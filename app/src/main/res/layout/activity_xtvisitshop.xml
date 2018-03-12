@@ -1,0 +1,7 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:id="@+id/xtbf_container"
+             android:layout_width="match_parent"
+             android:background="@color/holo_orange_dark"
+             android:layout_height="match_parent" >
+
+</FrameLayout>
