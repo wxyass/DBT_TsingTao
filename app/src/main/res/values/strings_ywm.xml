@@ -534,4 +534,8 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
 
+    <!--协同拜访-->
+    <string name="xtbf_selectterm">选择协同拜访终端</string>
+
+
 </resources>

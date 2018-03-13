@@ -8,4 +8,8 @@
     <color name="tab_unselect">#c9c9c9</color>
     <color name="tab_select">#598f35</color>
     <color name="bg_btn">#dadada</color>
+
+    <color name="green">#50D2C2</color>
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
 </resources>

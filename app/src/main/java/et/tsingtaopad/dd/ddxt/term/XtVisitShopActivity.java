@@ -1,4 +1,4 @@
-package et.tsingtaopad.dd.ddxt;
+package et.tsingtaopad.dd.ddxt.term;
 
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;

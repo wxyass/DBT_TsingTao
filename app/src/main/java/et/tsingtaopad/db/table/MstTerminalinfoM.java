@@ -106,6 +106,12 @@ public class MstTerminalinfoM implements java.io.Serializable {
 		this.terminalkey = terminalkey;
 	}
 
+	public MstTerminalinfoM(String terminalkey,String terminalname,String sequence ) {
+		this.terminalkey = terminalkey;
+		this.terminalname = terminalname;
+		this.sequence = sequence;
+	}
+
 	/** full constructor */
 	public MstTerminalinfoM(String terminalkey, String routekey, String terminalcode, String terminalname, String province, String city,
 			String county, String address, String contact, String mobile, String tlevel, String sequence, String cycle, String hvolume,
