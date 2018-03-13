@@ -8,11 +8,5 @@
 
     <include layout="@layout/top_navigation"/>
 
-    <android.support.v7.widget.AppCompatTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="购物车"
-        android:textSize="30sp"/>
-
 
 </LinearLayout>

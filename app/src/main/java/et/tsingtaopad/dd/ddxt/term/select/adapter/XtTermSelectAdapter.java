@@ -1,6 +1,4 @@
-package et.tsingtaopad.dd.ddxt.term.adapter;
-
-import java.util.List;
+package et.tsingtaopad.dd.ddxt.term.select.adapter;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -11,16 +9,18 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
+
+import java.util.List;
+
 import et.tsingtaopad.R;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
-import et.tsingtaopad.dd.ddxt.term.domain.TermSelectMStc;
+import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 
 /**
  * 项目名称：营销移动智能工作平台 </br>
@@ -32,18 +32,18 @@ import et.tsingtaopad.dd.ddxt.term.domain.TermSelectMStc;
  * 修改履历</br>
  * 日期      原因  BUG号    修改人 修改版本</br>
  */
-public class TermListAdapter extends BaseAdapter implements OnClickListener
+public class XtTermSelectAdapter extends BaseAdapter implements OnClickListener
 {
 
     private Activity context;
-    private List<TermSelectMStc> dataLst;
-    private List<TermSelectMStc> seqTermList;
+    private List<XtTermSelectMStc> dataLst;
+    private List<XtTermSelectMStc> seqTermList;
     private TextView confirmBt;
     private String termId;
     private int selectItem = -1;
     private boolean isUpdate;//是否处于修改状态
 
-    public TermListAdapter(Activity context, List<TermSelectMStc> seqTermList, List<TermSelectMStc> termialLst, TextView confirmBt, String termId)
+    public XtTermSelectAdapter(Activity context, List<XtTermSelectMStc> seqTermList, List<XtTermSelectMStc> termialLst, TextView confirmBt, String termId)
     {
         this.context = context;
         this.seqTermList = seqTermList;
@@ -125,7 +125,7 @@ public class TermListAdapter extends BaseAdapter implements OnClickListener
         }
         holder.terminalSequenceEt.setTag(position);
 
-        TermSelectMStc item = dataLst.get(position);
+        XtTermSelectMStc item = dataLst.get(position);
         holder.terminalNameTv.setHint(item.getTerminalkey());
         //是否允许修改
         if (isUpdate)
@@ -327,7 +327,7 @@ public class TermListAdapter extends BaseAdapter implements OnClickListener
 
     private void saveEditValue(String str, int position)
     {
-        TermSelectMStc option = dataLst.get(position);
+        XtTermSelectMStc option = dataLst.get(position);
         if (isUpdate && !str.equals(option.getSequence()))
         {
             resetSeq(option.getTerminalkey(), str);
@@ -344,7 +344,7 @@ public class TermListAdapter extends BaseAdapter implements OnClickListener
     {
         for (int i = 0; i < seqTermList.size(); i++)
         {
-            TermSelectMStc term = seqTermList.get(i);
+            XtTermSelectMStc term = seqTermList.get(i);
             if (termKey.equals(term.getTerminalkey()))
             {
                 if (CheckUtil.isBlankOrNull(newSeq))

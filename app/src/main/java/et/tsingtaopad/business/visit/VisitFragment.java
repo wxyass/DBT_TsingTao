@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
-import et.tsingtaopad.dd.ddxt.term.XtTermSelectFragment;
+import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectFragment;
 
 /**
  * Created by yangwenmin on 2018/3/12.

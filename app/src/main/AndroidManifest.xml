@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".dd.ddxt.term.XtVisitShopActivity" />
+        <activity android:name=".dd.ddxt.shopvisit.XtVisitShopActivity" />
 
     </application>
 

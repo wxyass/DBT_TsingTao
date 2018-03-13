@@ -1,4 +1,4 @@
-package et.tsingtaopad.dd.ddxt.term.domain;
+package et.tsingtaopad.dd.ddxt.term.select.domain;
 
 
 import et.tsingtaopad.db.table.MstTerminalinfoM;
@@ -6,7 +6,7 @@ import et.tsingtaopad.db.table.MstTerminalinfoM;
 /**
  *  终端列表结构体
  */
-public class TermSelectMStc extends MstTerminalinfoM
+public class XtTermSelectMStc extends MstTerminalinfoM
 {
 
     private static final long serialVersionUID = -7593099472791252366L;

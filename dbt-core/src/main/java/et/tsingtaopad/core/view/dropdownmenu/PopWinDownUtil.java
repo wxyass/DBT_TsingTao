@@ -26,7 +26,8 @@ public class PopWinDownUtil {
     }
     public void init(){
         //内容，高度，宽度
-        popupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        popupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT, true);
         //动画效果
         popupWindow.setAnimationStyle(R.style.AnimationTopFade);
         //菜单背景色

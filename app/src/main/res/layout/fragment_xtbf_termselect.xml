@@ -73,7 +73,7 @@
         <et.tsingtaopad.core.view.dropdownmenu.DropdownButton
             android:id="@+id/xtbf_termselect_area"
             android:layout_width="0px"
-            android:layout_height="35dp"
+            android:layout_height="45dp"
             android:layout_weight="1"/>
 
         <View
@@ -84,7 +84,7 @@
         <et.tsingtaopad.core.view.dropdownmenu.DropdownButton
             android:id="@+id/xtbf_termselect_grid"
             android:layout_width="0px"
-            android:layout_height="35dp"
+            android:layout_height="45dp"
             android:layout_weight="1"/>
 
         <View
@@ -95,7 +95,7 @@
         <et.tsingtaopad.core.view.dropdownmenu.DropdownButton
             android:id="@+id/xtbf_termselect_route"
             android:layout_width="0px"
-            android:layout_height="35dp"
+            android:layout_height="45dp"
             android:layout_weight="1"/>
     </LinearLayout>
 

@@ -12,11 +12,12 @@ import android.view.inputmethod.InputMethodManager;
 import et.tsingtaopad.R;
 
 public class BaseFragmentSupport extends Fragment {
-	
 
+	public FragmentManager supportFragmentManager;
     @Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		supportFragmentManager = getActivity().getSupportFragmentManager();
 	}
 
 	@Override

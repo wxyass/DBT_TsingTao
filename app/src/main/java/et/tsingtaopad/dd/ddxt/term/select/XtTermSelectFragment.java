@@ -1,8 +1,7 @@
-package et.tsingtaopad.dd.ddxt.term;
+package et.tsingtaopad.dd.ddxt.term.select;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +17,9 @@ import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.view.dropdownmenu.DropBean;
 import et.tsingtaopad.core.view.dropdownmenu.DropdownButton;
-import et.tsingtaopad.db.table.MstTerminalinfoM;
-import et.tsingtaopad.dd.ddxt.term.adapter.TermListAdapter;
-import et.tsingtaopad.dd.ddxt.term.domain.TermSelectMStc;
+import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartFragment;
+import et.tsingtaopad.dd.ddxt.term.select.adapter.XtTermSelectAdapter;
+import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 
 /**
  * Created by yangwenmin on 2018/3/12.
@@ -31,6 +30,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
     private RelativeLayout backBtn;
     private RelativeLayout confirmBtn;
     private AppCompatTextView confirmTv;
+    private AppCompatTextView backTv;
     private AppCompatTextView titleTv;
 
     private DropdownButton areaBtn;
@@ -39,9 +39,9 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
     private List<DropBean> areaList;
     private List<DropBean> gridList;
     private List<DropBean> routeList;
-    private List<TermSelectMStc> termList;
+    private List<XtTermSelectMStc> termList;
 
-    private FragmentManager supportFragmentManager;
+
 
     private ListView termRouteLv;
 
@@ -58,10 +58,12 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
         backBtn = (RelativeLayout)view.findViewById(R.id.top_navigation_rl_back);
         confirmBtn = (RelativeLayout)view.findViewById(R.id.top_navigation_rl_confirm);
         confirmTv = (AppCompatTextView)view.findViewById(R.id.top_navigation_bt_confirm);
+        backTv = (AppCompatTextView)view.findViewById(R.id.top_navigation_bt_back);
         titleTv = (AppCompatTextView)view.findViewById(R.id.top_navigation_tv_title);
+        confirmBtn.setVisibility(View.VISIBLE);
         confirmBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
-        confirmBtn.setVisibility(View.VISIBLE);
+
 
         areaBtn = (DropdownButton) view.findViewById(R.id.xtbf_termselect_area);
         gridBtn = (DropdownButton) view.findViewById(R.id.xtbf_termselect_grid);
@@ -74,7 +76,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        supportFragmentManager = getActivity().getSupportFragmentManager();
+
 
         titleTv.setText(R.string.xtbf_selectterm);
 
@@ -98,9 +100,11 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
                     gridList.clear();
                     gridBtn.setText("请先选择左侧");
                     gridList.add(new DropBean("请选择定格"));
+                    gridBtn.setData(gridList);
                     routeList.clear();
                     routeBtn.setText("请先选择左侧");
                     routeList.add(new DropBean("请选择路线"));
+                    routeBtn.setData(routeList);
                 }else{
                     gridList.clear();
                     gridList.add(new DropBean("请选择定格"));
@@ -124,6 +128,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
                     routeList.clear();
                     routeBtn.setText("请先选择左侧");
                     routeList.add(new DropBean("请选择路线"));
+                    routeBtn.setData(routeList);
                 }else{
                     routeList.clear();
                     routeList.add(new DropBean("请选择路线"));
@@ -146,35 +151,35 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
 
         // 设置终端数据 假数据
         initTermData();
-        termRouteLv.setAdapter(new TermListAdapter(getActivity(),termList,termList,confirmTv,null));
+        termRouteLv.setAdapter(new XtTermSelectAdapter(getActivity(),termList,termList,confirmTv,null));
     }
 
     // 设置终端数据 假数据
     private void initTermData() {
-        termList = new ArrayList<TermSelectMStc>();
-        TermSelectMStc termSelectMStc = new TermSelectMStc();
-        termSelectMStc.setTerminalkey("1-QWER1");
-        termSelectMStc.setTerminalname("北京建国门超级门店1");
-        termSelectMStc.setSequence("1");
-        termList.add(termSelectMStc);
+        termList = new ArrayList<XtTermSelectMStc>();
+        XtTermSelectMStc xtTermSelectMStc = new XtTermSelectMStc();
+        xtTermSelectMStc.setTerminalkey("1-QWER1");
+        xtTermSelectMStc.setTerminalname("北京建国门超级门店1");
+        xtTermSelectMStc.setSequence("1");
+        termList.add(xtTermSelectMStc);
 
-        TermSelectMStc termSelectMStc2 = new TermSelectMStc();
-        termSelectMStc2.setTerminalkey("1-QWER2");
-        termSelectMStc2.setTerminalname("北京建国门超级门店2");
-        termSelectMStc2.setSequence("2");
-        termList.add(termSelectMStc2);
+        XtTermSelectMStc xtTermSelectMStc2 = new XtTermSelectMStc();
+        xtTermSelectMStc2.setTerminalkey("1-QWER2");
+        xtTermSelectMStc2.setTerminalname("北京建国门超级门店2");
+        xtTermSelectMStc2.setSequence("2");
+        termList.add(xtTermSelectMStc2);
 
-        TermSelectMStc termSelectMStc3 = new TermSelectMStc();
-        termSelectMStc3.setTerminalkey("1-QWER3");
-        termSelectMStc3.setTerminalname("北京建国门超级门店3");
-        termSelectMStc3.setSequence("3");
-        termList.add(termSelectMStc3);
+        XtTermSelectMStc xtTermSelectMStc3 = new XtTermSelectMStc();
+        xtTermSelectMStc3.setTerminalkey("1-QWER3");
+        xtTermSelectMStc3.setTerminalname("北京建国门超级门店3");
+        xtTermSelectMStc3.setSequence("3");
+        termList.add(xtTermSelectMStc3);
 
-        TermSelectMStc termSelectMStc4 = new TermSelectMStc();
-        termSelectMStc4.setTerminalkey("1-QWER4");
-        termSelectMStc4.setTerminalname("北京建国门超级门店4");
-        termSelectMStc4.setSequence("4");
-        termList.add(termSelectMStc4);
+        XtTermSelectMStc xtTermSelectMStc4 = new XtTermSelectMStc();
+        xtTermSelectMStc4.setTerminalkey("1-QWER4");
+        xtTermSelectMStc4.setTerminalname("北京建国门超级门店4");
+        xtTermSelectMStc4.setSequence("4");
+        termList.add(xtTermSelectMStc4);
     }
 
     // 下来菜单设置数据  设置区域数据
@@ -203,7 +208,9 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
                 supportFragmentManager.popBackStack();
                 break;
             case R.id.top_navigation_rl_confirm:
+                supportFragmentManager.popBackStack();
                 changeFragment(new XtTermCartFragment(), "xttermcartfragment");
+
                 break;
             default:
                 break;

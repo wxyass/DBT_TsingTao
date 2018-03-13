@@ -1,4 +1,4 @@
-package et.tsingtaopad.dd.ddxt.term;
+package et.tsingtaopad.dd.ddxt.shopvisit;
 
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
