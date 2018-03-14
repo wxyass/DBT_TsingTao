@@ -5,7 +5,7 @@
               android:background="@color/bg_app"
               android:orientation="vertical">
 
-
+    <include layout="@layout/top_navigation"/>
 
     <android.support.v7.widget.AppCompatTextView
         android:layout_width="wrap_content"
@@ -13,7 +13,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="30dp"
         android:textSize="30sp"
-        android:text="@string/xtbf_title_camera"
+        android:text="@string/xtbf_title_numinput_content"
         />
 
 </LinearLayout>

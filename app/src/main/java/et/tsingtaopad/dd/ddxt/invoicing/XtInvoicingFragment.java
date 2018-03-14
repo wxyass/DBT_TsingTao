@@ -19,11 +19,7 @@ import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
 
 public class XtInvoicingFragment extends BaseFragmentSupport implements View.OnClickListener{
 
-    private RelativeLayout backBtn;
-    private RelativeLayout confirmBtn;
-    private AppCompatTextView confirmTv;
-    private AppCompatTextView backTv;
-    private AppCompatTextView titleTv;
+
 
     @Nullable
     @Override
@@ -35,21 +31,13 @@ public class XtInvoicingFragment extends BaseFragmentSupport implements View.OnC
 
     // 初始化控件
     private void initView(View view){
-        backBtn = (RelativeLayout)view.findViewById(R.id.top_navigation_rl_back);
-        confirmBtn = (RelativeLayout)view.findViewById(R.id.top_navigation_rl_confirm);
-        confirmTv = (AppCompatTextView)view.findViewById(R.id.top_navigation_bt_confirm);
-        backTv = (AppCompatTextView)view.findViewById(R.id.top_navigation_bt_back);
-        titleTv = (AppCompatTextView)view.findViewById(R.id.top_navigation_tv_title);
-        confirmBtn.setVisibility(View.VISIBLE);
-        confirmBtn.setOnClickListener(this);
-        backBtn.setOnClickListener(this);
+
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        titleTv.setText("终端列表");
 
     }
 
@@ -59,10 +47,7 @@ public class XtInvoicingFragment extends BaseFragmentSupport implements View.OnC
             case R.id.top_navigation_rl_back:
                 supportFragmentManager.popBackStack();
                 break;
-            case R.id.top_navigation_rl_confirm:
-                Intent intent = new Intent(getActivity(),XtVisitShopActivity.class);
-                startActivity(intent);
-                break;
+
             default:
                 break;
         }

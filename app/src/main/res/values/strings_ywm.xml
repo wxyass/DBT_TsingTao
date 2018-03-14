@@ -17,7 +17,7 @@
     <!-- 巡店拜访_终端列表 -->
     <string name="termlist_title">选择终端</string>
     <string name="termlist_visitdatelabel1">上次拜访时间：</string>
-    <string name="termlist_visitdatelabel2">距今</string>
+    <string name="termlist_visitdatelabel2"> 距今</string>
     <string name="termlist_visitdingge">5号定格</string>
     <string name="termlist_visitdatelabel3">天</string>
     <string name="termlist_search_hit">输入终端的首字母或汉字名称</string>
@@ -534,8 +534,21 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
 
-    <!--协同拜访-->
+    <!--协同拜访-选择终端-->
     <string name="xtbf_selectterm">选择协同拜访终端</string>
+    <string name="xtbf_selectterm_route">3号路线</string>
+    <string name="xtbf_selectterm_date">2018-02-15 10:23:44</string>
+    <string name="xtbf_selectterm_day">12</string>
+
+    <!--协同拜访-->
+    <string name="xtbf_title_sayhi">打招呼</string>
+    <string name="xtbf_title_invoicing">进销存</string>
+    <string name="xtbf_title_checkindex">查指标</string>
+    <string name="xtbf_title_chatvie">聊竞品</string>
+    <string name="xtbf_title_camera">拍照</string>
+    <string name="xtbf_title_numinput_content">填写现有量,变化量的界面</string>
+    <string name="xtbf_title_numinput">现有量,变化量</string>
+
 
 
 </resources>

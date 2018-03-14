@@ -17,6 +17,10 @@
 
     <!--下面是摘自Dbtplus旧版本 2017年12月25日10:11:39-->
 
+    <!--整体背景色-->
+    <color name="bg_app">#f8f9fa</color>
+
+
     <!-- 背景色 -->
     <color name="bg_lv_item">#f8f8f9</color>
 
@@ -121,4 +125,8 @@
     <color name="result_view">#b0000000</color>
     <color name="viewfinder_mask">#60000000</color>
     <color name="possible_result_points">#c0ffff00</color>
+
+    <!-- 顶部标题 -->
+    <color name="bg_top_navigation_title">#333333</color>
+
 </resources>

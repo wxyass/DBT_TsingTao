@@ -34,7 +34,7 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        changeFragment(new XtTermSelectFragment(), "xttermlistfragment");
+        changeHomeFragment(new XtTermSelectFragment(), "xttermlistfragment");
     }
 
 }

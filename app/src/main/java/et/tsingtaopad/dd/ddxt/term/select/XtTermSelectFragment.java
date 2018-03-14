@@ -209,7 +209,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
                 break;
             case R.id.top_navigation_rl_confirm:
                 supportFragmentManager.popBackStack();
-                changeFragment(new XtTermCartFragment(), "xttermcartfragment");
+                changeHomeFragment(new XtTermCartFragment(), "xttermcartfragment");
 
                 break;
             default:

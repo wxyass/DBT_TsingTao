@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:background="@drawable/bg_navigation"
+              android:layout_height="50dp"
+              android:background="@color/white"
               android:orientation="horizontal">
 
     <!-- 取消 -->
@@ -11,7 +11,8 @@
         android:id="@+id/top_navigation_rl_back"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="3">
+        android:layout_weight="2"
+        android:background="@drawable/bt_return">
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/top_navigation_bt_back"
@@ -19,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="30dp"
-            android:background="@drawable/bt_back"/>
+            android:background="@drawable/icon_return"/>
     </RelativeLayout>
 
     <!-- 标题 -->
@@ -27,7 +28,7 @@
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="6">
+        android:layout_weight="7">
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/top_navigation_tv_title"
@@ -35,6 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="65dp"
             android:layout_centerInParent="true"
+            android:textColor="@color/bg_top_navigation_title"
             android:gravity="center"
             android:maxLength="15"
             android:paddingLeft="30dp"
@@ -47,7 +49,8 @@
         android:id="@+id/top_navigation_rl_confirm"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="3"
+        android:layout_weight="2"
+        android:background="@drawable/bt_return"
         android:visibility="invisible">
 
         <!-- 删除Button按钮,因为这个按钮会有点击事件  使用TextView没有点击事件 -->
@@ -58,7 +61,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="30dp"
-            android:background="@drawable/bt_confirm"
+            android:text="@string/ceshi"
             />
     </RelativeLayout>
 

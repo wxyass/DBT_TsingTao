@@ -2,17 +2,182 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@color/home_channel_c9f8dfa"
+              android:background="@color/bg_app"
               android:orientation="vertical">
-
 
     <include layout="@layout/top_navigation"/>
 
-    <android.support.v7.widget.AppCompatTextView
-        android:layout_width="wrap_content"
+    <!--终端列表-->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="购物车"
-        android:textSize="30sp"/>
+        android:orientation="vertical">
+
+        <!-- 上次拜访距今多少天 -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:visibility="gone"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/img_selecttermina_line"/>
+
+            <TextView
+                android:id="@+id/xtbf_termcart_tv_visitline"
+                style="@style/font_size2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="@string/xtbf_selectterm_route"
+                android:textColor="#595757"/>
+
+            <TextView
+                style="@style/font_size2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/termlist_visitdatelabel1"
+                android:textColor="#595757"/>
+
+            <TextView
+                android:id="@+id/xtbf_termcart_tv_visitline_date"
+                style="@style/font_size2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/xtbf_selectterm_date"
+                android:textColor="#595757"/>
+
+            <TextView
+                style="@style/font_size2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/termlist_visitdatelabel2"
+                android:textColor="#595757"/>
+
+            <TextView
+                android:id="@+id/xtbf_termcart_tv_visitline_day"
+                style="@style/font_size2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/xtbf_selectterm_day"
+                android:textColor="#595757"/>
+
+            <TextView
+                style="@style/font_size2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/termlist_visitdatelabel3"
+                android:textColor="#595757"/>
+        </LinearLayout>
+
+        <!--搜索一行-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:background="@drawable/bg_visit_record"
+                android:orientation="horizontal"
+                android:layout_weight="7"
+                >
+
+                <!-- 搜索终端 -->
+
+                <EditText
+                    android:id="@+id/xtbf_termcart_et_search"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="6"
+                    android:background="@null"
+                    android:ems="14"
+                    android:hint="@string/termlist_search_hit"
+                    android:paddingLeft="5dp"
+                    android:singleLine="true">
+
+                    <requestFocus/>
+                </EditText>
+
+                <!-- 搜索按钮 -->
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <Button
+                        android:id="@+id/xtbf_termcart_bt_search"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/img_selecttermina_search"/>
+                </RelativeLayout>
+            </LinearLayout>
 
 
+            <!-- 排序按钮 -->
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2">
+
+                <Button
+                    android:id="@+id/xtbf_termcart_bt_update"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:background="@drawable/bt_sequence_edit"
+                    android:text="修改"
+                    android:textColor="@color/transparent"/>
+            </RelativeLayout>
+
+            <!-- 新增按钮 -->
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2">
+
+                <Button
+                    android:id="@+id/xtbf_termcart_bt_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:background="@drawable/bt_terminal_add"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@color/listview_line"
+            android:orientation="vertical"
+            android:padding="1dp">
+
+            <ListView
+                android:id="@+id/xtbf_termcart_lv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:cacheColorHint="@color/bg_lv_item"
+                android:divider="@color/listview_line"
+                android:dividerHeight="1dp">
+            </ListView>
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

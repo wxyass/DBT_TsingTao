@@ -1,4 +1,4 @@
-package et.tsingtaopad.test;
+package et.tsingtaopad.test.corefragment;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
