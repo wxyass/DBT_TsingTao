@@ -1,11 +1,14 @@
 package et.tsingtaopad.dd.ddxt.term.select;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -17,6 +20,7 @@ import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.view.dropdownmenu.DropBean;
 import et.tsingtaopad.core.view.dropdownmenu.DropdownButton;
+import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
 import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartFragment;
 import et.tsingtaopad.dd.ddxt.term.select.adapter.XtTermSelectAdapter;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
@@ -25,7 +29,7 @@ import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
  * Created by yangwenmin on 2018/3/12.
  */
 
-public class XtTermSelectFragment extends BaseFragmentSupport implements View.OnClickListener{
+public class XtTermSelectFragment extends BaseFragmentSupport implements View.OnClickListener,AdapterView.OnItemClickListener{
 
     private RelativeLayout backBtn;
     private RelativeLayout confirmBtn;
@@ -43,6 +47,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
 
 
 
+    private LinearLayout termRouteLl;
     private ListView termRouteLv;
 
     @Nullable
@@ -68,6 +73,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
         areaBtn = (DropdownButton) view.findViewById(R.id.xtbf_termselect_area);
         gridBtn = (DropdownButton) view.findViewById(R.id.xtbf_termselect_grid);
         routeBtn = (DropdownButton) view.findViewById(R.id.xtbf_termselect_route);
+        termRouteLl = (LinearLayout) view.findViewById(R.id.xtbf_termselect_ll_lv);
 
         termRouteLv = (ListView) view.findViewById(R.id.xtbf_termselect_lv);
     }
@@ -76,10 +82,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
-
         titleTv.setText(R.string.xtbf_selectterm);
-
         //
         initSomeData();
 
@@ -146,12 +149,23 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
             @Override
             public void onDropItemSelect(int Postion) {
                 Toast.makeText(getContext(),"您选择了 "+routeList.get(Postion).getName(),Toast.LENGTH_SHORT).show();
+
             }
         });
 
         // 设置终端数据 假数据
         initTermData();
         termRouteLv.setAdapter(new XtTermSelectAdapter(getActivity(),termList,termList,confirmTv,null));
+        termRouteLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                toShopActivity();
+            }
+        });
+
+        // 终端列表显示,之后放到下拉选择后显示
+        termRouteLl.setVisibility(View.VISIBLE);
     }
 
     // 设置终端数据 假数据
@@ -215,5 +229,16 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
             default:
                 break;
         }
+    }
+
+    // listview的条目点击事件
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        toShopActivity();
+    }
+
+    public void toShopActivity(){
+        Intent intent = new Intent(getActivity(),XtVisitShopActivity.class);
+        startActivity(intent);
     }
 }

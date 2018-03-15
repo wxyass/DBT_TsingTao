@@ -9,7 +9,9 @@ import android.widget.Toast;
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseActivity;
 import et.tsingtaopad.base.BaseFragmentSupport;
+import et.tsingtaopad.dd.ddxt.sayhi.XtSayhiFragment;
 import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartFragment;
+import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectFragment;
 import et.tsingtaopad.home.homefragment.MainFragment;
 
 public class MainActivity extends BaseActivity {
@@ -19,8 +21,10 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //一开始进入程序,就往容器中替换Fragment
-        //changeFragment(MainFragment.newInstance(), "mainfragment");
-        changeFragment(new XtTermCartFragment(), "mainfragment");
+        changeFragment(MainFragment.newInstance(), "mainfragment");
+        //changeFragment(new XtTermCartFragment(), "mainfragment");
+        //changeFragment(new XtTermSelectFragment(), "mainfragment");
+        //changeFragment(new XtSayhiFragment(), "mainfragment");
     }
 
 

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                style="@style/xtbf_listview_bg_item"
+                android:id="@+id/item_termcart_rl"
+                style="@style/listview_bg_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
     <LinearLayout
-        android:id="@+id/item_termselect_ll"
+        android:id="@+id/item_termcart_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -19,7 +20,7 @@
             <!-- 排序序号 -->
 
             <EditText
-                android:id="@+id/item_termselect_et_sequence"
+                android:id="@+id/item_termcart_et_sequence"
                 style="@style/listview_tv_item_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -29,7 +30,6 @@
                 android:gravity="center"
                 android:inputType="number"
                 android:maxLength="3"
-                android:visibility="gone"
                 android:singleLine="true"/>
 
             <!-- 选中标识 -->
@@ -41,7 +41,7 @@
                 android:layout_weight="1">
 
                 <RadioButton
-                    android:id="@+id/item_termselect_rb"
+                    android:id="@+id/item_termcart_rb"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:layout_centerHorizontal="true"
@@ -53,7 +53,7 @@
             <!-- 终端名称 -->
 
             <TextView
-                android:id="@+id/item_termselect_tv_name"
+                android:id="@+id/item_termcart_tv_name"
                 style="@style/listview_tv_item_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
             <!-- 上传成功标识 -->
 
             <ImageView
-                android:id="@+id/item_termselect_iv_update"
+                android:id="@+id/item_termcart_iv_update"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -71,7 +71,7 @@
             <!-- 渠道 -->
 
             <TextView
-                android:id="@+id/item_termselect_tv_type"
+                android:id="@+id/item_termcart_tv_type"
                 style="@style/listview_tv_item_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -85,7 +85,7 @@
                 <!-- 我品 -->
 
                 <ImageView
-                    android:id="@+id/item_termselect_iv_mime"
+                    android:id="@+id/item_termcart_iv_mime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -95,7 +95,7 @@
                 <!-- 绿色小书 -->
 
                 <ImageView
-                    android:id="@+id/item_termselect_iv_mineprotocol"
+                    android:id="@+id/item_termcart_iv_mineprotocol"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -104,7 +104,7 @@
                 <!-- 竞品 -->
 
                 <ImageView
-                    android:id="@+id/item_termselect_iv_vie"
+                    android:id="@+id/item_termcart_iv_vie"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -114,7 +114,7 @@
                 <!-- 黄色小书 -->
 
                 <ImageView
-                    android:id="@+id/item_termselect_iv_vieprotocol"
+                    android:id="@+id/item_termcart_iv_vieprotocol"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -137,7 +137,7 @@
             <!-- 拜访时间汇总 -->
 
             <TextView
-                android:id="@+id/item_termselect_tv_visitdate"
+                android:id="@+id/item_termcart_tv_visitdate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="11"
@@ -148,7 +148,7 @@
     <!-- 失效终端底色 -->
 
     <View
-        android:id="@+id/item_termselect_v_cover"
+        android:id="@+id/item_termcart_v_cover"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignBottom="@+id/item_termcart_ll"

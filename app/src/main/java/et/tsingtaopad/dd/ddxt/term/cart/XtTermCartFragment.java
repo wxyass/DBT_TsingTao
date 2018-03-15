@@ -19,6 +19,7 @@ import java.util.List;
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
+import et.tsingtaopad.dd.ddxt.term.cart.adapter.XtTermCartAdapter;
 import et.tsingtaopad.dd.ddxt.term.select.adapter.XtTermSelectAdapter;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 
@@ -81,7 +82,7 @@ public class XtTermCartFragment extends BaseFragmentSupport implements View.OnCl
 
         titleTv.setText("今日拜访终端列表");
         initTermData();
-        termCartLv.setAdapter(new XtTermSelectAdapter(getActivity(),termList,termList,confirmTv,null));
+        termCartLv.setAdapter(new XtTermCartAdapter(getActivity(),termList,termList,confirmTv,null));
     }
 
     @Override

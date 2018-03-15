@@ -40,5 +40,6 @@
     <dimen name="video_bottom_bar_height">40.0dip</dimen>
 
     <dimen name="banner_button_h">35dp</dimen>
+    <dimen name="xtbf_btn_h">40dp</dimen>
 
 </resources>

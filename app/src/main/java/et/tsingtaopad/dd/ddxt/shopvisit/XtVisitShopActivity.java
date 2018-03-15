@@ -50,6 +50,11 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_xtvisitshop);
         initView();
+        initData();
+    }
+
+    private void initData() {
+        titleTv.setText("超级门店2号店");
     }
 
     // 初始化控件

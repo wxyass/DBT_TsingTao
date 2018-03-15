@@ -8,6 +8,7 @@
     <include layout="@layout/top_navigation"/>
 
 
+    <!-- 3个下拉菜单 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -48,174 +49,109 @@
         android:layout_height="2px"
         android:background="#dfdfdf"/>
 
-    <!--终端列表-->
+    <!--搜索一行-->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <!-- 上次拜访距今多少天 -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center_vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ico_clock"/>
-
-            <TextView
-                android:id="@+id/xtbf_termselect_tv_visitline"
-                style="@style/font_size4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:text="@string/xtbf_selectterm_route"
-                android:textColor="#595757"/>
-
-            <TextView
-                style="@style/font_size4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/termlist_visitdatelabel1"
-                android:textColor="#595757"/>
-
-            <TextView
-                android:id="@+id/xtbf_termselect_tv_visitline_date"
-                style="@style/font_size4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/xtbf_selectterm_date"
-                android:textColor="#595757"/>
-
-            <TextView
-                style="@style/font_size4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/termlist_visitdatelabel2"
-                android:textColor="#595757"/>
-
-            <TextView
-                android:id="@+id/xtbf_termselect_tv_visitline_day"
-                style="@style/font_size4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/xtbf_selectterm_day"
-                android:textColor="#595757"/>
-
-            <TextView
-                style="@style/font_size4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:text="@string/termlist_visitdatelabel3"
-                android:textColor="#595757"/>
-        </LinearLayout>
+        android:layout_height="@dimen/xtbf_btn_h"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_width="0dp"
+            android:layout_height="@dimen/xtbf_btn_h"
+            android:layout_weight="7"
+            android:background="@drawable/bg_visit_record"
+            android:orientation="horizontal"
+            >
 
-            <LinearLayout
+            <!-- 搜索终端 -->
+            <EditText
+                android:id="@+id/xtbf_termselect_et_search"
                 android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:background="@drawable/bg_visit_record"
-                android:layout_weight="7"
-                >
+                android:layout_height="@dimen/xtbf_btn_h"
+                android:layout_gravity="center"
+                android:layout_weight="6"
+                android:background="@null"
+                android:ems="14"
+                android:hint="@string/termlist_search_hit"
+                android:paddingLeft="5dp"
+                android:singleLine="true">
 
-                <!-- 搜索终端 -->
+                <requestFocus/>
+            </EditText>
 
-                <EditText
-                    android:id="@+id/xtbf_termselect_et_search"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="6"
-                    android:background="@null"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:ems="14"
-                    android:hint="@string/termlist_search_hit"
-                    android:paddingLeft="5dp"
-                    android:singleLine="true">
-
-                    <requestFocus/>
-                </EditText>
-
-                <!-- 搜索按钮 -->
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <Button
-                        android:id="@+id/xtbf_termselect_bt_search"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:background="@drawable/img_selecttermina_search"/>
-                </RelativeLayout>
-            </LinearLayout>
-
-
-            <!-- 排序按钮 -->
-
+            <!-- 搜索按钮 -->
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2">
+                android:layout_weight="1">
 
                 <Button
-                    android:id="@+id/xtbf_termselect_bt_update"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:background="@drawable/bt_sequence_edit"
-                    android:text="修改"
-                    android:textColor="@color/transparent"/>
-            </RelativeLayout>
-
-            <!-- 新增按钮 -->
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2">
-
-                <Button
-                    android:id="@+id/xtbf_termselect_bt_add"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:background="@drawable/bt_terminal_add"/>
+                    android:id="@+id/xtbf_termselect_bt_search"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/img_selecttermina_search"/>
             </RelativeLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!-- 排序按钮 -->
+        <RelativeLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@color/listview_line"
-            android:orientation="vertical"
-            android:padding="1dp">
+            android:layout_weight="2"
+            android:visibility="invisible">
 
-            <ListView
-                android:id="@+id/xtbf_termselect_lv"
+            <Button
+                android:id="@+id/xtbf_termselect_bt_update"
+                style="@style/xtbf_btn_tv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:cacheColorHint="@color/bg_lv_item"
-                android:divider="@color/listview_line"
-                android:dividerHeight="1dp">
-            </ListView>
-        </LinearLayout>
+                android:layout_height="@dimen/xtbf_btn_h"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/bg_select_green"
+                android:text="编辑排序"
+                />
+        </RelativeLayout>
+
+        <!-- 新增按钮 -->
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2">
+
+            <Button
+                android:id="@+id/xtbf_termselect_bt_add"
+                style="@style/xtbf_btn_tv"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/xtbf_btn_h"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/bg_select_green"
+                android:text="新增终端"
+                />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <!--终端列表-->
+    <LinearLayout
+        android:id="@+id/xtbf_termselect_ll_lv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/listview_line"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        android:padding="1dp">
+
+        <ListView
+            android:id="@+id/xtbf_termselect_lv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:cacheColorHint="@color/bg_lv_item"
+            android:divider="@color/listview_line"
+            android:dividerHeight="1dp">
+        </ListView>
     </LinearLayout>
 </LinearLayout>

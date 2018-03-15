@@ -350,6 +350,57 @@
         <item name="android:textColor">#595757</item>
     </style>
 
+    <!-- checkbox -->
+    <style name="xtbf_btn_tv">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
 
+    <!-- ListView上每个item的背景色 -->
+    <style name="xtbf_listview_bg_item">
+        <item name="android:background">@color/white</item>
+        <item name="android:minHeight">50dp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+
+    <!-- xtbf_sayhi_rl -->
+    <style name="xtbf_sayhi_rl" parent="@style/font_size4">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/bg_select_white_gray</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+    <!-- xtbf_sayhi_第一列 -->
+    <style name="xtbf_sayhi_one_tv" parent="@style/font_size4">
+        <item name="android:textColor">#333333</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">19sp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginLeft">20dp</item>
+    </style>
+
+    <!-- xtbf_sayhi_第二列 -->
+    <style name="xtbf_sayhi_two_tv" parent="@style/font_size4">
+        <item name="android:textColor">#333333</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginRight">100dp</item>
+        <item name="android:gravity">center_vertical|left</item>
+    </style>
+    <!-- xtbf_sayhi_第三列 -->
+    <style name="xtbf_sayhi_third_tv" parent="@style/font_size4">
+        <item name="android:layout_width">10dp</item>
+        <item name="android:layout_height">20dp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginRight">20dp</item>
+        <item name="android:background">@drawable/icon_visit_unchecked</item>
+    </style>
 
 </resources>
