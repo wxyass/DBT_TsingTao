@@ -403,4 +403,11 @@
         <item name="android:background">@drawable/icon_visit_unchecked</item>
     </style>
 
+    <!--巡店拜访-下拉选项-->
+    <style name="pop_text_style">
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
 </resources>

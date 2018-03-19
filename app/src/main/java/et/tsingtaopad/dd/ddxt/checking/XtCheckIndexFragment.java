@@ -32,8 +32,7 @@ public class XtCheckIndexFragment extends BaseFragmentSupport implements View.On
 
     // 初始化控件
     private void initView(View view){
-        mXtvisit_btn_pro = (AppCompatButton) view.findViewById(R.id.xtvisit_btn_pro);
-        mXtvisit_btn_pro.setOnClickListener(this);
+
     }
 
     @Override
@@ -46,8 +45,8 @@ public class XtCheckIndexFragment extends BaseFragmentSupport implements View.On
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.xtvisit_btn_pro:
-                changeXtvisitFragment(new XtNumInputFragment(),"xtnuminputfragment");
+            case R.id.top_navigation_rl_back:
+//                changeXtvisitFragment(new XtNumInputFragment(),"xtnuminputfragment");
                 break;
 
             default:

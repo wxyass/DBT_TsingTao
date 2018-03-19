@@ -1,0 +1,179 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="122dp"
+              android:background="@color/white"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/xtbf_btn_h"
+        android:orientation="horizontal">
+
+        <!--产品名称-->
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="@dimen/xtbf_btn_h"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/item_checkgoods_tv_proname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:paddingRight="10dp"
+                android:textSize="18sp"
+                android:text="崂山啤酒8度500*12罐啤"/>
+
+        </RelativeLayout>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="@dimen/xtbf_btn_h"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/gray"/>
+        <!--经销商名称-->
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="@dimen/xtbf_btn_h"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/item_checkgoods_tv_agencyname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:paddingRight="10dp"
+                android:textSize="15sp"
+                android:text="北京青岛啤酒北方销售有限公司"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!--上次库存-->
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="@dimen/xtbf_btn_h"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/item_checkgoods_tv_prevstore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:paddingRight="10dp"
+                android:textSize="18sp"
+                android:text="上次库存:"/>
+
+            <TextView
+                android:id="@+id/item_checkgoods_et_prevstore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/item_checkgoods_tv_prevstore"
+                android:background="@drawable/bg_visit_record"/>
+
+        </RelativeLayout>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="@dimen/xtbf_btn_h"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/gray"/>
+        <!--日销量-->
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="@dimen/xtbf_btn_h"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/item_checkgoods_tv_daysellnum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:paddingRight="10dp"
+                android:textSize="15sp"
+                android:text="日销量:"/>
+            <EditText
+                android:id="@+id/item_checkgoods_et_daysellnum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/item_checkgoods_tv_daysellnum"
+                android:background="@drawable/bg_visit_record"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!--订单量(原名称是上周期进货总量)-->
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="@dimen/xtbf_btn_h"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/item_checkgoods_tv_prevnum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:paddingRight="10dp"
+                android:textSize="18sp"
+                android:text="订单量:"/>
+
+            <EditText
+                android:id="@+id/item_checkgoods_et_prevnum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/item_checkgoods_tv_prevnum"
+                android:background="@drawable/bg_visit_record"/>
+
+        </RelativeLayout>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="@dimen/xtbf_btn_h"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/gray"/>
+
+        <!--累计卡-->
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="@dimen/xtbf_btn_h"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/item_askgoods_tv_addcard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:paddingRight="10dp"
+                android:textSize="15sp"
+                android:text="累计卡:"/>
+            <EditText
+                android:id="@+id/item_askgoods_et_addcard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/item_askgoods_tv_addcard"
+                android:background="@drawable/bg_visit_record"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

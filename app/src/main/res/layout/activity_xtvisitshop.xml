@@ -3,61 +3,18 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
-
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@color/bg_app"
         android:orientation="vertical">
 
-
         <include layout="@layout/top_navigation"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/xtvisit_btn_sayhi"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/xtbf_title_sayhi"/>
-
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/xtvisit_btn_invoicing"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/xtbf_title_invoicing"/>
-
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/xtvisit_btn_checkindex"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/xtbf_title_checkindex"/>
-
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/xtvisit_btn_chatvie"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/xtbf_title_chatvie"/>
-
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/xtvisit_btn_camera"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/xtbf_title_camera"/>
-
-        </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="15dp">
 
             <LinearLayout
                 style="@style/content_margin"
@@ -88,6 +45,7 @@
                         style="@style/banner_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="2018-03-12"
                         android:textColor="#727171"/>
 
                     <android.support.v7.widget.AppCompatTextView
@@ -101,6 +59,7 @@
                         style="@style/banner_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="8"
                         android:textColor="#727171"/>
 
                     <android.support.v7.widget.AppCompatTextView
@@ -116,12 +75,14 @@
                     android:layout_width="fill_parent"
                     android:layout_height="2dp"
                     android:layout_marginTop="3dp"
-                    android:background="@drawable/ico_line"/>
+                    android:background="@drawable/ico_line"
+                    android:visibility="gone"/>
 
                 <FrameLayout
                     android:id="@+id/xtvisit_fl_content"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="15dp"
                     >
                 </FrameLayout>
 

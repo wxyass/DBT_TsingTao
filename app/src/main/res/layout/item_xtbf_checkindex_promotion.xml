@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:cuisw="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/bg_page_color"
+              android:orientation="horizontal">
+
+    <RelativeLayout
+        style="@style/xtbf_sayhi_rl">
+        <TextView
+            style="@style/xtbf_sayhi_one_tv"
+            android:text="@string/termadd_termname"/>
+        <TextView
+            style="@style/xtbf_sayhi_two_tv"
+            android:text="@string/termadd_termname"/>
+        <ImageView
+            style="@style/xtbf_sayhi_third_tv"/>
+    </RelativeLayout>
+
+</LinearLayout>
