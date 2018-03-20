@@ -54,6 +54,9 @@ public class XtChatvieFragment extends BaseFragmentSupport implements View.OnCli
         nextBtn = (Button) view.findViewById(R.id.xtbf_chatvie_bt_next);
         addrelationBtn.setOnClickListener(this);
         nextBtn.setOnClickListener(this);
+
+
+
     }
 
     @Override

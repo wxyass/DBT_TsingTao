@@ -2,20 +2,107 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:cuisw="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/bg_page_color"
-              android:orientation="horizontal">
+              android:layout_height="81dp"
+              android:background="@color/white"
+              android:orientation="vertical">
 
-    <RelativeLayout
-        style="@style/xtbf_sayhi_rl">
-        <TextView
-            style="@style/xtbf_sayhi_one_tv"
-            android:text="@string/termadd_termname"/>
-        <TextView
-            style="@style/xtbf_sayhi_two_tv"
-            android:text="@string/termadd_termname"/>
-        <ImageView
-            style="@style/xtbf_sayhi_third_tv"/>
-    </RelativeLayout>
+    <!--活动名称,活动产品-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/xtbf_item_h"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="@dimen/xtbf_item_h"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/item_xt_checkindex_tv_promotionname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:paddingLeft="10dp"
+                android:textSize="18sp"
+                android:text="秋季大练兵"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="@dimen/xtbf_item_h"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/item_xt_checkindex_tv_proname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:paddingRight="10dp"
+                android:textSize="18sp"
+                android:text="崂山啤酒8度500*12罐啤..."/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@color/gray"/>
+
+    <!--是否达成  -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/xtbf_item_h"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/xtbf_item_h"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            >
+
+            <TextView
+                style="@style/page_label_big"
+                android:id="@+id/item_xt_checkindex_tv_issucces"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/xtbf_item_h"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="20dp"
+                android:text="是否达成"/>
+
+            <et.tsingtaopad.view.DdSlideSwitch
+                android:id="@+id/item_xt_checkindex_sw_isacomplish"
+                style="@style/page_label_small"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/xtbf_item_h"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"
+                cuisw:defStatus="on"
+                cuisw:offText=""
+                cuisw:onText=""
+                cuisw:textColor="#595757"
+                cuisw:textSize="17sp"/>
+
+            <EditText
+                android:id="@+id/item_xt_checkindex_et_zushu"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/xtbf_item_h"
+                android:layout_toRightOf="@id/item_xt_checkindex_tv_issucces"
+                android:layout_toLeftOf="@id/item_xt_checkindex_sw_isacomplish"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:hint="请输入达成组数"
+                android:background="@drawable/bg_visit_record"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+
 
 </LinearLayout>

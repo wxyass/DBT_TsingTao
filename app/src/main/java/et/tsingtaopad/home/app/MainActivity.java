@@ -9,6 +9,7 @@ import android.widget.Toast;
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseActivity;
 import et.tsingtaopad.base.BaseFragmentSupport;
+import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.dd.ddxt.sayhi.XtSayhiFragment;
 import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartFragment;
 import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectFragment;
@@ -20,6 +21,10 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // 应用打开时,创建或更新数据库
+        new DatabaseHelper(this).getWritableDatabase();
+
         //一开始进入程序,就往容器中替换Fragment
         changeFragment(MainFragment.newInstance(), "mainfragment");
         //changeFragment(new XtTermCartFragment(), "mainfragment");

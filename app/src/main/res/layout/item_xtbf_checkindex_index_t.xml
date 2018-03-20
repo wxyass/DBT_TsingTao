@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    >
+
+    <!-- 2级条目 -->
+    <RelativeLayout
+        style="@style/item_xtbf_checkindex_rl">
+
+        <TextView
+            android:id="@+id/item_xt_checkindex_proname"
+            style="@style/xtbf_sayhi_one_tv"
+            android:text="@string/termadd_minorchannel"/>
+
+        <TextView
+            android:id="@+id/item_xt_checkindex_indexvalue"
+            style="@style/xtbf_sayhi_two_tv"
+            android:text="@string/termadd_termname"/>
+
+        <ImageView
+            style="@style/xtbf_sayhi_third_tv"/>
+    </RelativeLayout>
+
+</RelativeLayout>

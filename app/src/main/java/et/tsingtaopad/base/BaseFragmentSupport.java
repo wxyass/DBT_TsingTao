@@ -65,20 +65,5 @@ public class BaseFragmentSupport extends Fragment {
 		beginTransaction.commit();
 	}
 
-	//
-	public void changeXtvisitFragment(BaseFragmentSupport fragment, String tag) {
-		// 获取Fragment管理者
-		FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
-		// 开启事物
-		FragmentTransaction beginTransaction = supportFragmentManager.beginTransaction();
-		// 当前要添加的Fragment需要放的容器位置
-		// 要替换的fragment
-		// 标记
-		beginTransaction.replace(R.id.xtvisit_container, fragment, tag);
-		beginTransaction.addToBackStack(null);
-		// 提交事物
-		beginTransaction.commit();
-	}
-
 
 }

@@ -3,6 +3,7 @@ package et.tsingtaopad.core.util.dbtutil;
 import android.os.Handler;
 
 import java.io.Serializable;
+import java.util.List;
 
 
 /**
@@ -52,7 +53,8 @@ public class ConstValues implements Serializable{
 	// 当前有效的Handler
 	public static Handler msgHandler;
 	public static Handler handler;
-    
+
+
 
 
 
