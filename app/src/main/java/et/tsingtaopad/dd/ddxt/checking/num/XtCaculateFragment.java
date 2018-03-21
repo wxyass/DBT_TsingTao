@@ -1,6 +1,5 @@
 package et.tsingtaopad.dd.ddxt.checking.num;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatTextView;
@@ -17,8 +16,6 @@ import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProItem;
-import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.adapter.CalculateIndexItemPuhuoAdapter;
 
 /**
  * Created by yangwenmin on 2018/3/12.
@@ -26,7 +23,7 @@ import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.adapter.Calculat
  * 指标的现有量,变化量 填写界面
  */
 
-public class XtNumInputFragment extends BaseFragmentSupport implements View.OnClickListener {
+public class XtCaculateFragment extends BaseFragmentSupport implements View.OnClickListener {
 
     private RelativeLayout backBtn;
     private RelativeLayout confirmBtn;
@@ -39,7 +36,7 @@ public class XtNumInputFragment extends BaseFragmentSupport implements View.OnCl
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_xtbf_numinput, container, false);
+        View view = inflater.inflate(R.layout.fragment_xtbf_caculate, container, false);
         initView(view);
         return view;
     }
@@ -55,7 +52,7 @@ public class XtNumInputFragment extends BaseFragmentSupport implements View.OnCl
         confirmBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
 
-        colitemLv = (ListView) view.findViewById(R.id.xtbf_numinput_lv_colitem);
+        colitemLv = (ListView) view.findViewById(R.id.xtbf_caculate_lv_colitem);
     }
 
     @Override
@@ -68,8 +65,7 @@ public class XtNumInputFragment extends BaseFragmentSupport implements View.OnCl
         String proName = bundle.getString("proName");
         titleTv.setText(proName);
 
-        XtCalculateIndexItemPuhuoAdapter xtCalculateIndexItemPuhuoAdapter
-                = new XtCalculateIndexItemPuhuoAdapter(getActivity(), tempLst);
+        XtCalculateIndexItemPuhuoAdapter xtCalculateIndexItemPuhuoAdapter = new XtCalculateIndexItemPuhuoAdapter(getActivity(), tempLst);
         colitemLv.setAdapter(xtCalculateIndexItemPuhuoAdapter);
 
         ViewUtil.setListViewHeight(colitemLv);

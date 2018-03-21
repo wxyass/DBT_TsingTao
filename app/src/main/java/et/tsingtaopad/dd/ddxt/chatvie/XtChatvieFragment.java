@@ -16,8 +16,11 @@ import java.util.List;
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
+import et.tsingtaopad.dd.ddxt.chatvie.addchatvie.XtAddChatVieFragment;
 import et.tsingtaopad.dd.ddxt.chatvie.domain.XtChatVieStc;
+import et.tsingtaopad.dd.ddxt.checking.num.XtQuickCollectFragment;
 import et.tsingtaopad.dd.ddxt.invoicing.domain.XtInvoicingStc;
+import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.chatvie.adapter.VieSourceAdapter;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.chatvie.adapter.VieStatusAdapter;
 
@@ -52,6 +55,7 @@ public class XtChatvieFragment extends BaseFragmentSupport implements View.OnCli
         clearvieSw = (et.tsingtaopad.view.DdSlideSwitch) view.findViewById(R.id.xtbf_chatvie_sw_clearvie);
         visitreportEt = (EditText) view.findViewById(R.id.xtbf_chatvie_et_visitreport);
         nextBtn = (Button) view.findViewById(R.id.xtbf_chatvie_bt_next);
+
         addrelationBtn.setOnClickListener(this);
         nextBtn.setOnClickListener(this);
 
@@ -109,7 +113,8 @@ public class XtChatvieFragment extends BaseFragmentSupport implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.xtbf_chatvie_bt_addrelation:// 新增竞品
-
+                XtVisitShopActivity xtVisitShopActivity = (XtVisitShopActivity)getActivity();
+                xtVisitShopActivity.changeXtvisitFragment(new XtAddChatVieFragment(),"xtaddchatviefragment");
                 break;
             case R.id.xtbf_chatvie_bt_next:// 下一页
 

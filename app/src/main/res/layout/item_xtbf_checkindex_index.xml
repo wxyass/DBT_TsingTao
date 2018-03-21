@@ -24,7 +24,7 @@
             android:id="@+id/item_xt_caculate_tv_indexvalue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/chatvie_viestatus"/>
+            android:text="冰冻化"/>
     </LinearLayout>
 
 

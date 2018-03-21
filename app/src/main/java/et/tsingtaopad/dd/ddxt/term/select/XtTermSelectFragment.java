@@ -50,6 +50,8 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
     private LinearLayout termRouteLl;
     private ListView termRouteLv;
 
+    private XtTermSelectService xtTermSelectService;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -69,12 +71,10 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
         confirmBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
 
-
         areaBtn = (DropdownButton) view.findViewById(R.id.xtbf_termselect_area);
         gridBtn = (DropdownButton) view.findViewById(R.id.xtbf_termselect_grid);
         routeBtn = (DropdownButton) view.findViewById(R.id.xtbf_termselect_route);
         termRouteLl = (LinearLayout) view.findViewById(R.id.xtbf_termselect_ll_lv);
-
         termRouteLv = (ListView) view.findViewById(R.id.xtbf_termselect_lv);
     }
 
@@ -83,6 +83,8 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
         super.onActivityCreated(savedInstanceState);
 
         titleTv.setText(R.string.xtbf_selectterm);
+
+        xtTermSelectService = new XtTermSelectService(getActivity());
         //
         initSomeData();
 
@@ -149,7 +151,6 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
             @Override
             public void onDropItemSelect(int Postion) {
                 Toast.makeText(getContext(),"您选择了 "+routeList.get(Postion).getName(),Toast.LENGTH_SHORT).show();
-
             }
         });
 
@@ -157,7 +158,6 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
         initTermData();
         termRouteLv.setAdapter(new XtTermSelectAdapter(getActivity(),termList,termList,confirmTv,null));
         termRouteLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 toShopActivity();
@@ -170,30 +170,12 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
 
     // 设置终端数据 假数据
     private void initTermData() {
+
         termList = new ArrayList<XtTermSelectMStc>();
-        XtTermSelectMStc xtTermSelectMStc = new XtTermSelectMStc();
-        xtTermSelectMStc.setTerminalkey("1-QWER1");
-        xtTermSelectMStc.setTerminalname("北京建国门超级门店1");
-        xtTermSelectMStc.setSequence("1");
-        termList.add(xtTermSelectMStc);
-
-        XtTermSelectMStc xtTermSelectMStc2 = new XtTermSelectMStc();
-        xtTermSelectMStc2.setTerminalkey("1-QWER2");
-        xtTermSelectMStc2.setTerminalname("北京建国门超级门店2");
-        xtTermSelectMStc2.setSequence("2");
-        termList.add(xtTermSelectMStc2);
-
-        XtTermSelectMStc xtTermSelectMStc3 = new XtTermSelectMStc();
-        xtTermSelectMStc3.setTerminalkey("1-QWER3");
-        xtTermSelectMStc3.setTerminalname("北京建国门超级门店3");
-        xtTermSelectMStc3.setSequence("3");
-        termList.add(xtTermSelectMStc3);
-
-        XtTermSelectMStc xtTermSelectMStc4 = new XtTermSelectMStc();
-        xtTermSelectMStc4.setTerminalkey("1-QWER4");
-        xtTermSelectMStc4.setTerminalname("北京建国门超级门店4");
-        xtTermSelectMStc4.setSequence("4");
-        termList.add(xtTermSelectMStc4);
+        // 绑定TermList数据
+        List<String> routes = new ArrayList<String>();
+        routes.add("1-63UNEX");
+        termList = xtTermSelectService.queryTerminal(routes);
     }
 
     // 下来菜单设置数据  设置区域数据

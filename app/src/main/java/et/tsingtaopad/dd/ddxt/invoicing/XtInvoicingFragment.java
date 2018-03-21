@@ -17,6 +17,8 @@ import java.util.List;
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
+import et.tsingtaopad.dd.ddxt.chatvie.addchatvie.XtAddChatVieFragment;
+import et.tsingtaopad.dd.ddxt.invoicing.addinvoicing.XtAddInvoicingFragment;
 import et.tsingtaopad.dd.ddxt.invoicing.domain.XtInvoicingStc;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.invoicing.adapter.InvoicingAskGoodsAdapter;
@@ -28,7 +30,7 @@ import et.tsingtaopad.main.visit.shopvisit.termvisit.invoicing.domain.InvoicingS
 
 public class XtInvoicingFragment extends BaseFragmentSupport implements View.OnClickListener {
 
-    private RelativeLayout addRelationBt;
+    private Button addRelationBt;
     private Button nextBt;
     private ListView askGoodsLv;
     private ListView checkGoodsLv;
@@ -47,7 +49,7 @@ public class XtInvoicingFragment extends BaseFragmentSupport implements View.OnC
     private void initView(View view) {
 
         //新增供货关系按钮
-        addRelationBt = (RelativeLayout) view.findViewById(R.id.xtbf_invoicing_rl_addrelation);
+        addRelationBt = (Button) view.findViewById(R.id.xtbf_invoicing_bt_addrelation);
         //问货源
         askGoodsLv = (ListView) view.findViewById(R.id.xtbf_invoicing_lv_askgoods);
         //订单推荐(原是核查进销存)
@@ -109,8 +111,9 @@ public class XtInvoicingFragment extends BaseFragmentSupport implements View.OnC
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.top_navigation_rl_back:
-                supportFragmentManager.popBackStack();
+            case R.id.xtbf_invoicing_bt_addrelation:
+                XtVisitShopActivity xtVisitShopActivity = (XtVisitShopActivity)getActivity();
+                xtVisitShopActivity.changeXtvisitFragment(new XtAddInvoicingFragment(),"xtaddchatviefragment");
                 break;
 
             default:

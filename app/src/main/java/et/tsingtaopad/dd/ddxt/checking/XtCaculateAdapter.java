@@ -7,8 +7,6 @@ import java.util.List;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,17 +16,15 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import et.tsingtaopad.R;
-import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProIndex;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProIndexValue;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProItem;
-import et.tsingtaopad.dd.ddxt.checking.num.XtNumInputFragment;
+import et.tsingtaopad.dd.ddxt.checking.num.XtCaculateFragment;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.ProItem;
 
 
 /**
@@ -136,9 +132,9 @@ public class XtCaculateAdapter extends BaseAdapter {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("tempLst", (Serializable) tempLst);
                 bundle.putString("proName", proName);
-                XtNumInputFragment xtNumInputFragment = new XtNumInputFragment();
-                xtNumInputFragment.setArguments(bundle);
-                xtVisitShopActivity.changeXtvisitFragment(xtNumInputFragment,"xtnuminputfragment");
+                XtCaculateFragment xtCaculateFragment = new XtCaculateFragment();
+                xtCaculateFragment.setArguments(bundle);
+                xtVisitShopActivity.changeXtvisitFragment(xtCaculateFragment,"xtnuminputfragment");
             }
         });
         return convertView;

@@ -81,10 +81,9 @@ public class XtCalculateIndexItemPuhuoAdapter extends BaseAdapter {
 		if (convertView == null) {
 			holder = new ViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_xtbf_checkindex_index_third, null);
-			holder.itemNameTv = (TextView) convertView.findViewById(R.id.calculatedialog_tv_itemname);
-			holder.changeNumEt = (EditText) convertView.findViewById(R.id.calculatedialog_et_changenum);
-			holder.finalNumEt = (EditText) convertView.findViewById(R.id.calculatedialog_et_finalnum);
-			holder.xinxianduTv = (TextView) convertView.findViewById(R.id.calculatedialog_et_xinxiandu);
+			holder.itemNameTv = (TextView) convertView.findViewById(R.id.item_xt_calculatedialog_tv_itemname);
+			holder.changeNumEt = (EditText) convertView.findViewById(R.id.item_xt_calculatedialog_et_finalnum);
+			holder.finalNumEt = (EditText) convertView.findViewById(R.id.item_xt_calculatedialog_et_changenum);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -93,11 +92,7 @@ public class XtCalculateIndexItemPuhuoAdapter extends BaseAdapter {
 		holder.itemNameTv.setTag(item.getItemId());
 		holder.itemNameTv.setText(item.getItemName());
 		
-		if("库存".equals(item.getItemName())){
-			holder.xinxianduTv.setVisibility(View.VISIBLE);
-		}else {
-			holder.xinxianduTv.setVisibility(View.INVISIBLE);
-		}
+
 		
 		DecimalFormat df = new DecimalFormat("0");
 		// 变化量
@@ -123,51 +118,14 @@ public class XtCalculateIndexItemPuhuoAdapter extends BaseAdapter {
 			holder.finalNumEt.setText(finalNum);
 		}
 
-		// 
-		holder.xinxianduTv.setTag(position);
-		holder.xinxianduTv.setText(item.getFreshness());
-		holder.xinxianduTv.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(final View v) {
-				DatePickerDialog dateDialog = new DatePickerDialog(context,
-						new DatePickerDialog.OnDateSetListener() {
-							@Override
-							public void onDateSet(DatePicker view, int year,
-									int monthOfYear, int dayOfMonth) {
-								calendar.set(year, monthOfYear, dayOfMonth);
-								yearr = year;
-								month = monthOfYear;
-								day = dayOfMonth;
-								if (dayOfMonth < 10) {
-									aday = "0" + dayOfMonth;
-								} else {
-									aday = Integer.toString(dayOfMonth);
-								}
-								dateselect = (Integer.toString(year)
-										+ String.format("%02d", monthOfYear + 1) + aday);
-								dateselects = (Integer.toString(year)
-										+ String.format("%02d", monthOfYear + 1) + aday + "000000");
-								dateselectx = (Integer.toString(year)
-										+ String.format("%02d", monthOfYear + 1) + aday + "235959");
-								selectDate = (Integer.toString(year) + "-"
-										+ String.format("%02d", monthOfYear + 1) + "-" + aday);
-								TextView xinxianduTv = (TextView)v;
-								xinxianduTv.setText(selectDate);
-							}
-						}, yearr, month, day);
-				if (!dateDialog.isShowing()) {
-					dateDialog.show();
-				}
-			}
-		});
+
 
 		return convertView;
 	}
 
 	private class ViewHolder {
 		private TextView itemNameTv;
-		private TextView xinxianduTv;
+		//private TextView xinxianduTv;
 		private EditText changeNumEt;
 		private EditText finalNumEt;
 	}

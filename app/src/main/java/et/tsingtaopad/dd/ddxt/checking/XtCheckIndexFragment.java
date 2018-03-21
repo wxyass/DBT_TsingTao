@@ -1,13 +1,12 @@
 package et.tsingtaopad.dd.ddxt.checking;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -15,16 +14,12 @@ import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
-import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
-import et.tsingtaopad.db.DatabaseHelper;
-import et.tsingtaopad.db.dao.PadChecktypeMDao;
-import et.tsingtaopad.db.table.PadChecktypeM;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProIndex;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProItem;
-import et.tsingtaopad.dd.ddxt.checking.num.XtNumInputFragment;
+import et.tsingtaopad.dd.ddxt.checking.num.XtCaculateFragment;
+import et.tsingtaopad.dd.ddxt.checking.num.XtQuickCollectFragment;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
-import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartFragment;
 import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
 
@@ -38,6 +33,7 @@ public class XtCheckIndexFragment extends BaseFragmentSupport implements View.On
 
     private ListView calculateLv;
     private ListView promotionLv;
+    private Button quickCollectBt;
 
     @Nullable
     @Override
@@ -52,7 +48,10 @@ public class XtCheckIndexFragment extends BaseFragmentSupport implements View.On
 
         //采项分集listView
         calculateLv = (ListView)view.findViewById(R.id.xtbf_checkindex_lv_calculate);
+        quickCollectBt = (Button)view.findViewById(R.id.xtbf_checkindex_bt_quickcollect);
         promotionLv = (ListView)view.findViewById(R.id.xtbf_checkindex_lv_promotion);
+
+        quickCollectBt.setOnClickListener(this);
 
     }
 
@@ -86,8 +85,9 @@ public class XtCheckIndexFragment extends BaseFragmentSupport implements View.On
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.top_navigation_rl_back:
-                //changeXtvisitFragment(new XtNumInputFragment(),"xtnuminputfragment");
+            case R.id.xtbf_checkindex_bt_quickcollect:
+                XtVisitShopActivity xtVisitShopActivity = (XtVisitShopActivity)getActivity();
+                xtVisitShopActivity.changeXtvisitFragment(new XtQuickCollectFragment(),"xtnuminputfragment");
                 break;
 
             default:

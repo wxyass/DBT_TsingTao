@@ -17,6 +17,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
+            <!-- 点击快速采集 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -47,7 +48,7 @@
 
                     <Button
                         style="@style/xtbf_btn_tv"
-                        android:id="@+id/checkindex_bt_quickcollect"
+                        android:id="@+id/xtbf_checkindex_bt_quickcollect"
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/xtbf_btn_h"
                         android:paddingLeft="10dp"
@@ -132,14 +133,14 @@
                         android:src="@drawable/ico_point" />
 
                     <TextView
-                        android:id="@+id/noproindex_tv_name"
+                        android:id="@+id/xtbf_noproindex_tv_name"
                         style="@style/page_label_big"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="产品组合是否达标"/>
 
                     <et.tsingtaopad.view.DdSlideSwitch
-                        android:id="@+id/noproindex_sw_prostatus"
+                        android:id="@+id/xtbf_noproindex_sw_prostatus"
                         style="@style/page_label_small"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -165,14 +166,14 @@
                         android:src="@drawable/ico_point" />
 
                     <TextView
-                        android:id="@+id/noproindex_tv_hezuo"
+                        android:id="@+id/xtbf_noproindex_tv_hezuo"
                         style="@style/page_label_big"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/checkindex_tv_hz" />
 
                     <et.tsingtaopad.view.DdSlideSwitch
-                        android:id="@+id/noproindex_sw_hezuo"
+                        android:id="@+id/xtbf_noproindex_sw_hezuo"
                         style="@style/page_label_small"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -198,14 +199,14 @@
                         android:src="@drawable/ico_point" />
 
                     <TextView
-                        android:id="@+id/noproindex_tv_zhanyoulv"
+                        android:id="@+id/xtbf_noproindex_tv_zhanyoulv"
                         style="@style/page_label_big"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/checkindex_tv_zyl" />
 
                     <Spinner
-                        android:id="@+id/noproindex_sp_zhanyoulv"
+                        android:id="@+id/xtbf_noproindex_sp_zhanyoulv"
                         style="@style/page_label_small"
                         android:layout_width="120dp"
                         android:layout_height="43dp"
@@ -226,14 +227,14 @@
                         android:src="@drawable/ico_point" />
 
                     <TextView
-                        android:id="@+id/noproindex_tv_peisong"
+                        android:id="@+id/xtbf_noproindex_tv_peisong"
                         style="@style/page_label_big"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/checkindex_tv_ps" />
 
                     <et.tsingtaopad.view.DdSlideSwitch
-                        android:id="@+id/noproindex_sw_peisong"
+                        android:id="@+id/xtbf_noproindex_sw_peisong"
                         style="@style/page_label_small"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
