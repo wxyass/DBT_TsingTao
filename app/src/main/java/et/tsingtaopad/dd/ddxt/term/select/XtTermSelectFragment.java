@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -20,6 +21,7 @@ import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.view.dropdownmenu.DropBean;
 import et.tsingtaopad.core.view.dropdownmenu.DropdownButton;
+import et.tsingtaopad.db.table.MstTerminalinfoM;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
 import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartFragment;
 import et.tsingtaopad.dd.ddxt.term.select.adapter.XtTermSelectAdapter;
@@ -50,7 +52,11 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
     private LinearLayout termRouteLl;
     private ListView termRouteLv;
 
-    private XtTermSelectService xtTermSelectService;
+    private XtTermSelectService xtSelectService;
+    private List<XtTermSelectMStc> selectedList = new ArrayList<XtTermSelectMStc>();// 当前adapter的数据
+
+    private int TOFRAGMENT = 1;
+    private int TOACTIVITY = 2;
 
     @Nullable
     @Override
@@ -84,7 +90,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
 
         titleTv.setText(R.string.xtbf_selectterm);
 
-        xtTermSelectService = new XtTermSelectService(getActivity());
+        xtSelectService = new XtTermSelectService(getActivity());
         //
         initSomeData();
 
@@ -156,16 +162,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
 
         // 设置终端数据 假数据
         initTermData();
-        termRouteLv.setAdapter(new XtTermSelectAdapter(getActivity(),termList,termList,confirmTv,null));
-        termRouteLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                toShopActivity();
-            }
-        });
 
-        // 终端列表显示,之后放到下拉选择后显示
-        termRouteLl.setVisibility(View.VISIBLE);
     }
 
     // 设置终端数据 假数据
@@ -174,8 +171,31 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
         termList = new ArrayList<XtTermSelectMStc>();
         // 绑定TermList数据
         List<String> routes = new ArrayList<String>();
-        routes.add("1-63UNEX");
-        termList = xtTermSelectService.queryTerminal(routes);
+        routes.add("1-63UNEX");// 不同路线
+        termList.clear();
+        termList = xtSelectService.queryTerminal(routes);
+
+        // 设置适配器 加号按钮点击事件
+        XtTermSelectAdapter selectAdapter =new XtTermSelectAdapter(getActivity(), termList,termList, confirmTv, null, new IXtTermSelectClick() {
+            @Override
+            public void imageViewClick(int position, View v) {
+                ImageView imageView = (ImageView)v;
+                XtTermSelectMStc item = termList.get(position);
+                if (selectedList.contains(item)) {
+                    selectedList.remove(item);
+                    imageView.setImageResource(R.drawable.icon_visit_add);
+                }else{
+                    selectedList.add(item);
+                    imageView.setImageResource(R.drawable.ico_terminal_syncflag);
+                }
+            }
+        });
+        // 设置适配器
+        termRouteLv.setAdapter(selectAdapter);
+        // 条目点击事件
+        termRouteLv.setOnItemClickListener(this);
+        // 终端列表显示,之后放到下拉选择后显示
+        termRouteLl.setVisibility(View.VISIBLE);
     }
 
     // 下来菜单设置数据  设置区域数据
@@ -200,13 +220,13 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            // 返回
             case R.id.top_navigation_rl_back:
                 supportFragmentManager.popBackStack();
                 break;
-            case R.id.top_navigation_rl_confirm:
-                supportFragmentManager.popBackStack();
-                changeHomeFragment(new XtTermCartFragment(), "xttermcartfragment");
-
+            case R.id.top_navigation_rl_confirm:// 确定
+                // 生成临时表,并实现页面跳转
+                breakNextLayout(TOACTIVITY,selectedList);
                 break;
             default:
                 break;
@@ -216,11 +236,43 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
     // listview的条目点击事件
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        toShopActivity();
+        selectedList.clear();
+        selectedList.add(termList.get(position));
+        // 生成临时表,并实现页面跳转
+        breakNextLayout(TOACTIVITY,selectedList);
     }
 
-    public void toShopActivity(){
-        Intent intent = new Intent(getActivity(),XtVisitShopActivity.class);
-        startActivity(intent);
+    /**
+     * 生成临时表,并实现页面跳转
+     *
+     * @param type              1:跳转Fragment  2:跳转Activity
+     * @param selectedList      用户选择的终端
+     */
+    public void breakNextLayout(int type,List<XtTermSelectMStc> selectedList){
+        // 删除临时表表数据
+        xtSelectService.deleteData("MST_TERMINALINFO_M_TEMP");
+        // 复制终端临时表
+        for (XtTermSelectMStc xtselect:selectedList){
+            copyMstTerminalinfoMTemp(xtselect);
+        }
+        // 跳转
+        if(TOFRAGMENT == type){
+            //
+            supportFragmentManager.popBackStack();
+            // 跳转终端购物车
+            changeHomeFragment(new XtTermCartFragment(), "xttermcartfragment");
+        }else if(TOACTIVITY == type){
+            //
+            Intent intent = new Intent(getActivity(),XtVisitShopActivity.class);
+            startActivity(intent);
+        }
     }
+
+    // 查找终端,并复制到终端临时表
+    public void copyMstTerminalinfoMTemp(XtTermSelectMStc xtselect){
+        MstTerminalinfoM term = xtSelectService.findTermByTerminalkey(xtselect.getTerminalkey());
+        xtSelectService.toCopyMstTerminalinfoMData(term);
+    }
+
+
 }

@@ -6,13 +6,35 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 
+import com.j256.ormlite.android.AndroidDatabaseConnection;
+import com.j256.ormlite.dao.Dao;
+
 import et.tsingtaopad.db.DatabaseHelper;
+import et.tsingtaopad.db.dao.MstAgencysupplyInfoDao;
 import et.tsingtaopad.db.dao.MstTerminalinfoMDao;
+import et.tsingtaopad.db.table.MstAgencysupplyInfo;
+import et.tsingtaopad.db.table.MstAgencysupplyInfoTemp;
+import et.tsingtaopad.db.table.MstCheckexerecordInfo;
+import et.tsingtaopad.db.table.MstCheckexerecordInfoTemp;
+import et.tsingtaopad.db.table.MstCmpsupplyInfo;
+import et.tsingtaopad.db.table.MstCmpsupplyInfoTemp;
+import et.tsingtaopad.db.table.MstCollectionexerecordInfo;
+import et.tsingtaopad.db.table.MstCollectionexerecordInfoTemp;
+import et.tsingtaopad.db.table.MstPromotermInfo;
+import et.tsingtaopad.db.table.MstPromotermInfoTemp;
 import et.tsingtaopad.db.table.MstTerminalinfoM;
+import et.tsingtaopad.db.table.MstTerminalinfoMTemp;
+import et.tsingtaopad.db.table.MstVisitM;
+import et.tsingtaopad.db.table.MstVisitMTemp;
+import et.tsingtaopad.db.table.MstVistproductInfo;
+import et.tsingtaopad.db.table.MstVistproductInfoTemp;
+import et.tsingtaopad.db.table.PadCheckaccomplishInfo;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
+import et.tsingtaopad.main.visit.shopvisit.term.domain.MstTermListMStc;
 
 
 /**
@@ -56,6 +78,114 @@ public class XtTermSelectService {
             Log.e(TAG, "获取线路表DAO对象失败", e);
         }
         return terminalList;
+    }
+
+    // 复制终端表 到终端表临时表
+    public void toCopyMstTerminalinfoMData(MstTerminalinfoM xtTermSelectMStc) {
+
+        // 事务控制
+        AndroidDatabaseConnection connection = null;
+        // 开始复制
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MstTerminalinfoMTemp, String> terminalinfoMTempDao = helper.getMstTerminalinfoMTempDao();
+
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+            // 复制终端临时表
+            MstTerminalinfoM term = xtTermSelectMStc;
+            MstTerminalinfoMTemp terminalinfoMTemp = null;
+            if (term != null) {
+                terminalinfoMTemp = new MstTerminalinfoMTemp();
+                terminalinfoMTemp.setTerminalkey(term.getTerminalkey());
+                terminalinfoMTemp.setRoutekey(term.getRoutekey());
+                terminalinfoMTemp.setTerminalcode(term.getTerminalcode());
+                terminalinfoMTemp.setTerminalname(term.getTerminalname());
+                terminalinfoMTemp.setProvince(term.getProvince());
+                terminalinfoMTemp.setCity(term.getCity());
+                terminalinfoMTemp.setCounty(term.getCounty());
+                terminalinfoMTemp.setAddress(term.getAddress());
+                terminalinfoMTemp.setContact(term.getContact());
+                terminalinfoMTemp.setMobile(term.getMobile());
+                terminalinfoMTemp.setTlevel(term.getTlevel());
+                terminalinfoMTemp.setSequence(term.getSequence());
+                terminalinfoMTemp.setCycle(term.getCycle());
+                terminalinfoMTemp.setHvolume(term.getHvolume());
+                terminalinfoMTemp.setMvolume(term.getMvolume());
+                terminalinfoMTemp.setPvolume(term.getPvolume());
+                terminalinfoMTemp.setLvolume(term.getLvolume());
+                terminalinfoMTemp.setStatus(term.getStatus());
+                terminalinfoMTemp.setSellchannel(term.getSellchannel());
+                terminalinfoMTemp.setMainchannel(term.getMainchannel());
+                terminalinfoMTemp.setMinorchannel(term.getMinorchannel());
+                terminalinfoMTemp.setAreatype(term.getAreatype());
+                terminalinfoMTemp.setSisconsistent(term.getSisconsistent());
+                terminalinfoMTemp.setScondate(term.getScondate());
+                terminalinfoMTemp.setPadisconsistent(term.getPadisconsistent());
+                terminalinfoMTemp.setPadcondate(term.getPadcondate());
+                terminalinfoMTemp.setComid(term.getComid());
+                terminalinfoMTemp.setRemarks(term.getRemarks());
+                terminalinfoMTemp.setOrderbyno(term.getOrderbyno());
+                terminalinfoMTemp.setVersion(term.getVersion());
+                terminalinfoMTemp.setCredate(term.getCredate());
+                terminalinfoMTemp.setCreuser(term.getCreuser());
+                terminalinfoMTemp.setSelftreaty(term.getSelftreaty());
+                terminalinfoMTemp.setCmpselftreaty(term.getCmpselftreaty());
+                terminalinfoMTemp.setUpdatetime(term.getUpdatetime());
+                terminalinfoMTemp.setUpdateuser(term.getUpdateuser());
+                terminalinfoMTemp.setDeleteflag(term.getDeleteflag());
+                terminalinfoMTemp.setIfminedate(term.getIfminedate());
+                terminalinfoMTemp.setIfmine(term.getIfmine());
+                terminalinfoMTempDao.create(terminalinfoMTemp);
+
+            }
+
+
+            connection.commit(null);
+        }catch (Exception e){
+            Log.e(TAG, "复制数据出错", e);
+            try {
+                connection.rollback(null);
+                //ViewUtil.sendMsg(context, R.string.agencyvisit_msg_failsave);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    // 删除终端表临时表数据
+    public void deleteData(String tabname) {
+
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            String sql = "DELETE FROM " + tabname + ";";
+            SQLiteDatabase db = helper.getWritableDatabase();
+            db.execSQL(sql);
+        } catch (Exception e) {
+            Log.e(TAG, "删除临时表数据失败", e);
+        }
+    }
+
+    /**
+     * 获取终端信息
+     *
+     * @param termId 终端ID
+     * @return
+     */
+    public MstTerminalinfoM findTermByTerminalkey(String termId) {
+
+        MstTerminalinfoM termInfo = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            MstTerminalinfoMDao dao = helper.getDao(MstTerminalinfoM.class);
+            termInfo = dao.queryForId(termId);
+
+        } catch (SQLException e) {
+            Log.e(TAG, "获取终端表DAO对象失败", e);
+        }
+
+        return termInfo;
     }
 
 

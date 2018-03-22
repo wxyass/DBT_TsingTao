@@ -60,6 +60,7 @@
     <style name="font_size3">
         <item name="android:textSize">18sp</item>
     </style>
+
     <style name="font_size4">
         <item name="android:textSize">15sp</item>
     </style>
@@ -69,6 +70,13 @@
     <style name="font_size6">
         <item name="android:textSize">16sp</item>
     </style>
+    <style name="font_size7">
+        <item name="android:textSize">12sp</item>
+    </style>
+    <style name="font_size8">
+        <item name="android:textSize">10sp</item>
+    </style>
+
 
     <!-- 一级banner -->
     <style name="banner_main" parent="@style/font_size4">
@@ -153,14 +161,26 @@
         <item name="android:gravity">center_vertical</item>
     </style>
 
-    <!-- ListView上标题中的文字 -->
+    <!-- ListView上标题中的文字(最大) -->
     <style name="listview_tv_title" parent="@style/font_size6">
         <item name="android:textColor">#000000</item>
         <item name="android:gravity">center</item>
     </style>
 
-    <!-- ListView上每个item中的文字 -->
+    <!-- ListView上每个item中的文字(中大) -->
     <style name="listview_tv_item_text" parent="@style/font_size4">
+        <item name="android:textColor">#666464</item>
+        <item name="android:gravity">center_vertical|left</item>
+        <item name="android:paddingLeft">5dp</item>
+    </style>
+    <!-- ListView上每个item中的文字(最小) -->
+    <style name="listview_tv_item_text_xiao" parent="@style/font_size7">
+        <item name="android:textColor">#666464</item>
+        <item name="android:gravity">center_vertical|left</item>
+        <item name="android:paddingLeft">5dp</item>
+    </style>
+    <!-- ListView上每个item中的文字(最最小) -->
+    <style name="listview_tv_item_text_xiao2" parent="@style/font_size8">
         <item name="android:textColor">#666464</item>
         <item name="android:gravity">center_vertical|left</item>
         <item name="android:paddingLeft">5dp</item>

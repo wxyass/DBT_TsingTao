@@ -14,13 +14,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.dd.ddxt.term.select.IXtTermSelectClick;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
+import et.tsingtaopad.main.operation.workplan.domain.VpLvItemStc;
 
 /**
  * 项目名称：营销移动智能工作平台 </br>
@@ -39,15 +44,19 @@ public class XtTermSelectAdapter extends BaseAdapter implements OnClickListener 
     private List<XtTermSelectMStc> seqTermList;
     private TextView confirmBt;
     private String termId;
+    private IXtTermSelectClick mListener;
     private int selectItem = -1;
     private boolean isUpdate;//是否处于修改状态
 
-    public XtTermSelectAdapter(Activity context, List<XtTermSelectMStc> seqTermList, List<XtTermSelectMStc> termialLst, TextView confirmBt, String termId) {
+
+    public XtTermSelectAdapter(Activity context, List<XtTermSelectMStc> seqTermList, List<XtTermSelectMStc> termialLst,
+                               TextView confirmBt, String termId, IXtTermSelectClick mListener) {
         this.context = context;
         this.seqTermList = seqTermList;
         this.dataLst = termialLst;
         this.confirmBt = confirmBt;
         this.termId = termId;
+        this.mListener = mListener;
     }
 
     @Override
@@ -78,7 +87,7 @@ public class XtTermSelectAdapter extends BaseAdapter implements OnClickListener 
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         XtTermSelectAdapter.ViewHolder holder = null;
         if (convertView == null) {
             holder = new XtTermSelectAdapter.ViewHolder();
@@ -96,6 +105,8 @@ public class XtTermSelectAdapter extends BaseAdapter implements OnClickListener 
             holder.vieIv = (ImageView) convertView.findViewById(R.id.item_termselect_iv_vie);
             holder.vieProtocolIv = (ImageView) convertView.findViewById(R.id.item_termselect_iv_vieprotocol);
 
+            holder.addTerm = (ImageView) convertView.findViewById(R.id.item_termselect_iv_addterm);
+
             holder.itermLayout = (LinearLayout) convertView.findViewById(R.id.item_termselect_ll);// 整体条目
             holder.itemCoverV = convertView.findViewById(R.id.item_termselect_v_cover);// 失效终端底色
 
@@ -112,9 +123,14 @@ public class XtTermSelectAdapter extends BaseAdapter implements OnClickListener 
         }
         holder.terminalSequenceEt.setTag(position);
 
+        // 添加终端
+        holder.addTerm.setTag(position);
+        holder.addTerm.setOnClickListener(mListener);
+
+
         XtTermSelectMStc item = dataLst.get(position);
         holder.terminalNameTv.setHint(item.getTerminalkey());
-        //是否允许修改
+        //是否允许修改排序
         if (isUpdate) {
             holder.terminalSequenceEt.setEnabled(true);
             holder.terminalSequenceEt.setBackgroundColor(Color.LTGRAY);
@@ -132,21 +148,29 @@ public class XtTermSelectAdapter extends BaseAdapter implements OnClickListener 
             holder.terminalRb.setTag(position);
             holder.itermLayout.setOnClickListener(null);
             holder.itermLayout.setTag(position);
+            holder.addTerm.setVisibility(View.GONE);
         } else {
             holder.itemCoverV.setVisibility(View.GONE);
             holder.terminalRb.setOnClickListener(this);
             holder.terminalRb.setTag(position);
             //holder.itermLayout.setOnClickListener(this);
             holder.itermLayout.setTag(position);
+            holder.addTerm.setVisibility(View.VISIBLE);
         }
+
+        //
         holder.terminalSequenceEt.setText(item.getSequence());
+        //
         holder.terminalNameTv.setText(item.getTerminalname());
         holder.terminalTypeTv.setText(item.getTerminalType());
+
         if (!CheckUtil.isBlankOrNull(item.getVisitTime())) {
             holder.visitDateTv.setVisibility(View.VISIBLE);
             holder.visitDateTv.setText(item.getVisitTime());
         } else {
-            holder.visitDateTv.setVisibility(View.GONE);
+            //holder.visitDateTv.setVisibility(View.GONE);
+            holder.visitDateTv.setVisibility(View.VISIBLE);
+            holder.visitDateTv.setText("今日未拜访");
         }
 
         // 上传标记
@@ -228,7 +252,7 @@ public class XtTermSelectAdapter extends BaseAdapter implements OnClickListener 
                 holder.visitDateTv.setTextColor(context.getResources().getColor(R.color.listview_item_font_color));
             }
             // 未选中的条目,将拜访时间隐藏
-            holder.visitDateTv.setVisibility(View.GONE);
+            //holder.visitDateTv.setVisibility(View.GONE);
         }
 
         return convertView;
@@ -247,15 +271,17 @@ public class XtTermSelectAdapter extends BaseAdapter implements OnClickListener 
         private ImageView vieProtocolIv;
         private LinearLayout itermLayout;
         private View itemCoverV;
+        private ImageView addTerm;
     }
 
     @Override
     public void onClick(View v) {
-        int position = Integer.parseInt(v.getTag().toString());
+        /*int position = Integer.parseInt(v.getTag().toString());
         setSelectItem(position);
         notifyDataSetChanged();
         confirmBt.setVisibility(View.VISIBLE);
-        confirmBt.setTag(dataLst.get(position));
+        confirmBt.setTag(dataLst.get(position));*/
+
     }
 
     public int getSelectItem() {
@@ -344,4 +370,5 @@ public class XtTermSelectAdapter extends BaseAdapter implements OnClickListener 
 
         public abstract void afterTextChanged(Editable s, ViewHolder holder);
     }
+
 }
