@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -37,12 +38,13 @@ public class XtTermCartAdapter extends BaseAdapter implements OnClickListener {
     private Activity context;
     private List<XtTermSelectMStc> dataLst;
     private List<XtTermSelectMStc> seqTermList;
-    private TextView confirmBt;
+    private RelativeLayout confirmBt;
     private String termId;
     private int selectItem = -1;
     private boolean isUpdate;//是否处于修改状态
 
-    public XtTermCartAdapter(Activity context, List<XtTermSelectMStc> seqTermList, List<XtTermSelectMStc> termialLst, TextView confirmBt, String termId) {
+    public XtTermCartAdapter(Activity context, List<XtTermSelectMStc> seqTermList,
+                             List<XtTermSelectMStc> termialLst, RelativeLayout confirmBt, String termId) {
         this.context = context;
         this.seqTermList = seqTermList;
         this.dataLst = termialLst;
@@ -110,6 +112,8 @@ public class XtTermCartAdapter extends BaseAdapter implements OnClickListener {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+
+        // 排序
         holder.terminalSequenceEt.setTag(position);
 
         XtTermSelectMStc item = dataLst.get(position);
@@ -196,7 +200,7 @@ public class XtTermCartAdapter extends BaseAdapter implements OnClickListener {
 
         // 整体的字变色
         if (position == selectItem) {
-            // 选中的条目
+            // 将选中的条目,变成灰色
             holder.itermLayout.setBackgroundColor(context.getResources().getColor(R.color.bg_content_color_gray));
             holder.terminalRb.setChecked(true);
             holder.terminalNameTv.setTextColor(context.getResources().getColor(R.color.font_color_green));
@@ -207,7 +211,7 @@ public class XtTermCartAdapter extends BaseAdapter implements OnClickListener {
                 holder.visitDateTv.setVisibility(View.VISIBLE);
             }
         } else {
-            // 未选中的条目
+            // 未选中的条目,变成白色
             holder.itermLayout.setBackgroundColor(Color.WHITE);
             holder.terminalRb.setChecked(false);
             if (ConstValues.FLAG_1.equals(item.getUploadFlag())) {
@@ -283,19 +287,17 @@ public class XtTermCartAdapter extends BaseAdapter implements OnClickListener {
         this.isUpdate = isUpdate;
     }
 
+    // 当用户修改顺序时,保存排序
     private void saveEditValue(String str, int position) {
         XtTermSelectMStc xttermselectmstc = dataLst.get(position);
         if (isUpdate && !str.equals(xttermselectmstc.getSequence())) {
+            // 修改序号后,设置该终端在集合中的顺序,以便根据顺序排序
             resetSeq(xttermselectmstc.getTerminalkey(), str);
         }
-        xttermselectmstc.setSequence(str);
+        //xttermselectmstc.setSequence(str);
     }
 
-    /***
-     * 重新终端设置顺序
-     * @param termKey
-     * @param newSeq
-     */
+    // 修改序号后,设置该终端在集合中的顺序,以便根据顺序排序
     private void resetSeq(String termKey, String newSeq) {
         for (int i = 0; i < seqTermList.size(); i++) {
             XtTermSelectMStc term = seqTermList.get(i);
@@ -325,6 +327,7 @@ public class XtTermCartAdapter extends BaseAdapter implements OnClickListener {
         }
     }
 
+    // 排序输入监听
     abstract class MyTextWatcher implements TextWatcher {
         public MyTextWatcher(ViewHolder holder) {
             mHolder = holder;

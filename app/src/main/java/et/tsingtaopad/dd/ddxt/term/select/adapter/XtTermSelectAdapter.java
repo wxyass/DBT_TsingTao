@@ -221,7 +221,7 @@ public class XtTermSelectAdapter extends BaseAdapter implements OnClickListener 
         // 整体的字变色
         if (position == selectItem) {
             // 选中的条目
-            holder.itermLayout.setBackgroundColor(context.getResources().getColor(R.color.bg_content_color_gray));
+            //holder.itermLayout.setBackgroundColor(context.getResources().getColor(R.color.bg_content_color_gray));
             holder.terminalRb.setChecked(true);
             holder.terminalNameTv.setTextColor(context.getResources().getColor(R.color.font_color_green));
             holder.terminalTypeTv.setTextColor(context.getResources().getColor(R.color.font_color_green));
@@ -232,7 +232,7 @@ public class XtTermSelectAdapter extends BaseAdapter implements OnClickListener 
             }
         } else {
             // 未选中的条目
-            holder.itermLayout.setBackgroundColor(Color.WHITE);
+            //holder.itermLayout.setBackgroundColor(Color.WHITE);
             holder.terminalRb.setChecked(false);
             if (ConstValues.FLAG_1.equals(item.getUploadFlag())) {
                 // 已提交过的
@@ -281,7 +281,6 @@ public class XtTermSelectAdapter extends BaseAdapter implements OnClickListener 
         notifyDataSetChanged();
         confirmBt.setVisibility(View.VISIBLE);
         confirmBt.setTag(dataLst.get(position));*/
-
     }
 
     public int getSelectItem() {
