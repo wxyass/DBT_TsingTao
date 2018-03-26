@@ -10,17 +10,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
+import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
+import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
 import et.tsingtaopad.dd.ddxt.chatvie.addchatvie.XtAddChatVieFragment;
 import et.tsingtaopad.dd.ddxt.invoicing.addinvoicing.XtAddInvoicingFragment;
 import et.tsingtaopad.dd.ddxt.invoicing.domain.XtInvoicingStc;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
+import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.invoicing.adapter.InvoicingAskGoodsAdapter;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.invoicing.domain.InvoicingStc;
 
@@ -28,7 +32,7 @@ import et.tsingtaopad.main.visit.shopvisit.termvisit.invoicing.domain.InvoicingS
  * Created by yangwenmin on 2018/3/12.
  */
 
-public class XtInvoicingFragment extends BaseFragmentSupport implements View.OnClickListener {
+public class XtInvoicingFragment extends XtBaseVisitFragment implements View.OnClickListener {
 
     private Button addRelationBt;
     private Button nextBt;
@@ -65,6 +69,8 @@ public class XtInvoicingFragment extends BaseFragmentSupport implements View.OnC
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        Toast.makeText(getActivity(),"进销存"+"/"+termId+"/"+termName,Toast.LENGTH_SHORT).show();
 
         initProData();
 

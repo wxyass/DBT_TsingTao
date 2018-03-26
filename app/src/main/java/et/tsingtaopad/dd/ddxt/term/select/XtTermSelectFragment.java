@@ -282,7 +282,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
             Intent intent = new Intent(getActivity(),XtVisitShopActivity.class);
             intent.putExtra("isFirstVisit", "1");// 非第一次拜访1
             intent.putExtra("termStc", selectedList.get(0));
-            intent.putExtra("seeFlag", "1"); // 查看标识
+            intent.putExtra("seeFlag", "0"); // 0拜访 1查看标识
             startActivity(intent);
         }
     }

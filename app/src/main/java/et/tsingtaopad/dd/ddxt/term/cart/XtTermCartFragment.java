@@ -130,7 +130,7 @@ public class XtTermCartFragment extends BaseFragmentSupport implements View.OnCl
                 Intent intent = new Intent(getActivity(), XtVisitShopActivity.class);
                 intent.putExtra("isFirstVisit", "1");// 非第一次拜访1
                 intent.putExtra("termStc", termStc);
-                intent.putExtra("seeFlag", "1"); // 查看标识
+                intent.putExtra("seeFlag", "0"); // 0拜访 1查看标识
                 startActivity(intent);
                 break;
             case R.id.xtbf_termcart_bt_search:

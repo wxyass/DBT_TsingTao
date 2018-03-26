@@ -441,6 +441,169 @@ public class MstVistproductInfoDaoImpl extends
 	}
 
 	/**
+	 * 获取巡店拜访-查指标的分项采集部分的产品指标数据
+	 *
+	 * @param helper
+	 * @param visitId
+	 *            本次拜访ID
+	 * @param termId
+	 *            本次拜访终端ID
+	 * @param channelId
+	 *            本次拜访终端的次渠道ID
+	 * @param seeFlag
+	 *            查看标识
+	 * @return
+	 */
+	public List<CheckIndexCalculateStc> queryCalculateIndexTemp(
+			DatabaseHelper helper, String visitId, String termId,
+			String channelId, String seeFlag) {
+
+		List<CheckIndexCalculateStc> lst = new ArrayList<CheckIndexCalculateStc>();
+
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("select distinct vp.visitkey, vp.productkey, pm.proname, ");
+		buffer.append("cm.checktype, cm.checkkey, cm.checkname, vr.acresult, cs.cstatusname, vr.recordkey ");
+		buffer.append("from mst_vistproduct_info_temp vp ");
+		buffer.append("inner join mst_product_m pm ");
+		buffer.append(" on vp.productkey = pm.productkey and vp.visitkey= ? ");
+		buffer.append("inner join pad_checkpro_info cp ");
+		buffer.append(" on vp.productkey = cp.productkey ");
+		buffer.append(" and cp.minorchannel like '%").append(channelId)
+				.append("%' ");
+		buffer.append("inner join pad_checktype_m cm ");
+		buffer.append(" on cp.checkkey = cm.checkkey and cm.isproduct = '1'");
+		buffer.append(" and cm.minorchannel like '%").append(channelId)
+				.append("%' ");
+
+		// 如果seeFlag=1,
+		// 则从指标记录结果表取数，否则从指标结果临时表取数（mst_checkexerecord_info_temp）
+		if (ConstValues.FLAG_1.equals(seeFlag)) {
+			buffer.append("left join mst_checkexerecord_info vr  ");
+			buffer.append("  on vp.productkey = vr.productkey and cm.checkkey = vr.checkkey ");
+			buffer.append("  and vr.terminalkey ='").append(termId)
+					.append("' and vr.enddate='30001201' ");
+			buffer.append("  and vr.deleteflag !='").append(
+					ConstValues.delFlag + "'");
+		} else {
+			buffer.append("left join mst_checkexerecord_info_temp vr ");
+			buffer.append(" on vp.productkey = vr.productkey and cm.checkkey = vr.checkkey ");
+			buffer.append(" and vr.visitkey ='").append(visitId).append("' ");
+
+		}
+		buffer.append("left join pad_checkstatus_info cs on cs.cstatuskey = vr.acresult ");
+		buffer.append("order by cm.checkkey, vp.productkey ");
+
+		/*
+		 * StringBuffer buffer = new StringBuffer(); buffer.append(
+		 * "select distinct vp.visitkey, mai.productkey, pm.proname, cm.checktype, cm.checkkey, cm.checkname, "
+		 * ); buffer.append("vr.acresult, cs.cstatusname, vr.recordkey ");
+		 * buffer
+		 * .append("from mst_agencysupply_info mai inner join mst_product_m pm "
+		 * ); buffer.append(" on mai.productkey = pm.productkey ");
+		 * buffer.append("inner join pad_checkpro_info cp ");
+		 * buffer.append(" on mai.productkey = cp.productkey ");
+		 * buffer.append(" and cp.minorchannel like '%"
+		 * ).append(channelId).append("%' ");
+		 * buffer.append("inner join pad_checktype_m cm ");
+		 * buffer.append(" on cp.checkkey = cm.checkkey ");
+		 * buffer.append(" and cm.isproduct = '1' ");
+		 * buffer.append(" and cm.minorchannel like '%"
+		 * ).append(channelId).append("%' ");
+		 * buffer.append("left join mst_checkexerecord_info_temp vr ");
+		 * buffer.append(" on vp.productkey = vr.productkey ");
+		 * buffer.append(" and cm.checkkey = vr.checkkey ");
+		 * buffer.append(" and vr.visitkey = ? ");
+		 * buffer.append("left join mst_vistproduct_info vp ");
+		 * buffer.append(" on vp.productkey = mai.productkey ");
+		 * buffer.append(" and vp.visitkey= ? ");
+		 * buffer.append("left join pad_checkstatus_info cs ");
+		 * buffer.append(" on cs.cstatuskey = vr.acresult ");
+		 * buffer.append("order by cm.checkkey, vp.productkey ");
+		 */
+
+		Cursor cursor = helper.getReadableDatabase().rawQuery(
+				buffer.toString(), new String[] { visitId });
+		CheckIndexCalculateStc item;
+		while (cursor.moveToNext()) {
+			item = new CheckIndexCalculateStc();
+			item.setVisitId(cursor.getString(cursor.getColumnIndex("visitkey")));
+			item.setProId(cursor.getString(cursor.getColumnIndex("productkey")));
+			item.setProName(cursor.getString(cursor.getColumnIndex("proname")));
+			item.setIndexId(cursor.getString(cursor.getColumnIndex("checkkey")));
+			item.setIndexType(cursor.getString(cursor.getColumnIndex("checktype")));
+			item.setIndexName(cursor.getString(cursor.getColumnIndex("checkname")));
+			item.setIndexValueId(cursor.getString(cursor.getColumnIndex("acresult")));
+			item.setIndexValueName(cursor.getString(cursor.getColumnIndex("cstatusname")));
+			item.setRecordId(cursor.getString(cursor.getColumnIndex("recordkey")));
+			lst.add(item);
+		}
+		return lst;
+	}
+
+	/**
+	 * 获取巡店拜访-查指标的分项采集部分的产品指标对应的采集项数据
+	 *
+	 * @param helper
+	 * @param visitId
+	 *            本次拜访ID
+	 * @param channelId
+	 *            本次拜访终端的次渠道ID
+	 * @return
+	 */
+	public List<CheckIndexQuicklyStc> queryCalculateItemTemp(DatabaseHelper helper, String visitId, String channelId) {
+
+		List<CheckIndexQuicklyStc> lst = new ArrayList<CheckIndexQuicklyStc>();
+
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("select distinct ci.checkkey,ci.cstatuskey,ci.colitemkey, ");
+		buffer.append("ci.colitemname,ci.productkey,ci.addcount,ci.totalcount, ");
+		buffer.append("ci.minorchannel,vi.addcount changenum, ");
+		buffer.append("vi.totalcount finalnum, vi.bianhualiang, vi.xianyouliang,vi.colrecordkey,vi.freshness, pm.proname ");
+		buffer.append("from mst_vistproduct_info_temp vp ");
+		buffer.append("inner join pad_checkaccomplish_info ci ");
+		buffer.append(" on vp.productkey = ci.productkey and vp.visitkey= ? ");
+		buffer.append("inner join pad_checktype_m cm ");
+		buffer.append(" on ci.checkkey  = cm.checkkey and cm.isproduct = '1' ");
+		buffer.append("     and cm.minorchannel like '%").append(channelId)
+				.append("%' ");
+		buffer.append("inner join mst_product_m pm  ");
+		buffer.append(" on ci.productkey = pm.productkey ");
+		buffer.append("left join mst_collectionexerecord_info_temp vi ");
+		buffer.append(" on ci.productkey = vi.productkey ");
+		buffer.append("   and ci.colitemkey = vi.colitemkey and vi.visitKey=? ");
+		buffer.append("where ci.minorchannel like '%").append(channelId)
+				.append("%' ");
+		buffer.append("order by ci.minorchannel,ci.productkey,ci.colitemkey ");
+
+		String[] args = new String[] { visitId, visitId };
+		Cursor cursor = helper.getReadableDatabase().rawQuery(buffer.toString(), args);
+		CheckIndexQuicklyStc item;
+		while (cursor.moveToNext()) {
+			item = new CheckIndexQuicklyStc();
+			item.setCheckkey(cursor.getString(cursor.getColumnIndex("checkkey")));
+			item.setCstatuskey(cursor.getString(cursor.getColumnIndex("cstatuskey")));
+			item.setColitemkey(cursor.getString(cursor.getColumnIndex("colitemkey")));
+			item.setColitemname(cursor.getString(cursor.getColumnIndex("colitemname")));
+			item.setProductkey(cursor.getString(cursor.getColumnIndex("productkey")));
+			item.setProName(cursor.getString(cursor.getColumnIndex("proname")));
+			item.setAddcount(cursor.getDouble(cursor.getColumnIndex("addcount")));
+			item.setTotalcount(cursor.getDouble(cursor.getColumnIndex("totalcount")));
+			item.setFreshness(cursor.getString(cursor.getColumnIndex("freshness")));
+			item.setMinorchannel(cursor.getString(cursor.getColumnIndex("minorchannel")));
+			String cnum = cursor.getString(cursor.getColumnIndex("changenum"));
+			String fnum = cursor.getString(cursor.getColumnIndex("finalnum"));
+			item.setChangeNum(FunUtil.isBlankOrNullToDouble(cnum));
+			item.setFinalNum(FunUtil.isBlankOrNullToDouble(fnum));
+			item.setBianhualiang(cursor.getString(cursor.getColumnIndex("bianhualiang")));
+			item.setXianyouliang(cursor.getString(cursor.getColumnIndex("xianyouliang")));
+			item.setColRecordId(cursor.getString(cursor.getColumnIndex("colrecordkey")));
+			lst.add(item);
+		}
+
+		return lst;
+	}
+
+	/**
 	 * 获取巡店拜访-查指标的分项采集部分的与产品无关的指标数据
 	 *
 	 * @param visitId

@@ -82,6 +82,8 @@ public class XtCaculateFragment extends BaseFragmentSupport implements View.OnCl
                 /*Intent intent = new Intent(getActivity(),XtVisitShopActivity.class);
                 startActivity(intent);*/
                 break;
+            case R.id.top_navigation_tv_title:
+                break;
             default:
                 break;
         }

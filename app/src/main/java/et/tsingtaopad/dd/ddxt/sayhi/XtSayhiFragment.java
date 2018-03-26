@@ -8,18 +8,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
+import et.tsingtaopad.core.util.dbtutil.FunUtil;
+import et.tsingtaopad.core.util.dbtutil.PrefUtils;
+import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
+import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 
 /**
  * Created by yangwenmin on 2018/3/12.
  */
 
-public class XtSayhiFragment extends BaseFragmentSupport implements View.OnClickListener{
-
-
+public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClickListener{
 
     @Nullable
     @Override
@@ -38,6 +41,7 @@ public class XtSayhiFragment extends BaseFragmentSupport implements View.OnClick
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        Toast.makeText(getActivity(),"打招呼"+"/"+termId+"/"+termName,Toast.LENGTH_SHORT).show();
     }
 
     @Override

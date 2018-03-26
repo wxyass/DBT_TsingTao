@@ -9,6 +9,7 @@ import android.widget.Toast;
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseActivity;
 import et.tsingtaopad.base.BaseFragmentSupport;
+import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.dd.ddxt.sayhi.XtSayhiFragment;
 import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartFragment;
@@ -24,6 +25,9 @@ public class MainActivity extends BaseActivity {
 
         // 应用打开时,创建或更新数据库
         new DatabaseHelper(this).getWritableDatabase();
+
+        // 测试SharedPreferences
+        PrefUtils.putString(getApplicationContext(),"ceshi","ceshi");
 
         //一开始进入程序,就往容器中替换Fragment
         //changeFragment(MainFragment.newInstance(), "mainfragment");
