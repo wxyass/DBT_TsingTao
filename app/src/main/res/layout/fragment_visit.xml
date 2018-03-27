@@ -57,9 +57,21 @@
         android:text="@string/dxtbf"/>
 
     <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_xt_term"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="协同终端夹"/>
+
+    <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_zdzs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:text="@string/ddzdzs"/>
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_zs_term"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="追溯终端夹"/>
 
 </LinearLayout>

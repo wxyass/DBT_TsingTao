@@ -30,8 +30,8 @@ public class MainActivity extends BaseActivity {
         PrefUtils.putString(getApplicationContext(),"ceshi","ceshi");
 
         //一开始进入程序,就往容器中替换Fragment
-        //changeFragment(MainFragment.newInstance(), "mainfragment");
-        changeFragment(new XtTermCartFragment(), "mainfragment");
+        changeFragment(MainFragment.newInstance(), "mainfragment");
+        //changeFragment(new XtTermCartFragment(), "mainfragment");
         //changeFragment(new XtTermSelectFragment(), "mainfragment");
         //changeFragment(new XtSayhiFragment(), "mainfragment");
     }

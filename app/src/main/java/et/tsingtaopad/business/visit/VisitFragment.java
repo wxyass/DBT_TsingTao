@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
+import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartFragment;
 import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectFragment;
 
 /**
@@ -17,6 +18,7 @@ import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectFragment;
 
 public class VisitFragment extends BaseFragmentSupport implements View.OnClickListener{
     AppCompatButton button;
+    AppCompatButton xtTermBtn;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -27,14 +29,24 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
 
     private void initView(View view){
         button = view.findViewById(R.id.btn_test);
+        xtTermBtn = view.findViewById(R.id.btn_xt_term);
         button.setOnClickListener(this);
+        xtTermBtn.setOnClickListener(this);
     }
 
 
 
     @Override
     public void onClick(View v) {
-        changeHomeFragment(new XtTermSelectFragment(), "xttermlistfragment");
+        switch (v.getId()){
+            case R.id.btn_test:
+                changeHomeFragment(new XtTermSelectFragment(), "xttermlistfragment");
+                break;
+            case R.id.btn_xt_term:
+                changeHomeFragment(new XtTermCartFragment(), "xttermlistfragment");
+                break;
+        }
+
     }
 
 }
