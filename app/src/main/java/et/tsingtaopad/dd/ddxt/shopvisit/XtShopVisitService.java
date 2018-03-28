@@ -32,6 +32,7 @@ import et.tsingtaopad.db.dao.MstCheckexerecordInfoDao;
 import et.tsingtaopad.db.dao.MstGroupproductMDao;
 import et.tsingtaopad.db.dao.MstTerminalinfoMTempDao;
 import et.tsingtaopad.db.dao.MstVisitMDao;
+import et.tsingtaopad.db.dao.MstVisitMTempDao;
 import et.tsingtaopad.db.dao.MstVistproductInfoDao;
 import et.tsingtaopad.db.table.MstAgencysupplyInfo;
 import et.tsingtaopad.db.table.MstAgencysupplyInfoTemp;
@@ -215,7 +216,8 @@ public class XtShopVisitService {
                 visitMTemp.setTerminalkey(termStc.getTerminalkey());
                 visitMTemp.setRoutekey(termStc.getRoutekey());
                 visitMTemp.setVisitdate(visitDate);
-                visitMTemp.setStatus(ConstValues.FLAG_1);
+                //visitMTemp.setStatus(ConstValues.FLAG_1);
+                visitMTemp.setStatus(mstVisitM.getStatus());// 上次是否有效拜访
                 visitMTemp.setLongitude(mstVisitM.getLongitude());
                 visitMTemp.setLatitude(mstVisitM.getLatitude());
                 visitMTemp.setEnddate(null);
@@ -883,7 +885,7 @@ public class XtShopVisitService {
     }
 
     /**
-     * 获取终端信息
+     * 获取终端临时表 记录信息
      *
      * @param termId 终端ID
      * @return
@@ -901,6 +903,26 @@ public class XtShopVisitService {
         }
 
         return termInfo;
+    }
+
+    /**
+     * 获取拜访临时表信息
+     *
+     * @param visitId    拜访请表信息ID
+     * @return
+     */
+    public MstVisitMTemp findVisitTempById(String visitId) {
+
+        MstVisitMTemp visitInfo = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            MstVisitMTempDao dao = helper.getDao(MstVisitMTemp.class);
+            visitInfo = dao.queryForId(visitId);
+
+        } catch (SQLException e) {
+            Log.e(TAG, "获取拜访主表DAO对象失败", e);
+        }
+        return visitInfo;
     }
 
     // 删除临时表数据

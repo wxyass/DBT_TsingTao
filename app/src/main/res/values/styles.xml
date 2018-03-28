@@ -31,6 +31,19 @@
         <item name="android:layout_gravity">center</item>
     </style>
 
+    <!--巡店拜访 顶部按钮样式 fragment_dbt-->
+    <style name="style_shopvisit_RadioButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">35dp</item>
+        <item name="android:layout_marginLeft">3dp</item>
+        <item name="android:layout_marginRight">3dp</item>
+        <item name="android:button">@null</item>
+        <item name="android:background">@null</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
     <!--下面是摘自Dbtplus旧版本 2017年12月25日10:11:39-->
 
     <style name="FullscreenTheme" parent="android:Theme.NoTitleBar">
@@ -392,7 +405,7 @@
         <item name="android:background">@drawable/bg_select_white_gray</item>
         <item name="android:gravity">center_vertical</item>
     </style>
-    <!-- xtbf_sayhi_第一列 -->
+    <!-- xtbf_sayhi_打招呼 标题一列 -->
     <style name="xtbf_sayhi_one_tv" parent="@style/font_size4">
         <item name="android:textColor">#333333</item>
         <item name="android:layout_width">wrap_content</item>
@@ -402,7 +415,19 @@
         <item name="android:layout_marginLeft">20dp</item>
     </style>
 
-    <!-- xtbf_sayhi_第二列 -->
+    <!-- xtbf_sayhi_打招呼 数量 一列 -->
+    <style name="xtbf_sayhi_san_tv" parent="@style/font_size4">
+        <item name="android:textColor">#333333</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginRight">155dp</item>
+        <item name="android:gravity">center_vertical|left</item>
+    </style>
+
+    <!-- xtbf_sayhi_打招呼 件/年 一列 -->
     <style name="xtbf_sayhi_two_tv" parent="@style/font_size4">
         <item name="android:textColor">#333333</item>
         <item name="android:layout_width">wrap_content</item>
@@ -413,7 +438,8 @@
         <item name="android:layout_marginRight">100dp</item>
         <item name="android:gravity">center_vertical|left</item>
     </style>
-    <!-- xtbf_sayhi_第三列 -->
+
+    <!-- xtbf_sayhi_打招呼 箭头一列 -->
     <style name="xtbf_sayhi_third_tv" parent="@style/font_size4">
         <item name="android:layout_width">10dp</item>
         <item name="android:layout_height">20dp</item>

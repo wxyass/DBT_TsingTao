@@ -613,6 +613,16 @@ public class MstTerminalinfoMDaoImpl extends BaseDaoImpl<MstTerminalinfoM, Strin
             db.execSQL(buffer.toString(), new Object[]{term.getSequence(), term.getTerminalkey()});
         }
     }
+    @Override
+    public void updateTermTempSequence(SQLiteOpenHelper helper, List<TermSequence> list) {
+        for (TermSequence term : list) {
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("update mst_terminalinfo_m_temp set sequence=?");
+            buffer.append("where terminalkey=?");
+            SQLiteDatabase db = helper.getReadableDatabase();
+            db.execSQL(buffer.toString(), new Object[]{term.getSequence(), term.getTerminalkey()});
+        }
+    }
 
     @Override
     public TerminalName findByIdName(DatabaseHelper databaseHelper, String termId) {

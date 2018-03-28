@@ -23,6 +23,7 @@ import et.tsingtaopad.db.table.MstTerminalinfoM;
 import et.tsingtaopad.db.table.MstTerminalinfoMTemp;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 import et.tsingtaopad.main.visit.shopvisit.term.domain.MstTermListMStc;
+import et.tsingtaopad.main.visit.shopvisit.term.domain.TermSequence;
 
 
 /**
@@ -110,6 +111,40 @@ public class XtTermCartService {
         }
 
         return termPinyinMap;
+    }
+
+    /***
+     * 更新终端顺序 不上传
+     * @param list
+     */
+    public void updateTermSequence(List<TermSequence> list)
+    {
+        AndroidDatabaseConnection connection = null;
+        try
+        {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            SQLiteDatabase database = helper.getWritableDatabase();
+            connection = new AndroidDatabaseConnection(database, true);
+            Log.e(TAG, "更改巡店拜访顺序");
+            connection.setAutoCommit(false);
+            MstTerminalinfoMDao dao = helper.getDao(MstTerminalinfoM.class);
+            //dao.updateTermSequence(helper, list);
+            dao.updateTermTempSequence(helper, list);
+            connection.commit(null);
+            //sendTermSequenceRequest(list);
+        }
+        catch (SQLException e)
+        {
+            Log.e(TAG, "更改巡店拜访顺序失败", e);
+            try
+            {
+                connection.rollback(null);
+            }
+            catch (SQLException e1)
+            {
+                e1.printStackTrace();
+            }
+        }
     }
 
 

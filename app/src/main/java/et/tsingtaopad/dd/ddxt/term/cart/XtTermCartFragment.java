@@ -248,6 +248,6 @@ public class XtTermCartFragment extends BaseFragmentSupport implements View.OnCl
             termSequenceList.add(termSequence);
         }
         // 将排序上传服务器
-        //service.updateTermSequence(termSequenceList);
+        cartService.updateTermSequence(termSequenceList);
     }
 }

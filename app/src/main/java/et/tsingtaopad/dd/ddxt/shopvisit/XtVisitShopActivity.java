@@ -10,8 +10,10 @@ import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.PopupWindow;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -73,6 +75,13 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
     List<XtProItem> proItemLst = new ArrayList<XtProItem>();
     List<XtCheckIndexCalculateStc> noProIndexLst = new ArrayList<XtCheckIndexCalculateStc>();
 
+    private RadioButton xtvisit_rb_sayhi;
+    private RadioButton xtvisit_rb_invoicing;
+    private RadioButton xtvisit_rb_checkindex;
+    private RadioButton xtvisit_rb_chatvie;
+    private RadioButton xtvisit_rb_camera;
+    private RadioButton xtvisit_rb_other;
+
     private String visitId;
     private String channelId;
 
@@ -95,7 +104,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
         confirmBtn.setVisibility(View.VISIBLE);
         confirmBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
-        titleTv.setOnClickListener(this);
+        //titleTv.setOnClickListener(this);
 
 
         mDataTv = (AppCompatTextView) findViewById(R.id.xtvisit_tv_date);
@@ -104,12 +113,24 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
         mContentFl = (FrameLayout) findViewById(R.id.xtvisit_fl_content);
         mMemoImg = (AppCompatImageView) findViewById(R.id.xtvisit_bt_memo);
 
+        xtvisit_rb_sayhi = (RadioButton) findViewById(R.id.xtvisit_rb_sayhi);
+        xtvisit_rb_invoicing = (RadioButton) findViewById(R.id.xtvisit_rb_invoicing);
+        xtvisit_rb_checkindex = (RadioButton) findViewById(R.id.xtvisit_rb_checkindex);
+        xtvisit_rb_chatvie = (RadioButton) findViewById(R.id.xtvisit_rb_chatvie);
+        xtvisit_rb_camera = (RadioButton) findViewById(R.id.xtvisit_rb_camera);
+        xtvisit_rb_other = (RadioButton) findViewById(R.id.xtvisit_rb_other);
+        xtvisit_rb_sayhi.setOnClickListener(this);
+        xtvisit_rb_invoicing.setOnClickListener(this);
+        xtvisit_rb_checkindex.setOnClickListener(this);
+        xtvisit_rb_chatvie.setOnClickListener(this);
+        xtvisit_rb_camera.setOnClickListener(this);
+        xtvisit_rb_other.setOnClickListener(this);
+
 
     }
 
     // 初始化数据
     private void initData() {
-        titleTv.setText("打招呼(1/5)");
 
         // 获取参数“终端信息”
         Bundle bundle = getIntent().getExtras();
@@ -117,6 +138,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
         isFirstVisit = bundle.getString("isFirstVisit");
         termStc = (XtTermSelectMStc) bundle.getSerializable("termStc");
 
+        titleTv.setText(termStc.getTerminalname());
 
         xtShopVisitService = new XtShopVisitService(getApplicationContext(), null);
         // 从拜访主表中获取最后一次拜访数据
@@ -181,6 +203,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
                 break;
 
             case R.id.pop_sayhi:
+
                 if (fragmentType == 1) {
                     mPopWindow.dismiss();
                 } else {
@@ -192,6 +215,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
                     titleTv.setText("打招呼(1/5)");
                 }
                 break;
+
             case R.id.pop_invoicing:
                 if (fragmentType == 2) {
                     mPopWindow.dismiss();
@@ -241,6 +265,57 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
                     titleTv.setText("拍照(5/5)");
                 }
 
+                break;
+
+            case R.id.xtvisit_rb_sayhi:
+                if (fragmentType == 1) {
+                    return;
+                } else {
+                    fragmentType = 1;
+                    XtSayhiFragment xtSayhiFragment = new XtSayhiFragment();
+                    xtSayhiFragment.setArguments(returnBundle());
+                    changeFragment(xtSayhiFragment, "xtsayhifragment");
+                }
+                break;
+            case R.id.xtvisit_rb_invoicing:
+                if (fragmentType == 2) {
+                    return;
+                } else {
+                    fragmentType = 2;
+                    XtInvoicingFragment xtInvoicingFragment = new XtInvoicingFragment();
+                    xtInvoicingFragment.setArguments(returnBundle());
+                    changeFragment(xtInvoicingFragment, "xtinvoicingfragment");
+                }
+                break;
+            case R.id.xtvisit_rb_checkindex:
+                if (fragmentType == 3) {
+                    return;
+                } else {
+                    fragmentType = 3;
+                    XtCheckIndexFragment xtCheckIndexFragment = new XtCheckIndexFragment();
+                    xtCheckIndexFragment.setArguments(returnBundle());
+                    changeFragment(xtCheckIndexFragment, "xtcheckindexfragment");
+                }
+                break;
+            case R.id.xtvisit_rb_chatvie:
+                if (fragmentType == 4) {
+                    return;
+                } else {
+                    fragmentType = 4;
+                    XtChatvieFragment xtChatvieFragment = new XtChatvieFragment();
+                    xtChatvieFragment.setArguments(returnBundle());
+                    changeFragment(xtChatvieFragment, "xtchatviefragment");
+                }
+                break;
+            case R.id.xtvisit_rb_camera:
+                if (fragmentType == 5) {
+                    return;
+                } else {
+                    fragmentType = 5;
+                    XtCameraFragment xtCameraFragment = new XtCameraFragment();
+                    xtCameraFragment.setArguments(returnBundle());
+                    changeFragment(xtCameraFragment, "xtcamerafragment");
+                }
                 break;
             default:
                 break;

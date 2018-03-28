@@ -9,7 +9,8 @@
     <ScrollView
         android:id="@+id/sayhi_scrollview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,7 +33,7 @@
                     android:text="@string/sayhi_termstatus"/>
 
                 <et.tsingtaopad.view.DdSlideSwitch
-                    android:id="@+id/sayhi_sw_termstatus"
+                    android:id="@+id/xt_sayhi_sw_termstatus"
                     style="@style/page_label_small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -65,7 +66,7 @@
                     android:text="@string/sayhi_visitstatus"/>
 
                 <et.tsingtaopad.view.DdSlideSwitch
-                    android:id="@+id/sayhi_sw_visitstatus"
+                    android:id="@+id/xt_sayhi_sw_visitstatus"
                     style="@style/page_label_small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -90,7 +91,7 @@
                 android:gravity="center_vertical">
 
                 <TextView
-                    android:id="@+id/sayhi_tv_wopindianzhao"
+                    android:id="@+id/xt_sayhi_tv_wopindianzhao"
                     style="@style/page_label_big"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -99,33 +100,33 @@
                     android:text="@string/sayhi_wopindianzhao"/>
 
                 <Button
-                    android:id="@+id/sayhi_btn_text"
+                    android:id="@+id/xt_sayhi_btn_text"
                     style="@style/page_label_big"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@+id/sayhi_tv_wopindianzhao"
+                    android:layout_toRightOf="@+id/xt_sayhi_tv_wopindianzhao"
                     android:background="@drawable/transparent"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:text="@string/default_text"/>
 
                 <Button
-                    android:id="@+id/sayhi_btn_time"
+                    android:id="@+id/xt_sayhi_btn_time"
                     style="@style/button_text"
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="2dp"
-                    android:layout_toRightOf="@+id/sayhi_btn_text"
+                    android:layout_toRightOf="@+id/xt_sayhi_btn_text"
                     android:background="@drawable/bg_search_button"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:text="@string/default_date"/>
 
                 <et.tsingtaopad.view.DdSlideSwitch
-                    android:id="@+id/sayhi_sw_wopindianzhao"
+                    android:id="@+id/xt_sayhi_sw_wopindianzhao"
                     style="@style/page_label_small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -158,7 +159,7 @@
                     android:text="@string/sayhi_prostatus"/>
 
                 <CheckBox
-                    android:id="@+id/sayhi_cb_vie"
+                    android:id="@+id/xt_sayhi_cb_vie"
                     style="@style/page_label_small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -169,13 +170,13 @@
                     android:text="@string/sayhi_prostatus_vie"/>
 
                 <CheckBox
-                    android:id="@+id/sayhi_cb_mine"
+                    android:id="@+id/xt_sayhi_cb_mine"
                     style="@style/page_label_small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="20dp"
-                    android:layout_toLeftOf="@id/sayhi_cb_vie"
+                    android:layout_toLeftOf="@id/xt_sayhi_cb_vie"
                     android:button="@drawable/bg_visit_select"
                     android:text="@string/sayhi_prostatus_mine"/>
             </RelativeLayout>
@@ -199,10 +200,10 @@
                     android:text="@string/sayhi_protocol"/>
 
                 <CheckBox
-                    android:id="@+id/sayhi_cb_vieprotocol"
+                    android:id="@+id/xt_sayhi_cb_vieprotocol"
                     style="@style/page_label_small"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="70dp"
@@ -210,13 +211,13 @@
                     android:text="@string/sayhi_prostatus_vie"/>
 
                 <CheckBox
-                    android:id="@+id/sayhi_cb_mineprotocol"
+                    android:id="@+id/xt_sayhi_cb_mineprotocol"
                     style="@style/page_label_small"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="20dp"
-                    android:layout_toLeftOf="@id/sayhi_cb_vieprotocol"
+                    android:layout_toLeftOf="@id/xt_sayhi_cb_vieprotocol"
                     android:button="@drawable/bg_visit_select"
                     android:text="@string/sayhi_prostatus_mine"/>
             </RelativeLayout>
@@ -252,12 +253,16 @@
             <!-- 终端编码： -->
             <RelativeLayout
                 style="@style/xtbf_sayhi_rl">
+
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_termcode"/>
+
                 <TextView
+                    android:id="@+id/xtbf_sayhi_termcode"
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_termname"/>
+
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
             </RelativeLayout>
@@ -269,12 +274,16 @@
             <!-- 所属路线： -->
             <RelativeLayout
                 style="@style/xtbf_sayhi_rl">
+
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_belongline"/>
+
                 <TextView
+                    android:id="@+id/xtbf_sayhi_termroude"
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_termname"/>
+
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
             </RelativeLayout>
@@ -287,12 +296,16 @@
             <!-- 终端名称： -->
             <RelativeLayout
                 style="@style/xtbf_sayhi_rl">
+
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_termname"/>
+
                 <TextView
+                    android:id="@+id/xtbf_sayhi_termname"
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_termname"/>
+
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
             </RelativeLayout>
@@ -303,12 +316,21 @@
             <!-- 终端等级： -->
             <RelativeLayout
                 style="@style/xtbf_sayhi_rl">
+
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_level"/>
+
+                <TextView
+                    android:id="@+id/xtbf_sayhi_termlv"
+                    style="@style/xtbf_sayhi_san_tv"
+                    android:layout_marginRight="130dp"
+                    android:text="@string/termadd_termname"/>
+
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_termname"/>
+                    android:text="级"/>
+
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
             </RelativeLayout>
@@ -319,12 +341,16 @@
             <!-- 所在省： -->
             <RelativeLayout
                 style="@style/xtbf_sayhi_rl">
+
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_prov"/>
+
                 <TextView
+                    android:id="@+id/xtbf_sayhi_termprovince"
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_termname"/>
+
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
             </RelativeLayout>
@@ -335,12 +361,16 @@
             <!-- 所在市： -->
             <RelativeLayout
                 style="@style/xtbf_sayhi_rl">
+
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_city"/>
+
                 <TextView
+                    android:id="@+id/xtbf_sayhi_termcity"
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_termname"/>
+
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
             </RelativeLayout>
@@ -351,12 +381,16 @@
             <!-- 所在县： -->
             <RelativeLayout
                 style="@style/xtbf_sayhi_rl">
+
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_country"/>
+
                 <TextView
+                    android:id="@+id/xtbf_sayhi_termcountry"
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_termname"/>
+
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
             </RelativeLayout>
@@ -367,12 +401,16 @@
             <!-- 地址： -->
             <RelativeLayout
                 style="@style/xtbf_sayhi_rl">
+
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_address"/>
+
                 <TextView
+                    android:id="@+id/xtbf_sayhi_termaddress"
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_termname"/>
+
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
             </RelativeLayout>
@@ -383,12 +421,16 @@
             <!-- 联系人： -->
             <RelativeLayout
                 style="@style/xtbf_sayhi_rl">
+
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_person"/>
+
                 <TextView
+                    android:id="@+id/xtbf_sayhi_termcontact"
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_termname"/>
+
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
             </RelativeLayout>
@@ -399,12 +441,16 @@
             <!-- 电话： -->
             <RelativeLayout
                 style="@style/xtbf_sayhi_rl">
+
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_tel"/>
+
                 <TextView
+                    android:id="@+id/xtbf_sayhi_termphone"
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_termname"/>
+
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
             </RelativeLayout>
@@ -415,12 +461,20 @@
             <!-- 拜访周期： -->
             <RelativeLayout
                 style="@style/xtbf_sayhi_rl">
+
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_cycle"/>
+
+                <TextView
+                    android:id="@+id/xtbf_sayhi_termcycle"
+                    style="@style/xtbf_sayhi_san_tv"
+                    android:text="@string/termadd_termname"/>
+
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_termname"/>
+                    android:text="@string/termadd_unit_cycle"/>
+
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
             </RelativeLayout>
@@ -431,12 +485,16 @@
             <!-- 拜访顺序： -->
             <RelativeLayout
                 style="@style/xtbf_sayhi_rl">
+
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_sequence"/>
+
                 <TextView
+                    android:id="@+id/xtbf_sayhi_termsequence"
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_termname"/>
+
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
             </RelativeLayout>
@@ -447,12 +505,19 @@
             <!-- 高档容量： -->
             <RelativeLayout
                 style="@style/xtbf_sayhi_rl">
+
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_hvolume"/>
+
+                <TextView
+                    android:id="@+id/xtbf_sayhi_termhvolume"
+                    style="@style/xtbf_sayhi_san_tv"
+                    android:text="@string/termadd_termname"/>
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_termname"/>
+                    android:text="@string/termadd_unit_volume"/>
+
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
             </RelativeLayout>
@@ -463,12 +528,19 @@
             <!-- 中档容量： -->
             <RelativeLayout
                 style="@style/xtbf_sayhi_rl">
+
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_mvolume"/>
+
+                <TextView
+                    android:id="@+id/xtbf_sayhi_termmvolume"
+                    style="@style/xtbf_sayhi_san_tv"
+                    android:text="@string/termadd_termname"/>
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_termname"/>
+                    android:text="@string/termadd_unit_volume"/>
+
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
             </RelativeLayout>
@@ -479,12 +551,19 @@
             <!-- 普通容量： -->
             <RelativeLayout
                 style="@style/xtbf_sayhi_rl">
+
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_pvolume"/>
+
+                <TextView
+                    android:id="@+id/xtbf_sayhi_termpvolume"
+                    style="@style/xtbf_sayhi_san_tv"
+                    android:text="@string/termadd_termname"/>
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_termname"/>
+                    android:text="@string/termadd_unit_volume"/>
+
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
             </RelativeLayout>
@@ -495,12 +574,19 @@
             <!-- 低档容量： -->
             <RelativeLayout
                 style="@style/xtbf_sayhi_rl">
+
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_lvolume"/>
+
+                <TextView
+                    android:id="@+id/xtbf_sayhi_termlvolume"
+                    style="@style/xtbf_sayhi_san_tv"
+                    android:text="@string/termadd_termname"/>
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_termname"/>
+                    android:text="@string/termadd_unit_volume"/>
+
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
             </RelativeLayout>
@@ -511,12 +597,19 @@
             <!-- 总容量： -->
             <RelativeLayout
                 style="@style/xtbf_sayhi_rl">
+
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_totalvolume"/>
+
+                <TextView
+                    android:id="@+id/xtbf_sayhi_termtvolume"
+                    style="@style/xtbf_sayhi_san_tv"
+                    android:text="@string/termadd_termname"/>
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_termname"/>
+                    android:text="@string/termadd_unit_volume"/>
+
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
             </RelativeLayout>
@@ -527,12 +620,16 @@
             <!-- 区域类型： -->
             <RelativeLayout
                 style="@style/xtbf_sayhi_rl">
+
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_areatype"/>
+
                 <TextView
+                    android:id="@+id/xtbf_sayhi_termarea"
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_termname"/>
+
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
             </RelativeLayout>
@@ -543,12 +640,16 @@
             <!-- 销售渠道： -->
             <RelativeLayout
                 style="@style/xtbf_sayhi_rl">
+
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_sellchannel"/>
+
                 <TextView
+                    android:id="@+id/xtbf_sayhi_termsellchannel"
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_termname"/>
+
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
             </RelativeLayout>
@@ -559,12 +660,16 @@
             <!-- 主渠道： -->
             <RelativeLayout
                 style="@style/xtbf_sayhi_rl">
+
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_mainchannel"/>
+
                 <TextView
+                    android:id="@+id/xtbf_sayhi_termtmainchannel"
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_termname"/>
+
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
             </RelativeLayout>
@@ -575,12 +680,16 @@
             <!-- 次渠道： -->
             <RelativeLayout
                 style="@style/xtbf_sayhi_rl">
+
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_minorchannel"/>
+
                 <TextView
+                    android:id="@+id/xtbf_sayhi_termminorchannel"
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_termname"/>
+
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
             </RelativeLayout>
@@ -591,12 +700,16 @@
             <!-- 拜访对象： -->
             <RelativeLayout
                 style="@style/xtbf_sayhi_rl">
+
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_visitperson"/>
+
                 <TextView
+                    android:id="@+id/xtbf_sayhi_termpersion"
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_termname"/>
+
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
             </RelativeLayout>
@@ -610,17 +723,18 @@
                 android:layout_height="wrap_content">
 
                 <Button
-                    style="@style/xtbf_btn_tv"
                     android:id="@+id/xtbf_sayhi_bt_next"
+                    style="@style/xtbf_btn_tv"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/xtbf_btn_h"
-                    android:layout_marginTop="20dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
+                    android:layout_marginTop="20dp"
                     android:background="@drawable/bg_select_green"
                     android:text="下一步"
                     />
             </RelativeLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="80dp"/>

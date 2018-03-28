@@ -70,6 +70,52 @@
                         android:text="@string/shopvisit_visitdatelabel3"/>
                 </LinearLayout>
 
+                <RadioGroup
+                    android:id="@+id/radioGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:background="@null"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/xtvisit_rb_sayhi"
+                        style="@style/style_shopvisit_RadioButton"
+                        android:background="@drawable/bg_select_green"
+                        android:checked="true"
+                        android:text="打招呼"
+                        />
+
+                    <RadioButton
+                        android:id="@+id/xtvisit_rb_invoicing"
+                        style="@style/style_shopvisit_RadioButton"
+                        android:background="@drawable/bg_select_green"
+                        android:text="进销存"/>
+
+                    <RadioButton
+                        android:id="@+id/xtvisit_rb_checkindex"
+                        style="@style/style_shopvisit_RadioButton"
+                        android:background="@drawable/bg_select_green"
+                        android:text="查指标"/>
+
+                    <RadioButton
+                        android:id="@+id/xtvisit_rb_chatvie"
+                        style="@style/style_shopvisit_RadioButton"
+                        android:background="@drawable/bg_select_green"
+                        android:text="聊竞品"/>
+
+                    <RadioButton
+                        android:id="@+id/xtvisit_rb_camera"
+                        style="@style/style_shopvisit_RadioButton"
+                        android:background="@drawable/bg_select_green"
+                        android:text="拍照"/>
+
+                    <RadioButton
+                        android:id="@+id/xtvisit_rb_other"
+                        style="@style/style_shopvisit_RadioButton"
+                        android:background="@drawable/bg_select_green"
+                        android:text="其他"/>
+                </RadioGroup>
+
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/xtvisit_tv_textView2"
                     android:layout_width="fill_parent"
