@@ -7,29 +7,40 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import et.tsingtaopad.R;
+import et.tsingtaopad.adapter.AlertKeyValueAdapter;
 import et.tsingtaopad.adapter.SpinnerKeyValueAdapter;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
+import et.tsingtaopad.core.view.alertview.AlertView;
+import et.tsingtaopad.core.view.alertview.OnDismissListener;
+import et.tsingtaopad.core.view.alertview.OnItemClickListener;
+import et.tsingtaopad.db.table.MstRouteM;
 import et.tsingtaopad.db.table.MstTerminalinfoMTemp;
 import et.tsingtaopad.db.table.MstVisitMTemp;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
+import et.tsingtaopad.initconstvalues.domain.KvStc;
 
 /**
  * Created by yangwenmin on 2018/3/12.
  */
 
-public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClickListener {
+public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClickListener,OnItemClickListener, OnDismissListener {
 
     private et.tsingtaopad.view.DdSlideSwitch xttermstatusSw;
     private et.tsingtaopad.view.DdSlideSwitch xtvisitstatusSw;
@@ -42,8 +53,10 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
     private CheckBox xtmineprotocolCb;
     private TextView xttermcode;
     private TextView xttermroude;
+    private RelativeLayout xttermroudeRl;
     private TextView xttermname;
     private TextView xttermlv;
+    private RelativeLayout xttermlvRl;
     private TextView xtprovince;
     private TextView xttermcity;
     private TextView xttermcountry;
@@ -58,10 +71,15 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
     private TextView xttermlvolume;
     private TextView xttermtvolume;
     private TextView xttermarea;
+    private RelativeLayout xttermareaRl;
     private TextView xttermsellchannel;
+    private RelativeLayout xttermsellchannelRl;
     private TextView xttermtmainchannel;
+    private RelativeLayout xttermtmainchannelRl;
     private TextView xttermminorchannel;
+    private RelativeLayout xttermminorchannelRl;
     private TextView xttermpersion;
+    private RelativeLayout xttermpersionRl;
     private Button xtnextBtn;
 
     private XtSayhiService xtSayhiService;
@@ -74,6 +92,8 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
     private int month;
     private int day;
     private String ifminedate;
+
+    private AlertView mAlertViewExt;//窗口拓展例子
 
     @Nullable
     @Override
@@ -96,9 +116,11 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         xtvieprotocolCb = (CheckBox) view.findViewById(R.id.xt_sayhi_cb_vieprotocol);
         xtmineprotocolCb = (CheckBox) view.findViewById(R.id.xt_sayhi_cb_mineprotocol);
         xttermcode = (TextView) view.findViewById(R.id.xtbf_sayhi_termcode);
+        xttermroudeRl = (RelativeLayout) view.findViewById(R.id.xt_sayhi_rl_termroude);
         xttermroude = (TextView) view.findViewById(R.id.xtbf_sayhi_termroude);
         xttermname = (TextView) view.findViewById(R.id.xtbf_sayhi_termname);
         xttermlv = (TextView) view.findViewById(R.id.xtbf_sayhi_termlv);
+        xttermlvRl = (RelativeLayout) view.findViewById(R.id.xtbf_sayhi_rl_termlv);
         xtprovince = (TextView) view.findViewById(R.id.xtbf_sayhi_termprovince);
         xttermcity = (TextView) view.findViewById(R.id.xtbf_sayhi_termcity);
         xttermcountry = (TextView) view.findViewById(R.id.xtbf_sayhi_termcountry);
@@ -113,11 +135,24 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         xttermlvolume = (TextView) view.findViewById(R.id.xtbf_sayhi_termlvolume);
         xttermtvolume = (TextView) view.findViewById(R.id.xtbf_sayhi_termtvolume);
         xttermarea = (TextView) view.findViewById(R.id.xtbf_sayhi_termarea);
+        xttermareaRl = (RelativeLayout) view.findViewById(R.id.xtbf_sayhi_rl_termarea);
         xttermsellchannel = (TextView) view.findViewById(R.id.xtbf_sayhi_termsellchannel);
+        xttermsellchannelRl = (RelativeLayout) view.findViewById(R.id.xtbf_sayhi_rl_termsellchannel);
         xttermtmainchannel = (TextView) view.findViewById(R.id.xtbf_sayhi_termtmainchannel);
+        xttermtmainchannelRl = (RelativeLayout) view.findViewById(R.id.xtbf_sayhi_rl_termtmainchannel);
         xttermminorchannel = (TextView) view.findViewById(R.id.xtbf_sayhi_termminorchannel);
+        xttermminorchannelRl = (RelativeLayout) view.findViewById(R.id.xtbf_sayhi_rl_termminorchannel);
         xttermpersion = (TextView) view.findViewById(R.id.xtbf_sayhi_termpersion);
+        xttermpersionRl = (RelativeLayout) view.findViewById(R.id.xtbf_sayhi_rl_termpersion);
         xtnextBtn = (Button) view.findViewById(R.id.xtbf_sayhi_bt_next);
+
+        xttermlvRl.setOnClickListener(this);
+        xttermroudeRl.setOnClickListener(this);
+        xttermareaRl.setOnClickListener(this);
+        xttermsellchannelRl.setOnClickListener(this);
+        xttermtmainchannelRl.setOnClickListener(this);
+        xttermminorchannelRl.setOnClickListener(this);
+        xttermpersionRl.setOnClickListener(this);
 
 
     }
@@ -127,8 +162,11 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         super.onActivityCreated(savedInstanceState);
 
 
+        // 初始化页面数据
         initData();
         Toast.makeText(getActivity(), "打招呼" + "/" + termId + "/" + termName, Toast.LENGTH_SHORT).show();
+
+        // 设置监听
     }
 
     // 初始化数据
@@ -251,6 +289,8 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
             xttermcity.setText(xtSayhiService.getAreaName(termInfoTemp.getCity()));
             xttermcountry.setText(xtSayhiService.getAreaName(termInfoTemp.getCounty()));
 
+
+
         }
 
     }
@@ -262,8 +302,176 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
             case R.id.top_navigation_rl_back:
                 supportFragmentManager.popBackStack();
                 break;
+
+            case R.id.xt_sayhi_rl_termroude:// 终端路线
+                final List<MstRouteM> mstRouteList  = xtSayhiService.initMstRoute();
+                mAlertViewExt = new AlertView("请选择路线", null, null,null, null, getActivity(), AlertView.Style.ActionSheet, this);
+                ViewGroup extView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_list_form, null);
+                ListView listview = (ListView) extView.findViewById(R.id.alert_list);
+                AlertKeyValueAdapter keyValueAdapter = new AlertKeyValueAdapter(getActivity(), mstRouteList,
+                        new String[] {"routekey", "routename" }, termInfoTemp.getRoutekey());
+                listview.setAdapter(keyValueAdapter);
+                listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        xttermroude.setText(mstRouteList.get(position).getRoutename());
+                        termInfoTemp.setRoutekey(mstRouteList.get(position).getRoutekey());
+                        mAlertViewExt.dismiss();
+                    }
+                });
+                mAlertViewExt.addExtView(extView);
+                mAlertViewExt.setCancelable(true).setOnDismissListener(this);
+                mAlertViewExt.show();
+                break;
+
+            case R.id.xtbf_sayhi_rl_termlv:// 终端等级
+                final List<KvStc> dataDicByTermLevelLst = xtSayhiService.initDataDicByTermLevel();
+                mAlertViewExt = new AlertView("请选择终端等级", null, null,null, null, getActivity(), AlertView.Style.ActionSheet, this);
+                ViewGroup lvextView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_list_form, null);
+                ListView lvlistview = (ListView) lvextView.findViewById(R.id.alert_list);
+                AlertKeyValueAdapter lvkeyValueAdapter = new AlertKeyValueAdapter(getActivity(), dataDicByTermLevelLst,
+                        new String[] {"key", "value"}, termInfoTemp.getTlevel());
+                lvlistview.setAdapter(lvkeyValueAdapter);
+                lvlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        xttermlv.setText(dataDicByTermLevelLst.get(position).getValue());
+                        termInfoTemp.setTlevel(dataDicByTermLevelLst.get(position).getKey());
+                        mAlertViewExt.dismiss();
+                    }
+                });
+                mAlertViewExt.addExtView(lvextView);
+                mAlertViewExt.setCancelable(true).setOnDismissListener(this);
+                mAlertViewExt.show();
+
+                break;
+            case R.id.xtbf_sayhi_rl_termarea:// 区域类型
+                final List<KvStc> dataDicByAreaTypeLst = xtSayhiService.initDataDicByAreaType();
+                mAlertViewExt = new AlertView("请选择区域类型", null, null,null, null, getActivity(), AlertView.Style.ActionSheet, this);
+                ViewGroup areaextView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_list_form, null);
+                ListView arealistview = (ListView) areaextView.findViewById(R.id.alert_list);
+                AlertKeyValueAdapter areakeyValueAdapter = new AlertKeyValueAdapter(getActivity(), dataDicByAreaTypeLst,
+                        new String[] {"key", "value"}, termInfoTemp.getAreatype());
+                arealistview.setAdapter(areakeyValueAdapter);
+                arealistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        xttermarea.setText(dataDicByAreaTypeLst.get(position).getValue());
+                        termInfoTemp.setAreatype(dataDicByAreaTypeLst.get(position).getKey());
+                        mAlertViewExt.dismiss();
+                    }
+                });
+                mAlertViewExt.addExtView(areaextView);
+                mAlertViewExt.setCancelable(true).setOnDismissListener(this);
+                mAlertViewExt.show();
+
+                break;
+            case R.id.xtbf_sayhi_rl_termsellchannel:// 销售渠道
+                mAlertViewExt = new AlertView("请选择销售渠道", null, null,null, null, getActivity(), AlertView.Style.ActionSheet, this);
+                ViewGroup sellchannelextView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_list_form, null);
+                ListView sellchannellistview = (ListView) sellchannelextView.findViewById(R.id.alert_list);
+                AlertKeyValueAdapter sellchannelkeyValueAdapter = new AlertKeyValueAdapter(getActivity(), xtSayhiService.initMstRoute(),
+                        new String[] {"routekey", "routename" }, termInfoTemp.getRoutekey());
+                sellchannellistview.setAdapter(sellchannelkeyValueAdapter);
+                sellchannellistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        xttermroude.setText(xtSayhiService.initMstRoute().get(position).getRoutename());
+                        termInfoTemp.setRoutekey(xtSayhiService.initMstRoute().get(position).getRoutekey());
+                        mAlertViewExt.dismiss();
+                    }
+                });
+                mAlertViewExt.addExtView(sellchannelextView);
+                mAlertViewExt.setCancelable(true).setOnDismissListener(this);
+                mAlertViewExt.show();
+
+                break;
+            case R.id.xtbf_sayhi_rl_termtmainchannel://主渠道
+                mAlertViewExt = new AlertView("请选择主渠道", null, null,null, null, getActivity(), AlertView.Style.ActionSheet, this);
+                ViewGroup mainchannelextView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_list_form, null);
+                ListView mainchannellistview = (ListView) mainchannelextView.findViewById(R.id.alert_list);
+                AlertKeyValueAdapter mainchannelkeyValueAdapter = new AlertKeyValueAdapter(getActivity(), xtSayhiService.initMstRoute(),
+                        new String[] {"routekey", "routename" }, termInfoTemp.getRoutekey());
+                mainchannellistview.setAdapter(mainchannelkeyValueAdapter);
+                mainchannellistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        xttermroude.setText(xtSayhiService.initMstRoute().get(position).getRoutename());
+                        termInfoTemp.setRoutekey(xtSayhiService.initMstRoute().get(position).getRoutekey());
+                        mAlertViewExt.dismiss();
+                    }
+                });
+                mAlertViewExt.addExtView(mainchannelextView);
+                mAlertViewExt.setCancelable(true).setOnDismissListener(this);
+                mAlertViewExt.show();
+
+                break;
+            case R.id.xtbf_sayhi_rl_termminorchannel:// 次渠道
+                mAlertViewExt = new AlertView("请选择次渠道", null, null,null, null, getActivity(), AlertView.Style.ActionSheet, this);
+                ViewGroup minorchannelextView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_list_form, null);
+                ListView minorchannellistview = (ListView) minorchannelextView.findViewById(R.id.alert_list);
+                AlertKeyValueAdapter minorchannelkeyValueAdapter = new AlertKeyValueAdapter(getActivity(), xtSayhiService.initMstRoute(),
+                        new String[] {"routekey", "routename" }, termInfoTemp.getRoutekey());
+                minorchannellistview.setAdapter(minorchannelkeyValueAdapter);
+                minorchannellistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        xttermroude.setText(xtSayhiService.initMstRoute().get(position).getRoutename());
+                        termInfoTemp.setRoutekey(xtSayhiService.initMstRoute().get(position).getRoutekey());
+                        mAlertViewExt.dismiss();
+                    }
+                });
+                mAlertViewExt.addExtView(minorchannelextView);
+                mAlertViewExt.setCancelable(true).setOnDismissListener(this);
+                mAlertViewExt.show();
+
+                break;
+            case R.id.xtbf_sayhi_rl_termpersion:// 拜访对象
+                mAlertViewExt = new AlertView("请选择拜访对象", null, null,null, null, getActivity(), AlertView.Style.ActionSheet, this);
+                ViewGroup persionextView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_list_form, null);
+                ListView persionlistview = (ListView) persionextView.findViewById(R.id.alert_list);
+                AlertKeyValueAdapter persionkeyValueAdapter = new AlertKeyValueAdapter(getActivity(), xtSayhiService.initMstRoute(),
+                        new String[] {"routekey", "routename" }, termInfoTemp.getRoutekey());
+                persionlistview.setAdapter(persionkeyValueAdapter);
+                persionlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        xttermroude.setText(xtSayhiService.initMstRoute().get(position).getRoutename());
+                        termInfoTemp.setRoutekey(xtSayhiService.initMstRoute().get(position).getRoutekey());
+                        mAlertViewExt.dismiss();
+                    }
+                });
+                mAlertViewExt.addExtView(persionextView);
+                mAlertViewExt.setCancelable(true).setOnDismissListener(this);
+                mAlertViewExt.show();
+
+                break;
+
+
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onItemClick(Object o, int position) {
+        //判断是否是拓展窗口View，而且点击的是非取消按钮
+        /*if (o == mAlertViewExt && position != AlertView.CANCELPOSITION) {
+            String name = etName.getText().toString();
+            if (name.isEmpty()) {
+                Toast.makeText(this, "啥都没填呢", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "hello," + name, Toast.LENGTH_SHORT).show();
+            }
+
+            return;
+        }
+        Toast.makeText(this, "点击了第" + position + "个", Toast.LENGTH_SHORT).show();*/
+    }
+
+    @Override
+    public void onDismiss(Object o) {
+        //closeKeyboard();
+        //Toast.makeText(this, "消失了", Toast.LENGTH_SHORT).show();
     }
 }

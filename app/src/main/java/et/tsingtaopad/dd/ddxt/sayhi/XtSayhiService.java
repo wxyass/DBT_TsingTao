@@ -6,17 +6,25 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.util.Log;
 
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.db.dao.PadChecktypeMDao;
+import et.tsingtaopad.db.table.CmmDatadicM;
+import et.tsingtaopad.db.table.MstRouteM;
 import et.tsingtaopad.db.table.PadChecktypeM;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtShopVisitService;
 import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
+import et.tsingtaopad.main.visit.shopvisit.line.domain.MstRouteMStc;
 
 /**
  * 文件名：XtShopVisitService.java</br>
@@ -68,6 +76,7 @@ public class XtSayhiService extends XtShopVisitService {
         }
         return areaname;
     }
+
     // 根据路线key,获取路线名称
     public String getRouteName(String diccode) {
 
@@ -85,6 +94,96 @@ public class XtSayhiService extends XtShopVisitService {
             areaname = "";
         }
         return areaname;
+    }
+
+    /**
+     * 获取并初始化拜访线路
+     *
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public List<MstRouteM> initMstRoute() {
+
+        List<MstRouteM> mstRouteList = new ArrayList<MstRouteM>();
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MstRouteM, String> mstRouteMDao = helper.getMstRouteMDao();
+            QueryBuilder<MstRouteM, String> qBuilder = mstRouteMDao.queryBuilder();
+            Where<MstRouteM, String> where = qBuilder.where();
+            where.and(where.or(where.isNull("deleteflag"), where.eq("deleteflag", "0")),
+                    where.or(where.isNull("routestatus"), where.eq("routestatus", "0"))
+            );
+            qBuilder.orderBy("orderbyno", true).orderBy("routename", true);
+            mstRouteList = qBuilder.query();
+        } catch (Exception e) {
+            Log.e(TAG, "获取线路信息失败", e);
+        }
+
+        return mstRouteList;
+    }
+
+    /**
+     * 初始化终端等级
+     */
+    public List<KvStc> initDataDicByTermLevel() {
+        List<CmmDatadicM> dataDicLst = initDataDictionary();
+        // 获取数据字典表中区域字典对应的父ID
+        String termLevel = PropertiesUtil.getProperties("datadic_termLevel");
+
+        List<KvStc> kvLst = new ArrayList<KvStc>();
+        for (CmmDatadicM item : dataDicLst) {
+            if (termLevel.equals(item.getParentcode())) {
+                kvLst.add(new KvStc(item.getDiccode(),
+                        item.getDicname(), item.getParentcode()));
+            } else if (kvLst.size() > 0) {
+                break;
+            }
+        }
+        return kvLst;
+    }
+
+    /**
+     * 获取数据字典信息
+     *
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public List<CmmDatadicM> initDataDictionary() {
+        List<CmmDatadicM> dataDicLst = new ArrayList<CmmDatadicM>();
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            QueryBuilder<CmmDatadicM, String> qBuilder =
+                    helper.getCmmDatadicMDao().queryBuilder();
+            Where<CmmDatadicM, String> where = qBuilder.where();
+            where.or(where.isNull("deleteflag"), where.eq("deleteflag", "0"));
+            qBuilder.orderBy("parentcode", true).orderBy("orderbyno", true);
+            dataDicLst = qBuilder.query();
+        } catch (SQLException e) {
+            Log.e(TAG, "初始化数据字典失败", e);
+        }
+
+        return dataDicLst;
+    }
+
+    /**
+     * 初始化终端区域类型
+     */
+    public List<KvStc> initDataDicByAreaType() {
+        List<CmmDatadicM> dataDicLst = initDataDictionary();
+
+        // 获取数据字典表中区域字典对应的父ID
+        String areaType=PropertiesUtil.getProperties("datadic_areaType");
+
+        List<KvStc> kvLst = new ArrayList<KvStc>();
+        for (CmmDatadicM item : dataDicLst) {
+            if (areaType.equals(item.getParentcode())) {
+                kvLst.add(new KvStc(item.getDiccode()
+                        , item.getDicname(), item.getParentcode()));
+            } else if (kvLst.size() > 0) {
+                break;
+            }
+        }
+        return kvLst;
     }
 
 
