@@ -20,16 +20,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:paddingRight="10dp"
-                android:textSize="18sp"
-                android:text="崂山啤酒8度500*12罐啤"/>
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:text="崂山啤酒8度500*12罐啤"
+                android:textSize="18sp"/>
 
         </RelativeLayout>
+
         <View
             android:layout_width="1dp"
-            android:layout_height="@dimen/xtbf_btn_h"
-            android:layout_marginTop="5dp"
+            android:layout_height="match_parent"
             android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
             android:background="@color/gray"/>
         <!--经销商名称-->
         <RelativeLayout
@@ -42,9 +44,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:paddingRight="10dp"
-                android:textSize="15sp"
-                android:text="北京青岛啤酒北方销售有限公司"/>
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:text="北京青岛啤酒北方销售有限公司"
+                android:textSize="15sp"/>
         </RelativeLayout>
 
     </LinearLayout>
@@ -52,6 +55,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:background="@color/gray"/>
 
     <LinearLayout
@@ -67,26 +72,29 @@
 
             <TextView
                 android:id="@+id/item_checkgoods_tv_prevstore"
-                android:layout_width="wrap_content"
+                android:layout_width="90dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:paddingRight="10dp"
-                android:textSize="18sp"
-                android:text="上次库存:"/>
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:text="上次库存:"
+                android:textSize="18sp"/>
 
             <TextView
                 android:id="@+id/item_checkgoods_et_prevstore"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
                 android:layout_toRightOf="@id/item_checkgoods_tv_prevstore"
                 android:background="@drawable/bg_visit_record"/>
 
         </RelativeLayout>
+
         <View
             android:layout_width="1dp"
-            android:layout_height="@dimen/xtbf_btn_h"
-            android:layout_marginTop="5dp"
+            android:layout_height="match_parent"
             android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
             android:background="@color/gray"/>
         <!--日销量-->
         <RelativeLayout
@@ -96,16 +104,19 @@
 
             <TextView
                 android:id="@+id/item_checkgoods_tv_daysellnum"
-                android:layout_width="wrap_content"
+                android:layout_width="90dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:paddingRight="10dp"
-                android:textSize="15sp"
-                android:text="日销量:"/>
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:text="日销量:"
+                android:textSize="15sp"/>
+
             <EditText
                 android:id="@+id/item_checkgoods_et_daysellnum"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
                 android:layout_toRightOf="@id/item_checkgoods_tv_daysellnum"
                 android:background="@drawable/bg_visit_record"/>
         </RelativeLayout>
@@ -115,6 +126,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:background="@color/gray"/>
 
     <LinearLayout
@@ -130,26 +143,29 @@
 
             <TextView
                 android:id="@+id/item_checkgoods_tv_prevnum"
-                android:layout_width="wrap_content"
+                android:layout_width="90dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:paddingRight="10dp"
-                android:textSize="18sp"
-                android:text="订单量:"/>
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:text="订单量:"
+                android:textSize="18sp"/>
 
             <EditText
                 android:id="@+id/item_checkgoods_et_prevnum"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
                 android:layout_toRightOf="@id/item_checkgoods_tv_prevnum"
                 android:background="@drawable/bg_visit_record"/>
 
         </RelativeLayout>
+
         <View
             android:layout_width="1dp"
-            android:layout_height="@dimen/xtbf_btn_h"
-            android:layout_marginTop="5dp"
+            android:layout_height="match_parent"
             android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
             android:background="@color/gray"/>
 
         <!--累计卡-->
@@ -160,16 +176,19 @@
 
             <TextView
                 android:id="@+id/item_askgoods_tv_addcard"
-                android:layout_width="wrap_content"
+                android:layout_width="90dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:paddingRight="10dp"
-                android:textSize="15sp"
-                android:text="累计卡:"/>
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:text="累计卡:"
+                android:textSize="15sp"/>
+
             <EditText
                 android:id="@+id/item_askgoods_et_addcard"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
                 android:layout_toRightOf="@id/item_askgoods_tv_addcard"
                 android:background="@drawable/bg_visit_record"/>
         </RelativeLayout>

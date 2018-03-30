@@ -107,7 +107,81 @@ public class MstPromotionsmDaoImpl extends
         
         return lst;
     }
-    
+    /**
+     * 查询终端参与的活动及活动达成状态情况
+     *
+     * 用于：巡店拜访-查指标-促销活动
+     *
+     * @param helper
+     * @param visitId       拜访主键
+     * @param channelId     终端销售渠道ID
+     * @param termLevel     终端等级ID
+     * @return
+     */
+    @Override
+    public List<CheckIndexPromotionStc> queryXtPromotionByterm(
+            SQLiteOpenHelper helper, String visitId, String channelId, String termLevel) {
+
+        List<CheckIndexPromotionStc> lst = new ArrayList<CheckIndexPromotionStc>();
+
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("select distinct pm.promotkey, pm.areaid, pm.ispictype, pm.promottype, ");
+        buffer.append("pm.promotname, pm.startdate, pm.enddate, p.productkey, ");
+        buffer.append("p.proname, pt.recordkey, pt.remarks, pt.isaccomplish  ");
+        buffer.append("from mst_promotions_m pm ");
+        buffer.append("inner join mst_promoproduct_info ps ");
+        buffer.append(" on pm.promotkey = ps.promotkey and ps.typekey='1' and ps.productkey=? ");
+        buffer.append("inner join mst_promoproduct_info pl ");
+        buffer.append(" on pm.promotkey = pl.promotkey and pl.typekey='2' and pl.productkey=? ");
+        buffer.append("inner join mst_promoproduct_info pp ");
+        buffer.append(" on pm.promotkey = pp.promotkey and pp.typekey='0' ");
+        buffer.append("inner join mst_product_m p ");
+        buffer.append(" on pp.productkey = p.productkey ");
+        buffer.append("left join mst_promoterm_info_temp pt ");
+        buffer.append(" on pm.promotkey = pt.ptypekey and pt.visitkey =? ");
+        buffer.append("where ? between pm.startdate and pm.enddate ");
+        buffer.append("order by pm.promotkey ");
+
+        String[] args = new String[4];
+        args[0] = channelId;
+        args[1] = termLevel;
+        args[2] = visitId;
+        args[3] = DateUtil.formatDate(new Date(), "yyyyMMdd");
+
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor cursor = db.rawQuery(buffer.toString(), args);
+        CheckIndexPromotionStc item;
+        String date = "";
+        while (cursor.moveToNext()) {
+            item = new CheckIndexPromotionStc();
+            item.setPromotKey(cursor.getString(cursor.getColumnIndex("promotkey")));
+            item.setAreaid(cursor.getString(cursor.getColumnIndex("areaid")));
+            item.setIspictype(cursor.getString(cursor.getColumnIndex("ispictype")));
+            item.setPromotType(cursor.getString(cursor.getColumnIndex("promottype")));
+            item.setPromotName(cursor.getString(cursor.getColumnIndex("promotname")));
+            item.setStartDate(cursor.getString(cursor.getColumnIndex("startdate")));
+            item.setEndDate(cursor.getString(cursor.getColumnIndex("enddate")));
+            item.setProId(cursor.getString(cursor.getColumnIndex("productkey")));
+            item.setProName(cursor.getString(cursor.getColumnIndex("proname")));
+            item.setRecordKey(cursor.getString(cursor.getColumnIndex("recordkey")));
+            item.setReachNum(cursor.getString(cursor.getColumnIndex("remarks")));
+            item.setIsAccomplish(cursor.getString(cursor.getColumnIndex("isaccomplish")));
+            date = cursor.getString(cursor.getColumnIndex("startdate"));
+            if (!CheckUtil.isBlankOrNull(date) && date.length() >= 8) {
+                item.setStartDate(date.substring(0,4) + "."
+                        + date.substring(4, 6) + "." + date.substring(6, 8));
+            }
+            date = cursor.getString(cursor.getColumnIndex("enddate"));
+            if (!CheckUtil.isBlankOrNull(date) && date.length() >= 8) {
+                item.setEndDate(date.substring(0,4) + "."
+                        + date.substring(4, 6) + "." + date.substring(6, 8));
+            }
+            lst.add(item);
+        }
+
+        return lst;
+    }
+
     /**
      * 促销活动查询
      * 

@@ -186,5 +186,54 @@ public class XtSayhiService extends XtShopVisitService {
         return kvLst;
     }
 
+    /**
+     * 初始化销售渠道
+     */
+    public List<KvStc> initDataDicBySellChannel() {
+
+        // 获取数据字典表中区域字典对应的父ID
+        String sellChannel = PropertiesUtil.getProperties("datadic_sellChannel");
+        List<KvStc> kvLst = new ArrayList<KvStc>();
+        kvLst = queryChildForDataDic(sellChannel, 1);
+        return kvLst;
+    }
+
+    /**
+     *  递归遍历数据字典- 销售渠道
+     *
+     * @param parentCode    父ID
+     * @param level         当前等级  1
+     * @return
+     */
+    private List<KvStc> queryChildForDataDic(String parentCode, int level) {
+        List<CmmDatadicM> dataDicLst = initDataDictionary();// 数据源
+        List<KvStc> kvLst = null;
+        if (level <= 3) {
+            kvLst = new ArrayList<KvStc>();
+            KvStc kvItem = new KvStc();
+            int nextLevel = level + 1;
+            for (CmmDatadicM dataItem : dataDicLst) {
+                if (parentCode.equals(dataItem.getParentcode())) {
+                    kvItem = new KvStc(dataItem.getDiccode(),dataItem.getDicname(), dataItem.getParentcode());
+                    kvItem.setChildLst(queryChildForDataDic(dataItem.getDiccode(), nextLevel));
+                    kvLst.add(kvItem);
+                }
+            }
+
+            // 添加请选择
+            /*if (level <= 3) {
+                kvItem = new KvStc("-1", "请选择", "-1");
+            }
+            if (level <= 2) {
+                kvItem.getChildLst().add(new KvStc("-1", "请选择", "-1"));
+            }
+            if (level <= 1) {
+                kvItem.getChildLst().get(0).getChildLst().add(new KvStc("-1", "请选择", "-1"));
+            }
+            kvLst.add(0,kvItem);*/
+        }
+        return kvLst;
+    }
+
 
 }

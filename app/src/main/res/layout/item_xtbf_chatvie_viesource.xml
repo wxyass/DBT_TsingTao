@@ -21,7 +21,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:paddingRight="10dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
                 android:textSize="18sp"
                 android:text="崂山啤酒8度500*12罐啤"/>
 
@@ -29,7 +30,7 @@
 
         <View
             android:layout_width="1dp"
-            android:layout_height="@dimen/xtbf_btn_h"
+            android:layout_height="match_parent"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:background="@color/gray"/>
@@ -41,17 +42,19 @@
 
             <TextView
                 android:id="@+id/item_viesource_tv_agencyname"
-                android:layout_width="wrap_content"
+                android:layout_width="90dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:paddingRight="10dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
                 android:textSize="15sp"
                 android:text="供应商:"/>
 
             <EditText
                 android:id="@+id/item_viesource_et_agencyname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
                 android:layout_toRightOf="@id/item_viesource_tv_agencyname"
                 android:background="@drawable/bg_visit_record"/>
         </RelativeLayout>
@@ -61,6 +64,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:background="@color/gray"/>
 
     <LinearLayout
@@ -75,17 +80,19 @@
 
             <TextView
                 android:id="@+id/item_viesource_tv_qudao"
-                android:layout_width="wrap_content"
+                android:layout_width="90dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:paddingRight="10dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
                 android:textSize="18sp"
                 android:text="渠道价:"/>
 
             <EditText
                 android:id="@+id/item_viesource_et_qudao"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
                 android:layout_toRightOf="@id/item_viesource_tv_qudao"
                 android:background="@drawable/bg_visit_record"/>
 
@@ -93,7 +100,7 @@
 
         <View
             android:layout_width="1dp"
-            android:layout_height="@dimen/xtbf_btn_h"
+            android:layout_height="match_parent"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:background="@color/gray"/>
@@ -105,17 +112,19 @@
 
             <TextView
                 android:id="@+id/item_viesource_tv_lingshou"
-                android:layout_width="wrap_content"
+                android:layout_width="90dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:paddingRight="10dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
                 android:textSize="15sp"
                 android:text="零售价:"/>
 
             <EditText
                 android:id="@+id/item_viesource_et_lingshou"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
                 android:layout_toRightOf="@id/item_viesource_tv_lingshou"
                 android:background="@drawable/bg_visit_record"/>
         </RelativeLayout>

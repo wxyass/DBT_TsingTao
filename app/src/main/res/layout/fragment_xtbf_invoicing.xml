@@ -10,6 +10,7 @@
         android:id="@+id/xtbf_invoicing_scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:scrollbars="none"
         android:fillViewport="true">
 
         <LinearLayout

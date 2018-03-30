@@ -91,7 +91,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_xtvisitshop);
         initView();
-        initData();
+        //initData();
     }
 
     // 初始化控件
@@ -385,7 +385,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
 
         // 组建打招呼、进销存、聊竞品、查指标页面所需参数
         Bundle bundle = new Bundle();
-        bundle.putSerializable("termId", termStc.getTerminalkey());
+        /*bundle.putSerializable("termId", termStc.getTerminalkey());
         bundle.putSerializable("termname", termStc.getTerminalname());
         bundle.putSerializable("channelId", termStc.getMinorchannel());
         bundle.putSerializable("termStc", termStc);
@@ -393,7 +393,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
         bundle.putSerializable("seeFlag", seeFlag);// 默认0   0:拜访 1:查看
 
         bundle.putSerializable("visitDate", "");// visitDate上一次的拜访时间(用于促销活动 状态隔天关闭)
-        bundle.putSerializable("lastTime", "");// lastTime上一次的拜访时间(用于促销活动 状态隔天关闭)
+        bundle.putSerializable("lastTime", "");// lastTime上一次的拜访时间(用于促销活动 状态隔天关闭)*/
         return bundle;
     }
 

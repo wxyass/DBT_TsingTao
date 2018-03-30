@@ -10,14 +10,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyAppTheme">
-        <!--<activity android:name=".dd.ddxt.shopvisit.XtVisitShopActivity">
+        <activity android:name=".dd.ddxt.shopvisit.XtVisitShopActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-        </activity>-->
-        <activity android:name=".home.app.MainActivity">
+        </activity>
+        <!--<activity android:name=".home.app.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".dd.ddxt.shopvisit.XtVisitShopActivity" />
+        <activity android:name=".dd.ddxt.shopvisit.XtVisitShopActivity" />-->
 
     </application>
 

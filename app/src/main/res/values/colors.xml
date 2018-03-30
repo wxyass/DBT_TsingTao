@@ -17,7 +17,8 @@
     <!--下面是摘自Dbtplus旧版本 2017年12月25日10:11:39-->
 
     <!--整体背景色-->
-    <color name="bg_app">#f8f9fa</color>
+    <!--<color name="bg_app">#f8f9fa</color>-->
+    <color name="bg_app">#F0F0F0</color>
 
 
     <!-- 背景色 -->
@@ -38,7 +39,8 @@
     <color name="bg_plantform_color">#eef4f7</color>
 
     <!-- 每页的背景色 -->
-    <color name="bg_page_color">#f7f7f7</color>
+    <!--<color name="bg_page_color">#f7f7f7</color>-->
+    <color name="bg_page_color">#F0F0F0</color>
 
     <!-- 页面中内容的背景色(浅绿色) -->
     <color name="bg_content_color">#e3efe3</color>

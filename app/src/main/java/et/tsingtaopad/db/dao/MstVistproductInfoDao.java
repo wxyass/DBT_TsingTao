@@ -6,6 +6,8 @@ import java.util.List;
 
 import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.db.table.MstVistproductInfo;
+import et.tsingtaopad.dd.ddxt.chatvie.domain.XtChatVieStc;
+import et.tsingtaopad.dd.ddxt.invoicing.domain.XtInvoicingStc;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.chatvie.domain.ChatVieStc;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.CheckIndexCalculateStc;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.CheckIndexQuicklyStc;
@@ -35,7 +37,16 @@ public interface MstVistproductInfoDao extends Dao<MstVistproductInfo, String> {
      * @return
      */
     public List<InvoicingStc> queryMineProByTemp(DatabaseHelper helper, String visitId, String termKey);
-    
+
+    /**
+     * 从临时表中 获取协同拜访的我品的进销存数据情况
+     *
+     * @param helper
+     * @param visitId   拜访主键
+     * @return
+     */
+    public List<XtInvoicingStc> queryXtMineProByTemp(DatabaseHelper helper, String visitId, String termKey);
+
     /**
      * 获取某次拜访的竞品的进销存数据情况
      * 
@@ -53,7 +64,15 @@ public interface MstVistproductInfoDao extends Dao<MstVistproductInfo, String> {
      * @return
      */
     public List<ChatVieStc> queryVieProByTemp(DatabaseHelper helper, String visitId);
-    
+    /**
+     * 获取协同拜访的竞品的进销存数据情况
+     *
+     * @param helper
+     * @param visitId   拜访主键
+     * @return
+     */
+    public List<XtChatVieStc> queryXtVieProByTemp(DatabaseHelper helper, String visitId);
+
     /**
      * 获取巡店拜访-查指标的分项采集部分的产品指标数据
      * 

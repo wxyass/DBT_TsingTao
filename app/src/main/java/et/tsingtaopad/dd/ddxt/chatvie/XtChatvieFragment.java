@@ -32,8 +32,7 @@ import et.tsingtaopad.main.visit.shopvisit.termvisit.chatvie.adapter.VieStatusAd
  * Created by yangwenmin on 2018/3/12.
  */
 
-public class XtChatvieFragment extends XtBaseVisitFragment implements View.OnClickListener{
-
+public class XtChatvieFragment extends XtBaseVisitFragment implements View.OnClickListener {
 
 
     private ImageView point1;
@@ -54,7 +53,7 @@ public class XtChatvieFragment extends XtBaseVisitFragment implements View.OnCli
     }
 
     // 初始化控件
-    private void initView(View view){
+    private void initView(View view) {
         addrelationBtn = (Button) view.findViewById(R.id.xtbf_chatvie_bt_addrelation);
         viesourceLv = (ListView) view.findViewById(R.id.xtbf_chatvie_lv_viesource);
         viestatusLv = (ListView) view.findViewById(R.id.xtbf_chatvie_lv_viestatus);
@@ -66,20 +65,19 @@ public class XtChatvieFragment extends XtBaseVisitFragment implements View.OnCli
         nextBtn.setOnClickListener(this);
 
 
-
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Toast.makeText(getActivity(),"聊竞品"+"/"+termId+"/"+termName,Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "聊竞品" + "/" + termId + "/" + termName, Toast.LENGTH_SHORT).show();
 
         initProData();
 
         // 竞品来源
         XtVieSourceAdapter xtVieSourceAdapter = new XtVieSourceAdapter(
-                getActivity(), "",lst, "", null, null,null,null);//竞品来源
+                getActivity(), "", lst, "", null, null, null, null);//竞品来源
         viesourceLv.setAdapter(xtVieSourceAdapter);
         ViewUtil.setListViewHeight(viesourceLv);
 
@@ -90,39 +88,21 @@ public class XtChatvieFragment extends XtBaseVisitFragment implements View.OnCli
     }
 
     List<XtChatVieStc> lst;
+    XtChatVieService xtChatVieService;
+
     private void initProData() {
-        lst = new ArrayList<XtChatVieStc>();
-        XtChatVieStc xtChatVieStc = new XtChatVieStc();
-        xtChatVieStc.setProName("百威啤酒8度12*500箱啤");// 产品名称
-        xtChatVieStc.setAgencyName("北方销售");// 经销商名称
-        xtChatVieStc.setSellPrice("54.00");// 零售价
-        xtChatVieStc.setChannelPrice("48.00");// 渠道价
-        xtChatVieStc.setCurrStore("3");// 当前库存
-        xtChatVieStc.setDescribe("劣酒");// 描述
-        xtChatVieStc.setMonthSellNum("8");// 月销量
 
-
-        XtChatVieStc xtChatVieStc2 = new XtChatVieStc();
-        xtChatVieStc2.setProName("雪花啤酒8度12*500箱啤2");// 产品名称
-        xtChatVieStc2.setAgencyName("北方销售2");// 经销商名称
-        xtChatVieStc2.setSellPrice("542.00");// 零售价
-        xtChatVieStc2.setChannelPrice("482.00");// 渠道价
-        xtChatVieStc2.setCurrStore("32");// 当前库存
-        xtChatVieStc2.setDescribe("超级劣酒");// 描述
-        xtChatVieStc2.setMonthSellNum("3");// 月销量
-
-
-        lst.add(xtChatVieStc);
-        lst.add(xtChatVieStc2);
-
+        xtChatVieService = new XtChatVieService(getActivity(), null);
+        xtChatVieService.delRepeatVistProduct(visitId);
+        lst = xtChatVieService.queryVieProTemp(visitId);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.xtbf_chatvie_bt_addrelation:// 新增竞品
-                XtVisitShopActivity xtVisitShopActivity = (XtVisitShopActivity)getActivity();
-                xtVisitShopActivity.changeXtvisitFragment(new XtAddChatVieFragment(),"xtaddchatviefragment");
+                XtVisitShopActivity xtVisitShopActivity = (XtVisitShopActivity) getActivity();
+                xtVisitShopActivity.changeXtvisitFragment(new XtAddChatVieFragment(), "xtaddchatviefragment");
                 break;
             case R.id.xtbf_chatvie_bt_next:// 下一页
 

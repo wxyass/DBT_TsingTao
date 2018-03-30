@@ -26,6 +26,7 @@ import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
+import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.CheckIndexPromotionStc;
 
 /**
  * Created by yangwenmin on 2018/3/12.
@@ -40,6 +41,8 @@ public class XtCheckIndexFragment extends XtBaseVisitFragment implements View.On
     private Button quickCollectBt;
 
     private XtCheckIndexService service;
+
+    private List<CheckIndexPromotionStc> promotionLst;
 
 
     @Nullable
@@ -88,8 +91,10 @@ public class XtCheckIndexFragment extends XtBaseVisitFragment implements View.On
         calculateLv.setAdapter(xtCaculateAdapter);
         ViewUtil.setListViewHeight(calculateLv);
 
+        promotionLst = service.queryPromotion(visitId, termStc.getSellchannel(), termStc.getTlevel());
 
         // 促销活动 模拟数据
+        XtPromotionAdapter xtPromotionAdapter = new XtPromotionAdapter(getActivity(),promotionLst,"2018-03-30",seeFlag);
 
 
     }
