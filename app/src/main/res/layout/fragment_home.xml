@@ -5,13 +5,33 @@
                 android:background="@color/gray"
     >
 
-    <include layout="@layout/banner_cui" />
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
+
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_first_login"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="@string/platform_home"/>
+        android:layout_marginTop="50dp"
+        android:text="登录"/>
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_first_sync_grid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:text="同步 区域,定格,路线"/>
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_first_sync_index"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="250dp"
+        android:text="同步 指标模板"/>
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_first_sync_pro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="350dp"
+        android:text="同步 我区常用我品、促销活动、竞品相关表、照片类型"/>
 
 </RelativeLayout>

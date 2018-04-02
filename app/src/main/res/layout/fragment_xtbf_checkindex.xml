@@ -96,7 +96,7 @@
             </LinearLayout>
 
             <!-- 促销活动列表 -->
-            <et.tsingtaopad.view.NoScrollListView
+            <ListView
                 android:id="@+id/xtbf_checkindex_lv_promotion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

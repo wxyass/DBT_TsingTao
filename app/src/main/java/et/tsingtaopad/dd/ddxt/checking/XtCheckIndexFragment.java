@@ -17,6 +17,7 @@ import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
+import et.tsingtaopad.db.table.MstTerminalinfoMTemp;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProIndex;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProItem;
@@ -43,6 +44,7 @@ public class XtCheckIndexFragment extends XtBaseVisitFragment implements View.On
     private XtCheckIndexService service;
 
     private List<CheckIndexPromotionStc> promotionLst;
+    private MstTerminalinfoMTemp term;
 
 
     @Nullable
@@ -76,10 +78,13 @@ public class XtCheckIndexFragment extends XtBaseVisitFragment implements View.On
         Toast.makeText(getActivity(), "查指标" + "/" + termId + "/" + termName, Toast.LENGTH_SHORT).show();
 
         // 指标模拟数据
-
         service = new XtCheckIndexService(getActivity(), null);
+        // 查询最新终端临时表数据
+        term = service.findTermTempById(termId);
+
+
         // 获取分项采集页面显示数据 // 获取指标采集前3列数据 // 铺货状态,道具生动化,产品生动化,冰冻化
-        calculateLst = service.queryCalculateIndex(visitId, termId, channelId, seeFlag);
+        calculateLst = service.queryCalculateIndex(visitId, termId, term.getMinorchannel(), seeFlag);
         // 获取分项采集部分的产品指标对应的采集项目数据 // 因为在ShopVisitActivity生成了供货关系,此时就能关联出各个产品的采集项,现有量变化量为0
         proItemLst = service.queryCalculateItem(visitId, channelId);
 
@@ -91,12 +96,11 @@ public class XtCheckIndexFragment extends XtBaseVisitFragment implements View.On
         calculateLv.setAdapter(xtCaculateAdapter);
         ViewUtil.setListViewHeight(calculateLv);
 
-        promotionLst = service.queryPromotion(visitId, termStc.getSellchannel(), termStc.getTlevel());
+        promotionLst = service.queryPromotion(visitId, term.getSellchannel(), term.getTlevel());
 
         // 促销活动 模拟数据
-        XtPromotionAdapter xtPromotionAdapter = new XtPromotionAdapter(getActivity(),promotionLst,"2018-03-30",seeFlag);
-
-
+        XtPromotionAdapter xtPromotionAdapter = new XtPromotionAdapter(getActivity(), promotionLst, "2018-03-30", seeFlag);
+        promotionLv.setAdapter(xtPromotionAdapter);
     }
 
     @Override
@@ -111,4 +115,6 @@ public class XtCheckIndexFragment extends XtBaseVisitFragment implements View.On
                 break;
         }
     }
+
+
 }

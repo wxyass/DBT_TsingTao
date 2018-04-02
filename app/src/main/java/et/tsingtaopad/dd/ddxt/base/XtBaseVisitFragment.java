@@ -20,14 +20,14 @@ public class XtBaseVisitFragment extends BaseFragmentSupport{
     protected String visitDate;//
     protected String lastTime;//
     protected XtTermSelectMStc termStc;// 终端信息
-    protected String channelId="39DD41A3991E8C68E05010ACE0016FCD";// 终端渠道(废弃,因为由A->F后,可能在F中修改,但在另一个F中,还是用的A传递过来的,所以废弃)
+    protected String channelId="39DD41A3991E8C68E05010ACE0016FCD";// 终端次渠道(废弃,因为由A->F后,可能在F中修改,但在另一个F中,还是用的A传递过来的,所以废弃)
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         // 获取传递过来的数据
-        /*Bundle bundle = getArguments();
+        Bundle bundle = getArguments();
         visitId = bundle.getString("visitKey");
         termId = bundle.getString("termId");
         termName = bundle.getString("termname");
@@ -35,6 +35,6 @@ public class XtBaseVisitFragment extends BaseFragmentSupport{
         lastTime = bundle.getString("lastTime");
         seeFlag = bundle.getString("seeFlag");
         channelId = bundle.getString("channelId");
-        termStc = (XtTermSelectMStc) bundle.getSerializable("termStc");*/
+        termStc = (XtTermSelectMStc) bundle.getSerializable("termStc");
     }
 }

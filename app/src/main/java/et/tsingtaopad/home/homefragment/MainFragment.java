@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +21,23 @@ import et.tsingtaopad.business.operation.OperationFragment;
 import et.tsingtaopad.business.system.SystemFragment;
 import et.tsingtaopad.business.visit.VisitFragment;
 import et.tsingtaopad.core.base.BaseCoreFragment;
+import et.tsingtaopad.core.net.HttpUrl;
+import et.tsingtaopad.core.net.RestClient;
+import et.tsingtaopad.core.net.callback.IError;
+import et.tsingtaopad.core.net.callback.IFailure;
+import et.tsingtaopad.core.net.callback.ISuccess;
+import et.tsingtaopad.core.net.domain.RequestHeadStc;
+import et.tsingtaopad.core.net.domain.RequestStructBean;
+import et.tsingtaopad.core.net.domain.ResponseStructBean;
+import et.tsingtaopad.core.util.dbtutil.JsonUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.home.initadapter.MyFragmentPagerAdapter;
+import et.tsingtaopad.http.HttpParseJson;
 import et.tsingtaopad.main.home.HomeCoreFragment;
 import et.tsingtaopad.main.operation.OperationCoreFragment;
 import et.tsingtaopad.main.system.SystemCoreFragment;
 import et.tsingtaopad.main.visit.VisitCoreFragment;
+import et.tsingtaopad.util.requestHeadUtil;
 
 /**
  * Created by yangwenmin on 2018/3/12.
@@ -132,4 +144,6 @@ public class MainFragment extends BaseFragmentSupport {
             }
         });
     }
+
+
 }
