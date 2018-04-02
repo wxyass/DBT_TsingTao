@@ -33,7 +33,15 @@ public interface MstAgencyinfoMDao extends Dao<MstAgencyinfoM, String> {
      * @return
      */
     public List<KvStc>  agencySellProQuery(SQLiteOpenHelper helper);
-    
+
+    /**
+     * 根据终端key 查询 我方经销商
+     * @author wxyass
+     * @since    2013-12-17
+     * @return
+     */
+    public List<KvStc>  agencyTermQuery(SQLiteOpenHelper helper,String terminalkey);
+
     /**
      * 获取可拜访经销商及产品列表
      * 

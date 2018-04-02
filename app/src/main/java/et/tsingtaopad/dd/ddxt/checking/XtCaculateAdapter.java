@@ -44,6 +44,7 @@ public class XtCaculateAdapter extends BaseAdapter {
     private List<KvStc> indexValuelst;
     private List<KvStc> valueLst;
     private List<XtProItem> itemLst;
+    XtCheckIndexFragment.MyHandler handler;
 
     /**
      *  构造方法
@@ -53,15 +54,18 @@ public class XtCaculateAdapter extends BaseAdapter {
      * @param indexValuelst 指标、指标值关系数据
      * @param itemLst       每个产品对应的采集项及数据
      */
-    public XtCaculateAdapter(Activity context, List<XtProIndex> dataLst, List<KvStc> indexValuelst, List<XtProItem> itemLst) {
+    public XtCaculateAdapter(Activity context, List<XtProIndex> dataLst,
+                             List<KvStc> indexValuelst, List<XtProItem> itemLst,XtCheckIndexFragment.MyHandler handler) {
         this.context = context;
         this.dataLst = dataLst; //
+
         this.itemLst = itemLst;// 所有采集项数据
         if (CheckUtil.IsEmpty(indexValuelst)) {
             this.indexValuelst = new ArrayList<KvStc>();
         } else {
             this.indexValuelst = indexValuelst;
         }
+        this.handler = handler; //
     }
 
     @Override
@@ -132,7 +136,7 @@ public class XtCaculateAdapter extends BaseAdapter {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("tempLst", (Serializable) tempLst);
                 bundle.putString("proName", proName);
-                XtCaculateFragment xtCaculateFragment = new XtCaculateFragment();
+                XtCaculateFragment xtCaculateFragment = new XtCaculateFragment(xtProIndexValue,handler);
                 xtCaculateFragment.setArguments(bundle);
                 xtVisitShopActivity.changeXtvisitFragment(xtCaculateFragment,"xtnuminputfragment");
             }

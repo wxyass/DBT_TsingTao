@@ -317,7 +317,7 @@ public class DownLoadService {
                             ResponseStructBean resObj = new ResponseStructBean();
                             resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
                             // 解析表名
-                            String tableName = resObj.getResHead().getContant();
+                            String tableName = resObj.getResHead().getContent();
                             // 同步保存数据
                             saveDataFromNet(tableName,resObj);
                         }

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 
+import com.j256.ormlite.android.AndroidDatabaseConnection;
+import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 
@@ -17,6 +19,7 @@ import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.db.dao.MstVistproductInfoDao;
 import et.tsingtaopad.db.dao.MstVistproductInfoTempDao;
+import et.tsingtaopad.db.table.MstCheckexerecordInfoTemp;
 import et.tsingtaopad.db.table.MstVistproductInfo;
 import et.tsingtaopad.db.table.MstVistproductInfoTemp;
 import et.tsingtaopad.dd.ddxt.invoicing.domain.XtInvoicingStc;
@@ -91,6 +94,54 @@ public class XtInvoicingService extends XtShopVisitService {
             Log.e(TAG, "获取终端表DAO对象失败", e);
         }
         return lst;
+    }
+
+    /**
+     * 新增供货关系指标记录表进行更新
+     *
+     * 在这里只做了一个处理, 当有用户在进销存 删除一个供货关系时,又再次添加了这个产品的供货关系,
+     * 这个方法对这种情况作了处理,会将这个产品的指标设为空白或不合格(都是-1)
+     *
+     * @param visitId
+     * @param proId
+     */
+    public void updateMstcheckexerecordInfoTempDeleteflag(String visitId,String proId){
+        // 新增供货关系时，对指标记录表进行更新
+        AndroidDatabaseConnection connection = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MstCheckexerecordInfoTemp, String> tempDao = helper.getDao(MstCheckexerecordInfoTemp.class);
+
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+            QueryBuilder<MstCheckexerecordInfoTemp, String> qb = tempDao.queryBuilder();
+            qb.where().eq("visitkey", visitId).and()
+                    .eq("productkey", proId).and()
+                    .eq("deleteflag", "1");
+            List<MstCheckexerecordInfoTemp> list = qb.query();
+            StringBuffer buffer = new StringBuffer();
+            buffer = new StringBuffer();
+            //
+            if (list != null && list.size()>0)
+            {
+                //acresult='-1'如果是产品删除后  再新增产品  状态值就改为-1  请选择(指标状态查询处可体现)
+                buffer.append("update mst_checkexerecord_info_temp set deleteflag='0', acresult='-1'");
+                //buffer.append("update mst_checkexerecord_info_temp set deleteflag='0' ");
+            }else{
+                buffer.append("update mst_checkexerecord_info_temp set deleteflag='0' ");
+            }
+            buffer.append("where visitkey=? and productkey=? ");
+            tempDao.executeRaw(buffer.toString(), new String[] {visitId, proId});
+            connection.commit(null);
+        } catch (Exception e) {
+            Log.e(TAG, "新增供货关系时指标记录表数据更新发生异常", e);
+            try {
+                connection.rollback(null);
+            } catch (SQLException e1) {
+                Log.e(TAG, "回滚指标记录表数据更新发生异常", e1);
+            }
+        }
     }
 
 }

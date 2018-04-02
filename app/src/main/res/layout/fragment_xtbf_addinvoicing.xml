@@ -8,6 +8,31 @@
 
     <include layout="@layout/top_navigation"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <ListView
+            android:id="@+id/xt_addinvoicing_lv_agency"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:divider="@color/listview_line"
+            android:dividerHeight="1dp">
+
+        </ListView>
+
+        <ListView
+            android:id="@+id/xt_addinvoicing_lv_pro"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:divider="@color/listview_line"
+            android:dividerHeight="1dp">
+
+        </ListView>
+    </LinearLayout>
 
 
 </LinearLayout>

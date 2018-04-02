@@ -1,6 +1,8 @@
 package et.tsingtaopad.dd.ddxt.checking;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
@@ -10,6 +12,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,12 +20,15 @@ import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
+import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.db.table.MstTerminalinfoMTemp;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProIndex;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProItem;
 import et.tsingtaopad.dd.ddxt.checking.num.XtCaculateFragment;
 import et.tsingtaopad.dd.ddxt.checking.num.XtQuickCollectFragment;
+import et.tsingtaopad.dd.ddxt.invoicing.XtInvoicingFragment;
+import et.tsingtaopad.dd.ddxt.invoicing.domain.XtInvoicingStc;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 import et.tsingtaopad.home.initadapter.GlobalValues;
@@ -45,6 +51,10 @@ public class XtCheckIndexFragment extends XtBaseVisitFragment implements View.On
 
     private List<CheckIndexPromotionStc> promotionLst;
     private MstTerminalinfoMTemp term;
+
+    public static final int INPUT_SUC = 3;
+    MyHandler handler;
+    XtCaculateAdapter xtCaculateAdapter;
 
 
     @Nullable
@@ -75,10 +85,11 @@ public class XtCheckIndexFragment extends XtBaseVisitFragment implements View.On
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Toast.makeText(getActivity(), "查指标" + "/" + termId + "/" + termName, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "查指标" + "/" + termId + "/" + termName, Toast.LENGTH_SHORT).show();
 
         // 指标模拟数据
         service = new XtCheckIndexService(getActivity(), null);
+        handler = new MyHandler(this);
         // 查询最新终端临时表数据
         term = service.findTermTempById(termId);
 
@@ -92,7 +103,7 @@ public class XtCheckIndexFragment extends XtBaseVisitFragment implements View.On
         service.initCheckTypeStatus();
         indexValuelst = GlobalValues.indexLst;
 
-        XtCaculateAdapter xtCaculateAdapter = new XtCaculateAdapter(getActivity(), calculateLst, indexValuelst, proItemLst);
+        xtCaculateAdapter = new XtCaculateAdapter(getActivity(), calculateLst, indexValuelst, proItemLst, handler);
         calculateLv.setAdapter(xtCaculateAdapter);
         ViewUtil.setListViewHeight(calculateLv);
 
@@ -116,5 +127,49 @@ public class XtCheckIndexFragment extends XtBaseVisitFragment implements View.On
         }
     }
 
+    /**
+     * 接收子线程消息的 Handler
+     */
+    public static class MyHandler extends Handler {
+
+        // 软引用
+        SoftReference<XtCheckIndexFragment> fragmentRef;
+
+        public MyHandler(XtCheckIndexFragment fragment) {
+            fragmentRef = new SoftReference<XtCheckIndexFragment>(fragment);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            XtCheckIndexFragment fragment = fragmentRef.get();
+            if (fragment == null) {
+                return;
+            }
+            Bundle bundle = msg.getData();
+
+            // 处理UI 变化
+            switch (msg.what) {
+                case INPUT_SUC:
+                    fragment.showAddProSuc(bundle);
+                    break;
+            }
+        }
+    }
+
+    /**
+     * 添加产品成功 UI
+     */
+    public void showAddProSuc(Bundle bundle) {
+
+        String proId = "";
+        String indexId = "";
+        if (bundle != null) {
+            proId = FunUtil.isBlankOrNullTo(bundle.getString("proId"), "-1");// 产品主键
+            indexId = FunUtil.isBlankOrNullTo(bundle.getString("indexId"), "-1");// 指标主键: ad3030fb-e42e-47f8-a3ec-4229089aab5d
+        }
+        service.calculateIndex(channelId, proItemLst, calculateLst, proId, indexId);
+        xtCaculateAdapter.notifyDataSetChanged();
+        ViewUtil.setListViewHeight(calculateLv);
+    }
 
 }

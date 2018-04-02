@@ -159,6 +159,36 @@ public class MstAgencyinfoMDaoImpl extends BaseDaoImpl<MstAgencyinfoM, String>
         }
         return kvLst;
     }
+
+    /**
+     * 根据终端key 查询给该终端供货的经销商
+     *
+     * @author wxyass
+     * @since    2013-12-17
+     * @return
+     */
+    @Override
+    public List<KvStc> agencyTermQuery(SQLiteOpenHelper helper,String terminalkey){
+
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("select mam.* from MST_AGENCYGRID_INFO  mai ");
+        buffer.append("left join MST_ROUTE_M mtm on mtm.[gridkey] = mai.gridkey ");
+        buffer.append("inner join MST_TERMINALINFO_M mrm  on mtm.[routekey]  = mrm.[routekey] ");
+        buffer.append("inner join MST_AGENCYINFO_M mam on mai.agencykey = mam.agencykey ");
+        buffer.append("where mrm.[terminalkey] = ? ");
+
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor cursor = db.rawQuery(buffer.toString(), new String[]{terminalkey});
+        List<KvStc> kvLst = new ArrayList<KvStc>();
+        KvStc kvItem = new KvStc();
+        while(cursor.moveToNext()) {
+            kvItem = new KvStc();
+            kvItem.setKey(cursor.getString(cursor.getColumnIndex("agencykey")));
+            kvItem.setValue(cursor.getString(cursor.getColumnIndex("agencyname")));
+            kvLst.add(kvItem);
+        }
+        return kvLst;
+    }
     
     /**
      * 获取可拜访经销商及产品列表

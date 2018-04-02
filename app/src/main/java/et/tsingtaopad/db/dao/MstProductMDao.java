@@ -22,4 +22,12 @@ public interface MstProductMDao extends Dao<MstProductM, String> {
      * @return
      */
     public List<KvStc> getIndexPro(DatabaseHelper helper);
+
+    /**
+     * 获取产品列表
+     * @param helper
+     * @param //gridkey 定格主键
+     * @return
+     */
+    public List<KvStc> getProductData(DatabaseHelper helper);
 }

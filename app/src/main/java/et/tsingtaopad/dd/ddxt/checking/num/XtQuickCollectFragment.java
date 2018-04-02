@@ -20,7 +20,7 @@ import et.tsingtaopad.dd.ddxt.checking.domain.XtProItem;
 /**
  * Created by yangwenmin on 2018/3/12.
  * <p>
- * 指标的现有量,变化量 填写界面
+ * 快速采集 指标的现有量,变化量 填写界面
  */
 
 public class XtQuickCollectFragment extends BaseFragmentSupport implements View.OnClickListener {

@@ -259,7 +259,9 @@ public class InvoicingService extends ShopVisitService {
             connection.setAutoCommit(false);
 
             QueryBuilder<MstCheckexerecordInfoTemp, String> qb = tempDao.queryBuilder();
-            qb.where().eq("visitkey", visitId).and().eq("productkey", proId).and().eq("deleteflag", "1");
+            qb.where().eq("visitkey", visitId).and()
+                    .eq("productkey", proId).and()
+                    .eq("deleteflag", "1");
             List<MstCheckexerecordInfoTemp> list = qb.query();
             StringBuffer buffer = new StringBuffer();           
             buffer = new StringBuffer();

@@ -98,7 +98,7 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                         String json = HttpParseJson.parseJsonResToString(response);
                         ResponseStructBean resObj = new ResponseStructBean();
                         resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
-                        Toast.makeText(getActivity(), resObj.getResBody().getContent(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), resObj.getResBody().getContent()+""+resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
                         // 保存登录信息
                     }
                 })

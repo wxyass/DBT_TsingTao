@@ -82,8 +82,8 @@ public class XtCalculateIndexItemPuhuoAdapter extends BaseAdapter {
 			holder = new ViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_xtbf_checkindex_index_third, null);
 			holder.itemNameTv = (TextView) convertView.findViewById(R.id.item_xt_calculatedialog_tv_itemname);
-			holder.changeNumEt = (EditText) convertView.findViewById(R.id.item_xt_calculatedialog_et_finalnum);
-			holder.finalNumEt = (EditText) convertView.findViewById(R.id.item_xt_calculatedialog_et_changenum);
+			holder.finalNumEt = (EditText) convertView.findViewById(R.id.item_xt_calculatedialog_et_finalnum);
+			holder.changeNumEt = (EditText) convertView.findViewById(R.id.item_xt_calculatedialog_et_changenum);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -117,8 +117,6 @@ public class XtCalculateIndexItemPuhuoAdapter extends BaseAdapter {
 		} else {
 			holder.finalNumEt.setText(finalNum);
 		}
-
-
 
 		return convertView;
 	}

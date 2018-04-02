@@ -8,7 +8,7 @@ public class ResponseHeadStc implements java.io.Serializable{
     private static final long serialVersionUID = -4807562545922726434L;
     private String optcode;
     private String status;
-    private String contant;
+    private String content;
 
     public ResponseHeadStc() { /* compiled code */ }
 
@@ -28,11 +28,11 @@ public class ResponseHeadStc implements java.io.Serializable{
         this.status = status;
     }
 
-    public String getContant() {
-        return contant;
+    public String getContent() {
+        return content;
     }
 
-    public void setContant(String contant) {
-        this.contant = contant;
+    public void setContent(String content) {
+        this.content = content;
     }
 }

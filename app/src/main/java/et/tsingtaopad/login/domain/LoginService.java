@@ -138,7 +138,7 @@ public class LoginService {
 								}
 
 							} else {
-								String msg = FunUtil.isNullSetSpace(resObj.getResHead().getContant());
+								String msg = FunUtil.isNullSetSpace(resObj.getResHead().getContent());
 								if (msg.contains("用户已离职或冻结")) {
 									PrefUtils.putString(context, "userStatus", ConstValues.FLAG_1);
 								} else if (msg.contains("设备已冻结")) {
