@@ -1,6 +1,8 @@
 package et.tsingtaopad.dd.ddxt.chatvie;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,22 +13,20 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.List;
 
 import et.tsingtaopad.R;
-import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
+import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
 import et.tsingtaopad.dd.ddxt.chatvie.addchatvie.XtAddChatVieFragment;
 import et.tsingtaopad.dd.ddxt.chatvie.domain.XtChatVieStc;
-import et.tsingtaopad.dd.ddxt.checking.num.XtQuickCollectFragment;
-import et.tsingtaopad.dd.ddxt.invoicing.domain.XtInvoicingStc;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
-import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.chatvie.adapter.VieSourceAdapter;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.chatvie.adapter.VieStatusAdapter;
+import et.tsingtaopad.initconstvalues.domain.KvStc;
+import et.tsingtaopad.main.visit.shopvisit.termvisit.chatvie.domain.ChatVieStc;
 
 /**
  * Created by yangwenmin on 2018/3/12.
@@ -34,14 +34,21 @@ import et.tsingtaopad.main.visit.shopvisit.termvisit.chatvie.adapter.VieStatusAd
 
 public class XtChatvieFragment extends XtBaseVisitFragment implements View.OnClickListener {
 
+    private final String TAG = "XtChatvieFragment";
 
     private ImageView point1;
     private Button addrelationBtn;
     private ListView viesourceLv;
     private ListView viestatusLv;
     private et.tsingtaopad.view.DdSlideSwitch clearvieSw;
-    private EditText visitreportEt;
+    private EditText visitreportEt;// 拜访记录
     private Button nextBtn;
+
+    public static final int ADD_VIE_SUC = 3;
+    MyHandler handler;
+
+    private XtVieSourceAdapter xtVieSourceAdapter;
+    private XtVieStatusAdapter xtstatusAdapter;
 
 
     @Nullable
@@ -63,46 +70,55 @@ public class XtChatvieFragment extends XtBaseVisitFragment implements View.OnCli
 
         addrelationBtn.setOnClickListener(this);
         nextBtn.setOnClickListener(this);
-
-
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Toast.makeText(getActivity(), "聊竞品" + "/" + termId + "/" + termName, Toast.LENGTH_SHORT).show();
+        xtChatVieService = new XtChatVieService(getActivity(), null);
+        handler = new MyHandler(this);
 
         initProData();
 
         // 竞品来源
-        XtVieSourceAdapter xtVieSourceAdapter = new XtVieSourceAdapter(
-                getActivity(), "", lst, "", null, null, null, null);//竞品来源
+        xtVieSourceAdapter = new XtVieSourceAdapter(
+                getActivity(), "", dataLst, "", null, null, null, null);//竞品来源
         viesourceLv.setAdapter(xtVieSourceAdapter);
         ViewUtil.setListViewHeight(viesourceLv);
 
         // 竞品情况
-        XtVieStatusAdapter xtstatusAdapter = new XtVieStatusAdapter(getActivity(), lst);//竞品情况
+        xtstatusAdapter = new XtVieStatusAdapter(getActivity(), dataLst);//竞品情况
         viestatusLv.setAdapter(xtstatusAdapter);
         ViewUtil.setListViewHeight(viestatusLv);
     }
 
-    List<XtChatVieStc> lst;
+    List<XtChatVieStc> dataLst;
     XtChatVieService xtChatVieService;
 
+    // 初始化数据
     private void initProData() {
-
-        xtChatVieService = new XtChatVieService(getActivity(), null);
         xtChatVieService.delRepeatVistProduct(visitId);
-        lst = xtChatVieService.queryVieProTemp(visitId);
+        dataLst = xtChatVieService.queryVieProTemp(visitId);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.xtbf_chatvie_bt_addrelation:// 新增竞品
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("termId", termStc.getTerminalkey());
+                bundle.putSerializable("termname", termStc.getTerminalname());
+                bundle.putSerializable("channelId", termStc.getMinorchannel());// 次渠道
+                bundle.putSerializable("termStc", termStc);
+                bundle.putSerializable("visitKey", visitId);//visitId
+                bundle.putSerializable("seeFlag", seeFlag);// 默认0   0:拜访 1:查看
+
+                XtAddChatVieFragment xtaddchatviefragment = new XtAddChatVieFragment(handler);
+                xtaddchatviefragment.setArguments(bundle);
+
                 XtVisitShopActivity xtVisitShopActivity = (XtVisitShopActivity) getActivity();
-                xtVisitShopActivity.changeXtvisitFragment(new XtAddChatVieFragment(), "xtaddchatviefragment");
+                xtVisitShopActivity.changeXtvisitFragment(xtaddchatviefragment, "xtaddchatviefragment");
                 break;
             case R.id.xtbf_chatvie_bt_next:// 下一页
 
@@ -110,6 +126,64 @@ public class XtChatvieFragment extends XtBaseVisitFragment implements View.OnCli
 
             default:
                 break;
+        }
+    }
+
+    /**
+     * 接收子线程消息的 Handler
+     */
+    public static class MyHandler extends Handler {
+
+        // 软引用
+        SoftReference<XtChatvieFragment> fragmentRef;
+
+        public MyHandler(XtChatvieFragment fragment) {
+            fragmentRef = new SoftReference<XtChatvieFragment>(fragment);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            XtChatvieFragment fragment = fragmentRef.get();
+            if (fragment == null) {
+                return;
+            }
+            ArrayList<KvStc> products = (ArrayList<KvStc>) msg.obj;
+            Bundle bundle = msg.getData();
+            KvStc agency = (KvStc) bundle.getSerializable("agency");
+
+            // 处理UI 变化
+            switch (msg.what) {
+                case ADD_VIE_SUC:
+                    fragment.showAddVieProSuc(products, agency);
+                    break;
+            }
+        }
+    }
+
+    /**
+     * 添加竞品成功 UI
+     */
+    public void showAddVieProSuc(ArrayList<KvStc> products, KvStc agency) {
+
+        for (KvStc product : products) {
+
+            //DbtLog.logUtils(TAG,"经销商key:"+agency.getKey()+"、经销商名称:"+agency.getValue()+"-->产品key："+product.getKey()+"、产品名称："+product.getValue());
+            List<String> proIdLst = FunUtil.getPropertyByName(dataLst, "proId", String.class);
+            if (proIdLst.contains(product.getKey())) {
+                DbtLog.logUtils(TAG, "产品重复提示");
+                Toast.makeText(getActivity(), getString(R.string.addrelation_msg_repetitionadd), Toast.LENGTH_LONG).show();
+            } else {
+                XtChatVieStc supplyStc = new XtChatVieStc();
+                supplyStc.setProId(product.getKey());
+                supplyStc.setProName(product.getValue());
+                supplyStc.setCommpayId(agency.getKey());
+                dataLst.add(supplyStc);
+
+                xtstatusAdapter.notifyDataSetChanged();
+                ViewUtil.setListViewHeight(viestatusLv);//
+                xtVieSourceAdapter.notifyDataSetChanged();
+                ViewUtil.setListViewHeight(viesourceLv);
+            }
         }
     }
 }

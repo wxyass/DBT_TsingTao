@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.db.table.MstTerminalinfoMTemp;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
+import et.tsingtaopad.dd.ddxt.chatvie.addchatvie.XtAddChatVieFragment;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProIndex;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProItem;
 import et.tsingtaopad.dd.ddxt.checking.num.XtCaculateFragment;
@@ -117,9 +119,22 @@ public class XtCheckIndexFragment extends XtBaseVisitFragment implements View.On
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.xtbf_checkindex_bt_quickcollect:
+            case R.id.xtbf_checkindex_bt_quickcollect:// 快速采集
+                if (ViewUtil.isDoubleClick(v.getId(), 2500)) return;
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("termId", termStc.getTerminalkey());
+                bundle.putSerializable("termname", termStc.getTerminalname());
+                bundle.putSerializable("channelId", termStc.getMinorchannel());// 次渠道
+                bundle.putSerializable("termStc", termStc);
+                bundle.putSerializable("visitKey", visitId);//visitId
+                bundle.putSerializable("proItemLst", (Serializable) proItemLst);// 默认0   0:拜访 1:查看
+
+                XtQuickCollectFragment xtquickcollectfragment = new XtQuickCollectFragment(handler);
+                xtquickcollectfragment.setArguments(bundle);
+
                 XtVisitShopActivity xtVisitShopActivity = (XtVisitShopActivity) getActivity();
-                xtVisitShopActivity.changeXtvisitFragment(new XtQuickCollectFragment(), "xtnuminputfragment");
+                xtVisitShopActivity.changeXtvisitFragment(xtquickcollectfragment, "xtnuminputfragment");
                 break;
 
             default:

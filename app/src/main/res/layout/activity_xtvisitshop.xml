@@ -81,7 +81,7 @@
                         android:id="@+id/xtvisit_rb_sayhi"
                         style="@style/style_shopvisit_RadioButton"
                         android:background="@drawable/bg_select_green"
-                        android:checked="true"
+
                         android:text="打招呼"
                         />
 
@@ -107,6 +107,7 @@
                         android:id="@+id/xtvisit_rb_camera"
                         style="@style/style_shopvisit_RadioButton"
                         android:background="@drawable/bg_select_green"
+                        android:checked="true"
                         android:text="拍照"/>
 
                     <RadioButton

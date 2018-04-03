@@ -115,7 +115,7 @@ public class XtCaculateAdapter extends BaseAdapter {
         }
         // (上下文,有几个产品,指标标准,所有的采集项数据,当前指标key)
         holder.indexValueLv.setAdapter(new XtCaculateItemAdapter(context, item.getIndexValueLst(), valueLst, itemLst,item.getIndexId()));
-        ViewUtil.setListViewHeight(holder.indexValueLv);
+        //ViewUtil.setListViewHeight(holder.indexValueLv);
         holder.indexValueLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

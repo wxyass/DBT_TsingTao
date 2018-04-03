@@ -139,7 +139,10 @@ public class XtAddInvoicingFragment extends BaseFragmentSupport implements View.
                 proLst, new String[]{"key", "value"}, new int[]{R.color.bg_content_color, R.color.bg_content_color_orange});
         agencyLv.setAdapter(agencyadapte);
         proLv.setAdapter(proadapte);
-        agency = agencyLst.get(0);
+
+        if (!CheckUtil.IsEmpty(agencyLst)) {
+            agency = agencyLst.get(0);
+        }
 
         // 经销商条目监听
         agencyLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {

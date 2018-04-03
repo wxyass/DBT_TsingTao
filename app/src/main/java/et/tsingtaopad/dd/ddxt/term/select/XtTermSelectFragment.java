@@ -265,19 +265,25 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
      * @param selectedList      用户选择的终端
      */
     public void breakNextLayout(int type,List<XtTermSelectMStc> selectedList){
-        // 清空终端临时表数据
-        xtSelectService.deleteData("MST_TERMINALINFO_M_TEMP");
-        // 复制终端临时表
-        for (XtTermSelectMStc xtselect:selectedList){
-            copyMstTerminalinfoMTemp(xtselect);
-        }
+
+
         // 跳转
         if(TOFRAGMENT == type){
+            // 清空终端临时表数据
+            xtSelectService.deleteData("MST_TERMINALINFO_M_TEMP");
+            // 复制终端临时表
+            for (XtTermSelectMStc xtselect:selectedList){
+                copyMstTerminalinfoMTemp(xtselect);
+            }
             // 销毁当前Fragment
             supportFragmentManager.popBackStack();
             // 跳转终端购物车
             changeHomeFragment(new XtTermCartFragment(), "xttermcartfragment");
         }else if(TOACTIVITY == type){
+            // 复制终端临时表
+            for (XtTermSelectMStc xtselect:selectedList){
+                copyMstTerminalinfoMTemp(xtselect);
+            }
             //
             Intent intent = new Intent(getActivity(),XtVisitShopActivity.class);
             intent.putExtra("isFirstVisit", "1");// 非第一次拜访1

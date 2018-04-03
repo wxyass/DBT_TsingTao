@@ -30,6 +30,7 @@ import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.db.dao.MstAgencysupplyInfoDao;
 import et.tsingtaopad.db.dao.MstCheckexerecordInfoDao;
 import et.tsingtaopad.db.dao.MstGroupproductMDao;
+import et.tsingtaopad.db.dao.MstPromotionsmDao;
 import et.tsingtaopad.db.dao.MstTerminalinfoMTempDao;
 import et.tsingtaopad.db.dao.MstVisitMDao;
 import et.tsingtaopad.db.dao.MstVisitMTempDao;
@@ -61,6 +62,7 @@ import et.tsingtaopad.dd.ddxt.checking.domain.XtProItem;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 import et.tsingtaopad.main.visit.shopvisit.term.domain.MstTermListMStc;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.CheckIndexCalculateStc;
+import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.CheckIndexPromotionStc;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.CheckIndexQuicklyStc;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.ProIndex;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.ProIndexValue;
@@ -1295,6 +1297,48 @@ public class XtShopVisitService {
                 Log.e(TAG, "回滚进销存数据发生异常", e1);
             }
         }
+    }
+
+    /**
+     * 获取协同拜访-查指标的促销活动页面部分的数据
+     *
+     * @param //prevVisitId 拜访ID
+     * @param channelId     本次拜访终端的次渠道ID
+     * @param termLevel     本次拜访终端的终端类型ID(终端等级)
+     * @return
+     */
+    public List<CheckIndexPromotionStc> queryPromotion(String visitId, String channelId, String termLevel) {
+        // 获取分项采集数据
+        List<CheckIndexPromotionStc> stcLst = new ArrayList<CheckIndexPromotionStc>();
+        AndroidDatabaseConnection connection = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            MstPromotionsmDao dao = helper.getDao(MstPromotionsM.class);
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+            stcLst = dao.queryXtPromotionByterm(helper, visitId, channelId, termLevel);
+            connection.commit(null);
+        } catch (SQLException e) {
+            Log.e(TAG, "获取拜访产品-我品竞品表DAO对象失败", e);
+        }
+
+        // 处理组合进店的情况
+        List<CheckIndexPromotionStc> tempLst = new ArrayList<CheckIndexPromotionStc>();
+        String promotionKey = "";
+        CheckIndexPromotionStc itemStc = new CheckIndexPromotionStc();
+        for (CheckIndexPromotionStc item : stcLst) {
+            if (!promotionKey.equals(item.getPromotKey())) {
+                promotionKey = item.getPromotKey();
+                itemStc = item;
+                tempLst.add(itemStc);
+            } else {
+                itemStc.setProId(itemStc.getProId() + "," + item.getProId());
+                itemStc.setProName(itemStc.getProName() + "\n" + item.getProName());
+            }
+
+        }
+
+        return tempLst;
     }
 
 }

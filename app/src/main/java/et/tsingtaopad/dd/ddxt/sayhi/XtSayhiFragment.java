@@ -1,6 +1,9 @@
 package et.tsingtaopad.dd.ddxt.sayhi;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,26 +19,39 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.j256.ormlite.dao.Dao;
+
+import java.lang.ref.SoftReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.adapter.AlertKeyValueAdapter;
 import et.tsingtaopad.adapter.SpinnerKeyValueAdapter;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.DbtUtils;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
+import et.tsingtaopad.core.util.dbtutil.PrefUtils;
+import et.tsingtaopad.core.util.dbtutil.ViewUtil;
+import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.core.view.alertview.OnDismissListener;
 import et.tsingtaopad.core.view.alertview.OnItemClickListener;
+import et.tsingtaopad.db.table.MstPlanforuserM;
+import et.tsingtaopad.db.table.MstProductM;
 import et.tsingtaopad.db.table.MstRouteM;
 import et.tsingtaopad.db.table.MstTerminalinfoMTemp;
 import et.tsingtaopad.db.table.MstVisitMTemp;
+import et.tsingtaopad.db.table.PadPlantempcheckM;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
+import et.tsingtaopad.dd.ddxt.invoicing.XtInvoicingFragment;
+import et.tsingtaopad.dd.ddxt.invoicing.domain.XtInvoicingStc;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
 
 /**
@@ -105,6 +121,47 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
     private List<KvStc> mainchannelLst = new ArrayList<>();
     private List<KvStc> minorchannelLst = new ArrayList<>();
 
+    private ProgressDialog progressDialog;
+    public static final int FINISH_SUC = 1;
+    MyHandler handler;
+
+
+    /**
+     * 接收子线程消息的 Handler
+     */
+    public static class MyHandler extends Handler {
+
+        // 软引用
+        SoftReference<XtSayhiFragment> fragmentRef;
+
+        public MyHandler(XtSayhiFragment fragment) {
+            fragmentRef = new SoftReference<XtSayhiFragment>(fragment);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            XtSayhiFragment fragment = fragmentRef.get();
+            if (fragment == null) {
+                return;
+            }
+
+
+            // 处理UI 变化
+            switch (msg.what) {
+                case FINISH_SUC:
+                    fragment.closeProgressSuc();
+                    break;
+            }
+        }
+    }
+
+    /**
+     * 添加产品成功 UI
+     */
+    public void closeProgressSuc() {
+        progressDialog.dismiss();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -171,21 +228,28 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        xtSayhiService = new XtSayhiService(getActivity(), null);
+
+        handler = new MyHandler(this);
+
+        /*progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("初始化中...");
+        progressDialog.show();*/
 
         // 初始化页面数据
         initData();
+        //initViewData();
         Toast.makeText(getActivity(), "打招呼" + "/" + termId + "/" + termName, Toast.LENGTH_SHORT).show();
 
         // 设置监听
+
     }
 
     // 初始化数据
     private void initData() {
-        xtSayhiService = new XtSayhiService(getActivity(), null);
+
         termInfoTemp = xtSayhiService.findTermTempById(termId);// 终端临时表记录
         visitMTemp = xtSayhiService.findVisitTempById(visitId);// 拜访临时表记录
-
-
         // 路线集合
         mstRouteList = xtSayhiService.initMstRoute();
         // 终端等级集合
@@ -317,6 +381,23 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
 
         }
 
+    }
+
+    private void initViewData(){
+        Thread thread = new Thread() {
+
+            @Override
+            public void run() {
+                try{
+                    initData();
+                }catch (Exception e){
+
+                }finally {
+                    handler.sendEmptyMessage(XtSayhiFragment.FINISH_SUC);
+                }
+            }
+        };
+        thread.start();
     }
 
     @Override

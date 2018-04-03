@@ -18,12 +18,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ListView
-                android:id="@+id/xtbf_quickcollect_lv_colitem"
-                android:layout_width="match_parent"
+            <!-- 可滚动线性布局 -->
+
+            <LinearLayout
+                android:id="@+id/xtbf_quicklydialog_lv"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:divider="@null"
-                android:dividerHeight="1dp"/>
+                android:divider="@color/listview_line"
+                android:dividerHeight="1dp"
+                android:orientation="vertical" />
 
             <View
                 android:layout_width="match_parent"

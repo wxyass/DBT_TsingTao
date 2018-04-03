@@ -137,7 +137,7 @@ public class XtTermSelectService {
                 terminalinfoMTemp.setDeleteflag(term.getDeleteflag());
                 terminalinfoMTemp.setIfminedate(term.getIfminedate());
                 terminalinfoMTemp.setIfmine(term.getIfmine());
-                terminalinfoMTempDao.create(terminalinfoMTemp);
+                terminalinfoMTempDao.createOrUpdate(terminalinfoMTemp);
 
             }
 

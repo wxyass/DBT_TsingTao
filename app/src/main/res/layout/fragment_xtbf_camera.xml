@@ -7,7 +7,7 @@
     <!-- 拍照上传 -->
 
     <ScrollView
-        android:id="@+id/visitshop_sv_desc"
+        android:id="@+id/xtbf_camera_sv_desc"
         android:layout_width="match_parent"
         android:scrollbars="none"
         android:layout_height="wrap_content">
@@ -18,7 +18,7 @@
             android:orientation="vertical">
 
             <et.tsingtaopad.view.MyGridView
-                android:id="@+id/gv_camera"
+                android:id="@+id/xtbf_camera_gv_camera"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="15dp"
@@ -29,7 +29,7 @@
 
             <!-- 图片上传后本地会自动删除,查看模式下不能显示,只能通过服务器后台查看 -->
             <TextView
-                android:id="@+id/visitshop_tv_desc"
+                android:id="@+id/xtbf_camera_tv_desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"

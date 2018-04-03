@@ -78,47 +78,7 @@ public class XtCheckIndexService extends XtShopVisitService {
         GlobalValues.indexLst = checkTypeStatusList;
     }
 
-    /**
-     * 获取协同拜访-查指标的促销活动页面部分的数据
-     *
-     * @param //prevVisitId 拜访ID
-     * @param channelId     本次拜访终端的次渠道ID
-     * @param termLevel     本次拜访终端的终端类型ID(终端等级)
-     * @return
-     */
-    public List<CheckIndexPromotionStc> queryPromotion(String visitId, String channelId, String termLevel) {
-        // 获取分项采集数据
-        List<CheckIndexPromotionStc> stcLst = new ArrayList<CheckIndexPromotionStc>();
-        AndroidDatabaseConnection connection = null;
-        try {
-            DatabaseHelper helper = DatabaseHelper.getHelper(context);
-            MstPromotionsmDao dao = helper.getDao(MstPromotionsM.class);
-            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
-            connection.setAutoCommit(false);
-            stcLst = dao.queryXtPromotionByterm(helper, visitId, channelId, termLevel);
-            connection.commit(null);
-        } catch (SQLException e) {
-            Log.e(TAG, "获取拜访产品-我品竞品表DAO对象失败", e);
-        }
 
-        // 处理组合进店的情况
-        List<CheckIndexPromotionStc> tempLst = new ArrayList<CheckIndexPromotionStc>();
-        String promotionKey = "";
-        CheckIndexPromotionStc itemStc = new CheckIndexPromotionStc();
-        for (CheckIndexPromotionStc item : stcLst) {
-            if (!promotionKey.equals(item.getPromotKey())) {
-                promotionKey = item.getPromotKey();
-                itemStc = item;
-                tempLst.add(itemStc);
-            } else {
-                itemStc.setProId(itemStc.getProId() + "," + item.getProId());
-                itemStc.setProName(itemStc.getProName() + "\n" + item.getProName());
-            }
-
-        }
-
-        return tempLst;
-    }
 
 
     /**

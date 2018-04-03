@@ -151,10 +151,13 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
 
 
         // 展示打招呼页面
-        XtSayhiFragment xtSayhiFragment = new XtSayhiFragment();
+        /*XtSayhiFragment xtSayhiFragment = new XtSayhiFragment();
         xtSayhiFragment.setArguments(returnBundle());
-        changeFragment(xtSayhiFragment, "xtsayhifragment");
-        fragmentType = 1;
+        changeFragment(xtSayhiFragment, "xtsayhifragment");*/
+        XtCameraFragment xtCameraFragment = new XtCameraFragment();
+        xtCameraFragment.setArguments(returnBundle());
+        changeFragment(xtCameraFragment, "xtcamerafragment");
+        fragmentType = 5;
     }
 
     // 配置 拜访时 所需要的各个临时表数据
