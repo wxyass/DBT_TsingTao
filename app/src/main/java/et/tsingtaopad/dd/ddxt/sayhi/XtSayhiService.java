@@ -1,10 +1,20 @@
 package et.tsingtaopad.dd.ddxt.sayhi;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
@@ -12,14 +22,29 @@ import com.j256.ormlite.stmt.Where;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import et.tsingtaopad.R;
+import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.DateUtil;
+import et.tsingtaopad.core.util.dbtutil.FunUtil;
+import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
+import et.tsingtaopad.core.util.dbtutil.ViewUtil;
+import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.db.DatabaseHelper;
+import et.tsingtaopad.db.dao.MstTerminalinfoMDao;
+import et.tsingtaopad.db.dao.MstTerminalinfoMTempDao;
 import et.tsingtaopad.db.dao.PadChecktypeMDao;
 import et.tsingtaopad.db.table.CmmDatadicM;
+import et.tsingtaopad.db.table.MstInvalidapplayInfo;
 import et.tsingtaopad.db.table.MstRouteM;
+import et.tsingtaopad.db.table.MstTerminalinfoM;
+import et.tsingtaopad.db.table.MstTerminalinfoMTemp;
+import et.tsingtaopad.db.table.MstVisitM;
+import et.tsingtaopad.db.table.MstVisitMTemp;
 import et.tsingtaopad.db.table.PadChecktypeM;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtShopVisitService;
 import et.tsingtaopad.home.initadapter.GlobalValues;
@@ -33,9 +58,11 @@ import et.tsingtaopad.main.visit.shopvisit.line.domain.MstRouteMStc;
 public class XtSayhiService extends XtShopVisitService {
 
     private final String TAG = "XtSayhiService";
+    XtSayhiFragment.MyHandler handler;
 
-    public XtSayhiService(Context context, Handler handler) {
+    public XtSayhiService(Context context, XtSayhiFragment.MyHandler handler) {
         super(context, handler);
+        this.handler = handler;
     }
 
     // 根据省市县编码 获取省市县名称
@@ -233,6 +260,191 @@ public class XtSayhiService extends XtShopVisitService {
             kvLst.add(0,kvItem);*/
         }
         return kvLst;
+    }
+
+    /**
+     * 打招呼中无效终端的提示框
+     * @author 吴欣伟
+     * @param visitM 拜访记录
+     * @param termInfo 终端档案信息
+     */
+    public void dialogInValidTerm(final MstVisitMTemp visitM, final MstTerminalinfoMTemp termInfo , String seeFlag) {
+
+        // 加载弹出窗口layout
+        final View itemForm = LayoutInflater.from(context).inflate(R.layout.shopvisit_sayhi_invalidterm,null);
+        final AlertDialog invalidTermDialgo = new AlertDialog.Builder(context).setCancelable(false).create();
+        invalidTermDialgo.setView(itemForm, 0, 0, 0, 0);
+        invalidTermDialgo.show();
+        // 确定
+        Button sureBt = (Button)itemForm.findViewById(R.id.invalid_bt_baocun);
+        if(ConstValues.FLAG_1.equals(seeFlag)){
+            sureBt.setEnabled(false);
+        }
+        sureBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                //AndroidDatabaseConnection connection = null;
+                try {
+                    DatabaseHelper helper = DatabaseHelper.getHelper(context);
+                    Dao<MstTerminalinfoM, String> terDao = helper.getMstTerminalinfoMDao();
+                    Dao<MstTerminalinfoMTemp, String> termTempDao = helper.getMstTerminalinfoMTempDao();
+                    Dao<MstInvalidapplayInfo, String> invalidDao = helper.getMstInvalidapplayInfoDao();
+                        /*connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+                        connection.setAutoCommit(false);*/
+
+                    //更改终端档案主表的状态:无效
+                    //终端状态还是有效，但是申请表为未审核
+                    termInfo.setStatus(ConstValues.FLAG_3);
+                    termInfo.setPadisconsistent("0");
+
+                    //添加无效申请
+                    MstInvalidapplayInfo mstInvalid = new MstInvalidapplayInfo();
+                    mstInvalid.setApplaykey(FunUtil.getUUID());
+                    mstInvalid.setVisitkey(visitM.getVisitkey());
+                    mstInvalid.setTerminalkey(termInfo.getTerminalkey());
+                    mstInvalid.setStatus(ConstValues.FLAG_0);
+                    mstInvalid.setVisitdate(visitM.getVisitdate());
+                    mstInvalid.setApplaytype(ConstValues.FLAG_0);
+                    RadioGroup rg = (RadioGroup) itemForm.findViewById(R.id.invalid_rg_reason);
+                    RadioButton rb = (RadioButton) itemForm.findViewById(rg.getCheckedRadioButtonId());
+                    mstInvalid.setApplaycause(rb.getText().toString());
+                    EditText content = (EditText) itemForm.findViewById(R.id.invalid_et_reason);
+                    mstInvalid.setContent(content.getText().toString());
+                    //mstInvalid.setApplayuser(ConstValues.loginSession.getUserCode());
+                    mstInvalid.setApplayuser(PrefUtils.getString(context, "userCode", ""));
+                    mstInvalid.setApplaydate(DateUtil.formatDate(new Date(), "yyyyMMddHHmmss"));
+                    mstInvalid.setPadisconsistent(ConstValues.FLAG_0);
+                    mstInvalid.setCredate(new Date());
+                    //mstInvalid.setCreuser(ConstValues.loginSession.getUserCode());
+                    mstInvalid.setCreuser(PrefUtils.getString(context, "userCode", ""));
+                    mstInvalid.setUpdatetime(new Date());
+                    //mstInvalid.setUpdateuser(ConstValues.loginSession.getUserCode());
+                    mstInvalid.setUpdateuser(PrefUtils.getString(context, "userCode", ""));
+
+                    //terDao.createOrUpdate(termInfo);
+                    termTempDao.createOrUpdate(termInfo);
+                    invalidDao.create(mstInvalid);
+                    DbtLog.logUtils(TAG, "无效终端记录保存成功");
+
+                    //无效终端申请上传服务器
+                    /*UploadDataService service = new UploadDataService(context, handler);
+                    service.upload_terminal(false, termInfo.getTerminalkey(), ConstValues.WAIT2);
+                    ViewUtil.sendMsg(context, R.string.agencyvisit_msg_oksave);*/
+                    invalidTermDialgo.dismiss();
+
+                    ((Activity)context).finish();
+                    DbtLog.logUtils(TAG, "无效终端申请返回终端列表");
+
+                    //connection.commit(null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    DbtLog.logUtils(TAG, "无效终端申请失败");
+                    try {
+                        //connection.rollback(null);
+                        ViewUtil.sendMsg(context, R.string.agencyvisit_msg_failsave);
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        // 取消
+        Button cancelBt = (Button)itemForm.findViewById(R.id.invalid_bt_cancle);
+        cancelBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handler.sendEmptyMessage(XtSayhiFragment.NOT_TERMSTATUS);
+                invalidTermDialgo.dismiss();
+            }
+        });
+    }
+
+    /**
+     * 更新终端信息
+     *
+     * @param termInfo      终端信息
+     * @param prevSequence  修改前的拜访顺序
+     */
+    @SuppressWarnings("unchecked")
+    public void updateXtTermInfo(MstTerminalinfoMTemp termInfo,String prevSequence) {
+
+        int msgId = -1;
+        if (CheckUtil.isBlankOrNull(termInfo.getTerminalname())) {
+            msgId = R.string.termadd_msg_invaltermname;
+        } else if ("-1".equals(termInfo.getRoutekey()) ||CheckUtil.isBlankOrNull(termInfo.getRoutekey())) {
+            msgId = R.string.termadd_msg_invalbelogline;
+        } else if ("-1".equals(termInfo.getTlevel()) ||CheckUtil.isBlankOrNull(termInfo.getTlevel())) {
+            msgId = R.string.termadd_msg_invaltermlevel;
+        } else if ("-1".equals(termInfo.getProvince()) || CheckUtil.isBlankOrNull(termInfo.getProvince())) {
+            msgId = R.string.termadd_msg_invalprov;
+        } else if ("-1".equals(termInfo.getCity()) ||CheckUtil.isBlankOrNull(termInfo.getCity())) {
+            msgId = R.string.termadd_msg_invalcity;
+        } else if ("-1".equals(termInfo.getCounty())) {
+            msgId = R.string.termadd_msg_invalcountry;
+        } else if (CheckUtil.isBlankOrNull(termInfo.getAddress())) {
+            msgId = R.string.termadd_msg_invaladdress;
+        } else if (CheckUtil.isBlankOrNull(termInfo.getContact())) {
+            msgId = R.string.termadd_msg_invalcontact;
+
+        }
+        //        else if (CheckUtil.isBlankOrNull(termInfo.getMobile())) {
+        //            msgId = R.string.termadd_msg_invalmobile;
+        //
+        //        }
+/*        else if (CheckUtil.isBlankOrNull(termInfo.getSequence())) {
+            msgId = R.string.termadd_msg_invalsequence;
+
+        } */
+        else if ("-1".equals(termInfo.getSellchannel()) ||CheckUtil.isBlankOrNull(termInfo.getSellchannel())) {
+            msgId = R.string.termadd_msg_invalsellchannel;
+
+        } else if ("-1".equals(termInfo.getMainchannel()) ||CheckUtil.isBlankOrNull(termInfo.getMainchannel())) {
+            msgId = R.string.termadd_msg_invalmainchannel;
+
+        } else if ("-1".equals(termInfo.getMinorchannel()) ||
+                CheckUtil.isBlankOrNull(termInfo.getMinorchannel())) {
+            msgId = R.string.termadd_msg_invalminorchannel;
+        }
+
+        //TextView sureBt = (TextView)((Activity)context).findViewById(R.id.banner_navigation_bt_confirm);
+        //sureBt.setTag(msgId);
+        // 弹出提示信息
+        if (msgId != -1) {
+            //GlobalValues.isSayHiSure = false;
+            //sendMsg(context, msgId, ConstValues.WAIT2);
+            Message message = new Message();
+            message.obj = msgId;
+            message.what = XtSayhiFragment.DATA_ARROR;
+            handler.handleMessage(message);
+        } else {
+            //GlobalValues.isSayHiSure = true;
+            try {
+                DatabaseHelper helper = DatabaseHelper.getHelper(context);
+                MstTerminalinfoMTempDao dao = helper.getDao(MstTerminalinfoMTemp.class);
+                /*
+                SQLiteDatabase db = helper.getReadableDatabase();
+                    List<MstTerminalinfoM> mstTerminalinfoMList = new ArrayList<MstTerminalinfoM>();
+                    StringBuffer buffer = new StringBuffer();
+                    buffer.append("select  t.terminalkey,t.sequence from mst_terminalinfo_m t ");
+                    buffer.append("where routekey = '");
+                    buffer.append(termInfo.getRoutekey());
+                    buffer.append("' ");
+                    buffer.append("order by (sequence+0) asc, orderbyno, terminalname");
+                    Cursor cursor  = db.rawQuery(buffer.toString(), null);
+                    MstTerminalinfoM mstTerminalinfoM;
+                    while (cursor.moveToNext()) {
+                        mstTerminalinfoM =new MstTerminalinfoM();
+                        mstTerminalinfoM.setTerminalkey(cursor.getString(cursor.getColumnIndex("terminalkey")));
+                        mstTerminalinfoM.setSequence(cursor.getString(cursor.getColumnIndex("sequence")));
+                        mstTerminalinfoMList.add(mstTerminalinfoM);
+                    }*/
+                // 更新终端信息
+                dao.update(termInfo);
+            } catch (SQLException e) {
+                Log.e(TAG, "获取终端表DAO对象失败", e);
+            }
+        }
     }
 
 

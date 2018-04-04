@@ -30,6 +30,7 @@ import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.db.dao.MstAgencysupplyInfoDao;
 import et.tsingtaopad.db.dao.MstCheckexerecordInfoDao;
 import et.tsingtaopad.db.dao.MstGroupproductMDao;
+import et.tsingtaopad.db.dao.MstGroupproductMTempDao;
 import et.tsingtaopad.db.dao.MstPromotionsmDao;
 import et.tsingtaopad.db.dao.MstTerminalinfoMTempDao;
 import et.tsingtaopad.db.dao.MstVisitMDao;
@@ -120,6 +121,20 @@ public class XtShopVisitService {
             Log.e(TAG, "获取拜访请表DAO异常", e);
         }
         return visitM;
+    }
+
+    // 获取产品组合临时表数据 根据终端key
+    public MstGroupproductMTemp findMstGroupproductMTempByid(String termcode) {
+        // 获取产品组合临时表数据
+        List<MstGroupproductMTemp> stcLst = new ArrayList<MstGroupproductMTemp>();
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            MstGroupproductMTempDao dao = helper.getDao(MstGroupproductMTemp.class);
+            stcLst = dao.queryMstGroupproductMByTerminalcode(helper, termcode);
+        } catch (SQLException e) {
+            Log.e(TAG, "获取终端表DAO对象失败", e);
+        }
+        return stcLst.get(0);
     }
 
     // 复制各个临时表
@@ -1075,7 +1090,7 @@ public class XtShopVisitService {
      * @param seeFlag   查看操作标识
      * @return
      */
-    public List<XtCheckIndexCalculateStc> queryNoProIndex2(
+    public List<XtCheckIndexCalculateStc> queryNoProIndex12(
             String visitId, String channelId, String seeFlag) {
         // 获取分项采集数据
         List<XtCheckIndexCalculateStc> stcLst = new ArrayList<XtCheckIndexCalculateStc>();

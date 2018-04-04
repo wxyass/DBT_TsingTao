@@ -84,6 +84,7 @@
                 android:layout_width="150dp"
                 android:layout_height="match_parent"
                 android:layout_margin="3dp"
+                android:inputType="numberDecimal"
                 android:layout_toRightOf="@id/item_askgoods_tv_qudao"
                 android:background="@drawable/bg_visit_record"/>
 
@@ -115,6 +116,7 @@
                 android:id="@+id/item_askgoods_et_lingshou"
                 android:layout_width="150dp"
                 android:layout_height="match_parent"
+                android:inputType="numberDecimal"
                 android:layout_margin="3dp"
                 android:layout_toRightOf="@id/item_askgoods_tv_lingshou"
                 android:background="@drawable/bg_visit_record"/>

@@ -117,6 +117,7 @@
                 android:layout_width="150dp"
                 android:layout_height="match_parent"
                 android:layout_margin="3dp"
+                android:inputType="number"
                 android:layout_toRightOf="@id/item_checkgoods_tv_daysellnum"
                 android:background="@drawable/bg_visit_record"/>
         </RelativeLayout>
@@ -156,6 +157,7 @@
                 android:layout_width="150dp"
                 android:layout_height="match_parent"
                 android:layout_margin="3dp"
+                android:inputType="number"
                 android:layout_toRightOf="@id/item_checkgoods_tv_prevnum"
                 android:background="@drawable/bg_visit_record"/>
 
@@ -189,6 +191,7 @@
                 android:layout_width="150dp"
                 android:layout_height="match_parent"
                 android:layout_margin="3dp"
+                android:inputType="number"
                 android:layout_toRightOf="@id/item_askgoods_tv_addcard"
                 android:background="@drawable/bg_visit_record"/>
         </RelativeLayout>

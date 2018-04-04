@@ -250,6 +250,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"/>
 
+            <!-- layout_gravity属性是**指定当前控件在父元素的位置layout_gravity属性是**指定当前控件在父元素的位置- -->
+            <!-- 终端名称： -->
+            <RelativeLayout
+                style="@style/xtbf_sayhi_rl">
+
+                <TextView
+                    style="@style/xtbf_sayhi_one_tv"
+                    android:text="@string/termadd_termname"/>
+
+                <EditText
+                    android:id="@+id/xtbf_sayhi_termname"
+                    style="@style/xtbf_sayhi_two_tv"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginRight="100dp"
+                    android:background="@drawable/bg_visit_record"
+                    android:text="@string/termadd_termname"/>
+
+                <ImageView
+                    style="@style/xtbf_sayhi_third_tv"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+
             <!-- 终端编码： -->
             <RelativeLayout
                 style="@style/xtbf_sayhi_rl">
@@ -293,28 +321,6 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"/>
-
-            <!-- layout_gravity属性是**指定当前控件在父元素的位置layout_gravity属性是**指定当前控件在父元素的位置- -->
-            <!-- 终端名称： -->
-            <RelativeLayout
-                style="@style/xtbf_sayhi_rl">
-
-                <TextView
-                    style="@style/xtbf_sayhi_one_tv"
-                    android:text="@string/termadd_termname"/>
-
-                <TextView
-                    android:id="@+id/xtbf_sayhi_termname"
-                    style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_termname"/>
-
-                <ImageView
-                    style="@style/xtbf_sayhi_third_tv"/>
-            </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
             <!-- 终端等级： -->
             <RelativeLayout
                 android:id="@+id/xtbf_sayhi_rl_termlv"
@@ -342,6 +348,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"/>
+
             <!-- 所在省： -->
             <RelativeLayout
                 style="@style/xtbf_sayhi_rl">
@@ -410,9 +417,15 @@
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_address"/>
 
-                <TextView
+                <EditText
                     android:id="@+id/xtbf_sayhi_termaddress"
                     style="@style/xtbf_sayhi_two_tv"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginRight="100dp"
+                    android:background="@drawable/bg_visit_record"
                     android:text="@string/termadd_termname"/>
 
                 <ImageView
@@ -430,9 +443,15 @@
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_person"/>
 
-                <TextView
+                <EditText
                     android:id="@+id/xtbf_sayhi_termcontact"
                     style="@style/xtbf_sayhi_two_tv"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginRight="100dp"
+                    android:background="@drawable/bg_visit_record"
                     android:text="@string/termadd_termname"/>
 
                 <ImageView
@@ -450,9 +469,17 @@
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_tel"/>
 
-                <TextView
+                <EditText
                     android:id="@+id/xtbf_sayhi_termphone"
                     style="@style/xtbf_sayhi_two_tv"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginRight="100dp"
+                    android:maxLength="20"
+                    android:singleLine="true"
+                    android:background="@drawable/bg_visit_record"
                     android:text="@string/termadd_termname"/>
 
                 <ImageView
@@ -470,9 +497,15 @@
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_cycle"/>
 
-                <TextView
+                <EditText
                     android:id="@+id/xtbf_sayhi_termcycle"
                     style="@style/xtbf_sayhi_san_tv"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:inputType="number"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/bg_visit_record"
                     android:text="@string/termadd_termname"/>
 
                 <TextView
@@ -494,9 +527,16 @@
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_sequence"/>
 
-                <TextView
+                <EditText
                     android:id="@+id/xtbf_sayhi_termsequence"
                     style="@style/xtbf_sayhi_two_tv"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginRight="100dp"
+                    android:inputType="number"
+                    android:background="@drawable/bg_visit_record"
                     android:text="@string/termadd_termname"/>
 
                 <ImageView
@@ -514,9 +554,15 @@
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_hvolume"/>
 
-                <TextView
+                <EditText
                     android:id="@+id/xtbf_sayhi_termhvolume"
                     style="@style/xtbf_sayhi_san_tv"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:inputType="number"
+                    android:background="@drawable/bg_visit_record"
                     android:text="@string/termadd_termname"/>
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
@@ -537,9 +583,15 @@
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_mvolume"/>
 
-                <TextView
+                <EditText
                     android:id="@+id/xtbf_sayhi_termmvolume"
                     style="@style/xtbf_sayhi_san_tv"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:inputType="number"
+                    android:background="@drawable/bg_visit_record"
                     android:text="@string/termadd_termname"/>
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
@@ -560,9 +612,15 @@
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_pvolume"/>
 
-                <TextView
+                <EditText
                     android:id="@+id/xtbf_sayhi_termpvolume"
                     style="@style/xtbf_sayhi_san_tv"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:inputType="number"
+                    android:background="@drawable/bg_visit_record"
                     android:text="@string/termadd_termname"/>
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
@@ -583,9 +641,15 @@
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_lvolume"/>
 
-                <TextView
+                <EditText
                     android:id="@+id/xtbf_sayhi_termlvolume"
                     style="@style/xtbf_sayhi_san_tv"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:inputType="number"
+                    android:background="@drawable/bg_visit_record"
                     android:text="@string/termadd_termname"/>
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
@@ -606,9 +670,15 @@
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_totalvolume"/>
 
-                <TextView
+                <EditText
                     android:id="@+id/xtbf_sayhi_termtvolume"
                     style="@style/xtbf_sayhi_san_tv"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:inputType="number"
+                    android:background="@drawable/bg_visit_record"
                     android:text="@string/termadd_termname"/>
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"

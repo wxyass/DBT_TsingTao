@@ -1,18 +1,23 @@
 package et.tsingtaopad.dd.ddxt.sayhi;
 
+import android.annotation.TargetApi;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -52,13 +57,18 @@ import et.tsingtaopad.db.table.PadPlantempcheckM;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
 import et.tsingtaopad.dd.ddxt.invoicing.XtInvoicingFragment;
 import et.tsingtaopad.dd.ddxt.invoicing.domain.XtInvoicingStc;
+import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
+import et.tsingtaopad.view.DdSlideSwitch;
+import et.tsingtaopad.view.SlideSwitch;
 
 /**
  * Created by yangwenmin on 2018/3/12.
  */
 
-public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClickListener, OnItemClickListener, OnDismissListener {
+public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClickListener, DdSlideSwitch.OnLongSwitchChangedListener,OnItemClickListener, OnDismissListener {
+
+    private final String TAG = "XtSayhiFragment";
 
     private et.tsingtaopad.view.DdSlideSwitch xttermstatusSw;
     private et.tsingtaopad.view.DdSlideSwitch xtvisitstatusSw;
@@ -72,22 +82,22 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
     private TextView xttermcode;
     private TextView xttermroude;
     private RelativeLayout xttermroudeRl;
-    private TextView xttermname;
+    private EditText xttermname;
     private TextView xttermlv;
     private RelativeLayout xttermlvRl;
     private TextView xtprovince;
     private TextView xttermcity;
     private TextView xttermcountry;
-    private TextView xttermaddress;
-    private TextView xttermcontact;
-    private TextView xttermphone;
-    private TextView xttermcycle;
-    private TextView xttermsequence;
-    private TextView xttermhvolume;
-    private TextView xttermmvolume;
-    private TextView xttermpvolume;
-    private TextView xttermlvolume;
-    private TextView xttermtvolume;
+    private EditText xttermaddress;
+    private EditText xttermcontact;
+    private EditText xttermphone;
+    private EditText xttermcycle;
+    private EditText xttermsequence;
+    private EditText xttermhvolume;
+    private EditText xttermmvolume;
+    private EditText xttermpvolume;
+    private EditText xttermlvolume;
+    private EditText xttermtvolume;
     private TextView xttermarea;
     private RelativeLayout xttermareaRl;
     private TextView xttermsellchannel;
@@ -122,8 +132,12 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
     private List<KvStc> minorchannelLst = new ArrayList<>();
 
     private ProgressDialog progressDialog;
-    public static final int FINISH_SUC = 1;
+    public static final int FINISH_SUC = 11;
+    public static final int NOT_TERMSTATUS = 12;
+    public static final int DATA_ARROR = 13;
     MyHandler handler;
+
+
 
 
     /**
@@ -151,8 +165,59 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
                 case FINISH_SUC:
                     fragment.closeProgressSuc();
                     break;
+                case NOT_TERMSTATUS:
+                    fragment.closeXtTermstatusSw();
+                    break;
+                case DATA_ARROR:
+                    int res = (int)msg.obj;
+                    fragment.showErrorMsg(res);
+
+                    break;
             }
         }
+    }
+
+    // 展示错误信息
+    private void showErrorMsg(int res) {
+        Toast.makeText(getActivity(),getString(res),Toast.LENGTH_SHORT).show();
+        //requestFocus(res);
+    }
+
+    /**
+     * 由错误提示定位焦点
+     *
+     * @param msgId
+     */
+    private void requestFocus(int msgId) {
+        DbtLog.logUtils(TAG, "requestFocus()");
+        switch (msgId) {
+            case R.string.termadd_msg_invaltermname:
+                xttermname.requestFocus();
+                break;
+
+            case R.string.termadd_msg_invaladdress:
+                xttermaddress.requestFocus();
+                break;
+
+            case R.string.termadd_msg_invalcontact:
+                xttermcontact.requestFocus();
+                break;
+            case R.string.termadd_msg_invalsequence:
+                xttermsequence.requestFocus();
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    // 取消终端失效
+    private void closeXtTermstatusSw() {
+        MotionEvent event = MotionEvent.obtain(
+                SystemClock.uptimeMillis(), SystemClock.uptimeMillis(),
+                MotionEvent.ACTION_UP, xttermstatusSw.getLeft(),
+                xttermstatusSw.getTop(), xttermstatusSw.getId());
+        xttermstatusSw.onTouchEvent(event);
     }
 
     /**
@@ -175,32 +240,37 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
 
         xttermstatusSw = (et.tsingtaopad.view.DdSlideSwitch) view.findViewById(R.id.xt_sayhi_sw_termstatus);
         xtvisitstatusSw = (et.tsingtaopad.view.DdSlideSwitch) view.findViewById(R.id.xt_sayhi_sw_visitstatus);
+
+        xtwopindianzhaoSw = (et.tsingtaopad.view.DdSlideSwitch) view.findViewById(R.id.xt_sayhi_sw_wopindianzhao);
         xttextBtn = (Button) view.findViewById(R.id.xt_sayhi_btn_text);
         xttimeBtn = (Button) view.findViewById(R.id.xt_sayhi_btn_time);
-        xtwopindianzhaoSw = (et.tsingtaopad.view.DdSlideSwitch) view.findViewById(R.id.xt_sayhi_sw_wopindianzhao);
+
         xtvieCb = (CheckBox) view.findViewById(R.id.xt_sayhi_cb_vie);
         xtmineCb = (CheckBox) view.findViewById(R.id.xt_sayhi_cb_mine);
+
         xtvieprotocolCb = (CheckBox) view.findViewById(R.id.xt_sayhi_cb_vieprotocol);
         xtmineprotocolCb = (CheckBox) view.findViewById(R.id.xt_sayhi_cb_mineprotocol);
+
+        xttermname = (EditText) view.findViewById(R.id.xtbf_sayhi_termname);
         xttermcode = (TextView) view.findViewById(R.id.xtbf_sayhi_termcode);
         xttermroudeRl = (RelativeLayout) view.findViewById(R.id.xt_sayhi_rl_termroude);
         xttermroude = (TextView) view.findViewById(R.id.xtbf_sayhi_termroude);
-        xttermname = (TextView) view.findViewById(R.id.xtbf_sayhi_termname);
+
         xttermlv = (TextView) view.findViewById(R.id.xtbf_sayhi_termlv);
         xttermlvRl = (RelativeLayout) view.findViewById(R.id.xtbf_sayhi_rl_termlv);
         xtprovince = (TextView) view.findViewById(R.id.xtbf_sayhi_termprovince);
         xttermcity = (TextView) view.findViewById(R.id.xtbf_sayhi_termcity);
         xttermcountry = (TextView) view.findViewById(R.id.xtbf_sayhi_termcountry);
-        xttermaddress = (TextView) view.findViewById(R.id.xtbf_sayhi_termaddress);
-        xttermcontact = (TextView) view.findViewById(R.id.xtbf_sayhi_termcontact);
-        xttermphone = (TextView) view.findViewById(R.id.xtbf_sayhi_termphone);
-        xttermcycle = (TextView) view.findViewById(R.id.xtbf_sayhi_termcycle);
-        xttermsequence = (TextView) view.findViewById(R.id.xtbf_sayhi_termsequence);
-        xttermhvolume = (TextView) view.findViewById(R.id.xtbf_sayhi_termhvolume);
-        xttermmvolume = (TextView) view.findViewById(R.id.xtbf_sayhi_termmvolume);
-        xttermpvolume = (TextView) view.findViewById(R.id.xtbf_sayhi_termpvolume);
-        xttermlvolume = (TextView) view.findViewById(R.id.xtbf_sayhi_termlvolume);
-        xttermtvolume = (TextView) view.findViewById(R.id.xtbf_sayhi_termtvolume);
+        xttermaddress = (EditText) view.findViewById(R.id.xtbf_sayhi_termaddress);
+        xttermcontact = (EditText) view.findViewById(R.id.xtbf_sayhi_termcontact);
+        xttermphone = (EditText) view.findViewById(R.id.xtbf_sayhi_termphone);
+        xttermcycle = (EditText) view.findViewById(R.id.xtbf_sayhi_termcycle);
+        xttermsequence = (EditText) view.findViewById(R.id.xtbf_sayhi_termsequence);
+        xttermhvolume = (EditText) view.findViewById(R.id.xtbf_sayhi_termhvolume);
+        xttermmvolume = (EditText) view.findViewById(R.id.xtbf_sayhi_termmvolume);
+        xttermpvolume = (EditText) view.findViewById(R.id.xtbf_sayhi_termpvolume);
+        xttermlvolume = (EditText) view.findViewById(R.id.xtbf_sayhi_termlvolume);
+        xttermtvolume = (EditText) view.findViewById(R.id.xtbf_sayhi_termtvolume);
         xttermarea = (TextView) view.findViewById(R.id.xtbf_sayhi_termarea);
         xttermareaRl = (RelativeLayout) view.findViewById(R.id.xtbf_sayhi_rl_termarea);
         xttermsellchannel = (TextView) view.findViewById(R.id.xtbf_sayhi_termsellchannel);
@@ -213,6 +283,10 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         xttermpersionRl = (RelativeLayout) view.findViewById(R.id.xtbf_sayhi_rl_termpersion);
         xtnextBtn = (Button) view.findViewById(R.id.xtbf_sayhi_bt_next);
 
+
+        xttermstatusSw.setOnLongSwitchChangedListener(this);
+        xtwopindianzhaoSw.setOnLongSwitchChangedListener(this);
+
         xttermlvRl.setOnClickListener(this);
         xttermroudeRl.setOnClickListener(this);
         xttermareaRl.setOnClickListener(this);
@@ -221,6 +295,7 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         xttermminorchannelRl.setOnClickListener(this);
         xttermpersionRl.setOnClickListener(this);
 
+        xttimeBtn.setOnClickListener(this);
 
     }
 
@@ -228,9 +303,8 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        xtSayhiService = new XtSayhiService(getActivity(), null);
-
         handler = new MyHandler(this);
+        xtSayhiService = new XtSayhiService(getActivity(), handler);
 
         /*progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage("初始化中...");
@@ -239,7 +313,7 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         // 初始化页面数据
         initData();
         //initViewData();
-        Toast.makeText(getActivity(), "打招呼" + "/" + termId + "/" + termName, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "打招呼" + "/" + termId + "/" + termName, Toast.LENGTH_SHORT).show();
 
         // 设置监听
 
@@ -263,7 +337,6 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         // 主渠道集合
         mainchannelLst = getMainchannelLst(sellchannelLst);
 
-
         //设置时间
         calendar = Calendar.getInstance();
         yearr = calendar.get(Calendar.YEAR);
@@ -281,7 +354,6 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
 
         // 设置界面数据
         if (visitMTemp != null) {
-
             // 是否有效拜访 //进行判断(如果Status拜访状态为1 或者 拜访状态不为空设置为选中状态)
             if (ConstValues.FLAG_1.equals(visitMTemp.getStatus()) || CheckUtil.isBlankOrNull(visitMTemp.getStatus())) {
                 xtvisitstatusSw.setStatus(true);
@@ -383,6 +455,7 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
 
     }
 
+    //
     private void initViewData(){
         Thread thread = new Thread() {
 
@@ -406,6 +479,31 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
 
             case R.id.top_navigation_rl_back:
                 supportFragmentManager.popBackStack();
+                break;
+            case R.id.xt_sayhi_btn_time:// 进店时间选择
+                DatePickerDialog dateDialog = new DatePickerDialog(v.getContext(),
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                calendar.set(year, monthOfYear, dayOfMonth);
+                                yearr = year;
+                                month = monthOfYear;
+                                day = dayOfMonth;
+                                if (dayOfMonth < 10) {
+                                    aday = "0" + dayOfMonth;
+                                } else {
+                                    aday = Integer.toString(dayOfMonth);
+                                }
+                                ifminedate = (Integer.toString(year) + "-"+ String.format("%02d", monthOfYear + 1)+ "-" + aday);
+                                // ifminedate = (Integer.toString(year) +
+                                // String.format("%02d", monthOfYear + 1) + aday);
+                                xttimeBtn.setText(ifminedate);
+                            }
+                        }, yearr, month, day);
+                if (!dateDialog.isShowing()) {
+                    dateDialog.show();
+                }
                 break;
 
             case R.id.xt_sayhi_rl_termroude:// 终端路线
@@ -617,5 +715,164 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
     public void onDismiss(Object o) {
         //closeKeyboard();
         //Toast.makeText(this, "消失了", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onLongSwitchChanged(DdSlideSwitch obj, int status) {
+        switch (obj.getId()) {
+            //是否有效终端按钮
+            case R.id.xt_sayhi_sw_termstatus:
+                if (status == DdSlideSwitch.SWITCH_OFF) {
+                    xtSayhiService.dialogInValidTerm(visitMTemp, termInfoTemp, seeFlag);
+                }
+                break;
+            //是否我品店招
+            case R.id.xt_sayhi_sw_wopindianzhao:
+                if (status == DdSlideSwitch.SWITCH_OFF) {
+                    xttimeBtn.setVisibility(View.GONE);
+                    xttextBtn.setVisibility(View.GONE);
+                } else {
+                    xttimeBtn.setVisibility(View.VISIBLE);
+                    xttextBtn.setVisibility(View.VISIBLE);
+                }
+                break;
+        }
+    }
+
+    @Override
+    //失去焦点时调用
+    public void onPause() {
+        super.onPause();
+        DbtLog.logUtils(TAG, "onPause()");
+        Long time5 = new Date().getTime();
+
+        // 如果是查看操作，则不做数据校验及数据处理
+        if (ConstValues.FLAG_1.equals(seeFlag))
+            return;
+
+        // 终端状态为有效时才保存相关信息
+        if (xttermstatusSw.getStatus()) {
+            // 保存拜访主表信息
+            if (xtvisitstatusSw.getStatus()) {
+                visitMTemp.setStatus(ConstValues.FLAG_1);// status:1,true时为有效拜访
+            } else {
+                visitMTemp.setStatus(ConstValues.FLAG_0);
+            }
+
+            // 店招
+			/*if (mineproductSW.getStatus()) {
+				visitM.setIfmine(ConstValues.FLAG_1);// 是否我品店招 0不是 1是
+				if(mineProductTime.getText().toString()!=null&&mineProductTime.getText().toString().length()>0){
+					visitM.setIfminedate(mineProductTime.getText().toString());
+				}else{
+					visitM.setIfminedate(ifminedate);
+				}
+			} else {
+				visitM.setIfmine(ConstValues.FLAG_0);
+			}*/
+
+			// 是否我品销售范围
+            visitMTemp.setIsself(xtmineCb.isChecked() ? ConstValues.FLAG_1 : ConstValues.FLAG_0);
+            // 是否竞品销售范围
+            visitMTemp.setIscmp(xtvieCb.isChecked() ? ConstValues.FLAG_1 : ConstValues.FLAG_0);
+            // 如果初始状态为选中，保存进为未选中则状态为0：流失
+            if (xtmineprotocolCb.getTag() != null&& ConstValues.FLAG_1.equals(xtmineprotocolCb.getTag().toString())) {
+                visitMTemp.setSelftreaty(xtmineprotocolCb.isChecked() ? ConstValues.FLAG_1: ConstValues.FLAG_0);
+            } else {
+                visitMTemp.setSelftreaty(xtmineprotocolCb.isChecked() ? ConstValues.FLAG_1: ConstValues.FLAG_0);
+            }
+
+            if (xtvieprotocolCb.getTag() != null&& ConstValues.FLAG_1.equals(xtvieprotocolCb.getTag().toString())) {
+                visitMTemp.setCmptreaty(xtvieprotocolCb.isChecked() ? ConstValues.FLAG_1: ConstValues.FLAG_0);
+            } else {
+                visitMTemp.setCmptreaty(xtvieprotocolCb.isChecked() ? ConstValues.FLAG_1: ConstValues.FLAG_0);
+            }
+            /*visitMTemp.setVisituser(visitPersonEt.getText().toString());
+
+            // 当页面切换太快,页面数据(拜访对象职位)来不及初始化,导致页面数据保存时,系统崩溃
+            String visitpotion = "-1";
+            try {
+                visitpotion = laobanSp.getTag().toString();
+            } catch (Exception e) {
+                Log.e(TAG, "当页面切换太快,页面数据(拜访对象职位)来不及初始化", e);
+            }
+            if(!("-1".equals(visitpotion)||"66AA9D3A55374232891C964350610930".equals(visitpotion))){ //"-1",其他 根据原先用户是什么,不做处理
+                String visitpositionName = service.getVisitpositionName(visitpotion);
+                visitMTemp.setVisituser(visitpositionName);
+            }
+            visitMTemp.setVisitposition(visitpotion);
+
+            if (belongLineSp.getTag() != null
+                    && !CheckUtil.isBlankOrNull(belongLineSp.getTag()
+                    .toString())) {
+                visitMTemp.setRoutekey(belongLineSp.getTag().toString());
+            }
+            service.updateVisit(visitMTemp);*/
+
+            // 保存终端信息
+            if (termInfoTemp != null) {
+                termInfoTemp.setTerminalname(FunUtil.isNullSetSpace(xttermname.getText()).toString());
+                termInfoTemp.setRoutekey(FunUtil.isBlankOrNullTo(termInfoTemp.getRoutekey(), termInfoTemp.getRoutekey()));
+                termInfoTemp.setProvince(termInfoTemp.getProvince());
+                termInfoTemp.setCity(termInfoTemp.getCity());
+                termInfoTemp.setCounty(termInfoTemp.getCounty());
+                // if (citySp.getSelectedItem() != null) {
+                // KvStc cityKvStc = (KvStc)citySp.getSelectedItem();
+                // if ("全省".equals(cityKvStc.getValue())) {
+                // termInfo.setCounty("");
+                // } else {
+                // termInfo.setCounty(FunUtil.isBlankOrNullTo(countrySp.getTag(),
+                // termInfo.getCounty()));
+                // }
+                // }
+                termInfoTemp.setAddress(FunUtil.isNullSetSpace(xttermaddress.getText()).toString());
+                termInfoTemp.setContact(FunUtil.isNullSetSpace(xttermcontact.getText()).toString());
+                if(xttermphone.getText().toString().length()>30)xttermphone.setText(xttermphone.getText().toString().substring(0, 30));
+                termInfoTemp.setMobile(FunUtil.isNullSetSpace(xttermphone.getText()).toString());
+                termInfoTemp.setTlevel(FunUtil.isBlankOrNullTo(termInfoTemp.getTlevel(),termInfoTemp.getTlevel()));
+                termInfoTemp.setSequence(FunUtil.isNullSetSpace(xttermsequence.getText()).toString());
+                termInfoTemp.setCycle(FunUtil.isNullSetSpace(xttermcycle.getText()).toString());
+                termInfoTemp.setHvolume(FunUtil.isNullToZero(xttermhvolume.getText()).toString());
+                termInfoTemp.setMvolume(FunUtil.isNullToZero(xttermmvolume.getText()).toString());
+                termInfoTemp.setPvolume(FunUtil.isNullToZero(xttermpvolume.getText()).toString());
+                termInfoTemp.setLvolume(FunUtil.isNullToZero(xttermlvolume.getText()).toString());
+
+                // 有效终端
+                if (xttermstatusSw.getStatus()) {
+                    termInfoTemp.setStatus(ConstValues.FLAG_1); // 有效
+                } else {
+                    termInfoTemp.setStatus(ConstValues.FLAG_0); // 失效
+                }
+
+                // 店招
+                if (xtwopindianzhaoSw.getStatus()) {
+                    termInfoTemp.setIfmine(ConstValues.FLAG_1);// 是否我品店招 0不是 1是
+                    if(xttimeBtn.getText().toString()!=null&&xttimeBtn.getText().toString().length()>0){
+                        termInfoTemp.setIfminedate(xttimeBtn.getText().toString());
+                    }else{
+                        termInfoTemp.setIfminedate(ifminedate);
+                    }
+                } else {
+                    termInfoTemp.setIfmine(ConstValues.FLAG_0);
+                }
+
+                termInfoTemp.setSellchannel(FunUtil.isBlankOrNullTo(termInfoTemp.getSellchannel(), termInfoTemp.getSellchannel()));
+                termInfoTemp.setMainchannel(FunUtil.isBlankOrNullTo(termInfoTemp.getMainchannel(), termInfoTemp.getMainchannel()));
+                termInfoTemp.setMinorchannel(FunUtil.isBlankOrNullTo(termInfoTemp.getMinorchannel(), termInfoTemp.getMinorchannel()));
+                termInfoTemp.setAreatype(FunUtil.isBlankOrNullTo(termInfoTemp.getAreatype(), termInfoTemp.getAreatype()));
+                //termInfo.setUpdateuser(ConstValues.loginSession.getUserCode());
+                termInfoTemp.setUpdateuser(PrefUtils.getString(getActivity(), "userCode", ""));
+                termInfoTemp.setPadisconsistent(ConstValues.FLAG_0);
+                termInfoTemp.setUpdatetime(DateUtil.getDateTimeDte(1));
+                // --- 更改mst_terminalinfo_m表中selftreaty字段 ywm 20160426-----------------
+                termInfoTemp.setSelftreaty(visitMTemp.getSelftreaty());
+                termInfoTemp.setCmpselftreaty(visitMTemp.getCmptreaty());
+                // --- 更改mst_terminalinfo_m表中selftreaty字段 ywm 20160426-----------------
+                String prevSequence = xttermsequence.getText().toString();
+                xtSayhiService.updateXtTermInfo(termInfoTemp, prevSequence);
+            }
+        }
+        Long time6 = new Date().getTime();
+        Log.e("Optimization", "保存数据" + (time6 - time5));
     }
 }

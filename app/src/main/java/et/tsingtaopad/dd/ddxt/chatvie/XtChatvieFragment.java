@@ -18,9 +18,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import et.tsingtaopad.R;
+import et.tsingtaopad.core.util.dbtutil.CheckUtil;
+import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
+import et.tsingtaopad.db.table.MstVisitMTemp;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
 import et.tsingtaopad.dd.ddxt.chatvie.addchatvie.XtAddChatVieFragment;
 import et.tsingtaopad.dd.ddxt.chatvie.domain.XtChatVieStc;
@@ -81,6 +84,27 @@ public class XtChatvieFragment extends XtBaseVisitFragment implements View.OnCli
 
         initProData();
 
+
+    }
+
+    List<XtChatVieStc> dataLst;
+    XtChatVieService xtChatVieService;
+    private MstVisitMTemp visitMTemp;
+
+    // 初始化数据
+    private void initProData() {
+        xtChatVieService.delRepeatVistProduct(visitId);
+        dataLst = xtChatVieService.queryVieProTemp(visitId);
+        visitMTemp = xtChatVieService.findVisitTempById(visitId);// 拜访临时表记录
+
+        if (visitMTemp != null) {
+            // 是否瓦解竞品  0:未瓦解  1:瓦解
+            if (ConstValues.FLAG_1.equals(visitMTemp.getIscmpcollapse()) ) {
+                clearvieSw.setStatus(true);
+            } else {
+                clearvieSw.setStatus(false);
+            }}
+
         // 竞品来源
         xtVieSourceAdapter = new XtVieSourceAdapter(
                 getActivity(), "", dataLst, "", null, null, null, null);//竞品来源
@@ -91,15 +115,6 @@ public class XtChatvieFragment extends XtBaseVisitFragment implements View.OnCli
         xtstatusAdapter = new XtVieStatusAdapter(getActivity(), dataLst);//竞品情况
         viestatusLv.setAdapter(xtstatusAdapter);
         ViewUtil.setListViewHeight(viestatusLv);
-    }
-
-    List<XtChatVieStc> dataLst;
-    XtChatVieService xtChatVieService;
-
-    // 初始化数据
-    private void initProData() {
-        xtChatVieService.delRepeatVistProduct(visitId);
-        dataLst = xtChatVieService.queryVieProTemp(visitId);
     }
 
     @Override
@@ -186,4 +201,60 @@ public class XtChatvieFragment extends XtBaseVisitFragment implements View.OnCli
             }
         }
     }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        DbtLog.logUtils(TAG, "onPause()");
+        // 如果是查看操作，则不做数据校验及数据处理
+        if (ConstValues.FLAG_1.equals(seeFlag)) return;
+
+        View view;
+        EditText itemEt;
+        XtChatVieStc item;
+        // 遍历LV,获取采集数据
+        for (int i = 0; i < dataLst.size(); i++) {
+            item = dataLst.get(i);
+            view = viesourceLv.getChildAt(i);
+            if (view == null) continue;
+
+            // 聊竞品-进店价
+            itemEt = (EditText)view.findViewById(R.id.item_viesource_et_qudao);
+            String content = itemEt.getText().toString();
+            item.setChannelPrice(FunUtil.getDecimalsData(content));
+            //item.setChannelPrice(itemEt.getText().toString());
+
+            // 聊竞品-零售价
+            itemEt = (EditText)view.findViewById(R.id.item_viesource_et_lingshou);
+            content = itemEt.getText().toString();
+            item.setSellPrice(FunUtil.getDecimalsData(content));
+            //item.setSellPrice(itemEt.getText().toString());
+
+            itemEt = (EditText)view.findViewById(R.id.item_viesource_et_agencyname);
+            item.setAgencyName(itemEt.getText().toString());
+
+            view = viestatusLv.getChildAt(i);
+            if (view == null) continue;
+            itemEt = (EditText)view.findViewById(R.id.item_viestatus_et_currstore);
+            item.setCurrStore(itemEt.getText().toString());
+            itemEt = (EditText)view.findViewById(R.id.item_viestatus_et_monthsell);
+            item.setMonthSellNum(itemEt.getText().toString());
+            itemEt = (EditText)view.findViewById(R.id.item_viestatus_et_describe);
+            item.setDescribe(itemEt.getText().toString());
+        }
+
+        // 是否瓦解竞品 拜访主表相关数据
+        if (clearvieSw.getStatus()) {
+            visitMTemp.setIscmpcollapse(ConstValues.FLAG_1);// 瓦解
+        } else {
+            visitMTemp.setIscmpcollapse(ConstValues.FLAG_0);// 未瓦解
+        }
+
+        visitMTemp.setRemarks(visitreportEt.getText().toString());
+
+        xtChatVieService.saveXtVie(dataLst, visitId, termId, visitMTemp);
+    }
+
+
 }

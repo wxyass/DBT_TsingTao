@@ -16,9 +16,14 @@ import java.util.List;
 import java.util.Map;
 
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
+import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.FunUtil;
+import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.db.dao.MstVistproductInfoDao;
 import et.tsingtaopad.db.dao.MstVistproductInfoTempDao;
+import et.tsingtaopad.db.table.MstAgencysupplyInfo;
+import et.tsingtaopad.db.table.MstAgencysupplyInfoTemp;
 import et.tsingtaopad.db.table.MstCheckexerecordInfoTemp;
 import et.tsingtaopad.db.table.MstVistproductInfo;
 import et.tsingtaopad.db.table.MstVistproductInfoTemp;
@@ -140,6 +145,127 @@ public class XtInvoicingService extends XtShopVisitService {
                 connection.rollback(null);
             } catch (SQLException e1) {
                 Log.e(TAG, "回滚指标记录表数据更新发生异常", e1);
+            }
+        }
+    }
+
+
+    /**
+     * 保存销存页面数据，MST_VISTPRODUCT_INFO、MST_AGENCYSUPPLY_INFO
+     *
+     * @param dataLst       我品进度销存数据
+     * @param visitId       拜访主键
+     * @param termId        终端主键
+     */
+    public void saveXtInvoicing(List<XtInvoicingStc> dataLst, String visitId, String termId) {
+        if (CheckUtil.IsEmpty(dataLst) || CheckUtil.isBlankOrNull(visitId) || CheckUtil.isBlankOrNull(termId)) {
+            return;
+        }
+
+        AndroidDatabaseConnection connection = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MstVistproductInfoTemp, String> proDao = helper.getDao(MstVistproductInfoTemp.class);
+            Dao<MstAgencysupplyInfoTemp, String> supplyDao = helper.getDao(MstAgencysupplyInfoTemp.class);
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+            // 维护拜访产品-我品记录
+            StringBuffer buffer;
+            MstVistproductInfoTemp proItem;
+            for(XtInvoicingStc item : dataLst) {
+
+                // 新增
+                buffer = new StringBuffer();
+                if (CheckUtil.isBlankOrNull(item.getRecordId())) {
+                    proItem = new MstVistproductInfoTemp();
+                    proItem.setRecordkey(FunUtil.getUUID());
+                    proItem.setVisitkey(visitId);
+                    proItem.setProductkey(item.getProId());
+                    proItem.setAgencykey(item.getAgencyId());
+                    proItem.setPurcprice(Double.valueOf( FunUtil.isNullToZero(item.getChannelPrice())));// 渠道价
+                    proItem.setRetailprice(Double.valueOf(FunUtil.isNullToZero(item.getSellPrice())));// 零售价
+                    proItem.setPurcnum(Double.valueOf(FunUtil.isNullToZero(item.getPrevNum())));// 订单量
+                    proItem.setAddcard(Double.valueOf(FunUtil.isNullToZero(item.getAddcard())));// 累计卡
+                    proItem.setPronum(Double.valueOf(FunUtil.isNullToZero(item.getPrevStore())));
+                    proItem.setCurrnum(Double.valueOf(FunUtil.isNullToZero(item.getCurrStore())));
+                    proItem.setSalenum(Double.valueOf(FunUtil.isNullToZero(item.getDaySellNum())));
+                    proItem.setPadisconsistent(ConstValues.FLAG_0);
+                    proItem.setDeleteflag(ConstValues.FLAG_0);
+                    //proItem.setCreuser(ConstValues.loginSession.getUserCode());
+                    //proItem.setCreuser(PrefUtils.getString(context, "userCode", ""));
+                    //proItem.setUpdateuser(ConstValues.loginSession.getUserCode());
+                    //proItem.setUpdateuser(PrefUtils.getString(context, "userCode", ""));
+
+                    //proItem.setFristdate(item.getFristdate());
+                    proDao.create(proItem);
+
+                    // 更新
+                } else {
+                    buffer.append("update MST_VISTPRODUCT_INFO_TEMP set ");
+                    buffer.append("PURCPRICE=?, RETAILPRICE=?, PURCNUM=?, ");
+                    buffer.append("PRONUM=?, ADDCARD=?, FRISTDATE=?, CURRNUM=?, SALENUM=?,  ");
+                    buffer.append("PADISCONSISTENT='0' ");
+                    buffer.append("where RECORDKEY=? ");
+                    String[] args = new String[9];
+                    args[0] = FunUtil.isNullToZero(item.getChannelPrice());
+                    args[1] = FunUtil.isNullToZero(item.getSellPrice());
+                    args[2] = FunUtil.isNullToZero(item.getPrevNum());
+                    args[3] = FunUtil.isNullToZero(item.getPrevStore());
+                    args[4] = FunUtil.isNullToZero(item.getAddcard());// 累计卡
+                    //args[5] = item.getFristdate();
+                    args[5] = "";
+                    args[6] = FunUtil.isNullToZero(item.getCurrStore());
+                    args[7] = FunUtil.isNullToZero(item.getDaySellNum());
+                    args[8] = FunUtil.isNullToZero(item.getRecordId());
+                    proDao.executeRaw(buffer.toString(), args);
+                }
+            }
+
+            // 维护经销商供货关系表
+          /*  List<MstAgencysupplyInfo> supplyLst =supplyDao.queryForEq("lowerkey", termId);*/
+            //修改经销存界面问货源产品重复的问题
+            List<MstAgencysupplyInfoTemp> supplyLst = supplyDao.queryBuilder()
+                    .where().eq("lowerkey", termId).and().ne("status", "1").query();
+
+            MstAgencysupplyInfoTemp supply;
+            for (XtInvoicingStc pro : dataLst) {
+                supply = null;
+                for (MstAgencysupplyInfoTemp item : supplyLst) {
+                    if (pro.getProId().equals(item.getProductkey())) {
+                        supply = item;
+                        break;
+                    }
+                }
+                if (supply == null) {
+                    supply = new MstAgencysupplyInfoTemp();
+                    supply.setAsupplykey(FunUtil.getUUID());
+                    supply.setProductkey(pro.getProId());
+                    //supply.setCredate(DateUtil.getDateTimeDte(0));
+                    supply.setOrderbyno("0");// 0:新增  1:
+                    supply.setLowerkey(termId);
+                    //supply.setCreuser(ConstValues.loginSession.getUserCode());
+                    //supply.setCreuser(PrefUtils.getString(context, "userCode", ""));
+                }
+                supply.setLowertype(ConstValues.FLAG_2);
+                supply.setUpperkey(pro.getAgencyId());
+                supply.setUppertype(ConstValues.FLAG_1);
+                supply.setStatus(ConstValues.FLAG_0);
+                supply.setInprice(pro.getChannelPrice());
+                supply.setReprice(pro.getSellPrice());
+                supply.setPadisconsistent(ConstValues.FLAG_0);
+                supply.setDeleteflag(ConstValues.FLAG_0);
+                //supply.setUpdateuser(ConstValues.loginSession.getUserCode());
+                //supply.setUpdateuser(PrefUtils.getString(context, "userCode", ""));
+                supplyDao.createOrUpdate(supply);
+            }
+            connection.commit(null);
+        } catch (Exception e) {
+            Log.e(TAG, "保存进销存数据发生异常", e);
+            try {
+                connection.rollback(null);
+            } catch (SQLException e1) {
+                Log.e(TAG, "回滚进销存数据发生异常", e1);
             }
         }
     }

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 
+import com.j256.ormlite.android.AndroidDatabaseConnection;
+import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 
@@ -14,9 +16,16 @@ import java.util.List;
 import java.util.Map;
 
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
+import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.FunUtil;
+import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.db.dao.MstVistproductInfoDao;
 import et.tsingtaopad.db.dao.MstVistproductInfoTempDao;
+import et.tsingtaopad.db.table.MstCmpsupplyInfo;
+import et.tsingtaopad.db.table.MstCmpsupplyInfoTemp;
+import et.tsingtaopad.db.table.MstVisitM;
+import et.tsingtaopad.db.table.MstVisitMTemp;
 import et.tsingtaopad.db.table.MstVistproductInfo;
 import et.tsingtaopad.db.table.MstVistproductInfoTemp;
 import et.tsingtaopad.dd.ddxt.chatvie.domain.XtChatVieStc;
@@ -91,6 +100,125 @@ public class XtChatVieService extends XtShopVisitService {
         }
 
         return lst;
+    }
+
+    /**
+     * 保存销存页面数据，MST_VISTPRODUCT_INFO
+     *
+     * @param dataLst       我品进度销存数据
+     * @param visitId       拜访主键
+     * @param termId        终端主键
+     * @param visitM        拜访主表相关信息
+     */
+    public void saveXtVie(List<XtChatVieStc> dataLst,
+                        String visitId, String termId, MstVisitMTemp visitM) {
+
+        AndroidDatabaseConnection connection = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            /*Dao<MstVistproductInfoTemp, String> proDao = helper.getMstVistproductInfoDao();
+            Dao<MstVisitMTemp, String> visitDao = helper.getMstVisitMDao();
+            Dao<MstCmpsupplyInfoTemp, String> supplyDao = helper.getMstCmpsupplyInfoDao();*/
+            Dao<MstVistproductInfoTemp, String> proDao = helper.getDao(MstVistproductInfoTemp.class);
+            Dao<MstVisitMTemp, String> visitDao = helper.getDao(MstVisitMTemp.class);
+            Dao<MstCmpsupplyInfoTemp, String> supplyDao = helper.getDao(MstCmpsupplyInfoTemp.class);
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+            // 维护拜访产品-竞品记录
+            StringBuffer buffer;
+            MstVistproductInfoTemp proItem;
+            for(XtChatVieStc item : dataLst) {
+
+                // 新增
+                buffer = new StringBuffer();
+                if (CheckUtil.isBlankOrNull(item.getRecordId())) {
+                    proItem = new MstVistproductInfoTemp();
+                    proItem.setRecordkey(FunUtil.getUUID());
+                    proItem.setVisitkey(visitId);
+                    proItem.setCmpproductkey(item.getProId());
+                    proItem.setCmpcomkey(item.getCommpayId());
+                    proItem.setAgencykey(item.getAgencyId());
+                    proItem.setAgencyname(item.getAgencyName());
+                    proItem.setPurcprice(Double.valueOf(FunUtil.isNullToZero(item.getChannelPrice())));
+                    proItem.setRetailprice(Double.valueOf(FunUtil.isNullToZero(item.getSellPrice())));
+                    proItem.setCurrnum(Double.valueOf(FunUtil.isNullToZero(item.getCurrStore())));
+                    proItem.setSalenum(Double.valueOf(FunUtil.isNullToZero(item.getMonthSellNum())));
+                    proItem.setPadisconsistent(ConstValues.FLAG_0);
+                    proItem.setDeleteflag(ConstValues.FLAG_0);
+                    //proItem.setCreuser(ConstValues.loginSession.getUserCode());
+                    //proItem.setCreuser(PrefUtils.getString(context, "userCode", ""));
+                    //proItem.setUpdateuser(ConstValues.loginSession.getUserCode());
+                    //proItem.setUpdateuser(PrefUtils.getString(context, "userCode", ""));
+                    proItem.setRemarks(item.getDescribe());
+                    proDao.create(proItem);
+
+                    // 更新
+                } else {
+                    buffer.append("update mst_vistproduct_info_temp set ");
+                    buffer.append("purcprice=?, retailprice=?, ");
+                    buffer.append(" currnum=?, salenum=?, remarks=?, agencykey=?, agencyname=?,");
+                    buffer.append("padisconsistent='0' ");
+                    buffer.append("where recordkey=? ");
+                    String[] args = new String[8];
+                    args[0] = FunUtil.isNullToZero(item.getChannelPrice());
+                    args[1] = FunUtil.isNullToZero(item.getSellPrice());
+                    args[2] = FunUtil.isNullToZero(item.getCurrStore());
+                    args[3] = FunUtil.isNullToZero(item.getMonthSellNum());
+                    args[4] = FunUtil.isNullSetSpace(item.getDescribe());
+                    args[5] = FunUtil.isNullSetSpace(item.getAgencyId());
+                    args[6] = FunUtil.isNullSetSpace(item.getAgencyName());
+                    args[7] = FunUtil.isNullSetSpace(item.getRecordId());
+                    proDao.executeRaw(buffer.toString(), args);
+                }
+            }
+
+            // 维护竞品供货关系表
+            List<MstCmpsupplyInfoTemp> supplyLst = supplyDao.queryForEq("terminalkey", termId);
+            MstCmpsupplyInfoTemp supply;
+            for (XtChatVieStc pro : dataLst) {
+                supply = null;
+                for (MstCmpsupplyInfoTemp item : supplyLst) {
+                    if (pro.getProId().equals(item.getCmpproductkey())) {
+                        supply = item;
+                        break;
+                    }
+                }
+                if (supply == null) {
+                    supply = new MstCmpsupplyInfoTemp();
+                    supply.setCmpsupplykey(FunUtil.getUUID());
+                    supply.setCmpproductkey(pro.getProId());
+                    supply.setTerminalkey(termId);
+                    //supply.setCreuser(ConstValues.loginSession.getUserCode());
+                    supply.setCreuser(PrefUtils.getString(context, "userCode", ""));
+                }
+                supply.setCmpcomkey(pro.getAgencyId());
+                supply.setStatus(ConstValues.FLAG_0);
+                supply.setInprice(pro.getChannelPrice());
+                supply.setReprice(pro.getSellPrice());
+                supply.setPadisconsistent(ConstValues.FLAG_0);
+                supply.setDeleteflag(ConstValues.FLAG_0);
+                //supply.setUpdateuser(ConstValues.loginSession.getUserCode());
+                supply.setUpdateuser(PrefUtils.getString(context, "userCode", ""));
+                supplyDao.createOrUpdate(supply);
+            }
+
+            // 更新拜访主表拜访记录
+            buffer = new StringBuffer();
+            buffer.append("update mst_visit_m_temp set status=?, iscmpcollapse=?, remarks=? ,padisconsistent = '0' ");
+            buffer.append("where visitkey= ? ");
+            visitDao.executeRaw(buffer.toString(), new String[] {
+                    visitM.getStatus(), visitM.getIscmpcollapse(), visitM.getRemarks(), visitId});
+
+            connection.commit(null);
+        } catch (Exception e) {
+            Log.e(TAG, "保存聊竞品数据发生异常", e);
+            try {
+                connection.rollback(null);
+            } catch (SQLException e1) {
+                Log.e(TAG, "回滚聊竞品数据发生异常", e1);
+            }
+        }
     }
 
 }

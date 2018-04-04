@@ -57,4 +57,7 @@ public class GlobalValues {
 
     //连接mq服务器创建的连接
     public static HashMap<String, Integer> AuthorityMap = new HashMap<String, Integer>();
+
+    // 打招呼填写信息是否完整
+    public static boolean isSayHiSure = true;
 }

@@ -3,6 +3,7 @@ package et.tsingtaopad.dd.ddxt.shopvisit;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTabHost;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatImageView;
@@ -11,10 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +29,12 @@ import java.util.List;
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseActivity;
 import et.tsingtaopad.base.BaseFragmentSupport;
+import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.FunUtil;
+import et.tsingtaopad.core.util.dbtutil.ViewUtil;
+import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.db.table.MstVisitM;
+import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
 import et.tsingtaopad.dd.ddxt.camera.XtCameraFragment;
 import et.tsingtaopad.dd.ddxt.chatvie.XtChatvieFragment;
 import et.tsingtaopad.dd.ddxt.checking.XtCheckIndexFragment;
@@ -34,6 +44,7 @@ import et.tsingtaopad.dd.ddxt.checking.domain.XtProItem;
 import et.tsingtaopad.dd.ddxt.invoicing.XtInvoicingFragment;
 import et.tsingtaopad.dd.ddxt.sayhi.XtSayhiFragment;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
+import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
 import et.tsingtaopad.main.visit.shopvisit.term.domain.MstTermListMStc;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.CheckIndexCalculateStc;
@@ -44,7 +55,9 @@ import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.ProItem;
  * Created by yangwenmin on 2018/3/12.
  */
 
-public class XtVisitShopActivity extends BaseActivity implements View.OnClickListener {
+public class XtVisitShopActivity extends BaseActivity implements View.OnClickListener,TabHost.OnTabChangeListener {
+
+    private final String TAG = "XtVisitShopActivity";
 
     private RelativeLayout backBtn;
     private RelativeLayout confirmBtn;
@@ -55,7 +68,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
 
     private AppCompatTextView mDataTv;// 上次拜访时间: 2018-03-12
     private AppCompatTextView mDayTv;// 距今几天: 8
-    private AppCompatTextView mTextTv;
+    //private AppCompatTextView mTextTv;
     private FrameLayout mContentFl;// 需要替换的Fragment : 打招呼,聊竞品...
     private AppCompatImageView mMemoImg;// 客情备忘录
 
@@ -85,6 +98,16 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
     private String visitId;
     private String channelId;
 
+    private FragmentTabHost tabHost;
+    private Class fragmentArray[] = { XtSayhiFragment.class,
+            XtInvoicingFragment.class, XtCheckIndexFragment.class,
+            XtChatvieFragment.class ,XtCameraFragment.class};
+
+    private int imageViewArray[] = { R.drawable.bt_shopvisit_sayhi,
+            R.drawable.bt_shopvisit_invoicing,
+            R.drawable.bt_shopvisit_checkindex, R.drawable.bt_shopvisit_chatvie,
+            R.drawable.bt_shopvisit_camera };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +132,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
 
         mDataTv = (AppCompatTextView) findViewById(R.id.xtvisit_tv_date);
         mDayTv = (AppCompatTextView) findViewById(R.id.xtvisit_tv_day);
-        mTextTv = (AppCompatTextView) findViewById(R.id.xtvisit_tv_textView2);
+        //mTextTv = (AppCompatTextView) findViewById(R.id.xtvisit_tv_textView2);
         mContentFl = (FrameLayout) findViewById(R.id.xtvisit_fl_content);
         mMemoImg = (AppCompatImageView) findViewById(R.id.xtvisit_bt_memo);
 
@@ -149,16 +172,41 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
         // 复制各个临时表
         configVisitData(bundle);
 
-
         // 展示打招呼页面
         /*XtSayhiFragment xtSayhiFragment = new XtSayhiFragment();
         xtSayhiFragment.setArguments(returnBundle());
         changeFragment(xtSayhiFragment, "xtsayhifragment");*/
-        XtCameraFragment xtCameraFragment = new XtCameraFragment();
-        xtCameraFragment.setArguments(returnBundle());
-        changeFragment(xtCameraFragment, "xtcamerafragment");
-        fragmentType = 5;
+         /*xtCameraFragmentf = new XtCameraFragment();
+        xtCameraFragmentf.setArguments(returnBundle());
+        changeFragment(xtCameraFragmentf, "xtcamerafragment");
+        fragmentType = 5;*/
+
+        initBandleDate(returnBundle());
     }
+
+    // 初始化顶部TabHost
+    private void initBandleDate(Bundle bundle) {
+        // 初始化TabHost
+        tabHost = (FragmentTabHost) findViewById(R.id.tabhost);
+
+        tabHost.setup(XtVisitShopActivity.this, getSupportFragmentManager(), R.id.xtvisit_fl_content);
+        tabHost.getTabWidget().setDividerDrawable(null);
+        for (int i = 0; i < fragmentArray.length; i++) {
+            TabHost.TabSpec tabSpec = tabHost.newTabSpec(String.valueOf(i)).setIndicator(getTabItemView(i));
+            tabHost.addTab(tabSpec, fragmentArray[i], bundle);
+        }
+        tabHost.setOnTabChangedListener(this);// 用来监听 打招呼、进销存、差指标、聊竞品 页面的操作事件
+    }
+
+    // 初始化顶部TabHost图片
+    private View getTabItemView(int index) {
+        View view = LayoutInflater.from(this).inflate(R.layout.platform_tab_item, null);
+        ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
+        imageView.setImageResource(imageViewArray[index]);
+        //imageView.setImageResource(R.drawable.bg_select_green);
+        return view;
+    }
+
 
     // 配置 拜访时 所需要的各个临时表数据
     private void configVisitData(Bundle bundle) {
@@ -178,7 +226,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
         // (查出所有采集项数据)
         proItemLst = xtShopVisitService.queryCalculateItem(visitId, channelId);
         // 获取与产品无关的指标, 从临时表中读取
-        noProIndexLst = xtShopVisitService.queryNoProIndex2(visitId, channelId, seeFlag);
+        noProIndexLst = xtShopVisitService.queryNoProIndex12(visitId, channelId, seeFlag);
         // 保存查指标页面的数据
         xtShopVisitService.saveCheckIndex(visitId, termStc.getTerminalkey(), calculateLst, proItemLst, noProIndexLst);
 
@@ -194,6 +242,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
     // 按钮点击 监听
     @Override
     public void onClick(View v) {
+
         switch (v.getId()) {
             case R.id.top_navigation_rl_back:// 返回
                 this.finish();
@@ -201,74 +250,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
             case R.id.top_navigation_rl_confirm://
 
                 break;
-            case R.id.top_navigation_tv_title:// 标题
-                showPopupWindow();
-                break;
 
-            case R.id.pop_sayhi:
-
-                if (fragmentType == 1) {
-                    mPopWindow.dismiss();
-                } else {
-                    fragmentType = 1;
-                    XtSayhiFragment xtSayhiFragment = new XtSayhiFragment();
-                    xtSayhiFragment.setArguments(returnBundle());
-                    changeFragment(xtSayhiFragment, "xtsayhifragment");
-                    mPopWindow.dismiss();
-                    titleTv.setText("打招呼(1/5)");
-                }
-                break;
-
-            case R.id.pop_invoicing:
-                if (fragmentType == 2) {
-                    mPopWindow.dismiss();
-                } else {
-                    fragmentType = 2;
-                    XtInvoicingFragment xtInvoicingFragment = new XtInvoicingFragment();
-                    xtInvoicingFragment.setArguments(returnBundle());
-                    changeFragment(xtInvoicingFragment, "xtinvoicingfragment");
-                    mPopWindow.dismiss();
-                    titleTv.setText("进销存(2/5)");
-                }
-                break;
-            case R.id.pop_checkindex:
-                if (fragmentType == 3) {
-                    mPopWindow.dismiss();
-                } else {
-                    fragmentType = 3;
-                    XtCheckIndexFragment xtCheckIndexFragment = new XtCheckIndexFragment();
-                    xtCheckIndexFragment.setArguments(returnBundle());
-                    changeFragment(xtCheckIndexFragment, "xtcheckindexfragment");
-                    mPopWindow.dismiss();
-                    titleTv.setText("查指标(3/5)");
-                }
-                break;
-            case R.id.pop_chatvie:
-                if (fragmentType == 4) {
-                    mPopWindow.dismiss();
-                } else {
-                    fragmentType = 4;
-                    XtChatvieFragment xtChatvieFragment = new XtChatvieFragment();
-                    xtChatvieFragment.setArguments(returnBundle());
-                    changeFragment(xtChatvieFragment, "xtchatviefragment");
-                    mPopWindow.dismiss();
-                    titleTv.setText("聊竞品(4/5)");
-                }
-
-                break;
-            case R.id.pop_camera:
-                if (fragmentType == 5) {
-                    mPopWindow.dismiss();
-                } else {
-                    fragmentType = 5;
-                    XtCameraFragment xtCameraFragment = new XtCameraFragment();
-                    xtCameraFragment.setArguments(returnBundle());
-                    changeFragment(xtCameraFragment, "xtcamerafragment");
-                    mPopWindow.dismiss();
-                    titleTv.setText("拍照(5/5)");
-                }
-
-                break;
 
             case R.id.xtvisit_rb_sayhi:
                 if (fragmentType == 1) {
@@ -314,44 +296,17 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
                 if (fragmentType == 5) {
                     return;
                 } else {
-                    fragmentType = 5;
-                    XtCameraFragment xtCameraFragment = new XtCameraFragment();
-                    xtCameraFragment.setArguments(returnBundle());
-                    changeFragment(xtCameraFragment, "xtcamerafragment");
+                    if(GlobalValues.isSayHiSure){
+                        fragmentType = 5;
+                        XtCameraFragment xtCameraFragment = new XtCameraFragment();
+                        xtCameraFragment.setArguments(returnBundle());
+                        changeFragment(xtCameraFragment, "xtcamerafragment");
+                    }
                 }
                 break;
             default:
                 break;
         }
-    }
-
-    // 下拉列表,选择跳转不同Fragment
-    private void showPopupWindow() {
-        View contentView = LayoutInflater.from(XtVisitShopActivity.this).inflate(R.layout.popuplayout_showasdropdown, null);
-        mPopWindow = new PopupWindow(contentView);
-        mPopWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-        mPopWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-        // 设置外部可点击消失
-        mPopWindow.setOutsideTouchable(true);
-        mPopWindow.setBackgroundDrawable(new BitmapDrawable());
-
-        // 设置可获取焦点
-        mPopWindow.setFocusable(true);
-
-        RelativeLayout tv1 = (RelativeLayout) contentView.findViewById(R.id.pop_sayhi);
-        RelativeLayout tv2 = (RelativeLayout) contentView.findViewById(R.id.pop_invoicing);
-        RelativeLayout tv3 = (RelativeLayout) contentView.findViewById(R.id.pop_checkindex);
-        RelativeLayout tv4 = (RelativeLayout) contentView.findViewById(R.id.pop_chatvie);
-        RelativeLayout tv5 = (RelativeLayout) contentView.findViewById(R.id.pop_camera);
-        tv1.setOnClickListener(this);
-        tv2.setOnClickListener(this);
-        tv3.setOnClickListener(this);
-        tv4.setOnClickListener(this);
-        tv5.setOnClickListener(this);
-
-        // showAsDropDown 相对某个控件的位置 弹出popupwindow
-        // showAsDropDown(View anchor, int xoff, int yoff)：来添加相对x轴和y轴的位移量
-        mPopWindow.showAsDropDown(titleTv);
     }
 
     // 替换XtVisitShopActivity中的Fragment布局
@@ -400,4 +355,77 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
         return bundle;
     }
 
+    @Override
+    public void onTabChanged(String tabId) {
+
+        if (tabId.equals("0")) {
+            DbtLog.logUtils(TAG, "XtSayHiFragment:打招呼");
+        } else if (tabId.equals("1")) {
+            DbtLog.logUtils(TAG, "XtInvoicingFragment:进销存");
+        } else if (tabId.equals("2")) {
+            DbtLog.logUtils(TAG, "XtCheckIndexFragment:查指标");
+        } else if (tabId.equals("3")) {
+            DbtLog.logUtils(TAG, "XtChatVieFragment:聊竞品");
+        }else if (tabId.equals("4")) {
+            DbtLog.logUtils(TAG, "XtCameraFragment:拍照");
+        }
+
+        // 如果是查看操作，则不做数据校验
+        if (ConstValues.FLAG_1.equals(seeFlag))
+            return;
+
+        BaseActivity view = (XtVisitShopActivity) tabHost.getCurrentView().getContext();
+        EditText termNameTv = (EditText) view.findViewById(R.id.xtbf_sayhi_termname);
+        if (termNameTv != null) {
+            TextView belongLineSp = (TextView) view.findViewById(R.id.xtbf_sayhi_termroude);
+            TextView levelSp = (TextView) view.findViewById(R.id.xtbf_sayhi_termlv);
+
+            EditText addressEt = (EditText) view .findViewById(R.id.xtbf_sayhi_termaddress);
+            EditText linkmanEt = (EditText) view.findViewById(R.id.xtbf_sayhi_termcontact);
+            EditText telEt = (EditText) view.findViewById(R.id.xtbf_sayhi_termphone);
+            EditText sequenceEt = (EditText) view .findViewById(R.id.xtbf_sayhi_termsequence);
+            TextView sellChannelSp = (TextView) view.findViewById(R.id.xtbf_sayhi_termsellchannel);
+            TextView mainChannelSp = (TextView) view.findViewById(R.id.xtbf_sayhi_termtmainchannel);
+            TextView minorChannelSp = (TextView) view.findViewById(R.id.xtbf_sayhi_termminorchannel);
+
+            int msgId = -1;
+            if ("".equals(FunUtil.isNullSetSpace(termNameTv.getText()).toString())) {
+                //termNameTv.requestFocus();
+                msgId = R.string.termadd_msg_invaltermname;
+
+            } else if ("".equals(FunUtil.isNullSetSpace(addressEt.getText()).toString())) {
+                //addressEt.requestFocus();
+                msgId = R.string.termadd_msg_invaladdress;
+
+            } else if ("".equals(FunUtil.isNullSetSpace(linkmanEt.getText()).toString())) {
+                //linkmanEt.requestFocus();
+                msgId = R.string.termadd_msg_invalcontact;
+            }
+            if ("-1".equals(FunUtil.isBlankOrNullTo(belongLineSp.getText(), "-1"))) {
+                msgId = R.string.termadd_msg_invalbelogline;
+
+            } else if ("-1".equals(FunUtil.isBlankOrNullTo(levelSp.getText(),"-1"))) {
+                msgId = R.string.termadd_msg_invaltermlevel;
+
+            }  else if ("-1".equals(FunUtil.isBlankOrNullTo(sellChannelSp.getText(), "-1"))) {
+                msgId = R.string.termadd_msg_invalsellchannel;
+
+            } else if ("-1".equals(FunUtil.isBlankOrNullTo(mainChannelSp.getText(), "-1"))) {
+                msgId = R.string.termadd_msg_invalmainchannel;
+
+            } else if ("-1".equals(FunUtil.isBlankOrNullTo(minorChannelSp.getText(), "-1"))) {
+                msgId = R.string.termadd_msg_invalminorchannel;
+            }
+
+            if (msgId != -1) {
+                tabHost.setCurrentTab(0);
+                //ViewUtil.sendMsg(getApplicationContext(), msgId);
+
+            }
+            // 结束按钮提示信息
+            //sureBt.setTag(msgId);
+        }
+
+
+    }
 }

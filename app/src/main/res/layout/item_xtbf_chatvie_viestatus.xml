@@ -65,6 +65,7 @@
                 android:layout_width="150dp"
                 android:layout_height="match_parent"
                 android:layout_margin="3dp"
+                android:inputType="number"
                 android:layout_toRightOf="@id/item_viestatus_tv_monthsell"
                 android:background="@drawable/bg_visit_record"/>
 
@@ -97,6 +98,7 @@
                 android:layout_width="150dp"
                 android:layout_height="match_parent"
                 android:layout_margin="3dp"
+                android:inputType="number"
                 android:layout_toRightOf="@id/item_viestatus_tv_currstore"
                 android:background="@drawable/bg_visit_record"/>
         </RelativeLayout>

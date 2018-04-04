@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import et.tsingtaopad.R;
+import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
@@ -80,13 +82,22 @@ public class XtInvoicingFragment extends XtBaseVisitFragment implements View.OnC
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Toast.makeText(getActivity(), "进销存" + "/" + termId + "/" + termName, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "进销存" + "/" + termId + "/" + termName, Toast.LENGTH_SHORT).show();
 
         handler = new MyHandler(this);
         invoicingService = new XtInvoicingService(getActivity(), null);
 
         // 初始化产品数据
         initProData();
+
+    }
+
+    // 初始化产品数据
+    private void initProData() {
+        //删除重复拜访产品
+        invoicingService.delRepeatVistProduct(visitId);
+        //获取某次拜访的我品的进销存数据情况
+        dataLst = invoicingService.queryMineProFromTemp(visitId, termId);
 
         //问货源Adapter
         askAdapter = new XtInvoicingAskGoodsAdapter(getActivity(), "", dataLst, "", "", null, askGoodsLv, checkGoodsLv);//问货源
@@ -97,15 +108,6 @@ public class XtInvoicingFragment extends XtBaseVisitFragment implements View.OnC
         checkGoodsAdapter = new XtInvoicingCheckGoodsAdapter(getActivity(), dataLst);
         checkGoodsLv.setAdapter(checkGoodsAdapter);
         ViewUtil.setListViewHeight(checkGoodsLv);
-
-    }
-
-    // 初始化产品数据
-    private void initProData() {
-        //删除重复拜访产品
-        invoicingService.delRepeatVistProduct(visitId);
-        //获取某次拜访的我品的进销存数据情况
-        dataLst = invoicingService.queryMineProFromTemp(visitId, termId);
     }
 
     @Override
@@ -193,4 +195,42 @@ public class XtInvoicingFragment extends XtBaseVisitFragment implements View.OnC
             }
         }
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        DbtLog.logUtils(TAG, "onPause()");
+        // 如果是查看操作，则不做数据校验及数据处理
+        if (ConstValues.FLAG_1.equals(seeFlag)) return;
+
+        View view;
+        EditText itemEt;
+        Button itemBtn;
+        XtInvoicingStc item;
+        for (int i = 0; i < dataLst.size(); i++) {
+            item = dataLst.get(i);
+            view = askGoodsLv.getChildAt(i);
+            if (view != null) {
+                itemEt = (EditText)view.findViewById(R.id.item_askgoods_et_qudao);//渠道价
+                String content = itemEt.getText().toString();
+                item.setChannelPrice(FunUtil.getDecimalsData(content));
+
+                itemEt = (EditText)view.findViewById(R.id.item_askgoods_et_lingshou);// 零售价
+                content = itemEt.getText().toString();
+                item.setSellPrice(FunUtil.getDecimalsData(content));
+            }
+            view = checkGoodsLv.getChildAt(i);
+            if (view != null) {
+                itemEt = (EditText)view.findViewById(R.id.item_checkgoods_et_prevnum);// 订单量
+                item.setPrevNum(itemEt.getText().toString());
+                itemEt = (EditText)view.findViewById(R.id.item_checkgoods_et_daysellnum);// 日销量
+                item.setDaySellNum(itemEt.getText().toString());
+                itemEt = (EditText)view.findViewById(R.id.item_askgoods_et_addcard);// 累计卡
+                item.setAddcard(itemEt.getText().toString());
+
+            }
+        }
+        invoicingService.saveXtInvoicing(dataLst, visitId, termId);
+    }
+
 }

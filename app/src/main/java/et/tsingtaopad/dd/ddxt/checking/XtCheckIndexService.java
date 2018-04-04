@@ -31,11 +31,15 @@ import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.db.dao.MstCheckexerecordInfoDao;
 import et.tsingtaopad.db.dao.MstGroupproductMDao;
+import et.tsingtaopad.db.dao.MstGroupproductMTempDao;
 import et.tsingtaopad.db.dao.MstPromotionsmDao;
 import et.tsingtaopad.db.dao.MstVistproductInfoDao;
 import et.tsingtaopad.db.dao.PadChecktypeMDao;
+import et.tsingtaopad.db.table.MstGroupproductM;
+import et.tsingtaopad.db.table.MstGroupproductMTemp;
 import et.tsingtaopad.db.table.MstPromotionsM;
 import et.tsingtaopad.db.table.MstVistproductInfo;
+import et.tsingtaopad.db.table.PadCheckstatusInfo;
 import et.tsingtaopad.db.table.PadChecktypeM;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProIndex;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProIndexValue;
@@ -76,6 +80,67 @@ public class XtCheckIndexService extends XtShopVisitService {
             e.printStackTrace();
         }
         GlobalValues.indexLst = checkTypeStatusList;
+    }
+
+    /**
+     * @param vo
+     */
+    public void saveMstGroupproductMTemp(MstGroupproductMTemp vo) {
+
+        AndroidDatabaseConnection connection = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MstGroupproductMTemp, String>  indexValueDao = helper.getMstGroupproductMTempDao();
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+            // 更新我品的现有库存
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("update MST_GROUPPRODUCT_M_TEMP set ifrecstand = ? ");
+            buffer.append("where gproductid = ?  ");
+            indexValueDao.executeRaw(buffer.toString(), new String[]{vo.getIfrecstand(),vo.getGproductid()});
+            connection.commit(null);
+        } catch (SQLException e) {
+            Log.e(TAG, "获取失败", e);
+        }
+    }
+
+    /**
+     * 我品占有率 指标关联指标值
+     */
+    public List<KvStc> queryNoProIndexValueId31(){//
+
+        List<KvStc> stcLst = new ArrayList<KvStc>();
+        AndroidDatabaseConnection connection = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+
+            Dao<PadCheckstatusInfo, String> dao = helper.getPadCheckstatusInfoDao();
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+            QueryBuilder<PadCheckstatusInfo, String> collectionQB = dao.queryBuilder();
+            Where<PadCheckstatusInfo, String> collectionWhere=collectionQB.where();
+            collectionWhere.eq("checkkey", "59802090-02ac-4146-9cc3-f09570c36a26");
+            collectionQB.orderBy("orderbyno", true);
+            List<PadCheckstatusInfo> queryForEq =collectionQB.query();
+            //List<PadCheckstatusInfo> queryForEq = dao.queryForEq("checkkey", "59802090-02ac-4146-9cc3-f09570c36a26");// 我品占有率
+            KvStc kvStc = null;
+            for (PadCheckstatusInfo padCheckstatusInfo : queryForEq) {
+                kvStc = new KvStc();
+                kvStc.setKey(padCheckstatusInfo.getCstatuskey());
+                kvStc.setValue(padCheckstatusInfo.getCstatusname());
+                stcLst.add(kvStc);
+            }
+
+            connection.commit(null);
+
+
+        } catch (SQLException e) {
+            Log.e(TAG, "获取拜访产品-我品竞品表DAO对象失败", e);
+        }
+        return stcLst;
+
     }
 
 
@@ -315,5 +380,26 @@ public class XtCheckIndexService extends XtShopVisitService {
             proItem.setIndexValueName("不合格");
         }
     }
+
+    // 根据路线key,获取路线名称
+    public String getCheckStatusName(String diccode) {
+
+        DatabaseHelper helper = DatabaseHelper.getHelper(context);
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        String querySql = "SELECT cstatusname  FROM PAD_CHECKSTATUS_INFO WHERE cstatuskey = ?";
+        Cursor cursor = db.rawQuery(querySql, new String[]{diccode});
+        cursor.moveToFirst();
+        //int columnIndex = cursor.getColumnIndex("dicname");
+        String areaname;
+        try {
+            areaname = cursor.getString(cursor.getColumnIndex("cstatusname"));
+        } catch (Exception e) {
+            areaname = "";
+        }
+        return areaname;
+    }
+
+
 
 }

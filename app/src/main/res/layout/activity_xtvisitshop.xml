@@ -70,11 +70,13 @@
                         android:text="@string/shopvisit_visitdatelabel3"/>
                 </LinearLayout>
 
+                <!--第一种方式-->
                 <RadioGroup
                     android:id="@+id/radioGroup"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
                     android:background="@null"
+                    android:visibility="gone"
                     android:orientation="horizontal">
 
                     <RadioButton
@@ -117,13 +119,19 @@
                         android:text="其他"/>
                 </RadioGroup>
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/xtvisit_tv_textView2"
+                <!--第2种方式-->
+                <android.support.v4.app.FragmentTabHost
+                    android:id="@+id/tabhost"
                     android:layout_width="fill_parent"
-                    android:layout_height="2dp"
-                    android:layout_marginTop="3dp"
-                    android:background="@drawable/ico_line"
-                    android:visibility="gone"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp" >
+
+                    <FrameLayout
+                        android:id="@+id/tabcontent"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+                </android.support.v4.app.FragmentTabHost>
 
                 <FrameLayout
                     android:id="@+id/xtvisit_fl_content"
