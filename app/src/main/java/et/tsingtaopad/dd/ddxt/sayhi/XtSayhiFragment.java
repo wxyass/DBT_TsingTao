@@ -163,7 +163,7 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
             // 处理UI 变化
             switch (msg.what) {
                 case FINISH_SUC:
-                    fragment.closeProgressSuc();
+                    fragment.initData2();
                     break;
                 case NOT_TERMSTATUS:
                     fragment.closeXtTermstatusSw();
@@ -311,15 +311,33 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         progressDialog.show();*/
 
         // 初始化页面数据
-        initData();
-        //initViewData();
+        //initData();initData2();
+        initViewData();// 子线程查找数据
         //Toast.makeText(getActivity(), "打招呼" + "/" + termId + "/" + termName, Toast.LENGTH_SHORT).show();
 
         // 设置监听
 
     }
 
-    // 初始化数据
+    // 子线程查找数据
+    private void initViewData(){
+        Thread thread = new Thread() {
+
+            @Override
+            public void run() {
+                try{
+                    initData();
+                }catch (Exception e){
+
+                }finally {
+                    handler.sendEmptyMessage(XtSayhiFragment.FINISH_SUC);
+                }
+            }
+        };
+        thread.start();
+    }
+
+    // 子线程-初始化数据
     private void initData() {
 
         termInfoTemp = xtSayhiService.findTermTempById(termId);// 终端临时表记录
@@ -351,6 +369,10 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         Date date = calendar.getTime();
         ifminedate = sDateFormat.format(date);
 
+    }
+
+    // UI线程-展示控件数据
+    private void initData2() {
 
         // 设置界面数据
         if (visitMTemp != null) {
@@ -455,23 +477,7 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
 
     }
 
-    //
-    private void initViewData(){
-        Thread thread = new Thread() {
 
-            @Override
-            public void run() {
-                try{
-                    initData();
-                }catch (Exception e){
-
-                }finally {
-                    handler.sendEmptyMessage(XtSayhiFragment.FINISH_SUC);
-                }
-            }
-        };
-        thread.start();
-    }
 
     @Override
     public void onClick(View v) {
@@ -694,6 +700,7 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         // 返回某个主渠道下的次渠道集合
         return getSellChannelList(minor.getChildLst());
     }
+
 
     @Override
     public void onItemClick(Object o, int position) {

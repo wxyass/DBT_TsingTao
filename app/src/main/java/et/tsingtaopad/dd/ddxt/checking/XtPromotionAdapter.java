@@ -93,7 +93,7 @@ public class XtPromotionAdapter extends BaseAdapter {
         holder.proNameTv.setText(item.getProName());// 产品名称默认关闭
 
         // 添加促销活动 隔天默认关闭 //20160301(原因:需求设计如此)
-        String todaytime = DateUtil.formatDate(new Date(), "yyyy-MM-dd");
+        /*String todaytime = DateUtil.formatDate(new Date(), "yyyy-MM-dd");
         String accepttime = visitDate.substring(0, 10);
         if (todaytime.equals(accepttime)) {// 当天 多次进入这家终端
             if (ConstValues.FLAG_1.equals(item.getIsAccomplish())) {
@@ -107,6 +107,17 @@ public class XtPromotionAdapter extends BaseAdapter {
                 holder.reachnum.setText(null);
             }
         } else {// 上次拜访 不是当天 (即:当天第一次拜访)
+            holder.statusSw.setStatus(false);
+            holder.reachnum.setVisibility(View.INVISIBLE);
+            holder.reachnum.setText(null);
+        }*/
+        // 对促销活动按钮 初始化
+        if (ConstValues.FLAG_1.equals(item.getIsAccomplish())) {
+            holder.statusSw.setStatus(true);
+            holder.reachnum.setVisibility(View.VISIBLE);
+            holder.reachnum.setText(item.getReachNum());
+
+        } else {
             holder.statusSw.setStatus(false);
             holder.reachnum.setVisibility(View.INVISIBLE);
             holder.reachnum.setText(null);

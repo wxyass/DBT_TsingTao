@@ -18,6 +18,7 @@ import et.tsingtaopad.core.net.callback.ISuccess;
 import et.tsingtaopad.core.net.domain.RequestHeadStc;
 import et.tsingtaopad.core.net.domain.RequestStructBean;
 import et.tsingtaopad.core.net.domain.ResponseStructBean;
+import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.JsonUtil;
 import et.tsingtaopad.http.HttpParseJson;
 import et.tsingtaopad.util.requestHeadUtil;
@@ -57,16 +58,16 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_first_login:
-                ceshiHttp("get_login_3");
+                ceshiHttp("get_login_3","");
                 break;
             case R.id.btn_first_sync_grid:
-                ceshiHttp("get_gird_3");
+                ceshiHttp("get_date_3","MST_MARKETAREA_GRID_ROUTE_M");
                 break;
             case R.id.btn_first_sync_index:
-                ceshiHttp("get_index_3");
+                ceshiHttp("get_index_3","");
                 break;
             case R.id.btn_first_sync_pro:
-                ceshiHttp("get_pro_3");
+                ceshiHttp("get_pro_3","");
                 break;
             default:
                 break;
@@ -74,15 +75,15 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
     }
 
     // 测试登录网络框架
-    void ceshiHttp(String table) {
-        String loginjson = "{usercode:'20000', password:'b1234567',version:'2.3.4.3.2',padid:'dsfwerolkjqiwurywhl'}";
+    void ceshiHttp(String optcode,String table) {
+        String loginjson = "{usercode:'20000', password:'b1234567',version:'2.5',padid:'dsfwerolkjqiwurywhl'}";
 
         // 组建请求Json
         // 组建请求Json
         RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(getContext());
         requestHeadStc.setUsercode("20000");
         requestHeadStc.setPassword("b1234567");
-        requestHeadStc.setOptcode(table);
+        requestHeadStc.setOptcode(optcode);
         RequestStructBean reqObj = HttpParseJson.parseRequestStructBean(requestHeadStc, loginjson);
 
         // 压缩请求数据
@@ -98,8 +99,14 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                         String json = HttpParseJson.parseJsonResToString(response);
                         ResponseStructBean resObj = new ResponseStructBean();
                         resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
-                        Toast.makeText(getActivity(), resObj.getResBody().getContent()+""+resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity(), resObj.getResBody().getContent()+""+resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
                         // 保存登录信息
+                        if(ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())){
+                            // 保存信息
+                            String formjson = resObj.getResBody().getContent();
+                            String name = "";
+
+                        }
                     }
                 })
                 .error(new IError() {
@@ -117,4 +124,9 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                 .builde()
                 .post();
     }
+
+    void parseJson(String json){
+
+    }
+
 }

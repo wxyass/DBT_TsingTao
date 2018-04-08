@@ -141,7 +141,7 @@ public class XtCaculateFragment extends BaseFragmentSupport implements View.OnCl
             itemEt2 = (EditText) colitemLv.getChildAt(i).findViewById(R.id.item_xt_calculatedialog_et_changenum);
             item.setFinalNum((FunUtil.isBlankOrNullToDouble(itemEt2.getText().toString())));
             //item.setChangeNum(Double.valueOf(FunUtil.isNullToZero(itemEt.getText().toString())));
-            item.setBianhualiang(itemEt.getText().toString());// 变化量
+            item.setBianhualiang(itemEt2.getText().toString());// 变化量
 
             /*itemTv = (TextView) colitemLv.getChildAt(i).findViewById(R.id.calculatedialog_et_xinxiandu);
             item.setFreshness(FunUtil.isNullToZero(itemTv.getText().toString()));*/

@@ -273,19 +273,19 @@ public class XtCheckIndexFragment extends XtBaseVisitFragment implements View.On
             }
             Bundle bundle = msg.getData();
 
-            // 处理UI 变化
+
             switch (msg.what) {
-                case INPUT_SUC:
-                    fragment.showAddProSuc(bundle);
+                case INPUT_SUC:// 自动计算指标值
+                    fragment.autoCalculateSuc(bundle);
                     break;
             }
         }
     }
 
     /**
-     * 添加产品成功 UI
+     * 自动计算指标值
      */
-    public void showAddProSuc(Bundle bundle) {
+    public void autoCalculateSuc(Bundle bundle) {
 
         String proId = "";
         String indexId = "";
@@ -317,42 +317,31 @@ public class XtCheckIndexFragment extends XtBaseVisitFragment implements View.On
         Spinner resultSp;
 
         // 遍历lv，获取各指标的指标值
-        /*for (int i = 0; i < calculateLst.size(); i++) {
-            if (calculateLv == null || calculateLv.getChildAt(i) == null|| calculateLv.getChildAt(i).findViewById(R.id.caculate_lv_indexvalue) == null) continue;
+        for (int i = 0; i < calculateLst.size(); i++) {
+            if (calculateLv == null || calculateLv.getChildAt(i) == null || calculateLv.getChildAt(i).findViewById(R.id.caculate_lv_indexvalue) == null)
+                continue;
             indexItem = calculateLst.get(i);
-            indexValueLv = (ListView)calculateLv.getChildAt(i).findViewById(R.id.caculate_lv_indexvalue);
-            if (indexValueLv == null) continue;
+            indexValueLv = (ListView) calculateLv.getChildAt(i).findViewById(R.id.item_xt_caculate_lv_indexvalue);
+            if (indexValueLv == null)
+                continue;
             for (int j = 0; j < indexItem.getIndexValueLst().size(); j++) {
                 valueItem = indexItem.getIndexValueLst().get(j);
-                if (valueItem == null) continue;
+                if (valueItem == null)
+                    continue;
 
-                // 判定显示方式及初始化显示数据 0:计算单选、 1:单选、 2:文本框、 3:数值、 4:下拉单选
-                if (ConstValues.FLAG_1.equals(valueItem.getIndexType())) {
-                    if (indexValueLv.getChildAt(j).findViewById(R.id.caculate_rg_indexvalue) == null) continue;
-                    resultRg = (RadioGroup)indexValueLv.getChildAt(j).findViewById(R.id.caculate_rg_indexvalue);
-                    for (int k = 0; k < resultRg.getChildCount(); k++) {
-                        resultRb = (RadioButton)resultRg.getChildAt(k);
-                        if (resultRb.isChecked()) {
-                            valueItem.setIndexValueId(resultRb.getHint().toString());
-                            break;
-                        }
-                    }
-                } else if (ConstValues.FLAG_2.equals(valueItem.getIndexType())) {
-                    if (indexValueLv.getChildAt(j).findViewById(R.id.caculate_et_indexvalue) == null) continue;
-                    resultEt = (EditText)indexValueLv.getChildAt(j).findViewById(R.id.caculate_et_indexvalue);
-                    valueItem.setIndexValueId(resultEt.getText().toString());
+                /*if (ConstValues.FLAG_4.equals(valueItem.getIndexType())
+                        || ConstValues.FLAG_0.equals(valueItem.getIndexType())) {
+                    if (indexValueLv.getChildAt(j).findViewById(
+                            R.id.caculate_bt_indexvalue) == null) continue;
+                    valueItem.setIndexValueId(FunUtil.isBlankOrNullTo(
+                            indexValueLv.getChildAt(j).findViewById(R.id.caculate_bt_indexvalue).getTag(), "-1"));
+                }*/
 
-                } else if (ConstValues.FLAG_3.equals(valueItem.getIndexType())) {
-                    if (indexValueLv.getChildAt(j).findViewById(R.id.caculate_et_indexvalue_num) == null) continue;
-                    resultEt = (EditText)indexValueLv.getChildAt(j).findViewById(R.id.caculate_et_indexvalue_num);
-                    valueItem.setIndexValueId(resultEt.getText().toString());
-
-                } else if (ConstValues.FLAG_4.equals(valueItem.getIndexType())|| ConstValues.FLAG_0.equals(valueItem.getIndexType())) {
-                    if (indexValueLv.getChildAt(j).findViewById(R.id.caculate_bt_indexvalue) == null) continue;
-                    valueItem.setIndexValueId(FunUtil.isBlankOrNullTo(indexValueLv.getChildAt(j).findViewById(R.id.caculate_bt_indexvalue).getTag(), "-1"));
-                }
+                if (indexValueLv.getChildAt(j).findViewById(R.id.item_xt_checkindex_indexvalue) == null)
+                    continue;
+                valueItem.setIndexValueId(FunUtil.isBlankOrNullTo(indexValueLv.getChildAt(j).findViewById(R.id.item_xt_checkindex_indexvalue).getTag(), "-1"));
             }
-        }*/
+        }
 
         // 遍历获取与产品无关指标采集数据部分
         XtCheckIndexCalculateStc itemStc;
@@ -402,13 +391,13 @@ public class XtCheckIndexFragment extends XtBaseVisitFragment implements View.On
 
 
         // 遍历活动状态的达成情况
-        /*SlideSwitch statusSw;
+        et.tsingtaopad.view.DdSlideSwitch statusSw;
         EditText reachNum;
         for (int i = 0; i < promotionLst.size(); i++) {
             itemV = promotionLv.getChildAt(i);
-            if (itemV == null || itemV.findViewById(R.id.promotion_sw_status) == null) continue;
-            statusSw = (SlideSwitch)itemV.findViewById(R.id.promotion_sw_status);
-            reachNum = (EditText)itemV.findViewById(R.id.promotion_et_reachnum);
+            if (itemV == null || itemV.findViewById(R.id.item_xt_checkindex_sw_isacomplish) == null) continue;
+            statusSw = (et.tsingtaopad.view.DdSlideSwitch)itemV.findViewById(R.id.item_xt_checkindex_sw_isacomplish);
+            reachNum = (EditText)itemV.findViewById(R.id.item_xt_checkindex_et_zushu);
             if (statusSw.getStatus()) {
                 promotionLst.get(i).setIsAccomplish(ConstValues.FLAG_1);//达成
             } else {
@@ -416,7 +405,7 @@ public class XtCheckIndexFragment extends XtBaseVisitFragment implements View.On
 
                 // 根据是否有拍照,删除
                 // 删除记录
-                String pictypekey = promotionLst.get(i).getPromotKey();
+                /*String pictypekey = promotionLst.get(i).getPromotKey();
                 AndroidDatabaseConnection connection = null;
                 try {
                     DatabaseHelper helper = DatabaseHelper.getHelper(getActivity());
@@ -431,16 +420,16 @@ public class XtCheckIndexFragment extends XtBaseVisitFragment implements View.On
                     Log.e(TAG, "删除图片表记录失败", e);
                     try {
                         connection.rollback(null);
-                    } catch (SQLException e1) {
+                    } catch (Exception e1) {
                         Log.e(TAG, "删除图片表记录失败", e1);
                     }
-                }
+                }*/
                 // 删除本地照片(以为每次确定上传都会删除文件夹,就不做操作了)
             }
             promotionLst.get(i).setReachNum(reachNum.getText().toString());
 
         }
-        service.savePromotion(visitId, termId, promotionLst);*/
+        service.saveXtPromotionTemp(visitId, termId, promotionLst);
         long time4= new Date().getTime();
         Log.e("Optimization", "查指标执行数据库"+(time4-time3));
     }

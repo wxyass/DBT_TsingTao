@@ -121,6 +121,7 @@
                     android:layout_height="@dimen/xtbf_item_h"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
+                    android:inputType="number"
                     android:layout_toLeftOf="@id/item_xt_checkindex_sw_isacomplish"
                     android:layout_toRightOf="@id/item_xt_checkindex_tv_issucces"
                     android:background="@drawable/bg_visit_record"

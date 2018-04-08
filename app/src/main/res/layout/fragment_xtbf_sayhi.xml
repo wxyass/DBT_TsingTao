@@ -108,6 +108,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@+id/xt_sayhi_tv_wopindianzhao"
                     android:background="@drawable/transparent"
+                    android:visibility="gone"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:text="@string/default_text"/>
@@ -119,6 +120,7 @@
                     android:layout_height="35dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="2dp"
+                    android:visibility="gone"
                     android:layout_toRightOf="@+id/xt_sayhi_btn_text"
                     android:background="@drawable/bg_search_button"
                     android:paddingLeft="10dp"

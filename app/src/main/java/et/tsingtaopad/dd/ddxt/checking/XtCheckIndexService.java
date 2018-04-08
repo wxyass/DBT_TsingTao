@@ -27,7 +27,9 @@ import com.j256.ormlite.stmt.Where;
 import et.tsingtaopad.R;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
+import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.db.dao.MstCheckexerecordInfoDao;
 import et.tsingtaopad.db.dao.MstGroupproductMDao;
@@ -37,6 +39,8 @@ import et.tsingtaopad.db.dao.MstVistproductInfoDao;
 import et.tsingtaopad.db.dao.PadChecktypeMDao;
 import et.tsingtaopad.db.table.MstGroupproductM;
 import et.tsingtaopad.db.table.MstGroupproductMTemp;
+import et.tsingtaopad.db.table.MstPromotermInfo;
+import et.tsingtaopad.db.table.MstPromotermInfoTemp;
 import et.tsingtaopad.db.table.MstPromotionsM;
 import et.tsingtaopad.db.table.MstVistproductInfo;
 import et.tsingtaopad.db.table.PadCheckstatusInfo;
@@ -398,6 +402,63 @@ public class XtCheckIndexService extends XtShopVisitService {
             areaname = "";
         }
         return areaname;
+    }
+
+    /**
+     * 保存终端参与的活动的达成状态记录
+     *
+     * @param visitId       拜访主键
+     * @param termId        终端ID
+     * @param promotionLst  活动达成情况记录
+     */
+    public void saveXtPromotionTemp(String visitId, String termId,List<CheckIndexPromotionStc> promotionLst) {
+
+        AndroidDatabaseConnection connection = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MstPromotermInfo, String> dao = helper.getMstPromotermInfoDao();
+            Dao<MstPromotermInfoTemp, String> tempDao = helper.getMstPromotermInfoTempDao();
+
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+            StringBuffer buffer;
+            //MstPromotermInfo info;
+            MstPromotermInfoTemp infoTemp;
+            String currDate = DateUtil.formatDate(new Date(), "yyyyMMddHHmmss");
+            for(CheckIndexPromotionStc item : promotionLst) {
+                if (CheckUtil.isBlankOrNull(item.getRecordKey())) {
+                    item.setRecordKey(FunUtil.getUUID());
+                    //info = new MstPromotermInfo();
+                    infoTemp = new MstPromotermInfoTemp();
+                    infoTemp.setRecordkey(item.getRecordKey());
+                    infoTemp.setPtypekey(item.getPromotKey());
+                    infoTemp.setTerminalkey(termId);
+                    infoTemp.setVisitkey(visitId);
+                    infoTemp.setStartdate(currDate);
+                    infoTemp.setIsaccomplish(item.getIsAccomplish());
+                    infoTemp.setRemarks(item.getReachNum());
+                    infoTemp.setPadisconsistent(ConstValues.FLAG_0);
+                    //info.setCreuser(ConstValues.loginSession.getUserCode());
+                    infoTemp.setCreuser(PrefUtils.getString(context, "userCode", ""));
+                    //info.setUpdateuser(ConstValues.loginSession.getUserCode());
+                    infoTemp.setUpdateuser(PrefUtils.getString(context, "userCode", ""));
+                    tempDao.create(infoTemp);
+
+                } else {
+                    buffer = new StringBuffer();
+                    buffer.append("update mst_promoterm_info_temp set ");
+                    buffer.append("visitkey=?, isaccomplish=?, startdate=?,remarks=?,padisconsistent ='0' ");
+                    buffer.append("where recordkey = ? ");
+                    dao.executeRaw(buffer.toString(), new String[]{
+                            visitId, item.getIsAccomplish(), currDate, item.getReachNum(),item.getRecordKey()});
+                }
+            }
+
+            connection.commit(null);
+        } catch (SQLException e) {
+            Log.e(TAG, "获取拜访产品-我品竞品表DAO对象失败", e);
+        }
     }
 
 
