@@ -207,8 +207,8 @@ public class HttpParseJson {
         String jsonZip = "";
 
         try {
-            //jsonZip = JsonUtil.toJson(reqObj);
-            jsonZip = new String(ZipHelper.zipString(JsonUtil.toJson(reqObj)), "ISO-8859-1");
+            jsonZip = JsonUtil.toJson(reqObj);
+            jsonZip = new String(ZipHelper.zipString(jsonZip), "ISO-8859-1");
             //配合朱志凯测试给他提取json语句进行压力测试
             //FileTool.writeTxt(JsonUtil.toJson(reqObj),FileTool.getSDPath()+"/ceshi.txt");
         } catch (Exception e1) {

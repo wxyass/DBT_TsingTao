@@ -20,8 +20,12 @@ import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
+import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.view.dropdownmenu.DropBean;
 import et.tsingtaopad.core.view.dropdownmenu.DropdownButton;
+import et.tsingtaopad.db.table.MstGridM;
+import et.tsingtaopad.db.table.MstMarketareaM;
+import et.tsingtaopad.db.table.MstRouteM;
 import et.tsingtaopad.db.table.MstTerminalinfoM;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
 import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartFragment;
@@ -135,12 +139,12 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
                 }else{
                     gridList.clear();
                     gridList.add(new DropBean("请选择定格"));
-                    gridList.add(new DropBean("1号定格"));
-                    gridList.add(new DropBean("2号定格"));
-                    gridList.add(new DropBean("3号定格"));
-                    gridList.add(new DropBean("4号定格"));
-                    gridList.add(new DropBean("5号定格"));
-                    gridList.add(new DropBean("6号定格"));
+
+                    List<MstGridM> valueLst =  xtSelectService.getMstGridMList(areaList.get(Postion).getKey());
+                    for (MstGridM mstGridM:valueLst) {
+                        gridList.add(new DropBean(mstGridM.getGridname(),mstGridM.getGridkey()));
+                    }
+
                     gridBtn.setData(gridList);
                 }
             }
@@ -159,10 +163,10 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
                 }else{
                     routeList.clear();
                     routeList.add(new DropBean("请选择路线"));
-                    routeList.add(new DropBean("1号路线"));
-                    routeList.add(new DropBean("2号路线"));
-                    routeList.add(new DropBean("3号路线"));
-                    routeList.add(new DropBean("4号路线"));
+                    List<MstRouteM> valueLst =  xtSelectService.getMstRouteMList(gridList.get(Postion).getKey());
+                    for (MstRouteM mstRouteM:valueLst) {
+                        routeList.add(new DropBean(mstRouteM.getRoutename(),mstRouteM.getRoutekey()));
+                    }
                     routeBtn.setData(routeList);
                 }
             }
@@ -173,6 +177,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
             @Override
             public void onDropItemSelect(int Postion) {
                 Toast.makeText(getContext(),"您选择了 "+routeList.get(Postion).getName(),Toast.LENGTH_SHORT).show();
+                //
             }
         });
     }
@@ -222,11 +227,12 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
         areaList = new ArrayList<>();
         gridList = new ArrayList<>();
         routeList = new ArrayList<>();
-        int mouth = 10;
         areaList.add(new DropBean("请选择区域"));
-        for (int i = 0; i < mouth; i++) {
-            areaList.add(new DropBean("区域"+i));
+        List<MstMarketareaM> valueLst =  xtSelectService.getMstMarketareaMList(PrefUtils.getString(getActivity(),"departmentid",""));
+        for (MstMarketareaM mstMarketareaM:valueLst) {
+            areaList.add(new DropBean(mstMarketareaM.getAreaname(),mstMarketareaM.getAreaid()));
         }
+
         gridList.add(new DropBean("请选择定格"));
         routeList.add(new DropBean("请选择路线"));
     }
@@ -265,7 +271,6 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
      * @param selectedList      用户选择的终端
      */
     public void breakNextLayout(int type,List<XtTermSelectMStc> selectedList){
-
 
         // 跳转
         if(TOFRAGMENT == type){

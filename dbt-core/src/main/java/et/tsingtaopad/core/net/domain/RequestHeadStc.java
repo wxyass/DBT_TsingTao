@@ -10,11 +10,12 @@ public class RequestHeadStc implements java.io.Serializable{
     private String usercode;
     private String password;
     private String optcode;
-    private String usertype;
-    private String gridkey;
+    private String usertype;// 用户类型: 业代 督导
+    private String gridkey; // 定格id  废弃
     private String version;
-    private String bigareaid;
-    private String secareaid;
+    private String bigareaid;// 大区id  废弃
+    private String secareaid;// 二级区域id 废弃
+    private String departmentid;// 大区id
 
     public RequestHeadStc() { /* compiled code */ }
 
@@ -82,4 +83,11 @@ public class RequestHeadStc implements java.io.Serializable{
         this.secareaid = secareaid;
     }
 
+    public String getDepartmentid() {
+        return departmentid;
+    }
+
+    public void setDepartmentid(String departmentid) {
+        this.departmentid = departmentid;
+    }
 }

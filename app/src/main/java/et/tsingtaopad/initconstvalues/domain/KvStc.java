@@ -14,7 +14,7 @@ public class KvStc implements Serializable {
     private String key; // 该对象的key
     
     private String value; // 该对象的value
-    
+
     private String parentKey; // 父级的key
     
     private String isDefault; // 该对象是否 是默认对象

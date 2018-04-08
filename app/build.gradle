@@ -6,8 +6,8 @@ android {
         applicationId "et.tsingtaopad"
         minSdkVersion 14
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode 39
+        versionName "2.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

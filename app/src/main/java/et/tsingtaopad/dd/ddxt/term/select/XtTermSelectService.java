@@ -12,10 +12,17 @@ import android.util.Log;
 
 import com.j256.ormlite.android.AndroidDatabaseConnection;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
 
+import et.tsingtaopad.R;
+import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.db.dao.MstAgencysupplyInfoDao;
 import et.tsingtaopad.db.dao.MstTerminalinfoMDao;
+import et.tsingtaopad.db.dao.MstVisitMDao;
+import et.tsingtaopad.db.dao.MstVisitMTempDao;
 import et.tsingtaopad.db.table.MstAgencysupplyInfo;
 import et.tsingtaopad.db.table.MstAgencysupplyInfoTemp;
 import et.tsingtaopad.db.table.MstCheckexerecordInfo;
@@ -24,8 +31,11 @@ import et.tsingtaopad.db.table.MstCmpsupplyInfo;
 import et.tsingtaopad.db.table.MstCmpsupplyInfoTemp;
 import et.tsingtaopad.db.table.MstCollectionexerecordInfo;
 import et.tsingtaopad.db.table.MstCollectionexerecordInfoTemp;
+import et.tsingtaopad.db.table.MstGridM;
+import et.tsingtaopad.db.table.MstMarketareaM;
 import et.tsingtaopad.db.table.MstPromotermInfo;
 import et.tsingtaopad.db.table.MstPromotermInfoTemp;
+import et.tsingtaopad.db.table.MstRouteM;
 import et.tsingtaopad.db.table.MstTerminalinfoM;
 import et.tsingtaopad.db.table.MstTerminalinfoMTemp;
 import et.tsingtaopad.db.table.MstVisitM;
@@ -186,6 +196,111 @@ public class XtTermSelectService {
         }
 
         return termInfo;
+    }
+
+    /***
+     * 获取二级区域列表
+     * @param //tempDao
+     * @param //visitId
+     * @return
+     * @throws SQLException
+     */
+    public List<MstMarketareaM> getMstMarketareaMList(String areapid) {
+        AndroidDatabaseConnection connection = null;
+        List<MstMarketareaM> valueLst = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MstMarketareaM, String> valueDao = helper.getMstMarketareaMDao();
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+
+            QueryBuilder<MstMarketareaM, String> valueQb = valueDao.queryBuilder();
+            Where<MstMarketareaM, String> valueWr = valueQb.where();
+            valueWr.eq("areapid", areapid);
+            valueLst = valueQb.query();
+            connection.commit(null);
+        } catch (Exception e) {
+            Log.e(TAG, "查看拜访记录去除重复指标出错", e);
+            try {
+                connection.rollback(null);
+                ViewUtil.sendMsg(context, R.string.agencyvisit_msg_failsave);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+        return valueLst;
+    }
+
+    /***
+     * 获取某个二级区域  的定格列表
+     * @param //tempDao
+     * @param //visitId
+     * @return
+     * @throwsException
+     */
+    public List<MstGridM> getMstGridMList(String areaid) {
+        AndroidDatabaseConnection connection = null;
+        List<MstGridM> valueLst = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MstGridM, String> valueDao = helper.getMstGridMDao();
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+
+            QueryBuilder<MstGridM, String> valueQb = valueDao.queryBuilder();
+            Where<MstGridM, String> valueWr = valueQb.where();
+            valueWr.eq("areaid", areaid);
+            valueLst = valueQb.query();
+            connection.commit(null);
+        } catch (Exception e) {
+            Log.e(TAG, "查看拜访记录去除重复指标出错", e);
+            try {
+                connection.rollback(null);
+                ViewUtil.sendMsg(context, R.string.agencyvisit_msg_failsave);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+        return valueLst;
+    }
+
+    /***
+     * 获取某个定格  的路线列表
+     * @param //tempDao
+     * @param //visitId
+     * @return
+     * @throwsException
+     */
+    public List<MstRouteM> getMstRouteMList(String gridkey) {
+        AndroidDatabaseConnection connection = null;
+        List<MstRouteM> valueLst = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MstRouteM, String> valueDao = helper.getMstRouteMDao();
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+
+            QueryBuilder<MstRouteM, String> valueQb = valueDao.queryBuilder();
+            Where<MstRouteM, String> valueWr = valueQb.where();
+            valueWr.eq("gridkey", gridkey);
+            valueLst = valueQb.query();
+            connection.commit(null);
+        } catch (Exception e) {
+            Log.e(TAG, "查看拜访记录去除重复指标出错", e);
+            try {
+                connection.rollback(null);
+                ViewUtil.sendMsg(context, R.string.agencyvisit_msg_failsave);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+        return valueLst;
     }
 
 

@@ -28,6 +28,7 @@ public class requestHeadUtil {
         requestHeadStc.setVersion(DbtLog.getVersion());
         requestHeadStc.setBigareaid(PrefUtils.getString(context,"bigareaid",""));
         requestHeadStc.setSecareaid(PrefUtils.getString(context,"secareaid",""));
+        requestHeadStc.setSecareaid(PrefUtils.getString(context,"departmentid",""));
         return requestHeadStc;
     }
 }
