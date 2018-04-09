@@ -270,7 +270,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginRight="100dp"
                     android:background="@drawable/bg_visit_record"
-                    android:text="@string/termadd_termname"/>
+                    />
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
@@ -291,7 +291,7 @@
                 <TextView
                     android:id="@+id/xtbf_sayhi_termcode"
                     style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_termname"/>
+                    />
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
@@ -313,7 +313,7 @@
                 <TextView
                     android:id="@+id/xtbf_sayhi_termroude"
                     style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_termname"/>
+                    />
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"
@@ -336,7 +336,7 @@
                     android:id="@+id/xtbf_sayhi_termlv"
                     style="@style/xtbf_sayhi_san_tv"
                     android:layout_marginRight="130dp"
-                    android:text="@string/termadd_termname"/>
+                    />
 
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
@@ -362,7 +362,7 @@
                 <TextView
                     android:id="@+id/xtbf_sayhi_termprovince"
                     style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_termname"/>
+                    />
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
@@ -382,7 +382,7 @@
                 <TextView
                     android:id="@+id/xtbf_sayhi_termcity"
                     style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_termname"/>
+                    />
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
@@ -402,7 +402,7 @@
                 <TextView
                     android:id="@+id/xtbf_sayhi_termcountry"
                     style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_termname"/>
+                    />
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
@@ -428,7 +428,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginRight="100dp"
                     android:background="@drawable/bg_visit_record"
-                    android:text="@string/termadd_termname"/>
+                    />
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
@@ -454,7 +454,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginRight="100dp"
                     android:background="@drawable/bg_visit_record"
-                    android:text="@string/termadd_termname"/>
+                    />
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
@@ -482,7 +482,7 @@
                     android:maxLength="20"
                     android:singleLine="true"
                     android:background="@drawable/bg_visit_record"
-                    android:text="@string/termadd_termname"/>
+                    />
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
@@ -508,7 +508,7 @@
                     android:inputType="number"
                     android:layout_marginBottom="5dp"
                     android:background="@drawable/bg_visit_record"
-                    android:text="@string/termadd_termname"/>
+                    />
 
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
@@ -539,7 +539,7 @@
                     android:layout_marginRight="100dp"
                     android:inputType="number"
                     android:background="@drawable/bg_visit_record"
-                    android:text="@string/termadd_termname"/>
+                    />
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
@@ -565,7 +565,8 @@
                     android:layout_marginBottom="5dp"
                     android:inputType="number"
                     android:background="@drawable/bg_visit_record"
-                    android:text="@string/termadd_termname"/>
+                    android:hint="0"
+                    />
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_unit_volume"/>
@@ -594,7 +595,7 @@
                     android:layout_marginBottom="5dp"
                     android:inputType="number"
                     android:background="@drawable/bg_visit_record"
-                    android:text="@string/termadd_termname"/>
+                    android:hint="0"/>
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_unit_volume"/>
@@ -623,7 +624,7 @@
                     android:layout_marginBottom="5dp"
                     android:inputType="number"
                     android:background="@drawable/bg_visit_record"
-                    android:text="@string/termadd_termname"/>
+                    android:hint="0"/>
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_unit_volume"/>
@@ -652,7 +653,7 @@
                     android:layout_marginBottom="5dp"
                     android:inputType="number"
                     android:background="@drawable/bg_visit_record"
-                    android:text="@string/termadd_termname"/>
+                    android:hint="0"/>
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_unit_volume"/>
@@ -681,7 +682,7 @@
                     android:layout_marginBottom="5dp"
                     android:inputType="number"
                     android:background="@drawable/bg_visit_record"
-                    android:text="@string/termadd_termname"/>
+                    android:hint="0"/>
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_unit_volume"/>
@@ -705,7 +706,7 @@
                 <TextView
                     android:id="@+id/xtbf_sayhi_termarea"
                     style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_termname"/>
+                    />
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"
@@ -727,7 +728,7 @@
                 <TextView
                     android:id="@+id/xtbf_sayhi_termsellchannel"
                     style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_termname"/>
+                    />
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"
@@ -749,7 +750,7 @@
                 <TextView
                     android:id="@+id/xtbf_sayhi_termtmainchannel"
                     style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_termname"/>
+                    />
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"
@@ -771,7 +772,7 @@
                 <TextView
                     android:id="@+id/xtbf_sayhi_termminorchannel"
                     style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_termname"/>
+                    />
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"
@@ -793,7 +794,7 @@
                 <TextView
                     android:id="@+id/xtbf_sayhi_termpersion"
                     style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_termname"/>
+                    />
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"

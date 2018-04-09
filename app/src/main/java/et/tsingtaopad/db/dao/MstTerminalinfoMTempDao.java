@@ -11,6 +11,4 @@ import et.tsingtaopad.db.table.MstTerminalinfoMTemp;
  */
 public interface MstTerminalinfoMTempDao extends Dao<MstTerminalinfoMTemp, String> {
 
-
-
 }

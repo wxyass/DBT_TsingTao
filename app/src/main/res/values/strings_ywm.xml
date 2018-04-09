@@ -109,6 +109,7 @@
     <string name="termadd_msg_invalsellchannel">请选择终端的销售渠道</string>
     <string name="termadd_msg_invalmainchannel">请选择终端的主渠道</string>
     <string name="termadd_msg_invalminorchannel">请选择终端的次渠道</string>
+    <string name="termadd_msg_wait">请稍候,正在加载打招呼数据</string>
     <string name="termadd_msg_repeat">相同路线、相同名称、相同类型的终端、一天只能新建一次</string>
     <string name="termadd_msg_addsuccess">新增终端成功</string>
     <string name="termadd_msg_syncsuccess">新增终端上传成功</string>

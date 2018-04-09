@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
@@ -24,15 +25,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseActivity;
 import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
+import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
+import et.tsingtaopad.core.view.alertview.AlertView;
+import et.tsingtaopad.core.view.alertview.OnDismissListener;
+import et.tsingtaopad.core.view.alertview.OnItemClickListener;
 import et.tsingtaopad.db.table.MstVisitM;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
 import et.tsingtaopad.dd.ddxt.camera.XtCameraFragment;
@@ -181,6 +188,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
         changeFragment(xtCameraFragmentf, "xtcamerafragment");
         fragmentType = 5;*/
 
+        // 初始化顶部TabHost
         initBandleDate(returnBundle());
     }
 
@@ -245,10 +253,12 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
 
         switch (v.getId()) {
             case R.id.top_navigation_rl_back:// 返回
-                this.finish();
+                this.backFinish();
                 break;
             case R.id.top_navigation_rl_confirm://
-
+                //大区所有的
+                //confirmUplad();
+                confirmXtUplad();
                 break;
 
 
@@ -415,10 +425,13 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
 
             } else if ("-1".equals(FunUtil.isBlankOrNullTo(minorChannelSp.getText(), "-1"))) {
                 msgId = R.string.termadd_msg_invalminorchannel;
-            }
+            }/*else if (!PrefUtils.getBoolean(getApplication(),GlobalValues.SAYHIREADY,false)) {
+                msgId = R.string.termadd_msg_wait;
+            }*/
 
             if (msgId != -1) {
                 tabHost.setCurrentTab(0);
+                Toast.makeText(getApplicationContext(),getString(msgId),Toast.LENGTH_SHORT).show();
                 //ViewUtil.sendMsg(getApplicationContext(), msgId);
 
             }
@@ -426,6 +439,103 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
             //sureBt.setTag(msgId);
         }
 
+    }
 
+
+    private AlertView mAlertViewExt;//窗口拓展例子
+
+    private void confirmXtUplad() {
+        // 普通窗口
+        mAlertViewExt = new AlertView("上传拜访数据?", null, "取消", new String[]{"确定"}, null, this, AlertView.Style.Alert,
+                new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Object o, int position) {
+                        //Toast.makeText(getApplicationContext(), "点击了第" + position + "个", Toast.LENGTH_SHORT).show();
+                        if (0 == position) {// 确定按钮:0   取消按钮:-1
+                            //if (ViewUtil.isDoubleClick(v.getId(), 2500)) return;
+                            DbtLog.logUtils(TAG, "结束拜访：是");
+
+                            // 检测现有量变化量是否为空  true:全不为空 可以上传   false:有为空的 不可上传
+                            if (!checkCollectionexrecord()) {// 未填写现有量变化量
+                                Toast.makeText(getApplicationContext(), "所有的现有量,变化量必须填值(没货填0)", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+
+                            // 更新GPS坐标  更新到拜访临时表
+                            //service.updateGps(visitId, longitude, latitude, "");
+
+                            // 复制正表
+                            //1  "MST_VISIT_M_TEMP"   原样复制create,并把enddate附上值   是否已上传用padisconsistent字段控制  0:还未上传  1:已上传 有visitkey
+                            //3  "MST_TERMINALINFO_M_TEMP"   原样复制createor   是否已上传用padisconsistent字段控制  0:还未上传  1:已上传
+                            //4  "MST_AGENCYSUPPLY_INFO_TEMP"  原样复制createor  注意padisconsistent字段的取值
+                            //2  "MST_VISTPRODUCT_INFO_TEMP" 原样复制create   是否已上传用padisconsistent字段控制  0:还未上传  1:已上传  有visitkey
+                            //4  "MST_CMPSUPPLY_INFO_TEMP"   原样复制createor   注意padisconsistent字段的取值0
+                            //1  "MST_CHECKEXERECORD_INFO_TEMP  视情况复制
+                            //1  "MST_COLLECTIONEXERECORD_INFO_TEMP"   原样复制create   是否已上传用padisconsistent字段控制  0:还未上传  1:已上传  有visitkey
+                            //2  "MST_PROMOTERM_INFO_TEMP"   原样复制create   是否已上传用padisconsistent字段控制  0:还未上传  1:已上传  有visitkey
+                            //2  "MST_CAMERAINFO_M_TEMP"  原样复制create   是否已上传用padisconsistent字段控制  0:还未上传  1:已上传  有visitkey
+                            //  "MST_VISITMEMO_INFO_TEMP"
+                            //5  "MST_GROUPPRODUCT_M_TEMP"  原样复制createor   是否已上传用padisconsistent字段控制  0:还未上传  1:已上传
+                            //  "MST_CHECKGROUP_INFO"
+                            //  "MST_CHECKGROUP_INFO_TEMP"
+
+                            String visitEndDate = DateUtil.formatDate(new Date(), "yyyyMMddHHmmss");
+                            // 开始复制 更新拜访离店时间及是否要上传标志 以及对去除拜访指标采集项重复(collectionexerecord表)
+                            xtShopVisitService.confirmXtUpload(visitId, termStc.getTerminalkey(), visitEndDate, "1");
+
+
+
+                            XtVisitShopActivity.this.finish();
+                        }
+
+                    }
+                })
+                .setCancelable(true)
+                .setOnDismissListener(new OnDismissListener() {
+                    @Override
+                    public void onDismiss(Object o) {
+                        DbtLog.logUtils(TAG, "结束拜访：否");
+                    }
+                });
+        mAlertViewExt.show();
+    }
+
+    private void backFinish() {
+        // 普通窗口
+        mAlertViewExt = new AlertView("若返回,这次拜访数据不会保存", null, "取消", new String[]{"确定"}, null, this, AlertView.Style.Alert,
+                new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Object o, int position) {
+                        //Toast.makeText(getApplicationContext(), "点击了第" + position + "个", Toast.LENGTH_SHORT).show();
+                        if (0 == position) {// 确定按钮:0   取消按钮:-1
+                            //if (ViewUtil.isDoubleClick(v.getId(), 2500)) return;
+                            DbtLog.logUtils(TAG, "返回拜访：是");
+                            XtVisitShopActivity.this.finish();
+                        }
+                    }
+                })
+                .setCancelable(true)
+                .setOnDismissListener(new OnDismissListener() {
+                    @Override
+                    public void onDismiss(Object o) {
+                        DbtLog.logUtils(TAG, "返回拜访：否");
+                    }
+                });
+        mAlertViewExt.show();
+    }
+
+    // 检测现有量变化量是否为空  true:全不为空 可以上传   false:有为空的 不可上传
+    private boolean checkCollectionexrecord(){
+
+        boolean isallIn = true;
+        // (查出所有采集项)
+        /*List<ProItem> proItemLst = xtShopVisitService.queryCalculateItem(visitId, channelId);
+        for (ProItem proitem : proItemLst) {
+            if("".equals(FunUtil.isNullSetSpace(proitem.getBianhualiang()))||"".equals(FunUtil.isNullSetSpace(proitem.getXianyouliang()))){
+                isallIn = false;// 为空不能上传
+                break;
+            }
+        }*/
+        return isallIn;
     }
 }

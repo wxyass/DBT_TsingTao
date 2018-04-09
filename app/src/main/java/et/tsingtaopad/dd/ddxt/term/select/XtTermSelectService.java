@@ -37,6 +37,7 @@ import et.tsingtaopad.db.table.MstPromotermInfo;
 import et.tsingtaopad.db.table.MstPromotermInfoTemp;
 import et.tsingtaopad.db.table.MstRouteM;
 import et.tsingtaopad.db.table.MstTerminalinfoM;
+import et.tsingtaopad.db.table.MstTerminalinfoMCart;
 import et.tsingtaopad.db.table.MstTerminalinfoMTemp;
 import et.tsingtaopad.db.table.MstVisitM;
 import et.tsingtaopad.db.table.MstVisitMTemp;
@@ -148,6 +149,80 @@ public class XtTermSelectService {
                 terminalinfoMTemp.setIfminedate(term.getIfminedate());
                 terminalinfoMTemp.setIfmine(term.getIfmine());
                 terminalinfoMTempDao.createOrUpdate(terminalinfoMTemp);
+
+            }
+
+
+            connection.commit(null);
+        }catch (Exception e){
+            Log.e(TAG, "复制数据出错", e);
+            try {
+                connection.rollback(null);
+                //ViewUtil.sendMsg(context, R.string.agencyvisit_msg_failsave);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    // 复制终端表 到终端购物车
+    public void toCopyMstTerminalinfoMCartData(MstTerminalinfoM xtTermSelectMStc) {
+
+        // 事务控制
+        AndroidDatabaseConnection connection = null;
+        // 开始复制
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MstTerminalinfoMCart, String> terminalinfoMCartDao = helper.getMstTerminalinfoMCartDao();
+
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+            // 复制终端临时表
+            MstTerminalinfoM term = xtTermSelectMStc;
+            MstTerminalinfoMCart terminalinfoMTemp = null;
+            if (term != null) {
+                terminalinfoMTemp = new MstTerminalinfoMCart();
+                terminalinfoMTemp.setTerminalkey(term.getTerminalkey());
+                terminalinfoMTemp.setRoutekey(term.getRoutekey());
+                terminalinfoMTemp.setTerminalcode(term.getTerminalcode());
+                terminalinfoMTemp.setTerminalname(term.getTerminalname());
+                terminalinfoMTemp.setProvince(term.getProvince());
+                terminalinfoMTemp.setCity(term.getCity());
+                terminalinfoMTemp.setCounty(term.getCounty());
+                terminalinfoMTemp.setAddress(term.getAddress());
+                terminalinfoMTemp.setContact(term.getContact());
+                terminalinfoMTemp.setMobile(term.getMobile());
+                terminalinfoMTemp.setTlevel(term.getTlevel());
+                terminalinfoMTemp.setSequence(term.getSequence());
+                terminalinfoMTemp.setCycle(term.getCycle());
+                terminalinfoMTemp.setHvolume(term.getHvolume());
+                terminalinfoMTemp.setMvolume(term.getMvolume());
+                terminalinfoMTemp.setPvolume(term.getPvolume());
+                terminalinfoMTemp.setLvolume(term.getLvolume());
+                terminalinfoMTemp.setStatus(term.getStatus());
+                terminalinfoMTemp.setSellchannel(term.getSellchannel());
+                terminalinfoMTemp.setMainchannel(term.getMainchannel());
+                terminalinfoMTemp.setMinorchannel(term.getMinorchannel());
+                terminalinfoMTemp.setAreatype(term.getAreatype());
+                terminalinfoMTemp.setSisconsistent(term.getSisconsistent());
+                terminalinfoMTemp.setScondate(term.getScondate());
+                terminalinfoMTemp.setPadisconsistent(term.getPadisconsistent());
+                terminalinfoMTemp.setPadcondate(term.getPadcondate());
+                terminalinfoMTemp.setComid(term.getComid());
+                terminalinfoMTemp.setRemarks(term.getRemarks());
+                terminalinfoMTemp.setOrderbyno(term.getOrderbyno());
+                terminalinfoMTemp.setVersion(term.getVersion());
+                terminalinfoMTemp.setCredate(term.getCredate());
+                terminalinfoMTemp.setCreuser(term.getCreuser());
+                terminalinfoMTemp.setSelftreaty(term.getSelftreaty());
+                terminalinfoMTemp.setCmpselftreaty(term.getCmpselftreaty());
+                terminalinfoMTemp.setUpdatetime(term.getUpdatetime());
+                terminalinfoMTemp.setUpdateuser(term.getUpdateuser());
+                terminalinfoMTemp.setDeleteflag(term.getDeleteflag());
+                terminalinfoMTemp.setIfminedate(term.getIfminedate());
+                terminalinfoMTemp.setIfmine(term.getIfmine());
+                terminalinfoMCartDao.createOrUpdate(terminalinfoMTemp);
 
             }
 

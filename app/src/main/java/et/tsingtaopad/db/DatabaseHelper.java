@@ -84,6 +84,7 @@ import et.tsingtaopad.db.table.MstShowpicInfo;
 import et.tsingtaopad.db.table.MstSynckvM;
 import et.tsingtaopad.db.table.MstTermLedgerInfo;
 import et.tsingtaopad.db.table.MstTerminalinfoM;
+import et.tsingtaopad.db.table.MstTerminalinfoMCart;
 import et.tsingtaopad.db.table.MstTerminalinfoMTemp;
 import et.tsingtaopad.db.table.MstVisitM;
 import et.tsingtaopad.db.table.MstVisitMTemp;
@@ -149,6 +150,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<MstShipmentledgerInfo, String> mstShipmentledgerInfoDao = null;
     private Dao<MstTerminalinfoM, String> mstTerminalinfoMDao = null;
     private Dao<MstTerminalinfoMTemp, String> mstTerminalinfoMTempDao = null;
+    private Dao<MstTerminalinfoMCart, String> mstTerminalinfoMCartDao = null;
     private Dao<MstVisitauthorizeInfo, String> mstVisitauthorizeInfoDao = null;
     private Dao<MstVisitM, String> mstVisitMDao = null;
     private Dao<MstVisitMTemp, String> mstVisitMTempDao = null;
@@ -310,6 +312,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             //TableUtils.createTable(connectionSource, MstGroupproductM.class);// 组合表 临时表
 
             TableUtils.createTable(connectionSource, MstVisitMTemp.class);// 拜访表 临时表
+            TableUtils.createTable(connectionSource, MstTerminalinfoMCart.class);// 终端购物车
 
 
             this.initView(db);
@@ -822,7 +825,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
                 // 终端表购物车
                 String termcart = "create table MST_TERMINALINFO_M_CART (terminalkey varchar,routekey varchar,terminalcode varchar,terminalname varchar,province varchar,city varchar,county varchar,address varchar,contact varchar,mobile varchar,tlevel varchar,sequence varchar, cycle varchar,hvolume varchar,mvolume varchar,lvolume varchar,status varchar,sellchannel varchar,mainchannel varchar,minorchannel varchar,areatype varchar,sisconsistent varchar,scondate date ,padisconsistent varchar,padcondate date ,comid varchar,remarks varchar,orderbyno varchar,deleteflag varchar,version integer ,credate date ,creuser varchar,updatetime date ,updateuser varchar ,pvolume varchar ,selftreaty varchar ,cmpselftreaty varchar ,ifminedate varchar ,ifmine varchar )";
-                db.execSQL(termtemp);
+                db.execSQL(termcart);
 
                 // 我品供货关系表临时表
                 String agencysupplytemp = "create table MST_AGENCYSUPPLY_INFO_TEMP (asupplykey varchar,status varchar,inprice varchar,reprice varchar,productkey varchar,lowerkey varchar,lowertype varchar,upperkey varchar,uppertype varchar,siebelkey varchar,sisconsistent varchar, scondate date ,padisconsistent varchar,padcondate date ,comid varchar,remarks varchar,orderbyno varchar,deleteflag varchar,version integer ,credate date ,creuser varchar,updatetime date ,updateuser varchar )";
@@ -1280,6 +1283,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             mstTerminalinfoMTempDao = getDao(MstTerminalinfoMTemp.class);
         }
         return mstTerminalinfoMTempDao;
+    }
+    public Dao<MstTerminalinfoMCart, String> getMstTerminalinfoMCartDao() throws SQLException {
+
+        if (mstTerminalinfoMCartDao == null) {
+            mstTerminalinfoMCartDao = getDao(MstTerminalinfoMCart.class);
+        }
+        return mstTerminalinfoMCartDao;
     }
 
     public Dao<MstVisitauthorizeInfo, String> getMstVisitauthorizeInfoDao() throws SQLException {

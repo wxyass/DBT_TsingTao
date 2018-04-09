@@ -262,7 +262,7 @@ public class MstTerminalinfoMDaoImpl extends BaseDaoImpl<MstTerminalinfoM, Strin
         buffer.append("vm.isself, vm.iscmp, m.selftreaty, vm.cmptreaty, ");// 我品 竞品 我品协议店,竞品协议店
         buffer.append("vm.padisconsistent, vm.uploadFlag, m.minorchannel, ");// 销售渠道编码
         buffer.append("dm.dicname terminalType, vm.visitdate ");// 终端渠道类型 拜访时间
-        buffer.append("from mst_terminalinfo_m_temp m ");
+        buffer.append("from mst_terminalinfo_m_cart m ");
         buffer.append("left join cmm_datadic_m dm on m.minorchannel = dm.diccode ");
         buffer.append("     and coalesce(dm.deleteflag,'0') != '1' ");
         buffer.append("left join v_visit_m_newest vm on m.terminalkey = vm.terminalkey ");
@@ -617,7 +617,7 @@ public class MstTerminalinfoMDaoImpl extends BaseDaoImpl<MstTerminalinfoM, Strin
     public void updateTermTempSequence(SQLiteOpenHelper helper, List<TermSequence> list) {
         for (TermSequence term : list) {
             StringBuffer buffer = new StringBuffer();
-            buffer.append("update mst_terminalinfo_m_temp set sequence=?");
+            buffer.append("update mst_terminalinfo_m_cart set sequence=?");
             buffer.append("where terminalkey=?");
             SQLiteDatabase db = helper.getReadableDatabase();
             db.execSQL(buffer.toString(), new Object[]{term.getSequence(), term.getTerminalkey()});

@@ -16,11 +16,28 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
+import et.tsingtaopad.business.first.bean.AreaGridRoute;
+import et.tsingtaopad.core.net.HttpUrl;
+import et.tsingtaopad.core.net.RestClient;
+import et.tsingtaopad.core.net.callback.IError;
+import et.tsingtaopad.core.net.callback.IFailure;
+import et.tsingtaopad.core.net.callback.ISuccess;
+import et.tsingtaopad.core.net.domain.RequestHeadStc;
+import et.tsingtaopad.core.net.domain.RequestStructBean;
+import et.tsingtaopad.core.net.domain.ResponseStructBean;
+import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.DateUtil;
+import et.tsingtaopad.core.util.dbtutil.JsonUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
+import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
+import et.tsingtaopad.core.view.alertview.AlertView;
+import et.tsingtaopad.core.view.alertview.OnDismissListener;
+import et.tsingtaopad.core.view.alertview.OnItemClickListener;
 import et.tsingtaopad.core.view.dropdownmenu.DropBean;
 import et.tsingtaopad.core.view.dropdownmenu.DropdownButton;
 import et.tsingtaopad.db.table.MstGridM;
@@ -31,12 +48,17 @@ import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
 import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartFragment;
 import et.tsingtaopad.dd.ddxt.term.select.adapter.XtTermSelectAdapter;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
+import et.tsingtaopad.home.app.MainService;
+import et.tsingtaopad.http.HttpParseJson;
+import et.tsingtaopad.util.requestHeadUtil;
 
 /**
  * Created by yangwenmin on 2018/3/12.
  */
 
 public class XtTermSelectFragment extends BaseFragmentSupport implements View.OnClickListener,AdapterView.OnItemClickListener{
+
+    private final String TAG = "XtTermSelectFragment";
 
     private RelativeLayout backBtn;
     private RelativeLayout confirmBtn;
@@ -62,6 +84,10 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
 
     private int TOFRAGMENT = 1;
     private int TOACTIVITY = 2;
+
+    private AlertView mAlertViewExt;//窗口拓展
+
+    private String routeKey;
 
     @Nullable
     @Override
@@ -104,7 +130,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
         setDropdownItemSelectListener();
 
         // 设置终端列表数据 假数据
-        initTermListData();
+        initTermListData("1-63UNEX");
 
         // 设置终端条目适配器,及条目点击事件
         setItemAdapterListener();
@@ -178,17 +204,20 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
             public void onDropItemSelect(int Postion) {
                 Toast.makeText(getContext(),"您选择了 "+routeList.get(Postion).getName(),Toast.LENGTH_SHORT).show();
                 //
+
+                routeKey = routeList.get(Postion).getKey();
+                getDataByHttp("get_date_3","MST_TERMINALINFO_M",routeKey,null);
             }
         });
     }
 
     // 设置终端列表数据 假数据
-    private void initTermListData() {
+    private void initTermListData(String routekey) {
 
         termList = new ArrayList<XtTermSelectMStc>();
         // 绑定TermList数据
         List<String> routes = new ArrayList<String>();
-        routes.add("1-63UNEX");// 不同路线
+        routes.add(routekey);// 不同路线
         termList.clear();
         termList = xtSelectService.queryTerminal(routes);
 
@@ -272,29 +301,25 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
      */
     public void breakNextLayout(int type,List<XtTermSelectMStc> selectedList){
 
-        // 跳转
+        // 跳转购物车Fragment
         if(TOFRAGMENT == type){
             // 清空终端临时表数据
             xtSelectService.deleteData("MST_TERMINALINFO_M_TEMP");
             // 复制终端临时表
             for (XtTermSelectMStc xtselect:selectedList){
-                copyMstTerminalinfoMTemp(xtselect);
+                copyMstTerminalinfoMCart(xtselect);
             }
             // 销毁当前Fragment
             supportFragmentManager.popBackStack();
             // 跳转终端购物车
             changeHomeFragment(new XtTermCartFragment(), "xttermcartfragment");
-        }else if(TOACTIVITY == type){
-            // 复制终端临时表
+        }else if(TOACTIVITY == type){// 跳转拜访Activity
+            // 复制到终端购物车
             for (XtTermSelectMStc xtselect:selectedList){
-                copyMstTerminalinfoMTemp(xtselect);
+                //copyMstTerminalinfoMTemp(xtselect);
+                copyMstTerminalinfoMCart(xtselect);
             }
-            //
-            Intent intent = new Intent(getActivity(),XtVisitShopActivity.class);
-            intent.putExtra("isFirstVisit", "1");// 非第一次拜访1
-            intent.putExtra("termStc", selectedList.get(0));
-            intent.putExtra("seeFlag", "0"); // 0拜访 1查看标识
-            startActivity(intent);
+            confirmXtUplad();// 拜访
         }
     }
 
@@ -302,6 +327,151 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
     public void copyMstTerminalinfoMTemp(XtTermSelectMStc xtselect){
         MstTerminalinfoM term = xtSelectService.findTermByTerminalkey(xtselect.getTerminalkey());
         xtSelectService.toCopyMstTerminalinfoMData(term);
+    }
+
+    // 查找终端,并复制到终端购物车
+    public void copyMstTerminalinfoMCart(XtTermSelectMStc xtselect){
+        MstTerminalinfoM term = xtSelectService.findTermByTerminalkey(xtselect.getTerminalkey());
+        xtSelectService.toCopyMstTerminalinfoMCartData(term);
+    }
+
+
+
+    // 条目点击 确定拜访一家终端
+    private void confirmXtUplad() {
+        String termName = selectedList.get(0).getTerminalname();
+        // 普通窗口
+        mAlertViewExt = new AlertView(termName, null, "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert,
+                new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Object o, int position) {
+                        //Toast.makeText(getApplicationContext(), "点击了第" + position + "个", Toast.LENGTH_SHORT).show();
+                        if (0 == position) {// 确定按钮:0   取消按钮:-1
+                            //if (ViewUtil.isDoubleClick(v.getId(), 2500)) return;
+                            DbtLog.logUtils(TAG, "前往拜访：是");
+                            getDataByHttp("get_date_3","tableName","routekey","gridKey");
+                        }
+                    }
+                })
+                .setCancelable(true)
+                .setOnDismissListener(new OnDismissListener() {
+                    @Override
+                    public void onDismiss(Object o) {
+                        DbtLog.logUtils(TAG, "前往拜访：否");
+                    }
+                });
+        mAlertViewExt.show();
+    }
+
+
+    // 网络框架
+    void getDataByHttp(final String optcode, final String tableName,String routekey,String gridKey) {
+
+        String content = "";
+        if("get_date_3".equals(optcode)&&"MST_TERMINALINFO_M".equals(tableName)){
+            content =  "{routekey:'"+routekey+"'," +
+                    "tablename:'MST_TERMINALINFO_M'" +
+                    "}";
+        }
+
+        else if("get_date_3".equals(optcode)&&"".equals(tableName)){
+            content  = "{"+
+                    "routekey:'"+routekey+"'," +
+                    "gridKey:'"+gridKey+"'," +
+                    "tablename:'"+tableName+"'" +
+                    "}";
+
+        }
+
+
+
+        // 组建请求Json
+        // 组建请求Json
+        RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(getContext());
+        requestHeadStc.setUsercode("50000");
+        requestHeadStc.setPassword("a1234567");
+        requestHeadStc.setOptcode(optcode);
+        RequestStructBean reqObj = HttpParseJson.parseRequestStructBean(requestHeadStc, content);
+
+        // 压缩请求数据
+        String jsonZip = HttpParseJson.parseRequestJson(reqObj);
+
+        RestClient.builder()
+                .url(HttpUrl.IP_END)
+                .params("data", jsonZip)
+                .loader(getContext())
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+                        String json = HttpParseJson.parseJsonResToString(response);
+                        ResponseStructBean resObj = new ResponseStructBean();
+                        resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
+                        //Toast.makeText(getActivity(), resObj.getResBody().getContent()+""+resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
+                        // 保存登录信息
+                        if(ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())){
+                            // 保存信息
+                            if("get_date_3".equals(optcode)&&"MST_MARKETAREA_GRID_ROUTE_M".equals(tableName)){
+                                String formjson = resObj.getResBody().getContent();
+                                parseTermListJson(formjson);
+                                Toast.makeText(getActivity(), "请求终端数据成功", Toast.LENGTH_SHORT).show();
+                            }
+
+                            if("get_date_3".equals(optcode)&&"MST_MARKETAREA_GRID_ROUTE_M".equals(tableName)){
+                                String formjson = resObj.getResBody().getContent();
+                                parseTermInfoJson(formjson);
+                                Toast.makeText(getActivity(), "请求终端数据成功", Toast.LENGTH_SHORT).show();
+                            }
+
+
+                        }else{
+                            Toast.makeText(getActivity(), resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .error(new IError() {
+                    @Override
+                    public void onError(int code, String msg) {
+                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .failure(new IFailure() {
+                    @Override
+                    public void onFailure() {
+                        Toast.makeText(getContext(), "请求失败", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .builde()
+                .post();
+    }
+
+    // 解析路线key下的终端
+    private void parseTermListJson(String json) {
+        // 解析区域定格路线信息
+        AreaGridRoute emp = JsonUtil.parseJson(json, AreaGridRoute.class);
+        String MST_TERMINALINFO_M = emp.getMST_TERMINALINFO_M();
+
+        MainService service = new MainService(getActivity(),null);
+        service.createOrUpdateTable(MST_TERMINALINFO_M,"MST_TERMINALINFO_M",MstTerminalinfoM.class);
+        initTermListData(routeKey);
+        setItemAdapterListener();
+    }
+    // 解析某个终端上次拜访详情
+    private void parseTermInfoJson(String json) {
+        // 解析区域定格路线信息
+        AreaGridRoute emp = JsonUtil.parseJson(json, AreaGridRoute.class);
+        String MST_TERMINALINFO_M = emp.getMST_TERMINALINFO_M();
+
+        MainService service = new MainService(getActivity(),null);
+        service.createOrUpdateTable(MST_TERMINALINFO_M,"MST_TERMINALINFO_M",MstTerminalinfoM.class);
+        //initTermListData(routeKey);
+        //setItemAdapterListener();
+
+        //
+        Intent intent = new Intent(getActivity(),XtVisitShopActivity.class);
+        intent.putExtra("isFirstVisit", "1");// 非第一次拜访1
+        intent.putExtra("termStc", selectedList.get(0));
+        intent.putExtra("seeFlag", "0"); // 0拜访 1查看标识
+        startActivity(intent);
     }
 
 }

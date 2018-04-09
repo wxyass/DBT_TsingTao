@@ -37,6 +37,8 @@ import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.db.dao.MstTerminalinfoMDao;
 import et.tsingtaopad.db.dao.MstTerminalinfoMTempDao;
+import et.tsingtaopad.db.dao.MstVisitMDao;
+import et.tsingtaopad.db.dao.MstVisitMTempDao;
 import et.tsingtaopad.db.dao.PadChecktypeMDao;
 import et.tsingtaopad.db.table.CmmDatadicM;
 import et.tsingtaopad.db.table.MstInvalidapplayInfo;
@@ -162,6 +164,26 @@ public class XtSayhiService extends XtShopVisitService {
             if (termLevel.equals(item.getParentcode())) {
                 kvLst.add(new KvStc(item.getDiccode(),
                         item.getDicname(), item.getParentcode()));
+            } else if (kvLst.size() > 0) {
+                break;
+            }
+        }
+        return kvLst;
+    }
+
+    /**
+     * 初始化拜访对象职位(老板老板娘)
+     */
+    public List<KvStc> initVisitPosition() {
+        List<CmmDatadicM> dataDicLst = initDataDictionary();
+        // 获取数据字典表中区域字典对应的父ID
+        String areaType=PropertiesUtil.getProperties("datadic_visitposition");
+
+        List<KvStc> kvLst = new ArrayList<KvStc>();
+        for (CmmDatadicM item : dataDicLst) {
+            if (areaType.equals(item.getParentcode())) {
+                kvLst.add(new KvStc(item.getDiccode()
+                        , item.getDicname(), item.getParentcode()));
             } else if (kvLst.size() > 0) {
                 break;
             }
@@ -376,13 +398,13 @@ public class XtSayhiService extends XtShopVisitService {
             msgId = R.string.termadd_msg_invalbelogline;
         } else if ("-1".equals(termInfo.getTlevel()) ||CheckUtil.isBlankOrNull(termInfo.getTlevel())) {
             msgId = R.string.termadd_msg_invaltermlevel;
-        } else if ("-1".equals(termInfo.getProvince()) || CheckUtil.isBlankOrNull(termInfo.getProvince())) {
+        } /*else if ("-1".equals(termInfo.getProvince()) || CheckUtil.isBlankOrNull(termInfo.getProvince())) {
             msgId = R.string.termadd_msg_invalprov;
         } else if ("-1".equals(termInfo.getCity()) ||CheckUtil.isBlankOrNull(termInfo.getCity())) {
             msgId = R.string.termadd_msg_invalcity;
         } else if ("-1".equals(termInfo.getCounty())) {
             msgId = R.string.termadd_msg_invalcountry;
-        } else if (CheckUtil.isBlankOrNull(termInfo.getAddress())) {
+        }*/ else if (CheckUtil.isBlankOrNull(termInfo.getAddress())) {
             msgId = R.string.termadd_msg_invaladdress;
         } else if (CheckUtil.isBlankOrNull(termInfo.getContact())) {
             msgId = R.string.termadd_msg_invalcontact;
@@ -444,6 +466,23 @@ public class XtSayhiService extends XtShopVisitService {
             } catch (SQLException e) {
                 Log.e(TAG, "获取终端表DAO对象失败", e);
             }
+        }
+    }
+
+    /**
+     * 保存拜访主表信息
+     *
+     * @param visitInfo
+     */
+    public void updateVisit(MstVisitMTemp visitInfo) {
+
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            MstVisitMTempDao dao = helper.getDao(MstVisitMTemp.class);
+            dao.update(visitInfo);
+
+        } catch (SQLException e) {
+            Log.e(TAG, "获取拜访主表DAO对象失败", e);
         }
     }
 

@@ -127,6 +127,7 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
     private List<KvStc> dataDicByTermLevelLst = new ArrayList<>();
     private List<KvStc> dataDicByAreaTypeLst = new ArrayList<>();
     private List<KvStc> sellchanneldataLst = new ArrayList<>();
+    private List<KvStc> visitpositionLst = new ArrayList<>();
     private List<KvStc> sellchannelLst = new ArrayList<>();
     private List<KvStc> mainchannelLst = new ArrayList<>();
     private List<KvStc> minorchannelLst = new ArrayList<>();
@@ -136,9 +137,6 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
     public static final int NOT_TERMSTATUS = 12;
     public static final int DATA_ARROR = 13;
     MyHandler handler;
-
-
-
 
     /**
      * 接收子线程消息的 Handler
@@ -231,6 +229,7 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_xtbf_sayhi, container, false);
+
         initView(view);
         return view;
     }
@@ -312,8 +311,8 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
 
         // 初始化页面数据
         //initData();initData2();
+        PrefUtils.putBoolean(getActivity(),GlobalValues.SAYHIREADY,true);
         initViewData();// 子线程查找数据
-        //Toast.makeText(getActivity(), "打招呼" + "/" + termId + "/" + termName, Toast.LENGTH_SHORT).show();
 
         // 设置监听
 
@@ -350,6 +349,7 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         dataDicByAreaTypeLst = xtSayhiService.initDataDicByAreaType();
         // 销售渠道集合
         sellchanneldataLst = xtSayhiService.initDataDicBySellChannel();
+        visitpositionLst = xtSayhiService.initVisitPosition();
         // 销售渠道集合
         sellchannelLst = getSellChannelList(sellchanneldataLst);
         // 主渠道集合
@@ -474,7 +474,7 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
 
 
         }
-
+        PrefUtils.putBoolean(getActivity(),GlobalValues.SAYHIREADY,true);
     }
 
 
@@ -620,6 +620,7 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
                 break;
             case R.id.xtbf_sayhi_rl_termminorchannel:// 次渠道
 
+
                 minorchannelLst = getMinorchannelLst(mainchannelLst);
                 mAlertViewExt = new AlertView("请选择次渠道", null, null, null, null, getActivity(), AlertView.Style.ActionSheet, this);
                 ViewGroup minorchannelareaextView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_list_form, null);
@@ -642,6 +643,23 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
                 break;
             case R.id.xtbf_sayhi_rl_termpersion:// 拜访对象
 
+                mAlertViewExt = new AlertView("请选择拜访对象", null, null, null, null, getActivity(), AlertView.Style.ActionSheet, this);
+                ViewGroup visitpositionView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_list_form, null);
+                ListView visitpositionlistview = (ListView) visitpositionView.findViewById(R.id.alert_list);
+                AlertKeyValueAdapter visitpositionkeyValueAdapter = new AlertKeyValueAdapter(getActivity(), visitpositionLst,
+                        new String[]{"key", "value"}, visitMTemp.getVisitposition());
+                visitpositionlistview.setAdapter(visitpositionkeyValueAdapter);
+                visitpositionlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        xttermpersion.setText(visitpositionLst.get(position).getValue());
+                        visitMTemp.setVisitposition(visitpositionLst.get(position).getKey());
+                        mAlertViewExt.dismiss();
+                    }
+                });
+                mAlertViewExt.addExtView(visitpositionView);
+                mAlertViewExt.setCancelable(true).setOnDismissListener(this);
+                mAlertViewExt.show();
 
                 break;
 
@@ -754,8 +772,9 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         Long time5 = new Date().getTime();
 
         // 如果是查看操作，则不做数据校验及数据处理
-        if (ConstValues.FLAG_1.equals(seeFlag))
-            return;
+        if (ConstValues.FLAG_1.equals(seeFlag))return;
+
+        if(!PrefUtils.getBoolean(getActivity(),GlobalValues.SAYHIREADY,false))return;
 
         // 终端状态为有效时才保存相关信息
         if (xttermstatusSw.getStatus()) {
@@ -794,27 +813,9 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
             } else {
                 visitMTemp.setCmptreaty(xtvieprotocolCb.isChecked() ? ConstValues.FLAG_1: ConstValues.FLAG_0);
             }
-            /*visitMTemp.setVisituser(visitPersonEt.getText().toString());
-
-            // 当页面切换太快,页面数据(拜访对象职位)来不及初始化,导致页面数据保存时,系统崩溃
-            String visitpotion = "-1";
-            try {
-                visitpotion = laobanSp.getTag().toString();
-            } catch (Exception e) {
-                Log.e(TAG, "当页面切换太快,页面数据(拜访对象职位)来不及初始化", e);
-            }
-            if(!("-1".equals(visitpotion)||"66AA9D3A55374232891C964350610930".equals(visitpotion))){ //"-1",其他 根据原先用户是什么,不做处理
-                String visitpositionName = service.getVisitpositionName(visitpotion);
-                visitMTemp.setVisituser(visitpositionName);
-            }
-            visitMTemp.setVisitposition(visitpotion);
-
-            if (belongLineSp.getTag() != null
-                    && !CheckUtil.isBlankOrNull(belongLineSp.getTag()
-                    .toString())) {
-                visitMTemp.setRoutekey(belongLineSp.getTag().toString());
-            }
-            service.updateVisit(visitMTemp);*/
+            visitMTemp.setVisituser(xttermpersion.getText().toString());
+            visitMTemp.setVisitposition(visitMTemp.getVisitposition());
+            xtSayhiService.updateVisit(visitMTemp);
 
             // 保存终端信息
             if (termInfoTemp != null) {

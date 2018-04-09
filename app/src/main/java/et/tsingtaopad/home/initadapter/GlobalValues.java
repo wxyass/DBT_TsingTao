@@ -22,6 +22,8 @@ public class GlobalValues {
 
     // 登录信息缓存Key
     public static final String LOGINSESSIONKEY = "loginSesion";
+    // 打招呼是否读取完整
+    public static final String SAYHIREADY = "sayhiready";
     //今日要事是否允许提醒
     public static boolean isDayThingWarn = false;
 

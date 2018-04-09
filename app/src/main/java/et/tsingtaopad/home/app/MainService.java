@@ -11,8 +11,10 @@ import com.j256.ormlite.dao.Dao;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import cn.com.benyoyo.manage.bs.IntStc.DataSynStc;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
@@ -236,6 +238,18 @@ public class MainService extends XtShopVisitService {
     List<MstGridM> mstGridMs = null;
     List<MstRouteM> mstRouteMs = null;
 
+    List<CmmDatadicM> mstDatadicMs = null;
+    List<CmmAreaM> mstAreaMs = null;
+    List<MstPromotionsM> mstPromotionsMs = null;
+    List<MstPromoproductInfo> mstPromoproductInfos = null;
+    List<MstPictypeM> mstPictypeMs = null;
+    List<MstProductM> mstProductMs = null;
+
+    List<MstCmpcompanyM> mstCmpcompanyMs = null;
+    List<MstCmpbrandsM> mstCmpbrandsMs = null;
+    List<MstCmproductinfoM> mstCmproductinfoMs = null;
+    List<MstTerminalinfoM> mstTerminalinfoMs = null;
+
     /**
      * 图片类型表更新 注意本张表并不是差量插入,而是先全部删除,再全部插入 MST_PICTYPE_M 因为数量少
      *
@@ -268,6 +282,47 @@ public class MainService extends XtShopVisitService {
                 mstRouteMs= (List<MstRouteM>) JsonUtil.parseList(json, cls);
                 updateData(mstRouteMDao, mstRouteMs);
             }
+            else if(mClass.contains("CmmDatadicM")){
+                mstDatadicMs= (List<CmmDatadicM>) JsonUtil.parseList(json, cls);
+                updateData(cmmDatadicMDao, mstDatadicMs);
+            }
+            else if(mClass.contains("CmmAreaM")){
+                mstAreaMs= (List<CmmAreaM>) JsonUtil.parseList(json, cls);
+                updateData(cmmAreaMDao, mstAreaMs);
+            }
+            else if(mClass.contains("MstPromotionsM")){
+                mstPromotionsMs= (List<MstPromotionsM>) JsonUtil.parseList(json, cls);
+                updateData(mstPromotionsMDao, mstPromotionsMs);
+            }
+            else if(mClass.contains("MstPromoproductInfo")){
+                mstPromoproductInfos= (List<MstPromoproductInfo>) JsonUtil.parseList(json, cls);
+                updateData(mstPromoproductInfoDao, mstPromoproductInfos);
+            }
+            else if(mClass.contains("MstPictypeM")){
+                mstPictypeMs= (List<MstPictypeM>) JsonUtil.parseList(json, cls);
+                updateData(mstpictypeMDao, mstPictypeMs);
+            }
+            else if(mClass.contains("MstProductM")){
+                mstProductMs= (List<MstProductM>) JsonUtil.parseList(json, cls);
+                updateData(mstProductMDao, mstProductMs);
+            }
+
+            else if(mClass.contains("MstCmpcompanyM")){
+                mstCmpcompanyMs= (List<MstCmpcompanyM>) JsonUtil.parseList(json, cls);
+                updateData(mstCmpcompanyMDao, mstCmpcompanyMs);
+            }
+            else if(mClass.contains("MstCmpbrandsM")){
+                mstCmpbrandsMs= (List<MstCmpbrandsM>) JsonUtil.parseList(json, cls);
+                updateData(mstCmpbrandsMDao, mstCmpbrandsMs);
+            }
+            else if(mClass.contains("MstCmproductinfoM")){
+                mstCmproductinfoMs= (List<MstCmproductinfoM>) JsonUtil.parseList(json, cls);
+                updateData(mstCmproductinfoMDao, mstCmproductinfoMs);
+            }
+            else if(mClass.contains("MstTerminalinfoM")){
+                mstTerminalinfoMs= (List<MstTerminalinfoM>) JsonUtil.parseList(json, cls);
+                updateData(mstTerminalinfoMDao, mstTerminalinfoMs);
+            }
 
             connection.commit(null);
             Log.e(TAG, "createOrUpdateTable 2 transation");
@@ -281,6 +336,92 @@ public class MainService extends XtShopVisitService {
             }
             throw new RuntimeException(" 更新表出错" + e.toString());
         }
+    }
+
+    public void  parsePadCheckType(String strPAD_CHECKTYPE_M){
+
+        Log.e(TAG, "createOrUpdateTable");
+        AndroidDatabaseConnection connection = null;
+        try {
+            SQLiteDatabase database = helper.getWritableDatabase();
+            connection = new AndroidDatabaseConnection(database, true);
+            connection.setAutoCommit(false);
+            Log.e(TAG, "createOrUpdateTable 1 transation");
+
+            if (strPAD_CHECKTYPE_M != null && !"".equals(strPAD_CHECKTYPE_M.trim())) {
+                Map<String, Object> qudaoMap = JsonUtil.parseMap(strPAD_CHECKTYPE_M);// 有数
+                Set<Map.Entry<String, Object>> qudaoEntrySet = qudaoMap.entrySet();
+                Iterator<Map.Entry<String, Object>> iterator = qudaoEntrySet.iterator();
+
+                while (iterator.hasNext()) {
+                    Map.Entry<String, Object> next = iterator.next();
+                    String minorchannel = next.getKey();// 取出所有渠道号
+                    Log.i(TAG, "渠道号码" + minorchannel);
+                    // 取出表数据更新数据
+                    String childTableStr = (String) next.getValue();
+                    Map<String, Object> qudaoChilidTableMaps = JsonUtil.parseMap(childTableStr);
+                    String deleteFlag = (String) qudaoChilidTableMaps.get("DELETEFLAG");
+                    Log.e(TAG, "deleteFlag=" + deleteFlag);
+
+                    if ("1".equals(deleteFlag)) {// web端写死了恒等于1
+                        // 根据渠道号删除数据
+                        String sql_delete_PAD_CHECKPRO_INFO = "delete from PAD_CHECKPRO_INFO where minorchannel = ?";
+                        String sql_delete_PAD_CHECKACCOMPLISH_INFO = "delete from PAD_CHECKACCOMPLISH_INFO where minorchannel = ?";
+                        String sql_delete_PAD_CHECKTYPE_M = "delete from PAD_CHECKTYPE_M where minorchannel = ?";
+
+                        String deleteArgs[] = { minorchannel };
+                        if (database.isOpen()) {
+                            database.execSQL(sql_delete_PAD_CHECKPRO_INFO, deleteArgs);
+                            database.execSQL(sql_delete_PAD_CHECKACCOMPLISH_INFO, deleteArgs);
+                            database.execSQL(sql_delete_PAD_CHECKTYPE_M, deleteArgs);
+                        }
+
+                    }
+
+                    String childPAD_CHECKTYPE_M = (String) qudaoChilidTableMaps.get("PAD_CHECKTYPE_M");
+                    List<PadChecktypeM> padChecktypeMs = JsonUtil.parseList(childPAD_CHECKTYPE_M,PadChecktypeM.class);
+                    String strPAD_CHECKACCOMPLISH_INFO = (String) qudaoChilidTableMaps.get("PAD_CHECKACCOMPLISH_INFO");
+                    List<PadCheckaccomplishInfo> padCheckaccomplishInfos = JsonUtil.parseList(strPAD_CHECKACCOMPLISH_INFO, PadCheckaccomplishInfo.class);
+                    String strPAD_CHECKPRO_INFO = (String) qudaoChilidTableMaps.get("PAD_CHECKPRO_INFO");
+                    List<PadCheckproInfo> padCheckproInfos = JsonUtil.parseList(strPAD_CHECKPRO_INFO,PadCheckproInfo.class);
+
+                    // 更新主表
+                    if (padChecktypeMs != null && !padChecktypeMs.isEmpty()) {
+                        // updateData(padChecktypeMDao, padChecktypeMs);
+                        saveData(padChecktypeMDao, padChecktypeMs, true);
+                    }
+
+                    // PAD_CHECKACCOMPLISH_INFO(各类指标状态达成设置)
+                    if (padCheckaccomplishInfos != null && !padCheckaccomplishInfos.isEmpty()) {
+                        // updateData(padCheckaccomplishInfoDao,
+                        // padCheckaccomplishInfos);
+                        saveData(padCheckaccomplishInfoDao, padCheckaccomplishInfos, true);
+                    }
+                    if (padCheckproInfos != null && !padCheckproInfos.isEmpty()) {
+                        // PAD_CHECKPRO_INFO(PAD端指标关联产品表)
+                        // updateData(padCheckproInfoDao,
+                        // padCheckproInfos);
+                        saveData(padCheckproInfoDao, padCheckproInfos, true);
+                    }
+                }
+
+            }
+
+            connection.commit(null);
+            Log.e(TAG, "createOrUpdateTable 2 transation");
+
+        } catch (SQLException e) {
+            try {
+                connection.rollback(null);
+                Log.e(TAG, "createOrUpdateTable 3 transation", e);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+            throw new RuntimeException(" 更新表出错" + e.toString());
+        }
+
+
+
     }
 
     /**
@@ -322,6 +463,38 @@ public class MainService extends XtShopVisitService {
 
         } catch (Exception e) {
             // e.printStackTrace();
+        }
+    }
+
+    /**
+     * 保存数据
+     *
+     * @param dao
+     * @param datas
+     * @param isFull
+     *            是否全量
+     * @throws SQLException
+     */
+    private <T> void saveData(Dao<T, String> dao, List<T> datas, boolean isFull) throws SQLException {
+
+        if (!CheckUtil.IsEmpty(datas)) {
+            Log.i("updateData", "更新 " + dao.getDataClass().getName() + " size :" + datas.size());
+            for (int i = 0; i < datas.size(); i++) {
+                T data = datas.get(i);
+                setPadisconsistentAndUploadFlag(data);
+                try {
+                    dao.create(data);
+                } catch (Exception e) {
+                    DbtLog.write(e.getMessage());
+					/*MstCheckexerecordInfo ds =(MstCheckexerecordInfo)data;
+					DbtLog.write(ds.getRecordkey());*/
+                    e.printStackTrace();
+                    dao.createOrUpdate(data);
+                }
+            }
+        } else {
+            String listStatus = datas == null ? "传入对象为：null" : "数据size = 0";
+            Log.i("updateData", "更新list " + dao.getDataClass().getName() + "为：" + listStatus);
         }
     }
 

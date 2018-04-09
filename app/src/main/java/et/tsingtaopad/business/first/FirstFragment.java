@@ -4,12 +4,16 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
@@ -27,14 +31,25 @@ import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.JsonUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
+import et.tsingtaopad.db.table.CmmAreaM;
+import et.tsingtaopad.db.table.CmmDatadicM;
 import et.tsingtaopad.db.table.MstAgencygridInfo;
 import et.tsingtaopad.db.table.MstAgencyinfoM;
+import et.tsingtaopad.db.table.MstCmpbrandsM;
+import et.tsingtaopad.db.table.MstCmpcompanyM;
+import et.tsingtaopad.db.table.MstCmproductinfoM;
 import et.tsingtaopad.db.table.MstGridM;
 import et.tsingtaopad.db.table.MstMarketareaM;
 import et.tsingtaopad.db.table.MstPictypeM;
 import et.tsingtaopad.db.table.MstProductM;
 import et.tsingtaopad.db.table.MstProductareaInfo;
+import et.tsingtaopad.db.table.MstPromoproductInfo;
+import et.tsingtaopad.db.table.MstPromotionsM;
 import et.tsingtaopad.db.table.MstRouteM;
+import et.tsingtaopad.db.table.PadCheckaccomplishInfo;
+import et.tsingtaopad.db.table.PadCheckproInfo;
+import et.tsingtaopad.db.table.PadCheckstatusInfo;
+import et.tsingtaopad.db.table.PadChecktypeM;
 import et.tsingtaopad.home.app.MainService;
 import et.tsingtaopad.http.HttpParseJson;
 import et.tsingtaopad.login.domain.BsVisitEmpolyeeStc;
@@ -45,6 +60,9 @@ import et.tsingtaopad.util.requestHeadUtil;
  */
 
 public class FirstFragment extends BaseFragmentSupport implements View.OnClickListener {
+
+    private final String TAG = "FirstFragment";
+
     AppCompatButton login;
     AppCompatButton syncgrid;
     AppCompatButton syncindex;
@@ -69,22 +87,20 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
         syncpro.setOnClickListener(this);
     }
 
-
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_first_login:
+            case R.id.btn_first_login:// 登录
                 ceshiHttp("get_login_3","");
                 break;
-            case R.id.btn_first_sync_grid:
+            case R.id.btn_first_sync_grid:// 同步 定格,路线
                 ceshiHttp("get_date_3","MST_MARKETAREA_GRID_ROUTE_M");
                 break;
-            case R.id.btn_first_sync_index:
-                ceshiHttp("get_index_3","");
+            case R.id.btn_first_sync_index:// 同步 指标模板
+                ceshiHttp("get_date_3","MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO");
                 break;
-            case R.id.btn_first_sync_pro:
-                ceshiHttp("get_pro_3","");
+            case R.id.btn_first_sync_pro:// 同步 基础数据表
+                ceshiHttp("get_date_3","MST_BASEDATA_M");
                 break;
             default:
                 break;
@@ -107,6 +123,27 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                     "updatetime:''," +
                     "remarks:''," +
                     "tablename:'MST_MARKETAREA_GRID_ROUTE_M'," +
+                    "userId:'50000'}";
+        }
+
+        if("get_date_3".equals(optcode)&&"MST_BASEDATA_M".equals(table)){
+            loginjson =  "{areaid:'"+PrefUtils.getString(getActivity(),"departmentid","")+"'," +
+                    "gridKey:'163UNDF'," +
+                    "syncDay:'0'," +
+                    "synctime:''," +
+                    "updatetime:''," +
+                    "remarks:''," +
+                    "tablename:'MST_BASEDATA_M'," +
+                    "userId:'50000'}";
+        }
+        if("get_date_3".equals(optcode)&&"MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO".equals(table)){
+            loginjson =  "{areaid:'"+PrefUtils.getString(getActivity(),"departmentid","")+"'," +
+                    "gridKey:'163UNDF'," +
+                    "syncDay:'0'," +
+                    "synctime:''," +
+                    "updatetime:''," +
+                    "remarks:''," +
+                    "tablename:'MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO'," +
                     "userId:'50000'}";
         }
 
@@ -146,6 +183,16 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                                 parseTableJson(formjson);
                                 Toast.makeText(getActivity(), "区域定格路线成功", Toast.LENGTH_SHORT).show();
                             }
+                            if("get_date_3".equals(optcode)&&"MST_BASEDATA_M".equals(table)){
+                                String formjson = resObj.getResBody().getContent();
+                                parseDatadicTableJson(formjson);
+                                Toast.makeText(getActivity(), "数据字典成功", Toast.LENGTH_SHORT).show();
+                            }
+                            if("get_date_3".equals(optcode)&&"MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO".equals(table)){
+                                String formjson = resObj.getResBody().getContent();
+                                parseIndexTableJson(formjson);
+                                Toast.makeText(getActivity(), "指标数据成功", Toast.LENGTH_SHORT).show();
+                            }
 
                         }else{
                             Toast.makeText(getActivity(), resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
@@ -168,8 +215,8 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                 .post();
     }
 
+    // 解析登录者信息
     void parseJson(String json){
-
 
         // 保存登录者信息
         BsVisitEmpolyeeStc emp = JsonUtil.parseJson(json, BsVisitEmpolyeeStc.class);
@@ -230,9 +277,9 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
         }
     }
 
-    // 解析同步表
+    // 解析区域定格路线成功
     private void parseTableJson(String json) {
-        // 保存登录者信息
+        // 解析区域定格路线信息
         AreaGridRoute emp = JsonUtil.parseJson(json, AreaGridRoute.class);
         String mst_grid_m = emp.getMST_GRID_M();
         String mst_marketarea_m = emp.getMST_MARKETAREA_M();
@@ -243,4 +290,49 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
         service.createOrUpdateTable(mst_marketarea_m,"MST_MARKETAREA_M",MstMarketareaM.class);
         service.createOrUpdateTable(mst_route_m,"MST_ROUTE_M",MstRouteM.class);
     }
+
+    // 解析基础信息成功
+    private void parseDatadicTableJson(String json) {
+        // 解析基础信息
+        AreaGridRoute emp = JsonUtil.parseJson(json, AreaGridRoute.class);
+        String CMM_DATADIC_M = emp.getCMM_DATADIC_M();
+        String CMM_AREA_M = emp.getCMM_AREA_M();
+        String MST_PROMOTIONS_M = emp.getMST_PROMOTIONS_M();
+        String MST_PROMOPRODUCT_INFO = emp.getMST_PROMOPRODUCT_INFO();
+        String MST_PICTYPE_M = emp.getMST_PICTYPE_M();
+        String MST_PRODUCT_M = emp.getMST_PRODUCT_M();
+
+        String MST_CMPCOMPANY_M = emp.getMST_CMPCOMPANY_M();
+        String MST_CMPBRANDS_M = emp.getMST_CMPBRANDS_M();
+        String MST_CMPRODUCTINFO_M = emp.getMST_CMPRODUCTINFO_M();
+
+        MainService service = new MainService(getActivity(),null);
+        service.createOrUpdateTable(CMM_DATADIC_M,"CMM_DATADIC_M",CmmDatadicM.class);
+        service.createOrUpdateTable(CMM_AREA_M,"CMM_AREA_M",CmmAreaM.class);
+        service.createOrUpdateTable(MST_PROMOTIONS_M,"MST_PROMOTIONS_M",MstPromotionsM.class);
+        service.createOrUpdateTable(MST_PROMOPRODUCT_INFO,"MST_PROMOPRODUCT_INFO",MstPromoproductInfo.class);
+        service.createOrUpdateTable(MST_PICTYPE_M,"MST_PICTYPE_M",MstPictypeM.class);
+        service.createOrUpdateTable(MST_PRODUCT_M,"MST_PRODUCT_M",MstProductM.class);
+        service.createOrUpdateTable(MST_CMPCOMPANY_M,"MST_CMPCOMPANY_M",MstCmpcompanyM.class);
+        service.createOrUpdateTable(MST_CMPBRANDS_M,"MST_CMPBRANDS_M",MstCmpbrandsM.class);
+        service.createOrUpdateTable(MST_CMPRODUCTINFO_M,"MST_CMPRODUCTINFO_M",MstCmproductinfoM.class);
+    }
+
+
+    // 解析指标数据成功
+    private void parseIndexTableJson(String json) {
+        // 解析指标数据
+        AreaGridRoute emp = JsonUtil.parseJson(json, AreaGridRoute.class);
+
+        String PAD_CHECKSTATUS_INFO = emp.getMST_CHECKSTATUS_INFO();
+        String MST_COLLECTIONTEMPLATE_M = emp.getMST_COLLECTIONTEMPLATE_M();
+
+        MainService service = new MainService(getActivity(),null);
+        service.createOrUpdateTable(PAD_CHECKSTATUS_INFO,"PAD_CHECKSTATUS_INFO",PadCheckstatusInfo.class);
+        service.parsePadCheckType(MST_COLLECTIONTEMPLATE_M);
+    }
+
+
+
+
 }
