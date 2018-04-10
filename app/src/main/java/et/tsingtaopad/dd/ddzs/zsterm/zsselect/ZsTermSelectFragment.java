@@ -1,7 +1,5 @@
-package et.tsingtaopad.dd.ddxt.term.select;
+package et.tsingtaopad.dd.ddzs.zsterm.zsselect;
 
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatTextView;
@@ -16,7 +14,6 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import et.tsingtaopad.R;
@@ -31,7 +28,6 @@ import et.tsingtaopad.core.net.domain.RequestHeadStc;
 import et.tsingtaopad.core.net.domain.RequestStructBean;
 import et.tsingtaopad.core.net.domain.ResponseStructBean;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
-import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.JsonUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
@@ -41,24 +37,16 @@ import et.tsingtaopad.core.view.alertview.OnDismissListener;
 import et.tsingtaopad.core.view.alertview.OnItemClickListener;
 import et.tsingtaopad.core.view.dropdownmenu.DropBean;
 import et.tsingtaopad.core.view.dropdownmenu.DropdownButton;
-import et.tsingtaopad.db.table.MstAgencygridInfo;
-import et.tsingtaopad.db.table.MstAgencyinfoM;
-import et.tsingtaopad.db.table.MstAgencysupplyInfo;
-import et.tsingtaopad.db.table.MstCheckexerecordInfo;
-import et.tsingtaopad.db.table.MstCmpsupplyInfo;
-import et.tsingtaopad.db.table.MstCollectionexerecordInfo;
 import et.tsingtaopad.db.table.MstGridM;
-import et.tsingtaopad.db.table.MstGroupproductM;
 import et.tsingtaopad.db.table.MstMarketareaM;
-import et.tsingtaopad.db.table.MstPromotermInfo;
 import et.tsingtaopad.db.table.MstRouteM;
 import et.tsingtaopad.db.table.MstTerminalinfoM;
-import et.tsingtaopad.db.table.MstVisitM;
-import et.tsingtaopad.db.table.MstVistproductInfo;
-import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
 import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartFragment;
+import et.tsingtaopad.dd.ddxt.term.select.IXtTermSelectClick;
+import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectService;
 import et.tsingtaopad.dd.ddxt.term.select.adapter.XtTermSelectAdapter;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
+import et.tsingtaopad.dd.ddzs.zsterm.zscart.ZsTermCartFragment;
 import et.tsingtaopad.home.app.MainService;
 import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.http.HttpParseJson;
@@ -68,9 +56,9 @@ import et.tsingtaopad.util.requestHeadUtil;
  * Created by yangwenmin on 2018/3/12.
  */
 
-public class XtTermSelectFragment extends BaseFragmentSupport implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class ZsTermSelectFragment extends BaseFragmentSupport implements View.OnClickListener, AdapterView.OnItemClickListener {
 
-    private final String TAG = "XtTermSelectFragment";
+    private final String TAG = "ZsTermSelectFragment";
 
     private RelativeLayout backBtn;
     private RelativeLayout confirmBtn;
@@ -130,7 +118,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        titleTv.setText(R.string.xtbf_selectterm);
+        titleTv.setText(R.string.zdzs_selectterm);
 
         xtSelectService = new XtTermSelectService(getActivity());
 
@@ -289,10 +277,8 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
                 break;
             case R.id.top_navigation_rl_confirm:// 确定
                 // 生成临时表,跳转终端购物车
-
                 breakNextLayout(TOFRAGMENT, selectedList);
-                PrefUtils.putString(getActivity(), GlobalValues.DDXTZS,"1");
-
+                PrefUtils.putString(getActivity(), GlobalValues.DDXTZS,"2");
                 break;
             default:
                 break;
@@ -328,7 +314,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
             // 销毁当前Fragment
             supportFragmentManager.popBackStack();
             // 跳转终端购物车
-            changeHomeFragment(new XtTermCartFragment(), "xttermcartfragment");
+            changeHomeFragment(new ZsTermCartFragment(), "zstermcartfragment");
         } else if (TOACTIVITY == type) {// 跳转拜访Activity
             // 复制到终端购物车
             for (XtTermSelectMStc xtselect : selectedList) {
@@ -469,35 +455,17 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
     private void parseTermDetailInfoJson(String json) {
         // 解析区域定格路线信息
         AreaGridRoute emp = JsonUtil.parseJson(json, AreaGridRoute.class);
-        String MST_AGENCYGRID_INFO = emp.getMST_AGENCYGRID_INFO();
-        String MST_AGENCYINFO_M = emp.getMST_AGENCYINFO_M();
-        String MST_AGENCYSUPPLY_INFO = emp.getMST_AGENCYSUPPLY_INFO();
-        String MST_CHECKEXERECORD_INFO = emp.getMST_CHECKEXERECORD_INFO();
-        String MST_CMPSUPPLY_INFO = emp.getMST_CMPSUPPLY_INFO();
-        String MST_COLLECTIONEXERECORD_INFO = emp.getMST_COLLECTIONEXERECORD_INFO();
-        String MST_GROUPPRODUCT_M = emp.getMST_GROUPPRODUCT_M();
-        String MST_PROMOTERM_INFO = emp.getMST_PROMOTERM_INFO();
-        String MST_VISIT_M = emp.getMST_VISIT_M();
-        String MST_VISTPRODUCT_INFO = emp.getMST_VISTPRODUCT_INFO();
+        String MST_TERMINALINFO_M = emp.getMST_TERMINALINFO_M();
 
         MainService service = new MainService(getActivity(), null);
-        service.createOrUpdateTable(MST_AGENCYGRID_INFO, "MST_AGENCYGRID_INFO", MstAgencygridInfo.class);
-        service.createOrUpdateTable(MST_AGENCYINFO_M, "MST_AGENCYINFO_M", MstAgencyinfoM.class);
-        service.createOrUpdateTable(MST_AGENCYSUPPLY_INFO, "MST_AGENCYSUPPLY_INFO", MstAgencysupplyInfo.class);
-        service.createOrUpdateTable(MST_CHECKEXERECORD_INFO, "MST_CHECKEXERECORD_INFO", MstCheckexerecordInfo.class);
-        service.createOrUpdateTable(MST_CMPSUPPLY_INFO, "MST_CMPSUPPLY_INFO", MstCmpsupplyInfo.class);
-        service.createOrUpdateTable(MST_COLLECTIONEXERECORD_INFO, "MST_COLLECTIONEXERECORD_INFO", MstCollectionexerecordInfo.class);
-        service.createOrUpdateTable(MST_GROUPPRODUCT_M, "MST_GROUPPRODUCT_M", MstGroupproductM.class);
-        service.createOrUpdateTable(MST_PROMOTERM_INFO, "MST_PROMOTERM_INFO", MstPromotermInfo.class);
-        service.createOrUpdateTable(MST_VISIT_M, "MST_VISIT_M", MstVisitM.class);
-        service.createOrUpdateTable(MST_VISTPRODUCT_INFO, "MST_VISTPRODUCT_INFO", MstVistproductInfo.class);
+        service.createOrUpdateTable(MST_TERMINALINFO_M, "MST_TERMINALINFO_M", MstTerminalinfoM.class);
 
         //
-        Intent intent = new Intent(getActivity(), XtVisitShopActivity.class);
+        /*Intent intent = new Intent(getActivity(), XtVisitShopActivity.class);
         intent.putExtra("isFirstVisit", "1");// 非第一次拜访1
         intent.putExtra("termStc", selectedList.get(0));
         intent.putExtra("seeFlag", "0"); // 0拜访 1查看标识
-        startActivity(intent);
+        startActivity(intent);*/
     }
 
 }

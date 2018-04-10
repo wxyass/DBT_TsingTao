@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,9 +23,11 @@ import et.tsingtaopad.R;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
+import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.dd.ddxt.invoicing.domain.XtInvoicingStc;
+import et.tsingtaopad.dd.ddxt.invoicing.listener.ILongClick;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.invoicing.InvoicingService;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.invoicing.adapter.InvoicingCheckGoodsAdapter;
 
@@ -32,8 +35,7 @@ import et.tsingtaopad.main.visit.shopvisit.termvisit.invoicing.adapter.Invoicing
  * Created by yangwenmin on 2018/3/19.
  */
 
-public class XtInvoicingAskGoodsAdapter extends BaseAdapter
-        implements  View.OnFocusChangeListener{
+public class XtInvoicingAskGoodsAdapter extends BaseAdapter {//implements  View.OnFocusChangeListener{
 
 
     private final String TAG = "XtInvoicingAskGoodsAdapter";
@@ -48,9 +50,10 @@ public class XtInvoicingAskGoodsAdapter extends BaseAdapter
     private int delPosition = -1;
     private AlertDialog dialog;
     private String seeFlag;
+    private ILongClick listener;
 
     public XtInvoicingAskGoodsAdapter(Activity context, String seeFlag, List<XtInvoicingStc> dataLst,
-            String termId, String visitId, InvoicingCheckGoodsAdapter checkAdapter,ListView askGoodsLv,ListView checkGoodsLv) {
+                                      String termId, String visitId, InvoicingCheckGoodsAdapter checkAdapter, ListView askGoodsLv, ListView checkGoodsLv, ILongClick listener) {
         this.context = context;
         this.seeFlag = seeFlag;
         this.dataLst = dataLst;
@@ -59,6 +62,7 @@ public class XtInvoicingAskGoodsAdapter extends BaseAdapter
         this.checkAdapter = checkAdapter;
         this.askGoodsLv=askGoodsLv;
         this.checkGoodsLv=checkGoodsLv;
+        this.listener=listener;
     }
 
     @Override
@@ -93,6 +97,7 @@ public class XtInvoicingAskGoodsAdapter extends BaseAdapter
             holder = new ViewHolder();
 
             convertView = LayoutInflater.from(context).inflate(R.layout.item_xtbf_invoicing_askgoods, null);
+            holder.itemaskgoodsLl = (LinearLayout)convertView.findViewById(R.id.item_askgoods_ll);
             holder.productNameTv = (TextView)convertView.findViewById(R.id.item_askgoods_tv_proname);
             holder.agencyTv = (TextView)convertView.findViewById(R.id.item_askgoods_tv_agencyname);
             holder.channelPriceEt = (EditText)convertView.findViewById(R.id.item_askgoods_et_qudao);
@@ -144,14 +149,19 @@ public class XtInvoicingAskGoodsAdapter extends BaseAdapter
         holder.agencyTv.setHint(item.getAgencyId());
         holder.agencyTv.setText(item.getAgencyName());
 
+        holder.itemaskgoodsLl.setTag(position);
+        holder.itemaskgoodsLl.setOnLongClickListener(listener);
+
         return convertView;
     }
 
     private class ViewHolder {
+        private LinearLayout itemaskgoodsLl;
         private TextView productNameTv;
+        private TextView agencyTv;
         private EditText channelPriceEt;
         private EditText sellPriceEt;
-        private TextView agencyTv;
+
         private Button deleteIv;
     }
 
@@ -219,7 +229,7 @@ public class XtInvoicingAskGoodsAdapter extends BaseAdapter
     }
      */
 
-    @Override
+    /*@Override
     public void onFocusChange(View v, boolean hasFocus) {
 
         boolean hasFocus2 = hasFocus;
@@ -233,123 +243,24 @@ public class XtInvoicingAskGoodsAdapter extends BaseAdapter
         if (position > -1) {
             XtInvoicingStc stc = dataLst.get(position);
             String content = et.getText().toString();
+            String num = FunUtil.getDecimalsData(content);
             switch (et.getId()) {
-                case R.id.askgoods_et_channelprice:
+                case R.id.item_askgoods_et_qudao:
                     // 渠道价-判断小数点
-                    if(".".equals(content)){//
-                        stc.setChannelPrice("0.0");
-                        et.setText("0.0");// 页面
-                    }
-                    else if(content.length()>1&&content.endsWith(".")){
-                        stc.setChannelPrice(content+"0");
-                        et.setText(content+"0");// 页面
-                    }
-                    else if(content.length()>1&&content.startsWith(".")){
-            		/*stc.setChannelPrice("0"+content);
-            		et.setText("0"+content);// 页面*/
-                        // 以小数点开头,截取小数点后两位
-                        Double d = Double.parseDouble("0"+content);
-        			/*String num = new DecimalFormat("#0.00").format(d);
-            		stc.setChannelPrice(num);
-            		et.setText(num);*/
-
-            		/*d=d+0.000001;
-        			String count = String.valueOf(d);
-        			String[] split = count.split("\\.");*/
-                        String[] split = String.valueOf(d+0.000001).split("\\.");
-                        String num = split[0]+"."+split[1].substring(0, 2);
-
-                        stc.setChannelPrice(num);
-                        et.setText(num);
-
-                    }
-            	/*else if("".equals(content)){
-            		stc.setChannelPrice("0");
-            		et.setText("0");// 页面
-            	}*/
-                    else{
-            		/*stc.setChannelPrice(content);
-            		et.setText(content);// 页面
-*/
-
-
-                        if (content!=null&&(!"".equals(content))) {
-
-                            Double d = Double.parseDouble(content);
-            			/*String num = new DecimalFormat("#0.00").format(d);
-                		stc.setChannelPrice(num);
-                		et.setText(num);*/
-
-                            //String count = String.valueOf(d+0.000001);
-                            String[] split = String.valueOf(d+0.000001).split("\\.");
-                            String num = split[0]+"."+split[1].substring(0, 2);
-
-                            stc.setChannelPrice(num);
-                            et.setText(num);
-
-                        }else{
-                            stc.setChannelPrice(content);
-                            et.setText(content);
-                        }
-
-
-                    }
+                    stc.setChannelPrice(num);
+                    et.setText(num);
                     break;
-
-                case R.id.askgoods_et_sellproce:
-
+                case R.id.item_askgoods_et_lingshou:
                     // 零售价-判断小数点
-                    if(".".equals(content)){//
-                        stc.setSellPrice("0.0");
-                        et.setText("0.0");// 页面
-                    }
-                    else if(content.length()>1&&content.endsWith(".")){
-                        stc.setSellPrice(content+"0");
-                        et.setText(content+"0");// 页面
-                    }
-                    else if(content.length()>1&&content.startsWith(".")){
-            		/*stc.setSellPrice("0"+content);
-            		et.setText("0"+content);// 页面*/
-                        // 以小数点开头,截取小数点后两位
-                        Double d = Double.parseDouble("0"+content);
-                        //String num = new DecimalFormat("#0.00").format(d);
-
-                        String[] split = String.valueOf(d+0.000001).split("\\.");
-                        String num = split[0]+"."+split[1].substring(0, 2);
-                        stc.setChannelPrice(num);
-                        et.setText(num);
-                    }
-            	/*else if("".equals(content)){
-            		stc.setSellPrice("0");
-            		et.setText("0");// 页面
-            	}*/
-                    else{
-            		/*stc.setSellPrice(content);
-            		et.setText(content);// 页面
-*/
-                        if (content!=null&&(!"".equals(content))) {
-
-                            Double d = Double.parseDouble(content);
-                            //String num = new DecimalFormat("#0.00").format(d);
-                            String[] split = String.valueOf(d+0.000001).split("\\.");
-                            String num = split[0]+"."+split[1].substring(0, 2);
-                            stc.setChannelPrice(num);
-                            et.setText(num);
-                        }else{
-                            stc.setChannelPrice(content);
-                            et.setText(content);
-                        }
-                    }
-
-
+                    stc.setSellPrice(num);
+                    et.setText(num);// 页面
                     break;
 
                 default:
-
                     break;
             }
         }
-    }
+    }*/
 
     public int getDelPosition() {
         return delPosition;

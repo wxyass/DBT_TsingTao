@@ -26,6 +26,7 @@
         </activity>
 
         <activity android:name=".dd.ddxt.shopvisit.XtVisitShopActivity" />
+        <activity android:name=".dd.ddzs.zsshopvisit.ZsVisitShopActivity" />
 
     </application>
 

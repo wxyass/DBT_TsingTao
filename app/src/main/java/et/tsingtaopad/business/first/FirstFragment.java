@@ -31,6 +31,7 @@ import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.JsonUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
+import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.db.table.CmmAreaM;
 import et.tsingtaopad.db.table.CmmDatadicM;
 import et.tsingtaopad.db.table.MstAgencygridInfo;
@@ -91,16 +92,31 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_first_login:// 登录
-                ceshiHttp("get_login_3","");
+                String   loginjson = "{usercode:'50000', password:'a1234567',version:'2.5',padid:'dsfwerolkjqiwurywhl'}";
+                toLogin("opt_get_login","","",loginjson);
                 break;
             case R.id.btn_first_sync_grid:// 同步 定格,路线
-                ceshiHttp("get_date_3","MST_MARKETAREA_GRID_ROUTE_M");
+                String content  = "{"+
+                        "areaid:'"+PrefUtils.getString(getActivity(),"departmentid","")+"'," +
+                        "tablename:'"+"MST_MARKETAREA_GRID_ROUTE_M"+"'" +
+                        "}";
+                ceshiHttp("opt_get_dates2","MST_MARKETAREA_GRID_ROUTE_M",content);
                 break;
             case R.id.btn_first_sync_index:// 同步 指标模板
-                ceshiHttp("get_date_3","MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO");
+
+
+                String content2  = "{"+
+                        "areaid:'"+PrefUtils.getString(getActivity(),"departmentid","")+"'," +
+                        "tablename:'"+"MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO"+"'" +
+                        "}";
+                ceshiHttp("opt_get_dates2","MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO",content2);
                 break;
             case R.id.btn_first_sync_pro:// 同步 基础数据表
-                ceshiHttp("get_date_3","MST_BASEDATA_M");
+                String content1  = "{"+
+                        "areaid:'"+PrefUtils.getString(getActivity(),"departmentid","")+"'," +
+                        "tablename:'"+"MST_BASEDATA_M"+"'" +
+                        "}";
+                ceshiHttp("opt_get_dates2","MST_BASEDATA_M",content1);
                 break;
             default:
                 break;
@@ -108,52 +124,24 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
     }
 
     // 测试登录网络框架
-    void ceshiHttp(final String optcode, final String table) {
 
-        String loginjson = "";
-        if("get_login_3".equals(optcode)&&"".equals(table)){
-            loginjson = "{usercode:'50000', password:'a1234567',version:'2.5',padid:'dsfwerolkjqiwurywhl'}";
-        }
+    /**
+     * 同步表数据
+     *
+     * @param optcode   请求码
+     * @param table     请求表名(请求不同的)
+     * @param content   请求json
+     */
+    void ceshiHttp(final String optcode, final String table,String content) {
 
-        if("get_date_3".equals(optcode)&&"MST_MARKETAREA_GRID_ROUTE_M".equals(table)){
-            loginjson =  "{areaid:'"+PrefUtils.getString(getActivity(),"departmentid","")+"'," +
-                    "gridKey:'163UNDF'," +
-                    "syncDay:'0'," +
-                    "synctime:''," +
-                    "updatetime:''," +
-                    "remarks:''," +
-                    "tablename:'MST_MARKETAREA_GRID_ROUTE_M'," +
-                    "userId:'50000'}";
-        }
-
-        if("get_date_3".equals(optcode)&&"MST_BASEDATA_M".equals(table)){
-            loginjson =  "{areaid:'"+PrefUtils.getString(getActivity(),"departmentid","")+"'," +
-                    "gridKey:'163UNDF'," +
-                    "syncDay:'0'," +
-                    "synctime:''," +
-                    "updatetime:''," +
-                    "remarks:''," +
-                    "tablename:'MST_BASEDATA_M'," +
-                    "userId:'50000'}";
-        }
-        if("get_date_3".equals(optcode)&&"MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO".equals(table)){
-            loginjson =  "{areaid:'"+PrefUtils.getString(getActivity(),"departmentid","")+"'," +
-                    "gridKey:'163UNDF'," +
-                    "syncDay:'0'," +
-                    "synctime:''," +
-                    "updatetime:''," +
-                    "remarks:''," +
-                    "tablename:'MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO'," +
-                    "userId:'50000'}";
-        }
-
-        // 组建请求Json
         // 组建请求Json
         RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(getContext());
-        requestHeadStc.setUsercode("50000");
-        requestHeadStc.setPassword("a1234567");
-        requestHeadStc.setOptcode(optcode);
-        RequestStructBean reqObj = HttpParseJson.parseRequestStructBean(requestHeadStc, loginjson);
+        if("opt_get_login".equals(optcode)){
+            requestHeadStc.setUsercode("50000");
+            requestHeadStc.setPassword("a1234567");
+        }
+        requestHeadStc.setOptcode(PropertiesUtil.getProperties(optcode));
+        RequestStructBean reqObj = HttpParseJson.parseRequestStructBean(requestHeadStc, content);
 
         // 压缩请求数据
         String jsonZip = HttpParseJson.parseRequestJson(reqObj);
@@ -172,27 +160,81 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                         // 保存登录信息
                         if(ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())){
                             // 保存信息
-                            if("get_login_3".equals(optcode)&&"".equals(table)){
-                                String formjson = resObj.getResBody().getContent();
-                                parseJson(formjson);
-                                Toast.makeText(getActivity(), "登录成功", Toast.LENGTH_SHORT).show();
-                            }
-
-                            if("get_date_3".equals(optcode)&&"MST_MARKETAREA_GRID_ROUTE_M".equals(table)){
+                            if("opt_get_dates2".equals(optcode)&&"MST_MARKETAREA_GRID_ROUTE_M".equals(table)){
                                 String formjson = resObj.getResBody().getContent();
                                 parseTableJson(formjson);
-                                Toast.makeText(getActivity(), "区域定格路线成功", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "区域定格路线同步成功", Toast.LENGTH_SHORT).show();
                             }
-                            if("get_date_3".equals(optcode)&&"MST_BASEDATA_M".equals(table)){
+                            if("opt_get_dates2".equals(optcode)&&"MST_BASEDATA_M".equals(table)){
                                 String formjson = resObj.getResBody().getContent();
                                 parseDatadicTableJson(formjson);
-                                Toast.makeText(getActivity(), "数据字典成功", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "基础数据同步成功", Toast.LENGTH_SHORT).show();
                             }
-                            if("get_date_3".equals(optcode)&&"MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO".equals(table)){
+                            if("opt_get_dates2".equals(optcode)&&"MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO".equals(table)){
                                 String formjson = resObj.getResBody().getContent();
                                 parseIndexTableJson(formjson);
-                                Toast.makeText(getActivity(), "指标数据成功", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "指标数据同步成功", Toast.LENGTH_SHORT).show();
                             }
+                        }else{
+                            Toast.makeText(getActivity(), resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .error(new IError() {
+                    @Override
+                    public void onError(int code, String msg) {
+                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .failure(new IFailure() {
+                    @Override
+                    public void onFailure() {
+                        Toast.makeText(getContext(), "请求失败", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .builde()
+                .post();
+    }
+
+
+    /**
+     * 登录接口
+     *
+     * @param optcode   请求码
+     * @param username
+     * @param pwd
+     * @param content   请求json
+     */
+    void toLogin(final String optcode, String username,String pwd,String content) {
+
+        // 组建请求Json
+        RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(getContext());
+        if("opt_get_login".equals(optcode)){
+            requestHeadStc.setUsercode("50000");
+            requestHeadStc.setPassword("a1234567");
+        }
+        requestHeadStc.setOptcode(PropertiesUtil.getProperties(optcode));
+        RequestStructBean reqObj = HttpParseJson.parseRequestStructBean(requestHeadStc, content);
+
+        // 压缩请求数据
+        String jsonZip = HttpParseJson.parseRequestJson(reqObj);
+
+        RestClient.builder()
+                .url(HttpUrl.IP_END)
+                .params("data", jsonZip)
+                .loader(getContext())
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+                        String json = HttpParseJson.parseJsonResToString(response);
+                        ResponseStructBean resObj = new ResponseStructBean();
+                        resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
+                        // 保存登录信息
+                        if(ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())){
+                            // 保存信息
+                            String formjson = resObj.getResBody().getContent();
+                            parseLoginJson(formjson);
+                            Toast.makeText(getActivity(), "登录成功", Toast.LENGTH_SHORT).show();
 
                         }else{
                             Toast.makeText(getActivity(), resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
@@ -216,7 +258,7 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
     }
 
     // 解析登录者信息
-    void parseJson(String json){
+    void parseLoginJson(String json){
 
         // 保存登录者信息
         BsVisitEmpolyeeStc emp = JsonUtil.parseJson(json, BsVisitEmpolyeeStc.class);
@@ -318,7 +360,6 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
         service.createOrUpdateTable(MST_CMPRODUCTINFO_M,"MST_CMPRODUCTINFO_M",MstCmproductinfoM.class);
     }
 
-
     // 解析指标数据成功
     private void parseIndexTableJson(String json) {
         // 解析指标数据
@@ -331,8 +372,5 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
         service.createOrUpdateTable(PAD_CHECKSTATUS_INFO,"PAD_CHECKSTATUS_INFO",PadCheckstatusInfo.class);
         service.parsePadCheckType(MST_COLLECTIONTEMPLATE_M);
     }
-
-
-
 
 }

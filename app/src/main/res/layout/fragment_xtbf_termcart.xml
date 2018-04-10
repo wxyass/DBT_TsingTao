@@ -161,7 +161,7 @@
                     android:layout_height="@dimen/xtbf_btn_h"
                     android:layout_marginLeft="10dp"
                     android:background="@drawable/bg_select_green"
-                    android:text="新增终端"
+                    android:text="同步数据"
                     />
             </RelativeLayout>
         </LinearLayout>

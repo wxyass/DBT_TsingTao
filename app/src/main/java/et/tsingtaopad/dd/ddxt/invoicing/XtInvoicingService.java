@@ -19,6 +19,7 @@ import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
+import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.db.dao.MstVistproductInfoDao;
 import et.tsingtaopad.db.dao.MstVistproductInfoTempDao;
@@ -268,6 +269,106 @@ public class XtInvoicingService extends XtShopVisitService {
                 Log.e(TAG, "回滚进销存数据发生异常", e1);
             }
         }
+    }
+
+    /**
+     * 删除经销商与终端的产品供应关系
+     *
+     * @param recordKey 拜访产品-竞品我品记录表主键
+     * @param termId    终端ID
+     * @param visitId   拜访主键
+     * @param proId     产品ID
+     */
+    public boolean deleteSupply(String recordKey, String termId, String visitId, String proId) {
+        boolean isFlag=false;
+        AndroidDatabaseConnection connection = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MstVistproductInfo, String> proDao = helper.getDao(MstVistproductInfo.class);
+            Dao<MstAgencysupplyInfo, String> supplyDao =  helper.getDao(MstAgencysupplyInfo.class);
+
+            Dao<MstAgencysupplyInfoTemp, String> supplyTempDao =  helper.getDao(MstAgencysupplyInfoTemp.class);
+
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+            // 删除拜访产品-竞品我品记录表，相关数据
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("delete from mst_vistproduct_info_temp ");
+            buffer.append("where RECORDKEY=? ");
+            proDao.executeRaw(buffer.toString(), new String[] {recordKey});
+
+            // 删除经销商供货关系相关数据
+            /*buffer = new StringBuffer();
+            buffer.append("update MST_AGENCYSUPPLY_INFO set ");
+            buffer.append("STATUS ='1',padisconsistent ='0' where LOWERKEY=? and PRODUCTKEY=? ");
+            supplyDao.executeRaw(buffer.toString(), new String[] {termId, proId});
+
+            // 删除产品相关的指标数据
+            buffer = new StringBuffer();
+            buffer.append("update mst_checkexerecord_info_temp set deleteflag='1' ");
+            buffer.append("where visitkey=? and productkey=? ");
+            supplyDao.executeRaw(buffer.toString(), new String[] {visitId, proId});*/
+
+            //↓-------------------------------------------------------------------------------------------------------------
+            QueryBuilder<MstAgencysupplyInfoTemp, String> qb = supplyTempDao.queryBuilder();
+            qb.where().eq("lowerkey", termId).and().eq("productkey", proId).and().eq("orderbyno", "0");//
+            List<MstAgencysupplyInfoTemp> list = qb.query();
+
+            // 如果是今天新加的供货关系 但今天又删除了,直接物理删除该供货关系记录及临时指标记录 根据orderbyno
+            if(list!=null&&list.size()>0){
+                // 删除经销商供货关系相关数据(业代误操作会造成,上传失效的供货关系,所以直接删除该条记录不坐更新 orderbyno的值为当前时间)
+                buffer = new StringBuffer();
+                buffer.append("delete from MST_AGENCYSUPPLY_INFO_TEMP ");
+                buffer.append("where LOWERKEY=? and PRODUCTKEY=? and  orderbyno = '0' ");
+                proDao.executeRaw(buffer.toString(), new String[] {termId, proId});
+
+                // 删除产品相关的指标数据
+                buffer = new StringBuffer();
+                buffer.append("delete from  mst_checkexerecord_info_temp  ");
+                buffer.append("where visitkey=? and productkey=? ");
+                supplyDao.executeRaw(buffer.toString(), new String[] {visitId, proId});
+            }else{
+
+                // 删除经销商供货关系相关数据
+                buffer = new StringBuffer();
+                buffer.append("update MST_AGENCYSUPPLY_INFO_TEMP set ");
+                buffer.append("STATUS ='1',padisconsistent ='0' where LOWERKEY=? and PRODUCTKEY=? ");
+                supplyDao.executeRaw(buffer.toString(), new String[] {termId, proId});
+
+                // 删除产品相关的指标数据
+                buffer = new StringBuffer();
+                buffer.append("update mst_checkexerecord_info_temp set deleteflag='1' ");
+                buffer.append("where visitkey=? and productkey=? ");
+                supplyDao.executeRaw(buffer.toString(), new String[] {visitId, proId});
+            }
+
+            //↑-------------------------------------------------------------------------------------------------------------
+
+
+            //↑-------------------------------------------------------------------------------------------------------------
+            buffer = new StringBuffer();
+            buffer.append("delete from mst_collectionexerecord_info_temp ");
+            buffer.append("where visitkey=? and productkey=? ");
+            supplyDao.executeRaw(buffer.toString(), new String[] {visitId, proId});
+
+
+            connection.commit(null);
+            isFlag=true;
+
+        } catch (Exception e) {
+            isFlag=false;
+            DbtLog.logUtils(TAG,"解除供货关系失败");
+            DbtLog.logUtils(TAG,e.getMessage());
+            e.printStackTrace();
+            Log.e(TAG, "保存进销存数据发生异常", e);
+            try {
+                connection.rollback(null);
+            } catch (SQLException e1) {
+                Log.e(TAG, "回滚进销存数据发生异常", e1);
+            }
+        }
+        return isFlag;
     }
 
 }

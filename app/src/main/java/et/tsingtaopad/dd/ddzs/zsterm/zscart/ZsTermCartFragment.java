@@ -1,4 +1,4 @@
-package et.tsingtaopad.dd.ddxt.term.cart;
+package et.tsingtaopad.dd.ddzs.zsterm.zscart;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,12 +35,12 @@ import et.tsingtaopad.core.util.dbtutil.JsonUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
+import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartService;
 import et.tsingtaopad.dd.ddxt.term.cart.adapter.XtTermCartAdapter;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
+import et.tsingtaopad.dd.ddzs.zsshopvisit.ZsVisitShopActivity;
 import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.http.HttpParseJson;
-import et.tsingtaopad.main.visit.shopvisit.term.domain.MstTermListMStc;
-import et.tsingtaopad.main.visit.shopvisit.term.domain.TermListAdapter;
 import et.tsingtaopad.main.visit.shopvisit.term.domain.TermSequence;
 import et.tsingtaopad.util.requestHeadUtil;
 
@@ -48,7 +48,9 @@ import et.tsingtaopad.util.requestHeadUtil;
  * Created by yangwenmin on 2018/3/12.
  */
 
-public class XtTermCartFragment extends BaseFragmentSupport implements View.OnClickListener {
+public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnClickListener {
+
+    private final String TAG = "ZsTermCartFragment";
 
     private RelativeLayout backBtn;
     private RelativeLayout confirmBtn;
@@ -113,11 +115,11 @@ public class XtTermCartFragment extends BaseFragmentSupport implements View.OnCl
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        titleTv.setText("今日终端拜访列表");
+        titleTv.setText("今日终端追溯列表");
         confirmTv.setText("拜访");
         cartService = new XtTermCartService(getActivity());
         // 设置终端数据 假数据
-        if("1".equals(PrefUtils.getString(getActivity(), GlobalValues.DDXTZS,""))){
+        if("2".equals(PrefUtils.getString(getActivity(), GlobalValues.DDXTZS,""))){
             termList = cartService.queryCartTermList();
         }
         // 终端拼音集合
@@ -145,7 +147,7 @@ public class XtTermCartFragment extends BaseFragmentSupport implements View.OnCl
                 break;
             case R.id.top_navigation_rl_confirm:
                 termStc = (XtTermSelectMStc)confirmBtn.getTag();
-                Intent intent = new Intent(getActivity(), XtVisitShopActivity.class);
+                Intent intent = new Intent(getActivity(), ZsVisitShopActivity.class);
                 intent.putExtra("isFirstVisit", "1");// 非第一次拜访1
                 intent.putExtra("termStc", termStc);
                 intent.putExtra("seeFlag", "0"); // 0拜访 1查看标识

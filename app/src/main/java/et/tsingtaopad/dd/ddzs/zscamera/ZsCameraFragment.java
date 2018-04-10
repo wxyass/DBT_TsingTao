@@ -1,4 +1,4 @@
-package et.tsingtaopad.dd.ddxt.camera;
+package et.tsingtaopad.dd.ddzs.zscamera;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -16,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
 
 import java.io.File;
 import java.lang.ref.SoftReference;
@@ -36,6 +35,9 @@ import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.util.file.FileTool;
 import et.tsingtaopad.db.table.MstTerminalinfoMTemp;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
+import et.tsingtaopad.dd.ddxt.camera.XtCameraAdapter;
+import et.tsingtaopad.dd.ddxt.camera.XtCameraHandler;
+import et.tsingtaopad.dd.ddxt.camera.XtCameraService;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.camera.domain.CameraInfoStc;
 import et.tsingtaopad.view.MyGridView;
 
@@ -43,7 +45,7 @@ import et.tsingtaopad.view.MyGridView;
  * Created by yangwenmin on 2018/3/12.
  */
 
-public class XtCameraFragment extends XtBaseVisitFragment implements View.OnClickListener{
+public class ZsCameraFragment extends XtBaseVisitFragment implements View.OnClickListener{
 
     public static final String TAG = "XtCameraFragment";
 
@@ -227,9 +229,9 @@ public class XtCameraFragment extends XtBaseVisitFragment implements View.OnClic
 
                 // 拍照弹窗
                 if(TextUtils.isEmpty(valueLst.get(position).getCamerakey())||"".equals(valueLst.get(position).getCamerakey())){
-                    new XtCameraHandler(XtCameraFragment.this).takePhoto();
+                    new XtCameraHandler(ZsCameraFragment.this).takePhoto();
                 }else{
-                    new XtCameraHandler(XtCameraFragment.this).beginCameraDialog();
+                    new XtCameraHandler(ZsCameraFragment.this).beginCameraDialog();
                 }
             }
         });
@@ -287,15 +289,15 @@ public class XtCameraFragment extends XtBaseVisitFragment implements View.OnClic
     public static class MyHandler extends Handler {
 
         // 软引用
-        SoftReference<XtCameraFragment> fragmentRef;
+        SoftReference<ZsCameraFragment> fragmentRef;
 
-        public MyHandler(XtCameraFragment fragment) {
-            fragmentRef = new SoftReference<XtCameraFragment>(fragment);
+        public MyHandler(ZsCameraFragment fragment) {
+            fragmentRef = new SoftReference<ZsCameraFragment>(fragment);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            XtCameraFragment fragment = fragmentRef.get();
+            ZsCameraFragment fragment = fragmentRef.get();
             if (fragment == null) {
                 return;
             }

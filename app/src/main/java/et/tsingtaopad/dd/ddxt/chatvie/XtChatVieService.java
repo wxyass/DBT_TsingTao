@@ -11,14 +11,17 @@ import com.j256.ormlite.stmt.Where;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
+import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.db.dao.MstVistproductInfoDao;
 import et.tsingtaopad.db.dao.MstVistproductInfoTempDao;
@@ -219,6 +222,59 @@ public class XtChatVieService extends XtShopVisitService {
                 Log.e(TAG, "回滚聊竞品数据发生异常", e1);
             }
         }
+    }
+
+    /**
+     * 删除经销商与终端的产品供应关系
+     *
+     * @param recordKey 拜访产品-竞品我品记录表主键
+     * @param termId    终端ID
+     * @param proId     产品ID
+     */
+    public boolean deleteSupply(String recordKey, String termId, String proId) {
+        boolean isFlag=false;
+        AndroidDatabaseConnection connection = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MstVistproductInfo, String> proDao =
+                    helper.getDao(MstVistproductInfo.class);
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+            // 删除拜访产品-竞品我品记录表，相关数据
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("delete from mst_vistproduct_info_temp "); // 直接删除,因为记录是跟着visitkey的
+            buffer.append("where RECORDKEY=? ");
+            proDao.executeRaw(buffer.toString(), new String[] {recordKey});
+            //            StringBuffer buffer = new StringBuffer();
+            //            buffer.append("update mst_vistproduct_info set ");
+            //            buffer.append("padisconsistent ='0', deleteflag = '1' ");
+            //            buffer.append("where recordkey=? ");
+            //            proDao.executeRaw(buffer.toString(), new String[] {recordKey});
+
+            // 更新竞品供货关系
+            String currDate = DateUtil.formatDate(new Date(), "yyyyMMddHHmmss");
+            buffer = new StringBuffer();
+            buffer.append("update mst_cmpsupply_info_temp set ");
+            buffer.append("status ='1', cmpinvaliddate = ? ,padisconsistent ='0' ");
+            buffer.append("where terminalkey = ? and cmpproductkey = ? ");
+            proDao.executeRaw(buffer.toString(), new String[] {currDate, termId, proId});
+
+            connection.commit(null);
+            isFlag=true;
+        } catch (Exception e) {
+            isFlag=false;
+            DbtLog.logUtils(TAG,"解除供货关系失败");
+            DbtLog.logUtils(TAG,e.getMessage());
+            e.printStackTrace();
+            Log.e(TAG, "保存进销存数据发生异常", e);
+            try {
+                connection.rollback(null);
+            } catch (SQLException e1) {
+                Log.e(TAG, "回滚进销存数据发生异常", e1);
+            }
+        }
+        return isFlag;
     }
 
 }

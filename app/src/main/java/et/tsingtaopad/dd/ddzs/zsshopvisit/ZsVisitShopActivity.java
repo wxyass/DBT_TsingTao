@@ -1,25 +1,19 @@
-package et.tsingtaopad.dd.ddxt.shopvisit;
+package et.tsingtaopad.dd.ddzs.zsshopvisit;
 
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,14 +28,11 @@ import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
-import et.tsingtaopad.core.util.dbtutil.PrefUtils;
-import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.core.view.alertview.OnDismissListener;
 import et.tsingtaopad.core.view.alertview.OnItemClickListener;
 import et.tsingtaopad.db.table.MstVisitM;
-import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
 import et.tsingtaopad.dd.ddxt.camera.XtCameraFragment;
 import et.tsingtaopad.dd.ddxt.chatvie.XtChatvieFragment;
 import et.tsingtaopad.dd.ddxt.checking.XtCheckIndexFragment;
@@ -50,22 +41,23 @@ import et.tsingtaopad.dd.ddxt.checking.domain.XtProIndex;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProItem;
 import et.tsingtaopad.dd.ddxt.invoicing.XtInvoicingFragment;
 import et.tsingtaopad.dd.ddxt.sayhi.XtSayhiFragment;
+import et.tsingtaopad.dd.ddxt.shopvisit.XtShopVisitService;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
-import et.tsingtaopad.dd.ddxt.updata.XtUploadService;
+import et.tsingtaopad.dd.ddzs.zscamera.ZsCameraFragment;
+import et.tsingtaopad.dd.ddzs.zschatvie.ZsChatvieFragment;
+import et.tsingtaopad.dd.ddzs.zscheckindex.ZsCheckIndexFragment;
+import et.tsingtaopad.dd.ddzs.zsinvoicing.ZsInvoicingFragment;
+import et.tsingtaopad.dd.ddzs.zssayhi.ZsSayhiFragment;
 import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
-import et.tsingtaopad.main.visit.shopvisit.term.domain.MstTermListMStc;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.CheckIndexCalculateStc;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.ProIndex;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.ProItem;
 
 /**
  * Created by yangwenmin on 2018/3/12.
  */
 
-public class XtVisitShopActivity extends BaseActivity implements View.OnClickListener,TabHost.OnTabChangeListener {
+public class ZsVisitShopActivity extends BaseActivity implements View.OnClickListener,TabHost.OnTabChangeListener {
 
-    private final String TAG = "XtVisitShopActivity";
+    private final String TAG = "ZsVisitShopActivity";
 
     private RelativeLayout backBtn;
     private RelativeLayout confirmBtn;
@@ -107,12 +99,12 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
     private String channelId;
 
     private FragmentTabHost tabHost;
-    private Class fragmentArray[] = { XtSayhiFragment.class,
-            XtInvoicingFragment.class, XtCheckIndexFragment.class,
-            XtChatvieFragment.class ,XtCameraFragment.class};
+    private Class fragmentArray[] = { ZsSayhiFragment.class,
+            ZsInvoicingFragment.class, ZsInvoicingFragment.class,ZsCheckIndexFragment.class,
+            ZsChatvieFragment.class ,ZsCameraFragment.class};
 
     private int imageViewArray[] = { R.drawable.bt_shopvisit_sayhi,
-            R.drawable.bt_shopvisit_invoicing,
+            R.drawable.bt_shopvisit_invoicing,R.drawable.bt_shopvisit_invoicing,
             R.drawable.bt_shopvisit_checkindex, R.drawable.bt_shopvisit_chatvie,
             R.drawable.bt_shopvisit_camera };
 
@@ -169,7 +161,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
         isFirstVisit = bundle.getString("isFirstVisit");
         termStc = (XtTermSelectMStc) bundle.getSerializable("termStc");
 
-        titleTv.setText(termStc.getTerminalname());
+        titleTv.setText("追溯: "+termStc.getTerminalname());
 
         xtShopVisitService = new XtShopVisitService(getApplicationContext(), null);
         // 从拜访主表中获取最后一次拜访数据
@@ -198,7 +190,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
         // 初始化TabHost
         tabHost = (FragmentTabHost) findViewById(R.id.tabhost);
 
-        tabHost.setup(XtVisitShopActivity.this, getSupportFragmentManager(), R.id.xtvisit_fl_content);
+        tabHost.setup(ZsVisitShopActivity.this, getSupportFragmentManager(), R.id.xtvisit_fl_content);
         tabHost.getTabWidget().setDividerDrawable(null);
         for (int i = 0; i < fragmentArray.length; i++) {
             TabHost.TabSpec tabSpec = tabHost.newTabSpec(String.valueOf(i)).setIndicator(getTabItemView(i));
@@ -385,7 +377,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
         if (ConstValues.FLAG_1.equals(seeFlag))
             return;
 
-        BaseActivity view = (XtVisitShopActivity) tabHost.getCurrentView().getContext();
+        BaseActivity view = (ZsVisitShopActivity) tabHost.getCurrentView().getContext();
         EditText termNameTv = (EditText) view.findViewById(R.id.xtbf_sayhi_termname);
         if (termNameTv != null) {
             TextView belongLineSp = (TextView) view.findViewById(R.id.xtbf_sayhi_termroude);
@@ -485,10 +477,8 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
                             xtShopVisitService.confirmXtUpload(visitId, termStc.getTerminalkey(), visitEndDate, "1");
 
 
-                            XtUploadService xtUploadService = new XtUploadService(getApplicationContext(),null);
-                            xtUploadService.upload_visit(false,visitId,1);
 
-                            XtVisitShopActivity.this.finish();
+                            ZsVisitShopActivity.this.finish();
                         }
 
                     }
@@ -505,7 +495,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
 
     private void backFinish() {
         // 普通窗口
-        mAlertViewExt = new AlertView("若返回,这次拜访数据不会保存", null, "取消", new String[]{"确定"}, null, this, AlertView.Style.Alert,
+        mAlertViewExt = new AlertView("若返回,这次追溯数据不会保存", null, "取消", new String[]{"确定"}, null, this, AlertView.Style.Alert,
                 new OnItemClickListener() {
                     @Override
                     public void onItemClick(Object o, int position) {
@@ -513,7 +503,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
                         if (0 == position) {// 确定按钮:0   取消按钮:-1
                             //if (ViewUtil.isDoubleClick(v.getId(), 2500)) return;
                             DbtLog.logUtils(TAG, "返回拜访：是");
-                            XtVisitShopActivity.this.finish();
+                            ZsVisitShopActivity.this.finish();
                         }
                     }
                 })

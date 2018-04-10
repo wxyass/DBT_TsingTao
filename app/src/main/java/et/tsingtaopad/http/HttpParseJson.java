@@ -217,5 +217,4 @@ public class HttpParseJson {
         return jsonZip;
     }
 
-
 }

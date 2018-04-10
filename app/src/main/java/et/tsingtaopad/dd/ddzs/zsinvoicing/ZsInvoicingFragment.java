@@ -1,4 +1,4 @@
-package et.tsingtaopad.dd.ddxt.invoicing;
+package et.tsingtaopad.dd.ddzs.zsinvoicing;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -7,22 +7,18 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.io.Serializable;
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
-import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
@@ -30,20 +26,22 @@ import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.core.view.alertview.OnDismissListener;
 import et.tsingtaopad.core.view.alertview.OnItemClickListener;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
-import et.tsingtaopad.dd.ddxt.checking.num.XtCaculateFragment;
+import et.tsingtaopad.dd.ddxt.invoicing.XtInvoicingAskGoodsAdapter;
+import et.tsingtaopad.dd.ddxt.invoicing.XtInvoicingCheckGoodsAdapter;
+import et.tsingtaopad.dd.ddxt.invoicing.XtInvoicingService;
 import et.tsingtaopad.dd.ddxt.invoicing.addinvoicing.XtAddInvoicingFragment;
 import et.tsingtaopad.dd.ddxt.invoicing.domain.XtInvoicingStc;
 import et.tsingtaopad.dd.ddxt.invoicing.listener.ILongClick;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
+import et.tsingtaopad.dd.ddzs.zsinvoicing.zsaddinvoicing.ZsAddInvoicingFragment;
+import et.tsingtaopad.dd.ddzs.zsshopvisit.ZsVisitShopActivity;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.invoicing.InvoicingService;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.invoicing.domain.InvoicingStc;
 
 /**
  * Created by yangwenmin on 2018/3/12.
  */
 
-public class XtInvoicingFragment extends XtBaseVisitFragment implements View.OnClickListener{
+public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnClickListener{
 
     private final String TAG = "XtInvoicingFragment";
 
@@ -141,10 +139,10 @@ public class XtInvoicingFragment extends XtBaseVisitFragment implements View.OnC
                 bundle.putSerializable("visitKey", visitId);//visitId
                 bundle.putSerializable("seeFlag", seeFlag);// 默认0   0:拜访 1:查看
 
-                XtAddInvoicingFragment xtaddinvoicingfragment = new XtAddInvoicingFragment(handler);
+                ZsAddInvoicingFragment xtaddinvoicingfragment = new ZsAddInvoicingFragment(handler);
                 xtaddinvoicingfragment.setArguments(bundle);
 
-                XtVisitShopActivity xtVisitShopActivity = (XtVisitShopActivity) getActivity();
+                ZsVisitShopActivity xtVisitShopActivity = (ZsVisitShopActivity) getActivity();
                 xtVisitShopActivity.changeXtvisitFragment(xtaddinvoicingfragment, "xtaddchatviefragment");
                 break;
 
@@ -159,15 +157,15 @@ public class XtInvoicingFragment extends XtBaseVisitFragment implements View.OnC
     public static class MyHandler extends Handler {
 
         // 软引用
-        SoftReference<XtInvoicingFragment> fragmentRef;
+        SoftReference<ZsInvoicingFragment> fragmentRef;
 
-        public MyHandler(XtInvoicingFragment fragment) {
-            fragmentRef = new SoftReference<XtInvoicingFragment>(fragment);
+        public MyHandler(ZsInvoicingFragment fragment) {
+            fragmentRef = new SoftReference<ZsInvoicingFragment>(fragment);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            XtInvoicingFragment fragment = fragmentRef.get();
+            ZsInvoicingFragment fragment = fragmentRef.get();
             if (fragment == null) {
                 return;
             }

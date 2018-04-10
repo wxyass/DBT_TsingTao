@@ -11,6 +11,8 @@ import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartFragment;
 import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectFragment;
+import et.tsingtaopad.dd.ddzs.zsterm.zscart.ZsTermCartFragment;
+import et.tsingtaopad.dd.ddzs.zsterm.zsselect.ZsTermSelectFragment;
 
 /**
  * Created by yangwenmin on 2018/3/12.
@@ -19,6 +21,8 @@ import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectFragment;
 public class VisitFragment extends BaseFragmentSupport implements View.OnClickListener{
     AppCompatButton button;
     AppCompatButton xtTermBtn;
+    AppCompatButton zdzsBtn;
+    AppCompatButton zsTermBtn;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -30,8 +34,12 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
     private void initView(View view){
         button = view.findViewById(R.id.btn_test);
         xtTermBtn = view.findViewById(R.id.btn_xt_term);
+        zdzsBtn = view.findViewById(R.id.btn_zdzs);
+        zsTermBtn = view.findViewById(R.id.btn_zs_term);
         button.setOnClickListener(this);
         xtTermBtn.setOnClickListener(this);
+        zdzsBtn.setOnClickListener(this);
+        zsTermBtn.setOnClickListener(this);
     }
 
 
@@ -43,7 +51,13 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
                 changeHomeFragment(new XtTermSelectFragment(), "xttermlistfragment");
                 break;
             case R.id.btn_xt_term:
-                changeHomeFragment(new XtTermCartFragment(), "xttermlistfragment");
+                changeHomeFragment(new XtTermCartFragment(), "xttermcartfragment");
+                break;
+            case R.id.btn_zdzs:
+                changeHomeFragment(new ZsTermSelectFragment(), "zstermselectfragment");
+                break;
+            case R.id.btn_zs_term:
+                changeHomeFragment(new ZsTermCartFragment(), "zstermcartfragment");
                 break;
         }
 

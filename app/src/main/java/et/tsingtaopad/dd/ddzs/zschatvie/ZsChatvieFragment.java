@@ -1,4 +1,4 @@
-package et.tsingtaopad.dd.ddxt.chatvie;
+package et.tsingtaopad.dd.ddzs.zschatvie;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,21 +28,22 @@ import et.tsingtaopad.core.view.alertview.OnDismissListener;
 import et.tsingtaopad.core.view.alertview.OnItemClickListener;
 import et.tsingtaopad.db.table.MstVisitMTemp;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
+import et.tsingtaopad.dd.ddxt.chatvie.XtChatVieService;
+import et.tsingtaopad.dd.ddxt.chatvie.XtVieSourceAdapter;
+import et.tsingtaopad.dd.ddxt.chatvie.XtVieStatusAdapter;
 import et.tsingtaopad.dd.ddxt.chatvie.addchatvie.XtAddChatVieFragment;
 import et.tsingtaopad.dd.ddxt.chatvie.domain.XtChatVieStc;
-import et.tsingtaopad.dd.ddxt.invoicing.XtInvoicingService;
-import et.tsingtaopad.dd.ddxt.invoicing.domain.XtInvoicingStc;
 import et.tsingtaopad.dd.ddxt.invoicing.listener.ILongClick;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
+import et.tsingtaopad.dd.ddzs.zschatvie.zsaddchatvie.ZsAddChatVieFragment;
+import et.tsingtaopad.dd.ddzs.zsshopvisit.ZsVisitShopActivity;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.chatvie.ChatVieService;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.chatvie.domain.ChatVieStc;
 
 /**
  * Created by yangwenmin on 2018/3/12.
  */
 
-public class XtChatvieFragment extends XtBaseVisitFragment implements View.OnClickListener {
+public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnClickListener {
 
     private final String TAG = "XtChatvieFragment";
 
@@ -142,10 +143,10 @@ public class XtChatvieFragment extends XtBaseVisitFragment implements View.OnCli
                 bundle.putSerializable("visitKey", visitId);//visitId
                 bundle.putSerializable("seeFlag", seeFlag);// 默认0   0:拜访 1:查看
 
-                XtAddChatVieFragment xtaddchatviefragment = new XtAddChatVieFragment(handler);
+                ZsAddChatVieFragment xtaddchatviefragment = new ZsAddChatVieFragment(handler);
                 xtaddchatviefragment.setArguments(bundle);
 
-                XtVisitShopActivity xtVisitShopActivity = (XtVisitShopActivity) getActivity();
+                ZsVisitShopActivity xtVisitShopActivity = (ZsVisitShopActivity) getActivity();
                 xtVisitShopActivity.changeXtvisitFragment(xtaddchatviefragment, "xtaddchatviefragment");
                 break;
             case R.id.xtbf_chatvie_bt_next:// 下一页
@@ -163,15 +164,15 @@ public class XtChatvieFragment extends XtBaseVisitFragment implements View.OnCli
     public static class MyHandler extends Handler {
 
         // 软引用
-        SoftReference<XtChatvieFragment> fragmentRef;
+        SoftReference<ZsChatvieFragment> fragmentRef;
 
-        public MyHandler(XtChatvieFragment fragment) {
-            fragmentRef = new SoftReference<XtChatvieFragment>(fragment);
+        public MyHandler(ZsChatvieFragment fragment) {
+            fragmentRef = new SoftReference<ZsChatvieFragment>(fragment);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            XtChatvieFragment fragment = fragmentRef.get();
+            ZsChatvieFragment fragment = fragmentRef.get();
             if (fragment == null) {
                 return;
             }

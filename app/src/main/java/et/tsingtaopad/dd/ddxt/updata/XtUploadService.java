@@ -26,12 +26,21 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 
 
+import et.tsingtaopad.core.net.HttpUrl;
+import et.tsingtaopad.core.net.RestClient;
+import et.tsingtaopad.core.net.callback.IError;
+import et.tsingtaopad.core.net.callback.IFailure;
+import et.tsingtaopad.core.net.callback.ISuccess;
+import et.tsingtaopad.core.net.domain.RequestHeadStc;
+import et.tsingtaopad.core.net.domain.RequestStructBean;
+import et.tsingtaopad.core.net.domain.ResponseStructBean;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.FileUtil;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.JsonUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
+import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.db.DatabaseHelper;
@@ -62,6 +71,8 @@ import et.tsingtaopad.db.table.MstVisitmemoInfo;
 import et.tsingtaopad.db.table.MstVistproductInfo;
 import et.tsingtaopad.db.table.MstWorksummaryInfo;
 
+import et.tsingtaopad.http.HttpParseJson;
+import et.tsingtaopad.util.requestHeadUtil;
 import et.tsingtaopad.view.TitleLayout;
 
 /**
@@ -615,6 +626,7 @@ public class XtUploadService
                                 onFailureSendMessage(isNeedExit, visitKey);
                             }
                         });*/
+                upVisitDataInService("opt_save_visit","",json);
             } else {
                 if (isNeedExit) {
                 	//上传所有的巡店拜访
@@ -624,6 +636,60 @@ public class XtUploadService
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 请求路线下的所有终端
+     *
+     * @param optcode   请求码
+     * @param tableName 请求的表
+     * @param content   请求json
+     */
+    void upVisitDataInService(final String optcode, final String tableName, String content) {
+
+        // 组建请求Json
+        RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(context);
+        requestHeadStc.setOptcode(PropertiesUtil.getProperties(optcode));
+        RequestStructBean reqObj = HttpParseJson.parseRequestStructBean(requestHeadStc, content);
+
+        // 压缩请求数据
+        String jsonZip = HttpParseJson.parseRequestJson(reqObj);
+
+        RestClient.builder()
+                .url(HttpUrl.IP_END)
+                .params("data", jsonZip)
+                //.loader(context)
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+                        String json = HttpParseJson.parseJsonResToString(response);
+                        ResponseStructBean resObj = new ResponseStructBean();
+                        resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
+                        // 保存登录信息
+                        if (ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())) {
+                            //
+
+
+
+                        } else {
+                            Toast.makeText(context, resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .error(new IError() {
+                    @Override
+                    public void onError(int code, String msg) {
+                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .failure(new IFailure() {
+                    @Override
+                    public void onFailure() {
+                        Toast.makeText(context, "请求失败", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .builde()
+                .post();
     }
 
 

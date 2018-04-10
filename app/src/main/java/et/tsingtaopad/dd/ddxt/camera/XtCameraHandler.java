@@ -43,7 +43,7 @@ public class XtCameraHandler implements View.OnClickListener {
     }
 
     // 展示弹窗: 拍照,相册,取消
-    final void beginCameraDialog() {
+    public final void beginCameraDialog() {
         DIALOG.show();
         final Window window = DIALOG.getWindow();
         if (window != null) {

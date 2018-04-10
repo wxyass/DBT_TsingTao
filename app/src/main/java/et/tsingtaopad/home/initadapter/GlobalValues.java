@@ -24,6 +24,8 @@ public class GlobalValues {
     public static final String LOGINSESSIONKEY = "loginSesion";
     // 打招呼是否读取完整
     public static final String SAYHIREADY = "sayhiready";
+    // 判断购物车是协同,还是追溯  1协同  2追溯
+    public static final String DDXTZS = "ddxtzs";
     //今日要事是否允许提醒
     public static boolean isDayThingWarn = false;
 

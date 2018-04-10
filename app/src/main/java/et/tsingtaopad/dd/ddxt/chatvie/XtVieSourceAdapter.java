@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +30,7 @@ import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.db.table.MstCmpagencyInfo;
 import et.tsingtaopad.dd.ddxt.chatvie.domain.XtChatVieStc;
+import et.tsingtaopad.dd.ddxt.invoicing.listener.ILongClick;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.chatvie.ChatVieService;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.chatvie.adapter.VieStatusAdapter;
 
@@ -57,9 +59,10 @@ public class XtVieSourceAdapter extends BaseAdapter
     private String seeFlag;
     private ListView vieStatusLv;
     private ListView vieSourceLv;
+    private ILongClick listener;
     
     public XtVieSourceAdapter(Activity context,String seeFlag, List<XtChatVieStc> dataLst,
-            String termId, VieStatusAdapter statusAdapter, List<MstCmpagencyInfo> agencyLst,ListView vieStatusLv,ListView viewSourceLv) {
+            String termId, VieStatusAdapter statusAdapter, List<MstCmpagencyInfo> agencyLst,ListView vieStatusLv,ListView viewSourceLv, ILongClick listener) {
         this.context = context;
         this.seeFlag = seeFlag;
         this.dataLst = dataLst;
@@ -69,6 +72,7 @@ public class XtVieSourceAdapter extends BaseAdapter
         
         this.statusAdapter = statusAdapter;
         this.agencyLst = agencyLst;
+        this.listener=listener;
     }
 
     @Override
@@ -102,6 +106,7 @@ public class XtVieSourceAdapter extends BaseAdapter
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.item_xtbf_chatvie_viesource, null);
+            holder.itemviesourceLl = (LinearLayout)convertView.findViewById(R.id.item_viesource_ll);
             holder.proTv = (TextView)convertView.findViewById(R.id.item_viesource_tv_proname);
             holder.channelPriceEt = (EditText)convertView.findViewById(R.id.item_viesource_et_qudao);
             holder.sellPriceEt = (EditText)convertView.findViewById(R.id.item_viesource_et_lingshou);
@@ -161,7 +166,9 @@ public class XtVieSourceAdapter extends BaseAdapter
         }
         holder.agencyEt.setTag(position);
         holder.agencyEt.setOnFocusChangeListener(this);
-        
+        holder.itemviesourceLl.setTag(position);
+        holder.itemviesourceLl.setOnLongClickListener(listener);
+
         
         /*holder.agencyBt.setText(item.getAgencyName());
         holder.agencyBt.setTag(item.getAgencyId());
@@ -171,6 +178,7 @@ public class XtVieSourceAdapter extends BaseAdapter
     }
 
     private class ViewHolder {
+        private LinearLayout itemviesourceLl;
         private TextView proTv;
         private EditText channelPriceEt;
         private EditText sellPriceEt;

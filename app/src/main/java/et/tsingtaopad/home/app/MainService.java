@@ -250,6 +250,17 @@ public class MainService extends XtShopVisitService {
     List<MstCmproductinfoM> mstCmproductinfoMs = null;
     List<MstTerminalinfoM> mstTerminalinfoMs = null;
 
+    List<MstAgencygridInfo> mstAgencygridInfos = null;
+    List<MstAgencyinfoM> mstAgencyinfoMs = null;
+    List<MstAgencysupplyInfo> mstAgencysupplyInfos = null;
+    List<MstCheckexerecordInfo> mstCheckexerecordInfos = null;
+    List<MstCmpsupplyInfo> mstCmpsupplyInfos = null;
+    List<MstCollectionexerecordInfo> mstCollectionexerecordInfos = null;
+    List<MstGroupproductM> mstGroupproductMs = null;
+    List<MstPromotermInfo> mstPromotermInfos = null;
+    List<MstVisitM> mstVisitMs = null;
+    List<MstVistproductInfo> MstVistproductInfos = null;
+
     /**
      * 图片类型表更新 注意本张表并不是差量插入,而是先全部删除,再全部插入 MST_PICTYPE_M 因为数量少
      *
@@ -322,6 +333,47 @@ public class MainService extends XtShopVisitService {
             else if(mClass.contains("MstTerminalinfoM")){
                 mstTerminalinfoMs= (List<MstTerminalinfoM>) JsonUtil.parseList(json, cls);
                 updateData(mstTerminalinfoMDao, mstTerminalinfoMs);
+            }
+            //----------------------------------------------------------------------
+            else if(mClass.contains("MstAgencygridInfo")){
+                mstAgencygridInfos= (List<MstAgencygridInfo>) JsonUtil.parseList(json, cls);
+                updateData(mstAgencygridInfoDao, mstAgencygridInfos);
+            }
+            else if(mClass.contains("MstAgencyinfoM")){
+                mstAgencyinfoMs= (List<MstAgencyinfoM>) JsonUtil.parseList(json, cls);
+                updateData(mstAgencyinfoMDao, mstAgencyinfoMs);
+            }
+            else if(mClass.contains("MstAgencysupplyInfo")){
+                mstAgencysupplyInfos= (List<MstAgencysupplyInfo>) JsonUtil.parseList(json, cls);
+                updateData(mstAgencysupplyInfoDao, mstAgencysupplyInfos);
+            }
+            else if(mClass.contains("MstCheckexerecordInfo")){
+                mstCheckexerecordInfos= (List<MstCheckexerecordInfo>) JsonUtil.parseList(json, cls);
+                updateData(mstCheckexerecordInfoDao, mstCheckexerecordInfos);
+            }
+            else if(mClass.contains("MstCmpsupplyInfo")){
+                mstCmpsupplyInfos= (List<MstCmpsupplyInfo>) JsonUtil.parseList(json, cls);
+                updateData(mstCmpsupplyInfoDao, mstCmpsupplyInfos);
+            }
+            else if(mClass.contains("MstCollectionexerecordInfo")){
+                mstCollectionexerecordInfos= (List<MstCollectionexerecordInfo>) JsonUtil.parseList(json, cls);
+                updateData(mstCollectionexerecordInfoDao, mstCollectionexerecordInfos);
+            }
+            else if(mClass.contains("MstGroupproductM")){
+                mstGroupproductMs= (List<MstGroupproductM>) JsonUtil.parseList(json, cls);
+                updateData(mstGroupproductMDao, mstGroupproductMs);
+            }
+            else if(mClass.contains("MstPromotermInfo")){
+                mstPromotermInfos= (List<MstPromotermInfo>) JsonUtil.parseList(json, cls);
+                updateData(mstPromotermInfoDao, mstPromotermInfos);
+            }
+            else if(mClass.contains("MstVisitM")){
+                mstVisitMs= (List<MstVisitM>) JsonUtil.parseList(json, cls);
+                updateData(mstVisitMDao, mstVisitMs);
+            }
+            else if(mClass.contains("MstVistproductInfo")){
+                MstVistproductInfos= (List<MstVistproductInfo>) JsonUtil.parseList(json, cls);
+                updateData(mstVistproductInfoDao, MstVistproductInfos);
             }
 
             connection.commit(null);

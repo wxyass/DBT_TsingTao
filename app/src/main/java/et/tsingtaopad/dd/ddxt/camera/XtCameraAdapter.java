@@ -25,7 +25,7 @@ import et.tsingtaopad.main.visit.shopvisit.termvisit.camera.domain.CameraInfoStc
 /**
  * 功能描述: 拍照GridView适配器,展示每张缩略图</br>
  */
-class XtCameraAdapter extends BaseAdapter {
+public class XtCameraAdapter extends BaseAdapter {
 
 	private Context context;
     private List<CameraInfoStc> dataLst;
