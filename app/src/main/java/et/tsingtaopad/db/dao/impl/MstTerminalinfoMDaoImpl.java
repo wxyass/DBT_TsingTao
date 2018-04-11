@@ -233,6 +233,7 @@ public class MstTerminalinfoMDaoImpl extends BaseDaoImpl<MstTerminalinfoM, Strin
             item.setVieProtocolFlag(cursor.getString(cursor.getColumnIndex("cmptreaty")));
             visitDate = cursor.getString(cursor.getColumnIndex("visitdate"));
             if (visitDate != null && currDay.equals(visitDate.substring(0, 8))) {// 若果 记录是当天生成的
+                item.setVisitTime(visitDate);
                 item.setSyncFlag(cursor.getString(cursor.getColumnIndex("padisconsistent")));
                 item.setUploadFlag(cursor.getString(cursor.getColumnIndex("uploadFlag")));
             } else {

@@ -15,6 +15,7 @@ import java.io.InputStream;
 
 import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
+import et.tsingtaopad.db.table.MstTerminalinfoM;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 
 /**

@@ -474,7 +474,7 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
 
                             String visitEndDate = DateUtil.formatDate(new Date(), "yyyyMMddHHmmss");
                             // 开始复制 更新拜访离店时间及是否要上传标志 以及对去除拜访指标采集项重复(collectionexerecord表)
-                            xtShopVisitService.confirmXtUpload(visitId, termStc.getTerminalkey(), visitEndDate, "1");
+                            xtShopVisitService.confirmXtUpload(visitId, termStc.getTerminalkey(), termStc.getTerminalcode(),visitEndDate, "1");
 
 
 

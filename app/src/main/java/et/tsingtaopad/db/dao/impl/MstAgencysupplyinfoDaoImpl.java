@@ -69,7 +69,7 @@ public class MstAgencysupplyinfoDaoImpl extends
 			masInfo.setSiebelkey(cursor.getString(cursor.getColumnIndex("siebelkey")));
 			masInfo.setSisconsistent(cursor.getString(cursor.getColumnIndex("sisconsistent")));
 
-			//masInfo.setUpdatetime(cursor.getString(cursor.getColumnIndex("updatetime")));
+			//masInfo.setUpdatetime(cursor.getLong(cursor.getColumnIndex("updatetime")));
 			masInfo.setUpdateuser(cursor.getString(cursor.getColumnIndex("updateuser")));
 			masInfo.setUppertype(cursor.getString(cursor.getColumnIndex("uppertype")));
 			//masInfo.setVersion(cursor.getString(cursor.getColumnIndex("version")));

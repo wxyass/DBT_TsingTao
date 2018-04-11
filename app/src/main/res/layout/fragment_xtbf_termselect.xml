@@ -116,8 +116,9 @@
                 />
         </RelativeLayout>
 
-        <!-- 新增按钮 -->
+        <!-- 全部添加 -->
         <RelativeLayout
+            android:id="@+id/xtbf_termselect_Rl_add"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2">
@@ -129,7 +130,7 @@
                 android:layout_height="@dimen/xtbf_btn_h"
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/bg_select_green"
-                android:text="新增终端"
+                android:text="全部添加"
                 />
         </RelativeLayout>
     </LinearLayout>

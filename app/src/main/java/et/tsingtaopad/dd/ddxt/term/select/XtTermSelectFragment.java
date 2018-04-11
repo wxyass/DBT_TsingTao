@@ -3,18 +3,22 @@ package et.tsingtaopad.dd.ddxt.term.select;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -55,6 +59,7 @@ import et.tsingtaopad.db.table.MstRouteM;
 import et.tsingtaopad.db.table.MstTerminalinfoM;
 import et.tsingtaopad.db.table.MstVisitM;
 import et.tsingtaopad.db.table.MstVistproductInfo;
+import et.tsingtaopad.dd.ddxt.sayhi.XtSayhiFragment;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
 import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartFragment;
 import et.tsingtaopad.dd.ddxt.term.select.adapter.XtTermSelectAdapter;
@@ -89,12 +94,19 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
 
     private LinearLayout termRouteLl;
     private ListView termRouteLv;
+    private Button addAllTermBtn;
+
+    private XtTermSelectMStc xtTermSelectMStc;
 
     private XtTermSelectService xtSelectService;
+    // MstTerminalinfoM term = xtSelectService.findTermByTerminalkey(xtselect.getTerminalkey());
+    //private List<XtTermSelectMStc> selectedList = new ArrayList<XtTermSelectMStc>();// 当前adapter的数据
     private List<XtTermSelectMStc> selectedList = new ArrayList<XtTermSelectMStc>();// 当前adapter的数据
 
     private int TOFRAGMENT = 1;
     private int TOACTIVITY = 2;
+
+    public static final int SINGLE_UP_SUC = 110;
 
     private AlertView mAlertViewExt;//窗口拓展
 
@@ -122,8 +134,10 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
         areaBtn = (DropdownButton) view.findViewById(R.id.xtbf_termselect_area);
         gridBtn = (DropdownButton) view.findViewById(R.id.xtbf_termselect_grid);
         routeBtn = (DropdownButton) view.findViewById(R.id.xtbf_termselect_route);
+        addAllTermBtn = (Button) view.findViewById(R.id.xtbf_termselect_bt_add);
         termRouteLl = (LinearLayout) view.findViewById(R.id.xtbf_termselect_ll_lv);
         termRouteLv = (ListView) view.findViewById(R.id.xtbf_termselect_lv);
+        addAllTermBtn.setOnClickListener(this);
     }
 
     @Override
@@ -131,6 +145,8 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
         super.onActivityCreated(savedInstanceState);
 
         titleTv.setText(R.string.xtbf_selectterm);
+        handler = new MyHandler(this);
+        ConstValues.handler = handler;
 
         xtSelectService = new XtTermSelectService(getActivity());
 
@@ -142,6 +158,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
 
         // 设置终端列表数据 假数据
         initTermListData("1-63UNEX");
+
 
         // 设置终端条目适配器,及条目点击事件
         setItemAdapterListener();
@@ -163,7 +180,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
         areaBtn.setOnDropItemSelectListener(new DropdownButton.OnDropItemSelectListener() {
             @Override
             public void onDropItemSelect(int Postion) {
-                Toast.makeText(getContext(), "您选择了 " + areaList.get(Postion).getName(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "您选择了 " + areaList.get(Postion).getName(), Toast.LENGTH_SHORT).show();
                 if (Postion == 0) {
                     gridList.clear();
                     gridBtn.setText("请先选择左侧");
@@ -191,7 +208,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
         gridBtn.setOnDropItemSelectListener(new DropdownButton.OnDropItemSelectListener() {
             @Override
             public void onDropItemSelect(int Postion) {
-                Toast.makeText(getContext(), "您选择了 " + gridList.get(Postion).getName(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "您选择了 " + gridList.get(Postion).getName(), Toast.LENGTH_SHORT).show();
                 if (Postion == 0) {
                     routeList.clear();
                     routeBtn.setText("请先选择左侧");
@@ -213,9 +230,8 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
         routeBtn.setOnDropItemSelectListener(new DropdownButton.OnDropItemSelectListener() {
             @Override
             public void onDropItemSelect(int Postion) {
-                Toast.makeText(getContext(), "您选择了 " + routeList.get(Postion).getName(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "您选择了 " + routeList.get(Postion).getName(), Toast.LENGTH_SHORT).show();
                 //
-
                 routeKey = routeList.get(Postion).getKey();
                 // 请求路线下的所有终端
                 String content = "{routekey:'" + routeKey + "'," +"tablename:'MST_TERMINALINFO_M'" + "}";
@@ -233,23 +249,26 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
         routes.add(routekey);// 不同路线
         termList.clear();
         termList = xtSelectService.queryTerminal(routes);
-
     }
 
+    XtTermSelectAdapter selectAdapter;
     //  设置终端条目适配器,及条目点击事件
     private void setItemAdapterListener() {
         // 设置适配器 加号按钮点击事件
-        XtTermSelectAdapter selectAdapter = new XtTermSelectAdapter(getActivity(), termList, termList, confirmTv, null, new IXtTermSelectClick() {
+        selectAdapter = new XtTermSelectAdapter(getActivity(), termList, termList, confirmTv, null, new IXtTermSelectClick() {
             @Override
             public void imageViewClick(int position, View v) {
                 ImageView imageView = (ImageView) v;
                 XtTermSelectMStc item = termList.get(position);
+                //MstTerminalinfoM term = xtSelectService.findTermByTerminalkey(item.getTerminalkey());
                 if (selectedList.contains(item)) {
                     selectedList.remove(item);
+                    item.setIsSelectToCart("0");
                     imageView.setImageResource(R.drawable.icon_visit_add);
                     confirmTv.setText("确定" + "(" + selectedList.size() + ")");
                 } else {
                     selectedList.add(item);
+                    item.setIsSelectToCart("1");
                     imageView.setImageResource(R.drawable.ico_terminal_syncflag);
                     confirmTv.setText("确定" + "(" + selectedList.size() + ")");
                 }
@@ -289,10 +308,20 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
                 break;
             case R.id.top_navigation_rl_confirm:// 确定
                 // 生成临时表,跳转终端购物车
-
                 breakNextLayout(TOFRAGMENT, selectedList);
                 PrefUtils.putString(getActivity(), GlobalValues.DDXTZS,"1");
-
+                break;
+            case R.id.xtbf_termselect_bt_add:// 全部添加
+                for (XtTermSelectMStc selectMStc : termList) {
+                    //MstTerminalinfoM term = xtSelectService.findTermByTerminalkey(selectMStc.getTerminalkey());
+                    if (selectedList.contains(selectMStc)) {
+                        selectedList.remove(selectMStc);
+                    }
+                    selectMStc.setIsSelectToCart("1");
+                }
+                selectedList.addAll(termList);
+                selectAdapter.notifyDataSetChanged();
+                confirmTv.setText("确定" + "(" + selectedList.size() + ")");
                 break;
             default:
                 break;
@@ -303,10 +332,16 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //view.setBackgroundColor(getResources().getColor(R.color.bg_content_color_gray));
-        selectedList.clear();
+        /*selectedList.clear();
+        //MstTerminalinfoM term = xtSelectService.findTermByTerminalkey(termList.get(position).getTerminalkey());
         selectedList.add(termList.get(position));
         // 生成临时表,跳转终端拜访
-        breakNextLayout(TOACTIVITY, selectedList);
+        breakNextLayout(TOACTIVITY, selectedList);*/
+
+        xtTermSelectMStc = termList.get(position);
+        // 复制到终端购物车
+        copyMstTerminalinfoMCart(xtTermSelectMStc);
+        confirmXtUplad(xtTermSelectMStc);// 拜访
     }
 
     /**
@@ -319,7 +354,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
 
         // 跳转购物车Fragment
         if (TOFRAGMENT == type) {
-            // 清空终端临时表数据
+            // 清空购物车表数据
             xtSelectService.deleteData("MST_TERMINALINFO_M_CART");
             // 复制终端临时表
             for (XtTermSelectMStc xtselect : selectedList) {
@@ -335,7 +370,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
                 //copyMstTerminalinfoMTemp(xtselect);
                 copyMstTerminalinfoMCart(xtselect);
             }
-            confirmXtUplad();// 拜访
+            //confirmXtUplad();// 拜访
         }
     }
 
@@ -346,15 +381,15 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
     }
 
     // 查找终端,并复制到终端购物车
-    public void copyMstTerminalinfoMCart(XtTermSelectMStc xtselect) {
-        MstTerminalinfoM term = xtSelectService.findTermByTerminalkey(xtselect.getTerminalkey());
+    public void copyMstTerminalinfoMCart(XtTermSelectMStc termSelectMStc) {
+        MstTerminalinfoM term = xtSelectService.findTermByTerminalkey(termSelectMStc.getTerminalkey());
         xtSelectService.toCopyMstTerminalinfoMCartData(term);
     }
 
 
     // 条目点击 确定拜访一家终端
-    private void confirmXtUplad() {
-        String termName = selectedList.get(0).getTerminalname();
+    private void confirmXtUplad(final XtTermSelectMStc termSelectMStc) {
+        String termName = termSelectMStc.getTerminalname();
 
         // 普通窗口
         mAlertViewExt = new AlertView(termName, null, "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert,
@@ -366,7 +401,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
                             //if (ViewUtil.isDoubleClick(v.getId(), 2500)) return;
                             DbtLog.logUtils(TAG, "前往拜访：是");
                             List<String> termKeyLst = new ArrayList<String>();
-                            termKeyLst.add(selectedList.get(0).getTerminalkey());
+                            termKeyLst.add(termSelectMStc.getTerminalkey());
                             String json = JsonUtil.toJson(termKeyLst);
                             String content  = "{"+
                                     "terminalkeys:'"+json+"'," +
@@ -427,8 +462,10 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
                             // 请求某个终端上次拜访详情
                             if ("opt_get_dates2".equals(optcode) && "MST_VISITDATA_M".equals(tableName)) {
                                 String formjson = resObj.getResBody().getContent();
-                                parseTermDetailInfoJson(formjson);
-                                Toast.makeText(getActivity(), "上次终端数据请求成功", Toast.LENGTH_SHORT).show();
+                                MainService mainService = new MainService(getActivity(), null);
+                                mainService.parseTermDetailInfoJson(formjson);
+                                startXtVisitShopActivity();
+                                Toast.makeText(getActivity(), "该终端数据请求成功", Toast.LENGTH_SHORT).show();
                             }
 
 
@@ -462,42 +499,77 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
         MainService service = new MainService(getActivity(), null);
         service.createOrUpdateTable(MST_TERMINALINFO_M, "MST_TERMINALINFO_M", MstTerminalinfoM.class);
         initTermListData(routeKey);
+        setSelectTerm();// 设置已添加购物车的符号
         setItemAdapterListener();
     }
 
-    // 解析某个终端上次拜访详情
-    private void parseTermDetailInfoJson(String json) {
-        // 解析区域定格路线信息
-        AreaGridRoute emp = JsonUtil.parseJson(json, AreaGridRoute.class);
-        String MST_AGENCYGRID_INFO = emp.getMST_AGENCYGRID_INFO();
-        String MST_AGENCYINFO_M = emp.getMST_AGENCYINFO_M();
-        String MST_AGENCYSUPPLY_INFO = emp.getMST_AGENCYSUPPLY_INFO();
-        String MST_CHECKEXERECORD_INFO = emp.getMST_CHECKEXERECORD_INFO();
-        String MST_CMPSUPPLY_INFO = emp.getMST_CMPSUPPLY_INFO();
-        String MST_COLLECTIONEXERECORD_INFO = emp.getMST_COLLECTIONEXERECORD_INFO();
-        String MST_GROUPPRODUCT_M = emp.getMST_GROUPPRODUCT_M();
-        String MST_PROMOTERM_INFO = emp.getMST_PROMOTERM_INFO();
-        String MST_VISIT_M = emp.getMST_VISIT_M();
-        String MST_VISTPRODUCT_INFO = emp.getMST_VISTPRODUCT_INFO();
 
-        MainService service = new MainService(getActivity(), null);
-        service.createOrUpdateTable(MST_AGENCYGRID_INFO, "MST_AGENCYGRID_INFO", MstAgencygridInfo.class);
-        service.createOrUpdateTable(MST_AGENCYINFO_M, "MST_AGENCYINFO_M", MstAgencyinfoM.class);
-        service.createOrUpdateTable(MST_AGENCYSUPPLY_INFO, "MST_AGENCYSUPPLY_INFO", MstAgencysupplyInfo.class);
-        service.createOrUpdateTable(MST_CHECKEXERECORD_INFO, "MST_CHECKEXERECORD_INFO", MstCheckexerecordInfo.class);
-        service.createOrUpdateTable(MST_CMPSUPPLY_INFO, "MST_CMPSUPPLY_INFO", MstCmpsupplyInfo.class);
-        service.createOrUpdateTable(MST_COLLECTIONEXERECORD_INFO, "MST_COLLECTIONEXERECORD_INFO", MstCollectionexerecordInfo.class);
-        service.createOrUpdateTable(MST_GROUPPRODUCT_M, "MST_GROUPPRODUCT_M", MstGroupproductM.class);
-        service.createOrUpdateTable(MST_PROMOTERM_INFO, "MST_PROMOTERM_INFO", MstPromotermInfo.class);
-        service.createOrUpdateTable(MST_VISIT_M, "MST_VISIT_M", MstVisitM.class);
-        service.createOrUpdateTable(MST_VISTPRODUCT_INFO, "MST_VISTPRODUCT_INFO", MstVistproductInfo.class);
-
-        //
+    // 跳转巡店拜访
+    private void startXtVisitShopActivity(){
         Intent intent = new Intent(getActivity(), XtVisitShopActivity.class);
         intent.putExtra("isFirstVisit", "1");// 非第一次拜访1
-        intent.putExtra("termStc", selectedList.get(0));
+        intent.putExtra("termStc", xtTermSelectMStc);
         intent.putExtra("seeFlag", "0"); // 0拜访 1查看标识
         startActivity(intent);
     }
 
+    MyHandler handler;
+
+    /**
+     * 接收子线程消息的 Handler
+     */
+    public static class MyHandler extends Handler {
+
+        // 软引用
+        SoftReference<XtTermSelectFragment> fragmentRef;
+
+        public MyHandler(XtTermSelectFragment fragment) {
+            fragmentRef = new SoftReference<XtTermSelectFragment>(fragment);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            XtTermSelectFragment fragment = fragmentRef.get();
+            if (fragment == null) {
+                return;
+            }
+
+
+            // 处理UI 变化
+            switch (msg.what) {
+                case ConstValues.WAIT0://  结束上传  刷新本页面
+                    fragment.shuaxin();
+                    break;
+                case SINGLE_UP_SUC:
+                    //fragment.initData2();
+                    break;
+
+            }
+        }
+    }
+
+    // 结束上传  刷新页面
+    private void shuaxin() {
+        //
+        initTermListData(routeKey);// 重新读取终端列表
+        setSelectTerm();// 设置已添加购物车的符号
+        setItemAdapterListener();// 适配器处理
+    }
+
+    // 设置当前界面添加符号
+    private void setSelectTerm(){
+        List<XtTermSelectMStc> selectedList2 = new ArrayList<XtTermSelectMStc>();
+        List<XtTermSelectMStc> selectedList3 = new ArrayList<XtTermSelectMStc>();
+        for (XtTermSelectMStc selectMStc : termList) {
+            for (XtTermSelectMStc term : selectedList) {
+                if(selectMStc.getTerminalkey().equals(term.getTerminalkey())){
+                    selectedList2.add(selectMStc);
+                    selectedList3.add(term);
+                    selectMStc.setIsSelectToCart("1");
+                }
+            }
+        }
+        selectedList.removeAll(selectedList3);// 清空
+        selectedList.addAll(selectedList2);
+    }
 }

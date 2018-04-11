@@ -1,6 +1,7 @@
 package et.tsingtaopad.home.app;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.util.Log;
@@ -17,6 +18,7 @@ import java.util.Map;
 import java.util.Set;
 
 import cn.com.benyoyo.manage.bs.IntStc.DataSynStc;
+import et.tsingtaopad.business.first.bean.AreaGridRoute;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
@@ -87,6 +89,7 @@ import et.tsingtaopad.db.table.PadChecktypeM;
 import et.tsingtaopad.db.table.PadPlantempcheckM;
 import et.tsingtaopad.db.table.PadPlantempcollectionInfo;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtShopVisitService;
+import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.camera.domain.CameraInfoStc;
 
 /**
@@ -262,7 +265,7 @@ public class MainService extends XtShopVisitService {
     List<MstVistproductInfo> MstVistproductInfos = null;
 
     /**
-     * 图片类型表更新 注意本张表并不是差量插入,而是先全部删除,再全部插入 MST_PICTYPE_M 因为数量少
+     * 同步表数据
      *
      * @param json
      *            .
@@ -276,10 +279,17 @@ public class MainService extends XtShopVisitService {
             connection.setAutoCommit(false);
             Log.e(TAG, "createOrUpdateTable 1 transation");
 
-            // 先将之前此表中的数据全部删除, 在做插入记录操作
-            StringBuffer buffer = new StringBuffer();
-            buffer.append("DELETE FROM "+tablename);
-            database.execSQL(buffer.toString());
+
+            String table = "MST_MARKETAREA_M,MST_GRID_M,MST_ROUTE_M,CMM_DATADIC_M,CMM_AREA_M,MST_PROMOTIONS_M," +
+                    "MST_PROMOPRODUCT_INFO,MST_PICTYPE_M,MST_PRODUCT_M,MST_CMPCOMPANY_M,MST_CMPBRANDS_M," +
+                    "MST_CMPRODUCTINFO_M,MST_TERMINALINFO_M";
+
+            // 先将之前此表中的数据全部删除(拜访的上次详情不删)  在做插入记录操作,
+            if(table.contains(tablename)){
+                StringBuffer buffer = new StringBuffer();
+                buffer.append("DELETE FROM "+tablename);
+                database.execSQL(buffer.toString());
+            }
 
             // 更新 插入
             String mClass = cls.getName();
@@ -334,7 +344,7 @@ public class MainService extends XtShopVisitService {
                 mstTerminalinfoMs= (List<MstTerminalinfoM>) JsonUtil.parseList(json, cls);
                 updateData(mstTerminalinfoMDao, mstTerminalinfoMs);
             }
-            //----------------------------------------------------------------------
+            // 上次终端拜访记录----------------------------------------------------------------------
             else if(mClass.contains("MstAgencygridInfo")){
                 mstAgencygridInfos= (List<MstAgencygridInfo>) JsonUtil.parseList(json, cls);
                 updateData(mstAgencygridInfoDao, mstAgencygridInfos);
@@ -390,6 +400,7 @@ public class MainService extends XtShopVisitService {
         }
     }
 
+    // 保存指标模板
     public void  parsePadCheckType(String strPAD_CHECKTYPE_M){
 
         Log.e(TAG, "createOrUpdateTable");
@@ -548,6 +559,33 @@ public class MainService extends XtShopVisitService {
             String listStatus = datas == null ? "传入对象为：null" : "数据size = 0";
             Log.i("updateData", "更新list " + dao.getDataClass().getName() + "为：" + listStatus);
         }
+    }
+
+    // 解析某个(或多个)终端上次拜访详情
+    public void parseTermDetailInfoJson(String json) {
+        // 解析区域定格路线信息
+        AreaGridRoute emp = JsonUtil.parseJson(json, AreaGridRoute.class);
+        String MST_AGENCYGRID_INFO = emp.getMST_AGENCYGRID_INFO();
+        String MST_AGENCYINFO_M = emp.getMST_AGENCYINFO_M();
+        String MST_AGENCYSUPPLY_INFO = emp.getMST_AGENCYSUPPLY_INFO();
+        String MST_CHECKEXERECORD_INFO = emp.getMST_CHECKEXERECORD_INFO();
+        String MST_CMPSUPPLY_INFO = emp.getMST_CMPSUPPLY_INFO();
+        String MST_COLLECTIONEXERECORD_INFO = emp.getMST_COLLECTIONEXERECORD_INFO();
+        String MST_GROUPPRODUCT_M = emp.getMST_GROUPPRODUCT_M();
+        String MST_PROMOTERM_INFO = emp.getMST_PROMOTERM_INFO();
+        String MST_VISIT_M = emp.getMST_VISIT_M();
+        String MST_VISTPRODUCT_INFO = emp.getMST_VISTPRODUCT_INFO();
+
+        createOrUpdateTable(MST_AGENCYGRID_INFO, "MST_AGENCYGRID_INFO", MstAgencygridInfo.class);
+        createOrUpdateTable(MST_AGENCYINFO_M, "MST_AGENCYINFO_M", MstAgencyinfoM.class);
+        createOrUpdateTable(MST_AGENCYSUPPLY_INFO, "MST_AGENCYSUPPLY_INFO", MstAgencysupplyInfo.class);
+        createOrUpdateTable(MST_CHECKEXERECORD_INFO, "MST_CHECKEXERECORD_INFO", MstCheckexerecordInfo.class);
+        createOrUpdateTable(MST_CMPSUPPLY_INFO, "MST_CMPSUPPLY_INFO", MstCmpsupplyInfo.class);
+        createOrUpdateTable(MST_COLLECTIONEXERECORD_INFO, "MST_COLLECTIONEXERECORD_INFO", MstCollectionexerecordInfo.class);
+        createOrUpdateTable(MST_GROUPPRODUCT_M, "MST_GROUPPRODUCT_M", MstGroupproductM.class);
+        createOrUpdateTable(MST_PROMOTERM_INFO, "MST_PROMOTERM_INFO", MstPromotermInfo.class);
+        createOrUpdateTable(MST_VISIT_M, "MST_VISIT_M", MstVisitM.class);
+        createOrUpdateTable(MST_VISTPRODUCT_INFO, "MST_VISTPRODUCT_INFO", MstVistproductInfo.class);
     }
 
 }

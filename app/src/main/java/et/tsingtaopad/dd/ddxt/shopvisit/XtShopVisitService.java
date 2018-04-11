@@ -1391,7 +1391,7 @@ public class XtShopVisitService {
      * @param visitEndDate 离店时间
      * @param uploadFlag   是否要上传标志
      */
-    public void confirmXtUpload(String visitId, String termId, String visitEndDate, String uploadFlag) {
+    public void confirmXtUpload(String visitId, String termId, String terminalcode,String visitEndDate, String uploadFlag) {
         // 事务控制
         AndroidDatabaseConnection connection = null;
         try {
@@ -1457,7 +1457,7 @@ public class XtShopVisitService {
             createMstCmpsupplyInfoByMstCmpsupplyInfoTemp(cmpSupplyDao,cmpSupplyTempDao, visitId, termId, visitEndDate);
 
             // 复制产品组合是否达标表
-            createMstGroupproductMByMstGroupproductMTemp(groupproDao,groupproTempDao, visitId, termId, visitEndDate);
+            createMstGroupproductMByMstGroupproductMTemp(groupproDao,groupproTempDao, visitId, termId,terminalcode, visitEndDate);
 
             connection.commit(null);
         } catch (Exception e) {
@@ -1474,12 +1474,12 @@ public class XtShopVisitService {
     // 复制产品组合是否达标表
     private void createMstGroupproductMByMstGroupproductMTemp(
             Dao<MstGroupproductM, String> groupproDao,
-            Dao<MstGroupproductMTemp, String> groupproTempDao, String visitId, String termId, String visitEndDate) {
+            Dao<MstGroupproductMTemp, String> groupproTempDao, String visitId, String termId,String terminalcode, String visitEndDate) {
 
         try {
             QueryBuilder<MstGroupproductMTemp, String> collectionQB = groupproTempDao.queryBuilder();
             Where<MstGroupproductMTemp, String> collectionWhere = collectionQB.where();
-            collectionWhere.eq("lowerkey", termId);
+            collectionWhere.eq("terminalcode", terminalcode);
             List<MstGroupproductMTemp> mstGroupproductMTemps = collectionQB.query();
             if(mstGroupproductMTemps.size()>0){
                 for (MstGroupproductMTemp item:mstGroupproductMTemps) {
@@ -1494,7 +1494,7 @@ public class XtShopVisitService {
                     info.setCreatedate(item.getCreatedate());
                     info.setUpdateusereng(item.getUpdateusereng());
                     info.setVisitkey(item.getVisitkey());
-                    info.setUploadflag(item.getUploadflag());//  0:该条记录不上传  1:该条记录需要上传 ;
+                    info.setUploadflag("1");//  0:该条记录不上传  1:该条记录需要上传 ;
                     info.setPadisconsistent("0");
                     info.setUpdatetime(item.getUpdatetime());
 
@@ -1517,7 +1517,7 @@ public class XtShopVisitService {
         try {
             QueryBuilder<MstCmpsupplyInfoTemp, String> collectionQB = cmpSupplyTempDao.queryBuilder();
             Where<MstCmpsupplyInfoTemp, String> collectionWhere = collectionQB.where();
-            collectionWhere.eq("lowerkey", termId);
+            collectionWhere.eq("terminalkey", termId);
             List<MstCmpsupplyInfoTemp> mstCmpsupplyInfoTemps = collectionQB.query();
             if(mstCmpsupplyInfoTemps.size()>0){
                 for (MstCmpsupplyInfoTemp item:mstCmpsupplyInfoTemps) {
@@ -2094,7 +2094,7 @@ public class XtShopVisitService {
 
                 mstVisitM.setSisconsistent(visitTemp.getSisconsistent());
                 mstVisitM.setScondate(visitTemp.getScondate());
-                mstVisitM.setPadisconsistent(visitTemp.getPadisconsistent());
+
                 mstVisitM.setPadcondate(visitTemp.getPadcondate());
 
                 mstVisitM.setComid(visitTemp.getComid());
@@ -2114,7 +2114,8 @@ public class XtShopVisitService {
                 mstVisitM.setIfminedate(visitTemp.getIfminedate());
                 mstVisitM.setIfmine(visitTemp.getIfmine());
                 mstVisitM.setVisitposition(visitTemp.getVisitposition());
-                mstVisitM.setUploadFlag(visitTemp.getUploadFlag());
+                mstVisitM.setPadisconsistent("0");
+                mstVisitM.setUploadFlag("1");
                 dao.create(mstVisitM);
             } catch (SQLException e) {
                 Log.e(TAG, "复制到拜访主表正式表失败", e);

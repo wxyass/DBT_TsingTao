@@ -41,7 +41,10 @@ public class XtTermSelectMStc extends MstTerminalinfoM
 
     // 结束拜访上传按钮状态
     private String uploadFlag;
-    //当前终端 拜访结果
+    // 是否加入购物车
+    private String isSelectToCart;
+
+    //是否选中加入了购物车   0:未加入  1:已加入
     private String terminalStatus;
 
     public String getRoutename()
@@ -169,4 +172,11 @@ public class XtTermSelectMStc extends MstTerminalinfoM
         this.terminalStatus = terminalStatus;
     }
 
+    public String getIsSelectToCart() {
+        return isSelectToCart;
+    }
+
+    public void setIsSelectToCart(String isSelectToCart) {
+        this.isSelectToCart = isSelectToCart;
+    }
 }

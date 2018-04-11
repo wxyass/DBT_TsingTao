@@ -37,6 +37,7 @@ import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
 import et.tsingtaopad.dd.ddxt.term.cart.adapter.XtTermCartAdapter;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
+import et.tsingtaopad.home.app.MainService;
 import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.http.HttpParseJson;
 import et.tsingtaopad.main.visit.shopvisit.term.domain.MstTermListMStc;
@@ -316,10 +317,11 @@ public class XtTermCartFragment extends BaseFragmentSupport implements View.OnCl
                         // 保存登录信息
                         if(ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())){
                             // 保存信息
-                            if("opt_get_dates2".equals(optcode)&&"".equals(tableName)){
+                            if("opt_get_dates2".equals(optcode)&&"MST_VISITDATA_M".equals(tableName)){
                                 String formjson = resObj.getResBody().getContent();
-                                parseTermDetailJson(formjson);
-                                Toast.makeText(getActivity(), "同步终端详情成功", Toast.LENGTH_SHORT).show();
+                                MainService mainService = new MainService(getActivity(), null);
+                                mainService.parseTermDetailInfoJson(formjson);
+                                Toast.makeText(getActivity(), "该列表终端数据请求成功", Toast.LENGTH_SHORT).show();
                             }
 
 
@@ -344,8 +346,4 @@ public class XtTermCartFragment extends BaseFragmentSupport implements View.OnCl
                 .post();
     }
 
-    // 解析返回的 上次拜访详情
-    private void parseTermDetailJson(String formjson) {
-
-    }
 }

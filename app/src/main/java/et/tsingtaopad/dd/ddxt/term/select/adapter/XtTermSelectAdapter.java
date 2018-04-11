@@ -123,9 +123,7 @@ public class XtTermSelectAdapter extends BaseAdapter implements OnClickListener 
         }
         holder.terminalSequenceEt.setTag(position);
 
-        // 添加终端
-        holder.addTerm.setTag(position);
-        holder.addTerm.setOnClickListener(mListener);
+
 
 
         XtTermSelectMStc item = dataLst.get(position);
@@ -158,6 +156,15 @@ public class XtTermSelectAdapter extends BaseAdapter implements OnClickListener 
             holder.addTerm.setVisibility(View.VISIBLE);
         }
 
+        // 添加终端
+        holder.addTerm.setTag(position);
+        holder.addTerm.setOnClickListener(mListener);
+        if("1".equals(item.getIsSelectToCart())){
+            holder.addTerm.setImageResource(R.drawable.ico_terminal_syncflag);
+        }else{
+            holder.addTerm.setImageResource(R.drawable.icon_visit_add);
+        }
+
         //
         holder.terminalSequenceEt.setText(item.getSequence());
         //
@@ -173,8 +180,21 @@ public class XtTermSelectAdapter extends BaseAdapter implements OnClickListener 
             holder.visitDateTv.setText("今日未拜访");
         }
 
-        // 上传标记
-        if (ConstValues.FLAG_1.equals(item.getSyncFlag())) {
+        // 上传标记  SyncFlag对应拜访表Padisconsistent
+        if(ConstValues.FLAG_1.equals(item.getUploadFlag())&&ConstValues.FLAG_1.equals(item.getSyncFlag())){
+            // 结束上传  上传成功
+            holder.terminalNameTv.setTextColor(Color.RED);
+            holder.updateIv.setVisibility(View.VISIBLE);
+        }else if(ConstValues.FLAG_1.equals(item.getUploadFlag())&&ConstValues.FLAG_0.equals(item.getSyncFlag())){
+            // 结束上传  上传失败
+            holder.terminalNameTv.setTextColor(Color.YELLOW);
+            holder.updateIv.setVisibility(View.VISIBLE);// 后面修改
+        }else {
+            holder.terminalNameTv.setTextColor(Color.BLACK);
+            holder.updateIv.setVisibility(View.INVISIBLE);
+        }
+
+        /*if (ConstValues.FLAG_1.equals(item.getSyncFlag())) {
             holder.terminalNameTv.setTextColor(Color.RED);
             holder.updateIv.setVisibility(View.VISIBLE);
         } else if (ConstValues.FLAG_0.equals(item.getSyncFlag())) {
@@ -183,7 +203,7 @@ public class XtTermSelectAdapter extends BaseAdapter implements OnClickListener 
         } else {
             holder.terminalNameTv.setTextColor(Color.BLACK);
             holder.updateIv.setVisibility(View.INVISIBLE);
-        }
+        }*/
 
         // 我品
         if (ConstValues.FLAG_1.equals(item.getMineFlag())) {

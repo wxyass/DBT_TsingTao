@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -77,6 +78,7 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
 
     private LinearLayout termRouteLl;
     private ListView termRouteLv;
+    private Button addAllTermBtn;
 
     private XtTermSelectService xtSelectService;
     private List<XtTermSelectMStc> selectedList = new ArrayList<XtTermSelectMStc>();// 当前adapter的数据
@@ -110,8 +112,10 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
         areaBtn = (DropdownButton) view.findViewById(R.id.xtbf_termselect_area);
         gridBtn = (DropdownButton) view.findViewById(R.id.xtbf_termselect_grid);
         routeBtn = (DropdownButton) view.findViewById(R.id.xtbf_termselect_route);
+        addAllTermBtn = (Button) view.findViewById(R.id.xtbf_termselect_bt_add);
         termRouteLl = (LinearLayout) view.findViewById(R.id.xtbf_termselect_ll_lv);
         termRouteLv = (ListView) view.findViewById(R.id.xtbf_termselect_lv);
+        addAllTermBtn.setOnClickListener(this);
     }
 
     @Override
@@ -224,10 +228,11 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
 
     }
 
+    XtTermSelectAdapter selectAdapter;
     //  设置终端条目适配器,及条目点击事件
     private void setItemAdapterListener() {
         // 设置适配器 加号按钮点击事件
-        XtTermSelectAdapter selectAdapter = new XtTermSelectAdapter(getActivity(), termList, termList, confirmTv, null, new IXtTermSelectClick() {
+         selectAdapter = new XtTermSelectAdapter(getActivity(), termList, termList, confirmTv, null, new IXtTermSelectClick() {
             @Override
             public void imageViewClick(int position, View v) {
                 ImageView imageView = (ImageView) v;
@@ -279,6 +284,18 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
                 // 生成临时表,跳转终端购物车
                 breakNextLayout(TOFRAGMENT, selectedList);
                 PrefUtils.putString(getActivity(), GlobalValues.DDXTZS,"2");
+                break;
+            case R.id.xtbf_termselect_bt_add:// 全部添加
+
+                for (XtTermSelectMStc selectMStc : termList) {
+                    if (selectedList.contains(selectMStc)) {
+                        selectedList.remove(selectMStc);
+                    }
+                    selectMStc.setIsSelectToCart("1");
+                }
+                selectedList.addAll(termList);
+                selectAdapter.notifyDataSetChanged();
+                confirmTv.setText("确定" + "(" + selectedList.size() + ")");
                 break;
             default:
                 break;

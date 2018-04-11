@@ -345,7 +345,7 @@ public class XtUploadService
                     String visitsss = JsonUtil.toJson(mstVisitm);
                     //savFile(visitsss, "MstVisits");// 采集项记录表
                     //FileUtil.writeTxt(visitsss,FileUtil.getSDPath()+"/MstVisits2.txt");//上传巡店拜访的json
-                    childDatas.put("MST_VISIT_M", JsonUtil.toJson(mstVisitm));
+                    childDatas.put("MIT_VISIT_M", JsonUtil.toJson(mstVisitm));
                     
                     String visitkey = mstVisitm.getVisitkey();
                     String terminalkey = mstVisitm.getTerminalkey();
@@ -358,7 +358,7 @@ public class XtUploadService
                             childTerminalinfoMs.add(mTerminalinfoM);
                         }
                     }
-                    childDatas.put("MST_TERMINALINFO_M",JsonUtil.toJson(childTerminalinfoMs));
+                    childDatas.put("MIT_TERMINALINFO_M",JsonUtil.toJson(childTerminalinfoMs));
                     /*String childTerminalinfoMsqwe = JsonUtil.toJson(childTerminalinfoMs);
                     FileUtil.writeTxt(childTerminalinfoMsqwe, FileUtil.getSDPath()+"/childTerminalinfoMsqwe.txt");*/
                     
@@ -369,17 +369,16 @@ public class XtUploadService
                             childMstGroupproductMs.add(mstgroupproductm);
                         }
                     }
-                    childDatas.put("MST_GROUPPRODUCT_M",JsonUtil.toJson(childMstGroupproductMs));
+                    childDatas.put("MIT_GROUPPRODUCT_M",JsonUtil.toJson(childMstGroupproductMs));
 
                     List<MstCmpsupplyInfo> childCmpsupplyInfos = new ArrayList<MstCmpsupplyInfo>();
                     for (MstCmpsupplyInfo childCmpsupplyInfo : cmpsupplyInfos) {
-                        if (terminalkey.equals(childCmpsupplyInfo
-                                .getTerminalkey())) {
+                        if (terminalkey.equals(childCmpsupplyInfo.getTerminalkey())) {
                             childCmpsupplyInfo.setPadisconsistent("1");
                             childCmpsupplyInfos.add(childCmpsupplyInfo);
                         }
                     }
-                    childDatas.put("MST_CMPSUPPLY_INFO", JsonUtil.toJson(childCmpsupplyInfos));
+                    childDatas.put("MIT_CMPSUPPLY_INFO", JsonUtil.toJson(childCmpsupplyInfos));
 
                     // 终端档案申请表
                     List<MstInvalidapplayInfo> childInvalidapplayInfos = new ArrayList<MstInvalidapplayInfo>();
@@ -389,7 +388,7 @@ public class XtUploadService
                             childInvalidapplayInfos.add(mInvalidapplayInfo);
                         }
                     }
-                    childDatas.put("MST_INVALIDAPPLAY_INFO",JsonUtil.toJson(childInvalidapplayInfos));
+                    childDatas.put("MIT_INVALIDAPPLAY_INFO",JsonUtil.toJson(childInvalidapplayInfos));
 
                     // MST_PROMOTERM_INFO(终端参加活动信息表)
                     List<MstPromotermInfo> childPromotermInfos = new ArrayList<MstPromotermInfo>();
@@ -399,7 +398,7 @@ public class XtUploadService
                             childPromotermInfos.add(mPromotermInfo);
                         }
                     }
-                    childDatas.put("MST_PROMOTERM_INFO", JsonUtil.toJson(childPromotermInfos));
+                    childDatas.put("MIT_PROMOTERM_INFO", JsonUtil.toJson(childPromotermInfos));
 
                     // MST_VISTPRODUCT_INFO(拜访产品-竞品我品记录表)
                     List<MstVistproductInfo> childMstVistproductInfos = new ArrayList<MstVistproductInfo>();
@@ -411,7 +410,7 @@ public class XtUploadService
                     }
                     String json = JsonUtil.toJson(childMstVistproductInfos);
                     //FileUtil.writeTxt(json, FileUtil.getSDPath()+"/mVistproductInfos0808.txt");
-                    childDatas.put("MST_VISTPRODUCT_INFO",JsonUtil.toJson(childMstVistproductInfos));
+                    childDatas.put("MIT_VISTPRODUCT_INFO",JsonUtil.toJson(childMstVistproductInfos));
 
                     // MstAgencysupplyInfo MST_AGENCYSUPPLY_INFO(经销商供货关系信息表)
                     List<MstAgencysupplyInfo> childMstAgencysupplyInfos = new ArrayList<MstAgencysupplyInfo>();
@@ -422,7 +421,7 @@ public class XtUploadService
                             childMstAgencysupplyInfos.add(mAgencysupplyInfo);
                         }
                     }
-                    childDatas.put("MST_AGENCYSUPPLY_INFO", JsonUtil.toJson(childMstAgencysupplyInfos));
+                    childDatas.put("MIT_AGENCYSUPPLY_INFO", JsonUtil.toJson(childMstAgencysupplyInfos));
 
                     // MST_COLLECTIONEXERECORD_INFO(拜访指标执行采集项记录表)
                     List<MstCollectionexerecordInfo> childMstCollectionexerecordInfos = new ArrayList<MstCollectionexerecordInfo>();
@@ -435,7 +434,7 @@ public class XtUploadService
                     }
                     String collectionexerecord = JsonUtil.toJson(childMstCollectionexerecordInfos);
                     //FileUtil.writeTxt(collectionexerecord, FileUtil.getSDPath()+"/collectionexerecord1.txt");
-                    childDatas.put("MST_COLLECTIONEXERECORD_INFO",JsonUtil.toJson(childMstCollectionexerecordInfos));
+                    childDatas.put("MIT_COLLECTIONEXERECORD_INFO",JsonUtil.toJson(childMstCollectionexerecordInfos));
 
                     // MST_CHECKEXERECORD_INFO(拜访指标执行记录表)MstCheckexerecordInfo
                     List<MstCheckexerecordInfo> childMstCheckexerecordInfos = new ArrayList<MstCheckexerecordInfo>();
@@ -461,7 +460,7 @@ public class XtUploadService
                     //String checkexerecord = JsonUtil.toJson(childMstCheckexerecordInfos);
                     //savFile(checkexerecord, "MST_CHECKEXERECORD_INFO");// 拉链表
                     //FileUtil.writeTxt(checkexerecord, FileUtil.getSDPath()+"/checkexerecord3213.txt");
-                    childDatas.put("MST_CHECKEXERECORD_INFO",JsonUtil.toJson(childMstCheckexerecordInfos));
+                    childDatas.put("MIT_CHECKEXERECORD_INFO",JsonUtil.toJson(childMstCheckexerecordInfos));
 
                     mainDatas.add(childDatas);
                 }
@@ -472,8 +471,76 @@ public class XtUploadService
                 // System.out.println("巡店拜访"+json);
                 Log.i(TAG, "巡店拜访send list size" + mainDatas.size() + json);
 
+                upVisitDataInService("opt_save_visit","",json);
 
-                /*httpUtil.send("opt_save_visit", json, new RequestCallBack<String>() {
+            } else {
+                if (isNeedExit) {
+                	//上传所有的巡店拜访
+                    handler.sendEmptyMessage(TitleLayout.UPLOAD_DATA);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 请求路线下的所有终端
+     *
+     * @param optcode   请求码
+     * @param tableName 请求的表
+     * @param content   请求json
+     */
+    void upVisitDataInService(final String optcode, final String tableName, String content) {
+
+        // 组建请求Json
+        RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(context);
+        requestHeadStc.setOptcode(PropertiesUtil.getProperties(optcode));
+        RequestStructBean reqObj = HttpParseJson.parseRequestStructBean(requestHeadStc, content);
+
+        // 压缩请求数据
+        String jsonZip = HttpParseJson.parseRequestJson(reqObj);
+
+        RestClient.builder()
+                .url(HttpUrl.IP_END)
+                .params("data", jsonZip)
+                //.loader(context)
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+                        String json = HttpParseJson.parseJsonResToString(response);
+                        ResponseStructBean resObj = new ResponseStructBean();
+                        resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
+                        // 保存登录信息
+                        if (ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())) {
+                            //
+                            Toast.makeText(context, "上传成功", Toast.LENGTH_SHORT).show();
+                            // 处理上传后的数据,该删删,该处理
+                            parseUpData();
+
+                        } else {
+                            Toast.makeText(context, resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .error(new IError() {
+                    @Override
+                    public void onError(int code, String msg) {
+                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .failure(new IFailure() {
+                    @Override
+                    public void onFailure() {
+                        Toast.makeText(context, "请求失败", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .builde()
+                .post();
+    }
+
+    private void parseUpData() {
+        /*httpUtil.send("opt_save_visit", json, new RequestCallBack<String>() {
                             @Override
                             public void onSuccess(ResponseInfo<String> responseInfo) {
                                 ResponseStructBean resObj = HttpUtil .parseRes(responseInfo.result);
@@ -626,74 +693,7 @@ public class XtUploadService
                                 onFailureSendMessage(isNeedExit, visitKey);
                             }
                         });*/
-                upVisitDataInService("opt_save_visit","",json);
-            } else {
-                if (isNeedExit) {
-                	//上传所有的巡店拜访
-                    handler.sendEmptyMessage(TitleLayout.UPLOAD_DATA);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
-
-    /**
-     * 请求路线下的所有终端
-     *
-     * @param optcode   请求码
-     * @param tableName 请求的表
-     * @param content   请求json
-     */
-    void upVisitDataInService(final String optcode, final String tableName, String content) {
-
-        // 组建请求Json
-        RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(context);
-        requestHeadStc.setOptcode(PropertiesUtil.getProperties(optcode));
-        RequestStructBean reqObj = HttpParseJson.parseRequestStructBean(requestHeadStc, content);
-
-        // 压缩请求数据
-        String jsonZip = HttpParseJson.parseRequestJson(reqObj);
-
-        RestClient.builder()
-                .url(HttpUrl.IP_END)
-                .params("data", jsonZip)
-                //.loader(context)
-                .success(new ISuccess() {
-                    @Override
-                    public void onSuccess(String response) {
-                        String json = HttpParseJson.parseJsonResToString(response);
-                        ResponseStructBean resObj = new ResponseStructBean();
-                        resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
-                        // 保存登录信息
-                        if (ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())) {
-                            //
-
-
-
-                        } else {
-                            Toast.makeText(context, resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                })
-                .error(new IError() {
-                    @Override
-                    public void onError(int code, String msg) {
-                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .failure(new IFailure() {
-                    @Override
-                    public void onFailure() {
-                        Toast.makeText(context, "请求失败", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .builde()
-                .post();
-    }
-
-
-
 
 
     /**

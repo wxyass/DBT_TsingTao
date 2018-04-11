@@ -2,6 +2,7 @@ package et.tsingtaopad.dd.ddxt.shopvisit;
 
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.app.FragmentTransaction;
@@ -24,6 +25,7 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,6 +35,7 @@ import et.tsingtaopad.base.BaseActivity;
 import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
+import et.tsingtaopad.core.util.dbtutil.FileUtil;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
@@ -40,6 +43,7 @@ import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.core.view.alertview.OnDismissListener;
 import et.tsingtaopad.core.view.alertview.OnItemClickListener;
+import et.tsingtaopad.db.table.MstTerminalinfoM;
 import et.tsingtaopad.db.table.MstVisitM;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
 import et.tsingtaopad.dd.ddxt.camera.XtCameraFragment;
@@ -446,6 +450,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
     private AlertView mAlertViewExt;//窗口拓展例子
 
     private void confirmXtUplad() {
+        XtVisitShopActivity.this.onPause();
         // 普通窗口
         mAlertViewExt = new AlertView("上传拜访数据?", null, "取消", new String[]{"确定"}, null, this, AlertView.Style.Alert,
                 new OnItemClickListener() {
@@ -482,11 +487,13 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
 
                             String visitEndDate = DateUtil.formatDate(new Date(), "yyyyMMddHHmmss");
                             // 开始复制 更新拜访离店时间及是否要上传标志 以及对去除拜访指标采集项重复(collectionexerecord表)
-                            xtShopVisitService.confirmXtUpload(visitId, termStc.getTerminalkey(), visitEndDate, "1");
+                            xtShopVisitService.confirmXtUpload(visitId, termStc.getTerminalkey(),termStc.getTerminalcode(), visitEndDate, "1");
 
 
                             XtUploadService xtUploadService = new XtUploadService(getApplicationContext(),null);
                             xtUploadService.upload_visit(false,visitId,1);
+
+                            ConstValues.handler.sendEmptyMessage(ConstValues.WAIT0);
 
                             XtVisitShopActivity.this.finish();
                         }
@@ -526,6 +533,8 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
                 });
         mAlertViewExt.show();
     }
+
+
 
     // 检测现有量变化量是否为空  true:全不为空 可以上传   false:有为空的 不可上传
     private boolean checkCollectionexrecord(){
