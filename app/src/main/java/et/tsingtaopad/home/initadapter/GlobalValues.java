@@ -29,6 +29,11 @@ public class GlobalValues {
     //今日要事是否允许提醒
     public static boolean isDayThingWarn = false;
 
+    // 协同拜访上传成功
+    public static final int SINGLE_UP_SUC = 110;
+    // 协同拜访上传失败
+    public static final int SINGLE_UP_FAIL = 111;
+
     // TODO hongen 删除new LoginSession()  登录Session
     public static LoginSession loginSession = new LoginSession();
 

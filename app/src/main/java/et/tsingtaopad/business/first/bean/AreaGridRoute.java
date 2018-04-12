@@ -38,7 +38,9 @@ public class AreaGridRoute {
     private String MST_GROUPPRODUCT_M;//
     private String MST_PROMOTERM_INFO;//
     private String MST_VISIT_M;//
+
     private String MST_VISTPRODUCT_INFO;//
+    private String MIT_VISIT_M;//
 
 
 
@@ -241,5 +243,13 @@ public class AreaGridRoute {
 
     public void setMST_VISTPRODUCT_INFO(String MST_VISTPRODUCT_INFO) {
         this.MST_VISTPRODUCT_INFO = MST_VISTPRODUCT_INFO;
+    }
+
+    public String getMIT_VISIT_M() {
+        return MIT_VISIT_M;
+    }
+
+    public void setMIT_VISIT_M(String MIT_VISIT_M) {
+        this.MIT_VISIT_M = MIT_VISIT_M;
     }
 }

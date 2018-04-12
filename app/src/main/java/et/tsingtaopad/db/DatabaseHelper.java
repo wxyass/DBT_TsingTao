@@ -16,6 +16,17 @@ import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.db.table.CmmAreaM;
 import et.tsingtaopad.db.table.CmmBoardM;
 import et.tsingtaopad.db.table.CmmDatadicM;
+import et.tsingtaopad.db.table.MitAgencysupplyInfo;
+import et.tsingtaopad.db.table.MitCameraInfoM;
+import et.tsingtaopad.db.table.MitCheckexerecordInfo;
+import et.tsingtaopad.db.table.MitCmpsupplyInfo;
+import et.tsingtaopad.db.table.MitCollectionexerecordInfo;
+import et.tsingtaopad.db.table.MitGroupproductM;
+import et.tsingtaopad.db.table.MitPromotermInfo;
+import et.tsingtaopad.db.table.MitTerminalinfoM;
+import et.tsingtaopad.db.table.MitVisitM;
+import et.tsingtaopad.db.table.MitVisitmemoInfo;
+import et.tsingtaopad.db.table.MitVistproductInfo;
 import et.tsingtaopad.db.table.MstAgencyKFM;
 import et.tsingtaopad.db.table.MstAgencygridInfo;
 import et.tsingtaopad.db.table.MstAgencyinfoM;
@@ -116,6 +127,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<MstAgencyinfoM, String> mstAgencyinfoMDao = null;
     private Dao<MstAgencysupplyInfo, String> mstAgencysupplyInfoDao = null;
     private Dao<MstAgencysupplyInfoTemp, String> mstAgencysupplyInfoTempDao = null;
+    private Dao<MitAgencysupplyInfo, String> mitAgencysupplyInfoDao = null;
     private Dao<MstAgencytransferInfo, String> mstAgencytransferInfoDao = null;
     private Dao<MstAgencyvisitM, String> mstAgencyvisitMDao = null;
     private Dao<MstBrandsclassM, String> mstBrandsclassMDao = null;
@@ -126,6 +138,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<MstCheckcollectionInfo, String> mstCheckcollectionInfoDao = null;
     private Dao<MstCheckexerecordInfo, String> mstCheckexerecordInfoDao = null;
     private Dao<MstCheckexerecordInfoTemp, String> mstCheckexerecordInfoTempDao = null;
+    private Dao<MitCheckexerecordInfo, String> mitCheckexerecordInfoDao = null;
     private Dao<MstCheckstatusInfo, String> mstCheckstatusInfoDao = null;
     private Dao<MstChecktypeM, String> mstChecktypeMDao = null;
     private Dao<MstCmpareaInfo, String> mstCmpareaInfoDao = null;
@@ -144,24 +157,29 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<MstPromoproductInfo, String> mstPromoproductInfoDao = null;
     private Dao<MstPromotermInfo, String> mstPromotermInfoDao = null;
     private Dao<MstPromotermInfoTemp, String> mstPromotermInfoTempDao = null;
+    private Dao<MitPromotermInfo, String> mitPromotermInfoDao = null;
     private Dao<MstPromotionsM, String> mstPromotionsMDao = null;
     private Dao<MstPromotionstypeM, String> mstPromotionstypeMDao = null;
     private Dao<MstRouteM, String> mstRouteMDao = null;
     private Dao<MstShipmentledgerInfo, String> mstShipmentledgerInfoDao = null;
     private Dao<MstTerminalinfoM, String> mstTerminalinfoMDao = null;
     private Dao<MstTerminalinfoMTemp, String> mstTerminalinfoMTempDao = null;
+    private Dao<MitTerminalinfoM, String> mitTerminalinfoMDao = null;
     private Dao<MstTerminalinfoMCart, String> mstTerminalinfoMCartDao = null;
     private Dao<MstVisitauthorizeInfo, String> mstVisitauthorizeInfoDao = null;
     private Dao<MstVisitM, String> mstVisitMDao = null;
+    private Dao<MitVisitM, String> mitVisitMDao = null;
     private Dao<MstVisitMTemp, String> mstVisitMTempDao = null;
     private Dao<MstVisitmemoInfo, String> mstVisitmemoInfoDao = null;
     private Dao<MstVistproductInfo, String> mstVistproductInfoDao = null;
     private Dao<MstVistproductInfoTemp, String> mstVistproductInfoTempDao = null;
+    private Dao<MitVistproductInfo, String> mitVistproductInfoDao = null;
     private Dao<MstWorksummaryInfo, String> mstWorksummaryInfoDao = null;
     private Dao<MstSynckvM, String> mstSynckvMDao = null;
     private Dao<MstQuestionsanswersInfo, String> mstQuestionsanswersInfoDao = null;
     private Dao<MstCollectionexerecordInfo, String> mstCollectionexerecordInfoDao = null;
     private Dao<MstCollectionexerecordInfoTemp, String> mstCollectionexerecordInfoTempDao = null;
+    private Dao<MitCollectionexerecordInfo, String> mitCollectionexerecordInfoDao = null;
     private Dao<MstPlanforuserM, String> mstPlanforuserMDao = null;
     private Dao<PadChecktypeM, String> padChecktypeMDao = null;
     private Dao<PadCheckaccomplishInfo, String> padCheckaccomplishInfoDao = null;
@@ -182,6 +200,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<MstPowerfulterminalInfo, String> mstPowerfulterminalInfoDao = null;
     private Dao<MstCmpsupplyInfo, String> mstCmpsupplyInfoDao = null;
     private Dao<MstCmpsupplyInfoTemp, String> mstCmpsupplyInfoTempDao = null;
+    private Dao<MitCmpsupplyInfo, String> mitCmpsupplyInfoDao = null;
     private Dao<MstPlanrouteInfo, String> mstPlanrouteInfoDao = null;
     private Dao<MstMonthtargetInfo, String> mstMonthtargetInfoDao = null;
     private Dao<MstCmpagencyInfo, String> mstCmpagencyInfo = null;
@@ -190,6 +209,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<MstPlanWeekforuserM, String> mstPlanWeekforuserMDao = null;
     private Dao<MstCameraInfoM, String> mstCameraiInfoMDao = null;
     private Dao<MstCameraInfoMTemp, String> mstCameraiInfoMTempDao = null;
+    private Dao<MitCameraInfoM, String> mitCameraInfoMDao = null;
     private Dao<MstPictypeM, String> mstpictypeMDao = null;
     private Dao<MstAgencyKFM, String> mstAgencyKFMDao = null;
     private Dao<MstTermLedgerInfo, String> mstTermLedgerInfoDao = null;
@@ -197,6 +217,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<MstBsData, String> mstBsDataDao = null;
     private Dao<MstGroupproductM, String> mstGroupproductMDao = null;
     private Dao<MstGroupproductMTemp, String> mstGroupproductMTempDao = null;
+    private Dao<MitGroupproductM, String> mitGroupproductMDao = null;
 
     public DatabaseHelper(Context context) {
 
@@ -315,6 +336,18 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, MstTerminalinfoMCart.class);// 终端购物车
 
 
+            TableUtils.createTable(connectionSource, MitVisitM.class);// 协同拜访表
+            TableUtils.createTable(connectionSource, MitAgencysupplyInfo.class);// 协同我品供货关系
+            TableUtils.createTable(connectionSource, MitCameraInfoM.class);// 协同照片
+            TableUtils.createTable(connectionSource, MitCmpsupplyInfo.class);// 协同竞品供货关系
+            TableUtils.createTable(connectionSource, MitCollectionexerecordInfo.class);// 协同采集项表
+            TableUtils.createTable(connectionSource, MitGroupproductM.class);// 协同产品组合
+            TableUtils.createTable(connectionSource, MitPromotermInfo.class);// 协同活动终端表
+            TableUtils.createTable(connectionSource, MitTerminalinfoM.class);// 协同终端表
+            TableUtils.createTable(connectionSource, MitVisitmemoInfo.class);// 协同客情备忘
+            TableUtils.createTable(connectionSource, MitVistproductInfo.class);// 协同竞品我品表
+            TableUtils.createTable(connectionSource, MitCheckexerecordInfo.class);// 协同拉链表
+
             this.initView(db);
             this.initData(db);
 
@@ -425,6 +458,34 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         buffer = new StringBuffer();
         buffer.append("create view IF NOT EXISTS v_pad_checkaccomplish_info as ");
         buffer.append("select distinct p.colitemkey, p.colitemname from pad_checkaccomplish_info p ");
+        db.execSQL(buffer.toString());
+
+        // 获取各终端     每天    协同拜访的最新的拜访记录
+        buffer = new StringBuffer();
+        buffer.append("drop view if exists v_mit_visit_m");
+        db.execSQL(buffer.toString());
+        buffer = new StringBuffer();
+        buffer.append("create view IF NOT EXISTS v_mit_visit_m as ");
+        buffer.append("select m.* from mit_visit_m m  ");
+        buffer.append("inner join (select max(visitdate) maxvisitdate, ");
+        buffer.append("    max(terminalkey) maxterminalkey ");
+        buffer.append("    from mit_visit_m where visitdate is not null group by terminalkey, substr(visitdate,1,8)) v ");
+        buffer.append("  on m.terminalkey = v.maxterminalkey  ");
+        buffer.append("    and m.visitdate = v.maxvisitdate");
+        db.execSQL(buffer.toString());
+
+        // 获取各终端    所有    协同拜访的拜访数据中最新拜访记录
+        buffer = new StringBuffer();
+        buffer.append("drop view if exists v_mit_visit_m_newest");
+        db.execSQL(buffer.toString());
+        buffer = new StringBuffer();
+        buffer.append("create view IF NOT EXISTS v_mit_visit_m_newest as ");
+        buffer.append("select m.* from mit_visit_m m  ");
+        buffer.append("inner join (select max(visitdate) maxvisitdate, ");
+        buffer.append("    max(terminalkey) maxterminalkey ");
+        buffer.append("    from mit_visit_m where visitdate is not null group by terminalkey) v ");
+        buffer.append("  on m.terminalkey = v.maxterminalkey  ");
+        buffer.append("    and m.visitdate = v.maxvisitdate");
         db.execSQL(buffer.toString());
     }
 
@@ -868,6 +929,81 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 db.execSQL(checkgrouptemp);*/
 
 
+                // -----------------------------------
+
+                // 协同拜访表
+                String mitvisit = "create table MIT_VISIT_M (visitkey varchar,terminalkey varchar,routekey varchar,gridkey varchar,areaid varchar,visitdate varchar,tempkey varchar,enddate varchar,userid varchar,visituser varchar,isself varchar,iscmp varchar,selftreaty varchar,cmptreaty varchar,status varchar,ishdistribution varchar,exetreaty varchar,selfoccupancy varchar,iscmpcollapse varchar,sisconsistent varchar,scondate date ,padisconsistent varchar,padcondate date ,comid varchar2,remarks varchar,orderbyno varchar,deleteflag varchar,version integer ,credate date ,creuser varchar,updatetime date ,updateuser varchar,longitude  varchar , latitude  varchar ,gpsstatus  varchar ,ifminedate  varchar , ifmine  varchar ,visitposition  varchar ,uploadFlag  varchar )";
+                db.execSQL(mitvisit);
+
+                // 协同终端表
+                String mitterm = "create table MIT_TERMINALINFO_M (terminalkey varchar,routekey varchar,terminalcode varchar,terminalname varchar,province varchar,city varchar,county varchar,address varchar,contact varchar,mobile varchar,tlevel varchar,sequence varchar, cycle varchar,hvolume varchar,mvolume varchar,lvolume varchar,status varchar,sellchannel varchar,mainchannel varchar,minorchannel varchar,areatype varchar,sisconsistent varchar,scondate date ,padisconsistent varchar,padcondate date ,comid varchar,remarks varchar,orderbyno varchar,deleteflag varchar,version integer ,credate date ,creuser varchar,updatetime date ,updateuser varchar ,pvolume varchar ,selftreaty varchar ,cmpselftreaty varchar ,ifminedate varchar ,ifmine varchar )";
+                db.execSQL(mitterm);
+
+                // 协同我品供货关系表
+                String mitagencysupply = "create table MIT_AGENCYSUPPLY_INFO (asupplykey varchar,status varchar,inprice varchar,reprice varchar,productkey varchar,lowerkey varchar,lowertype varchar,upperkey varchar,uppertype varchar,siebelkey varchar,sisconsistent varchar, scondate date ,padisconsistent varchar,padcondate date ,comid varchar,remarks varchar,orderbyno varchar,deleteflag varchar,version integer ,credate date ,creuser varchar,updatetime date ,updateuser varchar )";
+                db.execSQL(mitagencysupply);
+
+                // 协同拜访产品表
+                String mitvisitpro = "create table MIT_VISTPRODUCT_INFO (recordkey varchar,visitkey varchar,productkey varchar,cmpproductkey varchar,cmpcomkey varchar, agencykey varchar,purcprice number(14,2) ,retailprice number(14,2) ,purcnum number(14,2) ,pronum number(14,2) ,currnum number(14,2) ,salenum number(14,2) ,sisconsistent varchar,scondate date ,padisconsistent varchar,padcondate date ,comid varchar,remarks varchar,orderbyno varchar,deleteflag varchar,version integer ,credate date ,creuser varchar,updatetime date ,updateuser varchar ,agencyname varchar,fristdate varchar,addcard number(14,2))";
+                db.execSQL(mitvisitpro);
+
+                // 协同竞品供货关系表
+                String mitcmpsupply = "create table MIT_CMPSUPPLY_INFO ( cmpsupplykey varchar,cmpproductkey varchar,cmpcomkey varchar,terminalkey varchar,inprice varchar,reprice varchar,status varchar,cmpinvaliddate varchar,sisconsistent varchar,scondate date ,padisconsistent varchar,padcondate date ,comid varchar,remarks varchar,orderbyno varchar,deleteflag varchar,version integer ,credate date ,creuser varchar,updatetime date ,updateuser varchar )";
+                db.execSQL(mitcmpsupply);
+
+                // 协同指标采集项
+                String mitcollection = "create table MIT_COLLECTIONEXERECORD_INFO (colrecordkey varchar ,visitkey varchar , productkey varchar , checkkey varchar , colitemkey varchar ,addcount number(14,2) ,totalcount number(14,2) ,sisconsistent varchar ,scondate date , padisconsistent varchar ,padcondate date ,comid varchar , remarks varchar , freshness varchar ,orderbyno varchar ,deleteflag varchar ,version integer ,credate date ,creuser varchar ,updatetime date ,updateuser varchar ,bianhualiang varchar ,xianyouliang varchar )";
+                db.execSQL(mitcollection);
+
+                // 协同促销活动表
+                String mitpromoterm = "create table MIT_PROMOTERM_INFO (recordkey varchar,ptypekey varchar,terminalkey varchar, startdate varchar,sisconsistent varchar,scondate date ,padisconsistent varchar, padcondate date ,comid varchar , remarks varchar, orderbyno varchar, deleteflag varchar,version integer ,credate date , creuser varchar,updatetime date ,updateuser varchar , visitkey varchar, isaccomplish varchar)";
+                db.execSQL(mitpromoterm);
+
+                // 协同图片表
+                String mitcamerainfo = "CREATE TABLE MIT_CAMERAINFO_M (camerakey VARCHAR(36) NOT NULL,terminalkey VARCHAR(36),visitkey VARCHAR(36),pictypekey VARCHAR(36),picname VARCHAR(150),localpath VARCHAR(150),netpath VARCHAR(150),cameradata VARCHAR(20),isupload VARCHAR2(36),istakecamera VARCHAR(36),picindex VARCHAR(16),pictypename VARCHAR(150),sureup VARCHAR(16),imagefileString VARCHAR(4000)) ";
+                db.execSQL(mitcamerainfo);
+
+                // 协同客情表
+                String mitvisitmemoinfo = "create table MIT_VISITMEMO_INFO (memokey varchar,terminalkey varchar, content varchar,isover varchar,iswarn varchar,startdate varchar,enddate varchar,sisconsistent varchar, scondate date ,padisconsistent varchar,padcondate date ,comid varchar,remarks varchar,orderbyno varchar,deleteflag varchar,version integer ,credate date ,creuser varchar,updatetime date ,updateuser varchar )";
+                db.execSQL(mitvisitmemoinfo);
+
+                // 协同产品组合是否达标表
+                String mitgroupproductm = "CREATE TABLE MIT_GROUPPRODUCT_M (gproductid VARCHAR(36) ,terminalcode VARCHAR(36),terminalname VARCHAR(36),ifrecstand VARCHAR(36),startdate VARCHAR(150),enddate VARCHAR(150),createusereng VARCHAR(150),createdate VARCHAR(20),updateusereng VARCHAR2(36),updatetime VARCHAR(36),uploadflag VARCHAR(16),padisconsistent VARCHAR(36),visitkey VARCHAR(36)) ";
+                db.execSQL(mitgroupproductm);
+
+                // 协同拉链表
+                String sql = "CREATE TABLE  IF NOT EXISTS MIT_CHECKEXERECORD_INFO " + "(recordkey  VARCHAR ,visitkey VARCHAR,productkey VARCHAR,checkkey VARCHAR,checktype VARCHAR,acresult VARCHAR,iscom VARCHAR,cstatuskey VARCHAR,isauto VARCHAR,exestatus VARCHAR,startdate VARCHAR,enddate VARCHAR,terminalkey VARCHAR,sisconsistent VARCHAR,scondate timestamp,siebelid VARCHAR,resultstatus VARCHAR,padisconsistent VARCHAR DEFAULT '0',padcondate VARCHAR,comid VARCHAR,remarks VARCHAR,orderbyno VARCHAR,version VARCHAR,credate timestamp,creuser VARCHAR,updatetime timestamp,updateuser VARCHAR,deleteflag VARCHAR  DEFAULT '0'   )";
+                db.execSQL(sql);
+
+                // 获取各终端     每天    协同拜访的最新的拜访记录
+                StringBuffer buffer = new StringBuffer();
+                buffer.append("drop view if exists v_mit_visit_m");
+                db.execSQL(buffer.toString());
+                buffer = new StringBuffer();
+                buffer.append("create view IF NOT EXISTS v_mit_visit_m as ");
+                buffer.append("select m.* from mst_visit_m m  ");
+                buffer.append("inner join (select max(visitdate) maxvisitdate, ");
+                buffer.append("    max(terminalkey) maxterminalkey ");
+                buffer.append("    from mst_visit_m where visitdate is not null group by terminalkey, substr(visitdate,1,8)) v ");
+                buffer.append("  on m.terminalkey = v.maxterminalkey  ");
+                buffer.append("    and m.visitdate = v.maxvisitdate");
+                db.execSQL(buffer.toString());
+
+                // 获取各终端    所有    协同拜访的拜访数据中最新拜访记录
+                buffer = new StringBuffer();
+                buffer.append("drop view if exists v_mit_visit_m_newest");
+                db.execSQL(buffer.toString());
+                buffer = new StringBuffer();
+                buffer.append("create view IF NOT EXISTS v_mit_visit_m_newest as ");
+                buffer.append("select m.* from mst_visit_m m  ");
+                buffer.append("inner join (select max(visitdate) maxvisitdate, ");
+                buffer.append("    max(terminalkey) maxterminalkey ");
+                buffer.append("    from mst_visit_m where visitdate is not null group by terminalkey) v ");
+                buffer.append("  on m.terminalkey = v.maxterminalkey  ");
+                buffer.append("    and m.visitdate = v.maxvisitdate");
+                db.execSQL(buffer.toString());
+
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1005,6 +1141,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mstAgencysupplyInfoTempDao;
     }
+    public Dao<MitAgencysupplyInfo, String> getMitAgencysupplyInfoDao() throws SQLException {
+
+        if (mitAgencysupplyInfoDao == null) {
+            mitAgencysupplyInfoDao = getDao(MitAgencysupplyInfo.class);
+        }
+        return mitAgencysupplyInfoDao;
+    }
 
     public Dao<MstAgencytransferInfo, String> getMstAgencytransferInfoDao() throws SQLException {
 
@@ -1084,6 +1227,14 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             mstCheckexerecordInfoTempDao = getDao(MstCheckexerecordInfoTemp.class);
         }
         return mstCheckexerecordInfoTempDao;
+    }
+
+    public Dao<MitCheckexerecordInfo, String> getMitCheckexerecordInfoDao() throws SQLException {
+
+        if (mitCheckexerecordInfoDao == null) {
+            mitCheckexerecordInfoDao = getDao(MitCheckexerecordInfo.class);
+        }
+        return mitCheckexerecordInfoDao;
     }
 
     public Dao<MstCheckstatusInfo, String> getMstCheckstatusInfoDao() throws SQLException {
@@ -1236,6 +1387,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mstPromotermInfoTempDao;
     }
+    public Dao<MitPromotermInfo, String> getMitPromotermInfoDao() throws SQLException {
+
+        if (mitPromotermInfoDao == null) {
+            mitPromotermInfoDao = getDao(MitPromotermInfo.class);
+        }
+        return mitPromotermInfoDao;
+    }
 
     public Dao<MstPromotionsM, String> getMstPromotionsMDao() throws SQLException {
 
@@ -1284,6 +1442,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mstTerminalinfoMTempDao;
     }
+    public Dao<MitTerminalinfoM, String> getMitTerminalinfoMDao() throws SQLException {
+
+        if (mitTerminalinfoMDao == null) {
+            mitTerminalinfoMDao = getDao(MitTerminalinfoM.class);
+        }
+        return mitTerminalinfoMDao;
+    }
     public Dao<MstTerminalinfoMCart, String> getMstTerminalinfoMCartDao() throws SQLException {
 
         if (mstTerminalinfoMCartDao == null) {
@@ -1306,6 +1471,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             mstVisitMDao = getDao(MstVisitM.class);
         }
         return mstVisitMDao;
+    }
+    public Dao<MitVisitM, String> getMitVisitMDao() throws SQLException {
+
+        if (mitVisitMDao == null) {
+            mitVisitMDao = getDao(MitVisitM.class);
+        }
+        return mitVisitMDao;
     }
 
     public Dao<MstVisitMTemp, String> getMstVisitMTempDao() throws SQLException {
@@ -1338,6 +1510,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             mstVistproductInfoTempDao = getDao(MstVistproductInfoTemp.class);
         }
         return mstVistproductInfoTempDao;
+    }
+    public Dao<MitVistproductInfo, String> getMitVistproductInfoDao() throws SQLException {
+
+        if (mitVistproductInfoDao == null) {
+            mitVistproductInfoDao = getDao(MitVistproductInfo.class);
+        }
+        return mitVistproductInfoDao;
     }
 
     public Dao<MstWorksummaryInfo, String> getMstWorksummaryInfoDao() throws SQLException {
@@ -1377,6 +1556,14 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             mstCollectionexerecordInfoTempDao = getDao(MstCollectionexerecordInfoTemp.class);
         }
         return mstCollectionexerecordInfoTempDao;
+    }
+
+    public Dao<MitCollectionexerecordInfo, String> getMitCollectionexerecordInfoDao() throws SQLException {
+
+        if (mitCollectionexerecordInfoDao == null) {
+            mitCollectionexerecordInfoDao = getDao(MitCollectionexerecordInfo.class);
+        }
+        return mitCollectionexerecordInfoDao;
     }
 
     public Dao<MstPlanforuserM, String> getMstPlanforuserMDao() throws SQLException {
@@ -1518,6 +1705,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mstCmpsupplyInfoTempDao;
     }
+    public Dao<MitCmpsupplyInfo, String> getMitCmpsupplyInfoDao() throws SQLException {
+        if (mitCmpsupplyInfoDao == null) {
+            mitCmpsupplyInfoDao = getDao(MitCmpsupplyInfo.class);
+        }
+        return mitCmpsupplyInfoDao;
+    }
 
     public Dao<MstPlanrouteInfo, String> getMstPlanrouteInfoDao() throws SQLException {
         if (mstPlanrouteInfoDao == null) {
@@ -1574,6 +1767,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mstCameraiInfoMTempDao;
     }
+    public Dao<MitCameraInfoM, String> getMitCameraInfoMDao() throws SQLException {
+        if (mitCameraInfoMDao == null) {
+            mitCameraInfoMDao = getDao(MitCameraInfoM.class);
+        }
+        return mitCameraInfoMDao;
+    }
 
 
     public Dao<MstAgencyKFM, String> getMstAgencyKFMDao() throws SQLException {
@@ -1620,6 +1819,14 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             mstGroupproductMTempDao = getDao(MstGroupproductMTemp.class);
         }
         return mstGroupproductMTempDao;
+    }
+
+    public Dao<MitGroupproductM, String> getMitGroupproductMDao() throws SQLException {
+
+        if (mitGroupproductMDao == null) {
+            mitGroupproductMDao = getDao(MitGroupproductM.class);
+        }
+        return mitGroupproductMDao;
     }
 
     /**

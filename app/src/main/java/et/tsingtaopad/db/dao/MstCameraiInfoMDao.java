@@ -20,13 +20,11 @@ public interface MstCameraiInfoMDao extends Dao<MstCameraInfoM, String> {
 
 	/**
 	 * 获取当天终端拍照记录
-	 * 
+	 *
 	 * 用于：巡店拜访 -- 拍照
-	 * 
+	 *
 	 * @param helper
 	 * @param terminalkey
-	 * @param cameradata
-	 * @param isupload
 	 * @return
 	 */
 	public List<CameraInfoStc> queryCurrentCameraLst(SQLiteOpenHelper helper,
@@ -136,19 +134,19 @@ public interface MstCameraiInfoMDao extends Dao<MstCameraInfoM, String> {
 	 */
 	public List<MstCameraListMStc> getCameraListNoIsuploadAndVisitkey(
 			DatabaseHelper helper, String isupload, String visitkey);
-	
-	
+
+
 	/**
 	 * 获取拜访主键
-	 * 
+	 *
 	 * @param isupload
 	 * @return
 	 */
 	public List<String> queryVisitKey(SQLiteOpenHelper helper, String isupload);
-	
+
 	/**
 	 * 查询所有未上传的图片记录
-	 * 
+	 *
 	 * @param helper
 	 * @param isupload 0未上传 1已上传
 	 * @return
@@ -158,7 +156,7 @@ public interface MstCameraiInfoMDao extends Dao<MstCameraInfoM, String> {
 
 	/**
 	 * 根据(图片类型,终端key,visitkey) 获取图片的本地路径
-	 * 
+	 *
 	 * @param helper
 	 * @param cameratype
 	 * @param termkey

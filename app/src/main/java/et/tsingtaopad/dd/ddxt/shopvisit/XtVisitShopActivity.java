@@ -55,6 +55,7 @@ import et.tsingtaopad.dd.ddxt.checking.domain.XtProItem;
 import et.tsingtaopad.dd.ddxt.invoicing.XtInvoicingFragment;
 import et.tsingtaopad.dd.ddxt.sayhi.XtSayhiFragment;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
+import et.tsingtaopad.dd.ddxt.updata.XtShopCopyService;
 import et.tsingtaopad.dd.ddxt.updata.XtUploadService;
 import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
@@ -486,12 +487,14 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
                             //  "MST_CHECKGROUP_INFO_TEMP"
 
                             String visitEndDate = DateUtil.formatDate(new Date(), "yyyyMMddHHmmss");
+
                             // 开始复制 更新拜访离店时间及是否要上传标志 以及对去除拜访指标采集项重复(collectionexerecord表)
-                            xtShopVisitService.confirmXtUpload(visitId, termStc.getTerminalkey(),termStc.getTerminalcode(), visitEndDate, "1");
+                            XtShopCopyService xtShopCopyService = new XtShopCopyService(getApplicationContext(),null);
+                            xtShopCopyService.copyXtUpload(visitId, termStc.getTerminalkey(),termStc.getTerminalcode(), visitEndDate, "1");
 
 
                             XtUploadService xtUploadService = new XtUploadService(getApplicationContext(),null);
-                            xtUploadService.upload_visit(false,visitId,1);
+                            xtUploadService.upload_xt_visit(false,visitId,1);
 
                             ConstValues.handler.sendEmptyMessage(ConstValues.WAIT0);
 

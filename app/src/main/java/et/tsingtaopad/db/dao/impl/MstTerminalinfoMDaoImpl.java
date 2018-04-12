@@ -52,7 +52,7 @@ public class MstTerminalinfoMDaoImpl extends BaseDaoImpl<MstTerminalinfoM, Strin
     }
 
     /**
-     * 获取某线路下的终端列表 (协同拜访,某条路线)
+     *  (协同拜访,某条路线) 选择终端界面
      * <p>
      * 用于：巡店拜访  -- 终端选择  (2018年3月21日16:50:54 新加 )
      *
@@ -203,7 +203,7 @@ public class MstTerminalinfoMDaoImpl extends BaseDaoImpl<MstTerminalinfoM, Strin
         buffer.append("from mst_terminalinfo_m m ");
         buffer.append("left join cmm_datadic_m dm on m.minorchannel = dm.diccode ");
         buffer.append("     and coalesce(dm.deleteflag,'0') != '1' ");
-        buffer.append("left join v_visit_m_newest vm on m.terminalkey = vm.terminalkey ");
+        buffer.append("left join v_mit_visit_m_newest vm on m.terminalkey = vm.terminalkey ");
         buffer.append("where coalesce(m.status,'0') != '2' and m.routekey=? ");
         buffer.append(" and coalesce(m.deleteflag,'0') != '1' ");
         if (isSequence) {
@@ -266,7 +266,7 @@ public class MstTerminalinfoMDaoImpl extends BaseDaoImpl<MstTerminalinfoM, Strin
         buffer.append("from mst_terminalinfo_m_cart m ");
         buffer.append("left join cmm_datadic_m dm on m.minorchannel = dm.diccode ");
         buffer.append("     and coalesce(dm.deleteflag,'0') != '1' ");
-        buffer.append("left join v_visit_m_newest vm on m.terminalkey = vm.terminalkey ");
+        buffer.append("left join v_mit_visit_m_newest vm on m.terminalkey = vm.terminalkey ");
         buffer.append("where coalesce(m.status,'0') != '2' ");
         buffer.append(" and coalesce(m.deleteflag,'0') != '1' ");
         if (isSequence) {

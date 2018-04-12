@@ -2,6 +2,8 @@ package et.tsingtaopad.dd.ddxt.term.cart;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +39,7 @@ import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
 import et.tsingtaopad.dd.ddxt.term.cart.adapter.XtTermCartAdapter;
+import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectFragment;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 import et.tsingtaopad.home.app.MainService;
 import et.tsingtaopad.home.initadapter.GlobalValues;
@@ -114,9 +118,21 @@ public class XtTermCartFragment extends BaseFragmentSupport implements View.OnCl
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        handler = new MyHandler(this);
+        ConstValues.handler = handler;
+
         titleTv.setText("今日终端拜访列表");
         confirmTv.setText("拜访");
         cartService = new XtTermCartService(getActivity());
+
+        // 初始化页面数据
+        initData();
+
+        //seqTermList = getNewMstTermListMStc();
+    }
+
+    // 初始化页面数据
+    private void initData() {
         // 设置终端数据 假数据
         if("1".equals(PrefUtils.getString(getActivity(), GlobalValues.DDXTZS,""))){
             termList = cartService.queryCartTermList();
@@ -135,7 +151,6 @@ public class XtTermCartFragment extends BaseFragmentSupport implements View.OnCl
 
         // 设置数据,适配器
         searchTerm();
-        //seqTermList = getNewMstTermListMStc();
     }
 
     @Override
@@ -333,7 +348,7 @@ public class XtTermCartFragment extends BaseFragmentSupport implements View.OnCl
                 .error(new IError() {
                     @Override
                     public void onError(int code, String msg) {
-                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "请求错误", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .failure(new IFailure() {
@@ -344,6 +359,51 @@ public class XtTermCartFragment extends BaseFragmentSupport implements View.OnCl
                 })
                 .builde()
                 .post();
+    }
+
+    MyHandler handler;
+
+    /**
+     * 接收子线程消息的 Handler
+     */
+    public static class MyHandler extends Handler {
+
+        // 软引用
+        SoftReference<XtTermCartFragment> fragmentRef;
+
+        public MyHandler(XtTermCartFragment fragment) {
+            fragmentRef = new SoftReference<XtTermCartFragment>(fragment);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            XtTermCartFragment fragment = fragmentRef.get();
+            if (fragment == null) {
+                return;
+            }
+
+
+            // 处理UI 变化
+            switch (msg.what) {
+                case ConstValues.WAIT0://  结束上传  刷新本页面
+                    fragment.shuaxinFragment();
+                    break;
+                case GlobalValues.SINGLE_UP_SUC://  协同拜访上传成功
+                    //fragment.initData2();
+                    break;
+                case GlobalValues.SINGLE_UP_FAIL://  协同拜访上传失败
+                    //fragment.initData2();
+                    break;
+
+            }
+        }
+    }
+
+    // 结束上传  刷新页面
+    private void shuaxinFragment() {
+        //
+        initData();
+
     }
 
 }

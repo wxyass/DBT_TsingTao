@@ -106,7 +106,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
     private int TOFRAGMENT = 1;
     private int TOACTIVITY = 2;
 
-    public static final int SINGLE_UP_SUC = 110;
+
 
     private AlertView mAlertViewExt;//窗口拓展
 
@@ -540,7 +540,10 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
                 case ConstValues.WAIT0://  结束上传  刷新本页面
                     fragment.shuaxin();
                     break;
-                case SINGLE_UP_SUC:
+                case GlobalValues.SINGLE_UP_SUC://  协同拜访上传成功
+                    //fragment.initData2();
+                    break;
+                case GlobalValues.SINGLE_UP_FAIL://  协同拜访上传失败
                     //fragment.initData2();
                     break;
 

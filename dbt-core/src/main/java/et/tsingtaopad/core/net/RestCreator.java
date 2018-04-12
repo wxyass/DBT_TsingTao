@@ -36,7 +36,7 @@ public final class RestCreator {
     private static final class RetrofitHolder {
         private static final String BASE_URL = (String) Latte.getConfiguration(ConfigKeys.API_HOST);
         private static final Retrofit RETROFIT_CLIENT = new Retrofit.Builder()
-                .baseUrl(BASE_URL)// 这个???
+                .baseUrl(BASE_URL)// 这个
                 .client(OKHttpHolder.OK_HTTP_CLIENT)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
@@ -64,7 +64,9 @@ public final class RestCreator {
 
         // 创建OkHttpClient客户端
         private static final OkHttpClient OK_HTTP_CLIENT = addInterceptor()
-                .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
+                .readTimeout(TIME_OUT,TimeUnit.SECONDS)//设置读取超时时间
+                .writeTimeout(TIME_OUT,TimeUnit.SECONDS)//设置写的超时时间
+                .connectTimeout(TIME_OUT,TimeUnit.SECONDS)//设置连接超时时间
                 .build();
 
     }
