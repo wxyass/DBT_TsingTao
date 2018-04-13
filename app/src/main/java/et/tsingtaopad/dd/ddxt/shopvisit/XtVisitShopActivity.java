@@ -40,6 +40,7 @@ import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
+import et.tsingtaopad.core.util.file.FileTool;
 import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.core.view.alertview.OnDismissListener;
 import et.tsingtaopad.core.view.alertview.OnItemClickListener;
@@ -492,7 +493,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
                             XtShopCopyService xtShopCopyService = new XtShopCopyService(getApplicationContext(),null);
                             xtShopCopyService.copyXtUpload(visitId, termStc.getTerminalkey(),termStc.getTerminalcode(), visitEndDate, "1");
 
-
+                            // 删除协同拜访数据
                             XtUploadService xtUploadService = new XtUploadService(getApplicationContext(),null);
                             xtUploadService.upload_xt_visit(false,visitId,1);
 

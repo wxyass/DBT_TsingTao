@@ -1932,7 +1932,7 @@ public class ShopVisitService {
                 voTemp.setUpdateusereng(vo.getUpdateusereng());
                 voTemp.setUpdatetime(vo.getUpdatetime());
                 voTemp.setUpdateusereng(vo.getUpdateusereng());
-                voTemp.setUploadFlag("0");// 不上传
+                voTemp.setUploadflag("0");// 不上传
                 voTemp.setPadisconsistent("0");// 未上传
                 voTemp.setVisitkey(visitkey);
                 createMstGroupproductM(voTemp);
@@ -1950,7 +1950,7 @@ public class ShopVisitService {
                 voTemp.setUpdateusereng(PrefUtils.getString(context, "userGongHao", "21000"));
                 voTemp.setUpdatetime(DateUtil.getDateTimeStr(6));
                 voTemp.setUpdateusereng(PrefUtils.getString(context, "userGongHao", "21000"));
-                voTemp.setUploadFlag("0");// 不上传
+                voTemp.setUploadflag("0");// 不上传
                 voTemp.setPadisconsistent("0");// 未上传
                 voTemp.setVisitkey(visitkey);
                 createMstGroupproductM(voTemp);
@@ -1970,7 +1970,7 @@ public class ShopVisitService {
             voTemp.setUpdateusereng(PrefUtils.getString(context, "userGongHao", "20000"));
             voTemp.setUpdatetime(DateUtil.getDateTimeStr(6));
             voTemp.setUpdateusereng(PrefUtils.getString(context, "userGongHao", "20000"));
-            voTemp.setUploadFlag("0");// 不上传
+            voTemp.setUploadflag("0");// 不上传
             voTemp.setPadisconsistent("0");// 未上传
             voTemp.setVisitkey(visitkey);
             createMstGroupproductM(voTemp);

@@ -225,19 +225,7 @@ public class MstGroupproductMTemp implements java.io.Serializable {
 		this.updatetime = updatetime;
 	}
 
-	/**
-	 * @return the uploadFlag
-	 */
-	public String getUploadFlag() {
-		return uploadflag;
-	}
 
-	/**
-	 * @param uploadFlag the uploadFlag to set
-	 */
-	public void setUploadFlag(String uploadFlag) {
-		this.uploadflag = uploadFlag;
-	}
 
 	/**
 	 * @return the padisconsistent

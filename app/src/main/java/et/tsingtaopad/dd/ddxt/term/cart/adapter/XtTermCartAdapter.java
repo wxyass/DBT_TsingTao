@@ -92,6 +92,7 @@ public class XtTermCartAdapter extends BaseAdapter implements OnClickListener {
             holder.terminalTypeTv = (TextView) convertView.findViewById(R.id.item_termcart_tv_type);// 渠道类型
 
             holder.updateIv = (ImageView) convertView.findViewById(R.id.item_termcart_iv_update);// 上传成功标识
+            holder.updateFailIv = (ImageView) convertView.findViewById(R.id.item_termcart_iv_update_fail);// 上传失败标识
 
             holder.mineIv = (ImageView) convertView.findViewById(R.id.item_termcart_iv_mime);
             holder.mineProtocolIv = (ImageView) convertView.findViewById(R.id.item_termcart_iv_mineprotocol);
@@ -154,7 +155,7 @@ public class XtTermCartAdapter extends BaseAdapter implements OnClickListener {
         }
 
         // 上传标记
-        if (ConstValues.FLAG_1.equals(item.getSyncFlag())) {
+        /*if (ConstValues.FLAG_1.equals(item.getSyncFlag())) {
             holder.terminalNameTv.setTextColor(Color.RED);
             holder.updateIv.setVisibility(View.VISIBLE);
         } else if (ConstValues.FLAG_0.equals(item.getSyncFlag())) {
@@ -163,6 +164,23 @@ public class XtTermCartAdapter extends BaseAdapter implements OnClickListener {
         } else {
             holder.terminalNameTv.setTextColor(Color.BLACK);
             holder.updateIv.setVisibility(View.INVISIBLE);
+        }*/
+
+        // 上传标记  SyncFlag对应拜访表Padisconsistent
+        if(ConstValues.FLAG_1.equals(item.getUploadFlag())&&ConstValues.FLAG_1.equals(item.getSyncFlag())){
+            // 结束上传  上传成功
+            holder.terminalNameTv.setTextColor(Color.RED);
+            holder.updateIv.setVisibility(View.VISIBLE);
+            holder.updateFailIv.setVisibility(View.GONE);
+        }else if(ConstValues.FLAG_1.equals(item.getUploadFlag())&&ConstValues.FLAG_0.equals(item.getSyncFlag())){
+            // 结束上传  上传失败
+            holder.terminalNameTv.setTextColor(Color.YELLOW);
+            holder.updateIv.setVisibility(View.GONE);// 后面修改
+            holder.updateFailIv.setVisibility(View.VISIBLE);
+        }else {
+            holder.terminalNameTv.setTextColor(Color.BLACK);
+            holder.updateIv.setVisibility(View.GONE);
+            holder.updateFailIv.setVisibility(View.GONE);
         }
 
         // 我品
@@ -245,6 +263,7 @@ public class XtTermCartAdapter extends BaseAdapter implements OnClickListener {
         private TextView visitDateTv;
         private TextView terminalTypeTv;
         private ImageView updateIv;
+        private ImageView updateFailIv;
         private ImageView mineIv;
         private ImageView mineProtocolIv;
         private ImageView vieIv;

@@ -34,6 +34,9 @@ public class GlobalValues {
     // 协同拜访上传失败
     public static final int SINGLE_UP_FAIL = 111;
 
+    // 最后一次点击路线的时间
+    public static final String ROUNTE_TIME = "route_time";
+
     // TODO hongen 删除new LoginSession()  登录Session
     public static LoginSession loginSession = new LoginSession();
 

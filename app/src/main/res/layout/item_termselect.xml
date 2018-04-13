@@ -80,12 +80,26 @@
 
             <!-- 上传成功标识 1-->
 
-            <ImageView
-                android:id="@+id/item_termselect_iv_update"
+            <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/ico_terminal_syncflag"/>
+                android:layout_height="50dp"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/item_termselect_iv_update"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:visibility="gone"
+                    android:src="@drawable/ico_terminal_syncflag"/>
+                <ImageView
+                    android:id="@+id/item_termselect_iv_update_fail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:visibility="gone"
+                    android:src="@drawable/icon_select_syncflagoff"/>
+            </RelativeLayout>
 
 
 

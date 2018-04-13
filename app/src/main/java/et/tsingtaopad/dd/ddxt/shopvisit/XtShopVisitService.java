@@ -801,7 +801,7 @@ public class XtShopVisitService {
     private void createMstGroupproductMTemp(MstTerminalinfoMTemp termTemp,String visitkey) {
         // 从产品组合是否达标表 搂取该终端的一条数据,今天之前的包含今天 判断该终端产品组合是否达标
         // 先查询MstGroupproductM表  判断终端该指标是否达标
-        List<MstGroupproductM> listvo = queryMstGroupproductM(termTemp.getTerminalcode(), (DateUtil.getDateTimeStr(7) + "  00:00:00"));
+        List<MstGroupproductM> listvo = queryMstGroupproductM(termTemp.getTerminalcode(), DateUtil.getDateTimeStr(7)+" 00:00:00");
 
         MstGroupproductM vo = null;
         MstGroupproductMTemp voTemp = new MstGroupproductMTemp();
@@ -809,7 +809,7 @@ public class XtShopVisitService {
         // 有上次数据
         if (listvo.size() > 0) {
             // 数据是今天创建的
-            if ((DateUtil.getDateTimeStr(7) + "  00:00:00").equals(listvo.get(0).getStartdate())) {
+            if ((DateUtil.getDateTimeStr(7)+" 00:00:00" ).equals(listvo.get(0).getStartdate())) {
                 vo = listvo.get(0);
                 voTemp.setGproductid(vo.getGproductid());
                 voTemp.setTerminalcode(vo.getTerminalcode());
@@ -822,7 +822,7 @@ public class XtShopVisitService {
                 voTemp.setUpdateusereng(vo.getUpdateusereng());
                 voTemp.setUpdatetime(vo.getUpdatetime());
                 voTemp.setUpdateusereng(vo.getUpdateusereng());
-                voTemp.setUploadFlag("0");// 不上传
+                voTemp.setUploadflag("0");// 不上传
                 voTemp.setPadisconsistent("0");// 未上传
                 voTemp.setVisitkey(visitkey);
                 createMstGroupproductM(voTemp);
@@ -833,14 +833,14 @@ public class XtShopVisitService {
                 voTemp.setTerminalcode(termTemp.getTerminalcode());
                 voTemp.setTerminalname(termTemp.getTerminalname());
                 voTemp.setIfrecstand(vo.getIfrecstand());// 取上次的
-                voTemp.setStartdate(DateUtil.getDateTimeStr(7) + "  00:00:00");
-                voTemp.setEnddate("3000-12-01" + "  00:00:00");
+                voTemp.setStartdate(DateUtil.getDateTimeStr(7)+" 00:00:00" );
+                voTemp.setEnddate("3000-12-01"+" 00:00:00");
                 voTemp.setCreateusereng(PrefUtils.getString(context, "userGongHao", "21000"));
-                voTemp.setCreatedate(DateUtil.getDateTimeStr(6));
+                voTemp.setCreatedate(DateUtil.getDateTimeStr(8));
                 voTemp.setUpdateusereng(PrefUtils.getString(context, "userGongHao", "21000"));
-                voTemp.setUpdatetime(DateUtil.getDateTimeStr(6));
+                voTemp.setUpdatetime(DateUtil.getDateTimeStr(8));
                 voTemp.setUpdateusereng(PrefUtils.getString(context, "userGongHao", "21000"));
-                voTemp.setUploadFlag("0");// 不上传
+                voTemp.setUploadflag("0");// 不上传
                 voTemp.setPadisconsistent("0");// 未上传
                 voTemp.setVisitkey(visitkey);
                 createMstGroupproductM(voTemp);
@@ -853,14 +853,14 @@ public class XtShopVisitService {
             voTemp.setTerminalcode(termTemp.getTerminalcode());
             voTemp.setTerminalname(termTemp.getTerminalname());
             voTemp.setIfrecstand("N");// 未达标
-            voTemp.setStartdate(DateUtil.getDateTimeStr(7) + "  00:00:00");
-            voTemp.setEnddate("3000-12-01" + "  00:00:00");
+            voTemp.setStartdate(DateUtil.getDateTimeStr(7)+" 00:00:00");
+            voTemp.setEnddate("3000-12-01"+" 00:00:00");
             voTemp.setCreateusereng(PrefUtils.getString(context, "userGongHao", "20000"));
-            voTemp.setCreatedate(DateUtil.getDateTimeStr(6));
+            voTemp.setCreatedate(DateUtil.getDateTimeStr(8));
             voTemp.setUpdateusereng(PrefUtils.getString(context, "userGongHao", "20000"));
-            voTemp.setUpdatetime(DateUtil.getDateTimeStr(6));
+            voTemp.setUpdatetime(DateUtil.getDateTimeStr(8));
             voTemp.setUpdateusereng(PrefUtils.getString(context, "userGongHao", "20000"));
-            voTemp.setUploadFlag("0");// 不上传
+            voTemp.setUploadflag("0");// 不上传
             voTemp.setPadisconsistent("0");// 未上传
             voTemp.setVisitkey(visitkey);
             createMstGroupproductM(voTemp);
@@ -1388,6 +1388,8 @@ public class XtShopVisitService {
 
     /**
      * 更新拜访离店时间及是否要上传标志
+     *
+     * 复制临时表数据 到业代的正式表中
      *
      * @param visitId      拜访主键
      * @param termId       终端主键

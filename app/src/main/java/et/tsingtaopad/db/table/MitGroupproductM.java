@@ -67,10 +67,10 @@ public class MitGroupproductM implements java.io.Serializable {
 	 * @param createdate
 	 * @param updateusereng
 	 * @param updatetime
-	 * @param uploadFlag
+	 * @param uploadflag
 	 * @param padisconsistent
 	 */
-	public MitGroupproductM(String gproductid, String terminalcode, String terminalname, String ifrecstand, String startdate, String enddate, String createusereng, String createdate, String updateusereng, String updatetime, String uploadFlag, String padisconsistent) {
+	public MitGroupproductM(String gproductid, String terminalcode, String terminalname, String ifrecstand, String startdate, String enddate, String createusereng, String createdate, String updateusereng, String updatetime, String uploadflag, String padisconsistent) {
 		super();
 		this.gproductid = gproductid;
 		this.terminalcode = terminalcode;
@@ -82,7 +82,7 @@ public class MitGroupproductM implements java.io.Serializable {
 		this.createdate = createdate;
 		this.updateusereng = updateusereng;
 		this.updatetime = updatetime;
-		this.uploadflag = uploadFlag;
+		this.uploadflag = uploadflag;
 		this.padisconsistent = padisconsistent;
 	}
 
@@ -224,20 +224,6 @@ public class MitGroupproductM implements java.io.Serializable {
 	 */
 	public void setUpdatetime(String updatetime) {
 		this.updatetime = updatetime;
-	}
-
-	/**
-	 * @return the uploadFlag
-	 */
-	public String getUploadFlag() {
-		return uploadflag;
-	}
-
-	/**
-	 * @param uploadFlag the uploadFlag to set
-	 */
-	public void setUploadFlag(String uploadFlag) {
-		this.uploadflag = uploadFlag;
 	}
 
 	/**

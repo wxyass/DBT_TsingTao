@@ -187,7 +187,8 @@ public class DateUtil {
      *     3        2011.04.11 22:52:08(yyyy.MM.dd hh:mm:ss)
      *     4        2011.04.11(yyyy.MM.dd)
      *     5        22:52:08(hh:mm:ss)
-     *     6		2011-04-11 22:52:08(yyyy-MM-dd hh:mm:ss)
+     *     6		2011-04-11  22:52:08(yyyy-MM-dd  hh:mm:ss)
+     *     8		2011-04-11 22:52:08(yyyy-MM-dd hh:mm:ss)
      *     7		2011-04-11 (yyyy-MM-dd)
      * ====================================================
      * @return 日期时间字符串
@@ -214,6 +215,7 @@ public class DateUtil {
             if (iType == 5) strResult = obj[1].toString();
             if (iType == 6) strResult = obj[3].toString() + "  " + obj[1].toString();// yyyy-MM-dd HH:mm:ss
             if (iType == 7) strResult = obj[3].toString();
+            if (iType == 8) strResult = obj[3].toString() + " " + obj[1].toString();// yyyy-MM-dd HH:mm:ss
         } catch (Exception ex) {
             ex.printStackTrace();
         }

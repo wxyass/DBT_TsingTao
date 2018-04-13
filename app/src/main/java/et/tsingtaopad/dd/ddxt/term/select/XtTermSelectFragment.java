@@ -236,6 +236,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
                 // 请求路线下的所有终端
                 String content = "{routekey:'" + routeKey + "'," +"tablename:'MST_TERMINALINFO_M'" + "}";
                 getDataByHttp("opt_get_dates2", "MST_TERMINALINFO_M", content);
+                PrefUtils.putString(getActivity(),GlobalValues.ROUNTE_TIME,DateUtil.getDateTimeStr(7));
             }
         });
     }
@@ -538,22 +539,26 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
             // 处理UI 变化
             switch (msg.what) {
                 case ConstValues.WAIT0://  结束上传  刷新本页面
-                    fragment.shuaxin();
+                    fragment.shuaxinXtTermSelect(0);
                     break;
                 case GlobalValues.SINGLE_UP_SUC://  协同拜访上传成功
-                    //fragment.initData2();
+                    fragment.shuaxinXtTermSelect(1);
                     break;
                 case GlobalValues.SINGLE_UP_FAIL://  协同拜访上传失败
-                    //fragment.initData2();
+                    fragment.shuaxinXtTermSelect(2);
                     break;
 
             }
         }
     }
 
-    // 结束上传  刷新页面
-    private void shuaxin() {
-        //
+    // 结束上传  刷新页面  0:确定上传  1上传成功  2上传失败
+    private void shuaxinXtTermSelect(int upType) {
+        if(1==upType){
+            Toast.makeText(getActivity(),"上传成功",Toast.LENGTH_SHORT).show();
+        }else if(2==upType){
+            Toast.makeText(getActivity(),"上传失败",Toast.LENGTH_SHORT).show();
+        }
         initTermListData(routeKey);// 重新读取终端列表
         setSelectTerm();// 设置已添加购物车的符号
         setItemAdapterListener();// 适配器处理

@@ -24,6 +24,7 @@ import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.JsonUtil;
+import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.ZipUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.db.DBManager;
@@ -90,6 +91,7 @@ import et.tsingtaopad.db.table.PadPlantempcheckM;
 import et.tsingtaopad.db.table.PadPlantempcollectionInfo;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtShopVisitService;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
+import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.camera.domain.CameraInfoStc;
 
 /**
@@ -280,16 +282,28 @@ public class MainService extends XtShopVisitService {
             Log.e(TAG, "createOrUpdateTable 1 transation");
 
 
-            String table = "MST_MARKETAREA_M,MST_GRID_M,MST_ROUTE_M,CMM_DATADIC_M,CMM_AREA_M,MST_PROMOTIONS_M," +
-                    "MST_PROMOPRODUCT_INFO,MST_PICTYPE_M,MST_PRODUCT_M,MST_CMPCOMPANY_M,MST_CMPBRANDS_M," +
-                    "MST_CMPRODUCTINFO_M,MST_TERMINALINFO_M";
-
             // 先将之前此表中的数据全部删除(拜访的上次详情不删)  在做插入记录操作,
-            if(table.contains(tablename)){
+            /*String table = "MST_MARKETAREA_M,MST_GRID_M,MST_ROUTE_M,CMM_DATADIC_M,CMM_AREA_M,MST_PROMOTIONS_M," +
+                    "MST_PROMOPRODUCT_INFO,MST_PICTYPE_M,MST_PRODUCT_M,MST_CMPCOMPANY_M,MST_CMPBRANDS_M," +
+                    "MST_CMPRODUCTINFO_M,MST_TERMINALINFO_M";*/
+
+            String table = "MST_TERMINALINFO_M";
+
+            String upDataRoutetime = PrefUtils.getString(context, GlobalValues.ROUNTE_TIME,"");
+            // 先将之前此表中的数据全部删除  在做插入记录操作,(终端表不删,之后做处理)
+            if(table.equals(tablename)){
+                if(!upDataRoutetime.equals(DateUtil.getDateTimeStr(7))){
+                    StringBuffer buffer = new StringBuffer();
+                    buffer.append("DELETE FROM "+tablename);
+                    database.execSQL(buffer.toString());
+                }
+            }else{
                 StringBuffer buffer = new StringBuffer();
                 buffer.append("DELETE FROM "+tablename);
                 database.execSQL(buffer.toString());
             }
+
+
 
             // 更新 插入
             String mClass = cls.getName();

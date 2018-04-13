@@ -16,7 +16,10 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+
+import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.lang.ref.SoftReference;
@@ -186,42 +189,48 @@ public class XtCameraFragment extends XtBaseVisitFragment implements View.OnClic
                         message.what = SHOW_PROGRESS;
                         handler.sendMessage(message);// 提示:图片正在保存,请稍后
 
-                        // 保存到表
-                        CameraInfoStc cameraDataStc = valueLst.get(position);
-                        CameraImageBean cameraImageBean = CameraImageBean.getInstance();
-                        String picname = cameraImageBean.getPicname();
-                        Uri uri = cameraImageBean.getmPath();
-                        // 将图片转成字符串
-                        String imagefileString = "";
-                        try {
-                            // 裁剪 压缩
-                            Bitmap bitmap = getBitmapFormUri(getContext(), uri);
-                            // 添加水印
-                            //bitmap = cameraService.addWaterBitmap(bitmap, DateUtil.getDateTimeStr(3),"username",termname,cameraDataStc.getPictypename());
-                            // 删除原图
-                            FileUtil.deleteFile(new File(FileTool.CAMERA_PHOTO_DIR + picname));
-                            // 保存小图
-                            FunUtil.saveHeadImg(FileTool.CAMERA_PHOTO_DIR, bitmap, picname, 100, 25);
-                            // 图片转成字符串
-                            imagefileString = FileUtil.fileToString(FileTool.CAMERA_PHOTO_DIR + picname);
-                            // 将图片记录保存到数据库
-                            String cameraKey = xtCameraService.savePicData(cameraDataStc, picname, imagefileString,termId,visitId);
+                        new Thread() {
+                            @Override
+                            public void run() {
+                                super.run();
+                                // 保存到表
+                                CameraInfoStc cameraDataStc = valueLst.get(position);
+                                CameraImageBean cameraImageBean = CameraImageBean.getInstance();
+                                String picname = cameraImageBean.getPicname();
+                                Uri uri = cameraImageBean.getmPath();
+                                // 将图片转成字符串
+                                String imagefileString = "";
+                                try {
+                                    // 裁剪 压缩
+                                    Bitmap bitmap = getBitmapFormUri(getContext(), uri);
+                                    // 添加水印
+                                    //bitmap = cameraService.addWaterBitmap(bitmap, DateUtil.getDateTimeStr(3),"username",termname,cameraDataStc.getPictypename());
+                                    // 删除原图
+                                    FileUtil.deleteFile(new File(FileTool.CAMERA_PHOTO_DIR + picname));
+                                    // 保存小图
+                                    FunUtil.saveHeadImg(FileTool.CAMERA_PHOTO_DIR, bitmap, picname, 100, 25);
+                                    // 图片转成字符串
+                                    imagefileString = FileUtil.fileToString(FileTool.CAMERA_PHOTO_DIR + picname);
+                                    // 将图片记录保存到数据库
+                                    String cameraKey = xtCameraService.savePicData(cameraDataStc, picname, imagefileString,termId,visitId);
 
-                            // 更新UI界面 刷新适配器
-                            Message message1 = new Message();
-                            message1.what = CLOSE_PROGRESS;
-                            handler.sendMessage(message1);// 刷新UI
+                                    // 更新UI界面 刷新适配器
+                                    Message message1 = new Message();
+                                    message1.what = CLOSE_PROGRESS;
+                                    handler.sendMessage(message1);// 刷新UI
 
-                            cameraDataStc.setCamerakey(cameraKey);
-                            cameraDataStc.setLocalpath(picname);
-                            gridAdapter.notifyDataSetChanged();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            // 更新UI界面 刷新适配器
-                            Message message1 = new Message();
-                            message1.what = CLOSE_PROGRESS;
-                            handler.sendMessage(message1);// 刷新UI
-                        }
+                                    cameraDataStc.setCamerakey(cameraKey);
+                                    cameraDataStc.setLocalpath(picname);
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    // 更新UI界面 刷新适配器
+                                    Message message1 = new Message();
+                                    message1.what = CLOSE_PROGRESS;
+                                    handler.sendMessage(message1);// 刷新UI
+                                }
+                            }
+                        }.start();
                     }
                 });
 
@@ -250,7 +259,7 @@ public class XtCameraFragment extends XtBaseVisitFragment implements View.OnClic
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //if (resultCode == RESULT_OK) {
+        if(resultCode == getActivity().RESULT_OK){
             switch (requestCode){
                 case RequestCodes.TAKE_PHONE:// 拍照相机 回来的
                     // 获取照片文件路径
@@ -266,6 +275,7 @@ public class XtCameraFragment extends XtBaseVisitFragment implements View.OnClic
                     if(callbacktakephone!=null){
                         callbacktakephone.executeCallback(resultUri);
                     }
+
                     /*// 去剪裁,将原图覆盖掉
                     UCrop.of(resultUri,resultUri)
                             .withMaxResultSize(480,640)
@@ -276,8 +286,9 @@ public class XtCameraFragment extends XtBaseVisitFragment implements View.OnClic
                 default:
                     break;
             }
-
-        //}
+        }else {
+            Toast.makeText(getActivity(), "拍照失败或初始化相机失败,请重新拍照", Toast.LENGTH_SHORT).show();
+        }
     }
 
 

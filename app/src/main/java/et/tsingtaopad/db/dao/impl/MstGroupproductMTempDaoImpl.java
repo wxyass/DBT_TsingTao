@@ -55,7 +55,7 @@ public class MstGroupproductMTempDaoImpl extends BaseDaoImpl<MstGroupproductMTem
 			vo.setUpdateusereng(cursor.getString(cursor.getColumnIndex("updateusereng")));
 			vo.setUpdatetime(cursor.getString(cursor.getColumnIndex("updatetime")));
 			vo.setUpdateusereng(cursor.getString(cursor.getColumnIndex("updateusereng")));
-			vo.setUploadFlag(cursor.getString(cursor.getColumnIndex("uploadflag")));
+			vo.setUploadflag(cursor.getString(cursor.getColumnIndex("uploadflag")));
 			vo.setPadisconsistent(cursor.getString(cursor.getColumnIndex("padisconsistent")));
 			listvo.add(vo);
 		}
