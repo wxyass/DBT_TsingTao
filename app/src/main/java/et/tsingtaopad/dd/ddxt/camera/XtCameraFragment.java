@@ -238,7 +238,7 @@ public class XtCameraFragment extends XtBaseVisitFragment implements View.OnClic
                 if(TextUtils.isEmpty(valueLst.get(position).getCamerakey())||"".equals(valueLst.get(position).getCamerakey())){
                     new XtCameraHandler(XtCameraFragment.this).takePhoto();
                 }else{
-                    new XtCameraHandler(XtCameraFragment.this).beginCameraDialog();
+                    new XtCameraHandler(XtCameraFragment.this).beginCameraDialog(valueLst.get(position).getPicname());
                 }
             }
         });
@@ -324,7 +324,7 @@ public class XtCameraFragment extends XtBaseVisitFragment implements View.OnClic
     }
 
     /**
-     * 添加竞品成功 UI
+     * 展示滚动条
      */
     public void showDialogSuc() {
         dialog = new AlertDialog.Builder(getActivity()).setCancelable(false).create();

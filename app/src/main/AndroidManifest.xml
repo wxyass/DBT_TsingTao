@@ -17,7 +17,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>-->
-        <activity android:name=".home.app.MainActivity">
+        <activity android:name=".home.app.MainActivity"
+                  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -25,8 +26,12 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".dd.ddxt.shopvisit.XtVisitShopActivity" />
-        <activity android:name=".dd.ddzs.zsshopvisit.ZsVisitShopActivity" />
+        <activity android:name=".dd.ddxt.shopvisit.XtVisitShopActivity"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".dd.ddzs.zsshopvisit.ZsVisitShopActivity"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".dd.ddxt.camera.XtShowPicActivity"
+                  android:screenOrientation="portrait"/>
 
     </application>
 

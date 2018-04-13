@@ -50,6 +50,8 @@ import et.tsingtaopad.db.table.MitVistproductInfo;
 import et.tsingtaopad.db.table.MstAgencysupplyInfo;
 import et.tsingtaopad.db.table.MstAgencytransferInfo;
 import et.tsingtaopad.db.table.MstAgencyvisitM;
+import et.tsingtaopad.db.table.MstCameraInfoM;
+import et.tsingtaopad.db.table.MstCameraInfoMTemp;
 import et.tsingtaopad.db.table.MstCheckexerecordInfo;
 import et.tsingtaopad.db.table.MstCmpsupplyInfo;
 import et.tsingtaopad.db.table.MstCollectionexerecordInfo;
@@ -122,6 +124,7 @@ public class XtUploadService
     private Dao<MitCmpsupplyInfo, String> mitCmpsupplyInfoDao = null;//8
     private Dao<MstPlanrouteInfo, String> mstPlanrouteInfodDao = null;
     private MstCameraiInfoMDao mstCameraiInfoMDao = null;
+    private Dao<MstCameraInfoMTemp, String> cameraTempDao =null;
     private MitCameraInfoMDao mitCameraInfoMDao = null;//9
     private MstAgencyKFMDao mstAgencyKFMDao = null;
     private Dao<MstPlanTerminalM, String> mstPlanTerminalMDao = null;
@@ -166,6 +169,7 @@ public class XtUploadService
             mitCmpsupplyInfoDao = helper.getMitCmpsupplyInfoDao();
             mstPlanrouteInfodDao = helper.getMstPlanrouteInfoDao();
             mstCameraiInfoMDao = (MstCameraiInfoMDao)helper.getMstCameraiInfoMDao();
+             cameraTempDao = helper.getMstCameraInfoMTempDao();
             mitCameraInfoMDao = (MitCameraInfoMDao)helper.getMitCameraInfoMDao();
             mstAgencyKFMDao = (MstAgencyKFMDao)helper.getMstAgencyKFMDao();
             mstGroupproductMDao = helper.getMstGroupproductMDao();
@@ -442,7 +446,7 @@ public class XtUploadService
                     }
                     //String json = JsonUtil.toJson(mitCameras);
                     //FileUtil.writeTxt(json, FileUtil.getSDPath()+"/mVistproductInfos0808.txt");
-                    childDatas.put("MIT_CAMERAINFO_M",JsonUtil.toJson(mitCameras));
+                    childDatas.put("MIT_VISITPIC_INFO",JsonUtil.toJson(mitCameras));
 
 
                     // MstAgencysupplyInfo MST_AGENCYSUPPLY_INFO(经销商供货关系信息表)
@@ -517,6 +521,32 @@ public class XtUploadService
         }
     }
 
+
+    // 用户点击返回  删除文件夹中的照片
+    public void deleteDICM(String visitKey){
+
+        // 图片上传专用map
+        Map<String, Object> visitKeyisuploadMap = new HashMap<String, Object>();
+        visitKeyisuploadMap.put("visitkey", visitKey);
+        visitKeyisuploadMap.put("isupload", "0");
+
+        // 照片s
+        // 图片列表
+        List<MstCameraInfoMTemp> mstCameraInfoMTemps = new ArrayList<MstCameraInfoMTemp>();
+        try {
+            mstCameraInfoMTemps = cameraTempDao.queryForFieldValues(visitKeyisuploadMap);
+            // 删除文件夹下的照片
+            for (MstCameraInfoMTemp mTerminalinfoM : mstCameraInfoMTemps) {
+                String picname = mTerminalinfoM.getPicname();
+                // 删除文件夹照片
+                FileUtil.deleteFile(new File(FileTool.CAMERA_PHOTO_DIR + picname));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     /**
      * 请求路线下的所有终端
      *
@@ -547,7 +577,6 @@ public class XtUploadService
                         // 保存登录信息
                         if (ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())) {
                             //
-                            Toast.makeText(context, "上传成功", Toast.LENGTH_SHORT).show();
                             // 处理上传后的数据,该删删,该处理
                             String formjson = resObj.getResBody().getContent();
                             parseUpData(formjson);

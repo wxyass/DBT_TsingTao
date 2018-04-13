@@ -184,7 +184,7 @@
                     android:id="@+id/item_termselect_iv_addterm"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="10dp"
+                    android:padding="15dp"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:src="@drawable/icon_visit_add"

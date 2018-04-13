@@ -22,7 +22,7 @@ public class GlobalValues {
 
     // 登录信息缓存Key
     public static final String LOGINSESSIONKEY = "loginSesion";
-    // 打招呼是否读取完整
+    // 打招呼是否读取完整  true:不完整   false:完整
     public static final String SAYHIREADY = "sayhiready";
     // 判断购物车是协同,还是追溯  1协同  2追溯
     public static final String DDXTZS = "ddxtzs";

@@ -231,7 +231,7 @@ public class ZsCameraFragment extends XtBaseVisitFragment implements View.OnClic
                 if(TextUtils.isEmpty(valueLst.get(position).getCamerakey())||"".equals(valueLst.get(position).getCamerakey())){
                     new XtCameraHandler(ZsCameraFragment.this).takePhoto();
                 }else{
-                    new XtCameraHandler(ZsCameraFragment.this).beginCameraDialog();
+                    new XtCameraHandler(ZsCameraFragment.this).beginCameraDialog(valueLst.get(position).getPicname());
                 }
             }
         });

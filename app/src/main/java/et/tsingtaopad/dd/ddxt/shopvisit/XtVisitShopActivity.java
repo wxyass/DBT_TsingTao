@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -493,7 +494,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
                             XtShopCopyService xtShopCopyService = new XtShopCopyService(getApplicationContext(),null);
                             xtShopCopyService.copyXtUpload(visitId, termStc.getTerminalkey(),termStc.getTerminalcode(), visitEndDate, "1");
 
-                            // 删除协同拜访数据
+                            // 上传协同拜访数据
                             XtUploadService xtUploadService = new XtUploadService(getApplicationContext(),null);
                             xtUploadService.upload_xt_visit(false,visitId,1);
 
@@ -524,6 +525,10 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
                         if (0 == position) {// 确定按钮:0   取消按钮:-1
                             //if (ViewUtil.isDoubleClick(v.getId(), 2500)) return;
                             DbtLog.logUtils(TAG, "返回拜访：是");
+                            // 删除图片表
+                            XtUploadService xtUploadService = new XtUploadService(getApplicationContext(),null);
+                            xtUploadService.deleteDICM(visitId);
+
                             XtVisitShopActivity.this.finish();
                         }
                     }
@@ -553,5 +558,16 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
             }
         }*/
         return isallIn;
+    }
+
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            // do something...
+            // 确定返回上一界面
+            backFinish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

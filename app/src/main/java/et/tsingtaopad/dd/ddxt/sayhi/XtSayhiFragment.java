@@ -1,6 +1,7 @@
 package et.tsingtaopad.dd.ddxt.sayhi;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -132,10 +133,11 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
     private List<KvStc> mainchannelLst = new ArrayList<>();
     private List<KvStc> minorchannelLst = new ArrayList<>();
 
-    private ProgressDialog progressDialog;
     public static final int FINISH_SUC = 11;
     public static final int NOT_TERMSTATUS = 12;
     public static final int DATA_ARROR = 13;
+    public static final int SHOW_INIT_PROGRESS = 14;// 开启滚动条
+    public static final int CLOSE_INIT_PROGRESS = 15;// 关闭滚动条
     MyHandler handler;
 
     /**
@@ -170,6 +172,13 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
                     int res = (int)msg.obj;
                     fragment.showErrorMsg(res);
 
+                    break;
+                case SHOW_INIT_PROGRESS:
+                    fragment.showXtSayHiDialog();
+                    break;
+                case CLOSE_INIT_PROGRESS:
+                    fragment.closeXtSayHiDialog();
+                    fragment.initData2();
                     break;
             }
         }
@@ -216,13 +225,6 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
                 MotionEvent.ACTION_UP, xttermstatusSw.getLeft(),
                 xttermstatusSw.getTop(), xttermstatusSw.getId());
         xttermstatusSw.onTouchEvent(event);
-    }
-
-    /**
-     * 添加产品成功 UI
-     */
-    public void closeProgressSuc() {
-        progressDialog.dismiss();
     }
 
     @Nullable
@@ -305,13 +307,10 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         handler = new MyHandler(this);
         xtSayhiService = new XtSayhiService(getActivity(), handler);
 
-        /*progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("初始化中...");
-        progressDialog.show();*/
 
+        PrefUtils.putBoolean(getActivity(),GlobalValues.SAYHIREADY,true);
         // 初始化页面数据
         //initData();initData2();
-        PrefUtils.putBoolean(getActivity(),GlobalValues.SAYHIREADY,true);
         initViewData();// 子线程查找数据
 
         // 设置监听
@@ -320,6 +319,12 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
 
     // 子线程查找数据
     private void initViewData(){
+
+        // 弹出提示对话框
+        Message message = new Message();
+        message.what = SHOW_INIT_PROGRESS;
+        handler.sendMessage(message);// 提示:图片正在保存,请稍后
+
         Thread thread = new Thread() {
 
             @Override
@@ -327,13 +332,33 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
                 try{
                     initData();
                 }catch (Exception e){
-
+                    e.printStackTrace();
                 }finally {
-                    handler.sendEmptyMessage(XtSayhiFragment.FINISH_SUC);
+                    Message message = new Message();
+                    message.what = CLOSE_INIT_PROGRESS;
+                    handler.sendMessage(message);// 提示:图片正在保存,请稍后
                 }
             }
         };
         thread.start();
+    }
+
+    private AlertDialog dialog;
+    /**
+     * 展示滚动条
+     */
+    public void showXtSayHiDialog() {
+        dialog = new AlertDialog.Builder(getActivity()).setCancelable(false).create();
+        dialog.setView(getActivity().getLayoutInflater().inflate(R.layout.dealwith_progress, null), 0, 0, 0, 0);
+        dialog.setCancelable(false); // 是否可以通过返回键 关闭
+        dialog.show();
+    }
+
+    public void closeXtSayHiDialog() {
+        if (dialog != null) {
+            dialog.dismiss();
+        }
+        //gridAdapter.notifyDataSetChanged();
     }
 
     // 子线程-初始化数据

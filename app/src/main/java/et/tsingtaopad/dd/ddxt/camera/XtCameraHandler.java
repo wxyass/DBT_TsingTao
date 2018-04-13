@@ -24,6 +24,7 @@ import et.tsingtaopad.core.base.middle.PermissionCheckerDelegate;
 import et.tsingtaopad.core.ui.camera.CameraImageBean;
 import et.tsingtaopad.core.ui.camera.RequestCodes;
 import et.tsingtaopad.core.util.file.FileTool;
+import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
 
 //import com.diabin.latte.util.file.FileUtil;
 
@@ -36,6 +37,7 @@ public class XtCameraHandler implements View.OnClickListener {
 
     private final AlertDialog DIALOG;
     private final Fragment DELEGATE;
+    private String picName;
 
     public XtCameraHandler(Fragment delegate) {
         this.DIALOG = new AlertDialog.Builder(delegate.getContext()).create();
@@ -43,8 +45,9 @@ public class XtCameraHandler implements View.OnClickListener {
     }
 
     // 展示弹窗: 拍照,相册,取消
-    public final void beginCameraDialog() {
+    public final void beginCameraDialog(String picname) {
         DIALOG.show();
+        picName = picname;
         final Window window = DIALOG.getWindow();
         if (window != null) {
             window.setContentView(R.layout.dialog_camera_panel);
@@ -71,14 +74,21 @@ public class XtCameraHandler implements View.OnClickListener {
 
         if (id == R.id.photodialog_btn_cancel) {// 取消
             DIALOG.cancel();
-        } else if (id == R.id.photodialog_btn_native) {// 相册
+        } else if (id == R.id.photodialog_btn_native) {// 查看
             // pickPhoto();
+            lookPic();
             DIALOG.cancel();
         } else if (id == R.id.photodialog_btn_take) {// 拍照
             takePhoto();
             DIALOG.cancel();
         }
 
+    }
+
+    private void lookPic() {
+        Intent intent = new Intent(DELEGATE.getActivity(), XtShowPicActivity.class);
+        intent.putExtra("picname", picName);// 非第一次拜访1
+        DELEGATE.startActivity(intent);
     }
 
     // 打开相机

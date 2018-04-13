@@ -270,7 +270,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
                 } else {
                     selectedList.add(item);
                     item.setIsSelectToCart("1");
-                    imageView.setImageResource(R.drawable.ico_terminal_syncflag);
+                    imageView.setImageResource(R.drawable.icon_select_minus);
                     confirmTv.setText("确定" + "(" + selectedList.size() + ")");
                 }
             }
@@ -393,7 +393,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
         String termName = termSelectMStc.getTerminalname();
 
         // 普通窗口
-        mAlertViewExt = new AlertView(termName, null, "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert,
+        mAlertViewExt = new AlertView("拜访: "+termName, null, "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert,
                 new OnItemClickListener() {
                     @Override
                     public void onItemClick(Object o, int position) {
