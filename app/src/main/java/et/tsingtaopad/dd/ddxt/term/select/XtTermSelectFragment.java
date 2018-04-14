@@ -363,8 +363,14 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
             }
             // 销毁当前Fragment
             supportFragmentManager.popBackStack();
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("fromFragment", "XtTermSelectFragment");
+            XtTermCartFragment xtTermCartFragment = new XtTermCartFragment();
+            xtTermCartFragment.setArguments(bundle);
+
             // 跳转终端购物车
-            changeHomeFragment(new XtTermCartFragment(), "xttermcartfragment");
+            changeHomeFragment(xtTermCartFragment, "xttermcartfragment");
         } else if (TOACTIVITY == type) {// 跳转拜访Activity
             // 复制到终端购物车
             for (XtTermSelectMStc xtselect : selectedList) {
@@ -468,7 +474,6 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
                                 startXtVisitShopActivity();
                                 Toast.makeText(getActivity(), "该终端数据请求成功", Toast.LENGTH_SHORT).show();
                             }
-
 
                         } else {
                             Toast.makeText(getActivity(), resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();

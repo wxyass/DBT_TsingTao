@@ -66,7 +66,7 @@ import et.tsingtaopad.initconstvalues.domain.KvStc;
 public class XtShowPicActivity extends BaseActivity  {
 
     private final String TAG = "XtShowPicActivity";
-    private PhotoView iv_photo1;
+    private com.github.chrisbanes.photoview.PhotoView iv_photo1;
     private String picname;
 
 
@@ -99,8 +99,13 @@ public class XtShowPicActivity extends BaseActivity  {
 
         try {
             // 读取uri所在的图片
-            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), fileuri);
-            iv_photo1.setImageBitmap(bitmap);
+            if (fileuri != null) {
+                //photoBmp = MediaStore.Images.Media.getBitmap(ac.getContentResolver(), mImageCaptureUri);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), fileuri);
+                iv_photo1.setImageBitmap(bitmap);
+            }
+
+
         } catch (Exception e) {
             Log.e("[Android]", e.getMessage());
             e.printStackTrace();
@@ -109,7 +114,7 @@ public class XtShowPicActivity extends BaseActivity  {
     }
 
     private void initView() {
-        iv_photo1 = (PhotoView) findViewById(R.id.xt_showpic_iv_photo);
+        iv_photo1 = (com.github.chrisbanes.photoview.PhotoView) findViewById(R.id.xt_showpic_iv_photo);
     }
 
     private Uri toCameraByContentResolverUri(File tempFile,String currentPhotoName){

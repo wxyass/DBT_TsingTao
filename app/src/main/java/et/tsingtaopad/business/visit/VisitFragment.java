@@ -51,7 +51,11 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
                 changeHomeFragment(new XtTermSelectFragment(), "xttermlistfragment");
                 break;
             case R.id.btn_xt_term:
-                changeHomeFragment(new XtTermCartFragment(), "xttermcartfragment");
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("fromFragment", "VisitFragment");
+                XtTermCartFragment xtTermCartFragment = new XtTermCartFragment();
+                xtTermCartFragment.setArguments(bundle);
+                changeHomeFragment(xtTermCartFragment, "xttermcartfragment");
                 break;
             case R.id.btn_zdzs:
                 changeHomeFragment(new ZsTermSelectFragment(), "zstermselectfragment");

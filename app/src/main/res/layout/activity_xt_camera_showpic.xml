@@ -5,10 +5,9 @@
     android:gravity="center"
      >
 
-    <uk.co.senab.photoview.PhotoView
+    <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/xt_showpic_iv_photo"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>

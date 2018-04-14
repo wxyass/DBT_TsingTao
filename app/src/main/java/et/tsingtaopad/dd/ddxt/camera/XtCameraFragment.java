@@ -238,7 +238,7 @@ public class XtCameraFragment extends XtBaseVisitFragment implements View.OnClic
                 if(TextUtils.isEmpty(valueLst.get(position).getCamerakey())||"".equals(valueLst.get(position).getCamerakey())){
                     new XtCameraHandler(XtCameraFragment.this).takePhoto();
                 }else{
-                    new XtCameraHandler(XtCameraFragment.this).beginCameraDialog(valueLst.get(position).getPicname());
+                    new XtCameraHandler(XtCameraFragment.this).beginCameraDialog(valueLst.get(position).getLocalpath());
                 }
             }
         });

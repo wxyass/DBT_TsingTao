@@ -367,7 +367,8 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         termInfoTemp = xtSayhiService.findTermTempById(termId);// 终端临时表记录
         visitMTemp = xtSayhiService.findVisitTempById(visitId);// 拜访临时表记录
         // 路线集合
-        mstRouteList = xtSayhiService.initMstRoute();
+        //mstRouteList = xtSayhiService.initMstRoute();
+        mstRouteList = xtSayhiService.initXtMstRoute(termId);
         // 终端等级集合
         dataDicByTermLevelLst = xtSayhiService.initDataDicByTermLevel();
         // 区域类型集合
