@@ -875,6 +875,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
                 // 产品组合是否达标  添加visitkey字段
                 db.execSQL("alter table MST_GROUPPRODUCT_M add visitkey varchar(36)");
+                // PAD_CHECKACCOMPLISH_INFO  添加visitkey字段
+                db.execSQL("alter table PAD_CHECKACCOMPLISH_INFO add areaid varchar(36)");
 
                 // 拜访临时表
                 String visittemp = "create table MST_VISIT_M_TEMP (visitkey varchar,terminalkey varchar,routekey varchar,gridkey varchar,areaid varchar,visitdate varchar,tempkey varchar,enddate varchar,userid varchar,visituser varchar,isself varchar,iscmp varchar,selftreaty varchar,cmptreaty varchar,status varchar,ishdistribution varchar,exetreaty varchar,selfoccupancy varchar,iscmpcollapse varchar,sisconsistent varchar,scondate date ,padisconsistent varchar,padcondate date ,comid varchar2,remarks varchar,orderbyno varchar,deleteflag varchar,version integer ,credate date ,creuser varchar,updatetime date ,updateuser varchar,longitude  varchar , latitude  varchar ,gpsstatus  varchar ,ifminedate  varchar , ifmine  varchar ,visitposition  varchar ,uploadFlag  varchar )";

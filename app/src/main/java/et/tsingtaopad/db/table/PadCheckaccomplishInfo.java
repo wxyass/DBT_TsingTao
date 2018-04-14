@@ -33,6 +33,8 @@ public class PadCheckaccomplishInfo implements java.io.Serializable {
 	private String orderbyno;
 	@DatabaseField
 	private String minorchannel;
+	@DatabaseField
+	private String areaid;
 
 	// Constructors
 
@@ -141,4 +143,11 @@ public class PadCheckaccomplishInfo implements java.io.Serializable {
 		this.minorchannel = minorchannel;
 	}
 
+	public String getAreaid() {
+		return areaid;
+	}
+
+	public void setAreaid(String areaid) {
+		this.areaid = areaid;
+	}
 }
