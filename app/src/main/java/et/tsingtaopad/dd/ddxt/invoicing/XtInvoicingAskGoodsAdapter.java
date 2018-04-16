@@ -2,7 +2,6 @@ package et.tsingtaopad.dd.ddxt.invoicing;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,22 +12,16 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Date;
 import java.util.List;
-import java.util.zip.Inflater;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
-import et.tsingtaopad.core.util.dbtutil.FunUtil;
-import et.tsingtaopad.core.util.dbtutil.ViewUtil;
-import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.dd.ddxt.invoicing.domain.XtInvoicingStc;
-import et.tsingtaopad.dd.ddxt.invoicing.listener.ILongClick;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.invoicing.InvoicingService;
+import et.tsingtaopad.listviewintf.ILongClick;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.invoicing.adapter.InvoicingCheckGoodsAdapter;
 
 /**
@@ -53,7 +46,8 @@ public class XtInvoicingAskGoodsAdapter extends BaseAdapter {//implements  View.
     private ILongClick listener;
 
     public XtInvoicingAskGoodsAdapter(Activity context, String seeFlag, List<XtInvoicingStc> dataLst,
-                                      String termId, String visitId, InvoicingCheckGoodsAdapter checkAdapter, ListView askGoodsLv, ListView checkGoodsLv, ILongClick listener) {
+                                      String termId, String visitId, InvoicingCheckGoodsAdapter checkAdapter,
+                                      ListView askGoodsLv, ListView checkGoodsLv, ILongClick listener) {
         this.context = context;
         this.seeFlag = seeFlag;
         this.dataLst = dataLst;

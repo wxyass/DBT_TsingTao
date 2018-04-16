@@ -5,8 +5,6 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,24 +12,19 @@ import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
-import et.tsingtaopad.core.util.dbtutil.ViewUtil;
-import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.db.table.MstCmpagencyInfo;
 import et.tsingtaopad.dd.ddxt.chatvie.domain.XtChatVieStc;
-import et.tsingtaopad.dd.ddxt.invoicing.listener.ILongClick;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.chatvie.ChatVieService;
+import et.tsingtaopad.listviewintf.ILongClick;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.chatvie.adapter.VieStatusAdapter;
 
 

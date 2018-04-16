@@ -68,7 +68,7 @@ import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.ProIndex;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.ProIndexValue;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.ProItem;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.QuicklyProItem;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.listener.IClick;
+import et.tsingtaopad.listviewintf.IClick;
 import et.tsingtaopad.view.NoScrollListView;
 import et.tsingtaopad.view.SlideSwitch;
 

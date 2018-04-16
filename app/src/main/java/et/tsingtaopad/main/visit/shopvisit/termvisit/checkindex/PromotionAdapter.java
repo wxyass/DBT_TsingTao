@@ -19,7 +19,7 @@ import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.camera.domain.CameraInfoStc;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.CheckIndexPromotionStc;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.listener.IClick;
+import et.tsingtaopad.listviewintf.IClick;
 import et.tsingtaopad.view.SlideSwitch;
 
 

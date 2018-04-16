@@ -37,7 +37,8 @@ public class GlobalValues {
     // 最后一次点击路线的时间
     public static final String ROUNTE_TIME = "route_time";
     // 购物车是否已经同步数据  false:没有  true:已同步
-    public static final String CART_SYNC = "cartsync";
+    public static final String XT_CART_SYNC = "xtcartsync";
+    public static final String ZS_CART_SYNC = "zscartsync";
 
     // TODO hongen 删除new LoginSession()  登录Session
     public static LoginSession loginSession = new LoginSession();

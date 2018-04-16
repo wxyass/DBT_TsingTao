@@ -13,16 +13,14 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.io.Serializable;
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import et.tsingtaopad.R;
+import et.tsingtaopad.adapter.AlertKeyValueAdapter;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
-import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
@@ -30,14 +28,13 @@ import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.core.view.alertview.OnDismissListener;
 import et.tsingtaopad.core.view.alertview.OnItemClickListener;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
-import et.tsingtaopad.dd.ddxt.checking.num.XtCaculateFragment;
 import et.tsingtaopad.dd.ddxt.invoicing.addinvoicing.XtAddInvoicingFragment;
 import et.tsingtaopad.dd.ddxt.invoicing.domain.XtInvoicingStc;
-import et.tsingtaopad.dd.ddxt.invoicing.listener.ILongClick;
+import et.tsingtaopad.dd.ddzs.zssayhi.ZsAmendFragment;
+import et.tsingtaopad.dd.ddzs.zsshopvisit.ZsVisitShopActivity;
+import et.tsingtaopad.listviewintf.ILongClick;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.invoicing.InvoicingService;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.invoicing.domain.InvoicingStc;
 
 /**
  * Created by yangwenmin on 2018/3/12.
@@ -306,5 +303,6 @@ public class XtInvoicingFragment extends XtBaseVisitFragment implements View.OnC
                 });
         mAlertViewExt.show();
     }
+
 
 }

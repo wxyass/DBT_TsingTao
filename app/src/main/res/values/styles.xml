@@ -465,4 +465,47 @@
         <item name="android:gravity">center_vertical</item>
     </style>
 
+
+    <!-- zdzs_sayhi_title 打招呼 标题列 -->
+    <style name="zdzs_sayhi_title" parent="@style/page_label_big">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginLeft">20dp</item>
+    </style>
+
+    <!-- zdzs_sayhi_content1 打招呼 内容 我品一列 -->
+    <style name="zdzs_sayhi_content1" parent="@style/font_size4">
+        <item name="android:textColor">#333333</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_marginLeft">220dp</item>
+        <item name="android:gravity">center_vertical|left</item>
+    </style>
+
+    <!-- zdzs_sayhi_content2 打招呼 内容 竞品二列 -->
+    <style name="zdzs_sayhi_content2" parent="@style/font_size4">
+        <item name="android:textColor">#333333</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_marginLeft">280dp</item>
+        <item name="android:gravity">center_vertical|left</item>
+    </style>
+
+    <!-- zdzs_sayhi_content2 打招呼 内容  -->
+    <style name="zdzs_sayhi_statue" parent="@style/font_size4">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginRight">35dp</item>
+    </style>
+
 </resources>

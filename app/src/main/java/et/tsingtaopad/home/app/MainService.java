@@ -265,6 +265,7 @@ public class MainService extends XtShopVisitService {
     List<MstPromotermInfo> mstPromotermInfos = null;
     List<MstVisitM> mstVisitMs = null;
     List<MstVistproductInfo> MstVistproductInfos = null;
+    List<PadCheckstatusInfo> padCheckstatusInfos = null;
 
     /**
      * 同步表数据
@@ -357,6 +358,10 @@ public class MainService extends XtShopVisitService {
             else if(mClass.contains("MstTerminalinfoM")){
                 mstTerminalinfoMs= (List<MstTerminalinfoM>) JsonUtil.parseList(json, cls);
                 updateData(mstTerminalinfoMDao, mstTerminalinfoMs);
+            }
+            else if(mClass.contains("PadCheckstatusInfo")){
+                padCheckstatusInfos= (List<PadCheckstatusInfo>) JsonUtil.parseList(json, cls);
+                updateData(padCheckstatusInfoDao, padCheckstatusInfos);
             }
             // 上次终端拜访记录----------------------------------------------------------------------
             else if(mClass.contains("MstAgencygridInfo")){

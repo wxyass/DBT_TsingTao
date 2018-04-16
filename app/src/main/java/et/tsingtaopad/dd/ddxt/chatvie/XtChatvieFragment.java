@@ -30,13 +30,9 @@ import et.tsingtaopad.db.table.MstVisitMTemp;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
 import et.tsingtaopad.dd.ddxt.chatvie.addchatvie.XtAddChatVieFragment;
 import et.tsingtaopad.dd.ddxt.chatvie.domain.XtChatVieStc;
-import et.tsingtaopad.dd.ddxt.invoicing.XtInvoicingService;
-import et.tsingtaopad.dd.ddxt.invoicing.domain.XtInvoicingStc;
-import et.tsingtaopad.dd.ddxt.invoicing.listener.ILongClick;
+import et.tsingtaopad.listviewintf.ILongClick;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.chatvie.ChatVieService;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.chatvie.domain.ChatVieStc;
 
 /**
  * Created by yangwenmin on 2018/3/12.

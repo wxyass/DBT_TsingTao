@@ -7,10 +7,13 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.ref.SoftReference;
@@ -18,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import et.tsingtaopad.R;
+import et.tsingtaopad.adapter.AlertKeyValueAdapter;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
@@ -31,10 +35,10 @@ import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
 import et.tsingtaopad.dd.ddxt.chatvie.XtChatVieService;
 import et.tsingtaopad.dd.ddxt.chatvie.XtVieSourceAdapter;
 import et.tsingtaopad.dd.ddxt.chatvie.XtVieStatusAdapter;
-import et.tsingtaopad.dd.ddxt.chatvie.addchatvie.XtAddChatVieFragment;
 import et.tsingtaopad.dd.ddxt.chatvie.domain.XtChatVieStc;
-import et.tsingtaopad.dd.ddxt.invoicing.listener.ILongClick;
-import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
+import et.tsingtaopad.dd.ddzs.zsinvoicing.ZsInvoicingAdapter;
+import et.tsingtaopad.listviewintf.IClick;
+import et.tsingtaopad.listviewintf.ILongClick;
 import et.tsingtaopad.dd.ddzs.zschatvie.zsaddchatvie.ZsAddChatVieFragment;
 import et.tsingtaopad.dd.ddzs.zsshopvisit.ZsVisitShopActivity;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
@@ -45,49 +49,50 @@ import et.tsingtaopad.initconstvalues.domain.KvStc;
 
 public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnClickListener {
 
-    private final String TAG = "XtChatvieFragment";
+    private final String TAG = "ZsChatvieFragment";
 
-    private ImageView point1;
-    private Button addrelationBtn;
-    private ListView viesourceLv;
-    private ListView viestatusLv;
-    private et.tsingtaopad.view.DdSlideSwitch clearvieSw;
-    private EditText visitreportEt;// 拜访记录
-    private Button nextBtn;
+    private ImageView zdzs_chatvie_point1;
+    private TextView zdzs_chatvie_textview01;
+    private Button zdzs_chatvie_bt_addrelation;
+    private ListView zsChatvieLv;
+    private RelativeLayout zdzs_chatvie_rl_clearvie;
+    private TextView zdzs_chatvie_rl_clearvie_con1;
+    private TextView zdzs_chatvie_rl_clearvie_statue;
+    private EditText zdzs_chatvie_et_visitreport;
+
+    ZsChatvieAdapter zsChatvieAdapter;
 
     public static final int ADD_VIE_SUC = 3;
     MyHandler handler;
 
-    private XtVieSourceAdapter xtVieSourceAdapter;
-    private XtVieStatusAdapter xtstatusAdapter;
-
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_xtbf_chatvie, container, false);
+        View view = inflater.inflate(R.layout.fragment_zdzs_chatvie, container, false);
         initView(view);
         return view;
     }
 
     // 初始化控件
     private void initView(View view) {
-        addrelationBtn = (Button) view.findViewById(R.id.xtbf_chatvie_bt_addrelation);
-        viesourceLv = (ListView) view.findViewById(R.id.xtbf_chatvie_lv_viesource);
-        viestatusLv = (ListView) view.findViewById(R.id.xtbf_chatvie_lv_viestatus);
-        clearvieSw = (et.tsingtaopad.view.DdSlideSwitch) view.findViewById(R.id.xtbf_chatvie_sw_clearvie);
-        visitreportEt = (EditText) view.findViewById(R.id.xtbf_chatvie_et_visitreport);
-        nextBtn = (Button) view.findViewById(R.id.xtbf_chatvie_bt_next);
+        zdzs_chatvie_point1 = (ImageView) view.findViewById(R.id.zdzs_chatvie_point1);
+        zdzs_chatvie_textview01 = (TextView) view.findViewById(R.id.zdzs_chatvie_textview01);
+        zdzs_chatvie_bt_addrelation = (Button) view.findViewById(R.id.zdzs_chatvie_bt_addrelation);
+        zsChatvieLv = (ListView) view.findViewById(R.id.zdzs_chatvie_lv_viesource);
+        zdzs_chatvie_rl_clearvie = (RelativeLayout) view.findViewById(R.id.zdzs_chatvie_rl_clearvie);
+        zdzs_chatvie_rl_clearvie_con1 = (TextView) view.findViewById(R.id.zdzs_chatvie_rl_clearvie_con1);
+        zdzs_chatvie_rl_clearvie_statue = (TextView) view.findViewById(R.id.zdzs_chatvie_rl_clearvie_statue);
+        zdzs_chatvie_et_visitreport = (EditText) view.findViewById(R.id.zdzs_chatvie_et_visitreport);
 
-        addrelationBtn.setOnClickListener(this);
-        nextBtn.setOnClickListener(this);
+
+        zdzs_chatvie_bt_addrelation.setOnClickListener(this);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        xtChatVieService = new XtChatVieService(getActivity(), null);
+        xtChatVieService = new ZsChatVieService(getActivity(), null);
         handler = new MyHandler(this);
 
         initProData();
@@ -96,7 +101,7 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
     }
 
     List<XtChatVieStc> dataLst;
-    XtChatVieService xtChatVieService;
+    ZsChatVieService xtChatVieService;
     private MstVisitMTemp visitMTemp;
 
     // 初始化数据
@@ -108,27 +113,24 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
         if (visitMTemp != null) {
             // 是否瓦解竞品  0:未瓦解  1:瓦解
             if (ConstValues.FLAG_1.equals(visitMTemp.getIscmpcollapse()) ) {
-                clearvieSw.setStatus(true);
+                zdzs_chatvie_rl_clearvie_con1.setText("是");
             } else {
-                clearvieSw.setStatus(false);
-            }}
+                zdzs_chatvie_rl_clearvie_con1.setText("否");
+            }
+        }
 
         // 竞品来源
-        xtVieSourceAdapter = new XtVieSourceAdapter(
-                getActivity(), "", dataLst, "", null, null,null, null,
-                new ILongClick(){
-                    @Override
-                    public void listViewItemLongClick(int position, View v) {
-                        deleteviesupply(position,dataLst.get(position));
-                    }
-                });//竞品来源
-        viesourceLv.setAdapter(xtVieSourceAdapter);
-        ViewUtil.setListViewHeight(viesourceLv);
+        // 订单推荐
+        zsChatvieAdapter = new ZsChatvieAdapter(getActivity(), dataLst,new IClick(){
+            @Override
+            public void listViewItemClick(int position, View v) {
+                alertShow3();
+            }
+        });
+        zsChatvieLv.setAdapter(zsChatvieAdapter);
+        ViewUtil.setListViewHeight(zsChatvieLv);
 
-        // 竞品情况
-        xtstatusAdapter = new XtVieStatusAdapter(getActivity(), dataLst);//竞品情况
-        viestatusLv.setAdapter(xtstatusAdapter);
-        ViewUtil.setListViewHeight(viestatusLv);
+
     }
 
     @Override
@@ -148,9 +150,6 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
 
                 ZsVisitShopActivity xtVisitShopActivity = (ZsVisitShopActivity) getActivity();
                 xtVisitShopActivity.changeXtvisitFragment(xtaddchatviefragment, "xtaddchatviefragment");
-                break;
-            case R.id.xtbf_chatvie_bt_next:// 下一页
-
                 break;
 
             default:
@@ -208,12 +207,60 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
                 supplyStc.setCommpayId(agency.getKey());
                 dataLst.add(supplyStc);
 
-                xtstatusAdapter.notifyDataSetChanged();
-                ViewUtil.setListViewHeight(viestatusLv);//
-                xtVieSourceAdapter.notifyDataSetChanged();
-                ViewUtil.setListViewHeight(viesourceLv);
+                zsChatvieAdapter.notifyDataSetChanged();
+                ViewUtil.setListViewHeight(zsChatvieLv);//
+
             }
         }
+    }
+
+    /**
+     * 弹窗3
+     * 参数1: 标题 ×
+     * 参数2: 主体内容    ×
+     * 参数3: 取消按钮    ×
+     * 参数4: 高亮按钮 数组 √
+     * 参数5: 普通按钮 数组 √
+     * 参数6: 上下文 √
+     * 参数7: 弹窗类型 (正常取消,确定按钮)   √
+     * 参数8: 条目点击监听  √
+     */
+    public void alertShow3() {
+        List<KvStc> sureOrFail = new ArrayList<>();
+        sureOrFail.add(new KvStc("zhengque","正确","-1"));
+        sureOrFail.add(new KvStc("cuowu","错误(去修正)","-1"));
+        mAlertViewExt = new AlertView(null, null, null, null, null, getActivity(), AlertView.Style.ActionSheet, new OnItemClickListener() {
+            @Override
+            public void onItemClick(Object o, int position) {}
+        });
+        ViewGroup extView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_list_form, null);
+        ListView listview = (ListView) extView.findViewById(R.id.alert_list);
+        AlertKeyValueAdapter keyValueAdapter = new AlertKeyValueAdapter(getActivity(), sureOrFail,
+                new String[]{"key", "value"}, "zhengque");
+        listview.setAdapter(keyValueAdapter);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(1==position){
+                    /*Bundle bundle = new Bundle();
+                    bundle.putString("proName", "");
+                    ZsAmendFragment zsAmendFragment = new ZsAmendFragment(handler);
+                    zsAmendFragment.setArguments(bundle);
+                    ZsVisitShopActivity zsVisitShopActivity = (ZsVisitShopActivity)getActivity();
+                    zsVisitShopActivity.changeXtvisitFragment(zsAmendFragment,"zsamendfragment");*/
+                }
+
+                mAlertViewExt.dismiss();
+            }
+        });
+        mAlertViewExt.addExtView(extView);
+        mAlertViewExt.setCancelable(true).setOnDismissListener(new OnDismissListener() {
+            @Override
+            public void onDismiss(Object o) {
+                DbtLog.logUtils(TAG, "取消选择结果");
+            }
+        });
+        mAlertViewExt.show();
     }
 
 
@@ -224,7 +271,7 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
         // 如果是查看操作，则不做数据校验及数据处理
         if (ConstValues.FLAG_1.equals(seeFlag)) return;
 
-        View view;
+        /*View view;
         EditText itemEt;
         XtChatVieStc item;
         // 遍历LV,获取采集数据
@@ -267,7 +314,7 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
 
         visitMTemp.setRemarks(visitreportEt.getText().toString());
 
-        xtChatVieService.saveXtVie(dataLst, visitId, termId, visitMTemp);
+        xtChatVieService.saveXtVie(dataLst, visitId, termId, visitMTemp);*/
     }
 
     private AlertView mAlertViewExt;//窗口拓展例子
@@ -290,11 +337,9 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
                                 if (isFlag) {
                                     // 删除界面listView相应行
                                     dataLst.remove(position);
-                                    xtVieSourceAdapter.notifyDataSetChanged();
-                                    xtstatusAdapter.setDelPosition(position);
-                                    xtstatusAdapter.notifyDataSetChanged();
-                                    ViewUtil.setListViewHeight(viesourceLv);
-                                    ViewUtil.setListViewHeight(viestatusLv);
+                                    zsChatvieAdapter.notifyDataSetChanged();
+                                    zsChatvieAdapter.setDelPosition(position);
+                                    ViewUtil.setListViewHeight(zsChatvieLv);
 
                                 } else {
                                     Toast.makeText(getActivity(), "删除产品失败!", Toast.LENGTH_SHORT).show();
@@ -302,11 +347,9 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
                             } else {
                                 // 删除界面listView相应行
                                 dataLst.remove(position);
-                                xtVieSourceAdapter.notifyDataSetChanged();
-                                xtstatusAdapter.setDelPosition(position);
-                                xtstatusAdapter.notifyDataSetChanged();
-                                ViewUtil.setListViewHeight(viesourceLv);
-                                ViewUtil.setListViewHeight(viestatusLv);
+                                zsChatvieAdapter.notifyDataSetChanged();
+                                zsChatvieAdapter.setDelPosition(position);
+                                ViewUtil.setListViewHeight(zsChatvieLv);
                             }
                         }
                     }
@@ -320,6 +363,4 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
                 });
         mAlertViewExt.show();
     }
-
-
 }

@@ -122,6 +122,14 @@ public class XtTermCartFragment extends BaseFragmentSupport implements View.OnCl
         confirmTv.setText("拜访");
         cartService = new XtTermCartService(getActivity());
 
+
+        // 获取从上个界面传递过来的数据
+        String fromFragment = (String) getArguments().get("fromFragment");
+        if("XtTermSelectFragment".equals(fromFragment)){// 如果从选择终端过来,设置需要同步
+            // 购物车是否已经同步数据  false:没有  true:已同步
+            PrefUtils.putBoolean(getActivity(),GlobalValues.XT_CART_SYNC,false);
+        }
+
         // 初始化页面数据
         initData();
 
@@ -130,13 +138,6 @@ public class XtTermCartFragment extends BaseFragmentSupport implements View.OnCl
 
     // 初始化页面数据
     private void initData() {
-
-        String fromFragment = (String) getArguments().get("fromFragment");
-        if("XtTermSelectFragment".equals(fromFragment)){// 如果从选择终端过来,设置需要同步
-            // 购物车是否已经同步数据  false:没有  true:已同步
-            PrefUtils.putBoolean(getActivity(),GlobalValues.CART_SYNC,false);
-        }
-
 
         // 设置终端数据 // 判断购物车是协同,还是追溯  1协同  2追溯
         if("1".equals(PrefUtils.getString(getActivity(), GlobalValues.DDXTZS,""))){
@@ -157,6 +158,7 @@ public class XtTermCartFragment extends BaseFragmentSupport implements View.OnCl
 
         // 设置数据,适配器
         searchTerm();
+
     }
 
     @Override
@@ -166,7 +168,8 @@ public class XtTermCartFragment extends BaseFragmentSupport implements View.OnCl
                 supportFragmentManager.popBackStack();
                 break;
             case R.id.top_navigation_rl_confirm:
-                if(PrefUtils.getBoolean(getActivity(),GlobalValues.CART_SYNC,false)){
+                boolean issync = PrefUtils.getBoolean(getActivity(),GlobalValues.XT_CART_SYNC,false);
+                if(issync){
                     termStc = (XtTermSelectMStc)confirmBtn.getTag();
                     Intent intent = new Intent(getActivity(), XtVisitShopActivity.class);
                     intent.putExtra("isFirstVisit", "1");// 非第一次拜访1
@@ -350,7 +353,7 @@ public class XtTermCartFragment extends BaseFragmentSupport implements View.OnCl
                                 MainService mainService = new MainService(getActivity(), null);
                                 mainService.parseTermDetailInfoJson(formjson);
                                 // 购物车是否已经同步数据  false:没有  true:已同步
-                                PrefUtils.putBoolean(getActivity(),GlobalValues.CART_SYNC,true);
+                                PrefUtils.putBoolean(getActivity(),GlobalValues.XT_CART_SYNC,true);
                                 Toast.makeText(getActivity(), "该列表终端数据请求成功", Toast.LENGTH_SHORT).show();
                             }
                         }else{

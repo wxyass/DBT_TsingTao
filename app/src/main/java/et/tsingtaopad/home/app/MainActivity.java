@@ -14,6 +14,8 @@ import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.dd.ddxt.sayhi.XtSayhiFragment;
 import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartFragment;
 import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectFragment;
+import et.tsingtaopad.dd.ddzs.zsinvoicing.ZsInvoicingFragment;
+import et.tsingtaopad.dd.ddzs.zssayhi.ZsSayhiFragment;
 import et.tsingtaopad.home.homefragment.MainFragment;
 
 public class MainActivity extends BaseActivity {
@@ -33,7 +35,8 @@ public class MainActivity extends BaseActivity {
         changeFragment(MainFragment.newInstance(), "mainfragment");
         //changeFragment(new XtTermCartFragment(), "mainfragment");
         //changeFragment(new XtTermSelectFragment(), "mainfragment");
-        //changeFragment(new XtSayhiFragment(), "mainfragment");
+        //changeFragment(new ZsSayhiFragment(), "mainfragment");
+        //changeFragment(new ZsInvoicingFragment(), "mainfragment");
     }
 
 

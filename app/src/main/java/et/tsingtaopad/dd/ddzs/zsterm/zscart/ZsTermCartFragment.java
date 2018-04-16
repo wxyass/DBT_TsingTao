@@ -2,6 +2,8 @@ package et.tsingtaopad.dd.ddzs.zsterm.zscart;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +42,7 @@ import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartService;
 import et.tsingtaopad.dd.ddxt.term.cart.adapter.XtTermCartAdapter;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 import et.tsingtaopad.dd.ddzs.zsshopvisit.ZsVisitShopActivity;
+import et.tsingtaopad.home.app.MainService;
 import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.http.HttpParseJson;
 import et.tsingtaopad.main.visit.shopvisit.term.domain.TermSequence;
@@ -49,8 +53,6 @@ import et.tsingtaopad.util.requestHeadUtil;
  */
 
 public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnClickListener {
-
-    private final String TAG = "ZsTermCartFragment";
 
     private RelativeLayout backBtn;
     private RelativeLayout confirmBtn;
@@ -115,13 +117,35 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        titleTv.setText("今日终端追溯列表");
+        handler = new MyHandler(this);
+        ConstValues.handler = handler;
+
+        titleTv.setText("今日终端拜访列表");
         confirmTv.setText("拜访");
         cartService = new XtTermCartService(getActivity());
-        // 设置终端数据 假数据
+
+
+        // 获取从上个界面传递过来的数据
+        String fromFragment = (String) getArguments().get("fromFragment");
+        if("ZsTermSelectFragment".equals(fromFragment)){// 如果从选择终端过来,设置需要同步
+            // 购物车是否已经同步数据  false:没有  true:已同步
+            PrefUtils.putBoolean(getActivity(),GlobalValues.ZS_CART_SYNC,false);
+        }
+
+        // 初始化页面数据
+        initData();
+
+        //seqTermList = getNewMstTermListMStc();
+    }
+
+    // 初始化页面数据
+    private void initData() {
+
+        // 设置终端数据 // 判断购物车是协同,还是追溯  1协同  2追溯
         if("2".equals(PrefUtils.getString(getActivity(), GlobalValues.DDXTZS,""))){
             termList = cartService.queryCartTermList();
         }
+
         // 终端拼音集合
         termPinyinMap = cartService.getAllTermPinyin(termList);
 
@@ -136,7 +160,7 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
 
         // 设置数据,适配器
         searchTerm();
-        //seqTermList = getNewMstTermListMStc();
+
     }
 
     @Override
@@ -146,12 +170,18 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
                 supportFragmentManager.popBackStack();
                 break;
             case R.id.top_navigation_rl_confirm:
-                termStc = (XtTermSelectMStc)confirmBtn.getTag();
-                Intent intent = new Intent(getActivity(), ZsVisitShopActivity.class);
-                intent.putExtra("isFirstVisit", "1");// 非第一次拜访1
-                intent.putExtra("termStc", termStc);
-                intent.putExtra("seeFlag", "0"); // 0拜访 1查看标识
-                startActivity(intent);
+                boolean issync = PrefUtils.getBoolean(getActivity(),GlobalValues.ZS_CART_SYNC,false);
+                if(issync){
+                    termStc = (XtTermSelectMStc)confirmBtn.getTag();
+                    Intent intent = new Intent(getActivity(), ZsVisitShopActivity.class);
+                    intent.putExtra("isFirstVisit", "1");// 非第一次拜访1
+                    intent.putExtra("termStc", termStc);
+                    intent.putExtra("seeFlag", "0"); // 0拜访 1查看标识
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(getActivity(),"请先点击全部同步",Toast.LENGTH_SHORT).show();
+                }
+
                 break;
             case R.id.xtbf_termcart_bt_search:
                 searchTerm();
@@ -172,7 +202,8 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
                 break;
             case R.id.xtbf_termcart_bt_add:// 更新数据
                 // 更新前不可点击,更新后可以点击
-                sendmsg();
+                // 组建json  请求终端上次拜访详情
+                buildJson();
 
 
                 break;
@@ -276,7 +307,8 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
         cartService.updateTermSequence(termSequenceList);
     }
 
-    private void sendmsg() {
+    // 组建json  请求终端上次拜访详情
+    private void buildJson() {
         List<String> termKeyLst = new ArrayList<String>();
         for (XtTermSelectMStc xtTermSelectMStc:termList) {
             termKeyLst.add(xtTermSelectMStc.getTerminalkey());
@@ -290,7 +322,7 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
         getTermData("opt_get_dates2","MST_VISITDATA_M",content);
     }
 
-    // 请求终端上次拜访详情
+    // 发送全部更新请求  请求终端上次拜访详情
     void getTermData(final String optcode, final String tableName,String content) {
 
         // 组建请求Json
@@ -318,13 +350,14 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
                         // 保存登录信息
                         if(ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())){
                             // 保存信息
-                            if("opt_get_dates2".equals(optcode)&&"".equals(tableName)){
+                            if("opt_get_dates2".equals(optcode)&&"MST_VISITDATA_M".equals(tableName)){
                                 String formjson = resObj.getResBody().getContent();
-                                parseTermDetailJson(formjson);
-                                Toast.makeText(getActivity(), "同步终端详情成功", Toast.LENGTH_SHORT).show();
+                                MainService mainService = new MainService(getActivity(), null);
+                                mainService.parseTermDetailInfoJson(formjson);
+                                // 购物车是否已经同步数据  false:没有  true:已同步
+                                PrefUtils.putBoolean(getActivity(),GlobalValues.ZS_CART_SYNC,true);
+                                Toast.makeText(getActivity(), "该列表终端数据请求成功", Toast.LENGTH_SHORT).show();
                             }
-
-
                         }else{
                             Toast.makeText(getActivity(), resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
                         }
@@ -333,7 +366,7 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
                 .error(new IError() {
                     @Override
                     public void onError(int code, String msg) {
-                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "请求错误", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .failure(new IFailure() {
@@ -346,8 +379,49 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
                 .post();
     }
 
-    // 解析返回的 上次拜访详情
-    private void parseTermDetailJson(String formjson) {
+    MyHandler handler;
 
+    /**
+     * 接收子线程消息的 Handler
+     */
+    public static class MyHandler extends Handler {
+
+        // 软引用
+        SoftReference<ZsTermCartFragment> fragmentRef;
+
+        public MyHandler(ZsTermCartFragment fragment) {
+            fragmentRef = new SoftReference<ZsTermCartFragment>(fragment);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            ZsTermCartFragment fragment = fragmentRef.get();
+            if (fragment == null) {
+                return;
+            }
+
+            // 处理UI 变化
+            switch (msg.what) {
+                case ConstValues.WAIT0://  结束上传  刷新本页面
+                    fragment.shuaxinXtTermCart(0);
+                    break;
+                case GlobalValues.SINGLE_UP_SUC://  协同拜访上传成功
+                    fragment.shuaxinXtTermCart(1);
+                    break;
+                case GlobalValues.SINGLE_UP_FAIL://  协同拜访上传失败
+                    fragment.shuaxinXtTermCart(2);
+                    break;
+            }
+        }
+    }
+
+    // 结束上传  刷新页面  0:确定上传  1上传成功  2上传失败
+    private void shuaxinXtTermCart(int upType) {
+        if(1==upType){
+            Toast.makeText(getActivity(),"上传成功",Toast.LENGTH_SHORT).show();
+        }else if(2==upType){
+            Toast.makeText(getActivity(),"上传失败",Toast.LENGTH_SHORT).show();
+        }
+        initData();
     }
 }

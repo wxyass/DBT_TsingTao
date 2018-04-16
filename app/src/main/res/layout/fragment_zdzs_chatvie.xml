@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:cuisw="http://schemas.android.com/apk/res-auto"
+              style="@style/content_margin"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/bg_page_color"
+              android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!--竞品来源标题-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <ImageView
+                    android:id="@+id/zdzs_chatvie_point1"
+                    style="@style/point"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ico_point"/>
+
+                <TextView
+                    android:id="@+id/zdzs_chatvie_textview01"
+                    style="@style/page_label_big"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/zdzs_chatvie_point1"
+                    android:text="@string/chatvie_viesource"/>
+
+                <!-- 新增竞品 -->
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@id/zdzs_chatvie_textview01"
+                    >
+
+                    <Button
+                        android:id="@+id/zdzs_chatvie_bt_addrelation"
+                        style="@style/xtbf_btn_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/xtbf_btn_h"
+                        android:background="@drawable/bg_select_green"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="添加竞品"
+                        />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <!--竞品供货列表-->
+            <ListView
+                android:id="@+id/zdzs_chatvie_lv_viesource"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginTop="15dp"
+                android:divider="@null"
+                android:dividerHeight="10dp"
+                />
+
+            <!--WJ竞品-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    style="@style/point"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ico_point"/>
+
+                <TextView
+                    style="@style/page_label_big"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="WJ竞品"/>
+            </LinearLayout>
+
+            <!--是否瓦解竞品-->
+            <RelativeLayout
+                android:id="@+id/zdzs_chatvie_rl_clearvie"
+                style="@style/xtbf_sayhi_rl">
+
+                <!--标题-->
+                <TextView
+                    style="@style/zdzs_sayhi_title"
+                    android:text="@string/chatvie_clearvie"/>
+
+                <!--内容1-->
+                <TextView
+                    android:id="@+id/zdzs_chatvie_rl_clearvie_con1"
+                    style="@style/zdzs_sayhi_content1"
+                    android:text=""/>
+
+                <!--内容2-->
+                <TextView
+                    style="@style/zdzs_sayhi_content2"
+                    android:text=""/>
+
+                <!--未稽查-->
+                <TextView
+                    android:id="@+id/zdzs_chatvie_rl_clearvie_statue"
+                    style="@style/zdzs_sayhi_statue"
+                    android:text="未稽查"/>
+
+                <ImageView
+                    style="@style/xtbf_sayhi_third_tv"
+                    android:visibility="visible"/>
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+
+            <!--拜访记录标题-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    style="@style/point"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ico_point"/>
+
+                <TextView
+                    style="@style/page_label_big"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/chatvie_report"/>
+            </LinearLayout>
+
+            <!--拜访记录输入框-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginTop="15dp"
+                android:background="@color/white"
+                android:gravity="center_vertical">
+
+                <EditText
+                    android:id="@+id/zdzs_chatvie_et_visitreport"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/bg_visit_record"
+                    android:hint="请输入拜访记录"
+                    android:inputType="textMultiLine"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="80dp"/>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

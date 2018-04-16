@@ -414,11 +414,9 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
                 xtwopindianzhaoSw.setStatus(true);
                 xttimeBtn.setVisibility(View.VISIBLE);
                 xttimeBtn.setText(termInfoTemp.getIfminedate());
-                xttextBtn.setVisibility(View.VISIBLE);
             } else {//当店招未选中的时候,隐藏对应的控件 文字
                 xtwopindianzhaoSw.setStatus(false);
                 xttimeBtn.setText(ifminedate);
-                xttimeBtn.setVisibility(View.GONE);
                 xttextBtn.setVisibility(View.GONE);
             }
 

@@ -1,4 +1,4 @@
-package et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.listener;
+package et.tsingtaopad.listviewintf;
 
 import android.view.View;  
 import android.view.View.OnClickListener;  
