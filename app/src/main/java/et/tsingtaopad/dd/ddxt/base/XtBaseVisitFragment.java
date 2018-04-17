@@ -26,6 +26,10 @@ public class XtBaseVisitFragment extends BaseFragmentSupport{
 
     protected String visitId="ec02b3a89d9e45baa60a3d837133b945";// 拜访主表key
     protected String termId="1-5A5LNU";// 终端key
+    protected String areaid="1-5A5LNU";// 二级区域id
+    protected String areapid="1-5A5LNU";// 大区id
+    protected String gridkey="1-5A5LNU";// 定格key
+    protected String routekey="1-5A5LNU";// 路线key
     protected String termName="张家烤全羊";// 终端名称
     protected String seeFlag="0";// 0:拜访  1:查看
     protected String visitDate;//
@@ -40,6 +44,10 @@ public class XtBaseVisitFragment extends BaseFragmentSupport{
         // 获取传递过来的数据
         Bundle bundle = getArguments();
         visitId = bundle.getString("visitKey");
+        areaid =bundle.getString("areaid");
+        areapid = bundle.getString("areapid");
+        gridkey = bundle.getString("gridkey");
+        routekey = bundle.getString("routekey");
         termId = bundle.getString("termId");
         termName = bundle.getString("termname");
         visitDate = bundle.getString("visitDate");

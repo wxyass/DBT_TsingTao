@@ -33,6 +33,7 @@ import et.tsingtaopad.db.dao.MstGroupproductMDao;
 import et.tsingtaopad.db.dao.MstGroupproductMTempDao;
 import et.tsingtaopad.db.dao.MstPromotionsmDao;
 import et.tsingtaopad.db.dao.MstTerminalinfoMCartDao;
+import et.tsingtaopad.db.dao.MstTerminalinfoMDao;
 import et.tsingtaopad.db.dao.MstTerminalinfoMTempDao;
 import et.tsingtaopad.db.dao.MstVisitMDao;
 import et.tsingtaopad.db.dao.MstVisitMTempDao;
@@ -72,6 +73,7 @@ import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.CheckInde
 import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.ProIndex;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.ProIndexValue;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.ProItem;
+import et.tsingtaopad.main.visit.shopvisit.termvisit.sayhi.domain.MstTerminalInfoMStc;
 
 import com.j256.ormlite.android.AndroidDatabaseConnection;
 import com.j256.ormlite.dao.Dao;
@@ -97,6 +99,28 @@ public class XtShopVisitService {
     public XtShopVisitService(Context context, Handler handler) {
         this.context = context;
         this.handler = handler;
+    }
+
+    /**
+     * 获取终端信息
+     * 有错误
+     * @param termId    终端ID
+     * @return
+     */
+    public MstTerminalInfoMStc findTermKeyById(String termId) {
+
+        MstTerminalInfoMStc termInfo = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            MstTerminalinfoMDao dao = helper.getDao(MstTerminalinfoM.class);
+            //termInfo = dao.findById(helper, termId);
+            termInfo = dao.findKeyById(helper, termId);
+
+        } catch (SQLException e) {
+            Log.e(TAG, "获取终端表DAO对象失败", e);
+        }
+
+        return termInfo;
     }
 
     /**

@@ -212,7 +212,7 @@ public class ZsAddChatVieFragment extends BaseFragmentSupport implements View.On
                 bundle.putSerializable("agency", agency);
                 message.setData(bundle);
                 message.obj = products;
-                message.what=XtChatvieFragment.ADD_VIE_SUC;//标志是哪个线程传数据
+                message.what=ZsChatvieFragment.ZS_ADD_VIE_SUC;//标志是哪个线程传数据
                 handler.sendMessage(message);//发送message信息
                 supportFragmentManager.popBackStack();
                 break;

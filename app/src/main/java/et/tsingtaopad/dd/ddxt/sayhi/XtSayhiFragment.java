@@ -133,11 +133,11 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
     private List<KvStc> mainchannelLst = new ArrayList<>();
     private List<KvStc> minorchannelLst = new ArrayList<>();
 
-    public static final int FINISH_SUC = 11;
-    public static final int NOT_TERMSTATUS = 12;
-    public static final int DATA_ARROR = 13;
-    public static final int SHOW_INIT_PROGRESS = 14;// 开启滚动条
-    public static final int CLOSE_INIT_PROGRESS = 15;// 关闭滚动条
+    public static final int FINISH_SUC = 11;// 初始化成功发送信息到主UI (废弃)
+    public static final int NOT_TERMSTATUS = 12;// 失效终端
+    public static final int DATA_ARROR = 13;// 打招呼页面信息不全
+    public static final int SHOW_INIT_PROGRESS = 14;// 数据初始化-开启滚动条
+    public static final int CLOSE_INIT_PROGRESS = 15;// 初始化成功-关闭滚动条
     MyHandler handler;
 
     /**

@@ -99,15 +99,15 @@ public class ZsChatvieAdapter extends
         ViewHolder holder = null;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_zdzs_invoicing, null);
-            holder.productNameTv = (TextView)convertView.findViewById(R.id.item_zs_invoicing_tv_proname);// 产品名称
-            holder.agencyTv = (TextView)convertView.findViewById(R.id.item_zs_invoicing_tv_agencyname);// 经销商名称
-            holder.statueTv = (TextView)convertView.findViewById(R.id.item_zs_invoicing_tv_statue);// 未稽查
-            holder.statueRl = (RelativeLayout)convertView.findViewById(R.id.item_zs_invoicing_Rl_statue);// 未稽查
-            holder.channelPriceEt = (TextView)convertView.findViewById(R.id.item_zs_invoicing_et_prevstore);// 渠道价
-            holder.sellPriceEt = (EditText)convertView.findViewById(R.id.item_zs_invoicing_et_daysellnum);// 零售价
-            holder.prevNumEt = (EditText)convertView.findViewById(R.id.item_zs_invoicing_et_prevnum);// 订单量->销量
-            holder.addcardEt = (EditText)convertView.findViewById(R.id.item_zs_invoicing_et_addcard);// 累计卡->当前库存
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_zdzs_chatvie, null);
+            holder.productNameTv = (TextView)convertView.findViewById(R.id.item_zs_chatvie_tv_proname);// 产品名称
+            holder.agencyTv = (TextView)convertView.findViewById(R.id.item_zs_chatvie_tv_agencyname);// 经销商名称
+            holder.statueTv = (TextView)convertView.findViewById(R.id.item_zs_chatvie_tv_statue);// 未稽查Tv
+            holder.statueRl = (RelativeLayout)convertView.findViewById(R.id.item_zs_chatvie_Rl_statue);// 未稽查Rl
+            holder.channelPriceEt = (TextView)convertView.findViewById(R.id.item_zs_chatvie_et_prevstore);// 渠道价
+            holder.sellPriceEt = (EditText)convertView.findViewById(R.id.item_zs_chatvie_et_daysellnum);// 零售价
+            holder.prevNumEt = (EditText)convertView.findViewById(R.id.item_zs_chatvie_et_prevnum);// 订单量->销量
+            holder.addcardEt = (EditText)convertView.findViewById(R.id.item_zs_chatvie_et_addcard);// 累计卡->当前库存
             
             convertView.setTag(holder);
         } else {
@@ -115,20 +115,22 @@ public class ZsChatvieAdapter extends
         }
         
         final XtChatVieStc item = dataLst.get(position);
+        // 产品名称
         holder.productNameTv.setHint(item.getProId());
         holder.productNameTv.setText(item.getProName());
 
+        // 未稽查Rl
         holder.statueRl.setTag(position);
         holder.statueRl.setOnClickListener(listener);
 
-        //订单量(原名称是上周期进货总量)
+        //销量
         if (ConstValues.FLAG_0.equals(item.getMonthSellNum())) {
             holder.prevNumEt.setHint(item.getMonthSellNum());
         } else {
             holder.prevNumEt.setText(item.getMonthSellNum());
         }
         
-        //累计卡)
+        //当前库存
         if (ConstValues.FLAG_0.equals(item.getCurrStore())) {
             holder.addcardEt.setHint("0");
         } else if("0.0".equals(item.getCurrStore())){
@@ -136,13 +138,13 @@ public class ZsChatvieAdapter extends
         }else {
             holder.addcardEt.setText(item.getCurrStore());
         }
-        
 
-        
-        holder.agencyTv.setHint(item.getAgencyId());
+        // 经销商名称
+        holder.agencyTv.setHint("业代未输入经销商名称");
         holder.agencyTv.setText(item.getAgencyName());
 
 
+        // 渠道价
         if (ConstValues.FLAG_0.equals(item.getChannelPrice())) {
             holder.channelPriceEt.setHint(item.getChannelPrice());
             holder.channelPriceEt.setText(null);
@@ -154,6 +156,8 @@ public class ZsChatvieAdapter extends
         }
         holder.channelPriceEt.setTag(position);
         //holder.channelPriceEt.setOnFocusChangeListener(this);
+
+        // 零售价
         if (ConstValues.FLAG_0.equals(item.getSellPrice())) {
             holder.sellPriceEt.setHint(item.getSellPrice());
             holder.sellPriceEt.setText(null);
@@ -164,9 +168,6 @@ public class ZsChatvieAdapter extends
             holder.sellPriceEt.setText(null);
         }
         holder.sellPriceEt.setTag(position);
-        
-
-        
         
         return convertView;
     }

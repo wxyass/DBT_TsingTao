@@ -184,7 +184,7 @@ public class ZsAddInvoicingFragment extends BaseFragmentSupport implements View.
                 bundle.putSerializable("agency", agency);
                 message.setData(bundle);
                 message.obj = products;
-                message.what=XtInvoicingFragment.ADD_SUC;//标志是哪个线程传数据
+                message.what=ZsInvoicingFragment.ZS_ADD_SUC;// 追溯-新增我品供货关系成功
                 handler.sendMessage(message);//发送message信息
                 supportFragmentManager.popBackStack();
                 break;

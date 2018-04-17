@@ -120,8 +120,8 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
         handler = new MyHandler(this);
         ConstValues.handler = handler;
 
-        titleTv.setText("今日终端拜访列表");
-        confirmTv.setText("拜访");
+        titleTv.setText("今日终端追溯列表");
+        confirmTv.setText("追溯");
         cartService = new XtTermCartService(getActivity());
 
 

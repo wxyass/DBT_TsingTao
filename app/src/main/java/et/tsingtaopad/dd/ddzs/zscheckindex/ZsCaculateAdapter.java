@@ -17,8 +17,14 @@ import java.util.Date;
 import java.util.List;
 
 import et.tsingtaopad.R;
+import et.tsingtaopad.adapter.AlertKeyValueAdapter;
+import et.tsingtaopad.adapter.GridKeyValueAdapter;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
+import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
+import et.tsingtaopad.core.view.alertview.AlertView;
+import et.tsingtaopad.core.view.alertview.OnDismissListener;
+import et.tsingtaopad.core.view.alertview.OnItemClickListener;
 import et.tsingtaopad.dd.ddxt.checking.XtCaculateItemAdapter;
 import et.tsingtaopad.dd.ddxt.checking.XtCheckIndexFragment;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProIndex;
@@ -27,6 +33,7 @@ import et.tsingtaopad.dd.ddxt.checking.domain.XtProItem;
 import et.tsingtaopad.dd.ddxt.checking.num.XtCaculateFragment;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
 import et.tsingtaopad.dd.ddzs.zscheckindex.zsnum.ZsCaculateFragment;
+import et.tsingtaopad.dd.ddzs.zssayhi.ZsAmendFragment;
 import et.tsingtaopad.dd.ddzs.zsshopvisit.ZsVisitShopActivity;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
 
@@ -42,6 +49,8 @@ import et.tsingtaopad.initconstvalues.domain.KvStc;
  * 日期      原因  BUG号    修改人 修改版本</br>
  */
 public class ZsCaculateAdapter extends BaseAdapter {
+
+    private final String TAG = "ZsCaculateAdapter";
 
     private Activity context;
     private List<XtProIndex> dataLst;
@@ -123,26 +132,9 @@ public class ZsCaculateAdapter extends BaseAdapter {
         holder.indexValueLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ZsVisitShopActivity xtVisitShopActivity = (ZsVisitShopActivity)context;
 
-                XtProIndexValue xtProIndexValue = item.getIndexValueLst().get(position);
-                String proName = xtProIndexValue.getProName();
-
-                // 获取该产品采集项
-                List<XtProItem> tempLst = new ArrayList<XtProItem>();
-                //TODO
-                for (XtProItem item : itemLst) {
-                    if (xtProIndexValue.getProId().equals(item.getProId()) && item.getIndexIdLst().contains(xtProIndexValue.getIndexId())) {
-                        tempLst.add(item);
-                    }
-                }
-
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("tempLst", (Serializable) tempLst);
-                bundle.putString("proName", proName);
-                ZsCaculateFragment xtCaculateFragment = new ZsCaculateFragment(xtProIndexValue,handler);
-                xtCaculateFragment.setArguments(bundle);
-                xtVisitShopActivity.changeXtvisitFragment(xtCaculateFragment,"xtnuminputfragment");
+                // 请选择结果
+                alertShow3(item,position);
             }
         });
         return convertView;
@@ -153,5 +145,88 @@ public class ZsCaculateAdapter extends BaseAdapter {
         private ListView indexValueLv;
     }
 
+
+    private AlertView mAlertViewExt;//窗口拓展例子
+
+    /**
+     *
+     * @param item 那个指标
+     * @param posi 指标里的第几个产品
+     */
+    public void alertShow3(final XtProIndex item,int posi) {
+
+
+        final XtProIndexValue xtProIndexValue = item.getIndexValueLst().get(posi);
+        final String proName = xtProIndexValue.getProName();
+
+        // 获取该产品采集项
+        final List<XtProItem> tempLst = new ArrayList<XtProItem>();// 用于下个页面展示
+        final List<KvStc> tempLstsureOrFail = new ArrayList<>();// 用于弹窗展示
+        //TODO
+        for (XtProItem xtProItem : itemLst) {
+            if (xtProIndexValue.getProId().equals(xtProItem.getProId()) &&
+                    xtProItem.getIndexIdLst().contains(xtProIndexValue.getIndexId())) {
+                tempLst.add(xtProItem);
+                // 库存: 100  xtProItem.getItemName()+": "+(xtProItem.getChangeNum()+xtProItem.getFinalNum())
+                tempLstsureOrFail.add(new KvStc("",
+                        xtProItem.getItemName()+": "+(xtProItem.getChangeNum()+xtProItem.getFinalNum()),"-1"));
+            }
+        }
+
+        //
+        List<KvStc> sureOrFail = new ArrayList<>();
+        sureOrFail.add(new KvStc("zhengque","正确","-1"));
+        sureOrFail.add(new KvStc("cuowu","错误(去修正)","-1"));
+
+        mAlertViewExt = new AlertView("请选择结果", null, null, null, null, context, AlertView.Style.ActionSheet, null);
+        ViewGroup extView = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.zs_checkindex_alert_list_form, null);
+        et.tsingtaopad.view.MyGridView gridview = (et.tsingtaopad.view.MyGridView) extView.findViewById(R.id.zs_checkindex_alert_grid);
+        ListView listview = (ListView) extView.findViewById(R.id.zs_checkindex_alert_list);
+
+        // gridview
+        GridKeyValueAdapter gridKeyValueAdapter = new GridKeyValueAdapter(context, tempLstsureOrFail,
+                new String[]{"key", "value"}, "zhengque");
+        gridview.setAdapter(gridKeyValueAdapter);
+
+        // listview
+        AlertKeyValueAdapter keyValueAdapter = new AlertKeyValueAdapter(context, sureOrFail,
+                new String[]{"key", "value"}, "zhengque");
+        listview.setAdapter(keyValueAdapter);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(1==position){
+                    /*Bundle bundle = new Bundle();
+                    bundle.putString("proName", "");
+                    ZsAmendFragment zsAmendFragment = new ZsAmendFragment(handler);
+                    zsAmendFragment.setArguments(bundle);
+                    ZsVisitShopActivity zsVisitShopActivity = (ZsVisitShopActivity)getActivity();
+                    zsVisitShopActivity.changeXtvisitFragment(zsAmendFragment,"zsamendfragment");*/
+
+                    ZsVisitShopActivity xtVisitShopActivity = (ZsVisitShopActivity)context;
+
+
+
+
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("tempLst", (Serializable) tempLst);
+                    bundle.putString("proName", proName);
+                    ZsCaculateFragment xtCaculateFragment = new ZsCaculateFragment(xtProIndexValue,handler);
+                    xtCaculateFragment.setArguments(bundle);
+                    xtVisitShopActivity.changeXtvisitFragment(xtCaculateFragment,"xtnuminputfragment");
+                }
+
+                mAlertViewExt.dismiss();
+            }
+        });
+        mAlertViewExt.addExtView(extView);
+        mAlertViewExt.setCancelable(true).setOnDismissListener(new OnDismissListener() {
+            @Override
+            public void onDismiss(Object o) {
+                DbtLog.logUtils(TAG, "取消选择结果");
+            }
+        });
+        mAlertViewExt.show();
+    }
 
 }

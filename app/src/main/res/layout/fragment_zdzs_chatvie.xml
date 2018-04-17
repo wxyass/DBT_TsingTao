@@ -96,6 +96,7 @@
             <!--是否瓦解竞品-->
             <RelativeLayout
                 android:id="@+id/zdzs_chatvie_rl_clearvie"
+                android:layout_marginTop="15dp"
                 style="@style/xtbf_sayhi_rl">
 
                 <!--标题-->
@@ -106,7 +107,7 @@
                 <!--内容1-->
                 <TextView
                     android:id="@+id/zdzs_chatvie_rl_clearvie_con1"
-                    style="@style/zdzs_sayhi_content1"
+                    style="@style/zdzs_sayhi_content3"
                     android:text=""/>
 
                 <!--内容2-->

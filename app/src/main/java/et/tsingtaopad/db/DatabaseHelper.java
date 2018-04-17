@@ -872,6 +872,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         if (oldVersion < 50) {
 
             try {
+                // 图片表新加4个字段
+                db.execSQL("alter table MST_CAMERAINFO_M add areaid varchar(100)");
+                db.execSQL("alter table MST_CAMERAINFO_M add areapid varchar(100)");
+                db.execSQL("alter table MST_CAMERAINFO_M add gridkey varchar(100)");
+                db.execSQL("alter table MST_CAMERAINFO_M add routekey varchar(100)");
 
                 // 产品组合是否达标  添加visitkey字段
                 db.execSQL("alter table MST_GROUPPRODUCT_M add visitkey varchar(36)");
@@ -911,7 +916,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 db.execSQL(promotermtemp);
 
                 // 图片表 临时表
-                String camerainfotemp = "CREATE TABLE MST_CAMERAINFO_M_TEMP (camerakey VARCHAR(36) NOT NULL,terminalkey VARCHAR(36),visitkey VARCHAR(36),pictypekey VARCHAR(36),picname VARCHAR(150),localpath VARCHAR(150),netpath VARCHAR(150),cameradata VARCHAR(20),isupload VARCHAR2(36),istakecamera VARCHAR(36),picindex VARCHAR(16),pictypename VARCHAR(150),sureup VARCHAR(16),imagefileString VARCHAR(4000)) ";
+                String camerainfotemp = "CREATE TABLE MST_CAMERAINFO_M_TEMP (camerakey VARCHAR(36) NOT NULL,terminalkey VARCHAR(36),visitkey VARCHAR(36),pictypekey VARCHAR(36),picname VARCHAR(150),localpath VARCHAR(150),netpath VARCHAR(150),cameradata VARCHAR(20),isupload VARCHAR2(36),istakecamera VARCHAR(36),picindex VARCHAR(16),pictypename VARCHAR(150),sureup VARCHAR(16),imagefileString VARCHAR(4000),areaid VARCHAR(36),areapid VARCHAR(36),gridkey VARCHAR(36),routekey VARCHAR(36)) ";
                 db.execSQL(camerainfotemp);
 
                 // 客情表 临时表
@@ -962,7 +967,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 db.execSQL(mitpromoterm);
 
                 // 协同图片表
-                String mitcamerainfo = "CREATE TABLE MIT_CAMERAINFO_M (camerakey VARCHAR(36) NOT NULL,terminalkey VARCHAR(36),visitkey VARCHAR(36),pictypekey VARCHAR(36),picname VARCHAR(150),localpath VARCHAR(150),netpath VARCHAR(150),cameradata VARCHAR(20),isupload VARCHAR2(36),istakecamera VARCHAR(36),picindex VARCHAR(16),pictypename VARCHAR(150),sureup VARCHAR(16),imagefileString VARCHAR(4000)) ";
+                String mitcamerainfo = "CREATE TABLE MIT_CAMERAINFO_M (camerakey VARCHAR(36) NOT NULL,terminalkey VARCHAR(36),visitkey VARCHAR(36),pictypekey VARCHAR(36),picname VARCHAR(150),localpath VARCHAR(150),netpath VARCHAR(150),cameradata VARCHAR(20),isupload VARCHAR2(36),istakecamera VARCHAR(36),picindex VARCHAR(16),pictypename VARCHAR(150),sureup VARCHAR(16),imagefileString VARCHAR(4000),areaid VARCHAR(36),areapid VARCHAR(36),gridkey VARCHAR(36),routekey VARCHAR(36)) ";
                 db.execSQL(mitcamerainfo);
 
                 // 协同客情表

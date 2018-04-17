@@ -91,6 +91,14 @@ public interface MstTerminalinfoMDao extends Dao<MstTerminalinfoM, String> {
     public MstTerminalInfoMStc findById(SQLiteOpenHelper helper, String termId);
 
     /**
+     * 通过终端key,查询大区id,二级区域id,定格key,路线key
+     * @param helper
+     * @param termId
+     * @return
+     */
+    public MstTerminalInfoMStc findKeyById(SQLiteOpenHelper helper, String termId);
+
+    /**
      * 依据终端主键获取终端 信息（包含数据字典对应的名称）
      * <p>
      * 上传图片时,由于之前的方法(findById)出错,所以重写,注释掉会出错的代码

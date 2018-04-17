@@ -65,6 +65,7 @@ import et.tsingtaopad.main.visit.shopvisit.term.domain.MstTermListMStc;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.CheckIndexCalculateStc;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.ProIndex;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.ProItem;
+import et.tsingtaopad.main.visit.shopvisit.termvisit.sayhi.domain.MstTerminalInfoMStc;
 
 /**
  * Created by yangwenmin on 2018/3/12.
@@ -123,6 +124,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
             R.drawable.bt_shopvisit_checkindex, R.drawable.bt_shopvisit_chatvie,
             R.drawable.bt_shopvisit_camera };
 
+    MstTerminalInfoMStc mstTerminalInfoMStc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,6 +183,8 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
         xtShopVisitService = new XtShopVisitService(getApplicationContext(), null);
         // 从拜访主表中获取最后一次拜访数据
         MstVisitM preMstVisitM = xtShopVisitService.findNewLastVisit(termStc.getTerminalkey(), false);
+        // 获取终端区域id,定格key
+        mstTerminalInfoMStc = xtShopVisitService.findTermKeyById(termStc.getTerminalkey());
         // 获取上次拜访主键
         prevVisitId = preMstVisitM.getVisitkey();
         prevVisitDate = preMstVisitM.getVisitdate();
@@ -362,6 +366,10 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
         // 组建打招呼、进销存、聊竞品、查指标页面所需参数
         Bundle bundle = new Bundle();
         bundle.putSerializable("termId", termStc.getTerminalkey());
+        bundle.putSerializable("areaid", mstTerminalInfoMStc.getAreaid());
+        bundle.putSerializable("areapid", mstTerminalInfoMStc.getAreapid());
+        bundle.putSerializable("gridkey", mstTerminalInfoMStc.getGridkey());
+        bundle.putSerializable("routekey", mstTerminalInfoMStc.getRoutekey());
         bundle.putSerializable("termname", termStc.getTerminalname());
         bundle.putSerializable("channelId", termStc.getMinorchannel());// 次渠道
         bundle.putSerializable("termStc", termStc);

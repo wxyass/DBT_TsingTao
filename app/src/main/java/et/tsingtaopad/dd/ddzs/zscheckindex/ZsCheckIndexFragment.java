@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -59,7 +60,7 @@ import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.CheckInde
 
 public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.OnClickListener ,OnItemClickListener, OnDismissListener {
 
-    private final String TAG = "XtCheckIndexFragment";
+    private final String TAG = "ZsCheckIndexFragment";
 
     private AppCompatButton mXtvisit_btn_pro;
 
@@ -76,22 +77,30 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
     MyHandler handler;
     ZsCaculateAdapter xtCaculateAdapter;
 
-    private et.tsingtaopad.view.DdSlideSwitch xtProstatusSw;
-    private et.tsingtaopad.view.DdSlideSwitch xtHezuoSw;
-    private et.tsingtaopad.view.DdSlideSwitch xtPeisongSw;
-    private RelativeLayout xtZhanyoulvRl;
-    private TextView xtZhanyoulvTv;
-
     private AlertView mAlertViewExt;//窗口拓展例子
 
     String zhanyoulvIndexValueId;//当前终端单店占有率 对应cstatuskey
     MstGroupproductMTemp vo;
 
 
+    private RelativeLayout zdzs_sayhi_rl_prostatus;
+    private TextView zdzs_sayhi_tv_prostatus_con1;
+    private TextView zdzs_sayhi_tv_prostatus_statue;
+    private RelativeLayout zdzs_sayhi_rl_hezuo;
+    private TextView zdzs_sayhi_tv_hezuo_con1;
+    private TextView zdzs_sayhi_tv_hezuo_statue;
+    private RelativeLayout zdzs_sayhi_rl_peisong;
+    private TextView zdzs_sayhi_tv_peisong_con1;
+    private TextView zdzs_sayhi_tv_peisong_statue;
+    private RelativeLayout zdzs_sayhi_rl_zhanyoulv;
+    private TextView zdzs_sayhi_tv_zhanyoulv_con1;
+    private TextView zdzs_sayhi_tv_zhanyoulv_statue;
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_xtbf_checkindex, container, false);
+        View view = inflater.inflate(R.layout.fragment_zdzs_checkindex, container, false);
         initView(view);
         return view;
     }
@@ -100,18 +109,31 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
     private void initView(View view) {
 
         //采项分集listView
-        calculateLv = (ListView) view.findViewById(R.id.xtbf_checkindex_lv_calculate);
-        quickCollectBt = (Button) view.findViewById(R.id.xtbf_checkindex_bt_quickcollect);
-        promotionLv = (ListView) view.findViewById(R.id.xtbf_checkindex_lv_promotion);
+        calculateLv = (ListView) view.findViewById(R.id.zdzs_checkindex_lv_calculate);
+        quickCollectBt = (Button) view.findViewById(R.id.zdzs_checkindex_bt_quickcollect);
+        promotionLv = (ListView) view.findViewById(R.id.zdzs_checkindex_lv_promotion);
 
-        xtProstatusSw = (et.tsingtaopad.view.DdSlideSwitch) view.findViewById(R.id.xtbf_noproindex_sw_prostatus);
-        xtHezuoSw = (et.tsingtaopad.view.DdSlideSwitch) view.findViewById(R.id.xtbf_noproindex_sw_hezuo);
-        xtPeisongSw = (et.tsingtaopad.view.DdSlideSwitch) view.findViewById(R.id.xtbf_noproindex_sw_peisong);
-        xtZhanyoulvRl = (RelativeLayout) view.findViewById(R.id.xtbf_sayhi_rl_termminorchannel);
-        xtZhanyoulvTv = (TextView) view.findViewById(R.id.xtbf_noproindex_sp_zhanyoulv);
+
+        zdzs_sayhi_rl_prostatus = (RelativeLayout) view.findViewById(R.id.zdzs_sayhi_rl_prostatus);
+        zdzs_sayhi_tv_prostatus_con1 = (TextView) view.findViewById(R.id.zdzs_sayhi_tv_prostatus_con1);
+        zdzs_sayhi_tv_prostatus_statue = (TextView) view.findViewById(R.id.zdzs_sayhi_tv_prostatus_statue);
+        zdzs_sayhi_rl_hezuo = (RelativeLayout) view.findViewById(R.id.zdzs_sayhi_rl_hezuo);
+        zdzs_sayhi_tv_hezuo_con1 = (TextView) view.findViewById(R.id.zdzs_sayhi_tv_hezuo_con1);
+        zdzs_sayhi_tv_hezuo_statue = (TextView) view.findViewById(R.id.zdzs_sayhi_tv_hezuo_statue);
+        zdzs_sayhi_rl_peisong = (RelativeLayout) view.findViewById(R.id.zdzs_sayhi_rl_peisong);
+        zdzs_sayhi_tv_peisong_con1 = (TextView) view.findViewById(R.id.zdzs_sayhi_tv_peisong_con1);
+        zdzs_sayhi_tv_peisong_statue = (TextView) view.findViewById(R.id.zdzs_sayhi_tv_peisong_statue);
+        zdzs_sayhi_rl_zhanyoulv = (RelativeLayout) view.findViewById(R.id.zdzs_sayhi_rl_zhanyoulv);
+        zdzs_sayhi_tv_zhanyoulv_con1 = (TextView) view.findViewById(R.id.zdzs_sayhi_tv_zhanyoulv_con1);
+        zdzs_sayhi_tv_zhanyoulv_statue = (TextView) view.findViewById(R.id.zdzs_sayhi_tv_zhanyoulv_statue);
+
+
 
         quickCollectBt.setOnClickListener(this);
-        xtZhanyoulvRl.setOnClickListener(this);
+        zdzs_sayhi_rl_prostatus.setOnClickListener(this);
+        zdzs_sayhi_rl_hezuo.setOnClickListener(this);
+        zdzs_sayhi_rl_peisong.setOnClickListener(this);
+        zdzs_sayhi_rl_zhanyoulv.setOnClickListener(this);
     }
 
     List<XtProIndex> calculateLst = new ArrayList<XtProIndex>();
@@ -151,7 +173,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
 
         // 促销活动
         promotionLst = service.queryPromotion(visitId, term.getSellchannel(), term.getTlevel());
-        XtPromotionAdapter xtPromotionAdapter = new XtPromotionAdapter(getActivity(), promotionLst, "2018-03-30", seeFlag);
+        ZsPromotionAdapter xtPromotionAdapter = new ZsPromotionAdapter(getActivity(), promotionLst, "2018-03-30", seeFlag);
         promotionLv.setAdapter(xtPromotionAdapter);
 
         // 其他信息
@@ -163,36 +185,36 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
             if ("666b74b3-b221-4920-b549-d9ec39a463fd".equals(item.getIndexId())) {// 合作是否到位
                 //tempLst = service.queryNoProIndexValueId1();// 此处报错
                 if ("9019cf03-4572-4559-9971-48a27a611c3d".equals(item.getIndexValueId())) {// 合作是否到位 是
-                    xtHezuoSw.setStatus(true);
+                    zdzs_sayhi_tv_hezuo_con1.setText("是");
                 }else{
-                    xtHezuoSw.setStatus(false);
+                    zdzs_sayhi_tv_hezuo_con1.setText("否");
                 }
             } else if ("df2e88c9-246f-40e2-b6e5-08cdebf8c281".equals(item.getIndexId())) {// 是否高质量配送
                 //tempLst = service.queryNoProIndexValueId2();
                 if ("460647a9-283a-44ea-b11f-42efe1fd62e4".equals(item.getIndexValueId())) {// 是否高质量配送
-                    xtPeisongSw.setStatus(true);
+                    zdzs_sayhi_tv_peisong_con1.setText("是");
                 }else{
-                    xtPeisongSw.setStatus(false);
+                    zdzs_sayhi_tv_peisong_con1.setText("否");
                 }
             } else if ("59802090-02ac-4146-9cc3-f09570c36a26".equals(item.getIndexId())) {// 我品占有率
                  zhanyoulvIndexValueId = item.getIndexValueId();
-                xtZhanyoulvTv.setText(service.getCheckStatusName(zhanyoulvIndexValueId));
+                zdzs_sayhi_tv_zhanyoulv_con1.setText(service.getCheckStatusName(zhanyoulvIndexValueId));
             }
         }
 
         // 产品组合是否达标
         vo = service.findMstGroupproductMTempByid(term.getTerminalcode());
         if (CheckUtil.isBlankOrNull(vo.getIfrecstand()) || "N".equals(vo.getIfrecstand()) || "null".equals(vo.getIfrecstand())) {
-            xtProstatusSw.setStatus(false);
+            zdzs_sayhi_tv_prostatus_con1.setText("否");
         }else{
-            xtProstatusSw.setStatus(true);
+            zdzs_sayhi_tv_prostatus_con1.setText("是");
         }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.xtbf_checkindex_bt_quickcollect:// 快速采集
+            case R.id.zdzs_checkindex_bt_quickcollect:// 快速采集
                 if (ViewUtil.isDoubleClick(v.getId(), 2500)) return;
 
                 Bundle bundle = new Bundle();
@@ -210,7 +232,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                 xtVisitShopActivity.changeXtvisitFragment(xtquickcollectfragment, "xtnuminputfragment");
                 break;
 
-            case R.id.xtbf_sayhi_rl_termminorchannel:// 单店占有率
+            case R.id.zdzs_sayhi_rl_zhanyoulv:// 单店占有率
                 final List<KvStc> tempLst = service.queryNoProIndexValueId31();
                 mAlertViewExt = new AlertView("请选择单店占有率", null,
                         null, null, null, getActivity(), AlertView.Style.ActionSheet, this);
@@ -222,9 +244,8 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                 arealistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        xtZhanyoulvTv.setText(tempLst.get(position).getValue());
+                        //xtZhanyoulvTv.setText(tempLst.get(position).getValue());
                         zhanyoulvIndexValueId = tempLst.get(position).getKey();
-                        //termInfoTemp.setAreatype(tempLst.get(position).getKey());
                         mAlertViewExt.dismiss();
                     }
                 });
@@ -232,6 +253,11 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                 mAlertViewExt.setCancelable(true).setOnDismissListener(this);
                 mAlertViewExt.show();
 
+                break;
+            case R.id.zdzs_sayhi_rl_prostatus:
+            case R.id.zdzs_sayhi_rl_hezuo:
+            case R.id.zdzs_sayhi_rl_peisong:
+                alertShow3();
                 break;
 
             default:
@@ -303,6 +329,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
         if (ConstValues.FLAG_1.equals(seeFlag)) return;
         //if(isLoadingData) return;
 
+        /*
         XtProIndex indexItem;
         XtProIndexValue valueItem;
         ListView indexValueLv;
@@ -325,13 +352,6 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                 if (valueItem == null)
                     continue;
 
-                /*if (ConstValues.FLAG_4.equals(valueItem.getIndexType())
-                        || ConstValues.FLAG_0.equals(valueItem.getIndexType())) {
-                    if (indexValueLv.getChildAt(j).findViewById(
-                            R.id.caculate_bt_indexvalue) == null) continue;
-                    valueItem.setIndexValueId(FunUtil.isBlankOrNullTo(
-                            indexValueLv.getChildAt(j).findViewById(R.id.caculate_bt_indexvalue).getTag(), "-1"));
-                }*/
 
                 if (indexValueLv.getChildAt(j).findViewById(R.id.item_xt_checkindex_indexvalue) == null)
                     continue;
@@ -369,14 +389,6 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
         service.saveCheckIndex(visitId, termId, calculateLst, proItemLst, noProIndexLst);
 
         // 获取产品组合是否达标值
-        /*for (int k = 0; k < groupRg.getChildCount(); k++) {
-        	RadioButton groupRgChildRb = (RadioButton)groupRg.getChildAt(k);
-            if (groupRgChildRb.isChecked()) {
-            	vo.setIfrecstand(groupRgChildRb.getHint().toString());
-                break;
-            }
-        }*/
-
         if(xtProstatusSw.getStatus()){
             vo.setIfrecstand("Y");// 产品组合  未达标
         }else{
@@ -398,28 +410,6 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                 promotionLst.get(i).setIsAccomplish(ConstValues.FLAG_1);//达成
             } else {
                 promotionLst.get(i).setIsAccomplish(ConstValues.FLAG_0);//未达成
-
-                // 根据是否有拍照,删除
-                // 删除记录
-                /*String pictypekey = promotionLst.get(i).getPromotKey();
-                AndroidDatabaseConnection connection = null;
-                try {
-                    DatabaseHelper helper = DatabaseHelper.getHelper(getActivity());
-                    MstCameraiInfoMDao dao = (MstCameraiInfoMDao) helper.getMstCameraiInfoMDao();
-                    connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
-                    connection.setAutoCommit(false);
-                    // 删除该记录
-                    dao.deletePicByCamerakeyATerminal(helper, pictypekey,termId);
-                    connection.commit(null);
-
-                } catch (Exception e) {
-                    Log.e(TAG, "删除图片表记录失败", e);
-                    try {
-                        connection.rollback(null);
-                    } catch (Exception e1) {
-                        Log.e(TAG, "删除图片表记录失败", e1);
-                    }
-                }*/
                 // 删除本地照片(以为每次确定上传都会删除文件夹,就不做操作了)
             }
             promotionLst.get(i).setReachNum(reachNum.getText().toString());
@@ -427,7 +417,53 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
         }
         service.saveXtPromotionTemp(visitId, termId, promotionLst);
         long time4= new Date().getTime();
-        Log.e("Optimization", "查指标执行数据库"+(time4-time3));
+        Log.e("Optimization", "查指标执行数据库"+(time4-time3));*/
+    }
+
+    /**
+     * 弹窗3
+     * 参数1: 标题 ×
+     * 参数2: 主体内容    ×
+     * 参数3: 取消按钮    ×
+     * 参数4: 高亮按钮 数组 √
+     * 参数5: 普通按钮 数组 √
+     * 参数6: 上下文 √
+     * 参数7: 弹窗类型 (正常取消,确定按钮)   √
+     * 参数8: 条目点击监听  √
+     */
+    public void alertShow3() {
+        List<KvStc> sureOrFail = new ArrayList<>();
+        sureOrFail.add(new KvStc("zhengque","正确","-1"));
+        sureOrFail.add(new KvStc("cuowu","错误(去修正)","-1"));
+        mAlertViewExt = new AlertView(null, null, null, null, null, getActivity(), AlertView.Style.ActionSheet, null);
+        ViewGroup extView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_list_form, null);
+        ListView listview = (ListView) extView.findViewById(R.id.alert_list);
+        AlertKeyValueAdapter keyValueAdapter = new AlertKeyValueAdapter(getActivity(), sureOrFail,
+                new String[]{"key", "value"}, "zhengque");
+        listview.setAdapter(keyValueAdapter);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(1==position){
+                    /*Bundle bundle = new Bundle();
+                    bundle.putString("proName", "");
+                    ZsAmendFragment zsAmendFragment = new ZsAmendFragment(handler);
+                    zsAmendFragment.setArguments(bundle);
+                    ZsVisitShopActivity zsVisitShopActivity = (ZsVisitShopActivity)getActivity();
+                    zsVisitShopActivity.changeXtvisitFragment(zsAmendFragment,"zsamendfragment");*/
+                }
+
+                mAlertViewExt.dismiss();
+            }
+        });
+        mAlertViewExt.addExtView(extView);
+        mAlertViewExt.setCancelable(true).setOnDismissListener(new OnDismissListener() {
+            @Override
+            public void onDismiss(Object o) {
+                DbtLog.logUtils(TAG, "取消选择结果");
+            }
+        });
+        mAlertViewExt.show();
     }
 
 }

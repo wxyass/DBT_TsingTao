@@ -90,8 +90,8 @@ public class ZsCaculateFragment extends BaseFragmentSupport implements View.OnCl
         String proName = bundle.getString("proName");
         titleTv.setText(proName);
 
-        XtCalculateIndexItemPuhuoAdapter xtCalculateIndexItemPuhuoAdapter = new XtCalculateIndexItemPuhuoAdapter(getActivity(), tempLst);
-        colitemLv.setAdapter(xtCalculateIndexItemPuhuoAdapter);
+        ZsCalculateAdapter zsCalculateAdapter = new ZsCalculateAdapter(getActivity(), tempLst);
+        colitemLv.setAdapter(zsCalculateAdapter);
 
         ViewUtil.setListViewHeight(colitemLv);
 

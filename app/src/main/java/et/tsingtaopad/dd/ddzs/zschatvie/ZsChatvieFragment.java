@@ -62,7 +62,7 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
 
     ZsChatvieAdapter zsChatvieAdapter;
 
-    public static final int ADD_VIE_SUC = 3;
+    public static final int ZS_ADD_VIE_SUC = 3;// 新增竞品关系成功
     MyHandler handler;
 
     @Nullable
@@ -119,8 +119,7 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
             }
         }
 
-        // 竞品来源
-        // 订单推荐
+        // 竞品信息
         zsChatvieAdapter = new ZsChatvieAdapter(getActivity(), dataLst,new IClick(){
             @Override
             public void listViewItemClick(int position, View v) {
@@ -136,7 +135,7 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.xtbf_chatvie_bt_addrelation:// 新增竞品
+            case R.id.zdzs_chatvie_bt_addrelation:// 新增竞品
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("termId", termStc.getTerminalkey());
                 bundle.putSerializable("termname", termStc.getTerminalname());
@@ -149,7 +148,7 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
                 xtaddchatviefragment.setArguments(bundle);
 
                 ZsVisitShopActivity xtVisitShopActivity = (ZsVisitShopActivity) getActivity();
-                xtVisitShopActivity.changeXtvisitFragment(xtaddchatviefragment, "xtaddchatviefragment");
+                xtVisitShopActivity.changeXtvisitFragment(xtaddchatviefragment, "zsvisitshopactivity");
                 break;
 
             default:
@@ -181,7 +180,7 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
 
             // 处理UI 变化
             switch (msg.what) {
-                case ADD_VIE_SUC:
+                case ZS_ADD_VIE_SUC:
                     fragment.showAddVieProSuc(products, agency);
                     break;
             }
@@ -229,10 +228,7 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
         List<KvStc> sureOrFail = new ArrayList<>();
         sureOrFail.add(new KvStc("zhengque","正确","-1"));
         sureOrFail.add(new KvStc("cuowu","错误(去修正)","-1"));
-        mAlertViewExt = new AlertView(null, null, null, null, null, getActivity(), AlertView.Style.ActionSheet, new OnItemClickListener() {
-            @Override
-            public void onItemClick(Object o, int position) {}
-        });
+        mAlertViewExt = new AlertView(null, null, null, null, null, getActivity(), AlertView.Style.ActionSheet, null);
         ViewGroup extView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_list_form, null);
         ListView listview = (ListView) extView.findViewById(R.id.alert_list);
         AlertKeyValueAdapter keyValueAdapter = new AlertKeyValueAdapter(getActivity(), sureOrFail,

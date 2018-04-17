@@ -63,12 +63,12 @@ public class XtCameraAdapter extends BaseAdapter {
 		CameraInfoStc camerainfostc = (CameraInfoStc)dataLst.get(position);
 		
 		descTv.setText(camerainfostc.getPictypename());
-		if (camerainfostc.getLocalpath()==null) {// 没拍照
+		if (camerainfostc.getPicname()==null) {// 没拍照
 			Glide.with(context)
 					.load(R.drawable.bg_camera)
 					.into(picIv);
 		}else{// 已拍照
-			final File tempFile = new File(FileTool.CAMERA_PHOTO_DIR, camerainfostc.getLocalpath());
+			final File tempFile = new File(FileTool.CAMERA_PHOTO_DIR, camerainfostc.getPicname());
 			//final File tempFile = new File(FileUtil.getPhotoPath()+camerainfostc.getLocalpath());
 
 			Uri fileUri = null;

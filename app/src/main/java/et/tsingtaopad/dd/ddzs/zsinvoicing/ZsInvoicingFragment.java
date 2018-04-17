@@ -9,8 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -49,7 +52,7 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
     ZsInvoicingService invoicingService;
     MyHandler handler;
 
-    public static final int ADD_SUC = 2;
+    public static final int ZS_ADD_SUC = 2;// 追溯-新增我品供货关系成功
 
     ZsInvoicingAdapter zsInvoicingAdapter;
 
@@ -167,7 +170,7 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
 
             // 处理UI 变化
             switch (msg.what) {
-                case ADD_SUC:
+                case ZS_ADD_SUC:
                     fragment.showAddProSuc(products, agency);
                     break;
             }
@@ -299,36 +302,99 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
      * 参数7: 弹窗类型 (正常取消,确定按钮)   √
      * 参数8: 条目点击监听  √
      */
+    int type = -1;
     public void alertShow3() {
         List<KvStc> sureOrFail = new ArrayList<>();
         sureOrFail.add(new KvStc("zhengque","正确","-1"));
         sureOrFail.add(new KvStc("cuowu","错误(去修正)","-1"));
-        mAlertViewExt = new AlertView(null, null, null, null, null, getActivity(), AlertView.Style.ActionSheet, new OnItemClickListener() {
-            @Override
-            public void onItemClick(Object o, int position) {}
-        });
-        ViewGroup extView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_list_form, null);
-        ListView listview = (ListView) extView.findViewById(R.id.alert_list);
-        AlertKeyValueAdapter keyValueAdapter = new AlertKeyValueAdapter(getActivity(), sureOrFail,
-                new String[]{"key", "value"}, "zhengque");
-        listview.setAdapter(keyValueAdapter);
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(1==position){
-                    /*Bundle bundle = new Bundle();
-                    bundle.putString("proName", "");
-                    ZsAmendFragment zsAmendFragment = new ZsAmendFragment(handler);
-                    zsAmendFragment.setArguments(bundle);
-                    ZsVisitShopActivity zsVisitShopActivity = (ZsVisitShopActivity)getActivity();
-                    zsVisitShopActivity.changeXtvisitFragment(zsAmendFragment,"zsamendfragment");*/
-                }
+        mAlertViewExt = new AlertView(null, null, null, null, null, getActivity(), AlertView.Style.ActionSheet, null);
+        ViewGroup extView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_result_form, null);
 
-                mAlertViewExt.dismiss();
+        RelativeLayout rl_back1 = (RelativeLayout) extView.findViewById(R.id.top_navigation_rl_back1);
+        android.support.v7.widget.AppCompatTextView bt_back1 = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_bt_back1);
+        RelativeLayout rl_confirm1 = (RelativeLayout) extView.findViewById(R.id.top_navigation_rl_confirm1);
+        android.support.v7.widget.AppCompatTextView bt_confirm1 = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_bt_confirm1);
+
+
+        final RadioButton man_rb = (RadioButton) extView.findViewById(R.id.man_rb);
+        final CheckBox cb0 = (CheckBox) extView.findViewById(R.id.cb0);
+        final CheckBox cb1 = (CheckBox) extView.findViewById(R.id.cb1);
+        final CheckBox cb2 = (CheckBox) extView.findViewById(R.id.cb2);
+        final CheckBox cb3 = (CheckBox) extView.findViewById(R.id.cb3);
+        final CheckBox cb4 = (CheckBox) extView.findViewById(R.id.cb4);
+
+        rl_back1.setOnClickListener(this);
+        rl_confirm1.setOnClickListener(this);
+
+        man_rb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                man_rb.setChecked(isChecked);
+                cb1.setChecked(false);
+                cb2.setChecked(false);
+                cb3.setChecked(false);
+                cb4.setChecked(false);
             }
         });
+        cb0.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                //cb0.setChecked(isChecked);
+                if(type == 0){
+                    cb1.setChecked(false);
+                    cb2.setChecked(false);
+                    cb3.setChecked(false);
+                    cb4.setChecked(false);
+                }
+
+                type = 0;
+            }
+        });
+        cb1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                cb1.setChecked(isChecked);
+                if(type == 1){
+                    cb0.setChecked(false);
+                }
+                type = 1;
+            }
+        });
+        cb2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                cb2.setChecked(isChecked);
+                if(type == 2){
+                    cb0.setChecked(false);
+                }
+                type = 2;
+            }
+        });
+        cb3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                cb3.setChecked(isChecked);
+                if(type == 3){
+                    cb0.setChecked(false);
+                }
+                type = 3;
+            }
+        });
+        cb4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                cb4.setChecked(isChecked);
+                if(type == 4){
+                    cb0.setChecked(false);
+                }
+                type = 4;
+            }
+        });
+
+
         mAlertViewExt.addExtView(extView);
-        mAlertViewExt.setCancelable(true).setOnDismissListener(new OnDismissListener() {
+        mAlertViewExt.setOnDismissListener(new OnDismissListener() {
             @Override
             public void onDismiss(Object o) {
                 DbtLog.logUtils(TAG, "取消选择结果");

@@ -532,6 +532,36 @@ public class MstTerminalinfoMDaoImpl extends BaseDaoImpl<MstTerminalinfoM, Strin
     }
 
     /**
+     * 通过终端key,查询大区id,二级区域id,定格key,路线key
+     * @param helper
+     * @param termId
+     * @return
+     */
+    public MstTerminalInfoMStc findKeyById(SQLiteOpenHelper helper, String termId) {
+
+        MstTerminalInfoMStc stc = new MstTerminalInfoMStc();
+
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("select sm.areaid,sm.areapid,g.gridkey,r.routekey,t.terminalkey  ");
+        buffer.append("from mst_terminalinfo_m_temp t  ");
+        buffer.append("left join mst_route_m r on t.routekey = r.routekey  ");
+        buffer.append("left join mst_grid_m g on g.gridkey = r.gridkey  ");
+        buffer.append("left join mst_marketarea_m sm on sm.areaid=g.areaid  ");
+        buffer.append("where t.terminalkey= ? ");
+
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor cursor = db.rawQuery(buffer.toString(), new String[]{termId});
+        while (cursor.moveToNext()) {
+            stc.setAreaid(cursor.getString(cursor.getColumnIndex("areaid")));
+            stc.setAreapid(cursor.getString(cursor.getColumnIndex("areapid")));
+            stc.setGridkey(cursor.getString(cursor.getColumnIndex("gridkey")));
+            stc.setRoutekey(cursor.getString(cursor.getColumnIndex("routekey")));
+            stc.setTerminalkey(cursor.getString(cursor.getColumnIndex("terminalkey")));
+        }
+        return stc;
+    }
+
+    /**
      * 依据终端主键获取终端 信息（包含数据字典对应的名称）
      * <p>
      * 上传图片时,由于之前的方法(findById)出错,所以重写,注释掉会出错的代码

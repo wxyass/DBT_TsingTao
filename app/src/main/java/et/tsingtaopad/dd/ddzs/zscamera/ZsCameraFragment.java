@@ -39,6 +39,7 @@ import et.tsingtaopad.dd.ddxt.camera.XtCameraAdapter;
 import et.tsingtaopad.dd.ddxt.camera.XtCameraHandler;
 import et.tsingtaopad.dd.ddxt.camera.XtCameraService;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.camera.domain.CameraInfoStc;
+import et.tsingtaopad.main.visit.shopvisit.termvisit.sayhi.domain.MstTerminalInfoMStc;
 import et.tsingtaopad.view.MyGridView;
 
 /**
@@ -78,6 +79,8 @@ public class ZsCameraFragment extends XtBaseVisitFragment implements View.OnClic
     MyHandler handler;
 
     private AlertDialog dialog;
+
+    MstTerminalInfoMStc mstTerminalInfoMStc;
 
 
     @Nullable
@@ -141,6 +144,8 @@ public class ZsCameraFragment extends XtBaseVisitFragment implements View.OnClic
         valueLst = xtCameraService.queryPictypeMAll();
         // 获取最新的终端数据
         termTemp = xtCameraService.findTermTempById(termId);
+
+        mstTerminalInfoMStc = xtCameraService.findTermKeyById(termId);
 
         // 没有图片类型时,给与提示
         if (valueLst == null || valueLst.size() <= 0) {
@@ -207,7 +212,7 @@ public class ZsCameraFragment extends XtBaseVisitFragment implements View.OnClic
                             // 图片转成字符串
                             imagefileString = FileUtil.fileToString(FileTool.CAMERA_PHOTO_DIR + picname);
                             // 将图片记录保存到数据库
-                            String cameraKey = xtCameraService.savePicData(cameraDataStc, picname, imagefileString,termId,visitId);
+                            String cameraKey = xtCameraService.savePicData(cameraDataStc, picname, imagefileString,termId,termTemp,visitId,mstTerminalInfoMStc);
 
                             // 更新UI界面 刷新适配器
                             Message message1 = new Message();

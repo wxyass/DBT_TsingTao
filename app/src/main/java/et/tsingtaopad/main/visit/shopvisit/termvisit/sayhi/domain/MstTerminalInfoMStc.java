@@ -21,6 +21,10 @@ public class MstTerminalInfoMStc extends MstTerminalinfoM {
     
     private String minorChannelName;
 
+    private String areaid;// 二级区域id
+    private String areapid;// 大区id
+    private String gridkey;// 定格key
+
     public String getProvName() {
         return provName;
     }
@@ -69,4 +73,27 @@ public class MstTerminalInfoMStc extends MstTerminalinfoM {
         this.minorChannelName = minorChannelName;
     }
 
+    public String getAreaid() {
+        return areaid;
+    }
+
+    public void setAreaid(String areaid) {
+        this.areaid = areaid;
+    }
+
+    public String getAreapid() {
+        return areapid;
+    }
+
+    public void setAreapid(String areapid) {
+        this.areapid = areapid;
+    }
+
+    public String getGridkey() {
+        return gridkey;
+    }
+
+    public void setGridkey(String gridkey) {
+        this.gridkey = gridkey;
+    }
 }

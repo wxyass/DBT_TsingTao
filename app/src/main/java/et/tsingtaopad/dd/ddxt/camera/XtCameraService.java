@@ -14,13 +14,16 @@ import java.util.List;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
+import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.db.dao.MstCameraiInfoMDao;
 import et.tsingtaopad.db.dao.MstPictypeMDao;
 import et.tsingtaopad.db.table.MstCameraInfoMTemp;
+import et.tsingtaopad.db.table.MstTerminalinfoMTemp;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtShopVisitService;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.camera.domain.CameraInfoStc;
+import et.tsingtaopad.main.visit.shopvisit.termvisit.sayhi.domain.MstTerminalInfoMStc;
 
 /**
  * 文件名：XtShopVisitService.java</br>
@@ -80,7 +83,8 @@ public class XtCameraService extends XtShopVisitService {
     }
 
     // 保存照片记录到数据库
-    public String savePicData(CameraInfoStc cameraDataStc, String picname, String imagefileString, String termId, String visitKey) {
+    public String savePicData(CameraInfoStc cameraDataStc, String picname, String imagefileString,
+                              String termId, MstTerminalinfoMTemp termTemp, String visitKey,MstTerminalInfoMStc mstTerminalInfoMStc) {
 
         DbtLog.logUtils(TAG, "queryCurrentPicRecord()-获取当天拍照记录");
         List<CameraInfoStc> lst = new ArrayList<CameraInfoStc>();
@@ -96,8 +100,8 @@ public class XtCameraService extends XtShopVisitService {
                 mstCameraInfoMTemp.setVisitkey(visitKey); // 拜访主键
                 mstCameraInfoMTemp.setPictypekey(cameraDataStc.getPictypekey());// 图片类型主键(UUID)
                 mstCameraInfoMTemp.setPicname(picname);// 图片名称
-                mstCameraInfoMTemp.setLocalpath(picname);// 本地图片路径
-                mstCameraInfoMTemp.setNetpath(picname);// 请求网址(原先ftp上传用,现已不用)
+                mstCameraInfoMTemp.setLocalpath(termTemp.getTerminalname());// 本地图片路径 -> 改为终端名称
+                mstCameraInfoMTemp.setNetpath(picname);// 请求网址
                 mstCameraInfoMTemp.setCameradata(DateUtil.getDateTimeStr(1));// 拍照时间
                 mstCameraInfoMTemp.setIsupload("0");// 是否已上传 0未上传  1已上传
                 mstCameraInfoMTemp.setIstakecamera("1");//
@@ -105,6 +109,10 @@ public class XtCameraService extends XtShopVisitService {
                 mstCameraInfoMTemp.setPictypename(cameraDataStc.getPictypename());// 图片类型(中文名称)
                 mstCameraInfoMTemp.setSureup("0");// 确定上传 0确定上传 1未确定上传
                 mstCameraInfoMTemp.setImagefileString(imagefileString);// 将图片文件转成String保存在数据库
+                mstCameraInfoMTemp.setAreaid(mstTerminalInfoMStc.getAreaid());
+                mstCameraInfoMTemp.setAreapid(mstTerminalInfoMStc.getAreapid());
+                mstCameraInfoMTemp.setGridkey(mstTerminalInfoMStc.getGridkey());
+                mstCameraInfoMTemp.setRoutekey(mstTerminalInfoMStc.getRoutekey());
                 proItemTempDao.create(mstCameraInfoMTemp);
             } else {// 更新照片记录
                 mstCameraInfoMTemp = new MstCameraInfoMTemp();
@@ -122,6 +130,10 @@ public class XtCameraService extends XtShopVisitService {
                 mstCameraInfoMTemp.setPictypename(cameraDataStc.getPictypename());// 图片类型(中文名称)
                 mstCameraInfoMTemp.setSureup("0");// 确定上传 0确定上传 1未确定上传
                 mstCameraInfoMTemp.setImagefileString(imagefileString);// 将图片文件转成String保存在数据库
+                mstCameraInfoMTemp.setAreaid(mstTerminalInfoMStc.getAreaid());
+                mstCameraInfoMTemp.setAreapid(mstTerminalInfoMStc.getAreapid());
+                mstCameraInfoMTemp.setGridkey(mstTerminalInfoMStc.getGridkey());
+                mstCameraInfoMTemp.setRoutekey(mstTerminalInfoMStc.getRoutekey());
                 proItemTempDao.createOrUpdate(mstCameraInfoMTemp);
             }
 

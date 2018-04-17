@@ -868,6 +868,10 @@ public class XtShopCopyService {
                     info.setPictypename(item.getPictypename());// 图片类型(中文名称)
                     info.setSureup(item.getSureup());// 确定上传 0确定上传 1未确定上传
                     info.setImagefileString(item.getImagefileString());// 将图片文件转成String保存在数据库
+                    info.setAreaid(item.getAreaid());
+                    info.setAreapid(item.getAreapid());
+                    info.setGridkey(item.getGridkey());
+                    info.setRoutekey(item.getRoutekey());
                     mitCameraDao.create(info);
                 }
             }

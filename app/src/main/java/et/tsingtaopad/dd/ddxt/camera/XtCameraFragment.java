@@ -40,6 +40,7 @@ import et.tsingtaopad.core.util.file.FileTool;
 import et.tsingtaopad.db.table.MstTerminalinfoMTemp;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.camera.domain.CameraInfoStc;
+import et.tsingtaopad.main.visit.shopvisit.termvisit.sayhi.domain.MstTerminalInfoMStc;
 import et.tsingtaopad.view.MyGridView;
 
 /**
@@ -79,6 +80,8 @@ public class XtCameraFragment extends XtBaseVisitFragment implements View.OnClic
     MyHandler handler;
 
     private AlertDialog dialog;
+
+    MstTerminalInfoMStc mstTerminalInfoMStc;
 
 
     @Nullable
@@ -143,6 +146,8 @@ public class XtCameraFragment extends XtBaseVisitFragment implements View.OnClic
         // 获取最新的终端数据
         termTemp = xtCameraService.findTermTempById(termId);
 
+        mstTerminalInfoMStc = xtCameraService.findTermKeyById(termId);
+
         // 没有图片类型时,给与提示
         if (valueLst == null || valueLst.size() <= 0) {
             descGv.setVisibility(View.GONE);
@@ -160,7 +165,8 @@ public class XtCameraFragment extends XtBaseVisitFragment implements View.OnClic
             for (CameraInfoStc stctc : valueLst) {// 需拍的
                 if (cameraDataStc.getPictypekey().equals(stctc.getPictypekey())) {
                     stctc.setCamerakey(cameraDataStc.getCamerakey());
-                    stctc.setLocalpath(cameraDataStc.getLocalpath());
+                    stctc.setLocalpath(cameraDataStc.getLocalpath());// 终端名称
+                    stctc.setPicname(cameraDataStc.getPicname());
                     stctc.setPicindex(cameraDataStc.getPicindex());
                     stctc.setVisitkey(cameraDataStc.getVisitkey());
                     stctc.setTerminalkey(cameraDataStc.getTerminalkey());
@@ -212,7 +218,8 @@ public class XtCameraFragment extends XtBaseVisitFragment implements View.OnClic
                                     // 图片转成字符串
                                     imagefileString = FileUtil.fileToString(FileTool.CAMERA_PHOTO_DIR + picname);
                                     // 将图片记录保存到数据库
-                                    String cameraKey = xtCameraService.savePicData(cameraDataStc, picname, imagefileString,termId,visitId);
+                                    String cameraKey = xtCameraService.savePicData(cameraDataStc, picname,
+                                            imagefileString,termId,termTemp,visitId,mstTerminalInfoMStc);
 
                                     // 更新UI界面 刷新适配器
                                     Message message1 = new Message();
@@ -220,7 +227,7 @@ public class XtCameraFragment extends XtBaseVisitFragment implements View.OnClic
                                     handler.sendMessage(message1);// 刷新UI
 
                                     cameraDataStc.setCamerakey(cameraKey);
-                                    cameraDataStc.setLocalpath(picname);
+                                    cameraDataStc.setPicname(picname);
 
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -238,7 +245,7 @@ public class XtCameraFragment extends XtBaseVisitFragment implements View.OnClic
                 if(TextUtils.isEmpty(valueLst.get(position).getCamerakey())||"".equals(valueLst.get(position).getCamerakey())){
                     new XtCameraHandler(XtCameraFragment.this).takePhoto();
                 }else{
-                    new XtCameraHandler(XtCameraFragment.this).beginCameraDialog(valueLst.get(position).getLocalpath());
+                    new XtCameraHandler(XtCameraFragment.this).beginCameraDialog(valueLst.get(position).getPicname());
                 }
             }
         });

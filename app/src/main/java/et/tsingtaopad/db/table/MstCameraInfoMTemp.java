@@ -41,6 +41,17 @@ public class MstCameraInfoMTemp implements java.io.Serializable {
 	@DatabaseField
 	private String imagefileString;// 将图片文件转成String保存在数据库
 
+	@DatabaseField
+	private String areaid;
+	@DatabaseField
+	private String areapid;
+	@DatabaseField
+	private String gridkey;
+	@DatabaseField
+	private String routekey;
+
+
+
 	// Constructors
 
 	/** default constructor */
@@ -284,5 +295,35 @@ public class MstCameraInfoMTemp implements java.io.Serializable {
 		this.sureup = sureup;
 	}
 
-	
+	public String getAreaid() {
+		return areaid;
+	}
+
+	public void setAreaid(String areaid) {
+		this.areaid = areaid;
+	}
+
+	public String getAreapid() {
+		return areapid;
+	}
+
+	public void setAreapid(String areapid) {
+		this.areapid = areapid;
+	}
+
+	public String getGridkey() {
+		return gridkey;
+	}
+
+	public void setGridkey(String gridkey) {
+		this.gridkey = gridkey;
+	}
+
+	public String getRoutekey() {
+		return routekey;
+	}
+
+	public void setRoutekey(String routekey) {
+		this.routekey = routekey;
+	}
 }
