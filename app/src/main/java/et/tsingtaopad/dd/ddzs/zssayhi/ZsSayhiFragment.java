@@ -39,6 +39,7 @@ import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.core.view.alertview.OnDismissListener;
 import et.tsingtaopad.core.view.alertview.OnItemClickListener;
+import et.tsingtaopad.db.table.MitValterMTemp;
 import et.tsingtaopad.db.table.MstRouteM;
 import et.tsingtaopad.db.table.MstTerminalinfoMTemp;
 import et.tsingtaopad.db.table.MstVisitMTemp;
@@ -59,6 +60,7 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
     private ZsSayhiService xtSayhiService;
     private MstTerminalinfoMTemp termInfoTemp;
     private MstVisitMTemp visitMTemp;
+    private MitValterMTemp mitValterMTemp;
 
     private String aday;
     private Calendar calendar;
@@ -425,6 +427,7 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
 
         termInfoTemp = xtSayhiService.findTermTempById(termId);// 终端临时表记录
         visitMTemp = xtSayhiService.findVisitTempById(visitId);// 拜访临时表记录
+        mitValterMTemp = xtSayhiService.findMitValterMTempById(mitValterMTempKey);// 拜访临时表记录
 
         /*// 路线集合
         mstRouteList = xtSayhiService.initXtMstRoute(termId);
@@ -458,6 +461,7 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
 
     // UI线程-展示控件数据
     private void initData2() {
+        // 是否有效终端
         if (ConstValues.FLAG_1.equals(termInfoTemp.getStatus())) {
             zdzs_sayhi_tv_termstatus_con1.setText("是");
         } else {
@@ -604,7 +608,8 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         List<KvStc> sureOrFail = new ArrayList<>();
         sureOrFail.add(new KvStc("zhengque","正确","-1"));
         sureOrFail.add(new KvStc("cuowu","错误(去修正)","-1"));
-        mAlertViewExt = new AlertView("请选择结果", null, null, null, null, getActivity(), AlertView.Style.ActionSheet, this);
+        mAlertViewExt = new AlertView("请选择结果", null, null, null,
+                null, getActivity(), AlertView.Style.ActionSheet, this);
         ViewGroup extView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_list_form, null);
         ListView listview = (ListView) extView.findViewById(R.id.alert_list);
         AlertKeyValueAdapter keyValueAdapter = new AlertKeyValueAdapter(getActivity(), sureOrFail,

@@ -183,7 +183,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
         xtShopVisitService = new XtShopVisitService(getApplicationContext(), null);
         // 从拜访主表中获取最后一次拜访数据
         MstVisitM preMstVisitM = xtShopVisitService.findNewLastVisit(termStc.getTerminalkey(), false);
-        // 获取终端区域id,定格key
+        // 获取终端区域id,定格key,路线id
         mstTerminalInfoMStc = xtShopVisitService.findTermKeyById(termStc.getTerminalkey());
         // 获取上次拜访主键
         prevVisitId = preMstVisitM.getVisitkey();
@@ -235,7 +235,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
         xtShopVisitService.deleteData();
 
         // 再复制
-        visitId = xtShopVisitService.toCopyData(termStc);
+        visitId = xtShopVisitService.toCopyData(termStc,mstTerminalInfoMStc);
         channelId = termStc.getMinorchannel();
 
         // 保存初始数据(上面虽然复制了数据库,但有些表是没有复制的,在这里把一些数据)

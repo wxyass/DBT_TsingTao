@@ -13,104 +13,7 @@ import java.sql.SQLException;
 
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
-import et.tsingtaopad.db.table.CmmAreaM;
-import et.tsingtaopad.db.table.CmmBoardM;
-import et.tsingtaopad.db.table.CmmDatadicM;
-import et.tsingtaopad.db.table.MitAgencysupplyInfo;
-import et.tsingtaopad.db.table.MitCameraInfoM;
-import et.tsingtaopad.db.table.MitCheckexerecordInfo;
-import et.tsingtaopad.db.table.MitCmpsupplyInfo;
-import et.tsingtaopad.db.table.MitCollectionexerecordInfo;
-import et.tsingtaopad.db.table.MitGroupproductM;
-import et.tsingtaopad.db.table.MitPromotermInfo;
-import et.tsingtaopad.db.table.MitTerminalinfoM;
-import et.tsingtaopad.db.table.MitVisitM;
-import et.tsingtaopad.db.table.MitVisitmemoInfo;
-import et.tsingtaopad.db.table.MitVistproductInfo;
-import et.tsingtaopad.db.table.MstAgencyKFM;
-import et.tsingtaopad.db.table.MstAgencygridInfo;
-import et.tsingtaopad.db.table.MstAgencyinfoM;
-import et.tsingtaopad.db.table.MstAgencysupplyInfo;
-import et.tsingtaopad.db.table.MstAgencysupplyInfoTemp;
-import et.tsingtaopad.db.table.MstAgencytransferInfo;
-import et.tsingtaopad.db.table.MstAgencyvisitM;
-import et.tsingtaopad.db.table.MstBrandsclassM;
-import et.tsingtaopad.db.table.MstBrandseriesM;
-import et.tsingtaopad.db.table.MstBsData;
-import et.tsingtaopad.db.table.MstCameraInfoM;
-import et.tsingtaopad.db.table.MstCameraInfoMTemp;
-import et.tsingtaopad.db.table.MstCenterM;
-import et.tsingtaopad.db.table.MstCenterdetailsM;
-import et.tsingtaopad.db.table.MstCheckaccomplishInfo;
-import et.tsingtaopad.db.table.MstCheckcollectionInfo;
-import et.tsingtaopad.db.table.MstCheckexerecordInfo;
-import et.tsingtaopad.db.table.MstCheckexerecordInfoTemp;
-import et.tsingtaopad.db.table.MstCheckmiddleInfo;
-import et.tsingtaopad.db.table.MstCheckstatusInfo;
-import et.tsingtaopad.db.table.MstChecktypeM;
-import et.tsingtaopad.db.table.MstCmpagencyInfo;
-import et.tsingtaopad.db.table.MstCmpareaInfo;
-import et.tsingtaopad.db.table.MstCmpbrandsM;
-import et.tsingtaopad.db.table.MstCmpcompanyM;
-import et.tsingtaopad.db.table.MstCmproductinfoM;
-import et.tsingtaopad.db.table.MstCmpsupplyInfo;
-import et.tsingtaopad.db.table.MstCmpsupplyInfoTemp;
-import et.tsingtaopad.db.table.MstCollectionexerecordInfo;
-import et.tsingtaopad.db.table.MstCollectionexerecordInfoTemp;
-import et.tsingtaopad.db.table.MstCollectionitemM;
-import et.tsingtaopad.db.table.MstGridM;
-import et.tsingtaopad.db.table.MstGroupproductM;
-import et.tsingtaopad.db.table.MstGroupproductMTemp;
-import et.tsingtaopad.db.table.MstInvalidapplayInfo;
-import et.tsingtaopad.db.table.MstInvoicingInfo;
-import et.tsingtaopad.db.table.MstMarketareaM;
-import et.tsingtaopad.db.table.MstMonthtargetInfo;
-import et.tsingtaopad.db.table.MstPictypeM;
-import et.tsingtaopad.db.table.MstPlanTerminalM;
-import et.tsingtaopad.db.table.MstPlanWeekforuserM;
-import et.tsingtaopad.db.table.MstPlancheckInfo;
-import et.tsingtaopad.db.table.MstPlancollectionInfo;
-import et.tsingtaopad.db.table.MstPlanforuserM;
-import et.tsingtaopad.db.table.MstPlanrouteInfo;
-import et.tsingtaopad.db.table.MstPlantempcheckInfo;
-import et.tsingtaopad.db.table.MstPlantempcollectionInfo;
-import et.tsingtaopad.db.table.MstPlantemplateM;
-import et.tsingtaopad.db.table.MstPowerfulchannelInfo;
-import et.tsingtaopad.db.table.MstPowerfulterminalInfo;
-import et.tsingtaopad.db.table.MstPriceM;
-import et.tsingtaopad.db.table.MstPricedetailsInfo;
-import et.tsingtaopad.db.table.MstProductM;
-import et.tsingtaopad.db.table.MstProductareaInfo;
-import et.tsingtaopad.db.table.MstProductshowM;
-import et.tsingtaopad.db.table.MstPromomiddleInfo;
-import et.tsingtaopad.db.table.MstPromoproductInfo;
-import et.tsingtaopad.db.table.MstPromotermInfo;
-import et.tsingtaopad.db.table.MstPromotermInfoTemp;
-import et.tsingtaopad.db.table.MstPromotionsM;
-import et.tsingtaopad.db.table.MstPromotionstypeM;
-import et.tsingtaopad.db.table.MstQuestionsanswersInfo;
-import et.tsingtaopad.db.table.MstRouteM;
-import et.tsingtaopad.db.table.MstShipmentledgerInfo;
-import et.tsingtaopad.db.table.MstShowpicInfo;
-import et.tsingtaopad.db.table.MstSynckvM;
-import et.tsingtaopad.db.table.MstTermLedgerInfo;
-import et.tsingtaopad.db.table.MstTerminalinfoM;
-import et.tsingtaopad.db.table.MstTerminalinfoMCart;
-import et.tsingtaopad.db.table.MstTerminalinfoMTemp;
-import et.tsingtaopad.db.table.MstVisitM;
-import et.tsingtaopad.db.table.MstVisitMTemp;
-import et.tsingtaopad.db.table.MstVisitauthorizeInfo;
-import et.tsingtaopad.db.table.MstVisitmemoInfo;
-import et.tsingtaopad.db.table.MstVisitmemoInfoTemp;
-import et.tsingtaopad.db.table.MstVistproductInfo;
-import et.tsingtaopad.db.table.MstVistproductInfoTemp;
-import et.tsingtaopad.db.table.MstWorksummaryInfo;
-import et.tsingtaopad.db.table.PadCheckaccomplishInfo;
-import et.tsingtaopad.db.table.PadCheckproInfo;
-import et.tsingtaopad.db.table.PadCheckstatusInfo;
-import et.tsingtaopad.db.table.PadChecktypeM;
-import et.tsingtaopad.db.table.PadPlantempcheckM;
-import et.tsingtaopad.db.table.PadPlantempcollectionInfo;
+import et.tsingtaopad.db.table.*;
 
 /**
  * Created by yangwenmin on 2017/12/12.
@@ -168,6 +71,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<MstTerminalinfoMCart, String> mstTerminalinfoMCartDao = null;
     private Dao<MstVisitauthorizeInfo, String> mstVisitauthorizeInfoDao = null;
     private Dao<MstVisitM, String> mstVisitMDao = null;
+    private Dao<MitValterM, String> mitValterMDao = null;
+    private Dao<MitValterMTemp, String> mitValterMTempDao = null;
     private Dao<MitVisitM, String> mitVisitMDao = null;
     private Dao<MstVisitMTemp, String> mstVisitMTempDao = null;
     private Dao<MstVisitmemoInfo, String> mstVisitmemoInfoDao = null;
@@ -347,6 +252,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, MitVisitmemoInfo.class);// 协同客情备忘
             TableUtils.createTable(connectionSource, MitVistproductInfo.class);// 协同竞品我品表
             TableUtils.createTable(connectionSource, MitCheckexerecordInfo.class);// 协同拉链表
+
+            TableUtils.createTable(connectionSource, MitValterM.class);// 追溯主表
+            TableUtils.createTable(connectionSource, MitValterMTemp.class);// 追溯主表临时表
+            TableUtils.createTable(connectionSource, MitValcheckterM.class);// 追溯指标配置
+
 
             this.initView(db);
             this.initData(db);
@@ -1010,6 +920,18 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 buffer.append("    and m.visitdate = v.maxvisitdate");
                 db.execSQL(buffer.toString());
 
+                // 追溯主表
+                String mit_valter_m = "create table MIT_VALTER_M (id  varchar2(36)  not null, terminalkey varchar2(36)  null, vidter  char(1)   null, vidterflag  char(1)   null, vidterremaek  varchar2(300)  null, vidvisit char(1)   null, vidvisitflag  char(1)   null, vidvisitremark   varchar2(300)  null, vidifmine   char(1)   null, vidifmineflag char(1)   null, vidifminermark   varchar2(300)  null, vidifminedate varchar2(20)  null, vidifminedateflag char(1)   null, vidifminedatermark   varchar2(300)  null, vidisself   char(1)   null, vidisselfflag char(1)   null, vidiscmp char(1)   null, vidiscmpflag  char(1)   null, vidisproremark   varchar2(300)  null, vidselftreaty char(1)   null, vidselftreatyflag char(1)   null, vidcmptreaty  char(1)   null, vidcmptreatyflag char(1)   null, vidcmptreatyremark   varchar2(300)  null, vidterminalcode  varchar2(50)  null, vidtercodeflag   char(1)   null, vidtercodeval varchar2(50)  null, vidtercoderemark varchar2(300)  null, vidroutekey varchar2(50)  null, vidrtekeyflag char(1)   null, vidrtekeyval  varchar2(50)  null, vidroutremark varchar2(300)  null, vidtername  varchar2(100)  null, vidternameflag   char(1)   null, vidternameval varchar2(100)  null, vidternameremark varchar2(300)  null, vidcountry  varchar2(20)  null, vidcountryflag   char(1)   null, vidcountryval varchar2(20)  null, vidcountryremark varchar2(300)  null, vidaddress  varchar2(150)  null, vidaddressflag   char(1)   null, vidaddressval varchar2(20)  null, vidaddressremark varchar2(300)  null, vidcontact  varchar2(150)  null, vidcontactflag   char(1)   null, vidcontactval varchar2(20)  null, vidcontactremark varchar2(300)  null, vidmobile   varchar2(150)  null, vidmobileflag char(1)   null, vidmobileval  varchar2(50)  null, vidmobileremark  varchar2(300)  null, vidsequence varchar2(150)  null, vidsequenceflag  char(1)   null, vidsequenceval   varchar2(10)  null, vidvidsequenceremark varchar2(300)  null, vidcycle varchar2(150)  null, vidcycleflag  char(1)   null, vidcycleval varchar2(10)  null, vidcycleremark2  varchar2(300)  null, vidareatype varchar(36)   null, vidareatypeflag  char(1)   null, vidareatypeval   varchar(36)   null, vidareatyperemark varchar2(300)  null, vidhvolume  varchar(36)   null, vidhvolumeflag   char(1)   null, vidhvolumeval varchar(36)   null, vidhvolumeremark varchar2(300)  null, vidzvolume  varchar(36)   null, vidzvolumeflag   char(1)   null, vidzvolumeval varchar(36)   null, vidxvolumeremark varchar2(300)  null, vidpvolume  varchar(36)   null, vidpvolumeflag   char(1)   null, vidpvolumeval varchar(36)   null, vidpvolumeremark varchar2(300)  null, vidlvolume  varchar(36)   null, vidlvolumeflag   char(1)   null, vidlvolumeval varchar(36)   null, vidlvolumeremark varchar2(300)  null, vidminchannel varchar(36)   null,vidminchannelflag char(1)   null, vidminchannelval varchar(36)   null, vidminchannelremark  varchar2(300)  null,vidvisituser  varchar2(100)  null,vidvisituserflag char(1)   null, vidvisituserval  varchar2(100)  null,vidvisituserremark   varchar2(300)  null,creuser varchar2(128)  null,credate date null,updateuser  varchar2(128)  null,updatedate  date null)";
+                db.execSQL(mit_valter_m);
+
+                // 追溯主表临时表
+                String mit_valter_m_temp = "create table MIT_VALTER_M_TEMP (id  varchar2(36)  not null, terminalkey varchar2(36)  null, vidter  char(1)   null, vidterflag  char(1)   null, vidterremaek  varchar2(300)  null, vidvisit char(1)   null, vidvisitflag  char(1)   null, vidvisitremark   varchar2(300)  null, vidifmine   char(1)   null, vidifmineflag char(1)   null, vidifminermark   varchar2(300)  null, vidifminedate varchar2(20)  null, vidifminedateflag char(1)   null, vidifminedatermark   varchar2(300)  null, vidisself   char(1)   null, vidisselfflag char(1)   null, vidiscmp char(1)   null, vidiscmpflag  char(1)   null, vidisproremark   varchar2(300)  null, vidselftreaty char(1)   null, vidselftreatyflag char(1)   null, vidcmptreaty  char(1)   null, vidcmptreatyflag char(1)   null, vidcmptreatyremark   varchar2(300)  null, vidterminalcode  varchar2(50)  null, vidtercodeflag   char(1)   null, vidtercodeval varchar2(50)  null, vidtercoderemark varchar2(300)  null, vidroutekey varchar2(50)  null, vidrtekeyflag char(1)   null, vidrtekeyval  varchar2(50)  null, vidroutremark varchar2(300)  null, vidtername  varchar2(100)  null, vidternameflag   char(1)   null, vidternameval varchar2(100)  null, vidternameremark varchar2(300)  null, vidcountry  varchar2(20)  null, vidcountryflag   char(1)   null, vidcountryval varchar2(20)  null, vidcountryremark varchar2(300)  null, vidaddress  varchar2(150)  null, vidaddressflag   char(1)   null, vidaddressval varchar2(20)  null, vidaddressremark varchar2(300)  null, vidcontact  varchar2(150)  null, vidcontactflag   char(1)   null, vidcontactval varchar2(20)  null, vidcontactremark varchar2(300)  null, vidmobile   varchar2(150)  null, vidmobileflag char(1)   null, vidmobileval  varchar2(50)  null, vidmobileremark  varchar2(300)  null, vidsequence varchar2(150)  null, vidsequenceflag  char(1)   null, vidsequenceval   varchar2(10)  null, vidvidsequenceremark varchar2(300)  null, vidcycle varchar2(150)  null, vidcycleflag  char(1)   null, vidcycleval varchar2(10)  null, vidcycleremark2  varchar2(300)  null, vidareatype varchar(36)   null, vidareatypeflag  char(1)   null, vidareatypeval   varchar(36)   null, vidareatyperemark varchar2(300)  null, vidhvolume  varchar(36)   null, vidhvolumeflag   char(1)   null, vidhvolumeval varchar(36)   null, vidhvolumeremark varchar2(300)  null, vidzvolume  varchar(36)   null, vidzvolumeflag   char(1)   null, vidzvolumeval varchar(36)   null, vidxvolumeremark varchar2(300)  null, vidpvolume  varchar(36)   null, vidpvolumeflag   char(1)   null, vidpvolumeval varchar(36)   null, vidpvolumeremark varchar2(300)  null, vidlvolume  varchar(36)   null, vidlvolumeflag   char(1)   null, vidlvolumeval varchar(36)   null, vidlvolumeremark varchar2(300)  null, vidminchannel varchar(36)   null,vidminchannelflag char(1)   null, vidminchannelval varchar(36)   null, vidminchannelremark  varchar2(300)  null,vidvisituser  varchar2(100)  null,vidvisituserflag char(1)   null, vidvisituserval  varchar2(100)  null,vidvisituserremark   varchar2(300)  null,creuser varchar2(128)  null,credate date null,updateuser  varchar2(128)  null,updatedate  date null)";
+                db.execSQL(mit_valter_m_temp);
+
+                // 追溯模板配置
+                String mit_valcheckter_m = "create table MIT_VALCHECKTER_M (id varchar2(36) not null, areaid varchar2(36) null, vaildter char(1) null, vaildvisit char(1) null, ifmine char(1) null, salesarea  char(1) null, terworkstatus   char(1) null, terminalcode char(1) null, routecode  char(1) null, tername  char(1) null, terlevel char(1) null, province char(1) null, city   char(1) null, country  char(1) null, address  char(1) null, contact  char(1) null, mobile char(1) null, cylie  char(1) null, visitorder char(1) null, hvolume  char(1) null, zvolume  char(1) null, pvolume  char(1) null, lvolume  char(1) null, areatype char(1) null, sellchannel char(1) null, mainchannel char(1) null, minorchannel char(1) null, visituser  char(1) null, addsupply  char(1) null, losesupply char(1) null, iffleeing  char(1) null, proerror char(1) null, agencyerror char(1) null, dataerror  char(1) null, distrbution char(1) null, goodsvivi  char(1) null, provivi  char(1) null, icevivi  char(1) null, salespromotion  char(1) null, grouppro char(1) null, cooperation char(1) null, highps char(1) null, prooccupy  char(1) null, addcmp char(1) null, losecmp  char(1) null, cmperror char(1) null, cmpagencyerror  char(1) null, cmpdataerror char(1) null, ifcmp  char(1) null, visinote char(1) null, creuser  varchar2(128) null, credate  date null, updateuser varchar2(128) null, updatedate date null )";
+                db.execSQL(mit_valcheckter_m);
+
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1470,6 +1392,21 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             mstVisitauthorizeInfoDao = getDao(MstVisitauthorizeInfo.class);
         }
         return mstVisitauthorizeInfoDao;
+    }
+
+    public Dao<MitValterMTemp, String> getMitValterMTempDao() throws SQLException {
+
+        if (mitValterMTempDao == null) {
+            mitValterMTempDao = getDao(MitValterMTemp.class);
+        }
+        return mitValterMTempDao;
+    }
+    public Dao<MitValterM, String> getMitValterMDao() throws SQLException {
+
+        if (mitValterMDao == null) {
+            mitValterMDao = getDao(MitValterM.class);
+        }
+        return mitValterMDao;
     }
 
     public Dao<MstVisitM, String> getMstVisitMDao() throws SQLException {

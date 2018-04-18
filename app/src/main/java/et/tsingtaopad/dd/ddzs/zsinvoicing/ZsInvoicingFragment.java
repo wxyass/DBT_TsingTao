@@ -14,6 +14,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -302,12 +303,10 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
      * 参数7: 弹窗类型 (正常取消,确定按钮)   √
      * 参数8: 条目点击监听  √
      */
-    int type = -1;
     public void alertShow3() {
-        List<KvStc> sureOrFail = new ArrayList<>();
-        sureOrFail.add(new KvStc("zhengque","正确","-1"));
-        sureOrFail.add(new KvStc("cuowu","错误(去修正)","-1"));
-        mAlertViewExt = new AlertView(null, null, null, null, null, getActivity(), AlertView.Style.ActionSheet, null);
+
+        mAlertViewExt = new AlertView(null, null, null, null,
+                null, getActivity(), AlertView.Style.ActionSheet, null);
         ViewGroup extView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_result_form, null);
 
         RelativeLayout rl_back1 = (RelativeLayout) extView.findViewById(R.id.top_navigation_rl_back1);
@@ -316,82 +315,86 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
         android.support.v7.widget.AppCompatTextView bt_confirm1 = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_bt_confirm1);
 
 
-        final RadioButton man_rb = (RadioButton) extView.findViewById(R.id.man_rb);
-        final CheckBox cb0 = (CheckBox) extView.findViewById(R.id.cb0);
+        final RadioButton right_rb = (RadioButton) extView.findViewById(R.id.right_rb);
+        final RadioGroup right_rg = (RadioGroup) extView.findViewById(R.id.right_rg);
         final CheckBox cb1 = (CheckBox) extView.findViewById(R.id.cb1);
         final CheckBox cb2 = (CheckBox) extView.findViewById(R.id.cb2);
         final CheckBox cb3 = (CheckBox) extView.findViewById(R.id.cb3);
         final CheckBox cb4 = (CheckBox) extView.findViewById(R.id.cb4);
 
-        rl_back1.setOnClickListener(this);
-        rl_confirm1.setOnClickListener(this);
-
-        man_rb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        // 取消按钮
+        rl_back1.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                man_rb.setChecked(isChecked);
-                cb1.setChecked(false);
-                cb2.setChecked(false);
-                cb3.setChecked(false);
-                cb4.setChecked(false);
+            public void onClick(View v) {
+                mAlertViewExt.dismiss();
             }
         });
-        cb0.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+        // 确定按钮
+        rl_confirm1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(),"0: "+right_rb.isChecked()+"\n"
+                        +"1: "+cb1.isChecked()+"\n"
+                        +"2: "+cb2.isChecked()+"\n"
+                        +"3: "+cb3.isChecked()+"\n"
+                        +"4: "+cb4.isChecked()+"\n"
+                        ,Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // 正确
+        right_rb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                //cb0.setChecked(isChecked);
-                if(type == 0){
+                if(isChecked){
                     cb1.setChecked(false);
                     cb2.setChecked(false);
                     cb3.setChecked(false);
                     cb4.setChecked(false);
                 }
-
-                type = 0;
             }
         });
+
+        // 品项有误
         cb1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                cb1.setChecked(isChecked);
-                if(type == 1){
-                    cb0.setChecked(false);
+                if(isChecked){
+                    right_rg.clearCheck();
                 }
-                type = 1;
-            }
-        });
-        cb2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                cb2.setChecked(isChecked);
-                if(type == 2){
-                    cb0.setChecked(false);
-                }
-                type = 2;
-            }
-        });
-        cb3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                cb3.setChecked(isChecked);
-                if(type == 3){
-                    cb0.setChecked(false);
-                }
-                type = 3;
-            }
-        });
-        cb4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                cb4.setChecked(isChecked);
-                if(type == 4){
-                    cb0.setChecked(false);
-                }
-                type = 4;
             }
         });
 
+        // 经销商有误
+        cb2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    right_rg.clearCheck();
+                }
+            }
+        });
+
+        // 数据有误
+        cb3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    right_rg.clearCheck();
+                }
+            }
+        });
+
+        // 窜货
+        cb4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    right_rg.clearCheck();
+                }
+            }
+        });
 
         mAlertViewExt.addExtView(extView);
         mAlertViewExt.setOnDismissListener(new OnDismissListener() {

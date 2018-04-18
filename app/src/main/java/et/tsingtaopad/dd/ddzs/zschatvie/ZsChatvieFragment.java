@@ -228,7 +228,8 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
         List<KvStc> sureOrFail = new ArrayList<>();
         sureOrFail.add(new KvStc("zhengque","正确","-1"));
         sureOrFail.add(new KvStc("cuowu","错误(去修正)","-1"));
-        mAlertViewExt = new AlertView(null, null, null, null, null, getActivity(), AlertView.Style.ActionSheet, null);
+        mAlertViewExt = new AlertView(null, null, null, null,
+                null, getActivity(), AlertView.Style.ActionSheet, null);
         ViewGroup extView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_list_form, null);
         ListView listview = (ListView) extView.findViewById(R.id.alert_list);
         AlertKeyValueAdapter keyValueAdapter = new AlertKeyValueAdapter(getActivity(), sureOrFail,

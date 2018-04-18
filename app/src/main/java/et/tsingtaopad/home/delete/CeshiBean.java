@@ -209,4 +209,6 @@ public class CeshiBean {
     public void setUppertype(String uppertype) {
         this.uppertype = uppertype;
     }
+
+
 }

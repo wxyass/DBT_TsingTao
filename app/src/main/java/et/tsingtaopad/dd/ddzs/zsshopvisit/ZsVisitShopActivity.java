@@ -50,6 +50,7 @@ import et.tsingtaopad.dd.ddzs.zsinvoicing.ZsInvoicingFragment;
 import et.tsingtaopad.dd.ddzs.zssayhi.ZsSayhiFragment;
 import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
+import et.tsingtaopad.main.visit.shopvisit.termvisit.sayhi.domain.MstTerminalInfoMStc;
 
 /**
  * Created by yangwenmin on 2018/3/12.
@@ -96,6 +97,7 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
     private RadioButton xtvisit_rb_other;
 
     private String visitId;
+    private String mitValterMTempKey;
     private String channelId;
 
     private FragmentTabHost tabHost;
@@ -107,6 +109,8 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
             R.drawable.bt_shopvisit_invoicing,R.drawable.bt_shopvisit_invoicing,
             R.drawable.bt_shopvisit_checkindex, R.drawable.bt_shopvisit_chatvie,
             R.drawable.bt_shopvisit_camera };
+
+    MstTerminalInfoMStc mstTerminalInfoMStc;
 
 
     @Override
@@ -166,6 +170,7 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
         xtShopVisitService = new XtShopVisitService(getApplicationContext(), null);
         // 从拜访主表中获取最后一次拜访数据
         MstVisitM preMstVisitM = xtShopVisitService.findNewLastVisit(termStc.getTerminalkey(), false);
+        mstTerminalInfoMStc = xtShopVisitService.findTermKeyById(termStc.getTerminalkey());
         // 获取上次拜访主键
         prevVisitId = preMstVisitM.getVisitkey();
         prevVisitDate = preMstVisitM.getVisitdate();
@@ -216,7 +221,9 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
         xtShopVisitService.deleteData();
 
         // 再复制
-        visitId = xtShopVisitService.toCopyData(termStc);
+        List<String> keys = xtShopVisitService.toCopyZsData(termStc,mstTerminalInfoMStc);
+        visitId = keys.get(0);
+        mitValterMTempKey = keys.get(1);
         channelId = termStc.getMinorchannel();
 
         // 保存初始数据(上面虽然复制了数据库,但有些表是没有复制的,在这里把一些数据)
@@ -352,6 +359,7 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
         bundle.putSerializable("termStc", termStc);
         bundle.putSerializable("visitKey", visitId);//visitId
         bundle.putSerializable("seeFlag", seeFlag);// 默认0   0:拜访 1:查看
+        bundle.putSerializable("mitValterMTempKey", mitValterMTempKey);// 追溯主键
 
         bundle.putSerializable("visitDate", "");// visitDate上一次的拜访时间(用于促销活动 状态隔天关闭)
         bundle.putSerializable("lastTime", "");// lastTime上一次的拜访时间(用于促销活动 状态隔天关闭)

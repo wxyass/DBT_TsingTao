@@ -34,6 +34,7 @@ public class XtBaseVisitFragment extends BaseFragmentSupport{
     protected String seeFlag="0";// 0:拜访  1:查看
     protected String visitDate;//
     protected String lastTime;//
+    protected String mitValterMTempKey;//
     protected XtTermSelectMStc termStc;// 终端信息
     protected String channelId="39DD41A399298C68E05010ACE0016FCD";// 终端次渠道(废弃,因为由A->F后,可能在F中修改,但在另一个F中,还是用的A传递过来的,所以废弃)
 
@@ -54,6 +55,7 @@ public class XtBaseVisitFragment extends BaseFragmentSupport{
         lastTime = bundle.getString("lastTime");
         seeFlag = bundle.getString("seeFlag");
         channelId = bundle.getString("channelId");
+        mitValterMTempKey = bundle.getString("mitValterMTempKey");//bundle.putSerializable("mitValterMTempKey", mitValterMTempKey);// 追溯主键
         termStc = (XtTermSelectMStc) bundle.getSerializable("termStc");
     }
 

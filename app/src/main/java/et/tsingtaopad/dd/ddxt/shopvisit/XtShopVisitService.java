@@ -27,6 +27,7 @@ import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.db.DatabaseHelper;
+import et.tsingtaopad.db.dao.MitValterMTempDao;
 import et.tsingtaopad.db.dao.MstAgencysupplyInfoDao;
 import et.tsingtaopad.db.dao.MstCheckexerecordInfoDao;
 import et.tsingtaopad.db.dao.MstGroupproductMDao;
@@ -38,6 +39,7 @@ import et.tsingtaopad.db.dao.MstTerminalinfoMTempDao;
 import et.tsingtaopad.db.dao.MstVisitMDao;
 import et.tsingtaopad.db.dao.MstVisitMTempDao;
 import et.tsingtaopad.db.dao.MstVistproductInfoDao;
+import et.tsingtaopad.db.table.MitValterMTemp;
 import et.tsingtaopad.db.table.MstAgencysupplyInfo;
 import et.tsingtaopad.db.table.MstAgencysupplyInfoTemp;
 import et.tsingtaopad.db.table.MstCameraInfoM;
@@ -165,9 +167,9 @@ public class XtShopVisitService {
         return stcLst.get(0);
     }
 
-    // 复制各个临时表
-    public String toCopyData(XtTermSelectMStc termStc) {
-        // 从拜访主表中获取最后一次拜访数据
+    // 复制协同各个临时表  mstTerminalInfoMStc:大区id 二级区域id,定格id,路线id,终端id
+    public String toCopyData(XtTermSelectMStc termStc,MstTerminalInfoMStc mstTerminalInfoMStc) {
+        // 从拜访主表中获取最后一次拜访数据(从业代主表获取)
         MstVisitM mstVisitM = findNewLastVisit(termStc.getTerminalkey(), false);
         MstVisitMTemp visitMTemp = null;
 
@@ -211,6 +213,8 @@ public class XtShopVisitService {
 
             Dao<PadCheckaccomplishInfo, String> padCheckaccomplishInfoDao = helper.getPadCheckaccomplishInfoDao();
 
+            Dao<MitValterMTemp, String> mitValterMTempDao = helper.getMitValterMTempDao();
+
             connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
             connection.setAutoCommit(false);
 
@@ -220,17 +224,17 @@ public class XtShopVisitService {
                 visitMTemp = new MstVisitMTemp();
                 visitMTemp.setVisitkey(FunUtil.getUUID());
                 visitMTemp.setTerminalkey(termStc.getTerminalkey());
-                visitMTemp.setRoutekey(termStc.getRoutekey());
-                visitMTemp.setGridkey(PrefUtils.getString(context, "gridId", ""));
-                visitMTemp.setAreaid(PrefUtils.getString(context, "disId", ""));
+                visitMTemp.setRoutekey(mstTerminalInfoMStc.getRoutekey());
+                visitMTemp.setGridkey(mstTerminalInfoMStc.getGridkey());
+                visitMTemp.setAreaid(mstTerminalInfoMStc.getAreaid());
                 visitMTemp.setVisitdate(visitDate);
-                visitMTemp.setUserid(PrefUtils.getString(context, "userCode", ""));
                 visitMTemp.setStatus(ConstValues.FLAG_1);
                 visitMTemp.setSisconsistent(ConstValues.FLAG_0);
                 visitMTemp.setPadisconsistent(ConstValues.FLAG_0);
                 visitMTemp.setOrderbyno(ConstValues.FLAG_0);// 同一次是0 返回时会改为1
-                visitMTemp.setCreuser(PrefUtils.getString(context, "userCode", ""));
-                visitMTemp.setUpdateuser(PrefUtils.getString(context, "userCode", ""));
+                visitMTemp.setUserid(PrefUtils.getString(context, "userid", ""));
+                visitMTemp.setCreuser(PrefUtils.getString(context, "userid", ""));
+                visitMTemp.setUpdateuser(PrefUtils.getString(context, "userid", ""));
                 visitMTemp.setUploadFlag(ConstValues.FLAG_0);
                 visitTempDao.create(visitMTemp);
 
@@ -256,6 +260,7 @@ public class XtShopVisitService {
                 } else {
                     visitMTemp.setRemarks(mstVisitM.getRemarks());
                 }
+
                 // 复制拜访主表数据，到临时表MST_VISIT_M_TEMP(拜访主表)
                 visitMTemp.setVisitkey(FunUtil.getUUID());
                 visitMTemp.setTerminalkey(termStc.getTerminalkey());
@@ -265,7 +270,7 @@ public class XtShopVisitService {
                 visitMTemp.setStatus(mstVisitM.getStatus());// 上次是否有效拜访
                 visitMTemp.setLongitude(mstVisitM.getLongitude());
                 visitMTemp.setLatitude(mstVisitM.getLatitude());
-                visitMTemp.setVisituser(mstVisitM.getVisituser());
+                visitMTemp.setVisituser(mstVisitM.getVisituser());// 为null
                 visitMTemp.setVisitposition(mstVisitM.getVisitposition());
                 visitMTemp.setEnddate(null);
                 visitMTemp.setSisconsistent(ConstValues.FLAG_0);
@@ -505,6 +510,400 @@ public class XtShopVisitService {
 
         }
         return visitMTemp.getVisitkey();
+    }
+
+    // 复制追溯各个临时表  mstTerminalInfoMStc:大区id 二级区域id,定格id,路线id,终端id
+    public  List<String> toCopyZsData(XtTermSelectMStc termStc,MstTerminalInfoMStc mstTerminalInfoMStc) {
+        // 从拜访主表中获取最后一次拜访数据(从业代主表获取)
+        MstVisitM mstVisitM = findNewLastVisit(termStc.getTerminalkey(), false);
+        MstVisitMTemp visitMTemp = null;
+        MitValterMTemp mitValterMTemp = null;
+
+        // 记录当前时间 作为拜访开始日期
+        String visitDate = DateUtil.formatDate(new Date(), "yyyyMMddHHmmss");
+
+        // 获取上次拜访主键
+        prevVisitId = mstVisitM.getVisitkey();
+        // 上次拜访日期
+        prevVisitDate = mstVisitM.getVisitdate();
+
+        // 事务控制
+        AndroidDatabaseConnection connection = null;
+        // 开始复制
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MstVisitM, String> visitDao = helper.getMstVisitMDao();
+            Dao<MstVisitMTemp, String> visitTempDao = helper.getMstVisitMTempDao();
+
+            Dao<MstTerminalinfoM, String> terminalinfoMDao = helper.getMstTerminalinfoMDao();
+            Dao<MstTerminalinfoMTemp, String> terminalinfoMTempDao = helper.getMstTerminalinfoMTempDao();
+
+            Dao<MstVistproductInfo, String> proDao = helper.getMstVistproductInfoDao();
+            Dao<MstVistproductInfoTemp, String> proTempDao = helper.getMstVistproductInfoTempDao();
+
+            MstAgencysupplyInfoDao asupplyDao = helper.getDao(MstAgencysupplyInfo.class);
+            Dao<MstAgencysupplyInfo, String> agencyDao = helper.getDao(MstAgencysupplyInfo.class);
+            Dao<MstAgencysupplyInfoTemp, String> agencyTempDao = helper.getMstAgencysupplyInfoTempDao();
+
+            Dao<MstCmpsupplyInfo, String> cmpSupplyDao = helper.getMstCmpsupplyInfoDao();
+            Dao<MstCmpsupplyInfoTemp, String> cmpSupplyTempDao = helper.getMstCmpsupplyInfoTempDao();
+
+            Dao<MstCheckexerecordInfo, String> valueDao = helper.getMstCheckexerecordInfoDao();
+            Dao<MstCheckexerecordInfoTemp, String> valueTempDao = helper.getMstCheckexerecordInfoTempDao();
+
+            Dao<MstCollectionexerecordInfo, String> collectionDao = helper.getMstCollectionexerecordInfoDao();
+            Dao<MstCollectionexerecordInfoTemp, String> collectionTempDao = helper.getMstCollectionexerecordInfoTempDao();
+
+            Dao<MstPromotermInfo, String> promDao = helper.getMstPromotermInfoDao();
+            Dao<MstPromotermInfoTemp, String> promTempDao = helper.getMstPromotermInfoTempDao();
+
+            Dao<PadCheckaccomplishInfo, String> padCheckaccomplishInfoDao = helper.getPadCheckaccomplishInfoDao();
+
+            Dao<MitValterMTemp, String> mitValterMTempDao = helper.getMitValterMTempDao();
+
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+            // 复制拜访表
+            // 如果上次拜访为空，则是本终端的第一次拜访
+            if (mstVisitM == null) {
+                visitMTemp = new MstVisitMTemp();
+                visitMTemp.setVisitkey(FunUtil.getUUID());
+                visitMTemp.setTerminalkey(termStc.getTerminalkey());
+                visitMTemp.setRoutekey(mstTerminalInfoMStc.getRoutekey());
+                visitMTemp.setGridkey(mstTerminalInfoMStc.getGridkey());
+                visitMTemp.setAreaid(mstTerminalInfoMStc.getAreaid());
+                visitMTemp.setVisitdate(visitDate);
+                visitMTemp.setStatus(ConstValues.FLAG_1);
+                visitMTemp.setSisconsistent(ConstValues.FLAG_0);
+                visitMTemp.setPadisconsistent(ConstValues.FLAG_0);
+                visitMTemp.setOrderbyno(ConstValues.FLAG_0);// 同一次是0 返回时会改为1
+                visitMTemp.setUserid(PrefUtils.getString(context, "userid", ""));
+                visitMTemp.setCreuser(PrefUtils.getString(context, "userid", ""));
+                visitMTemp.setUpdateuser(PrefUtils.getString(context, "userid", ""));
+                visitMTemp.setUploadFlag(ConstValues.FLAG_0);
+                visitTempDao.create(visitMTemp);
+
+                // 复制visitproduct_temp表 //初始化拜访产品表
+                addProductInfoToTemp(visitMTemp.getTerminalkey(), visitMTemp.getVisitkey(), agencyDao, proTempDao);
+
+                // 复制到拉链表临时表  只有当天重复拜访才会复制上次数据,若是当天第一次拜访,只复制与产品无关的指标
+                if (visitDate.substring(0, 8).equals(prevVisitDate.substring(0, 8))) {
+                    // 复制到拉链表临时表 MstCheckexerecordInfoTemp 全部复制
+                    createMstCheckexerecordInfoTemp(prevVisitId, visitDate, visitMTemp, valueDao, valueTempDao);
+                } else {
+                    // 复制到拉链表临时表 当天第一次拜访,MstCheckexerecordInfoTemp 只复制与产品无关的指标
+                    createMstCheckexerecordInfoTemp1(prevVisitId, visitDate, visitMTemp, valueDao, valueTempDao);
+                }
+
+            } else {
+                // 非第一次拜访该终端
+                visitMTemp = new MstVisitMTemp();
+
+                // 如果上次拜访日期与本次拜访不是同一天(竞品拜访记录清空)
+                if (!visitDate.substring(0, 8).equals(prevVisitDate.substring(0, 8))) {
+                    visitMTemp.setRemarks("");
+                } else {
+                    visitMTemp.setRemarks(mstVisitM.getRemarks());
+                }
+
+                // 复制拜访主表数据，到临时表MST_VISIT_M_TEMP(拜访主表)
+                visitMTemp.setVisitkey(FunUtil.getUUID());
+                visitMTemp.setTerminalkey(termStc.getTerminalkey());
+                visitMTemp.setRoutekey(termStc.getRoutekey());
+                visitMTemp.setVisitdate(visitDate);
+                //visitMTemp.setStatus(ConstValues.FLAG_1);
+                visitMTemp.setStatus(mstVisitM.getStatus());// 上次是否有效拜访
+                visitMTemp.setLongitude(mstVisitM.getLongitude());
+                visitMTemp.setLatitude(mstVisitM.getLatitude());
+                visitMTemp.setVisituser(mstVisitM.getVisituser());// 为null
+                visitMTemp.setVisitposition(mstVisitM.getVisitposition());
+                visitMTemp.setEnddate(null);
+                visitMTemp.setSisconsistent(ConstValues.FLAG_0);
+                visitMTemp.setScondate(null);
+                visitMTemp.setPadisconsistent(ConstValues.FLAG_0);
+                visitMTemp.setOrderbyno(ConstValues.FLAG_0);// 同一次是0 返回时会改为1
+                visitMTemp.setPadcondate(null);
+                visitMTemp.setUploadFlag(ConstValues.FLAG_0);
+                visitMTemp.setCredate(null);
+                visitMTemp.setUpdatetime(null);
+                visitMTemp.setUserid(PrefUtils.getString(context,"userid",""));// 待定
+                visitMTemp.setGridkey(mstVisitM.getGridkey());// 待定
+                visitMTemp.setAreaid(mstVisitM.getAreaid());// 待定
+                visitTempDao.create(visitMTemp);
+
+                // 复制visitproduct_temp表
+                List<MstVistproductInfo> proLst = proDao.queryForEq("visitkey", prevVisitId);
+                if (!CheckUtil.IsEmpty(proLst)) {
+                    //修复进销存界面因经销商不给该定格供货所以产品不显示 ,但是查指标界面还显示此商品的BUG
+                    List<MstAgencysupplyInfo> agencysupply = asupplyDao.agencysupply(helper, visitMTemp.getTerminalkey());
+                    // 通过终端获取此终端供货关系
+                    // List<MstAgencysupplyInfo> agencysupplyList=getAgencySupplyInfoList(mstVisitM.getTerminalkey(), agencyDao);
+                    Set<String> agencysupplySet = new HashSet<String>();
+                    for (MstAgencysupplyInfo info : agencysupply) {
+                        String key = info.getUpperkey() + info.getProductkey();// 经销商key+产品key
+                        agencysupplySet.add(key);
+                    }
+
+                    MstVistproductInfoTemp vistproductInfoTemp = null;
+                    for (MstVistproductInfo product : proLst) {
+                        if (!ConstValues.FLAG_1.equals(product.getDeleteflag())) {
+                            String key = product.getAgencykey() + product.getProductkey();
+                            if (CheckUtil.isBlankOrNull(product.getProductkey()) || agencysupplySet.contains(key)) {// productkey为空:表示竞品记录
+                                vistproductInfoTemp = new MstVistproductInfoTemp();
+                                vistproductInfoTemp.setRecordkey(FunUtil.getUUID());
+                                vistproductInfoTemp.setVisitkey(visitMTemp.getVisitkey());
+
+                                // (隔天清零)如果上次拜访日期与本次拜访不是同一天
+                                if (!visitDate.substring(0, 8).equals(prevVisitDate.substring(0, 8))) {
+                                    //上次库存
+                                    vistproductInfoTemp.setPronum(product.getCurrnum());
+                                    //日销量
+                                    vistproductInfoTemp.setSalenum(null);
+                                    //订单量(原 上周期进货总量)
+                                    vistproductInfoTemp.setPurcnum(null);
+                                    //当前库存 (本次库存)
+                                    vistproductInfoTemp.setCurrnum(null);
+
+                                } else {// 当日重复拜访
+                                    //上次库存
+                                    vistproductInfoTemp.setPronum(product.getPronum());
+                                    //日销量
+                                    vistproductInfoTemp.setSalenum(product.getSalenum());
+                                    //订单量(原 上周期进货总量)
+                                    vistproductInfoTemp.setPurcnum(product.getPurcnum());
+                                    //当前库存 (本次库存)
+                                    vistproductInfoTemp.setCurrnum(product.getCurrnum());
+
+                                }
+
+                                vistproductInfoTemp.setProductkey(product.getProductkey());
+                                vistproductInfoTemp.setCmpproductkey(product.getCmpproductkey());
+                                vistproductInfoTemp.setCmpcomkey(product.getCmpcomkey());
+                                vistproductInfoTemp.setAgencykey(product.getAgencykey());
+                                vistproductInfoTemp.setAgencyname(product.getAgencyname());// 用户输入的竞品经销商
+                                vistproductInfoTemp.setPurcprice(product.getPurcprice());
+                                vistproductInfoTemp.setRetailprice(product.getRetailprice());
+                                //vistproductInfoTemp.setPronum(product.getPronum());
+                                vistproductInfoTemp.setRemarks(product.getRemarks());
+                                vistproductInfoTemp.setOrderbyno(product.getOrderbyno());
+                                vistproductInfoTemp.setCreuser(product.getCreuser());
+                                vistproductInfoTemp.setUpdateuser(product.getUpdateuser());
+                                vistproductInfoTemp.setFristdate(product.getFristdate());
+                                vistproductInfoTemp.setAddcard(product.getAddcard());// 累计卡
+                                //
+                                vistproductInfoTemp.setSisconsistent(ConstValues.FLAG_0);
+                                vistproductInfoTemp.setScondate(null);
+                                vistproductInfoTemp.setPadisconsistent(ConstValues.FLAG_0);
+                                vistproductInfoTemp.setPadcondate(null);
+                                vistproductInfoTemp.setDeleteflag(ConstValues.FLAG_0);
+                                vistproductInfoTemp.setCredate(null);
+                                vistproductInfoTemp.setUpdatetime(null);
+
+                                proTempDao.create(vistproductInfoTemp);
+                            }
+                        }
+                    }
+                }
+
+                // 重复拜访,复制拉链表,活动表
+                if (visitDate.substring(0, 8).equals(prevVisitDate.substring(0, 8))) {
+                    // 复制拉链表 MstCheckexerecordInfoTemp 全部复制   只有当天重复拜访才会复制上次数据,若是当天第一次拜访,只复制与产品无关的指标
+                    createMstCheckexerecordInfoTemp(prevVisitId, visitDate, visitMTemp, valueDao, valueTempDao);
+                    // 复制活动拜访终端表  true:当天重复拜访
+                    createMstPromotermInfoTemp(helper, prevVisitId, visitDate, visitMTemp, promDao, promTempDao, true);
+                    //
+
+                } else {// 当天第一次拜访
+                    // 复制拉链表 MstCheckexerecordInfoTemp 当天第一次拜访,MstCheckexerecordInfoTemp 只复制与产品无关的指标
+                    createMstCheckexerecordInfoTemp1(prevVisitId, visitDate, visitMTemp, valueDao, valueTempDao);
+                    // 复制活动拜访终端表 false:当天第一次拜访
+                    createMstPromotermInfoTemp(helper, prevVisitId, visitDate, visitMTemp, promDao, promTempDao, false);
+                    // 复制采集项表
+                    createMstCollectionexerecordInfoTemp(collectionDao,collectionTempDao,padCheckaccomplishInfoDao,prevVisitId,termStc,visitMTemp);
+
+                }
+            }
+
+            // 复制终端临时表
+            MstTerminalinfoMCart term = findTermById(termStc.getTerminalkey());
+            MstTerminalinfoMTemp terminalinfoMTemp = null;
+            if (term != null) {
+                terminalinfoMTemp = new MstTerminalinfoMTemp();
+                terminalinfoMTemp.setTerminalkey(term.getTerminalkey());
+                terminalinfoMTemp.setRoutekey(term.getRoutekey());
+                terminalinfoMTemp.setTerminalcode(term.getTerminalcode());
+                terminalinfoMTemp.setTerminalname(term.getTerminalname());
+                terminalinfoMTemp.setProvince(term.getProvince());
+                terminalinfoMTemp.setCity(term.getCity());
+                terminalinfoMTemp.setCounty(term.getCounty());
+                terminalinfoMTemp.setAddress(term.getAddress());
+                terminalinfoMTemp.setContact(term.getContact());
+                terminalinfoMTemp.setMobile(term.getMobile());
+                terminalinfoMTemp.setTlevel(term.getTlevel());
+                terminalinfoMTemp.setSequence(term.getSequence());
+                terminalinfoMTemp.setCycle(term.getCycle());
+                terminalinfoMTemp.setHvolume(term.getHvolume());
+                terminalinfoMTemp.setMvolume(term.getMvolume());
+                terminalinfoMTemp.setPvolume(term.getPvolume());
+                terminalinfoMTemp.setLvolume(term.getLvolume());
+                terminalinfoMTemp.setStatus(term.getStatus());
+                terminalinfoMTemp.setSellchannel(term.getSellchannel());
+                terminalinfoMTemp.setMainchannel(term.getMainchannel());
+                terminalinfoMTemp.setMinorchannel(term.getMinorchannel());
+                terminalinfoMTemp.setAreatype(term.getAreatype());
+                terminalinfoMTemp.setSisconsistent(term.getSisconsistent());
+                terminalinfoMTemp.setScondate(term.getScondate());
+                terminalinfoMTemp.setPadisconsistent(term.getPadisconsistent());
+                terminalinfoMTemp.setPadcondate(term.getPadcondate());
+                terminalinfoMTemp.setComid(term.getComid());
+                terminalinfoMTemp.setRemarks(term.getRemarks());
+                terminalinfoMTemp.setOrderbyno(term.getOrderbyno());
+                terminalinfoMTemp.setVersion(term.getVersion());
+                terminalinfoMTemp.setCredate(term.getCredate());
+                terminalinfoMTemp.setCreuser(term.getCreuser());
+                terminalinfoMTemp.setSelftreaty(term.getSelftreaty());
+                terminalinfoMTemp.setCmpselftreaty(term.getCmpselftreaty());
+                terminalinfoMTemp.setUpdatetime(term.getUpdatetime());
+                terminalinfoMTemp.setUpdateuser(term.getUpdateuser());
+                terminalinfoMTemp.setDeleteflag(term.getDeleteflag());
+                terminalinfoMTemp.setIfminedate(term.getIfminedate());
+                terminalinfoMTemp.setIfmine(term.getIfmine());
+                terminalinfoMTempDao.create(terminalinfoMTemp);
+            }
+
+            // 复制追溯主表
+
+            if (term != null) {
+                mitValterMTemp = new MitValterMTemp();
+                mitValterMTemp.setId(FunUtil.getUUID());// 追溯主键
+                mitValterMTemp.setTerminalkey(term.getTerminalkey());// 终端KEY
+                mitValterMTemp.setVidter(term.getStatus());// 是否有效终端原值
+                mitValterMTemp.setVidvisit(mstVisitM.getStatus());// 是否有效拜访原值
+                mitValterMTemp.setVidifmine(term.getIfmine());// 我品店招原值
+                mitValterMTemp.setVidifminedate(term.getIfminedate());//店招时间原值
+                mitValterMTemp.setVidisself(mstVisitM.getIsself());// 销售产品范围我品原值
+                mitValterMTemp.setVidiscmp(mstVisitM.getIscmp());// 销售产品范围竞品原值
+                mitValterMTemp.setVidselftreaty(term.getSelftreaty());// 终端合作状态我品原值
+                mitValterMTemp.setVidcmptreaty(term.getCmpselftreaty());// 终端合作状态竞品原值
+                mitValterMTemp.setVidterminalcode(term.getTerminalcode());// 终端编码原值
+                mitValterMTemp.setVidroutekey(term.getRoutekey());// 所属路线原值
+                mitValterMTemp.setVidtername(term.getTerminalname());//终端名称原值
+                mitValterMTemp.setVidcountry(term.getCounty());//所属县原值
+                mitValterMTemp.setVidaddress(term.getAddress());//地址原值
+                mitValterMTemp.setVidcontact(term.getContact());//联系人原值
+                mitValterMTemp.setVidmobile(term.getMobile());//电话原值
+                mitValterMTemp.setVidsequence(term.getSequence());//拜访顺序原值
+                mitValterMTemp.setVidcycle(term.getCycle());//拜访周期原值
+                mitValterMTemp.setVidareatype(term.getAreatype());//区域类型原值
+                mitValterMTemp.setVidhvolume(term.getHvolume());//高档容量原值
+                mitValterMTemp.setVidzvolume(term.getMvolume());//中档容量原值
+                mitValterMTemp.setVidpvolume(term.getPvolume());//普档容量原值
+                mitValterMTemp.setVidlvolume(term.getLvolume());//底档容量原值
+                mitValterMTemp.setVidminchannel(term.getMinorchannel());//次渠道原值
+                mitValterMTemp.setVidvisituser(mstVisitM.getVisituser());//拜访对象原值
+                //mitValterMTemp.setPadisconsistent(term.getPadisconsistent());//
+
+                // ----------
+                /*mitValterMTemp.setCredate(term.getCredate());
+                mitValterMTemp.setCreuser(term.getCreuser());
+                mitValterMTemp.setUpdateuser(term.getUpdateuser());
+                mitValterMTemp.setUpdatedate(term.getUpdatetime());*/
+                //---------------
+
+                mitValterMTempDao.create(mitValterMTemp);
+            }
+
+
+
+            //MstTerminalinfoMTemp terminalinfoMTemp = findTermTempById(termStc.getTerminalkey());
+
+            // 复制 产品组合是否达标 (有则复制,没有则新建)
+            createMstGroupproductMTemp(terminalinfoMTemp,visitMTemp.getVisitkey());
+
+            // 复制我品供货关系临时表
+            List<MstAgencysupplyInfo> agencysupply = asupplyDao.agencysupply(helper, visitMTemp.getTerminalkey());
+            int size = agencysupply.size();
+            if (size > 0) {
+                MstAgencysupplyInfoTemp agencysupplyInfoTemp = null;
+                for (MstAgencysupplyInfo supply : agencysupply) {
+                    agencysupplyInfoTemp = new MstAgencysupplyInfoTemp();
+                    agencysupplyInfoTemp.setAsupplykey(supply.getAsupplykey());
+                    agencysupplyInfoTemp.setStatus("0");// 0:供货关系有效  1:供货关系失效  2:新加供货关系  3:值修改的供货关系
+                    agencysupplyInfoTemp.setInprice(supply.getInprice());
+                    agencysupplyInfoTemp.setReprice(supply.getReprice());
+                    agencysupplyInfoTemp.setProductkey(supply.getProductkey());
+                    agencysupplyInfoTemp.setLowerkey(supply.getLowerkey());
+                    agencysupplyInfoTemp.setLowertype(supply.getLowertype());
+                    agencysupplyInfoTemp.setUpperkey(supply.getUpperkey());
+                    agencysupplyInfoTemp.setUppertype(supply.getUppertype());
+                    agencysupplyInfoTemp.setSiebelkey(supply.getSiebelkey());
+                    agencysupplyInfoTemp.setSisconsistent(supply.getSisconsistent());
+                    agencysupplyInfoTemp.setScondate(supply.getScondate());
+                    agencysupplyInfoTemp.setPadisconsistent("1");// 复制过来为1 ,复制回去时变了的为0
+                    agencysupplyInfoTemp.setPadcondate(supply.getPadcondate());
+                    agencysupplyInfoTemp.setComid(supply.getComid());
+                    agencysupplyInfoTemp.setRemarks(supply.getRemarks());
+                    agencysupplyInfoTemp.setOrderbyno(supply.getOrderbyno());
+                    agencysupplyInfoTemp.setVersion(supply.getVersion());
+                    agencysupplyInfoTemp.setCredate(supply.getCredate());
+                    agencysupplyInfoTemp.setCreuser(supply.getCreuser());
+                    agencysupplyInfoTemp.setUpdatetime(supply.getUpdatetime());
+                    agencysupplyInfoTemp.setUpdateuser(supply.getUpdateuser());
+                    agencysupplyInfoTemp.setDeleteflag(supply.getDeleteflag());
+                    agencyTempDao.create(agencysupplyInfoTemp);
+                }
+            }
+
+            // 复制竞品供货关系临时表
+            List<MstCmpsupplyInfo> cmpSupplyLst = cmpSupplyDao.queryForEq("terminalkey", termStc.getTerminalkey());
+            int cmpSupplySize = cmpSupplyLst.size();
+            if (cmpSupplySize > 0) {
+                MstCmpsupplyInfoTemp mstCmpsupplyInfoTemp = null;
+                for (MstCmpsupplyInfo cmpsupply : cmpSupplyLst) {
+                    mstCmpsupplyInfoTemp = new MstCmpsupplyInfoTemp();
+                    mstCmpsupplyInfoTemp.setCmpsupplykey(cmpsupply.getCmpsupplykey());
+                    mstCmpsupplyInfoTemp.setCmpproductkey(cmpsupply.getCmpproductkey());
+                    mstCmpsupplyInfoTemp.setCmpcomkey(cmpsupply.getCmpcomkey());
+                    mstCmpsupplyInfoTemp.setTerminalkey(cmpsupply.getTerminalkey());
+                    mstCmpsupplyInfoTemp.setStatus("0");// 0:供货关系有效  1:供货关系失效  2:新加供货关系  3:值修改的供货关系
+                    mstCmpsupplyInfoTemp.setInprice(cmpsupply.getInprice());
+                    mstCmpsupplyInfoTemp.setReprice(cmpsupply.getReprice());
+                    mstCmpsupplyInfoTemp.setCmpinvaliddate(cmpsupply.getCmpinvaliddate());
+                    mstCmpsupplyInfoTemp.setSisconsistent(cmpsupply.getSisconsistent());
+                    mstCmpsupplyInfoTemp.setScondate(cmpsupply.getScondate());
+                    mstCmpsupplyInfoTemp.setPadisconsistent("1");// 复制过来为1 ,复制回去时变了的为0
+                    mstCmpsupplyInfoTemp.setPadcondate(cmpsupply.getPadcondate());
+                    mstCmpsupplyInfoTemp.setComid(cmpsupply.getComid());
+                    mstCmpsupplyInfoTemp.setRemarks(cmpsupply.getRemarks());
+                    mstCmpsupplyInfoTemp.setOrderbyno(cmpsupply.getOrderbyno());
+                    mstCmpsupplyInfoTemp.setVersion(cmpsupply.getVersion());
+                    mstCmpsupplyInfoTemp.setCredate(cmpsupply.getCredate());
+                    mstCmpsupplyInfoTemp.setCreuser(cmpsupply.getCreuser());
+                    mstCmpsupplyInfoTemp.setUpdatetime(cmpsupply.getUpdatetime());
+                    mstCmpsupplyInfoTemp.setUpdateuser(cmpsupply.getUpdateuser());
+                    mstCmpsupplyInfoTemp.setDeleteflag(cmpsupply.getDeleteflag());
+                    cmpSupplyTempDao.create(mstCmpsupplyInfoTemp);
+                }
+            }
+
+
+            connection.commit(null);
+        } catch (Exception e) {
+            Log.e(TAG, "复制数据出错", e);
+            try {
+                connection.rollback(null);
+                //ViewUtil.sendMsg(context, R.string.agencyvisit_msg_failsave);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+
+        }
+
+        List<String> keys = new ArrayList<>();
+        keys.add(visitMTemp.getVisitkey());
+        keys.add(mitValterMTemp.getId());
+        return keys;
     }
 
     //
@@ -995,6 +1394,27 @@ public class XtShopVisitService {
         return visitInfo;
     }
 
+    /**
+     * 获取追溯主表临时表记录
+     *
+     * @param MitValterMTempId    拜访请表信息ID
+     * @return
+     */
+    public MitValterMTemp findMitValterMTempById(String MitValterMTempId) {
+
+        MitValterMTemp mitValterMTemp = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            MitValterMTempDao dao = helper.getDao(MitValterMTemp.class);
+            mitValterMTemp = dao.queryForId(MitValterMTempId);
+
+        } catch (SQLException e) {
+            Log.e(TAG, "获取拜访主表DAO对象失败", e);
+        }
+        return mitValterMTemp;
+    }
+
+
     // 删除临时表数据
     public void deleteData() {
         DatabaseHelper helper = DatabaseHelper.getHelper(context);
@@ -1010,6 +1430,8 @@ public class XtShopVisitService {
             deleteTable(helper, "MST_CAMERAINFO_M_TEMP");
             deleteTable(helper, "MST_VISITMEMO_INFO_TEMP");
             deleteTable(helper, "MST_GROUPPRODUCT_M_TEMP");
+
+            deleteTable(helper, "MIT_VALTER_M_TEMP");// 追溯主表临时表
             //deleteTable(helper, "MST_CHECKGROUP_INFO");
             //deleteTable(helper, "MST_CHECKGROUP_INFO_TEMP");
         } catch (Exception e) {

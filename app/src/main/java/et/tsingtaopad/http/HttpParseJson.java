@@ -157,7 +157,7 @@ public class HttpParseJson {
         DbtLog.logUtils(TAG, resContent);
         String json = "";
         //判断字符串是否为空或者null
-        if (!CheckUtil.isBlankOrNull(resContent)) {
+        /*if (!CheckUtil.isBlankOrNull(resContent)) {
             try {
                 // 解压
                 byte[] buffer = new byte[0];
@@ -174,7 +174,8 @@ public class HttpParseJson {
 
         } else {
             json = "";
-        }
+        }*/
+        json = resContent;
         return json;
     }
 
@@ -208,7 +209,10 @@ public class HttpParseJson {
 
         try {
             jsonZip = JsonUtil.toJson(reqObj);
-            jsonZip = new String(ZipHelper.zipString(jsonZip), "ISO-8859-1");
+            // 加压缩
+            //jsonZip = new String(ZipHelper.zipString(jsonZip), "ISO-8859-1");
+
+
             //配合朱志凯测试给他提取json语句进行压力测试
             //FileTool.writeTxt(JsonUtil.toJson(reqObj),FileTool.getSDPath()+"/ceshi.txt");
         } catch (Exception e1) {

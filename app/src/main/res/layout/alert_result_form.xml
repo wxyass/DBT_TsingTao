@@ -71,7 +71,7 @@
     </LinearLayout>
 
     <RadioGroup
-        android:id="@+id/sex_rg"
+        android:id="@+id/right_rg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
@@ -79,21 +79,13 @@
         android:orientation="vertical" >
 
         <RadioButton
-            android:id="@+id/man_rb"
+            android:id="@+id/right_rb"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:text="正确" />
     </RadioGroup>
-
-    <CheckBox
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:text="正确"
-        android:id="@+id/cb0" />
 
     <View
         android:layout_width="match_parent"
