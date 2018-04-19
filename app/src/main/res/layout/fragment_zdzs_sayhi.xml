@@ -111,11 +111,11 @@
 
                 <!--未稽查-->
                 <TextView
+                    android:id="@+id/zdzs_sayhi_rl_wopindianzhao_statue"
                     style="@style/zdzs_sayhi_statue"
                     android:text="未稽查"/>
 
                 <ImageView
-                    android:id="@+id/zdzs_sayhi_rl_wopindianzhao_statue"
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>

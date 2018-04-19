@@ -80,11 +80,12 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
     private List<KvStc> mainchannelLst = new ArrayList<>();
     private List<KvStc> minorchannelLst = new ArrayList<>();
 
-    public static final int FINISH_SUC = 11;// 初始化成功发送信息到主UI (废弃)
+    //public static final int FINISH_SUC = 11;// 初始化成功发送信息到主UI (废弃)
     public static final int NOT_TERMSTATUS = 12;// 失效终端
     public static final int DATA_ARROR = 13;// 打招呼页面信息不全
     public static final int SHOW_INIT_PROGRESS = 14;// 数据初始化-开启滚动条
     public static final int CLOSE_INIT_PROGRESS = 15;// 初始化成功-关闭滚动条
+    public static final int INIT_DATA = 16;// 修改完数据 刷新界面
     MyHandler handler;
 
 
@@ -99,7 +100,7 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
     private RelativeLayout zdzs_sayhi_rl_wopindianzhao;
     private TextView zdzs_sayhi_rl_wopindianzhao_con1;
     private TextView zdzs_sayhi_rl_wopindianzhao_con2;
-    private ImageView zdzs_sayhi_rl_wopindianzhao_statue;
+    private TextView zdzs_sayhi_rl_wopindianzhao_statue;
     private RelativeLayout zdzs_sayhi_rl_prostatus;
     private TextView zdzs_sayhi_rl_prostatus_con1;
     private TextView zdzs_sayhi_rl_prostatus_con2;
@@ -200,9 +201,9 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
 
             // 处理UI 变化
             switch (msg.what) {
-                case FINISH_SUC:
+                /*case FINISH_SUC:
                     fragment.initData2();
-                    break;
+                    break;*/
                 case NOT_TERMSTATUS:
                     fragment.closeXtTermstatusSw();
                     break;
@@ -216,7 +217,11 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
                     break;
                 case CLOSE_INIT_PROGRESS:
                     fragment.closeXtSayHiDialog();
-                    fragment.initData2();
+                    fragment.initData3();
+                    break;
+
+                case INIT_DATA:
+                    fragment.initData3();
                     break;
             }
         }
@@ -260,7 +265,7 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         zdzs_sayhi_rl_wopindianzhao = (RelativeLayout)view. findViewById(R.id.zdzs_sayhi_rl_wopindianzhao);
         zdzs_sayhi_rl_wopindianzhao_con1 = (TextView) view.findViewById(R.id.zdzs_sayhi_rl_wopindianzhao_con1);
         zdzs_sayhi_rl_wopindianzhao_con2 = (TextView) view.findViewById(R.id.zdzs_sayhi_rl_wopindianzhao_con2);
-        zdzs_sayhi_rl_wopindianzhao_statue = (ImageView) view.findViewById(R.id.zdzs_sayhi_rl_wopindianzhao_statue);
+        zdzs_sayhi_rl_wopindianzhao_statue = (TextView) view.findViewById(R.id.zdzs_sayhi_rl_wopindianzhao_statue);
 
         zdzs_sayhi_rl_prostatus = (RelativeLayout)view. findViewById(R.id.zdzs_sayhi_rl_prostatus);
         zdzs_sayhi_rl_prostatus_con1 = (TextView)view. findViewById(R.id.zdzs_sayhi_rl_prostatus_con1);
@@ -361,7 +366,30 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         zdzs_sayhi_rl_visitperson_statue = (TextView) view.findViewById(R.id.zdzs_sayhi_rl_visitperson_statue);
 
         zdzs_sayhi_rl_termstatus.setOnClickListener(this);
+        zdzs_sayhi_rl_visitstatus.setOnClickListener(this);
+        zdzs_sayhi_rl_wopindianzhao.setOnClickListener(this);
+        zdzs_sayhi_rl_prostatus.setOnClickListener(this);
+        zdzs_sayhi_rl_protocol.setOnClickListener(this);
 
+
+        zdzs_sayhi_rl_termname.setOnClickListener(this);
+        zdzs_sayhi_rl_termcode.setOnClickListener(this);
+        zdzs_sayhi_rl_address.setOnClickListener(this);
+        zdzs_sayhi_rl_person.setOnClickListener(this);
+        zdzs_sayhi_rl_tel.setOnClickListener(this);
+        zdzs_sayhi_rl_sequence.setOnClickListener(this);
+
+        zdzs_sayhi_rl_cycle.setOnClickListener(this);
+        zdzs_sayhi_rl_hvolume.setOnClickListener(this);
+        zdzs_sayhi_rl_mvolume.setOnClickListener(this);
+        zdzs_sayhi_rl_pvolume.setOnClickListener(this);
+        zdzs_sayhi_rl_lvolume.setOnClickListener(this);
+
+        zdzs_sayhi_rl_belongline.setOnClickListener(this);
+        zdzs_sayhi_rl_country.setOnClickListener(this);
+        zdzs_sayhi_rl_areatype.setOnClickListener(this);
+        zdzs_sayhi_rl_minorchannel.setOnClickListener(this);
+        zdzs_sayhi_rl_visitperson.setOnClickListener(this);
     }
 
     @Override
@@ -427,7 +455,8 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
 
         termInfoTemp = xtSayhiService.findTermTempById(termId);// 终端临时表记录
         visitMTemp = xtSayhiService.findVisitTempById(visitId);// 拜访临时表记录
-        mitValterMTemp = xtSayhiService.findMitValterMTempById(mitValterMTempKey);// 拜访临时表记录
+        mitValterMTemp = xtSayhiService.findMitValterMTempById(mitValterMTempKey);// 追溯临时表记录
+
 
         /*// 路线集合
         mstRouteList = xtSayhiService.initXtMstRoute(termId);
@@ -459,7 +488,7 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
 
     }
 
-    // UI线程-展示控件数据
+    // UI线程-展示控件数据(原使用拜访临时表)
     private void initData2() {
         // 是否有效终端
         if (ConstValues.FLAG_1.equals(termInfoTemp.getStatus())) {
@@ -576,6 +605,165 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         PrefUtils.putBoolean(getActivity(),GlobalValues.SAYHIREADY,true);
     }
 
+    // UI线程-展示控件数据(现使用追溯临时表)
+    private void initData3() {
+
+
+
+        // 是否有效终端
+        //if (ConstValues.FLAG_1.equals(mitValterMTemp.getVidter())) {
+        if (ConstValues.FLAG_1.equals(mitValterMTemp.getVidter())) {
+            zdzs_sayhi_tv_termstatus_con1.setText("是");
+        } else {
+            zdzs_sayhi_tv_termstatus_con1.setText("否");
+        }
+
+        // 设置界面数据
+        if (visitMTemp != null) {
+            // 是否有效拜访 //进行判断(如果Status拜访状态为1 或者 拜访状态不为空设置为选中状态)
+            if (ConstValues.FLAG_1.equals(mitValterMTemp.getVidvisit()) || CheckUtil.isBlankOrNull(mitValterMTemp.getVidvisit())) {
+                zdzs_sayhi_tv_visitstatus_con1.setText("是");
+            } else {
+                zdzs_sayhi_tv_visitstatus_con1.setText("否");
+            }
+
+            // 是否我品店招
+            if (ConstValues.FLAG_1.equals(mitValterMTemp.getVidifmine())) {
+                zdzs_sayhi_rl_wopindianzhao_con1.setText("是");
+                zdzs_sayhi_rl_wopindianzhao_con2.setVisibility(View.VISIBLE);
+                zdzs_sayhi_rl_wopindianzhao_con2.setText(mitValterMTemp.getVidifminedate());
+            } else {//当店招未选中的时候,隐藏对应的控件 文字
+                zdzs_sayhi_rl_wopindianzhao_con1.setText("否");
+                zdzs_sayhi_rl_wopindianzhao_con2.setText(ifminedate);
+                zdzs_sayhi_rl_wopindianzhao_con2.setVisibility(View.GONE);
+            }
+
+            //销售产品范围 我品: 是1 否0
+            if(ConstValues.FLAG_1.equals(mitValterMTemp.getVidisself())){
+                zdzs_sayhi_rl_prostatus_con1.setText("我品");
+            }
+            //销售产品范围 竞品: 是1 否0
+            if(ConstValues.FLAG_1.equals(mitValterMTemp.getVidiscmp())){
+                zdzs_sayhi_rl_prostatus_con2.setText("竞品");
+            }
+            // 终端合作状态 我品: 是1 否0
+            if(ConstValues.FLAG_1.equals(mitValterMTemp.getVidselftreaty())){
+                zdzs_sayhi_rl_protocol_con1.setText("我品合作");
+            }
+            // 终端合作状态 竞品: 是1 否0
+            if(ConstValues.FLAG_1.equals(mitValterMTemp.getVidcmptreaty())){
+                zdzs_sayhi_rl_protocol_con2.setText("竞品合作");
+            }
+
+            // 拜访对象
+            zdzs_sayhi_rl_visitperson_con1.setText(mitValterMTemp.getVidvisituser());
+        }
+
+        if (termInfoTemp != null) {
+
+            // 保留修改关的拜访顺序，用于判定是不更改同线路下的各终端的拜访顺序
+            //prevSequence = termInfoTemp.getSequence();
+            zdzs_sayhi_rl_termcode_con1.setText(mitValterMTemp.getVidterminalcode());
+            zdzs_sayhi_rl_termname_con1.setText(mitValterMTemp.getVidtername());
+            zdzs_sayhi_rl_address_con1.setText(mitValterMTemp.getVidaddress());
+            zdzs_sayhi_rl_person_con1.setText(mitValterMTemp.getVidcontact());
+            zdzs_sayhi_rl_tel_con1.setText(mitValterMTemp.getVidmobile());
+            zdzs_sayhi_rl_sequence_con1.setText(mitValterMTemp.getVidsequence());
+            zdzs_sayhi_rl_cycle_con1.setText(mitValterMTemp.getVidcycle());
+            // 高中普低,总
+            Long tvolume = 0l;
+            if (ConstValues.FLAG_0.equals(FunUtil.isNullToZero(mitValterMTemp.getVidhvolume()))) {
+                zdzs_sayhi_rl_hvolume_con1.setText(FunUtil.isNullToZero(mitValterMTemp.getVidhvolume()));
+            } else {
+                zdzs_sayhi_rl_hvolume_con1.setText(FunUtil.isNullToZero(mitValterMTemp.getVidhvolume()));
+                tvolume = tvolume + FunUtil.isNullSetZero((mitValterMTemp.getVidhvolume()));
+            }
+            if (ConstValues.FLAG_0.equals(FunUtil.isNullToZero(mitValterMTemp.getVidzvolume()))) {
+                zdzs_sayhi_rl_mvolume_con1.setText(FunUtil.isNullToZero(mitValterMTemp.getVidzvolume()));
+            } else {
+                zdzs_sayhi_rl_mvolume_con1.setText(FunUtil.isNullToZero(mitValterMTemp.getVidzvolume()));
+                tvolume = tvolume + FunUtil.isNullSetZero((mitValterMTemp.getVidzvolume()));
+            }
+            if (ConstValues.FLAG_0.equals(FunUtil.isNullToZero(mitValterMTemp.getVidpvolume()))) {
+                zdzs_sayhi_rl_pvolume_con1.setText(FunUtil.isNullToZero(mitValterMTemp.getVidpvolume()));
+            } else {
+                zdzs_sayhi_rl_pvolume_con1.setText(FunUtil.isNullToZero(mitValterMTemp.getVidpvolume()));
+                tvolume = tvolume + FunUtil.isNullSetZero((mitValterMTemp.getVidpvolume()));
+            }
+            if (ConstValues.FLAG_0.equals(FunUtil.isNullToZero(mitValterMTemp.getVidlvolume()))) {
+                zdzs_sayhi_rl_lvolume_con1.setText(FunUtil.isNullToZero(mitValterMTemp.getVidlvolume()));
+            } else {
+                zdzs_sayhi_rl_lvolume_con1.setText(FunUtil.isNullToZero(mitValterMTemp.getVidlvolume()));
+                tvolume = tvolume + FunUtil.isNullSetZero(mitValterMTemp.getVidlvolume());
+            }
+            zdzs_sayhi_rl_totalvolume_con1.setText(String.valueOf(tvolume));
+
+            // 所属线路
+            zdzs_sayhi_rl_belongline_con1.setText(xtSayhiService.getRouteName(mitValterMTemp.getVidroutekey()));
+
+            // 区域类型
+            zdzs_sayhi_rl_areatype_con1.setText(xtSayhiService.getDatadicName(mitValterMTemp.getVidareatype()));
+
+            // 老板老板娘
+            //xttermpersion.setText(visitMTemp.getVisitposition());
+            zdzs_sayhi_rl_visitperson_con1.setText(mitValterMTemp.getVidvisituser());
+
+            // 终端等级
+            zdzs_sayhi_rl_level_con1.setText(xtSayhiService.getDatadicName(termInfoTemp.getTlevel()));
+
+            // 销售渠道
+            zdzs_sayhi_rl_sellchannel_con1.setText(xtSayhiService.getDatadicName(termInfoTemp.getSellchannel()));
+            zdzs_sayhi_rl_mainchannel_con1.setText(xtSayhiService.getDatadicName(termInfoTemp.getMainchannel()));
+            zdzs_sayhi_rl_minorchannel_con1.setText(xtSayhiService.getDatadicName(mitValterMTemp.getVidminchannel()));
+
+            // 获取省市县数据
+            zdzs_sayhi_rl_prov_con1.setText(xtSayhiService.getAreaName(termInfoTemp.getProvince()));
+            zdzs_sayhi_rl_city_con1.setText(xtSayhiService.getAreaName(termInfoTemp.getCity()));
+            zdzs_sayhi_rl_country_con1.setText(xtSayhiService.getAreaName(mitValterMTemp.getVidcountry()));
+
+
+        }
+
+        ;
+
+        zdzs_sayhi_tv_termstatus_statue.setText(getYdInfo(mitValterMTemp.getVidterflag()));
+        zdzs_sayhi_tv_visitstatus_statue.setText(getYdInfo(mitValterMTemp.getVidvisitflag()));
+
+        zdzs_sayhi_rl_wopindianzhao_statue.setText(getYdInfo(mitValterMTemp.getVidifmine()));
+        zdzs_sayhi_rl_prostatus_statue.setText(getYdInfo(mitValterMTemp.getVidterflag()));
+        zdzs_sayhi_rl_protocol_statue.setText(getYdInfo(mitValterMTemp.getVidterflag()));
+
+        zdzs_sayhi_rl_termname_statue.setText(getYdInfo(mitValterMTemp.getVidternameflag()));
+        zdzs_sayhi_rl_termcode_statue.setText(getYdInfo(mitValterMTemp.getVidterminalcode()));
+        zdzs_sayhi_rl_belongline_statue.setText(getYdInfo(mitValterMTemp.getVidrtekeyflag()));
+        zdzs_sayhi_rl_level_statue.setText(getYdInfo(mitValterMTemp.getVidterflag()));//
+
+        zdzs_sayhi_rl_prov_statue.setText(getYdInfo(mitValterMTemp.getVidterflag()));//
+        zdzs_sayhi_rl_city_statue.setText(getYdInfo(mitValterMTemp.getVidterflag()));//
+        zdzs_sayhi_rl_country_statue.setText(getYdInfo(mitValterMTemp.getVidcountryflag()));
+
+        zdzs_sayhi_rl_address_statue.setText(getYdInfo(mitValterMTemp.getVidaddressflag()));
+        zdzs_sayhi_rl_person_statue.setText(getYdInfo(mitValterMTemp.getVidcontactflag()));
+        zdzs_sayhi_rl_tel_statue.setText(getYdInfo(mitValterMTemp.getVidmobileflag()));
+        zdzs_sayhi_rl_cycle_statue.setText(getYdInfo(mitValterMTemp.getVidcycleflag()));
+        zdzs_sayhi_rl_sequence_statue.setText(getYdInfo(mitValterMTemp.getVidsequenceflag()));
+
+        zdzs_sayhi_rl_hvolume_statue.setText(getYdInfo(mitValterMTemp.getVidhvolumeflag()));
+        zdzs_sayhi_rl_mvolume_statue.setText(getYdInfo(mitValterMTemp.getVidzvolumeflag()));
+        zdzs_sayhi_rl_pvolume_statue.setText(getYdInfo(mitValterMTemp.getVidpvolumeflag()));
+        zdzs_sayhi_rl_lvolume_statue.setText(getYdInfo(mitValterMTemp.getVidlvolumeflag()));
+        zdzs_sayhi_rl_totalvolume_statue.setText(getYdInfo(mitValterMTemp.getVidterflag()));//
+
+        zdzs_sayhi_rl_areatype_statue.setText(getYdInfo(mitValterMTemp.getVidareatypeflag()));
+        zdzs_sayhi_rl_sellchannel_statue.setText(getYdInfo(mitValterMTemp.getVidterflag()));//
+        zdzs_sayhi_rl_mainchannel_statue.setText(getYdInfo(mitValterMTemp.getVidterflag()));//
+        zdzs_sayhi_rl_minorchannel_statue.setText(getYdInfo(mitValterMTemp.getVidminchannelflag()));
+
+        zdzs_sayhi_rl_visitperson_statue.setText(getYdInfo(mitValterMTemp.getVidvisituserflag()));
+
+        PrefUtils.putBoolean(getActivity(),GlobalValues.SAYHIREADY,true);
+    }
+
 
 
     @Override
@@ -586,8 +774,106 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
                 supportFragmentManager.popBackStack();
                 break;
             case R.id.zdzs_sayhi_rl_termstatus:
-                alertShow3();
+                alertShow3(mitValterMTemp,"是否有效终端","vidter",
+                        "","setVidterflag","setVidterremaek","termstatus");
                 break;
+            case R.id.zdzs_sayhi_rl_visitstatus:
+                alertShow3(mitValterMTemp,"是否有效拜访","vidvisit",
+                        "","setVidvisitflag","setVidvisitremark","visitstatus");
+                break;
+
+
+            case R.id.zdzs_sayhi_rl_wopindianzhao:
+                alertShow3(mitValterMTemp,"是否我品店招","vidifmine",
+                        "","setVidifmineflag","setVidifminermark","3");
+                break;
+                // 店招时间,
+            case R.id.zdzs_sayhi_rl_prostatus:
+                alertShow3(mitValterMTemp,"是否有效终端","vidter",
+                        "setVidter","setVidterflag","setVidterremaek","4");
+                break;
+            case R.id.zdzs_sayhi_rl_protocol:
+                alertShow3(mitValterMTemp,"是否有效终端","vidter",
+                        "setVidter","setVidterflag","setVidterremaek","5");
+                break;
+
+
+
+                // 终端名称
+            case R.id.zdzs_sayhi_rl_termname:
+                alertShow3(mitValterMTemp,"终端名称","vidtername",
+                        "setVidternameval","setVidternameflag","setVidternameremark","termname");
+                break;
+            case R.id.zdzs_sayhi_rl_termcode:
+                alertShow3(mitValterMTemp,"终端编码","vidterminalcode",
+                        "setVidtercodeval","setVidtercodeflag","setVidtercoderemark","termcode");
+                break;
+            case R.id.zdzs_sayhi_rl_address:
+                alertShow3(mitValterMTemp,"地址","vidaddress",
+                        "setVidaddressval","setVidaddressflag","setVidaddressremark","address");
+                break;
+            case R.id.zdzs_sayhi_rl_person:
+                alertShow3(mitValterMTemp,"联系人","vidcontact",
+                        "setVidcontactval","setvidcontactflag","setVidcontactremark","person");
+                break;
+            case R.id.zdzs_sayhi_rl_tel:
+                alertShow3(mitValterMTemp,"电话","vidmobile",
+                        "setVidmobileval","setVidmobileflag","setVidmobileremark","tel");
+                break;
+            case R.id.zdzs_sayhi_rl_sequence:
+                alertShow3(mitValterMTemp,"拜访顺序","vidsequence",
+                        "setVidsequenceval","setVidsequenceflag","setVidvidsequenceremark","sequence");
+                break;
+
+
+            case R.id.zdzs_sayhi_rl_cycle:
+                alertShow3(mitValterMTemp,"拜访周期","vidcycle",
+                        "setVidcycleval","setVidcycleflag","setVidcycleremark2","cycle");
+                break;
+            case R.id.zdzs_sayhi_rl_hvolume:
+                alertShow3(mitValterMTemp,"高档容量","vidhvolume",
+                        "setVidhvolumeval","setVidhvolumeflag","setVidhvolumeremark","hvolume");
+                break;
+            case R.id.zdzs_sayhi_rl_mvolume:
+                alertShow3(mitValterMTemp,"中档容量","vidzvolume",
+                        "setVidzvolumeval","setVidzvolumeflag","setVidxvolumeremark","mvolume");
+                break;
+            case R.id.zdzs_sayhi_rl_pvolume:
+                alertShow3(mitValterMTemp,"普档容量","vidpvolume",
+                        "setVidpvolumeval","setVidpvolumeflag","setVidpvolumeremark","pvolume");
+                break;
+            case R.id.zdzs_sayhi_rl_lvolume:
+                alertShow3(mitValterMTemp,"低档容量","vidlvolume",
+                        "setVidlvolumeval","setVidlvolumeflag","setVidlvolumeremark","lvolume");
+                break;
+
+
+            case R.id.zdzs_sayhi_rl_belongline:
+                alertShow3(mitValterMTemp,"所属路线","vidroutekey",
+                        "setVidrtekeyval","setVidrtekeyflag","setVidroutremark","belongline");
+                break;
+            case R.id.zdzs_sayhi_rl_level:
+                alertShow3(mitValterMTemp,"终端等级","vidroutekey",
+                        "setVidrtekeyval","setVidrtekeyflag","setVidroutremark","level");
+                break;
+            case R.id.zdzs_sayhi_rl_country:
+                alertShow3(mitValterMTemp,"县","vidcountry",
+                        "setVidcountryval","setVidcountryflag","setVidcountryremark","country");
+                break;
+            case R.id.zdzs_sayhi_rl_areatype:
+                alertShow3(mitValterMTemp,"区域类型","vidareatype",
+                        "setVidareatypeval","setVidareatypeflag","setVidareatyperemark","areatype");
+                break;
+            case R.id.zdzs_sayhi_rl_minorchannel:
+                alertShow3(mitValterMTemp,"次渠道","vidminchannel",
+                        "setVidminchannelval","setVidminchannelflag","setVidminchannelremark","minorchannel");
+                break;
+            case R.id.zdzs_sayhi_rl_visitperson:
+                alertShow3(mitValterMTemp,"拜访对象","vidvisituser",
+                        "setVidvisituserval","setVidvisituserflag","setVidvisituserremark","visitperson");
+                break;
+
+
 
             default:
                 break;
@@ -604,7 +890,8 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
      * 参数7: 弹窗类型 (正常取消,确定按钮)   √
      * 参数8: 条目点击监听  √
      */
-    public void alertShow3() {
+    public void alertShow3(final MitValterMTemp mitValterMTemp, final
+    String titleName,final String ydkey,final String ddkey,final String ddflag, final String ddremark,final String type) {
         List<KvStc> sureOrFail = new ArrayList<>();
         sureOrFail.add(new KvStc("zhengque","正确","-1"));
         sureOrFail.add(new KvStc("cuowu","错误(去修正)","-1"));
@@ -620,7 +907,15 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(1==position){
                     Bundle bundle = new Bundle();
-                    bundle.putString("proName", "");
+                    bundle.putString("titleName", titleName);// 标题内容,比如:是否有效终端
+                    bundle.putString("ydkey", ydkey);// 对象属性,比如: vidroutekey(属性)
+                    bundle.putString("setDdValue", ddkey);// 对象方法名,比如: setVidrtekeyval(督导输入的值)
+                    bundle.putString("setDdFlag", ddflag);// 对象方法名,比如: setVidrtekeyflag(正确与否)
+                    bundle.putString("setDdRemark", ddremark);// 对象方法名,比如: setVidroutremark(备注)
+                    bundle.putString("type", type);// 页面类型,比如: "1"
+                    bundle.putString("termId", termId);// 页面类型,比如: "1"
+                    bundle.putString("mitValterMTempKey", mitValterMTempKey);
+                    bundle.putSerializable("mitValterMTemp", mitValterMTemp);
                     ZsAmendFragment zsAmendFragment = new ZsAmendFragment(handler);
                     zsAmendFragment.setArguments(bundle);
                     ZsVisitShopActivity zsVisitShopActivity = (ZsVisitShopActivity)getActivity();
@@ -808,5 +1103,17 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         }*/
         Long time6 = new Date().getTime();
         Log.e("Optimization", "保存数据" + (time6 - time5));
+    }
+
+    private String getYdInfo(String flag){
+        String con ="";
+        if("N".equals(flag)){
+            con = "业代录错";
+        }else if("Y".equals(flag)){
+            con = "正确";
+        }else{
+            con = "未稽查";
+        }
+        return con;
     }
 }
