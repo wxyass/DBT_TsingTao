@@ -35,7 +35,7 @@ import et.tsingtaopad.initconstvalues.domain.KvStc;
  * 打招呼 录入正确数据
  */
 
-public class ZsAmendFragment extends BaseFragmentSupport implements View.OnClickListener {
+public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.OnClickListener {
 
     private RelativeLayout backBtn;
     private RelativeLayout confirmBtn;
@@ -104,12 +104,12 @@ public class ZsAmendFragment extends BaseFragmentSupport implements View.OnClick
     String persionType ="visitperson";
 
 
-    public ZsAmendFragment() {
+    public ZsSayhiAmendFragment() {
 
     }
 
     @SuppressLint("ValidFragment")
-    public ZsAmendFragment(ZsSayhiFragment.MyHandler handler) {
+    public ZsSayhiAmendFragment(ZsSayhiFragment.MyHandler handler) {
         this.handler = handler;
     }
 

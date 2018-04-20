@@ -2,6 +2,7 @@ package et.tsingtaopad.dd.ddzs.zsinvoicing;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -23,6 +25,7 @@ import et.tsingtaopad.R;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
+import et.tsingtaopad.db.table.MitValsupplyMTemp;
 import et.tsingtaopad.dd.ddxt.invoicing.domain.XtInvoicingStc;
 import et.tsingtaopad.listviewintf.IClick;
 
@@ -40,7 +43,7 @@ public class ZsInvoicingAdapter extends
                     BaseAdapter implements OnFocusChangeListener ,OnClickListener {
 
     private Activity context;
-    private List<XtInvoicingStc> dataLst;
+    private List<MitValsupplyMTemp> dataLst;
     private int delPosition = -1;
 
  // 时间控件
@@ -57,7 +60,7 @@ public class ZsInvoicingAdapter extends
 
 
 
-    public ZsInvoicingAdapter(Activity context, List<XtInvoicingStc> dataLst, IClick listener) {
+    public ZsInvoicingAdapter(Activity context, List<MitValsupplyMTemp> dataLst, IClick listener) {
         this.context = context;
         this.dataLst = dataLst;
         this.listener=listener;
@@ -99,10 +102,11 @@ public class ZsInvoicingAdapter extends
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.item_zdzs_invoicing, null);
+            holder.ll_all = (LinearLayout)convertView.findViewById(R.id.item_zs_invoicing_ll_all);// 整体
             holder.productNameTv = (TextView)convertView.findViewById(R.id.item_zs_invoicing_tv_proname);// 产品名称
             holder.agencyTv = (TextView)convertView.findViewById(R.id.item_zs_invoicing_tv_agencyname);// 经销商名称
-            holder.statueTv = (TextView)convertView.findViewById(R.id.item_zs_invoicing_tv_statue);// 未稽查
-            holder.statueRl = (RelativeLayout)convertView.findViewById(R.id.item_zs_invoicing_Rl_statue);// 未稽查
+            holder.statueTv = (TextView)convertView.findViewById(R.id.item_zs_invoicing_tv_statue);// 未稽查tv
+            holder.statueRl = (RelativeLayout)convertView.findViewById(R.id.item_zs_invoicing_Rl_statue);// 未稽查Rl
             holder.channelPriceEt = (TextView)convertView.findViewById(R.id.item_zs_invoicing_et_prevstore);// 渠道价
             holder.sellPriceEt = (EditText)convertView.findViewById(R.id.item_zs_invoicing_et_daysellnum);// 零售价
             holder.prevNumEt = (EditText)convertView.findViewById(R.id.item_zs_invoicing_et_prevnum);// 订单量
@@ -113,51 +117,76 @@ public class ZsInvoicingAdapter extends
             holder = (ViewHolder)convertView.getTag();
         }
         
-        final XtInvoicingStc item = dataLst.get(position);
-        holder.productNameTv.setHint(item.getProId());
-        holder.productNameTv.setText(item.getProName());
+        final MitValsupplyMTemp item = dataLst.get(position);
 
+
+
+        // 产品名称
+        holder.productNameTv.setHint(item.getValpro());
+        holder.productNameTv.setText(item.getValproname());
+
+        // 未稽查
         holder.statueRl.setTag(position);
         holder.statueRl.setOnClickListener(listener);
 
         //订单量(原名称是上周期进货总量)
-        if (ConstValues.FLAG_0.equals(item.getPrevNum())) {
-            holder.prevNumEt.setHint(item.getPrevNum());
+        if (ConstValues.FLAG_0.equals(item.getValsdd())) {
+            holder.prevNumEt.setHint(item.getValsdd());
         } else {
-            holder.prevNumEt.setText(item.getPrevNum());
+            holder.prevNumEt.setText(item.getValsdd());
         }
         
         //累计卡)
-        if (ConstValues.FLAG_0.equals(item.getAddcard())) {
+        if (ConstValues.FLAG_0.equals(item.getValsljk())) {
             holder.addcardEt.setHint("0");
-        } else if("0.0".equals(item.getAddcard())){
+        } else if("0.0".equals(item.getValsljk())){
             holder.addcardEt.setHint("0");
         }else {
-            holder.addcardEt.setText(item.getAddcard());
+            holder.addcardEt.setText(item.getValsljk());
+        }
+
+        // 未稽查
+        if("N".equals(item.getValagencysupplyflag())){
+            holder.statueTv.setText("业代录错");
+        }else if("Y".equals(item.getValagencysupplyflag())){
+            holder.statueTv.setText("正确");
+        }else{
+            holder.statueTv.setText("未稽查");
+        }
+
+        // 背景
+        if("Y".equals(item.getValproerror())){
+            holder.ll_all.setBackgroundColor(Color.LTGRAY);
+            holder.statueTv.setText("督导失效");
+        }else{
+            holder.ll_all.setBackgroundColor(Color.WHITE);
         }
         
 
-        
-        holder.agencyTv.setHint(item.getAgencyId());
-        holder.agencyTv.setText(item.getAgencyName());
+        // 经销商
+        holder.agencyTv.setHint(item.getValagency());
+        holder.agencyTv.setText(item.getValagencyname());
 
 
-        if (ConstValues.FLAG_0.equals(item.getChannelPrice())) {
-            holder.channelPriceEt.setHint(item.getChannelPrice());
+        // 渠道价
+        if (ConstValues.FLAG_0.equals(item.getValsqd())) {
+            holder.channelPriceEt.setHint(item.getValsqd());
             holder.channelPriceEt.setText(null);
-        } else if(!CheckUtil.isBlankOrNull(item.getChannelPrice())){
-            holder.channelPriceEt.setText(item.getChannelPrice());
+        } else if(!CheckUtil.isBlankOrNull(item.getValsqd())){
+            holder.channelPriceEt.setText(item.getValsqd());
         }else{
             holder.channelPriceEt.setHint(R.string.hit_input);
             holder.channelPriceEt.setText(null);
         }
         holder.channelPriceEt.setTag(position);
         //holder.channelPriceEt.setOnFocusChangeListener(this);
-        if (ConstValues.FLAG_0.equals(item.getSellPrice())) {
-            holder.sellPriceEt.setHint(item.getSellPrice());
+
+        // 零售价
+        if (ConstValues.FLAG_0.equals(item.getValsls())) {
+            holder.sellPriceEt.setHint(item.getValsls());
             holder.sellPriceEt.setText(null);
-        } else if(!CheckUtil.isBlankOrNull(item.getSellPrice())){
-            holder.sellPriceEt.setText(item.getSellPrice());
+        } else if(!CheckUtil.isBlankOrNull(item.getValsls())){
+            holder.sellPriceEt.setText(item.getValsls());
         }else{
             holder.sellPriceEt.setHint(R.string.hit_input);
             holder.sellPriceEt.setText(null);
@@ -171,6 +200,7 @@ public class ZsInvoicingAdapter extends
     }
 
     private class ViewHolder {
+        private LinearLayout ll_all;
         private TextView productNameTv;
         private TextView agencyTv;
         private TextView statueTv;
@@ -191,15 +221,15 @@ public class ZsInvoicingAdapter extends
             position = position -1;
         }
         if (position > -1) {
-            XtInvoicingStc stc = dataLst.get(position);
+            MitValsupplyMTemp stc = dataLst.get(position);
             String content = et.getText().toString();
             switch (et.getId()) {
-            case R.id.checkgoods_et_prevnum:
-                stc.setPrevNum(content);
+            case R.id.checkgoods_et_prevnum:// //订单量//
+                stc.setValsdd(content);
                 break;
                 
-            case R.id.checkgoods_et_daysell:
-                stc.setDaySellNum(content);
+            case R.id.checkgoods_et_daysell:// //日销量
+                stc.setValsrxl(content);
                 break;
                 
             default:
@@ -221,7 +251,7 @@ public class ZsInvoicingAdapter extends
 	public void onClick(View v) {
 		final Button dateBtn = (Button) v;
 		int position = (Integer) v.getTag();
-		final XtInvoicingStc stc = dataLst.get(position);
+		final MitValsupplyMTemp stc = dataLst.get(position);
 		switch (dateBtn.getId()) {
 		// 最早生产时间
 		case R.id.checkgoods_et_firstdate:
@@ -251,7 +281,7 @@ public class ZsInvoicingAdapter extends
 									+ String.format("%02d", monthOfYear + 1)
 									+ "-" + aday);
 							dateBtn.setText(selectDate);
-							stc.setFristdate(selectDate);
+							//stc.setFristdate(selectDate);
 						}
 					}, yearr, month, day);
 			if (!dateDialog.isShowing()) {

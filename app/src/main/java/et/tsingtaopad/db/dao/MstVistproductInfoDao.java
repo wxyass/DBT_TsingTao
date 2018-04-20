@@ -46,6 +46,15 @@ public interface MstVistproductInfoDao extends Dao<MstVistproductInfo, String> {
      * @return
      */
     public List<XtInvoicingStc> queryXtMineProByTemp(DatabaseHelper helper, String visitId, String termKey);
+    /**
+     * 从业代数据库中读取 获取 我品的进销存数据情况 wx_yss
+     *
+     * @param helper
+     * @param previsitId
+     *            拜访主键
+     * @return
+     */
+    public List<XtInvoicingStc> queryInvocingProByTemp(DatabaseHelper helper, String previsitId, String termKey);
 
     /**
      * 获取某次拜访的竞品的进销存数据情况

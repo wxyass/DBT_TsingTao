@@ -448,7 +448,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                 if(1==position){
                     /*Bundle bundle = new Bundle();
                     bundle.putString("proName", "");
-                    ZsAmendFragment zsAmendFragment = new ZsAmendFragment(handler);
+                    ZsSayhiAmendFragment zsAmendFragment = new ZsSayhiAmendFragment(handler);
                     zsAmendFragment.setArguments(bundle);
                     ZsVisitShopActivity zsVisitShopActivity = (ZsVisitShopActivity)getActivity();
                     zsVisitShopActivity.changeXtvisitFragment(zsAmendFragment,"zsamendfragment");*/

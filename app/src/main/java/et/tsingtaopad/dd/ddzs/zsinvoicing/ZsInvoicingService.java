@@ -20,8 +20,10 @@ import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.db.DatabaseHelper;
+import et.tsingtaopad.db.dao.MitValsupplyMTempDao;
 import et.tsingtaopad.db.dao.MstVistproductInfoDao;
 import et.tsingtaopad.db.dao.MstVistproductInfoTempDao;
+import et.tsingtaopad.db.table.MitValsupplyMTemp;
 import et.tsingtaopad.db.table.MstAgencysupplyInfo;
 import et.tsingtaopad.db.table.MstAgencysupplyInfoTemp;
 import et.tsingtaopad.db.table.MstCheckexerecordInfoTemp;
@@ -99,6 +101,81 @@ public class ZsInvoicingService extends XtShopVisitService {
             Log.e(TAG, "获取终端表DAO对象失败", e);
         }
         return lst;
+    }
+
+    /**
+     * 从临时表中 获取某次拜访的我品的进销存数据情况
+     *
+     * @param //helper
+     * @param visitId   拜访主键
+     * @return
+     */
+    public List<MitValsupplyMTemp> queryMineProToValSupplyTemp(String visitId, String termKey,String mitValterMTempKey) {
+
+        List<XtInvoicingStc> lst = new ArrayList<XtInvoicingStc>();
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            MstVistproductInfoDao dao = helper.getDao(MstVistproductInfo.class);
+            lst = dao.queryXtMineProByTemp(helper, visitId,termKey);
+        } catch (SQLException e) {
+            Log.e(TAG, "获取终端表DAO对象失败", e);
+        }
+
+        List<MitValsupplyMTemp> mitValsupplyMTemps = new ArrayList<MitValsupplyMTemp>();
+        MitValsupplyMTemp mitValsupplyMTemp;
+        for (XtInvoicingStc xtInvoicingStc:lst) {
+            mitValsupplyMTemp = new MitValsupplyMTemp();
+            mitValsupplyMTemp.setId(FunUtil.getUUID());
+            mitValsupplyMTemp.setValterid(mitValterMTempKey);// 追溯主表id
+            mitValsupplyMTemp.setValsuplyid(xtInvoicingStc.getAsupplykey());// 供货关系id
+            mitValsupplyMTemp.setValaddagencysupply("N");// 是否新增供货关系
+            mitValsupplyMTemp.setValsqd(xtInvoicingStc.getChannelPrice());// 渠道价
+            mitValsupplyMTemp.setValsls(xtInvoicingStc.getSellPrice());// 零售价
+            mitValsupplyMTemp.setValsdd(xtInvoicingStc.getPrevNum());//订单量//
+            mitValsupplyMTemp.setValsrxl(xtInvoicingStc.getDaySellNum());//日销量
+            mitValsupplyMTemp.setValsljk(xtInvoicingStc.getAddcard());//累计卡
+            mitValsupplyMTemp.setValter(termKey);//终端
+            mitValsupplyMTemp.setValpro(xtInvoicingStc.getProId());//产品key
+            mitValsupplyMTemp.setValproname(xtInvoicingStc.getProName());//产品name
+            mitValsupplyMTemp.setValagency(xtInvoicingStc.getAgencyId());//经销商key
+            mitValsupplyMTemp.setValagencyname(xtInvoicingStc.getAgencyName());//经销商name
+            /*mitValsupplyMTemp.setValagencysupplyflag();//供货关系正确与否
+            mitValsupplyMTemp.setValproerror();//品项有误
+            mitValsupplyMTemp.setValagencyerror();//经销商有误
+            mitValsupplyMTemp.setValtrueagency();//正确的经销商
+            mitValsupplyMTemp.setValdataerror();//数据有误
+            mitValsupplyMTemp.setValiffleeing();//是否窜货
+            mitValsupplyMTemp.setValagencysupplyqd();//供货关系正确渠道价
+            mitValsupplyMTemp.setValagencysupplyls();//供货关系正确零售价
+            mitValsupplyMTemp.setValagencysupplydd();//供货关系正确订单量
+            mitValsupplyMTemp.setValagencysupplysrxl();//供货关系正确日销量
+            mitValsupplyMTemp.setValagencysupplyljk();//供货关系正确累计卡
+            mitValsupplyMTemp.setValagencysupplyremark();//供货关系备注*/
+            mitValsupplyMTemps.add(mitValsupplyMTemp);
+
+        }
+        return mitValsupplyMTemps;
+    }
+
+
+    /***
+     * 通过终端获取此终端供货关系
+     * @param valterid
+     * @return
+     */
+    public List<MitValsupplyMTemp> queryValSupplyTemp(String valterid) {
+        List<MitValsupplyMTemp> list = new ArrayList<MitValsupplyMTemp>();
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            MitValsupplyMTempDao mitValsupplyMTempDao = helper.getDao(MitValsupplyMTemp.class);
+            QueryBuilder<MitValsupplyMTemp, String> qb = mitValsupplyMTempDao.queryBuilder();
+            Where<MitValsupplyMTemp, String> where = qb.where();
+            where.eq("valterid", valterid);
+            list = qb.query();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
     /**

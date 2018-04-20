@@ -1,7 +1,6 @@
 package et.tsingtaopad.dd.ddzs.zssayhi;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,15 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.DatePicker;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.Serializable;
 import java.lang.ref.SoftReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,7 +27,6 @@ import et.tsingtaopad.R;
 import et.tsingtaopad.adapter.AlertKeyValueAdapter;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
-import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.DbtUtils;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
@@ -47,7 +42,6 @@ import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
 import et.tsingtaopad.dd.ddzs.zsshopvisit.ZsVisitShopActivity;
 import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
-import et.tsingtaopad.view.DdSlideSwitch;
 
 /**
  * Created by yangwenmin on 2018/3/12.
@@ -916,10 +910,10 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
                     bundle.putString("termId", termId);// 页面类型,比如: "1"
                     bundle.putString("mitValterMTempKey", mitValterMTempKey);
                     bundle.putSerializable("mitValterMTemp", mitValterMTemp);
-                    ZsAmendFragment zsAmendFragment = new ZsAmendFragment(handler);
-                    zsAmendFragment.setArguments(bundle);
+                    ZsSayhiAmendFragment zsSayhiAmendFragment = new ZsSayhiAmendFragment(handler);
+                    zsSayhiAmendFragment.setArguments(bundle);
                     ZsVisitShopActivity zsVisitShopActivity = (ZsVisitShopActivity)getActivity();
-                    zsVisitShopActivity.changeXtvisitFragment(zsAmendFragment,"zsamendfragment");
+                    zsVisitShopActivity.changeXtvisitFragment(zsSayhiAmendFragment,"zsamendfragment");
                 }
 
                 mAlertViewExt.dismiss();

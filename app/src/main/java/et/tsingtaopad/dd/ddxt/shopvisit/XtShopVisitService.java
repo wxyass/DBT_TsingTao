@@ -27,6 +27,7 @@ import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.db.DatabaseHelper;
+import et.tsingtaopad.db.dao.MitValsupplyMTempDao;
 import et.tsingtaopad.db.dao.MitValterMTempDao;
 import et.tsingtaopad.db.dao.MstAgencysupplyInfoDao;
 import et.tsingtaopad.db.dao.MstCheckexerecordInfoDao;
@@ -39,6 +40,7 @@ import et.tsingtaopad.db.dao.MstTerminalinfoMTempDao;
 import et.tsingtaopad.db.dao.MstVisitMDao;
 import et.tsingtaopad.db.dao.MstVisitMTempDao;
 import et.tsingtaopad.db.dao.MstVistproductInfoDao;
+import et.tsingtaopad.db.table.MitValsupplyMTemp;
 import et.tsingtaopad.db.table.MitValterMTemp;
 import et.tsingtaopad.db.table.MstAgencysupplyInfo;
 import et.tsingtaopad.db.table.MstAgencysupplyInfoTemp;
@@ -67,6 +69,7 @@ import et.tsingtaopad.dd.ddxt.checking.domain.XtCheckIndexCalculateStc;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProIndex;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProIndexValue;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProItem;
+import et.tsingtaopad.dd.ddxt.invoicing.domain.XtInvoicingStc;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 import et.tsingtaopad.main.visit.shopvisit.term.domain.MstTermListMStc;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.CheckIndexCalculateStc;
@@ -560,6 +563,7 @@ public class XtShopVisitService {
             Dao<PadCheckaccomplishInfo, String> padCheckaccomplishInfoDao = helper.getPadCheckaccomplishInfoDao();
 
             Dao<MitValterMTemp, String> mitValterMTempDao = helper.getMitValterMTempDao();
+            Dao<MitValsupplyMTemp, String> mitValsupplyMTempDao = helper.getMitValsupplyMTempDao();
 
             connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
             connection.setAutoCommit(false);
@@ -654,7 +658,7 @@ public class XtShopVisitService {
                                 vistproductInfoTemp.setRecordkey(FunUtil.getUUID());
                                 vistproductInfoTemp.setVisitkey(visitMTemp.getVisitkey());
 
-                                // (隔天清零)如果上次拜访日期与本次拜访不是同一天
+                                /*// (隔天清零)如果上次拜访日期与本次拜访不是同一天
                                 if (!visitDate.substring(0, 8).equals(prevVisitDate.substring(0, 8))) {
                                     //上次库存
                                     vistproductInfoTemp.setPronum(product.getCurrnum());
@@ -675,7 +679,16 @@ public class XtShopVisitService {
                                     //当前库存 (本次库存)
                                     vistproductInfoTemp.setCurrnum(product.getCurrnum());
 
-                                }
+                                }*/
+
+                                //上次库存
+                                vistproductInfoTemp.setPronum(product.getPronum());
+                                //日销量
+                                vistproductInfoTemp.setSalenum(product.getSalenum());
+                                //订单量(原 上周期进货总量)
+                                vistproductInfoTemp.setPurcnum(product.getPurcnum());
+                                //当前库存 (本次库存)
+                                vistproductInfoTemp.setCurrnum(product.getCurrnum());
 
                                 vistproductInfoTemp.setProductkey(product.getProductkey());
                                 vistproductInfoTemp.setCmpproductkey(product.getCmpproductkey());
@@ -773,7 +786,6 @@ public class XtShopVisitService {
             }
 
             // 复制追溯主表
-
             if (term != null) {
                 mitValterMTemp = new MitValterMTemp();
                 mitValterMTemp.setId(FunUtil.getUUID());// 追溯主键
@@ -887,6 +899,11 @@ public class XtShopVisitService {
                 }
             }
 
+            // 复制追溯进销存
+            queryInvocingValSupplyTemp(mitValsupplyMTempDao,prevVisitId,term.getTerminalkey(), mitValterMTemp.getId());
+
+
+
 
             connection.commit(null);
         } catch (Exception e) {
@@ -904,6 +921,60 @@ public class XtShopVisitService {
         keys.add(visitMTemp.getVisitkey());
         keys.add(mitValterMTemp.getId());
         return keys;
+    }
+
+
+    /**
+     * 从临时表中 获取某次拜访的我品的进销存数据情况
+     *
+     * @param //helper
+     * @param previsitId   拜访主键
+     * @return
+     */
+    public void queryInvocingValSupplyTemp(Dao<MitValsupplyMTemp, String> mitValsupplyMTempDao,
+                                                              String previsitId, String termKey, String mitValterMTempKey) {
+
+        List<XtInvoicingStc> lst = new ArrayList<XtInvoicingStc>();
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            MstVistproductInfoDao dao = helper.getDao(MstVistproductInfo.class);
+            lst = dao.queryInvocingProByTemp(helper, previsitId,termKey);
+
+            MitValsupplyMTemp mitValsupplyMTemp;
+            for (XtInvoicingStc xtInvoicingStc:lst) {
+                mitValsupplyMTemp = new MitValsupplyMTemp();
+                mitValsupplyMTemp.setId(FunUtil.getUUID());
+                mitValsupplyMTemp.setValterid(mitValterMTempKey);// 追溯主表id
+                mitValsupplyMTemp.setValsuplyid(xtInvoicingStc.getAsupplykey());// 供货关系id
+                mitValsupplyMTemp.setValaddagencysupply("N");// 是否新增供货关系
+                mitValsupplyMTemp.setValsqd(xtInvoicingStc.getChannelPrice());// 渠道价
+                mitValsupplyMTemp.setValsls(xtInvoicingStc.getSellPrice());// 零售价
+                mitValsupplyMTemp.setValsdd(xtInvoicingStc.getPrevNum());//订单量//
+                mitValsupplyMTemp.setValsrxl(xtInvoicingStc.getDaySellNum());//日销量
+                mitValsupplyMTemp.setValsljk(xtInvoicingStc.getAddcard());//累计卡
+                mitValsupplyMTemp.setValter(termKey);//终端
+                mitValsupplyMTemp.setValpro(xtInvoicingStc.getProId());//产品key
+                mitValsupplyMTemp.setValproname(xtInvoicingStc.getProName());//产品name
+                mitValsupplyMTemp.setValagency(xtInvoicingStc.getAgencyId());//经销商key
+                mitValsupplyMTemp.setValagencyname(xtInvoicingStc.getAgencyName());//经销商name
+                /*mitValsupplyMTemp.setValagencysupplyflag();//供货关系正确与否
+                mitValsupplyMTemp.setValproerror();//品项有误
+                mitValsupplyMTemp.setValagencyerror();//经销商有误
+                mitValsupplyMTemp.setValtrueagency();//正确的经销商
+                mitValsupplyMTemp.setValdataerror();//数据有误
+                mitValsupplyMTemp.setValiffleeing();//是否窜货
+                mitValsupplyMTemp.setValagencysupplyqd();//供货关系正确渠道价
+                mitValsupplyMTemp.setValagencysupplyls();//供货关系正确零售价
+                mitValsupplyMTemp.setValagencysupplydd();//供货关系正确订单量
+                mitValsupplyMTemp.setValagencysupplysrxl();//供货关系正确日销量
+                mitValsupplyMTemp.setValagencysupplyljk();//供货关系正确累计卡
+                mitValsupplyMTemp.setValagencysupplyremark();//供货关系备注*/
+                mitValsupplyMTempDao.create(mitValsupplyMTemp);
+            }
+
+        } catch (SQLException e) {
+            Log.e(TAG, "获取终端表DAO对象失败", e);
+        }
     }
 
     //
@@ -1432,6 +1503,7 @@ public class XtShopVisitService {
             deleteTable(helper, "MST_GROUPPRODUCT_M_TEMP");
 
             deleteTable(helper, "MIT_VALTER_M_TEMP");// 追溯主表临时表
+            deleteTable(helper, "MIT_VALSUPPLY_M_TEMP");// 追溯进销存表临时表
             //deleteTable(helper, "MST_CHECKGROUP_INFO");
             //deleteTable(helper, "MST_CHECKGROUP_INFO_TEMP");
         } catch (Exception e) {

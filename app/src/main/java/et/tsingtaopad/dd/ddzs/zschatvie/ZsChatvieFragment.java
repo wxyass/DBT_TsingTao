@@ -241,7 +241,7 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
                 if(1==position){
                     /*Bundle bundle = new Bundle();
                     bundle.putString("proName", "");
-                    ZsAmendFragment zsAmendFragment = new ZsAmendFragment(handler);
+                    ZsSayhiAmendFragment zsAmendFragment = new ZsSayhiAmendFragment(handler);
                     zsAmendFragment.setArguments(bundle);
                     ZsVisitShopActivity zsVisitShopActivity = (ZsVisitShopActivity)getActivity();
                     zsVisitShopActivity.changeXtvisitFragment(zsAmendFragment,"zsamendfragment");*/

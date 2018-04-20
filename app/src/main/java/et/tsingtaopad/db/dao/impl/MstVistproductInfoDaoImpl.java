@@ -740,7 +740,7 @@ public class MstVistproductInfoDaoImpl extends
 
 		StringBuffer buffer = new StringBuffer();
 
-		String sql = "select vp.recordkey," + "mai.productkey,"  // INPRICE  // REPRICE
+		String sql = "select vp.recordkey," + "mai.productkey,"+ "mai.asupplykey,"  // INPRICE  // REPRICE
 				//+ "vp.purcprice," + "vp.retailprice," + "vp.purcnum," + "vp.fristdate,"
 				// 修改进销存的渠道价零售价 从供货关系表读取  不再从竞品我品表读取
 				+ "mai.inprice," + "mai.reprice," + "vp.purcnum," + "vp.fristdate,"
@@ -766,6 +766,77 @@ public class MstVistproductInfoDaoImpl extends
 		while (cursor.moveToNext()) {
 			item = new XtInvoicingStc();
 			item.setRecordId(cursor.getString(cursor.getColumnIndex("recordkey")));
+			item.setAsupplykey(cursor.getString(cursor.getColumnIndex("asupplykey")));
+			String productkey = cursor.getString(cursor.getColumnIndex("productkey"));
+			item.setProId(productkey);
+			item.setProName(cursor.getString(cursor.getColumnIndex("proname")));
+			item.setAgencyId(cursor.getString(cursor.getColumnIndex("agencykey")));
+			item.setAgencyName(cursor.getString(cursor.getColumnIndex("agencyname")));
+			item.setChannelPrice(cursor.getString((cursor.getColumnIndex("inprice"))));// 进店价
+			item.setSellPrice(cursor.getString(cursor.getColumnIndex("reprice")));// 零售价
+
+			item.setAddcard(cursor.getString(cursor.getColumnIndex("addcard")));// 累计卡
+
+			// 上周期进货总量
+			item.setPrevNum(cursor.getString(cursor.getColumnIndex("purcnum")));
+			// 上周期进货总量总和
+			item.setPrevNumSum(purcnumMap.get(productkey));
+			// 上次库存
+			item.setPrevStore(cursor.getString(cursor.getColumnIndex("pronum")));
+			// 本次库存
+			item.setCurrStore(cursor.getString(cursor.getColumnIndex("currnum")));
+			// 日销量
+			item.setDaySellNum(cursor.getString(cursor.getColumnIndex("salenum")));
+			// 最早生产日期
+			item.setFristdate(cursor.getString(cursor.getColumnIndex("fristdate")));
+			lst.add(item);
+		}
+
+		return lst;
+	}
+
+	/**
+	 * 从业代数据库中读取 获取 我品的进销存数据情况 wx_yss
+	 *
+	 * @param helper
+	 * @param previsitId
+	 *            拜访主键
+	 * @return
+	 */
+	public List<XtInvoicingStc> queryInvocingProByTemp(DatabaseHelper helper, String previsitId, String termKey) {
+
+		Map<String, String> purcnumMap = getPurcnumSum(helper, termKey);
+		List<XtInvoicingStc> lst = new ArrayList<XtInvoicingStc>();
+
+		StringBuffer buffer = new StringBuffer();
+
+		String sql = "select vp.recordkey," + "mai.productkey,"+ "mai.asupplykey,"  // INPRICE  // REPRICE
+				//+ "vp.purcprice," + "vp.retailprice," + "vp.purcnum," + "vp.fristdate,"
+				// 修改进销存的渠道价零售价 从供货关系表读取  不再从竞品我品表读取
+				+ "mai.inprice," + "mai.reprice," + "vp.purcnum," + "vp.fristdate,"
+				+ "vp.pronum," + "vp.currnum," + "vp.salenum," + "pm.proname," + "vp.addcard,"
+				+ "mai.upperkey as agencykey," + "am.agencyname"
+				+ " from mst_agencysupply_info mai"
+				+ " join mst_agencyinfo_m am"
+				+ " on am.agencykey = mai.upperkey" + " join mst_product_m pm"
+				+ " on mai.productkey = pm.productkey"
+				+ " left join mst_vistproduct_info vp"
+				+ " on mai.productkey = vp.productkey" + " and vp.visitkey = ?"
+				+ " and vp.cmpproductkey is null"
+				+ " and coalesce(vp.deleteflag, '0') != '1'"
+				// mai.status = '0'   0:供货关系有效  1:供货关系失效  2:新加供货关系  3:值修改的供货关系
+				+ " where mai.lowerkey = ?" + " and (mai.status = '0' or mai.status = '2'  or  mai.status = '3') "
+				+ " and am.AGENCYSTATUS = '0'" + " and pm.status = '0'";
+
+		buffer.append(sql);
+
+		Cursor cursor = helper.getReadableDatabase().rawQuery(
+				buffer.toString(), new String[] { previsitId, termKey });
+		XtInvoicingStc item;
+		while (cursor.moveToNext()) {
+			item = new XtInvoicingStc();
+			item.setRecordId(cursor.getString(cursor.getColumnIndex("recordkey")));
+			item.setAsupplykey(cursor.getString(cursor.getColumnIndex("asupplykey")));
 			String productkey = cursor.getString(cursor.getColumnIndex("productkey"));
 			item.setProId(productkey);
 			item.setProName(cursor.getString(cursor.getColumnIndex("proname")));

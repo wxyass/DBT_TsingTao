@@ -24,16 +24,11 @@ import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.core.view.alertview.OnDismissListener;
-import et.tsingtaopad.core.view.alertview.OnItemClickListener;
 import et.tsingtaopad.dd.ddxt.checking.XtCaculateItemAdapter;
-import et.tsingtaopad.dd.ddxt.checking.XtCheckIndexFragment;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProIndex;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProIndexValue;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProItem;
-import et.tsingtaopad.dd.ddxt.checking.num.XtCaculateFragment;
-import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
 import et.tsingtaopad.dd.ddzs.zscheckindex.zsnum.ZsCaculateFragment;
-import et.tsingtaopad.dd.ddzs.zssayhi.ZsAmendFragment;
 import et.tsingtaopad.dd.ddzs.zsshopvisit.ZsVisitShopActivity;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
 
@@ -198,7 +193,7 @@ public class ZsCaculateAdapter extends BaseAdapter {
                 if(1==position){
                     /*Bundle bundle = new Bundle();
                     bundle.putString("proName", "");
-                    ZsAmendFragment zsAmendFragment = new ZsAmendFragment(handler);
+                    ZsSayhiAmendFragment zsAmendFragment = new ZsSayhiAmendFragment(handler);
                     zsAmendFragment.setArguments(bundle);
                     ZsVisitShopActivity zsVisitShopActivity = (ZsVisitShopActivity)getActivity();
                     zsVisitShopActivity.changeXtvisitFragment(zsAmendFragment,"zsamendfragment");*/

@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -20,6 +21,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,16 +29,19 @@ import java.util.List;
 import et.tsingtaopad.R;
 import et.tsingtaopad.adapter.AlertKeyValueAdapter;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
+import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.core.view.alertview.OnDismissListener;
 import et.tsingtaopad.core.view.alertview.OnItemClickListener;
+import et.tsingtaopad.db.table.MitValsupplyMTemp;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
 import et.tsingtaopad.dd.ddxt.invoicing.XtInvoicingService;
 import et.tsingtaopad.dd.ddxt.invoicing.domain.XtInvoicingStc;
 import et.tsingtaopad.dd.ddzs.zsinvoicing.zsaddinvoicing.ZsAddInvoicingFragment;
+import et.tsingtaopad.dd.ddzs.zssayhi.ZsSayhiAmendFragment;
 import et.tsingtaopad.dd.ddzs.zsshopvisit.ZsVisitShopActivity;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
 import et.tsingtaopad.listviewintf.IClick;
@@ -49,11 +54,13 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
 
     private final String TAG = "ZsInvoicingFragment";
 
-    List<XtInvoicingStc> dataLst;
+    //List<XtInvoicingStc> dataLst;
+    List<MitValsupplyMTemp> dataLst;
     ZsInvoicingService invoicingService;
     MyHandler handler;
 
     public static final int ZS_ADD_SUC = 2;// 追溯-新增我品供货关系成功
+    public static final int INIT_AMEND = 22;// 督导输入数据成功
 
     ZsInvoicingAdapter zsInvoicingAdapter;
 
@@ -108,13 +115,15 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
         //删除重复拜访产品
         invoicingService.delRepeatVistProduct(visitId);
         //获取某次拜访的我品的进销存数据情况
-        dataLst = invoicingService.queryMineProFromTemp(visitId, termId);
+        //dataLst = invoicingService.queryMineProToValSupplyTemp(visitId, termId,mitValterMTempKey);
+        //mitValsupplyMTemps = invoicingService.queryMineProToValSupplyTemp(visitId, termId,mitValterMTempKey);
+        dataLst = invoicingService.queryValSupplyTemp(mitValterMTempKey);
 
         // 订单推荐
         zsInvoicingAdapter = new ZsInvoicingAdapter(getActivity(), dataLst,new IClick(){
             @Override
             public void listViewItemClick(int position, View v) {
-                alertShow3();
+                alertShow3(position);
             }
         });
         zsInvoicingLv.setAdapter(zsInvoicingAdapter);
@@ -174,12 +183,19 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
                 case ZS_ADD_SUC:
                     fragment.showAddProSuc(products, agency);
                     break;
+                case INIT_AMEND: // 督导输入数据后
+                    fragment.showAdapter();
+                    break;
             }
         }
     }
 
+    private void showAdapter() {
+        zsInvoicingAdapter.notifyDataSetChanged();
+    }
+
     /**
-     * 添加产品成功 UI
+     * 新增供货关系 添加产品成功 UI
      */
     public void showAddProSuc(ArrayList<KvStc> products, KvStc agency) {
         for (KvStc product : products) {
@@ -189,7 +205,7 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
                 DbtLog.logUtils(TAG, "产品重复提示");
                 Toast.makeText(getActivity(), getString(R.string.addrelation_msg_repetitionadd), Toast.LENGTH_LONG).show();
             } else {
-                XtInvoicingStc supplyStc = new XtInvoicingStc();
+                /*XtInvoicingStc supplyStc = new XtInvoicingStc();
                 supplyStc.setProId(product.getKey());
                 supplyStc.setProName(product.getValue());
                 supplyStc.setAgencyId(agency.getKey());
@@ -197,11 +213,24 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
                 supplyStc.setPrevStore("0");
                 dataLst.add(supplyStc);
                 //新增供货关系指标记录表进行更新
-                invoicingService.updateMstcheckexerecordInfoTempDeleteflag(visitId,product.getKey());
+                invoicingService.updateMstcheckexerecordInfoTempDeleteflag(visitId,product.getKey());*/
+
+
+
+
+
+                MitValsupplyMTemp valsupplyMTemp = new MitValsupplyMTemp();
+                valsupplyMTemp.setId(FunUtil.getUUID());
+                valsupplyMTemp.setValterid(mitValterMTempKey);// 终端追溯主表ID
+                valsupplyMTemp.setValaddagencysupply("Y");// 是否新增供货关系
+                valsupplyMTemp.setValagency(agency.getKey());// 经销商;
+                valsupplyMTemp.setValpro(product.getKey());// 产品
+                dataLst.add(valsupplyMTemp);
 
                 zsInvoicingAdapter.setDelPosition(-1);
                 zsInvoicingAdapter.notifyDataSetChanged();
                 ViewUtil.setListViewHeight(zsInvoicingLv);
+
             }
         }
     }
@@ -303,7 +332,8 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
      * 参数7: 弹窗类型 (正常取消,确定按钮)   √
      * 参数8: 条目点击监听  √
      */
-    public void alertShow3() {
+    MitValsupplyMTemp valsupplyMTemp;
+    public void alertShow3(final int position) {
 
         mAlertViewExt = new AlertView(null, null, null, null,
                 null, getActivity(), AlertView.Style.ActionSheet, null);
@@ -322,6 +352,32 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
         final CheckBox cb3 = (CheckBox) extView.findViewById(R.id.cb3);
         final CheckBox cb4 = (CheckBox) extView.findViewById(R.id.cb4);
 
+        valsupplyMTemp = dataLst.get(position);
+        String flag = valsupplyMTemp.getValagencysupplyflag();
+        if("Y".equals(flag)){
+            right_rb.setChecked(true);
+        }
+        String flag1 = valsupplyMTemp.getValproerror();
+        String flag2 = valsupplyMTemp.getValagencyerror();
+        String flag3 = valsupplyMTemp.getValdataerror();
+        String flag4 = valsupplyMTemp.getValiffleeing();
+        if("Y".equals(flag1)){
+            cb1.setChecked(true);
+            right_rg.clearCheck();
+        }
+        if("Y".equals(flag2)){
+            cb2.setChecked(true);
+            right_rg.clearCheck();
+        }
+        if("Y".equals(flag3)){
+            cb3.setChecked(true);
+            right_rg.clearCheck();
+        }
+        if("Y".equals(flag4)){
+            cb4.setChecked(true);
+            right_rg.clearCheck();
+        }
+
         // 取消按钮
         rl_back1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -334,12 +390,49 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
         rl_confirm1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(),"0: "+right_rb.isChecked()+"\n"
-                        +"1: "+cb1.isChecked()+"\n"
-                        +"2: "+cb2.isChecked()+"\n"
-                        +"3: "+cb3.isChecked()+"\n"
-                        +"4: "+cb4.isChecked()+"\n"
-                        ,Toast.LENGTH_SHORT).show();
+
+                // 请至少勾选一项
+                if((!right_rb.isChecked())&&(!cb1.isChecked())&&(!cb2.isChecked())&&(!cb3.isChecked())&&(!cb4.isChecked())){
+                    Toast.makeText(getActivity(),"请至少勾选一项",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(right_rb.isChecked()){
+                    valsupplyMTemp.setValagencysupplyflag("Y");// 供货关系正确与否
+                    valsupplyMTemp.setValproerror("N");// 品项有误
+                    valsupplyMTemp.setValagencyerror("N");// 经销商有误
+                    valsupplyMTemp.setValdataerror("N");// 数据有误
+                    valsupplyMTemp.setValiffleeing("N");// 窜货
+                    mAlertViewExt.dismiss();
+                    handler.sendEmptyMessage(ZsInvoicingFragment.INIT_AMEND);
+                }else{
+                    if(cb1.isChecked()){// 品项有误
+                        valsupplyMTemp.setValagencysupplyflag("N");// 供货关系正确与否
+                        valsupplyMTemp.setValproerror("Y");// 品项有误
+                        valsupplyMTemp.setValagencyerror("N");// 经销商有误
+                        valsupplyMTemp.setValdataerror("N");// 数据有误
+                        valsupplyMTemp.setValiffleeing("N");// 窜货
+                        mAlertViewExt.dismiss();
+                        handler.sendEmptyMessage(ZsInvoicingFragment.INIT_AMEND);
+                    }else{
+                        valsupplyMTemp.setValagencysupplyflag("N");// 供货关系正确与否
+                        valsupplyMTemp.setValproerror("N");// 品项有误
+
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("position", position);// 页面类型,比如: "1"
+                        bundle.putString("termId", termId);// 页面类型,比如: "1"
+                        bundle.putString("mitValterMTempKey", mitValterMTempKey);
+                        bundle.putBoolean("valagencyerror",cb2.isChecked());
+                        bundle.putBoolean("valdataerror",cb3.isChecked());
+                        bundle.putBoolean("valiffleeing",cb4.isChecked());
+                        bundle.putSerializable("dataLst", (Serializable) dataLst);
+                        ZsInvocingAmendFragment zsInvocingAmendFragment = new ZsInvocingAmendFragment(handler);
+                        zsInvocingAmendFragment.setArguments(bundle);
+                        ZsVisitShopActivity zsVisitShopActivity = (ZsVisitShopActivity)getActivity();
+                        zsVisitShopActivity.changeXtvisitFragment(zsInvocingAmendFragment,"zsamendfragment");
+                        mAlertViewExt.dismiss();
+                    }
+                }
             }
         });
 

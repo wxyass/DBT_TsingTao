@@ -14,6 +14,9 @@ public class XtInvoicingStc implements Serializable
     // 拜访产品表主键
     private String recordId;
 
+    // 供货关系主键
+    private String asupplykey;
+
     // 对应的拜访日期
     private String visitDate;
 
@@ -218,5 +221,12 @@ public class XtInvoicingStc implements Serializable
 	public void setAddcard(String addcard) {
 		this.addcard = addcard;
 	}
-	
+
+    public String getAsupplykey() {
+        return asupplykey;
+    }
+
+    public void setAsupplykey(String asupplykey) {
+        this.asupplykey = asupplykey;
+    }
 }
