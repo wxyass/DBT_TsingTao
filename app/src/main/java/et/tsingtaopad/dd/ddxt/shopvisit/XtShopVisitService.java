@@ -800,6 +800,7 @@ public class XtShopVisitService {
                 mitValterMTemp.setVidcmptreaty(term.getCmpselftreaty());// 终端合作状态竞品原值
                 mitValterMTemp.setVidterminalcode(term.getTerminalcode());// 终端编码原值
                 mitValterMTemp.setVidroutekey(term.getRoutekey());// 所属路线原值
+                mitValterMTemp.setVidterlevel(term.getTlevel());//终端等级
                 mitValterMTemp.setVidtername(term.getTerminalname());//终端名称原值
                 mitValterMTemp.setVidcountry(term.getCounty());//所属县原值
                 mitValterMTemp.setVidaddress(term.getAddress());//地址原值
@@ -813,7 +814,8 @@ public class XtShopVisitService {
                 mitValterMTemp.setVidpvolume(term.getPvolume());//普档容量原值
                 mitValterMTemp.setVidlvolume(term.getLvolume());//底档容量原值
                 mitValterMTemp.setVidminchannel(term.getMinorchannel());//次渠道原值
-                mitValterMTemp.setVidvisituser(mstVisitM.getVisituser());//拜访对象原值
+                mitValterMTemp.setVidvisituser(mstVisitM.getVisitposition());//拜访对象原值key
+                mitValterMTemp.setVidvisitotherval(mstVisitM.getVisituser());//拜访对象原值value
                 //mitValterMTemp.setPadisconsistent(term.getPadisconsistent());//
 
                 // ----------

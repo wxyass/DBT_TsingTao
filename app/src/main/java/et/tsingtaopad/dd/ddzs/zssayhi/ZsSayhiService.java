@@ -33,9 +33,12 @@ import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.db.DatabaseHelper;
+import et.tsingtaopad.db.dao.MstAgencyinfoMDao;
 import et.tsingtaopad.db.dao.MstTerminalinfoMTempDao;
 import et.tsingtaopad.db.dao.MstVisitMTempDao;
+import et.tsingtaopad.db.table.CmmAreaM;
 import et.tsingtaopad.db.table.CmmDatadicM;
+import et.tsingtaopad.db.table.MstAgencyinfoM;
 import et.tsingtaopad.db.table.MstInvalidapplayInfo;
 import et.tsingtaopad.db.table.MstRouteM;
 import et.tsingtaopad.db.table.MstTerminalinfoM;
@@ -271,6 +274,27 @@ public class ZsSayhiService extends XtShopVisitService {
     }
 
     /**
+     * 初始化拜访对象职位(老板老板娘)
+     */
+    public List<KvStc> initZsVisitPosition() {
+        List<CmmDatadicM> dataDicLst = initDataDictionary();
+        // 获取数据字典表中区域字典对应的父ID
+        String areaType=PropertiesUtil.getProperties("datadic_visitposition");
+
+        List<KvStc> kvLst = new ArrayList<KvStc>();
+        for (CmmDatadicM item : dataDicLst) {
+            if (areaType.equals(item.getParentcode())) {
+                kvLst.add(new KvStc(item.getDiccode()
+                        , item.getDicname(), item.getParentcode()));
+            } else if (kvLst.size() > 0) {
+                break;
+            }
+        }
+        return kvLst;
+    }
+
+
+    /**
      * 初始化销售渠道
      */
     public List<KvStc> initDataDicBySellChannel() {
@@ -281,6 +305,65 @@ public class ZsSayhiService extends XtShopVisitService {
         kvLst = queryChildForDataDic(sellChannel, 1);
         return kvLst;
     }
+
+    /**
+     *  根据父id 查询子集合
+     *
+     * @param parentCode    父ID
+     * @return
+     */
+    public List<KvStc> queryChildListDic(String parentCode) {
+        List<CmmDatadicM> dataDicLst = initDataDictionary();// 数据源
+        List<KvStc> kvLst = null;
+        kvLst = new ArrayList<KvStc>();
+        KvStc kvItem = new KvStc();
+        for (CmmDatadicM dataItem : dataDicLst) {
+            if (parentCode.equals(dataItem.getParentcode())) {
+                kvItem = new KvStc(dataItem.getDiccode(),dataItem.getDicname(), dataItem.getParentcode());
+                //kvItem.setChildLst(queryChildForDataDic(dataItem.getDiccode(), nextLevel));
+                kvLst.add(kvItem);
+            }
+        }
+        return kvLst;
+    }
+
+    /**
+     *  递归遍历区域树
+     *
+     * @param parentId      父ID
+     * @return
+     */
+    public List<KvStc> queryChildForArea(String parentId) {
+
+        List<CmmAreaM> areaLst = new ArrayList<CmmAreaM>();
+        MstAgencyinfoM agencyM = new MstAgencyinfoM();
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+
+            // 获取省市省
+            Dao<CmmAreaM, String> cmmAreaMDao = helper.getCmmAreaMDao();
+            QueryBuilder<CmmAreaM, String> qBuilder = cmmAreaMDao.queryBuilder();
+            Where<CmmAreaM, String> where = qBuilder.where();
+            where.or(where.isNull("deleteflag"), where.eq("deleteflag", "0"));
+            qBuilder.orderBy("areacode", true).orderBy("orderbyno", true);
+            areaLst = qBuilder.query();
+
+        } catch (Exception e) {
+            Log.e(TAG, "获取经销售商信息失败", e);
+        }
+
+        List<KvStc> kvLst = new ArrayList<KvStc>();
+        KvStc kvItem = new KvStc();
+        for (CmmAreaM areaItem : areaLst) {
+            if (parentId.equals(FunUtil.isBlankOrNullTo(areaItem.getParentcode(), "-1"))) {
+
+                kvItem = new KvStc(areaItem.getAreacode(), areaItem.getAreaname(), areaItem.getParentcode());
+                kvLst.add(kvItem);
+            }
+        }
+        return kvLst;
+    }
+
 
     /**
      *  递归遍历数据字典- 销售渠道
@@ -521,5 +604,23 @@ public class ZsSayhiService extends XtShopVisitService {
         }
     }
 
+    // 根据areacode查询CMM_AREA_M表中记录
+    public String getVisitpositionName(String diccode) {
+
+        DatabaseHelper helper = DatabaseHelper.getHelper(context);
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        String querySql = "SELECT *  FROM CMM_DATADIC_M WHERE diccode = ?";
+        Cursor cursor = db.rawQuery(querySql, new String[]{diccode});
+        cursor.moveToFirst();
+        int columnIndex = cursor.getColumnIndex("dicname");
+        String VisitpositionName;
+        try {
+            VisitpositionName = cursor.getString(cursor.getColumnIndex("dicname"));
+        } catch (Exception e) {
+            VisitpositionName = "";
+        }
+        return VisitpositionName;
+    }
 
 }

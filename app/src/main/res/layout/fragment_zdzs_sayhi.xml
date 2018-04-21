@@ -122,31 +122,31 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"/>
-            <!-- 销售产品范围：  -->
+            <!-- 是否我品销售范围：  -->
             <RelativeLayout
-                android:id="@+id/zdzs_sayhi_rl_prostatus"
+                android:id="@+id/zdzs_sayhi_rl_selfstatus"
                 style="@style/xtbf_sayhi_rl">
 
                 <!--标题-->
                 <TextView
                     style="@style/zdzs_sayhi_title"
-                    android:text="@string/sayhi_prostatus"/>
+                    android:text="是否我品销售范围"/>
 
                 <!--内容1-->
                 <TextView
-                    android:id="@+id/zdzs_sayhi_rl_prostatus_con1"
+                    android:id="@+id/zdzs_sayhi_rl_selfstatus_con1"
                     style="@style/zdzs_sayhi_content1"
                     android:text=""/>
 
                 <!--内容2-->
                 <TextView
-                    android:id="@+id/zdzs_sayhi_rl_prostatus_con2"
+                    android:id="@+id/zdzs_sayhi_rl_selfstatus_con2"
                     style="@style/zdzs_sayhi_content2"
                     android:text=""/>
 
                 <!--未稽查-->
                 <TextView
-                    android:id="@+id/zdzs_sayhi_rl_prostatus_statue"
+                    android:id="@+id/zdzs_sayhi_rl_selfstatus_statue"
                     style="@style/zdzs_sayhi_statue"
                     android:text="未稽查"/>
 
@@ -157,9 +157,48 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"/>
-            <!-- 终端合作状态 -->
+
+
+            <!-- 是否竞品销售范围：  -->
             <RelativeLayout
-                android:id="@+id/zdzs_sayhi_rl_protocol"
+                android:id="@+id/zdzs_sayhi_rl_cmpstatus"
+                style="@style/xtbf_sayhi_rl">
+
+                <!--标题-->
+                <TextView
+                    style="@style/zdzs_sayhi_title"
+                    android:text="是否我品销售范围"/>
+
+                <!--内容1-->
+                <TextView
+                    android:id="@+id/zdzs_sayhi_rl_cmpstatus_con1"
+                    style="@style/zdzs_sayhi_content1"
+                    android:text=""/>
+
+                <!--内容2-->
+                <TextView
+                    android:id="@+id/zdzs_sayhi_rl_cmpstatus_con2"
+                    style="@style/zdzs_sayhi_content2"
+                    android:text=""/>
+
+                <!--未稽查-->
+                <TextView
+                    android:id="@+id/zdzs_sayhi_rl_cmpstatus_statue"
+                    style="@style/zdzs_sayhi_statue"
+                    android:text="未稽查"/>
+
+                <ImageView
+                    style="@style/xtbf_sayhi_third_tv"
+                    android:visibility="visible"/>
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+
+
+            <!-- 我品终端合作状态 -->
+            <RelativeLayout
+                android:id="@+id/zdzs_sayhi_rl_selfprotocol"
                 style="@style/xtbf_sayhi_rl">
 
                 <!--标题-->
@@ -169,19 +208,55 @@
 
                 <!--内容1-->
                 <TextView
-                    android:id="@+id/zdzs_sayhi_rl_protocol_con1"
+                    android:id="@+id/zdzs_sayhi_rl_selfprotocol_con1"
                     style="@style/zdzs_sayhi_content1"
                     android:text=""/>
 
                 <!--内容2-->
                 <TextView
-                    android:id="@+id/zdzs_sayhi_rl_protocol_con2"
+                    android:id="@+id/zdzs_sayhi_rl_selfprotocol_con2"
                     style="@style/zdzs_sayhi_content2"
                     android:text=""/>
 
                 <!--未稽查-->
                 <TextView
-                    android:id="@+id/zdzs_sayhi_rl_protocol_statue"
+                    android:id="@+id/zdzs_sayhi_rl_selfprotocol_statue"
+                    style="@style/zdzs_sayhi_statue"
+                    android:text="未稽查"/>
+
+                <ImageView
+                    style="@style/xtbf_sayhi_third_tv"
+                    android:visibility="visible"/>
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+
+            <!-- 竞品终端合作状态 -->
+            <RelativeLayout
+                android:id="@+id/zdzs_sayhi_rl_cmpprotocol"
+                style="@style/xtbf_sayhi_rl">
+
+                <!--标题-->
+                <TextView
+                    style="@style/zdzs_sayhi_title"
+                    android:text="@string/sayhi_protocol"/>
+
+                <!--内容1-->
+                <TextView
+                    android:id="@+id/zdzs_sayhi_rl_cmpprotocol_con1"
+                    style="@style/zdzs_sayhi_content1"
+                    android:text=""/>
+
+                <!--内容2-->
+                <TextView
+                    android:id="@+id/zdzs_sayhi_rl_cmpprotocol_con2"
+                    style="@style/zdzs_sayhi_content2"
+                    android:text=""/>
+
+                <!--未稽查-->
+                <TextView
+                    android:id="@+id/zdzs_sayhi_rl_cmpprotocol_statue"
                     style="@style/zdzs_sayhi_statue"
                     android:text="未稽查"/>
 
@@ -378,11 +453,12 @@
                 <TextView
                     android:id="@+id/zdzs_sayhi_rl_prov_statue"
                     style="@style/zdzs_sayhi_statue"
+                    android:visibility="gone"
                     android:text="未稽查"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"
-                    android:visibility="visible"/>
+                    android:visibility="gone"/>
             </RelativeLayout>
             <View
                 android:layout_width="match_parent"
@@ -412,11 +488,12 @@
                 <TextView
                     android:id="@+id/zdzs_sayhi_rl_city_statue"
                     style="@style/zdzs_sayhi_statue"
+                    android:visibility="gone"
                     android:text="未稽查"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"
-                    android:visibility="visible"/>
+                    android:visibility="gone"/>
             </RelativeLayout>
             <View
                 android:layout_width="match_parent"
@@ -854,11 +931,12 @@
                 <TextView
                     android:id="@+id/zdzs_sayhi_rl_sellchannel_statue"
                     style="@style/zdzs_sayhi_statue"
+                    android:visibility="gone"
                     android:text="未稽查"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"
-                    android:visibility="visible"/>
+                    android:visibility="gone"/>
             </RelativeLayout>
             <View
                 android:layout_width="match_parent"
@@ -888,11 +966,12 @@
                 <TextView
                     android:id="@+id/zdzs_sayhi_rl_mainchannel_statue"
                     style="@style/zdzs_sayhi_statue"
+                    android:visibility="gone"
                     android:text="未稽查"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"
-                    android:visibility="visible"/>
+                    android:visibility="gone"/>
             </RelativeLayout>
             <View
                 android:layout_width="match_parent"

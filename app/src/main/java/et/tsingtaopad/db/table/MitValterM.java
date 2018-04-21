@@ -203,6 +203,20 @@ public class MitValterM implements java.io.Serializable {
 	@DatabaseField
 	private Date updatedate           ;//date                           null
 
+	@DatabaseField
+	private String vidterlevel ;//varchar2(100) null,
+	@DatabaseField
+	private String vidtervidterlevelflag ;//char(1) null,
+	@DatabaseField
+	private String vidtervidterlevelval ;//varchar2(100) null,
+	@DatabaseField
+	private String vidtervidterlevelremark ;//varchar2(300),
+
+	@DatabaseField
+	private String vidvisitotherval;
+
+	@DatabaseField
+	private String vidvisitottrueval;
 
 	// Constructors
 
@@ -1039,5 +1053,53 @@ public class MitValterM implements java.io.Serializable {
 
 	public void setUpdatedate(Date updatedate) {
 		this.updatedate = updatedate;
+	}
+
+	public String getVidterlevel() {
+		return vidterlevel;
+	}
+
+	public void setVidterlevel(String vidterlevel) {
+		this.vidterlevel = vidterlevel;
+	}
+
+	public String getVidtervidterlevelflag() {
+		return vidtervidterlevelflag;
+	}
+
+	public void setVidtervidterlevelflag(String vidtervidterlevelflag) {
+		this.vidtervidterlevelflag = vidtervidterlevelflag;
+	}
+
+	public String getVidtervidterlevelval() {
+		return vidtervidterlevelval;
+	}
+
+	public void setVidtervidterlevelval(String vidtervidterlevelval) {
+		this.vidtervidterlevelval = vidtervidterlevelval;
+	}
+
+	public String getVidtervidterlevelremark() {
+		return vidtervidterlevelremark;
+	}
+
+	public void setVidtervidterlevelremark(String vidtervidterlevelremark) {
+		this.vidtervidterlevelremark = vidtervidterlevelremark;
+	}
+
+	public String getVidvisitotherval() {
+		return vidvisitotherval;
+	}
+
+	public void setVidvisitotherval(String vidvisitotherval) {
+		this.vidvisitotherval = vidvisitotherval;
+	}
+
+	public String getVidvisitottrueval() {
+		return vidvisitottrueval;
+	}
+
+	public void setVidvisitottrueval(String vidvisitottrueval) {
+		this.vidvisitottrueval = vidvisitottrueval;
 	}
 }

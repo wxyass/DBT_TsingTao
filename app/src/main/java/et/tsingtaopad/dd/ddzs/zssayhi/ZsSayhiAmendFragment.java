@@ -48,6 +48,7 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
 
     protected String titleName="";// 标题内容,比如:是否有效终端
     protected String ydkey="";// 对象属性,比如: vidroutekey(属性)
+    protected String ydparentkey="";// 对象属性,比如: vidroutekey(属性)
     protected String setDdValue ="";// 对象方法名,比如: setVidrtekeyval(督导输入的值)
     protected String setDdFlag ="";// 对象方法名,比如: setVidrtekeyflag(正确与否)
     protected String setDdRemark ="";// 对象方法名,比如: setVidroutremark(备注)
@@ -74,6 +75,7 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
     private RelativeLayout zdzs_sayhi_amend_rl_dd_sp;
     private TextView zdzs_sayhi_amend_rl_dd_title_sp;
     private TextView zdzs_sayhi_amend_rl_dd_con1_sp;
+    private EditText zdzs_sayhi_amend_rl_dd_con1_et_sp;
     private TextView zdzs_sayhi_amend_rl_dd_con2_sp;
 
     private EditText zdzs_sayhi_amend_dd_et_report;
@@ -81,7 +83,7 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
     private ZsSayhiService xtSayhiService;
 
     // 0,1类型
-    String oneType ="termstatus,visitstatus";
+    String oneType ="termstatus,visitstatus,wopindianzhao,selfstatus,cmpstatus,selfprotocol,cmpprotocol";
     // 字符串类型
     String twoType ="termname,termcode,address,person,tel,sequence";
     // 下拉类型
@@ -149,6 +151,7 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
         zdzs_sayhi_amend_rl_dd_sp = (RelativeLayout) view.findViewById(R.id.zdzs_sayhi_amend_rl_dd_sp);
         zdzs_sayhi_amend_rl_dd_title_sp = (TextView) view.findViewById(R.id.zdzs_sayhi_amend_rl_dd_title_sp);
         zdzs_sayhi_amend_rl_dd_con1_sp = (TextView) view.findViewById(R.id.zdzs_sayhi_amend_rl_dd_con1_sp);
+        zdzs_sayhi_amend_rl_dd_con1_et_sp = (EditText) view.findViewById(R.id.zdzs_sayhi_amend_rl_dd_con1_et_sp);
         zdzs_sayhi_amend_rl_dd_con2_sp = (TextView) view.findViewById(R.id.zdzs_sayhi_amend_rl_dd_con2_sp);
 
         zdzs_sayhi_amend_dd_et_report = (EditText) view.findViewById(R.id.zdzs_sayhi_amend_dd_et_report);
@@ -170,6 +173,7 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
         Bundle bundle = getArguments();
         titleName = bundle.getString("titleName");
         ydkey = bundle.getString("ydkey");
+        ydparentkey = bundle.getString("ydparentkey");
         setDdValue = bundle.getString("setDdValue");
         setDdFlag = bundle.getString("setDdFlag");
         setDdRemark = bundle.getString("setDdRemark");
@@ -237,7 +241,12 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
         }
         // 拜访对象
         if(persionType.contains(type)){
-            zdzs_sayhi_amend_rl_con1.setText(getFieldValueByFieldName(ydkey,mitValterMTemp));
+            if(!("-1".equals(ydkey)||"66AA9D3A55374232891C964350610930".equals(ydkey))){ //"-1",其他 根据原先用户是什么,不做处理
+                String visitpositionName = xtSayhiService.getVisitpositionName(ydkey);
+                zdzs_sayhi_amend_rl_con1.setText(visitpositionName);
+            }else{
+                zdzs_sayhi_amend_rl_con1.setText(mitValterMTemp.getVidvisitotherval());// 其他
+            }
         }
 
         // 督导数据
@@ -266,7 +275,7 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             zdzs_sayhi_amend_rl_dd_sp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setSelectRouteMRight(xtSayhiService.initXtMstRoute(termId),getFieldValueByFieldName(ydkey,mitValterMTemp));
+                    setSelectRouteMRight(xtSayhiService.initXtMstRoute(termId),(String) zdzs_sayhi_amend_rl_dd_con1_sp.getTag());
                 }
             });
         }
@@ -277,7 +286,8 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             zdzs_sayhi_amend_rl_dd_sp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setSelectValueRight(xtSayhiService.initDataDicByTermLevel(),getFieldValueByFieldName(ydkey,mitValterMTemp));
+                    setSelectValueRight(xtSayhiService.initDataDicByTermLevel(),
+                            (String) zdzs_sayhi_amend_rl_dd_con1_sp.getTag());
                 }
             });
         }
@@ -285,6 +295,14 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
         if(countryType.contains(type)){
             zdzs_sayhi_amend_rl_ll_head.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_sp.setVisibility(View.VISIBLE);
+
+            zdzs_sayhi_amend_rl_dd_sp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setSelectValueRight(xtSayhiService.queryChildForArea(ydparentkey),
+                            (String) zdzs_sayhi_amend_rl_dd_con1_sp.getTag());
+                }
+            });
         }
         // 区域类型
         if(areaType.contains(type)){
@@ -294,7 +312,8 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             zdzs_sayhi_amend_rl_dd_sp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setSelectValueRight(xtSayhiService.initDataDicByAreaType(),getFieldValueByFieldName(ydkey,mitValterMTemp));
+                    setSelectValueRight(xtSayhiService.initDataDicByAreaType(),
+                            (String) zdzs_sayhi_amend_rl_dd_con1_sp.getTag());
                 }
             });
         }
@@ -302,11 +321,27 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
         if(channerlType.contains(type)){
             zdzs_sayhi_amend_rl_ll_head.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_sp.setVisibility(View.VISIBLE);
+
+            zdzs_sayhi_amend_rl_dd_sp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setSelectValueRight(xtSayhiService.queryChildListDic(ydparentkey),
+                            (String) zdzs_sayhi_amend_rl_dd_con1_sp.getTag());
+                }
+            });
         }
         // 拜访对象
         if(persionType.contains(type)){
             zdzs_sayhi_amend_rl_ll_head.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_sp.setVisibility(View.VISIBLE);
+
+            zdzs_sayhi_amend_rl_dd_sp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setSelectVisitPosition(xtSayhiService.initZsVisitPosition(),
+                            (String) zdzs_sayhi_amend_rl_dd_con1_sp.getTag());
+                }
+            });
         }
 
 
@@ -369,7 +404,17 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
         // 拜访对象
         if(persionType.contains(type)){
             String  key = (String)zdzs_sayhi_amend_rl_dd_con1_sp.getTag();
-            setFieldValue(mitValterMTemp, setDdValue,key);
+            setFieldValue(mitValterMTemp, setDdValue,key);// 督导正确的key
+
+            String  value = (String)zdzs_sayhi_amend_rl_dd_con1_sp.getText();
+            String  value2 = (String)zdzs_sayhi_amend_rl_dd_con1_et_sp.getText().toString();
+
+            if("66AA9D3A55374232891C964350610930".equals(key)){// 其他
+                mitValterMTemp.setVidvisitottrueval(value2);
+            }else{
+                setFieldValue(mitValterMTemp, setDdValue,key);
+                mitValterMTemp.setVidvisitottrueval(value);
+            }
         }
 
         // 保存是否正确,备注内容
@@ -433,7 +478,7 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
         mAlertViewExt.show();
     }
 
-    // 路线选择
+    // 选择 县 终端等级 区域 次渠道
     private void setSelectValueRight(final List<KvStc> dataDic, String routekey){
         mAlertViewExt = new AlertView("请正确值", null, null, null, null, getActivity(), AlertView.Style.ActionSheet, null);
         ViewGroup extView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_list_form, null);
@@ -446,6 +491,38 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 zdzs_sayhi_amend_rl_dd_con1_sp.setText(dataDic.get(position).getValue());
                 zdzs_sayhi_amend_rl_dd_con1_sp.setTag(dataDic.get(position).getKey());
+                mAlertViewExt.dismiss();
+            }
+        });
+        mAlertViewExt.addExtView(extView);
+        mAlertViewExt.setCancelable(true).setOnDismissListener(null);
+        mAlertViewExt.show();
+    }
+
+    // 拜访对象
+    private void setSelectVisitPosition(final List<KvStc> dataDic, String routekey){
+        mAlertViewExt = new AlertView("请正确值", null, null, null, null, getActivity(), AlertView.Style.ActionSheet, null);
+        ViewGroup extView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_list_form, null);
+        ListView listview = (ListView) extView.findViewById(R.id.alert_list);
+        AlertKeyValueAdapter keyValueAdapter = new AlertKeyValueAdapter(getActivity(), dataDic,
+                new String[]{"key", "value"}, routekey);
+        listview.setAdapter(keyValueAdapter);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if("66AA9D3A55374232891C964350610930".equals(dataDic.get(position).getKey())){// 选择其他
+                    zdzs_sayhi_amend_rl_dd_con1_sp.setVisibility(View.GONE);
+                    zdzs_sayhi_amend_rl_dd_con1_et_sp.setVisibility(View.VISIBLE);
+                    zdzs_sayhi_amend_rl_dd_con1_sp.setText(dataDic.get(position).getValue());
+                    zdzs_sayhi_amend_rl_dd_con1_sp.setTag(dataDic.get(position).getKey());
+                    zdzs_sayhi_amend_rl_dd_con1_et_sp.setTag(dataDic.get(position).getKey());
+                }else{
+                    zdzs_sayhi_amend_rl_dd_con1_sp.setVisibility(View.VISIBLE);
+                    zdzs_sayhi_amend_rl_dd_con1_et_sp.setVisibility(View.GONE);
+                    zdzs_sayhi_amend_rl_dd_con1_sp.setText(dataDic.get(position).getValue());
+                    zdzs_sayhi_amend_rl_dd_con1_sp.setTag(dataDic.get(position).getKey());
+                    zdzs_sayhi_amend_rl_dd_con1_et_sp.setTag(dataDic.get(position).getKey());
+                }
                 mAlertViewExt.dismiss();
             }
         });

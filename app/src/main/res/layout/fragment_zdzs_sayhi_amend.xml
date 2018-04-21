@@ -164,6 +164,15 @@
                             style="@style/zdzs_sayhi_content1"
                             android:text=""/>
 
+                        <!--内容1-->
+                        <EditText
+                            android:id="@+id/zdzs_sayhi_amend_rl_dd_con1_et_sp"
+                            android:background="@drawable/bg_visit_record"
+                            style="@style/zdzs_sayhi_content1"
+                            android:layout_marginRight="200dp"
+                            android:visibility="gone"
+                            android:text=""/>
+
                         <!--内容2-->
                         <TextView
                             android:id="@+id/zdzs_sayhi_amend_rl_dd_con2_sp"

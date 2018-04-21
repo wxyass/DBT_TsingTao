@@ -145,21 +145,28 @@ public class ZsInvoicingAdapter extends
             holder.addcardEt.setText(item.getValsljk());
         }
 
-        // 未稽查
-        if("N".equals(item.getValagencysupplyflag())){
-            holder.statueTv.setText("业代录错");
-        }else if("Y".equals(item.getValagencysupplyflag())){
-            holder.statueTv.setText("正确");
-        }else{
-            holder.statueTv.setText("未稽查");
-        }
 
-        // 背景
-        if("Y".equals(item.getValproerror())){
-            holder.ll_all.setBackgroundColor(Color.LTGRAY);
-            holder.statueTv.setText("督导失效");
-        }else{
-            holder.ll_all.setBackgroundColor(Color.WHITE);
+
+        if("Y".equals(item.getValaddagencysupply())){// 是否督导新增
+            holder.statueTv.setText("督导新增");
+
+        }else{// 业代的供货数据
+            // 未稽查
+            if("N".equals(item.getValagencysupplyflag())){
+                holder.statueTv.setText("业代录错");
+            }else if("Y".equals(item.getValagencysupplyflag())){
+                holder.statueTv.setText("正确");
+            }else{
+                holder.statueTv.setText("未稽查");
+            }
+
+            // 背景
+            if("Y".equals(item.getValproerror())){
+                holder.ll_all.setBackgroundColor(Color.LTGRAY);
+                holder.statueTv.setText("督导失效");
+            }else{
+                holder.ll_all.setBackgroundColor(Color.WHITE);
+            }
         }
         
 

@@ -328,6 +328,8 @@ public class XtSayhiService extends XtShopVisitService {
         return kvLst;
     }
 
+
+
     /**
      * 打招呼中无效终端的提示框
      * @author 吴欣伟
