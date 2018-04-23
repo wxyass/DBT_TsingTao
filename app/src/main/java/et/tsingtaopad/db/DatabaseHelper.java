@@ -31,6 +31,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<MstAgencysupplyInfo, String> mstAgencysupplyInfoDao = null;
     private Dao<MstAgencysupplyInfoTemp, String> mstAgencysupplyInfoTempDao = null;
     private Dao<MitAgencysupplyInfo, String> mitAgencysupplyInfoDao = null;
+    private Dao<MitValcmpM, String> mitValcmpMDao = null;
+    private Dao<MitValcmpMTemp, String> mitValcmpMTempDao = null;
     private Dao<MstAgencytransferInfo, String> mstAgencytransferInfoDao = null;
     private Dao<MstAgencyvisitM, String> mstAgencyvisitMDao = null;
     private Dao<MstBrandsclassM, String> mstBrandsclassMDao = null;
@@ -257,9 +259,14 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
             TableUtils.createTable(connectionSource, MitValterM.class);// 追溯主表
             TableUtils.createTable(connectionSource, MitValterMTemp.class);// 追溯主表临时表
+
             TableUtils.createTable(connectionSource, MitValcheckterM.class);// 追溯指标配置
+
             TableUtils.createTable(connectionSource, MitValsupplyM.class);// 追溯进销存表
             TableUtils.createTable(connectionSource, MitValsupplyMTemp.class);// 追溯进销存表临时表
+
+            TableUtils.createTable(connectionSource, MitValcmpM.class);// 追溯聊竞品表
+            TableUtils.createTable(connectionSource, MitValcmpMTemp.class);// 追溯聊竞品表 临时表
 
 
             this.initView(db);
@@ -943,6 +950,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 String mit_valsupply_m_temp = "create table MIT_VALSUPPLY_M_TEMP ( id varchar2(36) not null, valterid varchar2(36) null, valaddagencysupply char(1) null, valsuplyid varchar2(36) null, valsqd varchar2(10) null, valsls varchar2(10) null, valsdd varchar2(10) null, valsrxl  char(10) null, valsljk  varchar2(10) null, valter varchar2(36) null, valpro varchar2(36) null, valagency varchar2(36) null,valproname varchar2(36) null, valagencyname varchar2(36) null, valagencysupplyflag  char(1) null, valproerror  char(1) null, valagencyerror char(1) null,valtrueagency varchar2(10) null, valdataerror char(1) null, valiffleeing char(1) null,valiffleeingremark varchar2(300) null, valagencysupplyqd varchar2(10) null, valagencysupplyls varchar2(10) null, valagencysupplydd varchar2(10) null, valagencysupplysrxl  char(10) null, valagencysupplyljk varchar2(10) null, valagencysupplyremark varchar2(300)  null, creuser  varchar2(128)  null, credate  date null, updateuser varchar2(128)  null, updatedate date null )";
                 db.execSQL(mit_valsupply_m_temp);
 
+                // 追溯竞品供货关系
+                String mit_valcmp_m = "create table MIT_VALCMP_M ( id varchar2(36) not null, valterid varchar2(36) null, valaddagencysupply   char(1)    null, valagencysupplyid    varchar2(36) null, valcmpjdj    varchar2(10) null, valcmplsj    varchar2(10) null, valcmpsales  varchar2(10) null, valcmpkc varchar2(10) null, valcmpremark     varchar2(300)  null, valcmpagency     varchar2(300)  null, valcmpagencyval     varchar2(300)  null, valcmpname     varchar2(300)  null,valcmpid varchar2(36) null, valiscmpter  varchar2(36) null, valagencysupplyflag  char(1)    null, valproerror  char(1)    null, valagencyerror   char(1)    null, valdataerror     char(1)    null, valcmpjdjval     varchar2(10) null, valcmplsjval     varchar2(10) null, valcmpsalesval   varchar2(10) null, valcmpkcval  varchar2(10) null, valcmpsupremark  varchar2(300)  null, valcmpremarkval  varchar2(300)  null, valistrueflag    char(1)    null, valistruecmpval  char(1)    null, valiscmpremark   varchar2(300)  null, valvisitremark   varchar2(300)  null )";
+                db.execSQL(mit_valcmp_m);
+                // 追溯竞品供货关系
+                String mit_valcmp_m_temp = "create table MIT_VALCMP_M_TEMP ( id varchar2(36) not null, valterid varchar2(36) null, valaddagencysupply   char(1)    null, valagencysupplyid    varchar2(36) null, valcmpjdj    varchar2(10) null, valcmplsj    varchar2(10) null, valcmpsales  varchar2(10) null, valcmpkc varchar2(10) null, valcmpremark     varchar2(300)  null, valcmpagency     varchar2(300)  null,valcmpagencyval     varchar2(300)  null, valcmpname     varchar2(300)  null, valcmpid varchar2(36) null, valiscmpter  varchar2(36) null, valagencysupplyflag  char(1)    null, valproerror  char(1)    null, valagencyerror   char(1)    null, valdataerror     char(1)    null, valcmpjdjval     varchar2(10) null, valcmplsjval     varchar2(10) null, valcmpsalesval   varchar2(10) null, valcmpkcval  varchar2(10) null, valcmpsupremark  varchar2(300)  null, valcmpremarkval  varchar2(300)  null, valistrueflag    char(1)    null, valistruecmpval  char(1)    null, valiscmpremark   varchar2(300)  null, valvisitremark   varchar2(300)  null )";
+                db.execSQL(mit_valcmp_m_temp);
+
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1088,6 +1102,23 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mitAgencysupplyInfoDao;
     }
+
+    public Dao<MitValcmpM, String> getMitValcmpMDao() throws SQLException {
+
+        if (mitValcmpMDao == null) {
+            mitValcmpMDao = getDao(MitValcmpM.class);
+        }
+        return mitValcmpMDao;
+    }
+
+    public Dao<MitValcmpMTemp, String> getMitValcmpMTempDao() throws SQLException {
+
+        if (mitValcmpMTempDao == null) {
+            mitValcmpMTempDao = getDao(MitValcmpMTemp.class);
+        }
+        return mitValcmpMTempDao;
+    }
+
 
     public Dao<MstAgencytransferInfo, String> getMstAgencytransferInfoDao() throws SQLException {
 

@@ -968,4 +968,60 @@ public class MstVistproductInfoDaoImpl extends
 		return lst;
 	}
 
+	/**
+	 * 获取追溯 聊竞品 数据情况
+	 *
+	 * @param helper
+	 * @param visitId
+	 *            拜访主键
+	 * @return
+	 */
+	public List<XtChatVieStc> queryZsVieProByTemp(DatabaseHelper helper, String visitId, String termid) {
+
+		List<XtChatVieStc> lst = new ArrayList<XtChatVieStc>();
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("select vp.recordkey,vp.cmpproductkey, vp.purcprice, mci.cmpsupplykey,  ");
+		buffer.append("vp.retailprice, vp.remarks, pm.cmpprodesc, vp.currnum, ");
+		buffer.append("vp.salenum, vp.agencykey, vp.agencyname,pm.cmpproname, vp.cmpcomkey, pc.cmpagencyname ");
+		buffer.append("from mst_vistproduct_info vp ");
+		buffer.append("left join mst_cmproductinfo_m pm ");
+		buffer.append("    on vp.cmpproductkey = pm.cmpproductkey ");
+		buffer.append("left join mst_cmpagency_info pc ");
+		buffer.append("    on pc.cmpagencykey = vp.agencykey ");
+
+		buffer.append(" left join mst_cmpsupply_info mci");
+		buffer.append(" 	on mci.cmpproductkey = vp.cmpproductkey  and mci.terminalkey = ? " );
+
+		buffer.append("where vp.visitkey = ? and vp.productkey is null ");
+		buffer.append("and coalesce(vp.deleteflag,'0') != '1'");
+
+		Cursor cursor = helper.getReadableDatabase().rawQuery(
+				buffer.toString(), new String[] {termid, visitId });
+		XtChatVieStc item;
+		while (cursor.moveToNext()) {
+			item = new XtChatVieStc();
+			item.setRecordId(cursor.getString(cursor.getColumnIndex("recordkey")));
+			item.setProId(cursor.getString(cursor.getColumnIndex("cmpproductkey")));
+			item.setCmpsupplykey(cursor.getString(cursor.getColumnIndex("cmpsupplykey")));
+			item.setProName(cursor.getString(cursor.getColumnIndex("cmpproname")));
+			item.setAgencyId(cursor.getString(cursor.getColumnIndex("agencykey")));
+			item.setCommpayId(cursor.getString(cursor.getColumnIndex("cmpcomkey")));
+			item.setAgencyName(cursor.getString(cursor.getColumnIndex("agencyname")));// 用户输入的竞品经销商
+			item.setChannelPrice(cursor.getString((cursor.getColumnIndex("purcprice"))));
+			item.setSellPrice(cursor.getString(cursor.getColumnIndex("retailprice")));
+			item.setCurrStore(cursor.getString(cursor.getColumnIndex("currnum")));
+			item.setMonthSellNum(cursor.getString(cursor.getColumnIndex("salenum")));
+			// if
+			// (CheckUtil.isBlankOrNull(cursor.getString(cursor.getColumnIndex("remarks"))))
+			// {
+			// item.setDescribe(cursor.getString(cursor.getColumnIndex("cmpprodesc")));
+			// } else {
+			item.setDescribe(cursor.getString(cursor.getColumnIndex("remarks")));
+			// }
+			lst.add(item);
+		}
+
+		return lst;
+	}
+
 }

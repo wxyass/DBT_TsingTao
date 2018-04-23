@@ -42,30 +42,30 @@
 
         <!-- 业代数据： -->
         <RelativeLayout
-            android:id="@+id/zdzs_sayhi_amend_rl"
+            android:id="@+id/zdzs_chatvie_wj_amend_rl"
             style="@style/xtbf_sayhi_rl">
 
             <!--标题-->
             <TextView
-                android:id="@+id/zdzs_sayhi_amend_rl_yd_title"
+                android:id="@+id/zdzs_chatvie_wj_amend_rl_yd_title"
                 style="@style/zdzs_sayhi_title"
                 android:text="@string/termadd_termname"/>
 
             <!--内容1-->
             <TextView
-                android:id="@+id/zdzs_sayhi_amend_rl_con1"
+                android:id="@+id/zdzs_chatvie_wj_amend_rl_con1"
                 style="@style/zdzs_sayhi_content1"
                 android:text=""/>
 
             <!--内容2-->
             <TextView
-                android:id="@+id/zdzs_sayhi_amend_rl_con2"
+                android:id="@+id/zdzs_chatvie_wj_amend_rl_con2"
                 style="@style/zdzs_sayhi_content2"
                 android:text=""/>
 
             <!--未稽查-->
             <TextView
-                android:id="@+id/zdzs_sayhi_amend_rl_statue"
+                android:id="@+id/zdzs_chatvie_wj_amend_rl_statue"
                 style="@style/zdzs_sayhi_statue"
                 android:text="未稽查"
                 android:visibility="gone"/>
@@ -78,112 +78,6 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
-
-        <!--督导数据-->
-        <LinearLayout
-            android:id="@+id/zdzs_sayhi_amend_rl_ll_head"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    style="@style/point"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:src="@drawable/ico_point"/>
-
-                <TextView
-                    style="@style/page_label_big"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="督导数据"/>
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
-
-            <!-- 督导数据： -->
-            <RelativeLayout
-                android:id="@+id/zdzs_sayhi_amend_rl_dd_head"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/bg_select_white_gray">
-
-                <!--第一种类型,输入框-->
-                <RelativeLayout
-                    android:id="@+id/zdzs_sayhi_amend_rl_dd_et"
-                    style="@style/xtbf_sayhi_rl"
-                    android:visibility="gone">
-
-                    <!--标题-->
-                    <TextView
-                        android:id="@+id/zdzs_sayhi_amend_rl_dd_title_et"
-                        style="@style/zdzs_sayhi_title"
-                        android:text="@string/termadd_termname"/>
-
-                    <!--内容1-->
-                    <EditText
-                        android:id="@+id/zdzs_sayhi_amend_rl_dd_con1_et"
-                        style="@style/zdzs_sayhi_content1"
-                        android:background="@drawable/bg_visit_record"
-                        android:text=""/>
-                    <!--内容2-->
-                    <TextView
-                        android:id="@+id/zdzs_sayhi_amend_rl_con2_et"
-                        style="@style/zdzs_sayhi_content2"
-                        android:text=""/>
-
-
-                </RelativeLayout>
-
-                <!--第2种类型,下拉选择-->
-                <RelativeLayout
-                    android:id="@+id/zdzs_sayhi_amend_rl_dd_sp"
-                    style="@style/xtbf_sayhi_rl"
-                    android:visibility="gone">
-
-                    <!--标题-->
-                    <TextView
-                        android:id="@+id/zdzs_sayhi_amend_rl_dd_title_sp"
-                        style="@style/zdzs_sayhi_title"
-                        android:text="@string/termadd_termname"/>
-
-                    <!--内容1-->
-                    <TextView
-                        android:id="@+id/zdzs_sayhi_amend_rl_dd_con1_sp"
-                        style="@style/zdzs_sayhi_content1"
-                        android:text=""/>
-
-                    <!--内容1-->
-                    <EditText
-                        android:id="@+id/zdzs_sayhi_amend_rl_dd_con1_et_sp"
-                        style="@style/zdzs_sayhi_content1"
-                        android:layout_marginRight="200dp"
-                        android:background="@drawable/bg_visit_record"
-                        android:text=""
-                        android:visibility="gone"/>
-
-                    <!--内容2-->
-                    <TextView
-                        android:id="@+id/zdzs_sayhi_amend_rl_dd_con2_sp"
-                        style="@style/zdzs_sayhi_content2"
-                        android:text=""/>
-
-                    <ImageView
-                        style="@style/xtbf_sayhi_third_tv"
-                        android:visibility="visible"/>
-                </RelativeLayout>
-            </RelativeLayout>
-        </LinearLayout>
-
 
         <!--督导备注-->
         <LinearLayout
@@ -217,7 +111,7 @@
             android:gravity="center_vertical">
 
             <EditText
-                android:id="@+id/zdzs_sayhi_amend_dd_et_report"
+                android:id="@+id/zdzs_chatvie_wj_amend_dd_et_report"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginLeft="10dp"
@@ -242,7 +136,7 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:id="@+id/zdzs_sayhi_amend_dd_bt_save"
+                android:id="@+id/zdzs_chatvie_wj_amend_dd_bt_save"
                 style="@style/xtbf_btn_tv"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/xtbf_btn_h"

@@ -2,6 +2,7 @@ package et.tsingtaopad.dd.ddzs.zschatvie;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -23,6 +25,7 @@ import et.tsingtaopad.R;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
+import et.tsingtaopad.db.table.MitValcmpMTemp;
 import et.tsingtaopad.dd.ddxt.chatvie.domain.XtChatVieStc;
 import et.tsingtaopad.dd.ddxt.invoicing.domain.XtInvoicingStc;
 import et.tsingtaopad.listviewintf.IClick;
@@ -41,7 +44,8 @@ public class ZsChatvieAdapter extends
                     BaseAdapter implements OnFocusChangeListener ,OnClickListener {
 
     private Activity context;
-    List<XtChatVieStc> dataLst;
+    //List<XtChatVieStc> dataLst;
+    List<MitValcmpMTemp> dataLst;
     private int delPosition = -1;
 
  // 时间控件
@@ -58,7 +62,7 @@ public class ZsChatvieAdapter extends
 
 
 
-    public ZsChatvieAdapter(Activity context, List<XtChatVieStc> dataLst, IClick listener) {
+    public ZsChatvieAdapter(Activity context, List<MitValcmpMTemp> dataLst, IClick listener) {
         this.context = context;
         this.dataLst = dataLst;
         this.listener=listener;
@@ -100,6 +104,7 @@ public class ZsChatvieAdapter extends
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.item_zdzs_chatvie, null);
+            holder.ll_all = (LinearLayout)convertView.findViewById(R.id.item_zs_chatvie_ll_all);// 整体
             holder.productNameTv = (TextView)convertView.findViewById(R.id.item_zs_chatvie_tv_proname);// 产品名称
             holder.agencyTv = (TextView)convertView.findViewById(R.id.item_zs_chatvie_tv_agencyname);// 经销商名称
             holder.statueTv = (TextView)convertView.findViewById(R.id.item_zs_chatvie_tv_statue);// 未稽查Tv
@@ -114,42 +119,64 @@ public class ZsChatvieAdapter extends
             holder = (ViewHolder)convertView.getTag();
         }
         
-        final XtChatVieStc item = dataLst.get(position);
+        final MitValcmpMTemp item = dataLst.get(position);
         // 产品名称
-        holder.productNameTv.setHint(item.getProId());
-        holder.productNameTv.setText(item.getProName());
+        holder.productNameTv.setHint(item.getValcmpname());
+        holder.productNameTv.setText(item.getValcmpname());
 
         // 未稽查Rl
         holder.statueRl.setTag(position);
         holder.statueRl.setOnClickListener(listener);
 
+        if("Y".equals(item.getValaddagencysupply())){// 是否督导新增
+            holder.statueTv.setText("督导新增");
+
+        }else{// 业代的供货数据
+            // 未稽查
+            if("N".equals(item.getValagencysupplyflag())){
+                holder.statueTv.setText("业代录错");
+            }else if("Y".equals(item.getValagencysupplyflag())){
+                holder.statueTv.setText("正确");
+            }else{
+                holder.statueTv.setText("未稽查");
+            }
+
+            // 背景
+            if("Y".equals(item.getValproerror())){
+                holder.ll_all.setBackgroundColor(Color.LTGRAY);
+                holder.statueTv.setText("督导失效");
+            }else{
+                holder.ll_all.setBackgroundColor(Color.WHITE);
+            }
+        }
+
         //销量
-        if (ConstValues.FLAG_0.equals(item.getMonthSellNum())) {
-            holder.prevNumEt.setHint(item.getMonthSellNum());
+        if (ConstValues.FLAG_0.equals(item.getValcmpsales())) {
+            holder.prevNumEt.setHint(item.getValcmpsales());
         } else {
-            holder.prevNumEt.setText(item.getMonthSellNum());
+            holder.prevNumEt.setText(item.getValcmpsales());
         }
         
         //当前库存
-        if (ConstValues.FLAG_0.equals(item.getCurrStore())) {
+        if (ConstValues.FLAG_0.equals(item.getValcmpkc())) {
             holder.addcardEt.setHint("0");
-        } else if("0.0".equals(item.getCurrStore())){
+        } else if("0.0".equals(item.getValcmpkc())){
             holder.addcardEt.setHint("0");
         }else {
-            holder.addcardEt.setText(item.getCurrStore());
+            holder.addcardEt.setText(item.getValcmpkc());
         }
 
         // 经销商名称
         holder.agencyTv.setHint("业代未输入经销商名称");
-        holder.agencyTv.setText(item.getAgencyName());
+        holder.agencyTv.setText(item.getValcmpagency());
 
 
         // 渠道价
-        if (ConstValues.FLAG_0.equals(item.getChannelPrice())) {
-            holder.channelPriceEt.setHint(item.getChannelPrice());
+        if (ConstValues.FLAG_0.equals(item.getValcmpjdj())) {
+            holder.channelPriceEt.setHint(item.getValcmpjdj());
             holder.channelPriceEt.setText(null);
-        } else if(!CheckUtil.isBlankOrNull(item.getChannelPrice())){
-            holder.channelPriceEt.setText(item.getChannelPrice());
+        } else if(!CheckUtil.isBlankOrNull(item.getValcmpjdj())){
+            holder.channelPriceEt.setText(item.getValcmpjdj());
         }else{
             holder.channelPriceEt.setHint(R.string.hit_input);
             holder.channelPriceEt.setText(null);
@@ -158,11 +185,11 @@ public class ZsChatvieAdapter extends
         //holder.channelPriceEt.setOnFocusChangeListener(this);
 
         // 零售价
-        if (ConstValues.FLAG_0.equals(item.getSellPrice())) {
-            holder.sellPriceEt.setHint(item.getSellPrice());
+        if (ConstValues.FLAG_0.equals(item.getValcmplsj())) {
+            holder.sellPriceEt.setHint(item.getValcmplsj());
             holder.sellPriceEt.setText(null);
-        } else if(!CheckUtil.isBlankOrNull(item.getSellPrice())){
-            holder.sellPriceEt.setText(item.getSellPrice());
+        } else if(!CheckUtil.isBlankOrNull(item.getValcmplsj())){
+            holder.sellPriceEt.setText(item.getValcmplsj());
         }else{
             holder.sellPriceEt.setHint(R.string.hit_input);
             holder.sellPriceEt.setText(null);
@@ -173,6 +200,7 @@ public class ZsChatvieAdapter extends
     }
 
     private class ViewHolder {
+        private LinearLayout ll_all;
         private TextView productNameTv;
         private TextView agencyTv;
         private TextView statueTv;
@@ -193,7 +221,7 @@ public class ZsChatvieAdapter extends
             position = position -1;
         }
         if (position > -1) {
-            XtChatVieStc stc = dataLst.get(position);
+            MitValcmpMTemp stc = dataLst.get(position);
             String content = et.getText().toString();
             switch (et.getId()) {
             case R.id.checkgoods_et_prevnum:
@@ -223,7 +251,7 @@ public class ZsChatvieAdapter extends
 	public void onClick(View v) {
 		final Button dateBtn = (Button) v;
 		int position = (Integer) v.getTag();
-		final XtChatVieStc stc = dataLst.get(position);
+		final MitValcmpMTemp stc = dataLst.get(position);
 		switch (dateBtn.getId()) {
 		// 最早生产时间
 		case R.id.checkgoods_et_firstdate:

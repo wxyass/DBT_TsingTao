@@ -112,11 +112,10 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
 
     MstTerminalInfoMStc mstTerminalInfoMStc;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_xtvisitshop);
+        setContentView(R.layout.activity_zsvisitshop);
         initView();
         initData();
     }
@@ -134,24 +133,13 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
         //titleTv.setOnClickListener(this);
 
 
-        mDataTv = (AppCompatTextView) findViewById(R.id.xtvisit_tv_date);
-        mDayTv = (AppCompatTextView) findViewById(R.id.xtvisit_tv_day);
+        mDataTv = (AppCompatTextView) findViewById(R.id.zs_tv_date);
+        mDayTv = (AppCompatTextView) findViewById(R.id.zs_tv_day);
         //mTextTv = (AppCompatTextView) findViewById(R.id.xtvisit_tv_textView2);
-        mContentFl = (FrameLayout) findViewById(R.id.xtvisit_fl_content);
-        mMemoImg = (AppCompatImageView) findViewById(R.id.xtvisit_bt_memo);
+        mContentFl = (FrameLayout) findViewById(R.id.zs_fl_content);
+        mMemoImg = (AppCompatImageView) findViewById(R.id.zs_bt_memo);
 
-        xtvisit_rb_sayhi = (RadioButton) findViewById(R.id.xtvisit_rb_sayhi);
-        xtvisit_rb_invoicing = (RadioButton) findViewById(R.id.xtvisit_rb_invoicing);
-        xtvisit_rb_checkindex = (RadioButton) findViewById(R.id.xtvisit_rb_checkindex);
-        xtvisit_rb_chatvie = (RadioButton) findViewById(R.id.xtvisit_rb_chatvie);
-        xtvisit_rb_camera = (RadioButton) findViewById(R.id.xtvisit_rb_camera);
-        xtvisit_rb_other = (RadioButton) findViewById(R.id.xtvisit_rb_other);
-        xtvisit_rb_sayhi.setOnClickListener(this);
-        xtvisit_rb_invoicing.setOnClickListener(this);
-        xtvisit_rb_checkindex.setOnClickListener(this);
-        xtvisit_rb_chatvie.setOnClickListener(this);
-        xtvisit_rb_camera.setOnClickListener(this);
-        xtvisit_rb_other.setOnClickListener(this);
+
 
 
     }
@@ -262,7 +250,7 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
                 break;
 
 
-            case R.id.xtvisit_rb_sayhi:
+            /*case R.id.xtvisit_rb_sayhi:
                 if (fragmentType == 1) {
                     return;
                 } else {
@@ -313,7 +301,7 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
                         changeFragment(xtCameraFragment, "xtcamerafragment");
                     }
                 }
-                break;
+                break;*/
             default:
                 break;
         }
@@ -328,7 +316,7 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
         // 当前要添加的Fragment需要放的容器位置
         // 要替换的fragment
         // 标记
-        beginTransaction.replace(R.id.xtvisit_fl_content, fragment, tag);
+        beginTransaction.replace(R.id.zs_fl_content, fragment, tag);
         // 提交事物
         beginTransaction.commit();
     }
@@ -342,7 +330,7 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
         // 当前要添加的Fragment需要放的容器位置
         // 要替换的fragment
         // 标记
-        beginTransaction.replace(R.id.xtvisit_container, fragment, tag);
+        beginTransaction.replace(R.id.zs_container, fragment, tag);
         beginTransaction.addToBackStack(null);
         // 提交事物
         beginTransaction.commit();
@@ -384,61 +372,6 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
         // 如果是查看操作，则不做数据校验
         if (ConstValues.FLAG_1.equals(seeFlag))
             return;
-
-        BaseActivity view = (ZsVisitShopActivity) tabHost.getCurrentView().getContext();
-        EditText termNameTv = (EditText) view.findViewById(R.id.xtbf_sayhi_termname);
-        if (termNameTv != null) {
-            TextView belongLineSp = (TextView) view.findViewById(R.id.xtbf_sayhi_termroude);
-            TextView levelSp = (TextView) view.findViewById(R.id.xtbf_sayhi_termlv);
-
-            EditText addressEt = (EditText) view .findViewById(R.id.xtbf_sayhi_termaddress);
-            EditText linkmanEt = (EditText) view.findViewById(R.id.xtbf_sayhi_termcontact);
-            EditText telEt = (EditText) view.findViewById(R.id.xtbf_sayhi_termphone);
-            EditText sequenceEt = (EditText) view .findViewById(R.id.xtbf_sayhi_termsequence);
-            TextView sellChannelSp = (TextView) view.findViewById(R.id.xtbf_sayhi_termsellchannel);
-            TextView mainChannelSp = (TextView) view.findViewById(R.id.xtbf_sayhi_termtmainchannel);
-            TextView minorChannelSp = (TextView) view.findViewById(R.id.xtbf_sayhi_termminorchannel);
-
-            int msgId = -1;
-            if ("".equals(FunUtil.isNullSetSpace(termNameTv.getText()).toString())) {
-                //termNameTv.requestFocus();
-                msgId = R.string.termadd_msg_invaltermname;
-
-            } else if ("".equals(FunUtil.isNullSetSpace(addressEt.getText()).toString())) {
-                //addressEt.requestFocus();
-                msgId = R.string.termadd_msg_invaladdress;
-
-            } else if ("".equals(FunUtil.isNullSetSpace(linkmanEt.getText()).toString())) {
-                //linkmanEt.requestFocus();
-                msgId = R.string.termadd_msg_invalcontact;
-            }
-            if ("-1".equals(FunUtil.isBlankOrNullTo(belongLineSp.getText(), "-1"))) {
-                msgId = R.string.termadd_msg_invalbelogline;
-
-            } else if ("-1".equals(FunUtil.isBlankOrNullTo(levelSp.getText(),"-1"))) {
-                msgId = R.string.termadd_msg_invaltermlevel;
-
-            }  else if ("-1".equals(FunUtil.isBlankOrNullTo(sellChannelSp.getText(), "-1"))) {
-                msgId = R.string.termadd_msg_invalsellchannel;
-
-            } else if ("-1".equals(FunUtil.isBlankOrNullTo(mainChannelSp.getText(), "-1"))) {
-                msgId = R.string.termadd_msg_invalmainchannel;
-
-            } else if ("-1".equals(FunUtil.isBlankOrNullTo(minorChannelSp.getText(), "-1"))) {
-                msgId = R.string.termadd_msg_invalminorchannel;
-            }/*else if (!PrefUtils.getBoolean(getApplication(),GlobalValues.SAYHIREADY,false)) {
-                msgId = R.string.termadd_msg_wait;
-            }*/
-
-            if (msgId != -1) {
-                tabHost.setCurrentTab(0);
-                Toast.makeText(getApplicationContext(),getString(msgId),Toast.LENGTH_SHORT).show();
-                //ViewUtil.sendMsg(getApplicationContext(), msgId);
-
-            }
-            // 结束按钮提示信息
-            //sureBt.setTag(msgId);
-        }
 
     }
 

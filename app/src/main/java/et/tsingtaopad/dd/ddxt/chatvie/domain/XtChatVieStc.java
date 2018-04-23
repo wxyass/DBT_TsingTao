@@ -52,6 +52,9 @@ public class XtChatVieStc implements Serializable {
     // 描述
     private String describe;
 
+    // 供货关系id
+    private String cmpsupplykey;
+
     public String getRecordId() {
         return recordId;
     }
@@ -152,4 +155,11 @@ public class XtChatVieStc implements Serializable {
         return serialVersionUID;
     }
 
+    public String getCmpsupplykey() {
+        return cmpsupplykey;
+    }
+
+    public void setCmpsupplykey(String cmpsupplykey) {
+        this.cmpsupplykey = cmpsupplykey;
+    }
 }

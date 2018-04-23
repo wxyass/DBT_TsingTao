@@ -40,6 +40,8 @@ import et.tsingtaopad.db.dao.MstTerminalinfoMTempDao;
 import et.tsingtaopad.db.dao.MstVisitMDao;
 import et.tsingtaopad.db.dao.MstVisitMTempDao;
 import et.tsingtaopad.db.dao.MstVistproductInfoDao;
+import et.tsingtaopad.db.table.MitValcmpM;
+import et.tsingtaopad.db.table.MitValcmpMTemp;
 import et.tsingtaopad.db.table.MitValsupplyMTemp;
 import et.tsingtaopad.db.table.MitValterMTemp;
 import et.tsingtaopad.db.table.MstAgencysupplyInfo;
@@ -65,6 +67,7 @@ import et.tsingtaopad.db.table.MstVisitMTemp;
 import et.tsingtaopad.db.table.MstVistproductInfo;
 import et.tsingtaopad.db.table.MstVistproductInfoTemp;
 import et.tsingtaopad.db.table.PadCheckaccomplishInfo;
+import et.tsingtaopad.dd.ddxt.chatvie.domain.XtChatVieStc;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtCheckIndexCalculateStc;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProIndex;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProIndexValue;
@@ -565,6 +568,9 @@ public class XtShopVisitService {
             Dao<MitValterMTemp, String> mitValterMTempDao = helper.getMitValterMTempDao();
             Dao<MitValsupplyMTemp, String> mitValsupplyMTempDao = helper.getMitValsupplyMTempDao();
 
+            //Dao<MitValcmpM, String> mitValcmpMDao = helper.getMitValcmpMDao();
+            Dao<MitValcmpMTemp, String> mitValcmpMTempDao = helper.getMitValcmpMTempDao();
+
             connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
             connection.setAutoCommit(false);
 
@@ -905,6 +911,12 @@ public class XtShopVisitService {
             queryInvocingValSupplyTemp(mitValsupplyMTempDao,prevVisitId,term.getTerminalkey(), mitValterMTemp.getId());
 
 
+            // 复制追溯聊竞品
+
+            queryChatVieValVieSupplyTemp(mitValcmpMTempDao,prevVisitId,term.getTerminalkey(), mitValterMTemp.getId());
+
+
+
 
 
             connection.commit(null);
@@ -974,6 +986,58 @@ public class XtShopVisitService {
                 mitValsupplyMTempDao.create(mitValsupplyMTemp);
             }
 
+        } catch (SQLException e) {
+            Log.e(TAG, "获取终端表DAO对象失败", e);
+        }
+    }
+
+
+    /**
+     * 从临时表中 获取某次拜访的我品的进销存数据情况
+     *
+     * @param //helper
+     * @param previsitId   拜访主键
+     * @return
+     */
+    public void queryChatVieValVieSupplyTemp(Dao<MitValcmpMTemp, String> mitValcmpMTempDao,
+                                           String previsitId, String termKey, String mitValterMTempKey) {
+
+        List<XtChatVieStc> lst = new ArrayList<XtChatVieStc>();
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            MstVistproductInfoDao dao = helper.getDao(MstVistproductInfo.class);
+            lst = dao.queryZsVieProByTemp(helper, previsitId,termKey);
+
+            MitValcmpMTemp mitValcmpMTemp;
+            for (XtChatVieStc xtInvoicingStc:lst) {
+                mitValcmpMTemp = new MitValcmpMTemp();
+                mitValcmpMTemp.setId(FunUtil.getUUID());
+                mitValcmpMTemp.setValterid(mitValterMTempKey);// 追溯主表id
+                mitValcmpMTemp.setValaddagencysupply("N");// 是否新增供货关系
+                mitValcmpMTemp.setValagencysupplyid(xtInvoicingStc.getCmpsupplykey());// 供货关系ID
+                mitValcmpMTemp.setValcmpjdj(xtInvoicingStc.getChannelPrice());// 竞品进店价
+                mitValcmpMTemp.setValcmplsj(xtInvoicingStc.getSellPrice());//竞品零售价
+                mitValcmpMTemp.setValcmpsales(xtInvoicingStc.getMonthSellNum());//竞品销量
+                mitValcmpMTemp.setValcmpkc(xtInvoicingStc.getCurrStore());//竞品库存
+                mitValcmpMTemp.setValcmpremark(xtInvoicingStc.getDescribe());//竞品描述
+                mitValcmpMTemp.setValcmpagency(xtInvoicingStc.getAgencyName());//竞品供货商
+                mitValcmpMTemp.setValcmpid(xtInvoicingStc.getProId());//竞品ID
+                mitValcmpMTemp.setValcmpname(xtInvoicingStc.getProName());//竞品ID
+                mitValcmpMTemp.setValiscmpter(termKey);//终端
+                /*mitValsupplyMTemp.setValagencysupplyflag();//供货关系正确与否
+                mitValsupplyMTemp.setValproerror();//品项有误
+                mitValsupplyMTemp.setValagencyerror();//经销商有误
+                mitValsupplyMTemp.setValtrueagency();//正确的经销商
+                mitValsupplyMTemp.setValdataerror();//数据有误
+                mitValsupplyMTemp.setValiffleeing();//是否窜货
+                mitValsupplyMTemp.setValagencysupplyqd();//供货关系正确渠道价
+                mitValsupplyMTemp.setValagencysupplyls();//供货关系正确零售价
+                mitValsupplyMTemp.setValagencysupplydd();//供货关系正确订单量
+                mitValsupplyMTemp.setValagencysupplysrxl();//供货关系正确日销量
+                mitValsupplyMTemp.setValagencysupplyljk();//供货关系正确累计卡
+                mitValsupplyMTemp.setValagencysupplyremark();//供货关系备注*/
+                mitValcmpMTempDao.create(mitValcmpMTemp);
+            }
         } catch (SQLException e) {
             Log.e(TAG, "获取终端表DAO对象失败", e);
         }

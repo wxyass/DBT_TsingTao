@@ -23,8 +23,12 @@ import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.db.DatabaseHelper;
+import et.tsingtaopad.db.dao.MitValcmpMTempDao;
+import et.tsingtaopad.db.dao.MitValsupplyMTempDao;
 import et.tsingtaopad.db.dao.MstVistproductInfoDao;
 import et.tsingtaopad.db.dao.MstVistproductInfoTempDao;
+import et.tsingtaopad.db.table.MitValcmpMTemp;
+import et.tsingtaopad.db.table.MitValsupplyMTemp;
 import et.tsingtaopad.db.table.MstCmpsupplyInfoTemp;
 import et.tsingtaopad.db.table.MstVisitMTemp;
 import et.tsingtaopad.db.table.MstVistproductInfo;
@@ -274,4 +278,18 @@ public class ZsChatVieService extends XtShopVisitService {
         return isFlag;
     }
 
+    public List<MitValcmpMTemp> queryValVieSupplyTemp(String valterid) {
+        List<MitValcmpMTemp> list = new ArrayList<MitValcmpMTemp>();
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            MitValcmpMTempDao mitValsupplyMTempDao = helper.getDao(MitValcmpMTemp.class);
+            QueryBuilder<MitValcmpMTemp, String> qb = mitValsupplyMTempDao.queryBuilder();
+            Where<MitValcmpMTemp, String> where = qb.where();
+            where.eq("valterid", valterid);
+            list = qb.query();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

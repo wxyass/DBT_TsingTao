@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,6 +66,10 @@ public class ZsSayhiService extends XtShopVisitService {
     // 根据省市县编码 获取省市县名称
     public String getAreaName(String areacode) {
 
+        if(TextUtils.isEmpty(areacode)){
+            return "";
+        }
+
         DatabaseHelper helper = DatabaseHelper.getHelper(context);
         SQLiteDatabase db = helper.getReadableDatabase();
 
@@ -85,6 +90,10 @@ public class ZsSayhiService extends XtShopVisitService {
     // 根据渠道编码,获取渠道名称
     public String getDatadicName(String diccode) {
 
+        if(TextUtils.isEmpty(diccode)){
+            return "";
+        }
+
         DatabaseHelper helper = DatabaseHelper.getHelper(context);
         SQLiteDatabase db = helper.getReadableDatabase();
 
@@ -104,6 +113,9 @@ public class ZsSayhiService extends XtShopVisitService {
     // 根据路线key,获取路线名称
     public String getRouteName(String diccode) {
 
+        if(TextUtils.isEmpty(diccode)){
+            return "";
+        }
         DatabaseHelper helper = DatabaseHelper.getHelper(context);
         SQLiteDatabase db = helper.getReadableDatabase();
 

@@ -83,6 +83,15 @@ public interface MstVistproductInfoDao extends Dao<MstVistproductInfo, String> {
     public List<XtChatVieStc> queryXtVieProByTemp(DatabaseHelper helper, String visitId);
 
     /**
+     * 获取追溯 聊竞品 数据情况
+     *
+     * @param helper
+     * @param visitId   拜访主键
+     * @return
+     */
+    public List<XtChatVieStc> queryZsVieProByTemp(DatabaseHelper helper, String visitId, String termid);
+
+    /**
      * 获取巡店拜访-查指标的分项采集部分的产品指标数据
      * 
      * @param visitId       本次拜访ID
