@@ -49,9 +49,12 @@ import et.tsingtaopad.dd.ddxt.checking.domain.XtProItem;
 import et.tsingtaopad.dd.ddxt.checking.num.XtQuickCollectFragment;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
 import et.tsingtaopad.dd.ddzs.zscheckindex.zsnum.ZsQuickCollectFragment;
+import et.tsingtaopad.dd.ddzs.zsinvoicing.ZsInvoicingFragment;
+import et.tsingtaopad.dd.ddzs.zsinvoicing.zsaddinvoicing.ZsInvocingAddDataFragment;
 import et.tsingtaopad.dd.ddzs.zsshopvisit.ZsVisitShopActivity;
 import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
+import et.tsingtaopad.listviewintf.IClick;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.CheckIndexPromotionStc;
 
 /**
@@ -74,6 +77,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
     private MstTerminalinfoMTemp term;
 
     public static final int INPUT_SUC = 3;
+    public static final int INIT_AMEND = 33;// 促销活动修改完成
     MyHandler handler;
     ZsCaculateAdapter xtCaculateAdapter;
 
@@ -141,6 +145,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
     List<XtProItem> proItemLst = new ArrayList<XtProItem>();
 
     List<XtCheckIndexCalculateStc> noProIndexLst;
+    ZsPromotionAdapter xtPromotionAdapter;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -159,9 +164,11 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
 
 
         // 获取分项采集页面显示数据 // 获取指标采集前3列数据 // 铺货状态,道具生动化,产品生动化,冰冻化
-        calculateLst = service.queryCalculateIndex(visitId, termId, term.getMinorchannel(), seeFlag);
+        //calculateLst = service.queryCalculateIndex(visitId, termId, term.getMinorchannel(), seeFlag);
+        calculateLst = service.queryZsCalculateIndex(preVisitkey, termId, term.getMinorchannel(), seeFlag);
         // 获取分项采集部分的产品指标对应的采集项目数据 // 因为在ShopVisitActivity生成了供货关系,此时就能关联出各个产品的采集项,现有量变化量为0
-        proItemLst = service.queryCalculateItem(visitId, channelId);
+        //proItemLst = service.queryCalculateItem(visitId, channelId);
+        proItemLst = service.queryZsCalculateItem(preVisitkey, channelId);
 
         // 初始化指标、指标值树级关系 对象
         service.initCheckTypeStatus();
@@ -172,9 +179,16 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
         ViewUtil.setListViewHeight(calculateLv);
 
         // 促销活动
-        promotionLst = service.queryPromotion(visitId, term.getSellchannel(), term.getTlevel());
-        ZsPromotionAdapter xtPromotionAdapter = new ZsPromotionAdapter(getActivity(), promotionLst, "2018-03-30", seeFlag);
+        //promotionLst = service.queryPromotion(visitId, term.getSellchannel(), term.getTlevel());
+        promotionLst = service.queryZsPromotion(preVisitkey, term.getSellchannel(), term.getTlevel());
+        xtPromotionAdapter = new ZsPromotionAdapter(getActivity(), promotionLst, new IClick() {
+            @Override
+            public void listViewItemClick(int position, View v) {
+                alertShow4(position);
+            }
+        });
         promotionLv.setAdapter(xtPromotionAdapter);
+        //ViewUtil.setListViewHeight(promotionLv);
 
         // 其他信息
         noProIndexLst = service.queryNoProIndex12(visitId, term.getMinorchannel(), seeFlag);
@@ -300,8 +314,15 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                 case INPUT_SUC:// 自动计算指标值
                     fragment.autoCalculateSuc(bundle);
                     break;
+                case INIT_AMEND:// 促销活动修改完成
+                    fragment.showAdapter();
+                    break;
             }
         }
+    }
+
+    private void showAdapter() {
+        xtPromotionAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -467,4 +488,58 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
         mAlertViewExt.show();
     }
 
+
+
+    /**
+     * 参数1: 标题 ×
+     * 参数2: 主体内容 ×
+     * 参数3: 取消按钮 ×
+     * 参数4: 高亮按钮 数组 √
+     * 参数5: 普通按钮 数组 √
+     * 参数6: 上下文 √
+     * 参数7: 弹窗类型 (正常取消,确定按钮) √
+     * 参数8: 条目点击监听 √
+     */
+    public void alertShow4(final int posi) {
+        List<KvStc> sureOrFail = new ArrayList<>();
+        sureOrFail.add(new KvStc("zhengque","正确","-1"));
+        sureOrFail.add(new KvStc("cuowu","错误(去修正)","-1"));
+        mAlertViewExt = new AlertView(null, null, null, null,
+                null, getActivity(), AlertView.Style.ActionSheet, null);
+        ViewGroup extView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_list_form, null);
+        ListView listview = (ListView) extView.findViewById(R.id.alert_list);
+        AlertKeyValueAdapter keyValueAdapter = new AlertKeyValueAdapter(getActivity(), sureOrFail,
+                new String[]{"key", "value"}, "zhengque");
+        listview.setAdapter(keyValueAdapter);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(0==position){// 失效
+                    CheckIndexPromotionStc promotionStc = promotionLst.get(posi);
+                    promotionStc.setValistruenumflag("Y"); // 达成组数正确与否
+                    handler.sendEmptyMessage(ZsCheckIndexFragment.INIT_AMEND);
+                }else{// 跳转数据录入
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("position", posi);//
+                    bundle.putString("termId", termId);//
+                    bundle.putString("mitValterMTempKey", mitValterMTempKey);
+                    bundle.putSerializable("dataLst", (Serializable) promotionLst);
+                    ZsCheckPromoAmendFragment zsInvocingAddDataFragment = new ZsCheckPromoAmendFragment(handler);
+                    zsInvocingAddDataFragment.setArguments(bundle);
+                    ZsVisitShopActivity zsVisitShopActivity = (ZsVisitShopActivity) getActivity();
+                    zsVisitShopActivity.changeXtvisitFragment(zsInvocingAddDataFragment, "zscheckpromoamendfragment");
+                }
+
+                mAlertViewExt.dismiss();
+            }
+        });
+        mAlertViewExt.addExtView(extView);
+        mAlertViewExt.setCancelable(true).setOnDismissListener(new OnDismissListener() {
+            @Override
+            public void onDismiss(Object o) {
+                DbtLog.logUtils(TAG, "取消选择结果");
+            }
+        });
+        mAlertViewExt.show();
+    }
 }

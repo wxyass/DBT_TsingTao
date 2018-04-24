@@ -10,7 +10,7 @@ public class CheckIndexCalculateStc implements Serializable {
 
     private static final long serialVersionUID = 7309324791514462417L;
     
-    // 拜访指标执行记录表主键
+    // 拜访指标执行记录表主键( 拉链表主键 )
     private String recordId;
     
     // 拜访主键
@@ -36,7 +36,9 @@ public class CheckIndexCalculateStc implements Serializable {
     
     // 指标值名称 (指标的指标值,如 指标:是否高质量配送,指标值:是)
     private String indexValueName;
-    
+
+    // 终端追溯查指标表主键
+    private String id;
     
 
     /**
@@ -157,5 +159,12 @@ public class CheckIndexCalculateStc implements Serializable {
     public static long getSerialversionuid() {
         return serialVersionUID;
     }
-    
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }

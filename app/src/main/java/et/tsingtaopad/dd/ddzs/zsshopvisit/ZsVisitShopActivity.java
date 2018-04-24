@@ -81,7 +81,7 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
 
     private int fragmentType;
     private XtShopVisitService xtShopVisitService;
-    private String prevVisitId;// 获取上次拜访主键
+    private String preVisitkey;// 获取上次拜访主键
     private String prevVisitDate; // 上次拜访日期
 
     List<XtProIndex> calculateLst = new ArrayList<XtProIndex>();
@@ -160,7 +160,7 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
         MstVisitM preMstVisitM = xtShopVisitService.findNewLastVisit(termStc.getTerminalkey(), false);
         mstTerminalInfoMStc = xtShopVisitService.findTermKeyById(termStc.getTerminalkey());
         // 获取上次拜访主键
-        prevVisitId = preMstVisitM.getVisitkey();
+        preVisitkey = preMstVisitM.getVisitkey();
         prevVisitDate = preMstVisitM.getVisitdate();
         // 复制各个临时表
         configVisitData(bundle);
@@ -212,6 +212,7 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
         List<String> keys = xtShopVisitService.toCopyZsData(termStc,mstTerminalInfoMStc);
         visitId = keys.get(0);
         mitValterMTempKey = keys.get(1);
+        preVisitkey = keys.get(2);
         channelId = termStc.getMinorchannel();
 
         // 保存初始数据(上面虽然复制了数据库,但有些表是没有复制的,在这里把一些数据)
@@ -346,6 +347,7 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
         bundle.putSerializable("channelId", termStc.getMinorchannel());// 次渠道
         bundle.putSerializable("termStc", termStc);
         bundle.putSerializable("visitKey", visitId);//visitId
+        bundle.putSerializable("preVisitkey", preVisitkey);//visitId
         bundle.putSerializable("seeFlag", seeFlag);// 默认0   0:拜访 1:查看
         bundle.putSerializable("mitValterMTempKey", mitValterMTempKey);// 追溯主键
 

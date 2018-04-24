@@ -1,6 +1,7 @@
 package et.tsingtaopad.dd.ddzs.zscheckindex;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.Date;
@@ -18,6 +20,7 @@ import et.tsingtaopad.R;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
+import et.tsingtaopad.listviewintf.IClick;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.CheckIndexPromotionStc;
 import et.tsingtaopad.view.DdSlideSwitch;
 
@@ -29,15 +32,13 @@ public class ZsPromotionAdapter extends BaseAdapter {
 
     private Activity context;
     private List<CheckIndexPromotionStc> dataLst;
-    private String visitDate;
-    private String seeFlag;
     private int currentItem = -1;
+    private IClick listener;
 
-    public ZsPromotionAdapter(Activity context, List<CheckIndexPromotionStc> dataLst, String visitDate, String seeFlag) {
+    public ZsPromotionAdapter(Activity context, List<CheckIndexPromotionStc> dataLst, IClick listener) {
         this.context = context;
         this.dataLst = dataLst;
-        this.visitDate = visitDate;
-        this.seeFlag = seeFlag;
+        this.listener=listener;
     }
 
     @Override
@@ -72,7 +73,8 @@ public class ZsPromotionAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_zdzs_checkindex_promotion, null);
             holder.promotionNameTv = (TextView) convertView.findViewById(R.id.item_zs_checkindex_tv_promotionname);// 活动名称
             holder.showProTv = (TextView) convertView.findViewById(R.id.item_zs_checkindex_tv_proname);// 产品名称
-            holder.statusSw = (DdSlideSwitch) convertView.findViewById(R.id.item_zs_checkindex_sw_isacomplish);
+            holder.statueTv = (TextView)convertView.findViewById(R.id.item_zs_checkindex_tv_statue);// 未稽查tv
+            holder.statueRl = (RelativeLayout)convertView.findViewById(R.id.item_zs_checkindex_rl_statue);// 未稽查Rl
             holder.reachnum = (TextView) convertView.findViewById(R.id.item_zs_checkindex_et_zushu);//达成组数
             holder.proLl = (LinearLayout) convertView.findViewById(R.id.item_zs_checkindex_ll_pro);//产品展示,整体
             holder.proNameTv = (TextView) convertView.findViewById(R.id.item_zs_checkindex_lv_proname);//产品展示.Tv
@@ -82,7 +84,6 @@ public class ZsPromotionAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.statusSw.setTag(position);
         holder.showProTv.setTag(position);
 
         CheckIndexPromotionStc item = dataLst.get(position);
@@ -90,40 +91,30 @@ public class ZsPromotionAdapter extends BaseAdapter {
         holder.promotionNameTv.setText(item.getPromotName());// 活动名称
         holder.proNameTv.setText(item.getProName());// 产品名称默认关闭
 
-        // 添加促销活动 隔天默认关闭 //20160301(原因:需求设计如此)
-        /*String todaytime = DateUtil.formatDate(new Date(), "yyyy-MM-dd");
-        String accepttime = visitDate.substring(0, 10);
-        if (todaytime.equals(accepttime)) {// 当天 多次进入这家终端
-            if (ConstValues.FLAG_1.equals(item.getIsAccomplish())) {
-                holder.statusSw.setStatus(true);
-                holder.reachnum.setVisibility(View.VISIBLE);
-                holder.reachnum.setText(item.getReachNum());
 
-            } else {
-                holder.statusSw.setStatus(false);
-                holder.reachnum.setVisibility(View.INVISIBLE);
-                holder.reachnum.setText(null);
-            }
-        } else {// 上次拜访 不是当天 (即:当天第一次拜访)
-            holder.statusSw.setStatus(false);
-            holder.reachnum.setVisibility(View.INVISIBLE);
-            holder.reachnum.setText(null);
-        }*/
         // 对促销活动按钮 初始化
         if (ConstValues.FLAG_1.equals(item.getIsAccomplish())) {
-            holder.statusSw.setStatus(true);
             holder.reachnum.setVisibility(View.VISIBLE);
             holder.reachnum.setText(item.getReachNum());
-
         } else {
-            holder.statusSw.setStatus(false);
             holder.reachnum.setVisibility(View.VISIBLE);
             holder.reachnum.setText(null);
-            holder.reachnum.setHint("未达成");
+            holder.reachnum.setHint("0");
+        }
+
+
+
+        // 未稽查
+        if("N".equals(item.getValistruenumflag())){// 达成组数正确与否
+            holder.statueTv.setText("业代录错");
+        }else if("Y".equals(item.getValistruenumflag())){
+            holder.statueTv.setText("正确");
+        }else{
+            holder.statueTv.setText("未稽查");
         }
 
         // 是否达成监听
-        holder.statusSw.setOnLongSwitchChangedListener(new MySwitchChangedListener(holder) {
+        /*holder.statusSw.setOnLongSwitchChangedListener(new MySwitchChangedListener(holder) {
             @Override
             public void afterTextChanged(DdSlideSwitch obj, int status, ViewHolder holder) {
                 if (status == DdSlideSwitch.SWITCH_ON) {
@@ -135,7 +126,7 @@ public class ZsPromotionAdapter extends BaseAdapter {
                     dataLst.get(position).setIsAccomplish(ConstValues.FLAG_0);// 活动设为未达成
                 }
             }
-        });
+        });*/
 
         // 是否展示产品列表
         if(currentItem == position){
@@ -155,28 +146,22 @@ public class ZsPromotionAdapter extends BaseAdapter {
                 notifyDataSetChanged();
             }
         });
+
+        // 未稽查
+        holder.statueRl.setTag(position);
+        holder.statueRl.setOnClickListener(listener);
+
         return convertView;
     }
 
     private class ViewHolder {
         private TextView promotionNameTv;
         private TextView showProTv;
-        private DdSlideSwitch statusSw;
+        private TextView statueTv;
+        private RelativeLayout statueRl;
         private TextView reachnum;
         private LinearLayout proLl;
         private TextView proNameTv;
-    }
-
-    abstract class MySwitchChangedListener implements DdSlideSwitch.OnLongSwitchChangedListener {
-        private ViewHolder mHolder;
-        public MySwitchChangedListener(ViewHolder holder) {
-            mHolder = holder;
-        }
-        @Override
-        public void onLongSwitchChanged(DdSlideSwitch obj, int status) {
-            afterTextChanged(obj, status, mHolder);
-        }
-        public abstract void afterTextChanged(DdSlideSwitch obj, int status, ViewHolder holder);
     }
 
 }

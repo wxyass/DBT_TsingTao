@@ -31,6 +31,15 @@ public class CheckIndexQuicklyStc extends PadCheckaccomplishInfo {
     
     // 采集的现有量
     private String xianyouliang;
+    // 追溯采集项表主键
+    private String id;
+    // 采集项原值结果量
+    private String valitem;
+    // 采集项正确值结果量
+    private String valitemval;
+    // 采集项备注
+    private String valitemremark;
+
 
     public String getColRecordId() {
         return colRecordId;
@@ -109,7 +118,36 @@ public class CheckIndexQuicklyStc extends PadCheckaccomplishInfo {
 	public void setXianyouliang(String xianyouliang) {
 		this.xianyouliang = xianyouliang;
 	}
-	
-	
-    
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getValitem() {
+        return valitem;
+    }
+
+    public void setValitem(String valitem) {
+        this.valitem = valitem;
+    }
+
+    public String getValitemval() {
+        return valitemval;
+    }
+
+    public void setValitemval(String valitemval) {
+        this.valitemval = valitemval;
+    }
+
+    public String getValitemremark() {
+        return valitemremark;
+    }
+
+    public void setValitemremark(String valitemremark) {
+        this.valitemremark = valitemremark;
+    }
 }

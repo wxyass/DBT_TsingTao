@@ -33,6 +33,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<MitAgencysupplyInfo, String> mitAgencysupplyInfoDao = null;
     private Dao<MitValcmpM, String> mitValcmpMDao = null;
     private Dao<MitValcmpMTemp, String> mitValcmpMTempDao = null;
+    private Dao<MitValcheckitemM, String> mitValcheckitemMDao = null;
+    private Dao<MitValcheckitemMTemp, String> mitValcheckitemMTempDao = null;
+    private Dao<MitValchecktypeM, String> mitValchecktypeMDao = null;
+    private Dao<MitValchecktypeMTemp, String> mitValchecktypeMTempDao = null;
+    private Dao<MitValpromotionsM, String> mitValpromotionsMDao = null;
+    private Dao<MitValpromotionsMTemp, String> mitValpromotionsMTempDao = null;
     private Dao<MstAgencytransferInfo, String> mstAgencytransferInfoDao = null;
     private Dao<MstAgencyvisitM, String> mstAgencyvisitMDao = null;
     private Dao<MstBrandsclassM, String> mstBrandsclassMDao = null;
@@ -267,6 +273,15 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
             TableUtils.createTable(connectionSource, MitValcmpM.class);// 追溯聊竞品表
             TableUtils.createTable(connectionSource, MitValcmpMTemp.class);// 追溯聊竞品表 临时表
+
+            TableUtils.createTable(connectionSource, MitValpromotionsM.class);// 追溯促销活动终端表
+            TableUtils.createTable(connectionSource, MitValpromotionsMTemp.class);// 追溯促销活动终端表 临时表
+
+            TableUtils.createTable(connectionSource, MitValchecktypeM.class);// 追溯拉链表表
+            TableUtils.createTable(connectionSource, MitValchecktypeMTemp.class);// 追溯拉链表表 临时表
+
+            TableUtils.createTable(connectionSource, MitValcheckitemM.class);// 追溯拉链表表
+            TableUtils.createTable(connectionSource, MitValcheckitemMTemp.class);// 追溯拉链表表 临时表
 
 
             this.initView(db);
@@ -957,6 +972,32 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 String mit_valcmp_m_temp = "create table MIT_VALCMP_M_TEMP ( id varchar2(36) not null, valterid varchar2(36) null, valaddagencysupply   char(1)    null, valagencysupplyid    varchar2(36) null, valcmpjdj    varchar2(10) null, valcmplsj    varchar2(10) null, valcmpsales  varchar2(10) null, valcmpkc varchar2(10) null, valcmpremark     varchar2(300)  null, valcmpagency     varchar2(300)  null,valcmpagencyval     varchar2(300)  null, valcmpname     varchar2(300)  null, valcmpid varchar2(36) null, valiscmpter  varchar2(36) null, valagencysupplyflag  char(1)    null, valproerror  char(1)    null, valagencyerror   char(1)    null, valdataerror     char(1)    null, valcmpjdjval     varchar2(10) null, valcmplsjval     varchar2(10) null, valcmpsalesval   varchar2(10) null, valcmpkcval  varchar2(10) null, valcmpsupremark  varchar2(300)  null, valcmpremarkval  varchar2(300)  null, valistrueflag    char(1)    null, valistruecmpval  char(1)    null, valiscmpremark   varchar2(300)  null, valvisitremark   varchar2(300)  null )";
                 db.execSQL(mit_valcmp_m_temp);
 
+                // 追溯促销活动终端表
+                String mit_valpromotions_m = "create table MIT_VALPROMOTIONS_M ( id varchar2(36) not null, valterid varchar2(36) null, valpromotionsid  varchar2(36) null, valistrue    char(1)    null,visitkey varchar2(36) null,terminalkey varchar2(36) null, valistruefalg    char(1)    null, valistrueval char(1)    null, valistruenum varchar2(10) null, valistruenumflag char(10)   null, valistruenumval  char(10)   null, creuser  varchar2(128)  null, credate  date   null, updateuser   varchar2(128)  null, updatedate   date   null )";
+                db.execSQL(mit_valpromotions_m);
+
+                // 追溯促销活动终端表临时表
+                String mit_valpromotions_m_temp = "create table MIT_VALPROMOTIONS_M_TEMP ( id varchar2(36) not null, valterid varchar2(36) null, valpromotionsid  varchar2(36) null, valistrue    char(1)    null,visitkey varchar2(36) null,terminalkey varchar2(36) null, valistruefalg    char(1)    null, valistrueval char(1)    null, valistruenum varchar2(10) null, valistruenumflag char(10)   null, valistruenumval  char(10)   null, creuser  varchar2(128)  null, credate  date   null, updateuser   varchar2(128)  null, updatedate   date   null )";
+                db.execSQL(mit_valpromotions_m_temp);
+
+
+                // 追溯拉链表
+                String mit_valchecktype_m = "create table MIT_VALCHECKTYPE_M ( id varchar2(36) not null, valterid varchar2(36) null, visitkey varchar2(36) null, valchecktype varchar2(36) null, valchecktypeid varchar2(36) null, productkey varchar2(36) null, acresult varchar2(36) null, terminalkey varchar2(36) null, valchecktypeflag char(1)  null, valgrouppro  char(1)  null, valgroupproflag  char(1)  null, valgroupproremark    varchar2(300)  null, valhz    char(1)  null, valhzflag    char(1)  null, valhzremark  varchar2(300)  null, valgzlps char(1)  null, valgzlpsflag char(1)  null, valgzlpsremark varchar2(300)  null, valzyl   char(1)  null, valzylflag   char(1)  null, valzylremark varchar2(300)  null, creuser  varchar2(128)  null, credate  date   null, updateuser   varchar2(128)  null, updatedate   date   null )";
+                db.execSQL(mit_valchecktype_m);
+                // 追溯拉链表 临时表
+                String mit_valchecktype_m_temp = "create table MIT_VALCHECKTYPE_M_TEMP ( id varchar2(36) not null, valterid varchar2(36) null,visitkey varchar2(36) null, valchecktype varchar2(36) null, valchecktypeid varchar2(36) null, productkey varchar2(36) null, acresult varchar2(36) null, terminalkey varchar2(36) null, valchecktypeflag char(1)  null, valgrouppro  char(1)  null, valgroupproflag  char(1)  null, valgroupproremark    varchar2(300)  null, valhz    char(1)  null, valhzflag    char(1)  null, valhzremark  varchar2(300)  null, valgzlps char(1)  null, valgzlpsflag char(1)  null, valgzlpsremark varchar2(300)  null, valzyl   char(1)  null, valzylflag   char(1)  null, valzylremark varchar2(300)  null, creuser  varchar2(128)  null, credate  date   null, updateuser   varchar2(128)  null, updatedate   date   null )";
+                db.execSQL(mit_valchecktype_m_temp);
+
+
+                // 追溯采集项表
+                String mit_valcheckitem_m = "create table MIT_VALCHECKITEM_M ( id varchar2(36) not null, valterid varchar2(36) null,visitkey varchar2(36) null, valitemid varchar2(36) null, colitemkey  varchar2(36) null, checkkey varchar2(36) null, addcount varchar2(36) null, totalcount varchar2(36) null, productkey varchar2(36) null, valitem  varchar2(10) null, valitemval varchar2(10) null, valitemremark varchar2(300) null, creuser  varchar2(128) null, credate  date  null, updateuser varchar2(128) null, updatedate date  null );";
+                db.execSQL(mit_valcheckitem_m);
+                // 追溯采集项表 临时表
+                String mit_valcheckitem_m_temp = "create table MIT_VALCHECKITEM_M_TEMP ( id varchar2(36) not null, valterid varchar2(36) null, visitkey varchar2(36) null, valitemid varchar2(36) null, colitemkey  varchar2(36) null, checkkey varchar2(36) null, addcount varchar2(36) null, totalcount varchar2(36) null, productkey varchar2(36) null, valitem  varchar2(10) null, valitemval varchar2(10) null, valitemremark varchar2(300) null, creuser  varchar2(128) null, credate  date  null, updateuser varchar2(128) null, updatedate date  null );";
+                db.execSQL(mit_valcheckitem_m_temp);
+
+
+
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1117,6 +1158,53 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             mitValcmpMTempDao = getDao(MitValcmpMTemp.class);
         }
         return mitValcmpMTempDao;
+    }
+
+    public Dao<MitValcheckitemM, String> getMitValcheckitemMDao() throws SQLException {
+
+        if (mitValcheckitemMDao == null) {
+            mitValcheckitemMDao = getDao(MitValcheckitemM.class);
+        }
+        return mitValcheckitemMDao;
+    }
+
+    public Dao<MitValcheckitemMTemp, String> getMitValcheckitemMTempDao() throws SQLException {
+
+        if (mitValcheckitemMTempDao == null) {
+            mitValcheckitemMTempDao = getDao(MitValcheckitemMTemp.class);
+        }
+        return mitValcheckitemMTempDao;
+    }
+
+    public Dao<MitValchecktypeM, String> getMitValchecktypeMDao() throws SQLException {
+
+        if (mitValchecktypeMDao == null) {
+            mitValchecktypeMDao = getDao(MitValchecktypeM.class);
+        }
+        return mitValchecktypeMDao;
+    }
+
+    public Dao<MitValchecktypeMTemp, String> getMitValchecktypeMTempDao() throws SQLException {
+
+        if (mitValchecktypeMTempDao == null) {
+            mitValchecktypeMTempDao = getDao(MitValchecktypeMTemp.class);
+        }
+        return mitValchecktypeMTempDao;
+    }
+
+    public Dao<MitValpromotionsM, String> getMitValpromotionsMDao() throws SQLException {
+
+        if (mitValpromotionsMDao == null) {
+            mitValpromotionsMDao = getDao(MitValpromotionsM.class);
+        }
+        return mitValpromotionsMDao;
+    }
+    public Dao<MitValpromotionsMTemp, String> getMitValpromotionsMTempDao() throws SQLException {
+
+        if (mitValpromotionsMTempDao == null) {
+            mitValpromotionsMTempDao = getDao(MitValpromotionsMTemp.class);
+        }
+        return mitValpromotionsMTempDao;
     }
 
 

@@ -46,8 +46,15 @@ public class CheckIndexPromotionStc implements Serializable {
     // 拜访ID
     private String visitId;
     
-    // 达成组数
+    // 业代达成组数
     private String reachNum;
+    // 是否达成正确与否
+    private String valistruefalg;
+    // 达成组数正确与否
+    private String valistruenumflag;//
+
+    // 督导达成组数
+    private String valistruenumval;
 
     public String getRecordKey() {
         return recordKey;
@@ -174,5 +181,28 @@ public class CheckIndexPromotionStc implements Serializable {
 	public void setAreaid(String areaid) {
 		this.areaid = areaid;
 	}
-    
+
+    public String getValistruefalg() {
+        return valistruefalg;
+    }
+
+    public void setValistruefalg(String valistruefalg) {
+        this.valistruefalg = valistruefalg;
+    }
+
+    public String getValistruenumflag() {
+        return valistruenumflag;
+    }
+
+    public void setValistruenumflag(String valistruenumflag) {
+        this.valistruenumflag = valistruenumflag;
+    }
+
+    public String getValistruenumval() {
+        return valistruenumval;
+    }
+
+    public void setValistruenumval(String valistruenumval) {
+        this.valistruenumval = valistruenumval;
+    }
 }

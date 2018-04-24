@@ -129,11 +129,10 @@ public class ZsWjVieAmendFragment extends BaseFragmentSupport implements View.On
         zdzs_chatvie_wj_amend_dd_et_report = (EditText) view.findViewById(R.id.zdzs_chatvie_wj_amend_dd_et_report);
         sureBtn = (Button) view.findViewById(R.id.zdzs_chatvie_wj_amend_dd_bt_save);
 
-
-        sureBtn = (Button) view.findViewById(R.id.zdzs_sayhi_amend_dd_bt_save);
-
         sureBtn.setOnClickListener(this);
     }
+
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

@@ -64,6 +64,8 @@ public class MstCollectionexerecordInfo implements java.io.Serializable {
 
 	// Constructors
 
+
+
 	/** default constructor */
 	public MstCollectionexerecordInfo() {
 	}

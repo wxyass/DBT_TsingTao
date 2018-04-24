@@ -159,12 +159,11 @@ public class ZsCaculateAdapter extends BaseAdapter {
         final List<KvStc> tempLstsureOrFail = new ArrayList<>();// 用于弹窗展示
         //TODO
         for (XtProItem xtProItem : itemLst) {
-            if (xtProIndexValue.getProId().equals(xtProItem.getProId()) &&
-                    xtProItem.getIndexIdLst().contains(xtProIndexValue.getIndexId())) {
+            if (xtProIndexValue.getProId().equals(xtProItem.getProId()) && xtProItem.getIndexIdLst().contains(xtProIndexValue.getIndexId())) {
                 tempLst.add(xtProItem);
                 // 库存: 100  xtProItem.getItemName()+": "+(xtProItem.getChangeNum()+xtProItem.getFinalNum())
-                tempLstsureOrFail.add(new KvStc("",
-                        xtProItem.getItemName()+": "+(xtProItem.getChangeNum()+xtProItem.getFinalNum()),"-1"));
+                //tempLstsureOrFail.add(new KvStc("",xtProItem.getItemName()+": "+(xtProItem.getChangeNum()+xtProItem.getFinalNum()),"-1"));
+                tempLstsureOrFail.add(new KvStc("",xtProItem.getItemName()+": "+(xtProItem.getValitem()),"-1"));
             }
         }
 

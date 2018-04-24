@@ -25,6 +25,7 @@ import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 public class XtBaseVisitFragment extends BaseFragmentSupport{
 
     protected String visitId="ec02b3a89d9e45baa60a3d837133b945";// 拜访主表key
+    protected String preVisitkey="";// 拜访主表key
     protected String termId="1-5A5LNU";// 终端key
     protected String areaid="1-5A5LNU";// 二级区域id
     protected String areapid="1-5A5LNU";// 大区id
@@ -45,6 +46,7 @@ public class XtBaseVisitFragment extends BaseFragmentSupport{
         // 获取传递过来的数据
         Bundle bundle = getArguments();
         visitId = bundle.getString("visitKey");
+        preVisitkey = bundle.getString("preVisitkey");
         areaid =bundle.getString("areaid");
         areapid = bundle.getString("areapid");
         gridkey = bundle.getString("gridkey");

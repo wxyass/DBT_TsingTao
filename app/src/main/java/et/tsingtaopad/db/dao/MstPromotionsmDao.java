@@ -45,6 +45,20 @@ public interface MstPromotionsmDao extends Dao<MstPromotionsM, String> {
             SQLiteOpenHelper helper, String visitId, String channelId, String termLevel);
 
     /**
+     * 查询协同拜访终端参与的活动及活动达成状态情况
+     *
+     * 用于：终端追溯-查指标-促销活动
+     *
+     * @param helper
+     * @param previsitId       拜访主键
+     * @param channelId     终端销售渠道ID
+     * @param termLevel     终端等级ID
+     * @return
+     */
+    public List<CheckIndexPromotionStc> queryZsPromotionByterm(
+            SQLiteOpenHelper helper, String previsitId, String channelId, String termLevel);
+
+    /**
      * 促销活动查询
      * 
      * @param promId        活动ID
