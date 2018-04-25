@@ -63,16 +63,6 @@
                 style="@style/zdzs_sayhi_content2"
                 android:text=""/>
 
-            <!--未稽查-->
-            <TextView
-                android:id="@+id/zdzs_chatvie_wj_amend_rl_statue"
-                style="@style/zdzs_sayhi_statue"
-                android:text="未稽查"
-                android:visibility="gone"/>
-
-            <ImageView
-                style="@style/xtbf_sayhi_third_tv"
-                android:visibility="invisible"/>
         </RelativeLayout>
 
         <View

@@ -47,13 +47,13 @@
 
                 <!--标题-->
                 <TextView
-                    android:id="@+id/zdzs_check_promo_tv_title"
+                    android:id="@+id/zdzs_check_index_tv_title"
                     style="@style/zdzs_sayhi_title"
                     android:text="达成组数"/>
 
                 <!--内容1-->
                 <TextView
-                    android:id="@+id/zdzs_check_promo_tv_con1"
+                    android:id="@+id/zdzs_check_index_tv_con1"
                     style="@style/zdzs_sayhi_content1"
                     android:text=""/>
 
@@ -68,6 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:visibility="gone"
                 >
 
                 <LinearLayout
@@ -106,15 +107,14 @@
 
                         <!--标题-->
                         <TextView
-                            android:id="@+id/zdzs_check_promo_et_title"
+                            android:id="@+id/zdzs_check_index_et_title"
                             style="@style/zdzs_sayhi_title"
                             android:text="达成组数"/>
 
                         <!--内容1-->
                         <EditText
-                            android:id="@+id/zdzs_check_promo_et_con1"
+                            android:id="@+id/zdzs_check_index_et_con1"
                             style="@style/zdzs_sayhi_content1"
-                            android:inputType="number|numberDecimal"
                             android:background="@drawable/bg_visit_record"
                             android:text=""/>
                     </RelativeLayout>
@@ -129,7 +129,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:gravity="center_vertical"
-                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -152,12 +151,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:layout_marginTop="15dp"
-                android:visibility="gone"
                 android:background="@color/white"
                 android:gravity="center_vertical">
 
                 <EditText
-                    android:id="@+id/zdzs_check_promo_et_report"
+                    android:id="@+id/zdzs_check_index_et_report"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:layout_marginLeft="10dp"
@@ -182,7 +180,7 @@
                 android:layout_height="wrap_content">
 
                 <Button
-                    android:id="@+id/zdzs_check_promo_bt_save"
+                    android:id="@+id/zdzs_check_index_bt_save"
                     style="@style/xtbf_btn_tv"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/xtbf_btn_h"

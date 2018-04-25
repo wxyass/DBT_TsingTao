@@ -11,6 +11,8 @@ import et.tsingtaopad.db.dao.impl.MitVisitMDaoImpl;
 
 
 /**
+ * 追溯终端配置表
+ *
  * MitValcheckterM entity. @author MyEclipse Persistence Tools
  */
 //MitValcheckterM(拜访主表)

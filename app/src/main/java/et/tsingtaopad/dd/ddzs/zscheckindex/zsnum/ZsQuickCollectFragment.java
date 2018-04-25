@@ -23,6 +23,8 @@ import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.dd.ddxt.checking.XtCheckIndexFragment;
+import et.tsingtaopad.dd.ddxt.checking.domain.XtProIndex;
+import et.tsingtaopad.dd.ddxt.checking.domain.XtProIndexValue;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProItem;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtQuicklyProItem;
 import et.tsingtaopad.dd.ddxt.checking.num.XtQuickCollectService;
@@ -48,6 +50,7 @@ public class ZsQuickCollectFragment extends BaseFragmentSupport implements View.
     private XtQuickCollectService xtQuickCollectService;
     private Button sureBtn;
     private List<XtQuicklyProItem> quicklyProItemLst;
+    private List<XtProIndex> calculateLst;
 
     public ZsQuickCollectFragment() {
     }
@@ -92,17 +95,18 @@ public class ZsQuickCollectFragment extends BaseFragmentSupport implements View.
         // 获取传递过来的数据
         Bundle bundle = getArguments();
         proItemLst = (List<XtProItem>)bundle.getSerializable("proItemLst");
+        calculateLst = (List<XtProIndex>)bundle.getSerializable("calculateLst");//List<XtProIndex> calculateLst
         quicklyProItemLst = xtQuickCollectService.initQuicklyProItem(proItemLst);
 
         quicklyDialogLv.setOrientation(LinearLayout.VERTICAL);
         for(int i=0; i<quicklyProItemLst.size();i++){
-            View layout = LayoutInflater.from(getActivity()).inflate(R.layout.xtbf_quicklydialog_lvitem_o,null);
-            TextView indexNameTv = (TextView)layout.findViewById(R.id.xtbf_quicklydialog_tv_itemname);
-            ListView proItemLv = (ListView)layout.findViewById(R.id.xtbf_quicklydialog_lv_pro);
+            View layout = LayoutInflater.from(getActivity()).inflate(R.layout.zdzs_quicklydialog_lvitem_o,null);
+            TextView indexNameTv = (TextView)layout.findViewById(R.id.zdzs_quicklydialog_tv_itemname);
+            ListView proItemLv = (ListView)layout.findViewById(R.id.zdzs_quicklydialog_lv_pro);
             XtQuicklyProItem item = quicklyProItemLst.get(i);
             indexNameTv.setHint(item.getItemId());
             indexNameTv.setText(item.getItemName());
-            proItemLv.setAdapter(new XtQuicklyDialogItemAdapter(getActivity(), item.getProItemLst(),item.getItemId()));
+            proItemLv.setAdapter(new ZsQuicklyDialogItemAdapter(getActivity(), item.getProItemLst(),item.getItemId()));
             ViewUtil.setListViewHeight(proItemLv);
             quicklyDialogLv.addView(layout);
         }
@@ -132,39 +136,34 @@ public class ZsQuickCollectFragment extends BaseFragmentSupport implements View.
         List<XtProItem> itemJLst;
         ListView itemLv;
         EditText itemEt;
-        EditText itemEt2;
-        TextView itemTv;
-        int isAllIn = 0;
         for (int i = 0; i < quicklyProItemLst.size(); i++) {
             itemI = quicklyProItemLst.get(i);
             itemJLst = itemI.getProItemLst();
-            itemLv =(ListView) quicklyDialogLv.getChildAt(i).findViewById(R.id.xtbf_quicklydialog_lv_pro);
+            itemLv =(ListView) quicklyDialogLv.getChildAt(i).findViewById(R.id.zdzs_quicklydialog_lv_pro);
             for (int j = 0; j < itemJLst.size(); j++) {
                 itemJ = itemJLst.get(j);
 
                 // 获取文本框的值
-                itemEt = (EditText)itemLv.getChildAt(j).findViewById(R.id.xtbf_quicklydialog_et_changenum);
-                itemJ.setChangeNum((FunUtil.isBlankOrNullToDouble(itemEt.getText().toString())));
-                //itemJ.setChangeNum(Double.valueOf(FunUtil.isNullToZero(itemEt.getText().toString())));
-                itemJ.setBianhualiang(itemEt.getText().toString());// 现有量
-                itemEt2 = (EditText)itemLv.getChildAt(j).findViewById(R.id.xtbf_quicklydialog_et_finalnum);
-                itemJ.setFinalNum((FunUtil.isBlankOrNullToDouble(itemEt2.getText().toString())));
-                //itemJ.setFinalNum(Double.valueOf(FunUtil.isNullToZero(itemEt2.getText().toString())));
-                itemJ.setXianyouliang(itemEt2.getText().toString());// 现有量
+                itemEt = (EditText)itemLv.getChildAt(j).findViewById(R.id.item_zs_quick_et_finalnum);
+                //itemJ.setChangeNum((FunUtil.isBlankOrNullToDouble(itemEt.getText().toString())));
+                itemJ.setValitemval(itemEt.getText().toString());// 督导结果量
 
-                if("".equals(FunUtil.isNullSetSpace(itemEt.getText().toString()))||"".equals(FunUtil.isNullSetSpace(itemEt2.getText().toString()))){
-                    isAllIn=1;
-                }
             }
         }
-        if (isAllIn == 1) {
-            Toast.makeText(getActivity(), "所有的现有量,变化量必须填值(没货填0)", Toast.LENGTH_SHORT).show();
-            return;
-        }
+
         ViewUtil.hideSoftInputFromWindow(getActivity(),v);
         //quicklyDialog.cancel();
 
-        handler.sendEmptyMessage(XtCheckIndexFragment.INPUT_SUC);
+        for (XtProIndex xtProIndex:calculateLst) {
+            for (XtProIndexValue xtProIndexValue:xtProIndex.getIndexValueLst()) {
+                xtProIndexValue.setValchecktypeflag("N");// // 终端追溯 指标正确与否
+            }
+        }
+
+        handler.sendEmptyMessage(ZsCheckIndexFragment.INIT_INDEX_AMEND);
+
+        /*handler.sendEmptyMessage(XtCheckIndexFragment.INPUT_SUC);
+        */
         supportFragmentManager.popBackStack();
 
     }

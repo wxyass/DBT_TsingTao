@@ -24,11 +24,10 @@ import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.core.view.alertview.OnDismissListener;
-import et.tsingtaopad.dd.ddxt.checking.XtCaculateItemAdapter;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProIndex;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProIndexValue;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProItem;
-import et.tsingtaopad.dd.ddzs.zscheckindex.zsnum.ZsCaculateFragment;
+import et.tsingtaopad.dd.ddzs.zscheckindex.zsnum.ZsCaculateAmendFragment;
 import et.tsingtaopad.dd.ddzs.zsshopvisit.ZsVisitShopActivity;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
 
@@ -122,7 +121,7 @@ public class ZsCaculateAdapter extends BaseAdapter {
             }
         }
         // (上下文,有几个产品,指标标准,所有的采集项数据,当前指标key)
-        holder.indexValueLv.setAdapter(new XtCaculateItemAdapter(context, item.getIndexValueLst(), valueLst, itemLst,item.getIndexId()));
+        holder.indexValueLv.setAdapter(new ZsCaculateItemAdapter(context, item.getIndexValueLst(), valueLst, itemLst,item.getIndexId()));
         //ViewUtil.setListViewHeight(holder.indexValueLv);
         holder.indexValueLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -159,7 +158,9 @@ public class ZsCaculateAdapter extends BaseAdapter {
         final List<KvStc> tempLstsureOrFail = new ArrayList<>();// 用于弹窗展示
         //TODO
         for (XtProItem xtProItem : itemLst) {
-            if (xtProIndexValue.getProId().equals(xtProItem.getProId()) && xtProItem.getIndexIdLst().contains(xtProIndexValue.getIndexId())) {
+            if (xtProIndexValue.getProId().equals(xtProItem.getProId())
+                    && xtProItem.getIndexIdLst().contains(xtProIndexValue.getIndexId())) {
+
                 tempLst.add(xtProItem);
                 // 库存: 100  xtProItem.getItemName()+": "+(xtProItem.getChangeNum()+xtProItem.getFinalNum())
                 //tempLstsureOrFail.add(new KvStc("",xtProItem.getItemName()+": "+(xtProItem.getChangeNum()+xtProItem.getFinalNum()),"-1"));
@@ -189,7 +190,12 @@ public class ZsCaculateAdapter extends BaseAdapter {
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(1==position){
+                if(0==position){
+                    // 修改对错
+                    xtProIndexValue.setValchecktypeflag("Y");
+                    handler.sendEmptyMessage(ZsCheckIndexFragment.INIT_INDEX_AMEND);
+                }
+                else if(1==position){
                     /*Bundle bundle = new Bundle();
                     bundle.putString("proName", "");
                     ZsSayhiAmendFragment zsAmendFragment = new ZsSayhiAmendFragment(handler);
@@ -198,14 +204,10 @@ public class ZsCaculateAdapter extends BaseAdapter {
                     zsVisitShopActivity.changeXtvisitFragment(zsAmendFragment,"zsamendfragment");*/
 
                     ZsVisitShopActivity xtVisitShopActivity = (ZsVisitShopActivity)context;
-
-
-
-
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("tempLst", (Serializable) tempLst);
                     bundle.putString("proName", proName);
-                    ZsCaculateFragment xtCaculateFragment = new ZsCaculateFragment(xtProIndexValue,handler);
+                    ZsCaculateAmendFragment xtCaculateFragment = new ZsCaculateAmendFragment(xtProIndexValue,handler);
                     xtCaculateFragment.setArguments(bundle);
                     xtVisitShopActivity.changeXtvisitFragment(xtCaculateFragment,"xtnuminputfragment");
                 }

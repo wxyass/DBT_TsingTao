@@ -23,6 +23,7 @@ import et.tsingtaopad.adapter.AlertKeyValueAdapter;
 import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.view.alertview.AlertView;
+import et.tsingtaopad.db.table.MitValcmpotherMTemp;
 import et.tsingtaopad.db.table.MitValterMTemp;
 import et.tsingtaopad.db.table.MstRouteM;
 import et.tsingtaopad.dd.ddzs.zssayhi.ZsSayhiFragment;
@@ -46,16 +47,7 @@ public class ZsWjVieAmendFragment extends BaseFragmentSupport implements View.On
 
     private Button sureBtn;
 
-    protected String titleName = "";// 标题内容,比如:是否有效终端
-    protected String ydkey = "";// 对象属性,比如: vidroutekey(属性)
-    protected String ydparentkey = "";// 对象属性,比如: vidroutekey(属性)
-    protected String setDdValue = "";// 对象方法名,比如: setVidrtekeyval(督导输入的值)
-    protected String setDdFlag = "";// 对象方法名,比如: setVidrtekeyflag(正确与否)
-    protected String setDdRemark = "";// 对象方法名,比如: setVidroutremark(备注)
-    //protected String type = "";// 页面类型,比如: "1"
-    protected String termId = "";// 终端id
-    protected String mitValterMTempKey = "";// 追溯主表临时表key
-    protected MitValterMTemp mitValterMTemp;// 追溯主表信息
+    protected MitValcmpotherMTemp mitValcmpotherMTemp;// 追溯主表信息
 
 
     /*private RelativeLayout zdzs_sayhi_amend_rl;
@@ -121,12 +113,11 @@ public class ZsWjVieAmendFragment extends BaseFragmentSupport implements View.On
         zdzs_chatvie_wj_amend_rl = (RelativeLayout) view.findViewById(R.id.zdzs_chatvie_wj_amend_rl);
 
         zdzs_chatvie_wj_amend_rl_yd_title = (TextView)view. findViewById(R.id.zdzs_chatvie_wj_amend_rl_yd_title);
-
         zdzs_chatvie_wj_amend_rl_con1 = (TextView) view.findViewById(R.id.zdzs_chatvie_wj_amend_rl_con1);
         zdzs_chatvie_wj_amend_rl_con2 = (TextView)view. findViewById(R.id.zdzs_chatvie_wj_amend_rl_con2);
-        zdzs_chatvie_wj_amend_rl_statue = (TextView) view.findViewById(R.id.zdzs_chatvie_wj_amend_rl_statue);
 
         zdzs_chatvie_wj_amend_dd_et_report = (EditText) view.findViewById(R.id.zdzs_chatvie_wj_amend_dd_et_report);
+
         sureBtn = (Button) view.findViewById(R.id.zdzs_chatvie_wj_amend_dd_bt_save);
 
         sureBtn.setOnClickListener(this);
@@ -144,16 +135,7 @@ public class ZsWjVieAmendFragment extends BaseFragmentSupport implements View.On
 
         // 获取传递过来的数据
         Bundle bundle = getArguments();
-        titleName = bundle.getString("titleName");
-        ydkey = bundle.getString("ydkey");
-        ydparentkey = bundle.getString("ydparentkey");
-        setDdValue = bundle.getString("setDdValue");
-        setDdFlag = bundle.getString("setDdFlag");
-        setDdRemark = bundle.getString("setDdRemark");
-        //type = bundle.getString("type");
-        termId = bundle.getString("termId");
-        mitValterMTempKey = bundle.getString("mitValterMTempKey");//bundle.putSerializable("mitValterMTempKey", mitValterMTempKey);// 追溯主键
-        mitValterMTemp = (MitValterMTemp) bundle.getSerializable("mitValterMTemp");
+        mitValcmpotherMTemp = (MitValcmpotherMTemp) bundle.getSerializable("mitValcmpotherMTemp");
 
         initData();
 
@@ -161,15 +143,13 @@ public class ZsWjVieAmendFragment extends BaseFragmentSupport implements View.On
 
     private void initData() {
         // 标题
-        zdzs_chatvie_wj_amend_rl_yd_title.setText(titleName);
+        zdzs_chatvie_wj_amend_rl_yd_title.setText("是否瓦解竞品");
 
-        // 是否有效终端
-        if ("vidter".equals(ydkey)) {
-            if (ConstValues.FLAG_1.equals(mitValterMTemp.getVidter())) {
-                zdzs_chatvie_wj_amend_rl_con2.setText("是");
-            } else {
-                zdzs_chatvie_wj_amend_rl_con2.setText("否");
-            }
+        // 是否瓦解竞品
+        if (ConstValues.FLAG_1.equals(mitValcmpotherMTemp.getValistruecmpval())) {
+            zdzs_chatvie_wj_amend_rl_con2.setText("是");
+        } else {
+            zdzs_chatvie_wj_amend_rl_con2.setText("否");
         }
 
     }
@@ -183,7 +163,7 @@ public class ZsWjVieAmendFragment extends BaseFragmentSupport implements View.On
                 supportFragmentManager.popBackStack();// 取消
                 break;
 
-            case R.id.zdzs_sayhi_amend_dd_bt_save:// 确定
+            case R.id.zdzs_chatvie_wj_amend_dd_bt_save:// 确定
                 saveValue();
                 supportFragmentManager.popBackStack();
                 break;
@@ -196,13 +176,14 @@ public class ZsWjVieAmendFragment extends BaseFragmentSupport implements View.On
     // 确定保存
     private void saveValue() {
 
+        // 是否成功瓦解竞品正确与否
+        mitValcmpotherMTemp.setValistrueflag("N");
 
         // 保存是否正确,备注内容
         String remark = zdzs_chatvie_wj_amend_dd_et_report.getText().toString();
-        /*setFieldValue(mitValterMTemp, setDdFlag, "N");
-        setFieldValue(mitValterMTemp, setDdRemark, remark);*/
+        mitValcmpotherMTemp.setValiscmpremark(remark);
 
-        handler.sendEmptyMessage(ZsSayhiFragment.INIT_DATA);
+        handler.sendEmptyMessage(ZsChatvieFragment.INIT_WJ_AMEND);
 
     }
 }

@@ -112,12 +112,7 @@
                 android:background="@null"
                 android:hint="未达成"/>
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
-                android:background="@color/gray"/>
+
             <!--未稽查-->
             <RelativeLayout
                 android:id="@+id/item_zs_checkindex_rl_statue"

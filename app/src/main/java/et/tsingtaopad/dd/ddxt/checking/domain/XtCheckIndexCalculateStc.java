@@ -1,5 +1,7 @@
 package et.tsingtaopad.dd.ddxt.checking.domain;
 
+import com.j256.ormlite.field.DatabaseField;
+
 import java.io.Serializable;
 
 /**
@@ -36,6 +38,15 @@ public class XtCheckIndexCalculateStc implements Serializable {
 
     // 指标值名称 (指标的指标值,如 指标:是否高质量配送,指标值:是)
     private String indexValueName;
+
+    // 追溯拉链表id
+    private String id;
+    // 督导指标值
+    private String ddacresult;//     varchar2(128)                  null,
+    // 追溯备注
+    private String ddremark;//   追溯备注    varchar2(128)                  null,
+    // 指标正确与否
+    private String valchecktypeflag;//   追溯备注    varchar2(128)                  null,
 
 
 
@@ -157,5 +168,36 @@ public class XtCheckIndexCalculateStc implements Serializable {
     public static long getSerialversionuid() {
         return serialVersionUID;
     }
-    
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getDdacresult() {
+        return ddacresult;
+    }
+
+    public void setDdacresult(String ddacresult) {
+        this.ddacresult = ddacresult;
+    }
+
+    public String getDdremark() {
+        return ddremark;
+    }
+
+    public void setDdremark(String ddremark) {
+        this.ddremark = ddremark;
+    }
+
+    public String getValchecktypeflag() {
+        return valchecktypeflag;
+    }
+
+    public void setValchecktypeflag(String valchecktypeflag) {
+        this.valchecktypeflag = valchecktypeflag;
+    }
 }

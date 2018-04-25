@@ -19,6 +19,7 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.Serializable;
 import java.lang.ref.SoftReference;
@@ -78,6 +79,8 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
 
     public static final int INPUT_SUC = 3;
     public static final int INIT_AMEND = 33;// 促销活动修改完成
+    public static final int INIT_INDEX_AMEND = 34;// 分项采集修改完成
+    public static final int INIT_HPZ_AMEND = 35;// 合作配送占有率修改完成
     MyHandler handler;
     ZsCaculateAdapter xtCaculateAdapter;
 
@@ -130,6 +133,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
         zdzs_sayhi_rl_zhanyoulv = (RelativeLayout) view.findViewById(R.id.zdzs_sayhi_rl_zhanyoulv);
         zdzs_sayhi_tv_zhanyoulv_con1 = (TextView) view.findViewById(R.id.zdzs_sayhi_tv_zhanyoulv_con1);
         zdzs_sayhi_tv_zhanyoulv_statue = (TextView) view.findViewById(R.id.zdzs_sayhi_tv_zhanyoulv_statue);
+
 
 
 
@@ -191,7 +195,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
         //ViewUtil.setListViewHeight(promotionLv);
 
         // 其他信息
-        noProIndexLst = service.queryNoProIndex12(visitId, term.getMinorchannel(), seeFlag);
+        noProIndexLst = service.queryZsNoProIndex(preVisitkey, term.getMinorchannel(), seeFlag);
         // 初始化 合作是否到位 占有率 高质量配送数据
         for (XtCheckIndexCalculateStc item : noProIndexLst) {
             // 重新查询指标关联指标值 //因为原先的这3个指标 不再关联指标值(pad_checktype_m不再同步这三个指标)
@@ -203,6 +207,14 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                 }else{
                     zdzs_sayhi_tv_hezuo_con1.setText("否");
                 }
+                // 未稽查
+                if("N".equals(item.getValchecktypeflag())){// 达成组数正确与否
+                    zdzs_sayhi_tv_hezuo_statue.setText("业代录错");
+                }else if("Y".equals(item.getValchecktypeflag())){
+                    zdzs_sayhi_tv_hezuo_statue.setText("正确");
+                }else{
+                    zdzs_sayhi_tv_hezuo_statue.setText("未稽查");
+                }
             } else if ("df2e88c9-246f-40e2-b6e5-08cdebf8c281".equals(item.getIndexId())) {// 是否高质量配送
                 //tempLst = service.queryNoProIndexValueId2();
                 if ("460647a9-283a-44ea-b11f-42efe1fd62e4".equals(item.getIndexValueId())) {// 是否高质量配送
@@ -210,9 +222,25 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                 }else{
                     zdzs_sayhi_tv_peisong_con1.setText("否");
                 }
+                // 未稽查
+                if("N".equals(item.getValchecktypeflag())){// 达成组数正确与否
+                    zdzs_sayhi_tv_peisong_statue.setText("业代录错");
+                }else if("Y".equals(item.getValchecktypeflag())){
+                    zdzs_sayhi_tv_peisong_statue.setText("正确");
+                }else{
+                    zdzs_sayhi_tv_peisong_statue.setText("未稽查");
+                }
             } else if ("59802090-02ac-4146-9cc3-f09570c36a26".equals(item.getIndexId())) {// 我品占有率
                  zhanyoulvIndexValueId = item.getIndexValueId();
                 zdzs_sayhi_tv_zhanyoulv_con1.setText(service.getCheckStatusName(zhanyoulvIndexValueId));
+                // 未稽查
+                if("N".equals(item.getValchecktypeflag())){// 达成组数正确与否
+                    zdzs_sayhi_tv_zhanyoulv_statue.setText("业代录错");
+                }else if("Y".equals(item.getValchecktypeflag())){
+                    zdzs_sayhi_tv_zhanyoulv_statue.setText("正确");
+                }else{
+                    zdzs_sayhi_tv_zhanyoulv_statue.setText("未稽查");
+                }
             }
         }
 
@@ -238,6 +266,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                 bundle.putSerializable("termStc", termStc);
                 bundle.putSerializable("visitKey", visitId);//visitId
                 bundle.putSerializable("proItemLst", (Serializable) proItemLst);// 默认0   0:拜访 1:查看
+                bundle.putSerializable("calculateLst", (Serializable) calculateLst);// 默认0   0:拜访 1:查看//
 
                 ZsQuickCollectFragment xtquickcollectfragment = new ZsQuickCollectFragment(handler);
                 xtquickcollectfragment.setArguments(bundle);
@@ -246,33 +275,20 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                 xtVisitShopActivity.changeXtvisitFragment(xtquickcollectfragment, "xtnuminputfragment");
                 break;
 
-            case R.id.zdzs_sayhi_rl_zhanyoulv:// 单店占有率
-                final List<KvStc> tempLst = service.queryNoProIndexValueId31();
-                mAlertViewExt = new AlertView("请选择单店占有率", null,
-                        null, null, null, getActivity(), AlertView.Style.ActionSheet, this);
-                ViewGroup areaextView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_list_form, null);
-                ListView arealistview = (ListView) areaextView.findViewById(R.id.alert_list);
-                AlertKeyValueAdapter areakeyValueAdapter = new AlertKeyValueAdapter(getActivity(), tempLst,
-                        new String[]{"key", "value"}, zhanyoulvIndexValueId);
-                arealistview.setAdapter(areakeyValueAdapter);
-                arealistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        //xtZhanyoulvTv.setText(tempLst.get(position).getValue());
-                        zhanyoulvIndexValueId = tempLst.get(position).getKey();
-                        mAlertViewExt.dismiss();
-                    }
-                });
-                mAlertViewExt.addExtView(areaextView);
-                mAlertViewExt.setCancelable(true).setOnDismissListener(this);
-                mAlertViewExt.show();
 
+            case R.id.zdzs_sayhi_rl_prostatus:// 产品组合
                 break;
-            case R.id.zdzs_sayhi_rl_prostatus:
-            case R.id.zdzs_sayhi_rl_hezuo:
-            case R.id.zdzs_sayhi_rl_peisong:
-                alertShow3();
+            case R.id.zdzs_sayhi_rl_hezuo:// 合作是否到位
+                alertShow3(noProIndexLst.get(0));
                 break;
+            case R.id.zdzs_sayhi_rl_peisong:// 是否配送
+                alertShow3(noProIndexLst.get(1));
+                break;
+            case R.id.zdzs_sayhi_rl_zhanyoulv:// 单店占有率
+                alertShow3(noProIndexLst.get(2));
+                //alertShow5();
+                break;
+
 
             default:
                 break;
@@ -317,12 +333,57 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                 case INIT_AMEND:// 促销活动修改完成
                     fragment.showAdapter();
                     break;
+                case INIT_INDEX_AMEND:// 分项采集修改完成
+                    fragment.showIndexAdapter();
+                    break;
+                case INIT_HPZ_AMEND:// 分项采集修改完成
+                    fragment.showHpzAdapter();
+                    break;
+            }
+        }
+    }
+
+    // 刷新合作配送占有率
+    private void showHpzAdapter() {
+        for (XtCheckIndexCalculateStc item : noProIndexLst) {
+            // 重新查询指标关联指标值 //因为原先的这3个指标 不再关联指标值(pad_checktype_m不再同步这三个指标)
+            // 交由pad直接初始化 // ywm 20160407
+            if ("666b74b3-b221-4920-b549-d9ec39a463fd".equals(item.getIndexId())) {// 合作是否到位
+                // 未稽查
+                if("N".equals(item.getValchecktypeflag())){// 达成组数正确与否
+                    zdzs_sayhi_tv_hezuo_statue.setText("业代录错");
+                }else if("Y".equals(item.getValchecktypeflag())){
+                    zdzs_sayhi_tv_hezuo_statue.setText("正确");
+                }else{
+                    zdzs_sayhi_tv_hezuo_statue.setText("未稽查");
+                }
+            } else if ("df2e88c9-246f-40e2-b6e5-08cdebf8c281".equals(item.getIndexId())) {// 是否高质量配送
+                // 未稽查
+                if("N".equals(item.getValchecktypeflag())){// 达成组数正确与否
+                    zdzs_sayhi_tv_peisong_statue.setText("业代录错");
+                }else if("Y".equals(item.getValchecktypeflag())){
+                    zdzs_sayhi_tv_peisong_statue.setText("正确");
+                }else{
+                    zdzs_sayhi_tv_peisong_statue.setText("未稽查");
+                }
+            } else if ("59802090-02ac-4146-9cc3-f09570c36a26".equals(item.getIndexId())) {// 我品占有率
+                // 未稽查
+                if("N".equals(item.getValchecktypeflag())){// 达成组数正确与否
+                    zdzs_sayhi_tv_zhanyoulv_statue.setText("业代录错");
+                }else if("Y".equals(item.getValchecktypeflag())){
+                    zdzs_sayhi_tv_zhanyoulv_statue.setText("正确");
+                }else{
+                    zdzs_sayhi_tv_zhanyoulv_statue.setText("未稽查");
+                }
             }
         }
     }
 
     private void showAdapter() {
         xtPromotionAdapter.notifyDataSetChanged();
+    }
+    private void showIndexAdapter() {
+        xtCaculateAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -442,7 +503,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
     }
 
     /**
-     * 弹窗3
+     * 配送 占有率 合作
      * 参数1: 标题 ×
      * 参数2: 主体内容    ×
      * 参数3: 取消按钮    ×
@@ -452,7 +513,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
      * 参数7: 弹窗类型 (正常取消,确定按钮)   √
      * 参数8: 条目点击监听  √
      */
-    public void alertShow3() {
+    public void alertShow3(final XtCheckIndexCalculateStc checkIndexCalculateStc) {
         List<KvStc> sureOrFail = new ArrayList<>();
         sureOrFail.add(new KvStc("zhengque","正确","-1"));
         sureOrFail.add(new KvStc("cuowu","错误(去修正)","-1"));
@@ -473,6 +534,13 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                     zsAmendFragment.setArguments(bundle);
                     ZsVisitShopActivity zsVisitShopActivity = (ZsVisitShopActivity)getActivity();
                     zsVisitShopActivity.changeXtvisitFragment(zsAmendFragment,"zsamendfragment");*/
+
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("checkIndexCalculateStc", (Serializable) checkIndexCalculateStc);
+                    ZsCheckIndexAmendFragment zsInvocingAddDataFragment = new ZsCheckIndexAmendFragment(handler);
+                    zsInvocingAddDataFragment.setArguments(bundle);
+                    ZsVisitShopActivity zsVisitShopActivity = (ZsVisitShopActivity) getActivity();
+                    zsVisitShopActivity.changeXtvisitFragment(zsInvocingAddDataFragment, "zscheckpromoamendfragment");
                 }
 
                 mAlertViewExt.dismiss();
@@ -488,9 +556,8 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
         mAlertViewExt.show();
     }
 
-
-
     /**
+     * 促销活动 对错弹窗
      * 参数1: 标题 ×
      * 参数2: 主体内容 ×
      * 参数3: 取消按钮 ×

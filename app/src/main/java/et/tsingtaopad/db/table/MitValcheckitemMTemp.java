@@ -5,6 +5,7 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.Date;
 
+import et.tsingtaopad.db.dao.impl.MitValcheckitemMDaoImpl;
 import et.tsingtaopad.db.dao.impl.MitValchecktypeMDaoImpl;
 
 
@@ -12,7 +13,7 @@ import et.tsingtaopad.db.dao.impl.MitValchecktypeMDaoImpl;
  * MitValterM entity. @author MyEclipse Persistence Tools
  */
 //MIT_VALTER_M(追溯主表)
-@DatabaseTable(tableName = "MIT_VALCHECKITEM_M_TEMP", daoClass = MitValchecktypeMDaoImpl.class)
+@DatabaseTable(tableName = "MIT_VALCHECKITEM_M_TEMP", daoClass = MitValcheckitemMDaoImpl.class)
 public class MitValcheckitemMTemp implements java.io.Serializable {
 
     // Fields

@@ -39,7 +39,9 @@ public class CheckIndexCalculateStc implements Serializable {
 
     // 终端追溯查指标表主键
     private String id;
-    
+    // 终端追溯 指标正确与否
+    private String valchecktypeflag;
+
 
     /**
 	 * 
@@ -166,5 +168,13 @@ public class CheckIndexCalculateStc implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getValchecktypeflag() {
+        return valchecktypeflag;
+    }
+
+    public void setValchecktypeflag(String valchecktypeflag) {
+        this.valchecktypeflag = valchecktypeflag;
     }
 }

@@ -61,7 +61,6 @@ public class ZsCheckPromoAmendFragment extends BaseFragmentSupport implements Vi
 
     private CheckIndexPromotionStc checkIndexPromotionStc;
 
-
     public ZsCheckPromoAmendFragment() {
 
     }

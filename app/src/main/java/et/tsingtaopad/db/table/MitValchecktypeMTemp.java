@@ -67,6 +67,10 @@ public class MitValchecktypeMTemp implements java.io.Serializable {
     private String updateuser;//       varchar2(128)                  null,
     @DatabaseField
     private Date updatedate;//       date                           null
+    @DatabaseField
+    private String ddacresult;//  督导指标值     varchar2(128)                  null,
+    @DatabaseField
+    private String ddremark;//   追溯备注    varchar2(128)                  null,
 
 
     /**
@@ -273,5 +277,21 @@ public class MitValchecktypeMTemp implements java.io.Serializable {
 
     public void setVisitkey(String visitkey) {
         this.visitkey = visitkey;
+    }
+
+    public String getDdacresult() {
+        return ddacresult;
+    }
+
+    public void setDdacresult(String ddacresult) {
+        this.ddacresult = ddacresult;
+    }
+
+    public String getDdremark() {
+        return ddremark;
+    }
+
+    public void setDdremark(String ddremark) {
+        this.ddremark = ddremark;
     }
 }

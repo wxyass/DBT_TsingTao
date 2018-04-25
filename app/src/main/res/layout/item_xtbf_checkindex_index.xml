@@ -29,12 +29,14 @@
     </LinearLayout>
 
 
-    <ListView
+    <et.tsingtaopad.view.NoScrollListView
         android:id="@+id/item_xt_caculate_lv_indexvalue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:divider="@color/listview_line"
         android:dividerHeight="1dp" />
+
+
 
 
 

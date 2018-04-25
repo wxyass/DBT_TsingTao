@@ -29,7 +29,12 @@ public class XtProIndexValue implements Serializable {
     
     // 动态指标值名称
     private String indexValueName;
-    
+
+    // 终端追溯查指标表主键
+    private String id;
+    // 终端追溯 指标正确与否
+    private String valchecktypeflag;
+
     public String getIndexResultId() {
         return indexResultId;
     }
@@ -97,5 +102,20 @@ public class XtProIndexValue implements Serializable {
     public static long getSerialversionuid() {
         return serialVersionUID;
     }
-    
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getValchecktypeflag() {
+        return valchecktypeflag;
+    }
+
+    public void setValchecktypeflag(String valchecktypeflag) {
+        this.valchecktypeflag = valchecktypeflag;
+    }
 }
