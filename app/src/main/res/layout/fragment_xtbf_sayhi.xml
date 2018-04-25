@@ -110,10 +110,10 @@
                     android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@+id/xt_sayhi_tv_wopindianzhao"
                     android:background="@drawable/transparent"
-                    android:visibility="gone"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:text="@string/default_text"/>
+                    android:text="@string/default_text"
+                    android:visibility="gone"/>
 
                 <Button
                     android:id="@+id/xt_sayhi_btn_time"
@@ -122,12 +122,12 @@
                     android:layout_height="35dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="2dp"
-                    android:visibility="gone"
                     android:layout_toRightOf="@+id/xt_sayhi_btn_text"
                     android:background="@drawable/bg_search_button"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:text="@string/default_date"/>
+                    android:text="@string/default_date"
+                    android:visibility="gone"/>
 
                 <et.tsingtaopad.view.DdSlideSwitch
                     android:id="@+id/xt_sayhi_sw_wopindianzhao"
@@ -268,9 +268,9 @@
                     style="@style/xtbf_sayhi_two_tv"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
                     android:layout_marginRight="100dp"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/bg_visit_record"
                     />
 
@@ -426,9 +426,9 @@
                     style="@style/xtbf_sayhi_two_tv"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
                     android:layout_marginRight="100dp"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/bg_visit_record"
                     />
 
@@ -452,9 +452,9 @@
                     style="@style/xtbf_sayhi_two_tv"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
                     android:layout_marginRight="100dp"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/bg_visit_record"
                     />
 
@@ -478,12 +478,12 @@
                     style="@style/xtbf_sayhi_two_tv"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
                     android:layout_marginRight="100dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/bg_visit_record"
                     android:maxLength="20"
                     android:singleLine="true"
-                    android:background="@drawable/bg_visit_record"
                     />
 
                 <ImageView
@@ -506,10 +506,10 @@
                     style="@style/xtbf_sayhi_san_tv"
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="5dp"
-                    android:inputType="number"
                     android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/bg_visit_record"
+                    android:inputType="number"
                     />
 
                 <TextView
@@ -536,11 +536,11 @@
                     style="@style/xtbf_sayhi_two_tv"
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
                     android:layout_marginRight="100dp"
-                    android:inputType="number"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/bg_visit_record"
+                    android:inputType="number"
                     />
 
                 <ImageView
@@ -563,12 +563,13 @@
                     style="@style/xtbf_sayhi_san_tv"
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
-                    android:inputType="number"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/bg_visit_record"
                     android:hint="0"
+                    android:inputType="number"
                     />
+
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_unit_volume"/>
@@ -593,11 +594,12 @@
                     style="@style/xtbf_sayhi_san_tv"
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
-                    android:inputType="number"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/bg_visit_record"
-                    android:hint="0"/>
+                    android:hint="0"
+                    android:inputType="number"/>
+
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_unit_volume"/>
@@ -622,11 +624,12 @@
                     style="@style/xtbf_sayhi_san_tv"
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
-                    android:inputType="number"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/bg_visit_record"
-                    android:hint="0"/>
+                    android:hint="0"
+                    android:inputType="number"/>
+
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_unit_volume"/>
@@ -651,11 +654,12 @@
                     style="@style/xtbf_sayhi_san_tv"
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
-                    android:inputType="number"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/bg_visit_record"
-                    android:hint="0"/>
+                    android:hint="0"
+                    android:inputType="number"/>
+
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_unit_volume"/>
@@ -680,11 +684,12 @@
                     style="@style/xtbf_sayhi_san_tv"
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
-                    android:inputType="number"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/bg_visit_record"
-                    android:hint="0"/>
+                    android:hint="0"
+                    android:inputType="number"/>
+
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_unit_volume"/>
@@ -809,7 +814,8 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="gone">
 
                 <Button
                     android:id="@+id/xtbf_sayhi_bt_next"

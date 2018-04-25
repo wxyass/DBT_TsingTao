@@ -381,14 +381,14 @@ public class XtShopVisitService {
                     // 复制活动拜访终端表  true:当天重复拜访
                     createMstPromotermInfoTemp(helper, prevVisitId, visitDate, visitMTemp, promDao, promTempDao, true);
                     //
+                    // 复制采集项表
+                    createMstCollectionexerecordInfoTemp(collectionDao, collectionTempDao, padCheckaccomplishInfoDao, prevVisitId, termStc, visitMTemp);
 
                 } else {// 当天第一次拜访
                     // 复制拉链表 MstCheckexerecordInfoTemp 当天第一次拜访,MstCheckexerecordInfoTemp 只复制与产品无关的指标
                     createMstCheckexerecordInfoTemp1(prevVisitId, visitDate, visitMTemp, valueDao, valueTempDao);
                     // 复制活动拜访终端表 false:当天第一次拜访
                     createMstPromotermInfoTemp(helper, prevVisitId, visitDate, visitMTemp, promDao, promTempDao, false);
-                    // 复制采集项表
-                    createMstCollectionexerecordInfoTemp(collectionDao, collectionTempDao, padCheckaccomplishInfoDao, prevVisitId, termStc, visitMTemp);
 
                 }
             }
