@@ -109,7 +109,7 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        xtChatVieService = new ZsChatVieService(getActivity(), null);
+        zsChatVieService = new ZsChatVieService(getActivity(), null);
         handler = new MyHandler(this);
 
         initProData();
@@ -119,18 +119,18 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
 
     //List<XtChatVieStc> dataLst;
     List<MitValcmpMTemp> dataLst;
-    ZsChatVieService xtChatVieService;
+    ZsChatVieService zsChatVieService;
     private MstVisitMTemp visitMTemp;
     MitValcmpMTemp valsupplyMTemp;
 
     // 初始化数据
     private void initProData() {
 
-        xtChatVieService.delRepeatVistProduct(visitId);
+        zsChatVieService.delRepeatVistProduct(visitId);
         //dataLst = xtChatVieService.queryVieProTemp(visitId);
-        dataLst = xtChatVieService.queryValVieSupplyTemp(mitValterMTempKey);
+        dataLst = zsChatVieService.queryValVieSupplyTemp(mitValterMTempKey);
 
-        visitMTemp = xtChatVieService.findVisitTempById(visitId);// 拜访临时表记录
+        visitMTemp = zsChatVieService.findVisitTempById(visitId);// 拜访临时表记录
 
         if (visitMTemp != null) {
             // 是否瓦解竞品  0:未瓦解  1:瓦解
@@ -158,10 +158,12 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
         ViewUtil.setListViewHeight(zsChatvieLv);
 
         // 瓦解竞品
-        mitValcmpotherMTemp = xtChatVieService.findMitValcmpotherMTempById(mitValterMTempKey);
+        mitValcmpotherMTemp = zsChatVieService.findMitValcmpotherMTempById(mitValterMTempKey);
         // 设置瓦解竞品稽查
         setWjFalg();
 
+        // 拜访记录
+        zdzs_chatvie_et_visitreport.setText(mitValcmpotherMTemp.getValvisitremark());
     }
 
     // 设置瓦解竞品稽查
@@ -251,28 +253,11 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
     }
 
     /**
-     * 添加竞品成功 UI
+     * 新增竞品成功 后的处理 UI
      */
     public void showAddVieProSuc(ArrayList<KvStc> products, KvStc agency) {
 
         for (KvStc product : products) {
-
-            //DbtLog.logUtils(TAG,"经销商key:"+agency.getKey()+"、经销商名称:"+agency.getValue()+"-->产品key："+product.getKey()+"、产品名称："+product.getValue());
-            /*List<String> proIdLst = FunUtil.getPropertyByName(dataLst, "proId", String.class);
-            if (proIdLst.contains(product.getKey())) {
-                DbtLog.logUtils(TAG, "产品重复提示");
-                Toast.makeText(getActivity(), getString(R.string.addrelation_msg_repetitionadd), Toast.LENGTH_LONG).show();
-            } else {
-                XtChatVieStc supplyStc = new XtChatVieStc();
-                supplyStc.setProId(product.getKey());
-                supplyStc.setProName(product.getValue());
-                supplyStc.setCommpayId(agency.getKey());
-                dataLst.add(supplyStc);
-
-                zsChatvieAdapter.notifyDataSetChanged();
-                ViewUtil.setListViewHeight(zsChatvieLv);//
-
-            }*/
 
             List<String> proIdLst = new ArrayList<String>();
 
@@ -288,16 +273,6 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
                 DbtLog.logUtils(TAG, "产品重复提示");
                 Toast.makeText(getActivity(), getString(R.string.addrelation_msg_repetitionadd), Toast.LENGTH_LONG).show();
             } else {
-                /*XtInvoicingStc supplyStc = new XtInvoicingStc();
-                supplyStc.setProId(product.getKey());
-                supplyStc.setProName(product.getValue());
-                supplyStc.setAgencyId(agency.getKey());
-                supplyStc.setAgencyName(agency.getValue());
-                supplyStc.setPrevStore("0");
-                dataLst.add(supplyStc);
-                //新增供货关系指标记录表进行更新
-                invoicingService.updateMstcheckexerecordInfoTempDeleteflag(visitId,product.getKey());*/
-
 
                 MitValcmpMTemp valsupplyMTemp = new MitValcmpMTemp();
                 valsupplyMTemp.setId(FunUtil.getUUID());
@@ -317,6 +292,10 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
         }
     }
 
+    /**
+     * 处理供货关系对错
+     * @param position
+     */
     public void alertShow3(final int position) {
 
         mAlertViewExt = new AlertView(null, null, null, null,
@@ -474,50 +453,11 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
         // 如果是查看操作，则不做数据校验及数据处理
         if (ConstValues.FLAG_1.equals(seeFlag)) return;
 
-        /*View view;
-        EditText itemEt;
-        XtChatVieStc item;
-        // 遍历LV,获取采集数据
-        for (int i = 0; i < dataLst.size(); i++) {
-            item = dataLst.get(i);
-            view = viesourceLv.getChildAt(i);
-            if (view == null) continue;
+        // 拜访记录
+        mitValcmpotherMTemp.setValvisitremark(zdzs_chatvie_et_visitreport.getText().toString());
 
-            // 聊竞品-进店价
-            itemEt = (EditText)view.findViewById(R.id.item_viesource_et_qudao);
-            String content = itemEt.getText().toString();
-            item.setChannelPrice(FunUtil.getDecimalsData(content));
-            //item.setChannelPrice(itemEt.getText().toString());
-
-            // 聊竞品-零售价
-            itemEt = (EditText)view.findViewById(R.id.item_viesource_et_lingshou);
-            content = itemEt.getText().toString();
-            item.setSellPrice(FunUtil.getDecimalsData(content));
-            //item.setSellPrice(itemEt.getText().toString());
-
-            itemEt = (EditText)view.findViewById(R.id.item_viesource_et_agencyname);
-            item.setAgencyName(itemEt.getText().toString());
-
-            view = viestatusLv.getChildAt(i);
-            if (view == null) continue;
-            itemEt = (EditText)view.findViewById(R.id.item_viestatus_et_currstore);
-            item.setCurrStore(itemEt.getText().toString());
-            itemEt = (EditText)view.findViewById(R.id.item_viestatus_et_monthsell);
-            item.setMonthSellNum(itemEt.getText().toString());
-            itemEt = (EditText)view.findViewById(R.id.item_viestatus_et_describe);
-            item.setDescribe(itemEt.getText().toString());
-        }
-
-        // 是否瓦解竞品 拜访主表相关数据
-        if (clearvieSw.getStatus()) {
-            visitMTemp.setIscmpcollapse(ConstValues.FLAG_1);// 瓦解
-        } else {
-            visitMTemp.setIscmpcollapse(ConstValues.FLAG_0);// 未瓦解
-        }
-
-        visitMTemp.setRemarks(visitreportEt.getText().toString());
-
-        xtChatVieService.saveXtVie(dataLst, visitId, termId, visitMTemp);*/
+        // 保存追溯聊竞品页面数据到临时表
+        zsChatVieService.saveZsVie(dataLst, mitValcmpotherMTemp);
     }
 
     private AlertView mAlertViewExt;//窗口拓展例子
@@ -619,6 +559,7 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
         });
         mAlertViewExt.show();
     }
+
     /**
      * 处理瓦解竞品
      * 参数1: 标题 ×
@@ -676,4 +617,5 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
         });
         mAlertViewExt.show();
     }
+
 }

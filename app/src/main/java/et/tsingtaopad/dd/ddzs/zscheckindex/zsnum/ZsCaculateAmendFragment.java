@@ -132,21 +132,22 @@ public class ZsCaculateAmendFragment extends BaseFragmentSupport implements View
 
 
         // 自动计算
-        /*Bundle bundle = new Bundle();
+        Bundle bundle = new Bundle();
         if (item != null) {
             bundle.putString("proId", item.getProId());
             bundle.putString("indexId", xtProIndexValue.getIndexId());
-        }*/
+        }
 
 
         // 修改对错
         xtProIndexValue.setValchecktypeflag("N");
 
-        handler.sendEmptyMessage(ZsCheckIndexFragment.INIT_INDEX_AMEND);
-        /*Message msg = new Message();
-        msg.what = XtCheckIndexFragment.INPUT_SUC;
-        msg.setData(bundle);
-        handler.sendMessage(msg);*/
 
+        Message msg = new Message();
+        msg.what = ZsCheckIndexFragment.INIT_INDEX_AUTO_AMEND;// 自动计算
+        msg.setData(bundle);
+        handler.sendMessage(msg);
+
+        //handler.sendEmptyMessage(ZsCheckIndexFragment.INIT_INDEX_AMEND);
     }
 }

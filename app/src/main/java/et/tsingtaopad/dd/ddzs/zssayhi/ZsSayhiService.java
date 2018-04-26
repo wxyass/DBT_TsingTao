@@ -34,11 +34,13 @@ import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.db.DatabaseHelper;
+import et.tsingtaopad.db.dao.MitValterMTempDao;
 import et.tsingtaopad.db.dao.MstAgencyinfoMDao;
 import et.tsingtaopad.db.dao.MstTerminalinfoMTempDao;
 import et.tsingtaopad.db.dao.MstVisitMTempDao;
 import et.tsingtaopad.db.table.CmmAreaM;
 import et.tsingtaopad.db.table.CmmDatadicM;
+import et.tsingtaopad.db.table.MitValterMTemp;
 import et.tsingtaopad.db.table.MstAgencyinfoM;
 import et.tsingtaopad.db.table.MstInvalidapplayInfo;
 import et.tsingtaopad.db.table.MstRouteM;
@@ -596,6 +598,24 @@ public class ZsSayhiService extends XtShopVisitService {
             } catch (SQLException e) {
                 Log.e(TAG, "获取终端表DAO对象失败", e);
             }
+        }
+    }
+
+    /**
+     * 更新终端信息
+     *
+     * @param termInfo      终端信息
+     */
+    @SuppressWarnings("unchecked")
+    public void updateMitValterMTemp(MitValterMTemp termInfo) {
+
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            MitValterMTempDao dao = helper.getDao(MitValterMTemp.class);
+            // 更新终端信息
+            dao.update(termInfo);
+        } catch (SQLException e) {
+            Log.e(TAG, "获取终端表DAO对象失败", e);
         }
     }
 

@@ -33,11 +33,17 @@ public class XtProItem implements Serializable{
     
     // 新鲜度 
     private String freshness;
+
+    // 督导采集项表主键
+    private String id;
+
     // 业代结果量(现有量+变化量)
     private String valitem;
+
     // 督导结果量(现有量+变化量) 采集项正确值结果量
     private String valitemval;
-    // 督导采集项备注(现有量+变化量)
+
+    // 督导采集项备注
     private String valitemremark;
 
     // 适用指标主键集合
@@ -196,5 +202,13 @@ public class XtProItem implements Serializable{
 
     public void setValitemremark(String valitemremark) {
         this.valitemremark = valitemremark;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

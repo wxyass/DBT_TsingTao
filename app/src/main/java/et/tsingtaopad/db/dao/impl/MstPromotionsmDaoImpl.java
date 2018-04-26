@@ -203,7 +203,7 @@ public class MstPromotionsmDaoImpl extends
 
         StringBuffer buffer = new StringBuffer();
         buffer.append("select distinct pm.promotkey, pm.areaid, pm.ispictype, pm.promottype, ");
-        buffer.append("pm.promotname, pm.startdate, pm.enddate, p.productkey, p.proname, pt.id,  ");
+        buffer.append("pm.promotname, pm.startdate, pm.enddate, p.productkey, p.proname, pt.id, pt.visitkey,  ");
         buffer.append("pt.valistruenum, pt.valistrue , pt.valistruefalg , pt.valistruenumflag , pt.valistruenumval  ");
         buffer.append("from mst_promotions_m pm ");
         buffer.append("inner join mst_promoproduct_info ps ");
@@ -231,7 +231,7 @@ public class MstPromotionsmDaoImpl extends
         String date = "";
         while (cursor.moveToNext()) {
             item = new CheckIndexPromotionStc();
-            item.setRecordKey(cursor.getString(cursor.getColumnIndex("id")));// 督导锉削活动表主键
+            item.setRecordKey(cursor.getString(cursor.getColumnIndex("id")));// 督导锉削活动表主键 // 终端追溯促销活动表 主键
             item.setPromotKey(cursor.getString(cursor.getColumnIndex("promotkey")));// 促销活动主键
             item.setAreaid(cursor.getString(cursor.getColumnIndex("areaid")));
             item.setIspictype(cursor.getString(cursor.getColumnIndex("ispictype")));
@@ -243,6 +243,8 @@ public class MstPromotionsmDaoImpl extends
             item.setProName(cursor.getString(cursor.getColumnIndex("proname")));// 产品名
             item.setValistruefalg(cursor.getString(cursor.getColumnIndex("valistruefalg")));// 是否达成正确与否
 
+            item.setVisitId(cursor.getString(cursor.getColumnIndex("visitkey")));// 终端追溯促销活动表 主键
+            //item.setId(cursor.getString(cursor.getColumnIndex("id")));// 终端追溯促销活动表 主键
             item.setReachNum(cursor.getString(cursor.getColumnIndex("valistruenum")));// 业代达成组数
             item.setValistruenumflag(cursor.getString(cursor.getColumnIndex("valistruenumflag")));// 达成组数正确与否
             item.setValistruenumval(cursor.getString(cursor.getColumnIndex("valistruenumval")));// 达成组数正确值

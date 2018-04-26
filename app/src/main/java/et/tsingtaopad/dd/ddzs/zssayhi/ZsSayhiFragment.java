@@ -51,7 +51,7 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
 
     private final String TAG = "ZsSayhiFragment";
 
-    private ZsSayhiService xtSayhiService;
+    private ZsSayhiService zsSayhiService;
     private MstTerminalinfoMTemp termInfoTemp;
     private MstVisitMTemp visitMTemp;
     private MitValterMTemp mitValterMTemp;
@@ -428,7 +428,7 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         super.onActivityCreated(savedInstanceState);
 
         handler = new MyHandler(this);
-        xtSayhiService = new ZsSayhiService(getActivity(), handler);
+        zsSayhiService = new ZsSayhiService(getActivity(), handler);
 
 
         PrefUtils.putBoolean(getActivity(),GlobalValues.SAYHIREADY,true);
@@ -484,9 +484,9 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
     // 子线程-初始化数据
     private void initData() {
 
-        termInfoTemp = xtSayhiService.findTermTempById(termId);// 终端临时表记录
-        visitMTemp = xtSayhiService.findVisitTempById(visitId);// 拜访临时表记录
-        mitValterMTemp = xtSayhiService.findMitValterMTempById(mitValterMTempKey);// 追溯临时表记录
+        termInfoTemp = zsSayhiService.findTermTempById(termId);// 终端临时表记录
+        visitMTemp = zsSayhiService.findVisitTempById(visitId);// 拜访临时表记录
+        mitValterMTemp = zsSayhiService.findMitValterMTempById(mitValterMTempKey);// 追溯临时表记录
 
 
         /*// 路线集合
@@ -704,7 +704,7 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
             //zdzs_sayhi_rl_visitperson_con1.setText(mitValterMTemp.getVidvisituser());
             String visitposition = mitValterMTemp.getVidvisituser();
             if(!("-1".equals(visitposition)||"66AA9D3A55374232891C964350610930".equals(visitposition))){ //"-1",其他 根据原先用户是什么,不做处理
-                String visitpositionName = xtSayhiService.getVisitpositionName(visitposition);
+                String visitpositionName = zsSayhiService.getVisitpositionName(visitposition);
                 zdzs_sayhi_rl_visitperson_con1.setText(visitpositionName);
             }else{
                 zdzs_sayhi_rl_visitperson_con1.setText(mitValterMTemp.getVidvisitotherval());// 其他
@@ -751,27 +751,27 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
             zdzs_sayhi_rl_totalvolume_con1.setText(String.valueOf(tvolume));
 
             // 所属线路
-            zdzs_sayhi_rl_belongline_con1.setText(xtSayhiService.getRouteName(mitValterMTemp.getVidroutekey()));
+            zdzs_sayhi_rl_belongline_con1.setText(zsSayhiService.getRouteName(mitValterMTemp.getVidroutekey()));
 
             // 区域类型
-            zdzs_sayhi_rl_areatype_con1.setText(xtSayhiService.getDatadicName(mitValterMTemp.getVidareatype()));
+            zdzs_sayhi_rl_areatype_con1.setText(zsSayhiService.getDatadicName(mitValterMTemp.getVidareatype()));
 
             // 老板老板娘
             //xttermpersion.setText(visitMTemp.getVisitposition());
             //zdzs_sayhi_rl_visitperson_con1.setText(mitValterMTemp.getVidvisituser());
 
             // 终端等级
-            zdzs_sayhi_rl_level_con1.setText(xtSayhiService.getDatadicName(termInfoTemp.getTlevel()));
+            zdzs_sayhi_rl_level_con1.setText(zsSayhiService.getDatadicName(termInfoTemp.getTlevel()));
 
             // 销售渠道
-            zdzs_sayhi_rl_sellchannel_con1.setText(xtSayhiService.getDatadicName(termInfoTemp.getSellchannel()));
-            zdzs_sayhi_rl_mainchannel_con1.setText(xtSayhiService.getDatadicName(termInfoTemp.getMainchannel()));
-            zdzs_sayhi_rl_minorchannel_con1.setText(xtSayhiService.getDatadicName(mitValterMTemp.getVidminchannel()));
+            zdzs_sayhi_rl_sellchannel_con1.setText(zsSayhiService.getDatadicName(termInfoTemp.getSellchannel()));
+            zdzs_sayhi_rl_mainchannel_con1.setText(zsSayhiService.getDatadicName(termInfoTemp.getMainchannel()));
+            zdzs_sayhi_rl_minorchannel_con1.setText(zsSayhiService.getDatadicName(mitValterMTemp.getVidminchannel()));
 
             // 获取省市县数据
-            zdzs_sayhi_rl_prov_con1.setText(xtSayhiService.getAreaName(termInfoTemp.getProvince()));
-            zdzs_sayhi_rl_city_con1.setText(xtSayhiService.getAreaName(termInfoTemp.getCity()));
-            zdzs_sayhi_rl_country_con1.setText(xtSayhiService.getAreaName(mitValterMTemp.getVidcountry()));
+            zdzs_sayhi_rl_prov_con1.setText(zsSayhiService.getAreaName(termInfoTemp.getProvince()));
+            zdzs_sayhi_rl_city_con1.setText(zsSayhiService.getAreaName(termInfoTemp.getCity()));
+            zdzs_sayhi_rl_country_con1.setText(zsSayhiService.getAreaName(mitValterMTemp.getVidcountry()));
 
         }
 
@@ -792,7 +792,8 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         zdzs_sayhi_rl_cmpprotocol_statue.setText(getYdInfo(mitValterMTemp.getVidcmptreatyflag()));
 
         zdzs_sayhi_rl_termname_statue.setText(getYdInfo(mitValterMTemp.getVidternameflag()));
-        zdzs_sayhi_rl_termcode_statue.setText(getYdInfo(mitValterMTemp.getVidterminalcode()));
+        // 终端编码
+        zdzs_sayhi_rl_termcode_statue.setText(getYdInfo(mitValterMTemp.getVidtercodeflag()));
         zdzs_sayhi_rl_belongline_statue.setText(getYdInfo(mitValterMTemp.getVidrtekeyflag()));
         // 终端等级
         zdzs_sayhi_rl_level_statue.setText(getYdInfo(mitValterMTemp.getVidtervidterlevelflag()));//
@@ -886,7 +887,7 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
                 break;
             case R.id.zdzs_sayhi_rl_person:
                 alertShow3(mitValterMTemp,"联系人","vidcontact","vidcontactval",
-                        "setVidcontactval","setvidcontactflag","setVidcontactremark");
+                        "setVidcontactval","setVidcontactflag","setVidcontactremark");
                 break;
             case R.id.zdzs_sayhi_rl_tel:
                 alertShow3(mitValterMTemp,"电话","vidmobile","vidmobileval",
@@ -952,7 +953,7 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         }
     }
     /**
-     * 弹窗3
+     * 正确 错误(去修正)
      * 参数1: 标题 ×
      * 参数2: 主体内容    ×
      * 参数3: 取消按钮    ×
@@ -979,7 +980,11 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(1==position){
+                if(0==position){
+                    FunUtil.setFieldValue(mitValterMTemp, ddflag, "Y");
+                    handler.sendEmptyMessage(ZsSayhiFragment.INIT_DATA);
+                }
+                else if(1==position){
                     Bundle bundle = new Bundle();
                     bundle.putString("titleName", titleName);// 标题内容,比如:是否有效终端
                     bundle.putString("ydkey", ydkey);// 对象属性,比如: vidroutekey(属性)
@@ -1006,6 +1011,7 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
     }
 
 
+    // 需要传递县,次渠道父id的弹窗
     public void alertShow4(final MitValterMTemp mitValterMTemp, final String titleName,
                            final String ydkey,final String onlyddkey,final String ydparentkey,
                            final String ddkey,final String ddflag,
@@ -1024,7 +1030,11 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(1==position){
+                if(0==position){
+                    FunUtil.setFieldValue(mitValterMTemp, ddflag, "Y");
+                    handler.sendEmptyMessage(ZsSayhiFragment.INIT_DATA);
+                }
+                else if(1==position){
                     Bundle bundle = new Bundle();
                     bundle.putString("titleName", titleName);// 标题内容,比如:是否有效终端
                     bundle.putString("ydkey", ydkey);// 对象属性,比如: vidroutekey(属性)
@@ -1136,96 +1146,14 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
 
         if(!PrefUtils.getBoolean(getActivity(),GlobalValues.SAYHIREADY,false))return;
 
-        /*// 终端状态为有效时才保存相关信息
-        if (xttermstatusSw.getStatus()) {
-            // 保存拜访主表信息
-            if (xtvisitstatusSw.getStatus()) {
-                visitMTemp.setStatus(ConstValues.FLAG_1);// status:1,true时为有效拜访
-            } else {
-                visitMTemp.setStatus(ConstValues.FLAG_0);
-            }
+        // 将追溯数据 保存到追溯主表临时表中
+        zsSayhiService.updateMitValterMTemp(mitValterMTemp);
 
-
-
-			// 是否我品销售范围
-            visitMTemp.setIsself(xtmineCb.isChecked() ? ConstValues.FLAG_1 : ConstValues.FLAG_0);
-            // 是否竞品销售范围
-            visitMTemp.setIscmp(xtvieCb.isChecked() ? ConstValues.FLAG_1 : ConstValues.FLAG_0);
-            // 如果初始状态为选中，保存进为未选中则状态为0：流失
-            if (xtmineprotocolCb.getTag() != null&& ConstValues.FLAG_1.equals(xtmineprotocolCb.getTag().toString())) {
-                visitMTemp.setSelftreaty(xtmineprotocolCb.isChecked() ? ConstValues.FLAG_1: ConstValues.FLAG_0);
-            } else {
-                visitMTemp.setSelftreaty(xtmineprotocolCb.isChecked() ? ConstValues.FLAG_1: ConstValues.FLAG_0);
-            }
-
-            if (xtvieprotocolCb.getTag() != null&& ConstValues.FLAG_1.equals(xtvieprotocolCb.getTag().toString())) {
-                visitMTemp.setCmptreaty(xtvieprotocolCb.isChecked() ? ConstValues.FLAG_1: ConstValues.FLAG_0);
-            } else {
-                visitMTemp.setCmptreaty(xtvieprotocolCb.isChecked() ? ConstValues.FLAG_1: ConstValues.FLAG_0);
-            }
-            visitMTemp.setVisituser(xttermpersion.getText().toString());
-            visitMTemp.setVisitposition(visitMTemp.getVisitposition());
-            xtSayhiService.updateVisit(visitMTemp);
-
-            // 保存终端信息
-            if (termInfoTemp != null) {
-                termInfoTemp.setTerminalname(FunUtil.isNullSetSpace(xttermname.getText()).toString());
-                termInfoTemp.setRoutekey(FunUtil.isBlankOrNullTo(termInfoTemp.getRoutekey(), termInfoTemp.getRoutekey()));
-                termInfoTemp.setProvince(termInfoTemp.getProvince());
-                termInfoTemp.setCity(termInfoTemp.getCity());
-                termInfoTemp.setCounty(termInfoTemp.getCounty());
-
-                termInfoTemp.setAddress(FunUtil.isNullSetSpace(xttermaddress.getText()).toString());
-                termInfoTemp.setContact(FunUtil.isNullSetSpace(xttermcontact.getText()).toString());
-                if(xttermphone.getText().toString().length()>30)xttermphone.setText(xttermphone.getText().toString().substring(0, 30));
-                termInfoTemp.setMobile(FunUtil.isNullSetSpace(xttermphone.getText()).toString());
-                termInfoTemp.setTlevel(FunUtil.isBlankOrNullTo(termInfoTemp.getTlevel(),termInfoTemp.getTlevel()));
-                termInfoTemp.setSequence(FunUtil.isNullSetSpace(xttermsequence.getText()).toString());
-                termInfoTemp.setCycle(FunUtil.isNullSetSpace(xttermcycle.getText()).toString());
-                termInfoTemp.setHvolume(FunUtil.isNullToZero(xttermhvolume.getText()).toString());
-                termInfoTemp.setMvolume(FunUtil.isNullToZero(xttermmvolume.getText()).toString());
-                termInfoTemp.setPvolume(FunUtil.isNullToZero(xttermpvolume.getText()).toString());
-                termInfoTemp.setLvolume(FunUtil.isNullToZero(xttermlvolume.getText()).toString());
-
-                // 有效终端
-                if (xttermstatusSw.getStatus()) {
-                    termInfoTemp.setStatus(ConstValues.FLAG_1); // 有效
-                } else {
-                    termInfoTemp.setStatus(ConstValues.FLAG_0); // 失效
-                }
-
-                // 店招
-                if (xtwopindianzhaoSw.getStatus()) {
-                    termInfoTemp.setIfmine(ConstValues.FLAG_1);// 是否我品店招 0不是 1是
-                    if(xttimeBtn.getText().toString()!=null&&xttimeBtn.getText().toString().length()>0){
-                        termInfoTemp.setIfminedate(xttimeBtn.getText().toString());
-                    }else{
-                        termInfoTemp.setIfminedate(ifminedate);
-                    }
-                } else {
-                    termInfoTemp.setIfmine(ConstValues.FLAG_0);
-                }
-
-                termInfoTemp.setSellchannel(FunUtil.isBlankOrNullTo(termInfoTemp.getSellchannel(), termInfoTemp.getSellchannel()));
-                termInfoTemp.setMainchannel(FunUtil.isBlankOrNullTo(termInfoTemp.getMainchannel(), termInfoTemp.getMainchannel()));
-                termInfoTemp.setMinorchannel(FunUtil.isBlankOrNullTo(termInfoTemp.getMinorchannel(), termInfoTemp.getMinorchannel()));
-                termInfoTemp.setAreatype(FunUtil.isBlankOrNullTo(termInfoTemp.getAreatype(), termInfoTemp.getAreatype()));
-                //termInfo.setUpdateuser(ConstValues.loginSession.getUserCode());
-                termInfoTemp.setUpdateuser(PrefUtils.getString(getActivity(), "userCode", ""));
-                termInfoTemp.setPadisconsistent(ConstValues.FLAG_0);
-                termInfoTemp.setUpdatetime(DateUtil.getDateTimeDte(1));
-                // --- 更改mst_terminalinfo_m表中selftreaty字段 ywm 20160426-----------------
-                termInfoTemp.setSelftreaty(visitMTemp.getSelftreaty());
-                termInfoTemp.setCmpselftreaty(visitMTemp.getCmptreaty());
-                // --- 更改mst_terminalinfo_m表中selftreaty字段 ywm 20160426-----------------
-                String prevSequence = xttermsequence.getText().toString();
-                xtSayhiService.updateXtTermInfo(termInfoTemp, prevSequence);
-            }
-        }*/
         Long time6 = new Date().getTime();
         Log.e("Optimization", "保存数据" + (time6 - time5));
     }
 
+    // 判定业代录入的状态
     private String getYdInfo(String flag){
         String con ="";
         if("N".equals(flag)){

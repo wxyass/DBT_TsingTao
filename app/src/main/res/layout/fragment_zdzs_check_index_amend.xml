@@ -65,6 +65,7 @@
 
             <!--督导数据-->
             <LinearLayout
+                android:id="@+id/zdzs_check_index_ll_head"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -100,23 +101,27 @@
                     android:layout_height="50dp"
                     android:background="@drawable/bg_select_white_gray">
 
-                    <!--第一种类型,输入框-->
+                    <!--第2种类型,下拉选择-->
                     <RelativeLayout
+                        android:id="@+id/zdzs_check_index_rl_sp"
                         style="@style/xtbf_sayhi_rl"
                         >
 
                         <!--标题-->
                         <TextView
-                            android:id="@+id/zdzs_check_index_et_title"
+                            android:id="@+id/zdzs_check_index_rl_dd_title"
                             style="@style/zdzs_sayhi_title"
-                            android:text="达成组数"/>
+                            android:text="@string/termadd_termname"/>
 
                         <!--内容1-->
-                        <EditText
-                            android:id="@+id/zdzs_check_index_et_con1"
+                        <TextView
+                            android:id="@+id/zdzs_check_index_rl_dd_con1_sp"
                             style="@style/zdzs_sayhi_content1"
-                            android:background="@drawable/bg_visit_record"
                             android:text=""/>
+
+                        <ImageView
+                            style="@style/xtbf_sayhi_third_tv"
+                            android:visibility="visible"/>
                     </RelativeLayout>
 
                 </RelativeLayout>

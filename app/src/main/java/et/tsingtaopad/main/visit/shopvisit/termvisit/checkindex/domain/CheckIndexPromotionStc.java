@@ -11,7 +11,7 @@ public class CheckIndexPromotionStc implements Serializable {
     private static final long serialVersionUID = -4531050847262997094L;
     
     // 终端参与活动记录主键 
-    private String recordKey;
+    private String recordKey;// 督导活动终端表主键
     
     // 活动达成状态
     private String isAccomplish;
@@ -45,9 +45,13 @@ public class CheckIndexPromotionStc implements Serializable {
     
     // 拜访ID
     private String visitId;
-    
+
+    // 督导活动终端表主键
+    //private String id;
+
     // 业代达成组数
     private String reachNum;
+
     // 是否达成正确与否
     private String valistruefalg;
     // 达成组数正确与否
@@ -205,4 +209,5 @@ public class CheckIndexPromotionStc implements Serializable {
     public void setValistruenumval(String valistruenumval) {
         this.valistruenumval = valistruenumval;
     }
+
 }

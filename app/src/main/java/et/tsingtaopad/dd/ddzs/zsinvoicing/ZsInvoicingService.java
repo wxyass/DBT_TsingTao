@@ -226,4 +226,33 @@ public class ZsInvoicingService extends XtShopVisitService {
         }
     }
 
+    /**
+     * 保存追溯进销存页面数据，MitValsupplyMTemp
+     *
+     * @param dataLst       我品进度销存数据
+     */
+    public void saveZsInvoicing(List<MitValsupplyMTemp> dataLst) {
+        if (CheckUtil.IsEmpty(dataLst)) {
+            return;
+        }
+        AndroidDatabaseConnection connection = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MitValsupplyMTemp, String> supplyDao = helper.getDao(MitValsupplyMTemp.class);
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+            for (MitValsupplyMTemp pro : dataLst) {
+                supplyDao.createOrUpdate(pro);
+            }
+            connection.commit(null);
+        } catch (Exception e) {
+            Log.e(TAG, "保存进销存数据发生异常", e);
+            try {
+                connection.rollback(null);
+            } catch (SQLException e1) {
+                Log.e(TAG, "回滚进销存数据发生异常", e1);
+            }
+        }
+    }
+
 }

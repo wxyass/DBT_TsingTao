@@ -26,7 +26,7 @@ public class MitValcheckitemMTemp implements java.io.Serializable {
     @DatabaseField
     private String valitemid ;//  采集项主键ID varchar2(36) null,
     @DatabaseField
-    private String colitemkey  ;// 采集项名称 varchar2(36) null,
+    private String colitemkey  ;// 采集项key varchar2(36) null,
     @DatabaseField
     private String checkkey ;// 指标 varchar2(36) null,
     @DatabaseField

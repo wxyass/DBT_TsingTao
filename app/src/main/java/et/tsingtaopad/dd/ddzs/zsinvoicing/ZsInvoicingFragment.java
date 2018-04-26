@@ -256,37 +256,9 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
     public void onPause() {
         super.onPause();
         DbtLog.logUtils(TAG, "onPause()");
-        /*// 如果是查看操作，则不做数据校验及数据处理
-        if (ConstValues.FLAG_1.equals(seeFlag)) return;
 
-        View view;
-        EditText itemEt;
-        Button itemBtn;
-        XtInvoicingStc item;
-        for (int i = 0; i < dataLst.size(); i++) {
-            item = dataLst.get(i);
-            view = askGoodsLv.getChildAt(i);
-            if (view != null) {
-                itemEt = (EditText)view.findViewById(R.id.item_askgoods_et_qudao);//渠道价
-                String content = itemEt.getText().toString();
-                item.setChannelPrice(FunUtil.getDecimalsData(content));
-
-                itemEt = (EditText)view.findViewById(R.id.item_askgoods_et_lingshou);// 零售价
-                content = itemEt.getText().toString();
-                item.setSellPrice(FunUtil.getDecimalsData(content));
-            }
-            view = checkGoodsLv.getChildAt(i);
-            if (view != null) {
-                itemEt = (EditText)view.findViewById(R.id.item_checkgoods_et_prevnum);// 订单量
-                item.setPrevNum(itemEt.getText().toString());
-                itemEt = (EditText)view.findViewById(R.id.item_checkgoods_et_daysellnum);// 日销量
-                item.setDaySellNum(itemEt.getText().toString());
-                itemEt = (EditText)view.findViewById(R.id.item_askgoods_et_addcard);// 累计卡
-                item.setAddcard(itemEt.getText().toString());
-
-            }
-        }
-        invoicingService.saveXtInvoicing(dataLst, visitId, termId);*/
+        // 保存追溯 进销存数据  MitValsupplyMTemp
+        invoicingService.saveZsInvoicing(dataLst);
     }
 
     private AlertView mAlertViewExt;//窗口拓展例子

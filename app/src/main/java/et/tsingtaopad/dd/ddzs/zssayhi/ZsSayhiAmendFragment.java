@@ -25,6 +25,7 @@ import et.tsingtaopad.R;
 import et.tsingtaopad.adapter.AlertKeyValueAdapter;
 import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.db.table.MitValterMTemp;
 import et.tsingtaopad.db.table.MstRouteM;
@@ -575,31 +576,32 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
 
         // 保存督导拜访对象
         if ("vidvisituser".contains(ydkey)) {
+            // 保存督导拜访对象的key
             String key = (String) zdzs_sayhi_amend_rl_dd_con1_sp.getTag();
-            setFieldValue(mitValterMTemp, setDdValue, key);// 督导正确的key
+            FunUtil.setFieldValue(mitValterMTemp, setDdValue, key);// 督导正确的key
 
+            // 保存督导拜访对象的Value
             String tv = (String) zdzs_sayhi_amend_rl_dd_con1_sp.getText();
             String et = (String) zdzs_sayhi_amend_rl_dd_con1_et_sp.getText().toString();
-
             if ("66AA9D3A55374232891C964350610930".equals(key)) {// 其他
                 mitValterMTemp.setVidvisitottrueval(et);
             } else {
-                setFieldValue(mitValterMTemp, setDdValue, key);
+                FunUtil.setFieldValue(mitValterMTemp, setDdValue, key);
                 mitValterMTemp.setVidvisitottrueval(tv);
             }
         }
 
         // 保存是否正确,备注内容
         String remark = zdzs_sayhi_amend_dd_et_report.getText().toString();
-        setFieldValue(mitValterMTemp, setDdFlag, "N");
-        setFieldValue(mitValterMTemp, setDdRemark, remark);
+        FunUtil.setFieldValue(mitValterMTemp, setDdFlag, "N");
+        FunUtil.setFieldValue(mitValterMTemp, setDdRemark, remark);
 
         handler.sendEmptyMessage(ZsSayhiFragment.INIT_DATA);
 
     }
 
 
-    // 写入
+    /*// 写入
     private <T> void setFieldValue(T data, String key, String value) {
         Class<? extends Object> clazz = data.getClass();
         try {
@@ -608,7 +610,7 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
         } catch (Exception e) {
             // e.printStackTrace();
         }
-    }
+    }*/
 
     /**
      * 根据属性名获取属性值
@@ -630,7 +632,7 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
 
     AlertView mAlertViewExt;
 
-    // 路线选择
+    // 路线选择  弹窗
     private void setSelectRouteMRight(final List<MstRouteM> mstRouteList, String routekey) {
         mAlertViewExt = new AlertView("请选择路线", null, null, null, null, getActivity(), AlertView.Style.ActionSheet, null);
         ViewGroup extView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_list_form, null);
@@ -652,7 +654,7 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
         mAlertViewExt.show();
     }
 
-    // 选择 县 终端等级 区域 次渠道
+    // 选择 县 终端等级 区域 次渠道  弹窗
     private void setSelectValueRight(final List<KvStc> dataDic, String routekey) {
         mAlertViewExt = new AlertView("请正确值", null, null, null, null, getActivity(), AlertView.Style.ActionSheet, null);
         ViewGroup extView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_list_form, null);
@@ -689,7 +691,7 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
         mAlertViewExt.show();
     }
 
-    // 拜访对象
+    // 拜访对象 弹窗
     private void setSelectVisitPosition(final List<KvStc> dataDic, String routekey) {
         mAlertViewExt = new AlertView("请正确值", null, null, null, null, getActivity(), AlertView.Style.ActionSheet, null);
         ViewGroup extView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_list_form, null);

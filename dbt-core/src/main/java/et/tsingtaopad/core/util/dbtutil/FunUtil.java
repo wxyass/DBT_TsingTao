@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.text.ParseException;
@@ -964,6 +965,17 @@ public class FunUtil {
             }
         }
         return data;
+    }
+
+    // 写入
+    public static  <T> void setFieldValue(T data, String key, String value) {
+        Class<? extends Object> clazz = data.getClass();
+        try {
+            Method padisconsistentMethod = data.getClass().getMethod(key, String.class);
+            padisconsistentMethod.invoke(data, value);
+        } catch (Exception e) {
+            // e.printStackTrace();
+        }
     }
 
 

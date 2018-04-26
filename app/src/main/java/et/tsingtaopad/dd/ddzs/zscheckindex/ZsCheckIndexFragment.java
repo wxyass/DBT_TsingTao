@@ -80,6 +80,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
     public static final int INPUT_SUC = 3;
     public static final int INIT_AMEND = 33;// 促销活动修改完成
     public static final int INIT_INDEX_AMEND = 34;// 分项采集修改完成
+    public static final int INIT_INDEX_AUTO_AMEND = 36;// 分项采集后自动计算修改完成
     public static final int INIT_HPZ_AMEND = 35;// 合作配送占有率修改完成
     MyHandler handler;
     ZsCaculateAdapter xtCaculateAdapter;
@@ -335,8 +336,12 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                     break;
                 case INIT_INDEX_AMEND:// 分项采集修改完成
                     fragment.showIndexAdapter();
+                    //zsCalculateIndex
                     break;
-                case INIT_HPZ_AMEND:// 分项采集修改完成
+                case INIT_INDEX_AUTO_AMEND:// 分项采集后自动计算
+                    fragment.autoZsCalculateSuc(bundle);
+                    break;
+                case INIT_HPZ_AMEND:// hezuo 配送 占有率 修改完成
                     fragment.showHpzAdapter();
                     break;
             }
@@ -379,13 +384,31 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
         }
     }
 
+    // 促销活动修改完成
     private void showAdapter() {
         xtPromotionAdapter.notifyDataSetChanged();
     }
+
+    // 分项采集修改完成
     private void showIndexAdapter() {
         xtCaculateAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * // 分项采集后自动计算
+     */
+    public void autoZsCalculateSuc(Bundle bundle) {
+
+        String proId = "";
+        String indexId = "";
+        if (bundle != null) {
+            proId = FunUtil.isBlankOrNullTo(bundle.getString("proId"), "-1");// 产品主键
+            indexId = FunUtil.isBlankOrNullTo(bundle.getString("indexId"), "-1");// 指标主键: ad3030fb-e42e-47f8-a3ec-4229089aab5d
+        }
+        service.zsCalculateIndex(channelId, proItemLst, calculateLst, proId, indexId);
+        xtCaculateAdapter.notifyDataSetChanged();
+        ViewUtil.setListViewHeight(calculateLv);
+    }
     /**
      * 自动计算指标值
      */
@@ -500,6 +523,12 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
         service.saveXtPromotionTemp(visitId, termId, promotionLst);
         long time4= new Date().getTime();
         Log.e("Optimization", "查指标执行数据库"+(time4-time3));*/
+        // 保存查指标页面的数据
+        service.saveZsCheckIndex(preVisitkey,mitValterMTempKey, termId, calculateLst, proItemLst, noProIndexLst);
+        // 保存产品组合是否达标
+        //service.saveMstGroupproductMTemp(vo);
+        // 保存追溯
+        service.saveZsPromotionTemp(mitValterMTempKey, termId, promotionLst);
     }
 
     /**
@@ -609,4 +638,5 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
         });
         mAlertViewExt.show();
     }
+
 }

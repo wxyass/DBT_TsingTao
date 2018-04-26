@@ -31,6 +31,7 @@ public class CheckIndexQuicklyStc extends PadCheckaccomplishInfo {
     
     // 采集的现有量
     private String xianyouliang;
+
     // 追溯采集项表主键
     private String id;
     // 采集项原值结果量

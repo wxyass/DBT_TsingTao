@@ -7,17 +7,23 @@ import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
 
 import et.tsingtaopad.R;
+import et.tsingtaopad.adapter.AlertKeyValueAdapter;
 import et.tsingtaopad.base.BaseFragmentSupport;
+import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.dd.ddxt.checking.XtCheckIndexService;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtCheckIndexCalculateStc;
+import et.tsingtaopad.initconstvalues.domain.KvStc;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.CheckIndexPromotionStc;
 
 /**
@@ -43,8 +49,11 @@ public class ZsCheckIndexAmendFragment extends BaseFragmentSupport implements Vi
     private TextView zdzs_check_index_tv_title;
     private TextView zdzs_check_index_tv_con1;
 
-    private TextView zdzs_check_index_et_title;
-    private EditText zdzs_check_index_et_con1;
+
+    private LinearLayout zdzs_check_index_ll_head;
+    private RelativeLayout zdzs_check_index_rl_sp;
+    private TextView zdzs_check_index_rl_dd_title;
+    private TextView zdzs_check_index_rl_dd_con1_sp;
 
     private EditText zdzs_check_index_et_report;
 
@@ -80,13 +89,16 @@ public class ZsCheckIndexAmendFragment extends BaseFragmentSupport implements Vi
         zdzs_check_index_tv_title = (TextView) view.findViewById(R.id.zdzs_check_index_tv_title);
         zdzs_check_index_tv_con1 = (TextView) view.findViewById(R.id.zdzs_check_index_tv_con1);
 
-        zdzs_check_index_et_title = (TextView) view.findViewById(R.id.zdzs_check_index_et_title);
-        zdzs_check_index_et_con1 = (EditText) view.findViewById(R.id.zdzs_check_index_et_con1);
+        zdzs_check_index_ll_head = (LinearLayout) view.findViewById(R.id.zdzs_check_index_ll_head);
+        zdzs_check_index_rl_sp = (RelativeLayout) view.findViewById(R.id.zdzs_check_index_rl_sp);
+        zdzs_check_index_rl_dd_title = (TextView) view.findViewById(R.id.zdzs_check_index_rl_dd_title);
+        zdzs_check_index_rl_dd_con1_sp = (TextView) view.findViewById(R.id.zdzs_check_index_rl_dd_con1_sp);
 
         zdzs_check_index_et_report = (EditText) view.findViewById(R.id.zdzs_check_index_et_report);
         sureBtn = (Button) view.findViewById(R.id.zdzs_check_index_bt_save);
 
         sureBtn.setOnClickListener(this);
+        zdzs_check_index_rl_sp.setOnClickListener(this);
 
     }
 
@@ -110,6 +122,8 @@ public class ZsCheckIndexAmendFragment extends BaseFragmentSupport implements Vi
 
         // 业代指标名称
         zdzs_check_index_tv_title.setText(checkIndexCalculateStc.getIndexName());
+        // 督导指标名称
+        zdzs_check_index_rl_dd_title.setText(checkIndexCalculateStc.getIndexName());
 
         // 业代指标值
         if ("666b74b3-b221-4920-b549-d9ec39a463fd".equals(checkIndexCalculateStc.getIndexId())) {// 合作是否到位
@@ -128,10 +142,12 @@ public class ZsCheckIndexAmendFragment extends BaseFragmentSupport implements Vi
             }
         } else if ("59802090-02ac-4146-9cc3-f09570c36a26".equals(checkIndexCalculateStc.getIndexId())) {// 我品占有率
             zdzs_check_index_tv_con1.setText(service.getCheckStatusName(checkIndexCalculateStc.getIndexValueId()));
+            // 督导数据
+            zdzs_check_index_ll_head.setVisibility(View.VISIBLE);
+            zhanyoulvIndexValueId = checkIndexCalculateStc.getDdacresult();
+            zdzs_check_index_rl_dd_con1_sp.setText(service.getCheckStatusName(zhanyoulvIndexValueId));
         }
 
-        // 督导数据
-        //zdzs_check_promo_et_con1.setText(checkIndexPromotionStc.getValistruenumval());
 
         // 督导备注
         zdzs_check_index_et_report.setText(checkIndexCalculateStc.getDdremark());
@@ -144,6 +160,9 @@ public class ZsCheckIndexAmendFragment extends BaseFragmentSupport implements Vi
                 break;
             case R.id.top_navigation_rl_back:
                 supportFragmentManager.popBackStack();// 取消
+                break;
+            case R.id.zdzs_check_index_rl_sp:// 占有率选择
+                alertShowzyl();
                 break;
 
 
@@ -163,8 +182,10 @@ public class ZsCheckIndexAmendFragment extends BaseFragmentSupport implements Vi
         checkIndexCalculateStc.setValchecktypeflag("N");// 达成组数正确与否
 
         // 督导达成组数
-        //String qdinfo = zdzs_check_promo_et_con1.getText().toString();
-        //checkIndexPromotionStc.setValistruenumval(qdinfo);
+        if ("59802090-02ac-4146-9cc3-f09570c36a26".equals(checkIndexCalculateStc.getIndexId())) {// 我品占有率
+            // 督导占有率 数据
+            checkIndexCalculateStc.setDdacresult(zhanyoulvIndexValueId);
+        }
 
         // 备注
         String report = zdzs_check_index_et_report.getText().toString();
@@ -172,5 +193,30 @@ public class ZsCheckIndexAmendFragment extends BaseFragmentSupport implements Vi
 
         handler.sendEmptyMessage(ZsCheckIndexFragment.INIT_HPZ_AMEND);
 
+    }
+
+    private AlertView mAlertViewExt;//窗口拓展例子
+    String zhanyoulvIndexValueId;//当前终端单店占有率 对应cstatuskey
+    public void alertShowzyl() {
+        final List<KvStc> tempLst = service.queryNoProIndexValueId31();
+        mAlertViewExt = new AlertView("请选择单店占有率", null,
+                null, null, null, getActivity(), AlertView.Style.ActionSheet, null);
+        ViewGroup areaextView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_list_form, null);
+        ListView arealistview = (ListView) areaextView.findViewById(R.id.alert_list);
+        AlertKeyValueAdapter areakeyValueAdapter = new AlertKeyValueAdapter(getActivity(), tempLst,
+                new String[]{"key", "value"}, zhanyoulvIndexValueId);
+        arealistview.setAdapter(areakeyValueAdapter);
+        arealistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //xtZhanyoulvTv.setText(tempLst.get(position).getValue());
+                zhanyoulvIndexValueId = tempLst.get(position).getKey();
+                zdzs_check_index_rl_dd_con1_sp.setText(service.getCheckStatusName(zhanyoulvIndexValueId));
+                mAlertViewExt.dismiss();
+            }
+        });
+        mAlertViewExt.addExtView(areaextView);
+        mAlertViewExt.setCancelable(true).setOnDismissListener(null);
+        mAlertViewExt.show();
     }
 }

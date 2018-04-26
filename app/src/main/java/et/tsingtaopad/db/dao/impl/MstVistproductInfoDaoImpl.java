@@ -564,7 +564,7 @@ public class MstVistproductInfoDaoImpl extends
 
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("select distinct vp.visitkey, vp.productkey, pm.proname, ");
-		buffer.append("cm.checktype, cm.checkkey, cm.checkname, vr.acresult, vr.valchecktypeflag, cs.cstatusname, vr.valchecktypeid,vr.id ");
+		buffer.append("cm.checktype, cm.checkkey, cm.checkname, vr.acresult,vr.ddacresult,vr.ddremark, vr.valchecktypeflag, cs.cstatusname, vr.valchecktypeid,vr.id ");
 		buffer.append("from mst_vistproduct_info vp ");
 		buffer.append("inner join mst_product_m pm ");
 		buffer.append(" on vp.productkey = pm.productkey and vp.visitkey= ? ");
@@ -617,6 +617,8 @@ public class MstVistproductInfoDaoImpl extends
 			item.setRecordId(cursor.getString(cursor.getColumnIndex("valchecktypeid")));// 业代拉链表主键
 			item.setId(cursor.getString(cursor.getColumnIndex("id")));// 督导拉链表主键
 			item.setValchecktypeflag(cursor.getString(cursor.getColumnIndex("valchecktypeflag")));// 指标正确与否
+			item.setDdacresult(cursor.getString(cursor.getColumnIndex("ddacresult")));// 督导自动计算的指标值
+			item.setDdremark(cursor.getString(cursor.getColumnIndex("ddremark")));// 督导指标备注
 			lst.add(item);
 		}
 		return lst;

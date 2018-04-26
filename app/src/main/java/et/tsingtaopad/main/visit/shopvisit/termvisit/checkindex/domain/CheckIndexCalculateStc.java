@@ -41,6 +41,10 @@ public class CheckIndexCalculateStc implements Serializable {
     private String id;
     // 终端追溯 指标正确与否
     private String valchecktypeflag;
+    // 终端追溯 督导指标值
+    private String ddacresult;
+    // 终端追溯 督导指标备注
+    private String ddremark;
 
 
     /**
@@ -176,5 +180,21 @@ public class CheckIndexCalculateStc implements Serializable {
 
     public void setValchecktypeflag(String valchecktypeflag) {
         this.valchecktypeflag = valchecktypeflag;
+    }
+
+    public String getDdacresult() {
+        return ddacresult;
+    }
+
+    public void setDdacresult(String ddacresult) {
+        this.ddacresult = ddacresult;
+    }
+
+    public String getDdremark() {
+        return ddremark;
+    }
+
+    public void setDdremark(String ddremark) {
+        this.ddremark = ddremark;
     }
 }

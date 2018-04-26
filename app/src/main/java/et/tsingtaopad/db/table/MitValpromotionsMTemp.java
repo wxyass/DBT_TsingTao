@@ -45,10 +45,10 @@ public class MitValpromotionsMTemp implements java.io.Serializable {
     private Date updatedate;//  更新时间    date                           null
 
     @DatabaseField
-    private String visitkey;//  更新人   varchar2(128)                  null,
+    private String visitkey;//     varchar2(128)                  null,
 
     @DatabaseField
-    private String terminalkey;//  更新人   varchar2(128)                  null,
+    private String terminalkey;//     varchar2(128)                  null,
 
 
     // Constructors

@@ -15,7 +15,7 @@ public class XtProIndexValue implements Serializable {
     // 产品名称
     private String proName;
     
-    // 所属指标主键
+    // 所属指标主键 (5d,6d...)
     private String indexId;
     
     // 指标类型
@@ -34,6 +34,13 @@ public class XtProIndexValue implements Serializable {
     private String id;
     // 终端追溯 指标正确与否
     private String valchecktypeflag;
+
+    // 终端追溯 督导指标值
+    private String ddacresult;
+    // 终端追溯 督导指标备注
+    private String ddremark;
+
+
 
     public String getIndexResultId() {
         return indexResultId;
@@ -117,5 +124,21 @@ public class XtProIndexValue implements Serializable {
 
     public void setValchecktypeflag(String valchecktypeflag) {
         this.valchecktypeflag = valchecktypeflag;
+    }
+
+    public String getDdacresult() {
+        return ddacresult;
+    }
+
+    public void setDdacresult(String ddacresult) {
+        this.ddacresult = ddacresult;
+    }
+
+    public String getDdremark() {
+        return ddremark;
+    }
+
+    public void setDdremark(String ddremark) {
+        this.ddremark = ddremark;
     }
 }

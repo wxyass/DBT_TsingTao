@@ -841,6 +841,7 @@
             <!-- 总容量： -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_totalvolume"
+                android:visibility="gone"
                 style="@style/xtbf_sayhi_rl">
 
                 <!--标题-->

@@ -46,6 +46,7 @@ import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 import et.tsingtaopad.dd.ddzs.zscamera.ZsCameraFragment;
 import et.tsingtaopad.dd.ddzs.zschatvie.ZsChatvieFragment;
 import et.tsingtaopad.dd.ddzs.zscheckindex.ZsCheckIndexFragment;
+import et.tsingtaopad.dd.ddzs.zsfees.ZsFeesFragment;
 import et.tsingtaopad.dd.ddzs.zsinvoicing.ZsInvoicingFragment;
 import et.tsingtaopad.dd.ddzs.zssayhi.ZsSayhiFragment;
 import et.tsingtaopad.home.initadapter.GlobalValues;
@@ -102,7 +103,7 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
 
     private FragmentTabHost tabHost;
     private Class fragmentArray[] = { ZsSayhiFragment.class,
-            ZsInvoicingFragment.class, ZsInvoicingFragment.class,ZsCheckIndexFragment.class,
+            ZsInvoicingFragment.class, ZsFeesFragment.class,ZsCheckIndexFragment.class,
             ZsChatvieFragment.class ,ZsCameraFragment.class};
 
     private int imageViewArray[] = { R.drawable.bt_shopvisit_sayhi,

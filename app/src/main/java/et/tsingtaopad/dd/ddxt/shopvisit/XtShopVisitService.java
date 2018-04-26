@@ -92,6 +92,7 @@ import et.tsingtaopad.main.visit.shopvisit.termvisit.sayhi.domain.MstTerminalInf
 
 import com.j256.ormlite.android.AndroidDatabaseConnection;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 
@@ -963,6 +964,7 @@ public class XtShopVisitService {
         return keys;
     }
 
+    // 复制追溯聊竞品附表 临时表
     private void createZsMitValcmpotherMTemp(Dao<MitValcmpotherMTemp, String> mitValcmpotherMTempDao,
                                              MstVisitM mstVisitM, String valterid) {
 
@@ -1034,7 +1036,7 @@ public class XtShopVisitService {
 
 
     /**
-     * 从临时表中 获取某次拜访的我品的进销存数据情况
+     * 从临时表中 获取某次拜访的竞品数据情况
      *
      * @param //helper
      * @param previsitId 拜访主键
@@ -1179,6 +1181,7 @@ public class XtShopVisitService {
 
 
     /**
+     * 复制 促销活动终端临时表
      * @param helper
      * @param prevVisitId 上次拜访主键key
      * @param visitDate   这次拜访时间
@@ -1263,10 +1266,11 @@ public class XtShopVisitService {
                     promotermInfoTemp = new MitValpromotionsMTemp();
                     promotermInfoTemp.setId(FunUtil.getUUID());//
                     promotermInfoTemp.setValterid(valterid);// 终端追溯主表ID
-                    promotermInfoTemp.setValpromotionsid(item.getPtypekey());//    促销活动主键
-                    //promotermInfoTemp.setTerminalkey(item.getTerminalkey());
+                    promotermInfoTemp.setValpromotionsid(item.getPtypekey());//    促销活动主键/ valpromotionsid
+                    promotermInfoTemp.setTerminalkey(item.getTerminalkey());
                     promotermInfoTemp.setValistrue(item.getIsaccomplish());// 是否达成原值
                     promotermInfoTemp.setValistruenum(item.getRemarks());// 达成数组
+                    promotermInfoTemp.setVisitkey(item.getVisitkey());// 拜访主键
                     //promotermInfoTemp.setCreuser(item.getCreuser());
                     //promotermInfoTemp.setUpdateuser(item.getUpdateuser());
                     promotermInfoTemp.setCredate(null);
@@ -1985,6 +1989,8 @@ public class XtShopVisitService {
             indexValueItem.setProName(item.getProName());
             indexValueItem.setId(item.getId());// // 终端追溯查指标表主键
             indexValueItem.setValchecktypeflag(item.getValchecktypeflag());// 终端追溯 指标正确与否
+            indexValueItem.setDdacresult(item.getDdacresult());// 终端追溯 督导自动计算指标值
+            indexValueItem.setDdremark(item.getDdremark());// 终端追溯 督导指标备注
             indexItem.getIndexValueLst().add(indexValueItem);
         }
         return proIndexLst;
@@ -2076,7 +2082,8 @@ public class XtShopVisitService {
             proItemId = stc.getProductkey() + stc.getColitemkey();
             if (!Id.equals(proItemId)) {
                 proItem = new XtProItem();
-                proItem.setColRecordKey(stc.getColRecordId());
+                proItem.setColRecordKey(stc.getColRecordId());// 业代采集项表主键
+                proItem.setId(stc.getId());// 督导采集项表主键
                 proItem.setCheckkey(stc.getCheckkey());
                 proItem.setItemId(stc.getColitemkey());
                 proItem.setItemName(stc.getColitemname());
@@ -2414,6 +2421,97 @@ public class XtShopVisitService {
             }
         }
     }
+    /**
+     * 保存 追溯查指标页面数据
+     *
+     * @param preVisitkey       拜访主键
+     * @param termId        终端ID,终端key,
+     * @param calculateLst  指标、指标值记录结果
+     * @param proItemLst    产品、采集项记录结果
+     * @param noProIndexLst 与产品无关的指标采集值
+     */
+    public void saveZsCheckIndex(String preVisitkey,String valterid, String termId, List<XtProIndex> calculateLst,
+                               List<XtProItem> proItemLst, List<XtCheckIndexCalculateStc> noProIndexLst) {
+        AndroidDatabaseConnection connection = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MitValchecktypeMTemp, String> indexValueDao = helper.getMitValchecktypeMTempDao();
+            Dao<MitValcheckitemMTemp, String> proItemDao = helper.getMitValcheckitemMTempDao();
+            //Dao<MstCollectionexerecordInfoTemp, String> proItemTempDao = helper.getMstCollectionexerecordInfoTempDao();
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+            // 有产品的指标
+            MitValchecktypeMTemp indexInfo;
+            for (XtProIndex indexItem : calculateLst) {
+                for (XtProIndexValue valueItem : indexItem.getIndexValueLst()) {
+                    indexInfo = new MitValchecktypeMTemp();
+                    indexInfo.setId(valueItem.getId());//
+                    indexInfo.setValterid(valterid);// 终端追溯主表ID
+                    indexInfo.setVisitkey(preVisitkey);// 终端追溯主表ID
+                    indexInfo.setValchecktype(valueItem.getIndexId());//  指标类型 5d,6d....  varchar2(36)                   null,
+                    indexInfo.setValchecktypeid(valueItem.getIndexResultId());//  指标ID  拉链表主键  varchar2(36)                   null,
+                    indexInfo.setProductkey(valueItem.getProId());//
+                    indexInfo.setAcresult(valueItem.getIndexValueId());//
+                    indexInfo.setTerminalkey(termId);//
+                    indexInfo.setDdremark(valueItem.getDdremark());// 督导备注
+                    indexInfo.setDdacresult(valueItem.getDdacresult());// 督导自动计算值
+                    indexInfo.setValchecktypeflag(valueItem.getValchecktypeflag());// 指标正确与否   char(1)                        null,
+                    indexValueDao.createOrUpdate(indexInfo);
+                }
+            }
+
+            // 保产品及对应的采集项数据
+            MitValcheckitemMTemp itemInfo;
+            for (XtProItem proItem : proItemLst) {
+                for (String chekcKey : proItem.getIndexIdLst()) {
+
+                    itemInfo = new MitValcheckitemMTemp();
+                    itemInfo.setId(proItem.getId());// 督导采集项表主键
+                    itemInfo.setValterid(valterid);// 终端追溯主表ID
+                    itemInfo.setVisitkey(preVisitkey); ;// 拜访主键
+                    itemInfo.setValitemid(proItem.getColRecordKey()); ;//  采集项主键ID varchar2(36) null,
+                    itemInfo.setColitemkey(proItem.getItemId());  ;// 采集项key varchar2(36) null,
+                    itemInfo.setCheckkey(chekcKey); ;// 指标 varchar2(36) null,
+                    //itemInfo.setAddcount();//  变化量varchar2(36) null,
+                    //itemInfo.setTotalcount();// 现有量 varchar2(36) null,
+                    itemInfo.setProductkey(proItem.getProId()); ;// 产品key varchar2(36) null,
+                    itemInfo.setValitem(proItem.getValitem());  ;// 采集项原值结果量 varchar2(10) null,
+                    itemInfo.setValitemval(proItem.getValitemval()); ;// 采集项正确值结果量 varchar2(10) null,
+                    itemInfo.setValitemremark(proItem.getValitemremark()); ;// 采集项备注 varchar2(300) null,
+                    proItemDao.createOrUpdate(itemInfo);
+                }
+            }
+
+            // 无产品的指标
+            for (XtCheckIndexCalculateStc itemStc : noProIndexLst) {
+
+                indexInfo = new MitValchecktypeMTemp();
+                indexInfo.setId(itemStc.getId());//
+                indexInfo.setValterid(valterid);// 终端追溯主表ID
+                indexInfo.setVisitkey(preVisitkey);// 终端追溯主表ID
+                indexInfo.setValchecktype(itemStc.getIndexId());//  指标类型 5d,6d....  varchar2(36)                   null,
+                indexInfo.setValchecktypeid(itemStc.getRecordId());//  指标ID  拉链表主键  varchar2(36)                   null,
+                //indexInfo.setProductkey(valueItem.getProId());//
+                indexInfo.setAcresult(itemStc.getIndexValueId());//
+                indexInfo.setTerminalkey(termId);//
+                indexInfo.setDdremark(itemStc.getDdremark());// 督导备注
+                indexInfo.setDdacresult(itemStc.getDdacresult());// 督导自动计算值
+                indexInfo.setValchecktypeflag(itemStc.getValchecktypeflag());// 指标正确与否   char(1)                        null,
+                indexValueDao.createOrUpdate(indexInfo);
+            }
+
+            connection.commit(null);
+        } catch (Exception e) {
+            Log.e(TAG, "保存追溯查指标数据发生异常", e);
+            //ViewUtil.sendMsg(context, R.string.checkindex_save_fail);
+            try {
+                connection.rollback(null);
+            } catch (SQLException e1) {
+                Log.e(TAG, "回滚追溯查指标数据发生异常", e1);
+            }
+        }
+    }
 
     /**
      * 获取协同拜访-查指标的促销活动页面部分的数据
@@ -2474,7 +2572,8 @@ public class XtShopVisitService {
             MstPromotionsmDao dao = helper.getDao(MstPromotionsM.class);
             connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
             connection.setAutoCommit(false);
-            stcLst = dao.queryXtPromotionByterm(helper, visitId, channelId, termLevel);
+            //stcLst = dao.queryXtPromotionByterm(helper, visitId, channelId, termLevel);
+            stcLst = dao.queryZsPromotionByterm(helper, visitId, channelId, termLevel);
             connection.commit(null);
         } catch (SQLException e) {
             Log.e(TAG, "获取拜访产品-我品竞品表DAO对象失败", e);

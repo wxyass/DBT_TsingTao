@@ -28,6 +28,7 @@ import et.tsingtaopad.db.dao.MitValsupplyMTempDao;
 import et.tsingtaopad.db.dao.MstVistproductInfoDao;
 import et.tsingtaopad.db.dao.MstVistproductInfoTempDao;
 import et.tsingtaopad.db.table.MitValcmpMTemp;
+import et.tsingtaopad.db.table.MitValcmpotherMTemp;
 import et.tsingtaopad.db.table.MitValsupplyMTemp;
 import et.tsingtaopad.db.table.MstCmpsupplyInfoTemp;
 import et.tsingtaopad.db.table.MstVisitMTemp;
@@ -214,6 +215,36 @@ public class ZsChatVieService extends XtShopVisitService {
             visitDao.executeRaw(buffer.toString(), new String[] {
                     visitM.getStatus(), visitM.getIscmpcollapse(), visitM.getRemarks(), visitId});
 
+            connection.commit(null);
+        } catch (Exception e) {
+            Log.e(TAG, "保存聊竞品数据发生异常", e);
+            try {
+                connection.rollback(null);
+            } catch (SQLException e1) {
+                Log.e(TAG, "回滚聊竞品数据发生异常", e1);
+            }
+        }
+    }
+    /**
+     * 保存追溯聊竞品页面数据，MitValcmpMTemp,MitValcmpotherMTemp
+     *
+     * @param dataLst       竞品数据
+     * @param mitValcmpotherMTemp
+     */
+    public void saveZsVie(List<MitValcmpMTemp> dataLst,
+                        MitValcmpotherMTemp mitValcmpotherMTemp) {
+
+        AndroidDatabaseConnection connection = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MitValcmpMTemp, String> mitValcmpMTempDao = helper.getDao(MitValcmpMTemp.class);
+            Dao<MitValcmpotherMTemp, String> mitValcmpotherMTempDao = helper.getDao(MitValcmpotherMTemp.class);
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+            for (MitValcmpMTemp cmppro : dataLst) {
+                mitValcmpMTempDao.createOrUpdate(cmppro);
+            }
+            mitValcmpotherMTempDao.createOrUpdate(mitValcmpotherMTemp);
             connection.commit(null);
         } catch (Exception e) {
             Log.e(TAG, "保存聊竞品数据发生异常", e);
