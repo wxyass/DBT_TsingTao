@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import et.tsingtaopad.db.dao.MstPictypeMDao;
+import et.tsingtaopad.db.table.MitValpicMTemp;
 import et.tsingtaopad.db.table.MstPictypeM;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.camera.domain.CameraInfoStc;
 
@@ -47,6 +48,30 @@ public class MstPictypeMDaoImpl extends BaseDaoImpl<MstPictypeM, String>
 			pictypeDataStc.setFocus(cursor.getString(cursor.getColumnIndex("focus")));
 			pictypeDataStc.setOrderno(cursor.getString(cursor.getColumnIndex("orderno")));
 			lst.add(pictypeDataStc);
+		}
+		return lst;
+	}
+
+	/**
+	 * 查询图片类型表中所有记录,用于追溯初始化要拍几张图片
+	 */
+	@Override
+	public List<MitValpicMTemp> queryZsAllPictype(SQLiteOpenHelper helper) {
+		List<MitValpicMTemp> lst = new ArrayList<MitValpicMTemp>();
+
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("select areaid,pictypekey,pictypename,focus,orderno from MST_PICTYPE_M ORDER BY orderno");
+		SQLiteDatabase db = helper.getReadableDatabase();
+		Cursor cursor = db.rawQuery(buffer.toString(), new String[] {});
+		MitValpicMTemp valpicMTemp;
+		while (cursor.moveToNext()) {
+			valpicMTemp = new MitValpicMTemp();
+			//pictypeDataStc.setAreaid(cursor.getString(cursor.getColumnIndex("areaid")));
+			valpicMTemp.setPictypekey(cursor.getString(cursor.getColumnIndex("pictypekey")));
+			valpicMTemp.setPictypename(cursor.getString(cursor.getColumnIndex("pictypename")));
+			//pictypeDataStc.setFocus(cursor.getString(cursor.getColumnIndex("focus")));
+			//pictypeDataStc.setOrderno(cursor.getString(cursor.getColumnIndex("orderno")));
+			lst.add(valpicMTemp);
 		}
 		return lst;
 	}

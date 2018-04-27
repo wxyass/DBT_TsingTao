@@ -925,13 +925,10 @@ public class XtShopVisitService {
 
 
             // 复制追溯聊竞品
-
             queryChatVieValVieSupplyTemp(mitValcmpMTempDao, prevVisitId, term.getTerminalkey(), mitValterMTemp.getId());
-
 
             // 复制活动拜访终端表 false:当天第一次拜访
             createMitPromotermInfoTemp(helper, mitValterMTemp.getId(), promDao, mitValpromotionsMTempDao);
-
 
             // 复制到拉链表临时表 -> 追溯拉链表临时表
             createZsMstCheckexerecordInfoTemp(prevVisitId, term.getTerminalkey(), visitDate,
@@ -1862,6 +1859,7 @@ public class XtShopVisitService {
             deleteTable(helper, "MIT_VALCHECKTYPE_M_TEMP");// 追溯拉链表临时表
             deleteTable(helper, "MIT_VALCHECKITEM_M_TEMP");// 追溯采集项表临时表
             deleteTable(helper, "MIT_VALCMPOTHER_M_TEMP");// 终端追溯竞品附表 临时表
+            deleteTable(helper, "MIT_VALPIC_M_TEMP");// 终端追溯图片表 临时表
             //deleteTable(helper, "MST_CHECKGROUP_INFO");
             //deleteTable(helper, "MST_CHECKGROUP_INFO_TEMP");
         } catch (Exception e) {
@@ -2500,6 +2498,8 @@ public class XtShopVisitService {
                 indexInfo.setValchecktypeflag(itemStc.getValchecktypeflag());// 指标正确与否   char(1)                        null,
                 indexValueDao.createOrUpdate(indexInfo);
             }
+
+
 
             connection.commit(null);
         } catch (Exception e) {

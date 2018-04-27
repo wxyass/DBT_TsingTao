@@ -29,6 +29,8 @@ import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.db.DatabaseHelper;
+import et.tsingtaopad.db.dao.MitValterMDao;
+import et.tsingtaopad.db.dao.MitValterMTempDao;
 import et.tsingtaopad.db.dao.MitVisitMDao;
 import et.tsingtaopad.db.dao.MstAgencysupplyInfoDao;
 import et.tsingtaopad.db.dao.MstCheckexerecordInfoDao;
@@ -48,6 +50,22 @@ import et.tsingtaopad.db.table.MitCollectionexerecordInfo;
 import et.tsingtaopad.db.table.MitGroupproductM;
 import et.tsingtaopad.db.table.MitPromotermInfo;
 import et.tsingtaopad.db.table.MitTerminalinfoM;
+import et.tsingtaopad.db.table.MitValcheckitemM;
+import et.tsingtaopad.db.table.MitValcheckitemMTemp;
+import et.tsingtaopad.db.table.MitValchecktypeM;
+import et.tsingtaopad.db.table.MitValchecktypeMTemp;
+import et.tsingtaopad.db.table.MitValcmpM;
+import et.tsingtaopad.db.table.MitValcmpMTemp;
+import et.tsingtaopad.db.table.MitValcmpotherM;
+import et.tsingtaopad.db.table.MitValcmpotherMTemp;
+import et.tsingtaopad.db.table.MitValpicM;
+import et.tsingtaopad.db.table.MitValpicMTemp;
+import et.tsingtaopad.db.table.MitValpromotionsM;
+import et.tsingtaopad.db.table.MitValpromotionsMTemp;
+import et.tsingtaopad.db.table.MitValsupplyM;
+import et.tsingtaopad.db.table.MitValsupplyMTemp;
+import et.tsingtaopad.db.table.MitValterM;
+import et.tsingtaopad.db.table.MitValterMTemp;
 import et.tsingtaopad.db.table.MitVisitM;
 import et.tsingtaopad.db.table.MitVistproductInfo;
 import et.tsingtaopad.db.table.MstAgencysupplyInfo;
@@ -1615,6 +1633,475 @@ public class XtShopCopyService {
         valueWr.isNotNull("productkey");
         List<MstCheckexerecordInfo> valueLst = valueQb.query();
         return valueLst;
+    }
+
+
+    /**
+     * 追溯 离店时间 及 是否要上传标志
+     *
+     * @param valterid      追溯主键
+     */
+    public void copyZsUpload(String valterid) {
+        // 事务控制
+        AndroidDatabaseConnection connection = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+
+            // 复制督导追溯数据
+            MitValterMTempDao valterMTempDao = helper.getDao(MitValterMTemp.class);
+            MitValterMDao valterMDao = helper.getDao(MitValterM.class);
+
+            // 复制追溯拉链表
+            Dao<MitValchecktypeM, String> mitValchecktypeMDao = helper.getMitValchecktypeMDao();
+            Dao<MitValchecktypeMTemp, String> mitValchecktypeMTempDao = helper.getMitValchecktypeMTempDao();
+
+            // 复制追溯采集项表
+            Dao<MitValcheckitemM, String> mitValcheckitemMDao = helper.getMitValcheckitemMDao();
+            Dao<MitValcheckitemMTemp, String> mitValcheckitemMTempDao = helper.getMitValcheckitemMTempDao();
+
+            // 复制追溯终端活动表
+            Dao<MitValpromotionsM, String> mitValpromotionsMDao = helper.getMitValpromotionsMDao();
+            Dao<MitValpromotionsMTemp, String> mitValpromotionsMTempDao = helper.getMitValpromotionsMTempDao();
+
+            // 复制追溯产品组合表
+            //Dao<MitValpicM, String> mitValpicMDao = helper.getMitValpicMDao();
+            //Dao<MitValpicMTemp, String> mitValpicMTemppDao = helper.getMitValpicMTempDao();
+
+            // 复制追溯进销存表
+            Dao<MitValsupplyM, String> mitValsupplyMDao = helper.getMitValsupplyMDao();
+            Dao<MitValsupplyMTemp, String> mitValsupplyMTempDao = helper.getMitValsupplyMTempDao();
+
+            // 复制追溯聊竞品表
+            Dao<MitValcmpM, String> mitValcmpMDao = helper.getMitValcmpMDao();
+            Dao<MitValcmpMTemp, String> mitValcmpMTempDao = helper.getMitValcmpMTempDao();
+
+            // 复制追溯聊竞品附表
+            Dao<MitValcmpotherM, String> mitValcmpotherMDao = helper.getMitValcmpotherMDao();
+            Dao<MitValcmpotherMTemp, String> mitValcmpotherMTempDao = helper.getMitValcmpotherMTempDao();
+
+            // 复制追溯图片表
+            Dao<MitValpicM, String> mitValpicMDao = helper.getMitValpicMDao();
+            Dao<MitValpicMTemp, String> mitValpicMTemppDao = helper.getMitValpicMTempDao();
+
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+            // 复制追溯表数据--------------------------------------------------------------------------------
+            // 复制追溯主表
+            MitValterMTemp valterMTemp = valterMTempDao.queryForId(valterid);
+            createMitValterMByTemp(valterMDao,valterMTemp);
+
+            // 复制追溯拉链表
+            createMitValchecktypeMByTemp(mitValchecktypeMDao,mitValchecktypeMTempDao,valterid);
+
+            // 复制追溯采集项表
+            createMitValcheckitemMByTemp(mitValcheckitemMDao,mitValcheckitemMTempDao,valterid);
+
+            // 复制追溯终端活动表
+            createMitValpromotionsMByTemp(mitValpromotionsMDao,mitValpromotionsMTempDao,valterid);
+
+            // 复制追溯产品组合表
+            //createMitValchecktypeMByTemp(mitValchecktypeMDao,mitValchecktypeMTempDao,valterMTemp);
+
+            // 复制追溯进销存表
+            createMitValsupplyMByTemp(mitValsupplyMDao,mitValsupplyMTempDao,valterid);
+
+            // 复制追溯聊竞品表
+            createMitValcmpMByTemp(mitValcmpMDao,mitValcmpMTempDao,valterid);
+
+            // 复制追溯聊竞品附表
+            createMitValcmpotherMByTemp(mitValcmpotherMDao,mitValcmpotherMTempDao,valterid);
+
+            // 复制追溯图片表
+            createMitValpicMByTemp(mitValpicMDao,mitValpicMTemppDao,valterid);
+
+            connection.commit(null);
+        } catch (Exception e) {
+            Log.e(TAG, "更新拜访离店时间及是否要上传标志失败", e);
+            try {
+                connection.rollback(null);
+                ViewUtil.sendMsg(context, R.string.agencyvisit_msg_failsave);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    // 复制追溯主表 临时表到主表
+    private void createMitValterMByTemp(MitValterMDao valterMDao, MitValterMTemp valterMTemp) {
+        if (valterMTemp != null) {
+            try {
+                MitValterM mitValterM = new MitValterM();
+                mitValterM.setId(valterMTemp.getId());// 追溯主键
+                mitValterM.setTerminalkey(valterMTemp.getTerminalkey());// 终端KEY
+
+                mitValterM.setVidter(valterMTemp.getVidter());// 是否有效终端原值
+                mitValterM.setVidterflag(valterMTemp.getVidterflag());// 是否有效终端正确与否
+                mitValterM.setVidterremaek(valterMTemp.getVidterremaek());// 是否有效终端错误备注内容
+
+                mitValterM.setVidvisit(valterMTemp.getVidvisit());// 是否有效拜访原值
+                mitValterM.setVidvisitflag(valterMTemp.getVidvisitflag());// 是否有效拜访正确与否
+                mitValterM.setVidvisitremark(valterMTemp.getVidvisitremark());// 是否有效拜访错误备注内容
+
+                mitValterM.setVidifmine(valterMTemp.getVidifmine());// 我品店招原值
+                mitValterM.setVidifmineflag(valterMTemp.getVidifmineflag());// 我品店招原值正确与否
+                mitValterM.setVidifminermark(valterMTemp.getVidifminermark());// 我品店招错误备注内容
+
+                mitValterM.setVidifminedate(valterMTemp.getVidifminedate());//店招时间原值
+                mitValterM.setVidifminedateflag(valterMTemp.getVidifminedateflag());// 店招时间原值正确与否
+                mitValterM.setVidifminedatermark(valterMTemp.getVidifminedatermark());// 店招时间错误备注内容
+
+                mitValterM.setVidisself(valterMTemp.getVidisself());// 销售产品范围我品原值
+                mitValterM.setVidisselfflag(valterMTemp.getVidisselfflag());// 销售产品范围我品正确与否
+                //mitValterM.setvidisselfremark(valterMTemp.getVidter());// 销售产品范围我品备注内容
+
+                mitValterM.setVidiscmp(valterMTemp.getVidiscmp());// 销售产品范围竞品原值
+                mitValterM.setVidiscmpflag(valterMTemp.getVidiscmpflag());// 销售产品范围竞品正确与否
+                //mitValterM.setvidiscmpremark(valterMTemp.getVidter());// 销售产品范围竞品备注内容
+
+                mitValterM.setVidselftreaty(valterMTemp.getVidselftreaty());// 终端合作状态我品原值
+                mitValterM.setVidselftreatyflag(valterMTemp.getVidselftreatyflag());// 终端合作状态我品正确与否
+                //mitValterM.setvidselftreatyremark(valterMTemp.getVidter());// 终端合作状态我品备注内容
+
+                mitValterM.setVidcmptreaty(valterMTemp.getVidcmptreaty());// 终端合作状态竞品原值
+                mitValterM.setVidcmptreatyflag(valterMTemp.getVidcmptreatyflag());// 终端合作状态竞品原值正确与否
+                mitValterM.setVidcmptreatyremark(valterMTemp.getVidcmptreatyremark());// 终端合作状态竞品备注内容
+
+                mitValterM.setVidterminalcode(valterMTemp.getVidterminalcode());// 终端编码原值
+                mitValterM.setVidtercodeflag(valterMTemp.getVidtercodeflag());// 终端编码正确与否
+                mitValterM.setVidtercodeval(valterMTemp.getVidtercodeval());// 终端编码正确值
+                mitValterM.setVidtercoderemark(valterMTemp.getVidtercoderemark());// 终端编码备注内容
+
+                mitValterM.setVidroutekey(valterMTemp.getVidroutekey());// 所属路线原值
+                mitValterM.setVidrtekeyflag(valterMTemp.getVidrtekeyflag());// 所属路线原值正确与否
+                mitValterM.setVidrtekeyval(valterMTemp.getVidrtekeyval());// 所属路线正确值
+                mitValterM.setVidroutremark(valterMTemp.getVidroutremark());// 所属路线备注内容
+
+                mitValterM.setVidterlevel(valterMTemp.getVidterlevel());//终端等级
+                mitValterM.setVidtervidterlevelflag(valterMTemp.getVidtervidterlevelflag());// 终端等级正确与否
+                mitValterM.setVidtervidterlevelval(valterMTemp.getVidtervidterlevelval());// 终端等级正确值
+                mitValterM.setVidtervidterlevelremark(valterMTemp.getVidtervidterlevelremark());// 终端等级备注内容
+
+                mitValterM.setVidtername(valterMTemp.getVidtername());//终端名称原值
+                mitValterM.setVidternameflag(valterMTemp.getVidternameflag());// 终端名称正确与否
+                mitValterM.setVidternameval(valterMTemp.getVidternameval());// 终端名称正确值
+                mitValterM.setVidternameremark(valterMTemp.getVidternameremark());// 终端名称备注内容
+
+                mitValterM.setVidcountry(valterMTemp.getVidcountry());//所属县原值
+                mitValterM.setVidcountryflag(valterMTemp.getVidcountryflag());// 所属县原值正确与否
+                mitValterM.setVidcountryval(valterMTemp.getVidcountryval());// 所属县正确值
+                mitValterM.setVidcountryremark(valterMTemp.getVidcountryremark());// 所属县备注内容
+
+                mitValterM.setVidaddress(valterMTemp.getVidaddress());//地址原值
+                mitValterM.setVidaddressflag(valterMTemp.getVidaddressflag());// 地址原值正确与否
+                mitValterM.setVidaddressval(valterMTemp.getVidaddressval());// 地址正确值
+                mitValterM.setVidaddressremark(valterMTemp.getVidaddressremark());// 地址备注内容
+
+                mitValterM.setVidcontact(valterMTemp.getVidcontact());//联系人原值
+                mitValterM.setVidcontactflag(valterMTemp.getVidcontactflag());// 联系人原值正确与否
+                mitValterM.setVidcontactval(valterMTemp.getVidcontactval());// 联系人正确值
+                mitValterM.setVidcontactremark(valterMTemp.getVidcontactremark());// 联系人备注内容
+
+                mitValterM.setVidmobile(valterMTemp.getVidmobile());//电话原值
+                mitValterM.setVidmobileflag(valterMTemp.getVidmobileflag());// 电话原值正确与否
+                mitValterM.setVidmobileval(valterMTemp.getVidmobileval());// 电话正确值
+                mitValterM.setVidmobileremark(valterMTemp.getVidmobileremark());// 电话备注内容
+
+                mitValterM.setVidsequence(valterMTemp.getVidsequence());//拜访顺序原值
+                mitValterM.setVidsequenceflag(valterMTemp.getVidsequenceflag());// 拜访顺序原值正确与否
+                mitValterM.setVidsequenceval(valterMTemp.getVidsequenceval());// 拜访顺序正确值
+                mitValterM.setVidvidsequenceremark(valterMTemp.getVidvidsequenceremark());// 拜访顺序备注内容
+
+                mitValterM.setVidcycle(valterMTemp.getVidcycle());//拜访周期原值
+                mitValterM.setVidcycleflag(valterMTemp.getVidcycleflag());// 拜访周期原值正确与否
+                mitValterM.setVidcycleval(valterMTemp.getVidcycleval());// 拜访周期正确值
+                mitValterM.setVidcycleremark2(valterMTemp.getVidcycleremark2());// 拜访周期备注内容
+
+                mitValterM.setVidareatype(valterMTemp.getVidareatype());//区域类型原值
+                mitValterM.setVidareatypeflag(valterMTemp.getVidareatypeflag());// 区域类型正确与否
+                mitValterM.setVidareatypeval(valterMTemp.getVidareatypeval());// 区域类型正确值
+                mitValterM.setVidareatyperemark(valterMTemp.getVidareatyperemark());// 区域类型备注内容
+
+                mitValterM.setVidhvolume(valterMTemp.getVidhvolume());//高档容量原值
+                mitValterM.setVidhvolumeflag(valterMTemp.getVidhvolumeflag());// 高档容量正确与否
+                mitValterM.setVidhvolumeval(valterMTemp.getVidhvolumeval());// 高档容量正确值
+                mitValterM.setVidhvolumeremark(valterMTemp.getVidhvolumeremark());// 高档容量备注内容
+
+                mitValterM.setVidzvolume(valterMTemp.getVidzvolume());//中档容量原值
+                mitValterM.setVidzvolumeflag(valterMTemp.getVidzvolumeflag());// 中档容量正确与否
+                mitValterM.setVidzvolumeval(valterMTemp.getVidzvolumeval());// 中档容量正确值
+                mitValterM.setVidxvolumeremark(valterMTemp.getVidxvolumeremark());// 中档容量备注内容
+
+                mitValterM.setVidpvolume(valterMTemp.getVidpvolume());//普档容量原值
+                mitValterM.setVidpvolumeflag(valterMTemp.getVidpvolumeflag());// 普档容量正确与否
+                mitValterM.setVidpvolumeval(valterMTemp.getVidpvolumeval());// 普档容量正确值
+                mitValterM.setVidpvolumeremark(valterMTemp.getVidpvolumeremark());// 普档容量备注内容
+
+                mitValterM.setVidlvolume(valterMTemp.getVidlvolume());//底档容量原值
+                mitValterM.setVidlvolumeflag(valterMTemp.getVidlvolumeflag());// 底档容量正确与否
+                mitValterM.setVidlvolumeval(valterMTemp.getVidlvolumeval());// 底档容量正确值
+                mitValterM.setVidlvolumeremark(valterMTemp.getVidlvolumeremark());// 底档容量备注内容
+
+                mitValterM.setVidminchannel(valterMTemp.getVidminchannel());//次渠道原值
+                mitValterM.setVidminchannelflag(valterMTemp.getVidminchannelflag());// 次渠道正确与否
+                mitValterM.setVidminchannelval(valterMTemp.getVidminchannelval());// 次渠道正确值
+                mitValterM.setVidminchannelremark(valterMTemp.getVidminchannelremark());// 次渠道正确值备注内容
+
+                mitValterM.setVidvisituser(valterMTemp.getVidvisituser());//拜访对象原值key
+                mitValterM.setVidvisituserflag(valterMTemp.getVidvisituserflag());// 拜访对象原值正确与否
+                mitValterM.setVidvisituserval(valterMTemp.getVidvisituserval());// 拜访对象正确值
+                mitValterM.setVidvisituserremark(valterMTemp.getVidvisituserremark());// 拜访对象备注内容
+
+                mitValterM.setVidvisitotherval(valterMTemp.getVidvisitotherval());//拜访对象原值value
+                mitValterM.setVidvisitottrueval(valterMTemp.getVidvisitottrueval());// 拜访对象其他VALUE正确值
+
+                valterMDao.create(mitValterM);
+            } catch (SQLException e) {
+                Log.e(TAG, "复制到拜访主表正式表失败", e);
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // 复制追溯拉链表
+    private void createMitValchecktypeMByTemp(Dao<MitValchecktypeM, String> mitValchecktypeMDao,
+                                              Dao<MitValchecktypeMTemp, String> mitValchecktypeMTempDao,
+                                              String valterid) {
+
+        try {
+            QueryBuilder<MitValchecktypeMTemp, String> collectionQB = mitValchecktypeMTempDao.queryBuilder();
+            Where<MitValchecktypeMTemp, String> collectionWhere = collectionQB.where();
+            collectionWhere.eq("valterid", valterid);
+            List<MitValchecktypeMTemp> cameraInfoMTemps = collectionQB.query();
+            if(cameraInfoMTemps.size()>0){
+                for (MitValchecktypeMTemp item:cameraInfoMTemps) {
+                    MitValchecktypeM info = new MitValchecktypeM();
+                    info.setId(item.getId());// 图片主键
+                    info.setValterid(item.getValterid()); // 追溯主键
+                    info.setVisitkey(item.getVisitkey());// 终端追溯主表ID
+                    info.setValchecktype(item.getValchecktype());//  指标类型 5d,6d....
+                    info.setValchecktypeid(item.getValchecktypeid());//  指标ID  拉链表主键
+                    info.setProductkey(item.getProductkey());//
+                    info.setAcresult(item.getAcresult());// 业代原值
+                    info.setTerminalkey(item.getTerminalkey());//
+                    info.setDdremark(item.getDdremark());// 督导备注
+                    info.setDdacresult(item.getDdacresult());// 督导自动计算值
+                    info.setValchecktypeflag(item.getValchecktypeflag());// 指标正确与否   char(1)
+                    mitValchecktypeMDao.create(info);
+                }
+            }
+        }catch (Exception e){
+            Log.e(TAG, "复制追溯聊竞品附表失败", e);
+        }
+    }
+
+    // 复制追溯采集项表
+    private void createMitValcheckitemMByTemp(Dao<MitValcheckitemM, String> mitValcheckitemMDao,
+                                              Dao<MitValcheckitemMTemp, String> mitValcheckitemMTempDao,
+                                              String valterid) {
+        try {
+            QueryBuilder<MitValcheckitemMTemp, String> collectionQB = mitValcheckitemMTempDao.queryBuilder();
+            Where<MitValcheckitemMTemp, String> collectionWhere = collectionQB.where();
+            collectionWhere.eq("valterid", valterid);
+            List<MitValcheckitemMTemp> cameraInfoMTemps = collectionQB.query();
+            if(cameraInfoMTemps.size()>0){
+                for (MitValcheckitemMTemp item:cameraInfoMTemps) {
+                    MitValcheckitemM info = new MitValcheckitemM();
+                    info.setId(item.getId());// 图片主键
+                    info.setValterid(item.getValterid()); // 追溯主键
+                    info.setVisitkey(item.getVisitkey()); ;// 拜访主键
+                    info.setValitemid(item.getValitemid()); ;//  采集项主键ID
+                    info.setColitemkey(item.getColitemkey());  ;// 采集项key
+                    info.setCheckkey(item.getCheckkey()); ;// 指标 varchar2(36)
+                    //itemInfo.setAddcount();//  变化量
+                    //itemInfo.setTotalcount();// 现有量
+                    info.setProductkey(item.getProductkey()); ;// 产品key
+                    info.setValitem(item.getValitem());  ;// 采集项原值结果量
+                    info.setValitemval(item.getValitemval()); ;// 采集项正确值结果量
+                    info.setValitemremark(item.getValitemremark()); ;// 采集项备注
+                    mitValcheckitemMDao.create(info);
+                }
+            }
+        }catch (Exception e){
+            Log.e(TAG, "复制追溯聊竞品附表失败", e);
+        }
+    }
+
+    // 复制追溯终端活动表
+    private void createMitValpromotionsMByTemp(Dao<MitValpromotionsM, String> mitValpromotionsMDao,
+                                               Dao<MitValpromotionsMTemp, String> mitValpromotionsMTempDao,
+                                               String valterid) {
+        try {
+            QueryBuilder<MitValpromotionsMTemp, String> collectionQB = mitValpromotionsMTempDao.queryBuilder();
+            Where<MitValpromotionsMTemp, String> collectionWhere = collectionQB.where();
+            collectionWhere.eq("valterid", valterid);
+            List<MitValpromotionsMTemp> cameraInfoMTemps = collectionQB.query();
+            if(cameraInfoMTemps.size()>0){
+                for (MitValpromotionsMTemp item:cameraInfoMTemps) {
+                    MitValpromotionsM info = new MitValpromotionsM();
+                    info.setId(item.getId());// 图片主键
+                    info.setValterid(item.getValterid()); // 追溯主键
+                    info.setValpromotionsid(item.getValpromotionsid());//    促销活动主键/ valpromotionsid
+                    info.setTerminalkey(item.getTerminalkey());
+                    //info.setValistrue(item.getIsaccomplish());// 是否达成原值
+                    info.setValistruenum(item.getValistruenum());// 业代达成数组
+                    info.setValistruenumflag(item.getValistruenumflag());// 达成数组是否正确
+                    info.setValistruenumval(item.getValistruenumval());// 督导达成数组正确值
+                    info.setVisitkey(item.getVisitkey());// 拜访主键
+                    mitValpromotionsMDao.create(info);
+                }
+            }
+        }catch (Exception e){
+            Log.e(TAG, "复制追溯聊竞品附表失败", e);
+        }
+    }
+
+    // 复制追溯进销存表
+    private void createMitValsupplyMByTemp(Dao<MitValsupplyM, String> mitValsupplyMDao,
+                                           Dao<MitValsupplyMTemp, String> mitValsupplyMTempDao,
+                                           String valterid) {
+        try {
+            QueryBuilder<MitValsupplyMTemp, String> collectionQB = mitValsupplyMTempDao.queryBuilder();
+            Where<MitValsupplyMTemp, String> collectionWhere = collectionQB.where();
+            collectionWhere.eq("valterid", valterid);
+            List<MitValsupplyMTemp> cameraInfoMTemps = collectionQB.query();
+            if(cameraInfoMTemps.size()>0){
+                for (MitValsupplyMTemp item:cameraInfoMTemps) {
+                    MitValsupplyM info = new MitValsupplyM();
+                    info.setId(item.getId());// 图片主键
+                    info.setValterid(item.getValterid()); // 追溯主键
+                    info.setValsuplyid(item.getValsuplyid());// 供货关系id
+                    info.setValaddagencysupply(item.getValaddagencysupply());// 是否新增供货关系
+                    info.setValsqd(item.getValsqd());// 渠道价
+                    info.setValsls(item.getValsls());// 零售价
+                    info.setValsdd(item.getValsdd());//订单量//
+                    info.setValsrxl(item.getValsrxl());//日销量
+                    info.setValsljk(item.getValsljk());//累计卡
+                    info.setValter(item.getValter());//终端
+                    info.setValpro(item.getValpro());//产品key
+                    info.setValproname(item.getValproname());//产品name
+                    info.setValagency(item.getValagency());//经销商key
+                    info.setValagencyname(item.getValagencyname());//经销商name
+                    info.setValagencysupplyflag(item.getValagencysupplyflag());//供货关系正确与否
+                    info.setValproerror(item.getValproerror());//品项有误
+                    info.setValagencyerror(item.getValagencyerror());//经销商有误
+                    info.setValtrueagency(item.getValtrueagency());//正确的经销商
+                    info.setValdataerror(item.getValdataerror());//数据有误
+                    info.setValiffleeing(item.getValiffleeing());//是否窜货
+                    info.setValagencysupplyqd(item.getValagencysupplyqd());//供货关系正确渠道价
+                    info.setValagencysupplyls(item.getValagencysupplyls());//供货关系正确零售价
+                    info.setValagencysupplydd(item.getValagencysupplydd());//供货关系正确订单量
+                    info.setValagencysupplysrxl(item.getValagencysupplysrxl());//供货关系正确日销量
+                    info.setValagencysupplyljk(item.getValagencysupplyljk());//供货关系正确累计卡
+                    info.setValagencysupplyremark(item.getValagencysupplyremark());//供货关系备注
+
+                    mitValsupplyMDao.create(info);
+                }
+            }
+        }catch (Exception e){
+            Log.e(TAG, "复制追溯聊竞品附表失败", e);
+        }
+    }
+
+    // 复制追溯聊竞品表
+    private void createMitValcmpMByTemp(Dao<MitValcmpM, String> mitValcmpMDao,
+                                        Dao<MitValcmpMTemp, String> mitValcmpMTempDao,
+                                        String valterid) {
+        try {
+            QueryBuilder<MitValcmpMTemp, String> collectionQB = mitValcmpMTempDao.queryBuilder();
+            Where<MitValcmpMTemp, String> collectionWhere = collectionQB.where();
+            collectionWhere.eq("valterid", valterid);
+            List<MitValcmpMTemp> cameraInfoMTemps = collectionQB.query();
+            if(cameraInfoMTemps.size()>0){
+                for (MitValcmpMTemp item:cameraInfoMTemps) {
+                    MitValcmpM info = new MitValcmpM();
+                    info.setId(item.getId());// 图片主键
+                    info.setValterid(item.getValterid()); // 追溯主键
+                    info.setValaddagencysupply(item.getValaddagencysupply());// 是否新增供货关系
+                    info.setValagencysupplyid(item.getValagencysupplyid());// 供货关系ID
+                    info.setValcmpjdj(item.getValcmpjdj());// 竞品进店价
+                    info.setValcmplsj(item.getValcmplsj());//竞品零售价
+                    info.setValcmpsales(item.getValcmpsales());//竞品销量
+                    info.setValcmpkc(item.getValcmpkc());//竞品库存
+                    info.setValcmpremark(item.getValcmpremark());//竞品描述
+                    info.setValcmpagency(item.getValcmpagency());//竞品供货商
+                    info.setValcmpid(item.getValcmpid());//竞品ID
+                    info.setValcmpname(item.getValcmpname());//竞品ID
+                    info.setValiscmpter(item.getValiscmpter());//终端
+                    info.setValagencysupplyflag(item.getValagencysupplyflag());//供货关系正确与否
+                    info.setValproerror(item.getValproerror());//品项有误
+                    info.setValagencyerror(item.getValagencyerror());//经销商有误
+                    info.setValdataerror(item.getValdataerror());//数据有误
+                    info.setValcmpagencyval(item.getValcmpagencyval());//正确的经销商
+                    info.setValcmpjdjval(item.getValcmpjdjval());//正确竞品进店价
+                    info.setValcmplsjval(item.getValcmplsjval());//正确竞品零售价
+                    info.setValcmpsalesval(item.getValcmpsalesval());//正确竞品销量
+                    info.setValcmpkcval(item.getValcmpkcval());//正确竞品库存
+                    info.setValcmpremarkval(item.getValcmpremarkval());//正确竞品描述
+                    info.setValcmpsupremark(item.getValcmpsupremark());//竞品供货关系备注
+                    mitValcmpMDao.create(info);
+                }
+            }
+        }catch (Exception e){
+            Log.e(TAG, "复制追溯聊竞品附表失败", e);
+        }
+
+    }
+
+    // 复制追溯聊竞品附表
+    private void createMitValcmpotherMByTemp(Dao<MitValcmpotherM, String> mitValcmpotherMDao,
+                                             Dao<MitValcmpotherMTemp, String> mitValcmpotherMTempDao,
+                                             String valterid) {
+        try {
+            QueryBuilder<MitValcmpotherMTemp, String> collectionQB = mitValcmpotherMTempDao.queryBuilder();
+            Where<MitValcmpotherMTemp, String> collectionWhere = collectionQB.where();
+            collectionWhere.eq("valterid", valterid);
+            List<MitValcmpotherMTemp> cameraInfoMTemps = collectionQB.query();
+            if(cameraInfoMTemps.size()>0){
+                for (MitValcmpotherMTemp item:cameraInfoMTemps) {
+                    MitValcmpotherM info = new MitValcmpotherM();
+                    info.setId(item.getId());// 图片主键
+                    info.setValterid(item.getValterid()); // 追溯主键
+                    info.setValistrueflag(item.getValistrueflag());// 是否成功瓦解竞品正确与否
+                    info.setValistruecmpval(item.getValistruecmpval());// 是否成功瓦解竞品原值
+                    info.setValiscmpremark(item.getValiscmpremark());// 是否成功瓦解竞品备注
+                    info.setValvisitremark(item.getValvisitremark());// 拜访记录
+                    mitValcmpotherMDao.create(info);
+                }
+            }
+        }catch (Exception e){
+            Log.e(TAG, "复制追溯聊竞品附表失败", e);
+        }
+    }
+
+    // 复制追溯图片表
+    private void createMitValpicMByTemp(Dao<MitValpicM, String> mitValpicMDao,
+                                        Dao<MitValpicMTemp, String> mitValpicMTemppDao,
+                                        String valterid) {
+        try {
+            QueryBuilder<MitValpicMTemp, String> collectionQB = mitValpicMTemppDao.queryBuilder();
+            Where<MitValpicMTemp, String> collectionWhere = collectionQB.where();
+            collectionWhere.eq("valterid", valterid);
+            List<MitValpicMTemp> cameraInfoMTemps = collectionQB.query();
+            if(cameraInfoMTemps.size()>0){
+                for (MitValpicMTemp item:cameraInfoMTemps) {
+                    MitValpicM info = new MitValpicM();
+                    info.setId(item.getId());// 图片主键
+                    info.setValterid(item.getValterid()); // 追溯主键
+                    info.setPictypekey(item.getPictypekey());// 图片类型主键(UUID)
+                    info.setPicname(item.getPicname());// 图片名称
+                    info.setPictypename(item.getPictypename());// 图片类型(中文名称)
+                    info.setImagefileString(item.getImagefileString());// 将图片文件转成String保存在数据库
+                    info.setAreaid(item.getAreaid());// 二级区域
+                    info.setGridkey(item.getGridkey());//定格
+                    info.setRoutekey(item.getRoutekey());// 路线
+                    info.setTerminalkey(item.getTerminalkey());// 终端主键
+                    mitValpicMDao.create(info);
+                }
+            }
+        }catch (Exception e){
+            Log.e(TAG, "复制追溯图片表失败", e);
+        }
     }
 
 }

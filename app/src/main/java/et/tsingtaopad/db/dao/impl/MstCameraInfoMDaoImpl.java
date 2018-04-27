@@ -11,8 +11,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.db.dao.MstCameraiInfoMDao;
+import et.tsingtaopad.db.table.MitValpicMTemp;
 import et.tsingtaopad.db.table.MstCameraInfoM;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.camera.domain.CameraInfoStc;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.camera.domain.MstCameraListMStc;
@@ -54,6 +56,42 @@ public class MstCameraInfoMDaoImpl extends
 
 			cameradatastc.setVisitkey(cursor.getString(cursor.getColumnIndex("visitkey")));
 			cameradatastc.setTerminalkey(cursor.getString(cursor.getColumnIndex("terminalkey")));
+           lst.add(cameradatastc);
+        }
+        //db.close();
+        return lst;
+    }
+	/**
+	 * 根据终端key和拜访key查询记录
+	 */
+	@Override
+	public List<MitValpicMTemp> queryZsCurrentCameraLst(SQLiteOpenHelper helper,
+														String terminalkey, String valterid) {
+
+        List<MitValpicMTemp> lst = new ArrayList<MitValpicMTemp>();
+
+        StringBuffer buffer = new StringBuffer();
+        //buffer.append("select * from MST_CAMERAINFO_M_TEMP where terminalkey = ? and cameradata = ? and istakecamera = ? and isupload = ? and visitkey = ?");
+        buffer.append("select * from MIT_VALPIC_M_TEMP where terminalkey = ?  and valterid = ?");
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor cursor = db.rawQuery(buffer.toString(), new String[]{terminalkey,valterid});
+		MitValpicMTemp cameradatastc;
+        while (cursor.moveToNext()) {
+        	cameradatastc = new MitValpicMTemp();
+        	cameradatastc.setId(cursor.getString(cursor.getColumnIndex("id")));
+        	//cameradatastc.setLocalpath(cursor.getString(cursor.getColumnIndex("localpath")));
+        	//cameradatastc.setPicindex(cursor.getString(cursor.getColumnIndex("picindex")));
+        	cameradatastc.setPictypekey(cursor.getString(cursor.getColumnIndex("pictypekey")));
+			cameradatastc.setValterid(cursor.getString(cursor.getColumnIndex("valterid")));
+			cameradatastc.setTerminalkey(cursor.getString(cursor.getColumnIndex("terminalkey")));
+
+			cameradatastc.setPicname(cursor.getString(cursor.getColumnIndex("picname")));// 图片名称
+			cameradatastc.setPictypename(cursor.getString(cursor.getColumnIndex("pictypename")));// 图片类型(中文名称)
+			//cameradatastc.setImagefileString(imagefileString);// 将图片文件转成String保存在数据库
+			cameradatastc.setAreaid(cursor.getString(cursor.getColumnIndex("areaid")));// 二级区域
+			cameradatastc.setGridkey(cursor.getString(cursor.getColumnIndex("gridkey")));//定格
+			cameradatastc.setRoutekey(cursor.getString(cursor.getColumnIndex("routekey")));// 路线
+
            lst.add(cameradatastc);
         }
         //db.close();

@@ -7,6 +7,7 @@ import com.j256.ormlite.dao.Dao;
 import java.util.List;
 
 import et.tsingtaopad.db.DatabaseHelper;
+import et.tsingtaopad.db.table.MitValpicMTemp;
 import et.tsingtaopad.db.table.MstCameraInfoM;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.camera.domain.CameraInfoStc;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.camera.domain.MstCameraListMStc;
@@ -29,6 +30,17 @@ public interface MstCameraiInfoMDao extends Dao<MstCameraInfoM, String> {
 	 */
 	public List<CameraInfoStc> queryCurrentCameraLst(SQLiteOpenHelper helper,
 													 String terminalkey, String visitKey);
+	/**
+	 * 获取当天终端拍照记录
+	 *
+	 * 用于：终端追溯 -- 拍照
+	 *
+	 * @param helper
+	 * @param terminalkey
+	 * @return
+	 */
+	public List<MitValpicMTemp> queryZsCurrentCameraLst(SQLiteOpenHelper helper,
+														String terminalkey, String valterid);
 
 	/**
 	 * 查询所有未上传的图片记录

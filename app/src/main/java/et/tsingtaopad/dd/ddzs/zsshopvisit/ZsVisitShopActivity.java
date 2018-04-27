@@ -43,6 +43,8 @@ import et.tsingtaopad.dd.ddxt.invoicing.XtInvoicingFragment;
 import et.tsingtaopad.dd.ddxt.sayhi.XtSayhiFragment;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtShopVisitService;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
+import et.tsingtaopad.dd.ddxt.updata.XtShopCopyService;
+import et.tsingtaopad.dd.ddxt.updata.XtUploadService;
 import et.tsingtaopad.dd.ddzs.zscamera.ZsCameraFragment;
 import et.tsingtaopad.dd.ddzs.zschatvie.ZsChatvieFragment;
 import et.tsingtaopad.dd.ddzs.zscheckindex.ZsCheckIndexFragment;
@@ -416,10 +418,15 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
                             //  "MST_CHECKGROUP_INFO"
                             //  "MST_CHECKGROUP_INFO_TEMP"
 
-                            String visitEndDate = DateUtil.formatDate(new Date(), "yyyyMMddHHmmss");
-                            // 开始复制 更新拜访离店时间及是否要上传标志 以及对去除拜访指标采集项重复(collectionexerecord表)
-                            xtShopVisitService.confirmXtUpload(visitId, termStc.getTerminalkey(), termStc.getTerminalcode(),visitEndDate, "1");
+                            // 开始复制 追溯 离店时间及是否要上传标志
+                            XtShopCopyService xtShopCopyService = new XtShopCopyService(getApplicationContext(),null);
+                            xtShopCopyService.copyZsUpload(mitValterMTempKey);
 
+                            // 上传协同拜访数据
+                            XtUploadService xtUploadService = new XtUploadService(getApplicationContext(),null);
+                            xtUploadService.upload_zs_visit(false,mitValterMTempKey,1);
+
+                            ConstValues.handler.sendEmptyMessage(ConstValues.WAIT0);
 
 
                             ZsVisitShopActivity.this.finish();

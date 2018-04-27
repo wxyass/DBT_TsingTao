@@ -33,6 +33,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<MitAgencysupplyInfo, String> mitAgencysupplyInfoDao = null;
     private Dao<MitValcmpM, String> mitValcmpMDao = null;
     private Dao<MitValcmpMTemp, String> mitValcmpMTempDao = null;
+    private Dao<MitValpicM, String> mitValpicMDao = null;
+    private Dao<MitValpicMTemp, String> mitValpicMTempDao = null;
     private Dao<MitValcmpotherM, String> mitValcmpotherMDao = null;
     private Dao<MitValcmpotherMTemp, String> mitValcmpotherMTempDao = null;
     private Dao<MitValcheckitemM, String> mitValcheckitemMDao = null;
@@ -287,6 +289,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
             TableUtils.createTable(connectionSource, MitValcmpotherM.class);// 终端追溯竞品附表
             TableUtils.createTable(connectionSource, MitValcmpotherMTemp.class);// 终端追溯竞品附表 临时表
+
+            TableUtils.createTable(connectionSource, MitValpicM.class);// 终端追溯图片
+            TableUtils.createTable(connectionSource, MitValpicMTemp.class);// 终端追溯图片表 临时表
 
 
             this.initView(db);
@@ -1010,6 +1015,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 db.execSQL(mit_valcmpother_m_temp);
 
 
+                // 终端追溯图片表
+                String mit_valpic_m = "create table MIT_VALPIC_M ( id varchar2(36) not null, valterid varchar2(36) null,imagefileString varchar2(4000) null, pictypekey varchar2(36) null,pictypename varchar2(300) null, picname varchar2(36) null, picpath varchar2(36) null, areaid varchar2(36) null, gridkey varchar2(36) null, routekey varchar2(36) null, terminalkey varchar2(36) null, creuser varchar2(128) null, credate date null, updateuser varchar2(128) null, updatedate date null )";
+                db.execSQL(mit_valpic_m);
+                // 终端追溯图片表 临时表
+                String mit_valpic_m_temp = "create table MIT_VALPIC_M_TEMP ( id varchar2(36) not null, valterid varchar2(36) null,imagefileString varchar2(4000) null, pictypekey varchar2(36) null, pictypename varchar2(300) null,picname varchar2(36) null, picpath varchar2(36) null, areaid varchar2(36) null, gridkey varchar2(36) null, routekey varchar2(36) null, terminalkey varchar2(36) null, creuser varchar2(128) null, credate date null, updateuser varchar2(128) null, updatedate date null )";
+                db.execSQL(mit_valpic_m_temp);
+
 
 
             } catch (Exception e) {
@@ -1172,6 +1184,24 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mitValcmpMTempDao;
     }
+
+
+    public Dao<MitValpicM, String> getMitValpicMDao() throws SQLException {
+
+        if (mitValpicMDao == null) {
+            mitValpicMDao = getDao(MitValpicM.class);
+        }
+        return mitValpicMDao;
+    }
+
+    public Dao<MitValpicMTemp, String> getMitValpicMTempDao() throws SQLException {
+
+        if (mitValpicMTempDao == null) {
+            mitValpicMTempDao = getDao(MitValpicMTemp.class);
+        }
+        return mitValpicMTempDao;
+    }
+
 
 
     public Dao<MitValcmpotherM, String> getMitValcmpotherMDao() throws SQLException {

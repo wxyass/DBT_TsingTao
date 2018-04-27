@@ -35,6 +35,7 @@ import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.core.util.file.FileTool;
 import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.db.dao.MitCameraInfoMDao;
+import et.tsingtaopad.db.dao.MitValterMDao;
 import et.tsingtaopad.db.dao.MstAgencyKFMDao;
 import et.tsingtaopad.db.dao.MstCameraiInfoMDao;
 import et.tsingtaopad.db.table.MitAgencysupplyInfo;
@@ -45,6 +46,21 @@ import et.tsingtaopad.db.table.MitCollectionexerecordInfo;
 import et.tsingtaopad.db.table.MitGroupproductM;
 import et.tsingtaopad.db.table.MitPromotermInfo;
 import et.tsingtaopad.db.table.MitTerminalinfoM;
+import et.tsingtaopad.db.table.MitValcheckitemM;
+import et.tsingtaopad.db.table.MitValcheckitemMTemp;
+import et.tsingtaopad.db.table.MitValchecktypeM;
+import et.tsingtaopad.db.table.MitValchecktypeMTemp;
+import et.tsingtaopad.db.table.MitValcmpM;
+import et.tsingtaopad.db.table.MitValcmpMTemp;
+import et.tsingtaopad.db.table.MitValcmpotherM;
+import et.tsingtaopad.db.table.MitValcmpotherMTemp;
+import et.tsingtaopad.db.table.MitValpicM;
+import et.tsingtaopad.db.table.MitValpicMTemp;
+import et.tsingtaopad.db.table.MitValpromotionsM;
+import et.tsingtaopad.db.table.MitValpromotionsMTemp;
+import et.tsingtaopad.db.table.MitValsupplyM;
+import et.tsingtaopad.db.table.MitValsupplyMTemp;
+import et.tsingtaopad.db.table.MitValterM;
 import et.tsingtaopad.db.table.MitVisitM;
 import et.tsingtaopad.db.table.MitVistproductInfo;
 import et.tsingtaopad.db.table.MstAgencysupplyInfo;
@@ -78,18 +94,16 @@ import et.tsingtaopad.util.requestHeadUtil;
 import et.tsingtaopad.view.TitleLayout;
 
 /**
- * 
  * 项目名称：营销移动智能工作平台 </br>
  * 文件名：XtUploadService.java</br>
  * 作者：wxyass   </br>
  * 创建时间：2018年3月20日</br>
- * 功能描述: </br>      
- * 版本 V 1.0</br>               
+ * 功能描述: </br>
+ * 版本 V 1.0</br>
  * 修改履历</br>
  * 日期      原因  BUG号    修改人 修改版本</br>
  */
-public class XtUploadService
-{
+public class XtUploadService {
 
     public DatabaseHelper helper;
     private final String TAG = "UploadDataService";
@@ -124,20 +138,28 @@ public class XtUploadService
     private Dao<MitCmpsupplyInfo, String> mitCmpsupplyInfoDao = null;//8
     private Dao<MstPlanrouteInfo, String> mstPlanrouteInfodDao = null;
     private MstCameraiInfoMDao mstCameraiInfoMDao = null;
-    private Dao<MstCameraInfoMTemp, String> cameraTempDao =null;
+    private Dao<MstCameraInfoMTemp, String> cameraTempDao = null;
     private MitCameraInfoMDao mitCameraInfoMDao = null;//9
     private MstAgencyKFMDao mstAgencyKFMDao = null;
     private Dao<MstPlanTerminalM, String> mstPlanTerminalMDao = null;
     private Dao<MstGroupproductM, String> mstGroupproductMDao = null;
     private Dao<MitGroupproductM, String> mitGroupproductMDao = null;//10
 
-    public XtUploadService(Context context, Handler handler)
-    {
+
+    private MitValterMDao valterMDao = null;
+    private Dao<MitValchecktypeM, String> mitValchecktypeMDao = null;
+    private Dao<MitValcheckitemM, String> mitValcheckitemMDao = null;
+    private Dao<MitValpromotionsM, String> mitValpromotionsMDao = null;
+    private Dao<MitValsupplyM, String> mitValsupplyMDao = null;
+    private Dao<MitValcmpM, String> mitValcmpMDao = null;
+    private Dao<MitValcmpotherM, String> mitValcmpotherMDao = null;
+    private Dao<MitValpicM, String> mitValpicMDao = null;
+
+    public XtUploadService(Context context, Handler handler) {
         this.handler = handler;
         this.context = context;
         helper = DatabaseHelper.getHelper(context);
-        try
-        {
+        try {
             mstVisitmemoInfoDao = helper.getMstVisitmemoInfoDao();
             mstQuestionsanswersInfoDao = helper.getMstQuestionsanswersInfoDao();
             mstVisitMDao = helper.getMstVisitMDao();
@@ -158,7 +180,7 @@ public class XtUploadService
             mitPromotermInfoDao = helper.getMitPromotermInfoDao();
             mstPlancheckInfoDao = helper.getMstPlancheckInfoDao();
             mstPlanTerminalMDao = helper.getMstPlanTerminalM();
-            
+
             mstPlancollectionInfoDao = helper.getMstPlancollectionInfoDao();
             mstPlanforuserMDao = helper.getMstPlanforuserMDao();
             mstPlanWeekforuserMDao = helper.getMstPlanWeekforuserMDao();
@@ -168,15 +190,42 @@ public class XtUploadService
             mstCmpsupplyInfoDao = helper.getMstCmpsupplyInfoDao();
             mitCmpsupplyInfoDao = helper.getMitCmpsupplyInfoDao();
             mstPlanrouteInfodDao = helper.getMstPlanrouteInfoDao();
-            mstCameraiInfoMDao = (MstCameraiInfoMDao)helper.getMstCameraiInfoMDao();
-             cameraTempDao = helper.getMstCameraInfoMTempDao();
-            mitCameraInfoMDao = (MitCameraInfoMDao)helper.getMitCameraInfoMDao();
-            mstAgencyKFMDao = (MstAgencyKFMDao)helper.getMstAgencyKFMDao();
+            mstCameraiInfoMDao = (MstCameraiInfoMDao) helper.getMstCameraiInfoMDao();
+            cameraTempDao = helper.getMstCameraInfoMTempDao();
+            mitCameraInfoMDao = (MitCameraInfoMDao) helper.getMitCameraInfoMDao();
+            mstAgencyKFMDao = (MstAgencyKFMDao) helper.getMstAgencyKFMDao();
             mstGroupproductMDao = helper.getMstGroupproductMDao();
             mitGroupproductMDao = helper.getMitGroupproductMDao();
-        }
-        catch (SQLException e)
-        {
+
+
+            // 复制督导追溯数据
+            valterMDao = helper.getDao(MitValterM.class);
+
+            // 复制追溯拉链表
+            mitValchecktypeMDao = helper.getMitValchecktypeMDao();
+
+            // 复制追溯采集项表
+            mitValcheckitemMDao = helper.getMitValcheckitemMDao();
+
+            // 复制追溯终端活动表
+            mitValpromotionsMDao = helper.getMitValpromotionsMDao();
+
+            // 复制追溯产品组合表
+            //Dao<MitValpicM, String> mitValpicMDao = helper.getMitValpicMDao();
+
+            // 复制追溯进销存表
+            mitValsupplyMDao = helper.getMitValsupplyMDao();
+
+            // 复制追溯聊竞品表
+            mitValcmpMDao = helper.getMitValcmpMDao();
+
+            // 复制追溯聊竞品附表
+            mitValcmpotherMDao = helper.getMitValcmpotherMDao();
+
+            // 复制追溯图片表
+            mitValpicMDao = helper.getMitValpicMDao();
+
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -197,7 +246,7 @@ public class XtUploadService
     // 上传产品组合是否达标
     List<MitGroupproductM> mMstGroupproductMs = new ArrayList<MitGroupproductM>();
 
-    public void upload_xt_visit(final boolean isNeedExit, final String visitKey,final int whatId) {
+    public void upload_xt_visit(final boolean isNeedExit, final String visitKey, final int whatId) {
         try {
             MitVisitM visit = null;
             if (visitKey != null && !visitKey.trim().equals("")) {
@@ -292,7 +341,7 @@ public class XtUploadService
 
 
                 // 存放今天所有终端所有次数的拜访记录
-                QueryBuilder<MitVisitM, String> visitQB1 = mitVisitMDao .queryBuilder();
+                QueryBuilder<MitVisitM, String> visitQB1 = mitVisitMDao.queryBuilder();
                 Where<MitVisitM, String> visitWhere1 = visitQB1.where();
                 visitWhere1.eq("uploadFlag", "1");
                 visitWhere1.and();
@@ -301,7 +350,6 @@ public class XtUploadService
                 visitQB1.orderBy("terminalkey", true);
                 visitQB1.orderBy("visitdate", false);
                 visitsall = visitQB1.query();
-
 
 
                 if (visits != null && !visits.isEmpty()) {
@@ -381,7 +429,7 @@ public class XtUploadService
                             childTerminalinfoMs.add(mTerminalinfoM);
                         }
                     }
-                    childDatas.put("MIT_TERMINALINFO_M",JsonUtil.toJson(childTerminalinfoMs));
+                    childDatas.put("MIT_TERMINALINFO_M", JsonUtil.toJson(childTerminalinfoMs));
                     /*String childTerminalinfoMsqwe = JsonUtil.toJson(childTerminalinfoMs);
                     FileUtil.writeTxt(childTerminalinfoMsqwe, FileUtil.getSDPath()+"/childTerminalinfoMsqwe.txt");*/
 
@@ -392,7 +440,7 @@ public class XtUploadService
                             childMstGroupproductMs.add(mstgroupproductm);
                         }
                     }
-                    childDatas.put("MIT_GROUPPRODUCT_M",JsonUtil.toJson(childMstGroupproductMs));
+                    childDatas.put("MIT_GROUPPRODUCT_M", JsonUtil.toJson(childMstGroupproductMs));
 
                     List<MitCmpsupplyInfo> childCmpsupplyInfos = new ArrayList<MitCmpsupplyInfo>();
                     for (MitCmpsupplyInfo childCmpsupplyInfo : cmpsupplyInfos) {
@@ -411,7 +459,7 @@ public class XtUploadService
                             childInvalidapplayInfos.add(mInvalidapplayInfo);
                         }
                     }
-                    childDatas.put("MIT_INVALIDAPPLAY_INFO",JsonUtil.toJson(childInvalidapplayInfos));
+                    childDatas.put("MIT_INVALIDAPPLAY_INFO", JsonUtil.toJson(childInvalidapplayInfos));
 
                     // MST_PROMOTERM_INFO(终端参加活动信息表)
                     List<MitPromotermInfo> childPromotermInfos = new ArrayList<MitPromotermInfo>();
@@ -433,7 +481,7 @@ public class XtUploadService
                     }
                     String json = JsonUtil.toJson(childMstVistproductInfos);
                     //FileUtil.writeTxt(json, FileUtil.getSDPath()+"/mVistproductInfos0808.txt");
-                    childDatas.put("MIT_VISTPRODUCT_INFO",JsonUtil.toJson(childMstVistproductInfos));
+                    childDatas.put("MIT_VISTPRODUCT_INFO", JsonUtil.toJson(childMstVistproductInfos));
 
 
                     // MST_VISTPRODUCT_INFO(照片)
@@ -446,7 +494,7 @@ public class XtUploadService
                     }
                     //String json = JsonUtil.toJson(mitCameras);
                     //FileUtil.writeTxt(json, FileUtil.getSDPath()+"/mVistproductInfos0808.txt");
-                    childDatas.put("MIT_VISITPIC_INFO",JsonUtil.toJson(mitCameras));
+                    childDatas.put("MIT_VISITPIC_INFO", JsonUtil.toJson(mitCameras));
 
 
                     // MstAgencysupplyInfo MST_AGENCYSUPPLY_INFO(经销商供货关系信息表)
@@ -466,28 +514,28 @@ public class XtUploadService
                     for (MitCollectionexerecordInfo mCollectionexerecordInfo : mCollectionexerecordInfos) {
                         if (visitkey.equals(mCollectionexerecordInfo.getVisitkey())) {
                             mCollectionexerecordInfo.setPadisconsistent("1");
-                            childMstCollectionexerecordInfos .add(mCollectionexerecordInfo);
+                            childMstCollectionexerecordInfos.add(mCollectionexerecordInfo);
                         }
                     }
                     String collectionexerecord = JsonUtil.toJson(childMstCollectionexerecordInfos);
                     //FileUtil.writeTxt(collectionexerecord, FileUtil.getSDPath()+"/collectionexerecord1.txt");
-                    childDatas.put("MIT_COLLECTIONEXERECORD_INFO",JsonUtil.toJson(childMstCollectionexerecordInfos));
+                    childDatas.put("MIT_COLLECTIONEXERECORD_INFO", JsonUtil.toJson(childMstCollectionexerecordInfos));
 
                     // MST_CHECKEXERECORD_INFO(拜访指标执行记录表)MstCheckexerecordInfo
                     List<MitCheckexerecordInfo> childMstCheckexerecordInfos = new ArrayList<MitCheckexerecordInfo>();
                     for (MitCheckexerecordInfo mCheckexerecordInfo : mCheckexerecordInfos) {
-                        if(null != visit){
+                        if (null != visit) {
                             mCheckexerecordInfo.setUpdateuser(visit.getUserid());
                         }
                         // 修改多家离线上传数据错误bug
-                        if(terminalkey.equals(mCheckexerecordInfo.getTerminalkey())){
+                        if (terminalkey.equals(mCheckexerecordInfo.getTerminalkey())) {
 
                             // 只上传离线拜访的最后一次
-                            if("temp".equals(mCheckexerecordInfo.getVisitkey())){
+                            if ("temp".equals(mCheckexerecordInfo.getVisitkey())) {
                                 mCheckexerecordInfo.setPadisconsistent("1");
                                 childMstCheckexerecordInfos.add(mCheckexerecordInfo);
                             }
-                            if(visitkey.equals(mCheckexerecordInfo.getVisitkey())){
+                            if (visitkey.equals(mCheckexerecordInfo.getVisitkey())) {
                                 mCheckexerecordInfo.setPadisconsistent("1");
                                 childMstCheckexerecordInfos.add(mCheckexerecordInfo);
                             }
@@ -497,7 +545,7 @@ public class XtUploadService
                     //String checkexerecord = JsonUtil.toJson(childMstCheckexerecordInfos);
                     //savFile(checkexerecord, "MST_CHECKEXERECORD_INFO");// 拉链表
                     //FileUtil.writeTxt(checkexerecord, FileUtil.getSDPath()+"/checkexerecord3213.txt");
-                    childDatas.put("MIT_CHECKEXERECORD_INFO",JsonUtil.toJson(childMstCheckexerecordInfos));
+                    childDatas.put("MIT_CHECKEXERECORD_INFO", JsonUtil.toJson(childMstCheckexerecordInfos));
 
                     mainDatas.add(childDatas);
                 }
@@ -508,7 +556,7 @@ public class XtUploadService
                 // System.out.println("巡店拜访"+json);
                 Log.i(TAG, "巡店拜访send list size" + mainDatas.size() + json);
 
-                upVisitDataInService("opt_save_visit","",json);
+                upVisitDataInService("opt_save_visit", "", json);
 
             } else {
                 if (isNeedExit) {
@@ -522,8 +570,234 @@ public class XtUploadService
     }
 
 
+    List<MitValterM> mitValterMs = new ArrayList<MitValterM>();
+    List<MitValterM> mitValterMsall = new ArrayList<MitValterM>();
+    List<MitValchecktypeM> mitValchecktypeMs = new ArrayList<MitValchecktypeM>();
+    List<MitValcheckitemM> mitValcheckitemMs = new ArrayList<MitValcheckitemM>();
+    List<MitValpromotionsM> mitValpromotionsMs = new ArrayList<MitValpromotionsM>();
+    List<MitValsupplyM> mitValsupplyMs = new ArrayList<MitValsupplyM>();
+    List<MitValcmpM> mitValcmpMs = new ArrayList<MitValcmpM>();
+    List<MitValcmpotherM> mitValcmpotherMs = new ArrayList<MitValcmpotherM>();
+    List<MitValpicM> mitValpicMs = new ArrayList<MitValpicM>();
+
+    // 上传追溯数据
+    public void upload_zs_visit(final boolean isNeedExit, final String valterid, final int whatId) {
+        try {
+            MitValterM mitValterM = null;
+            if (valterid != null && !valterid.trim().equals("")) {
+                mitValterM = valterMDao.queryForId(valterid);
+                if (mitValterM != null) {
+                    mitValterMs.add(mitValterM);
+                    mitValterMsall.add(mitValterM);
+                    Map<String, Object> valteridMap = new HashMap<String, Object>();
+                    valteridMap.put("valterid", valterid);
+                    valteridMap.put("padisconsistent", "0");
+                    mitValchecktypeMs = mitValchecktypeMDao.queryForFieldValues(valteridMap);
+                    mitValcheckitemMs = mitValcheckitemMDao.queryForFieldValues(valteridMap);
+                    mitValpromotionsMs = mitValpromotionsMDao.queryForFieldValues(valteridMap);
+                    mitValsupplyMs = mitValsupplyMDao.queryForFieldValues(valteridMap);
+                    mitValcmpMs = mitValcmpMDao.queryForFieldValues(valteridMap);
+                    mitValcmpotherMs = mitValcmpotherMDao.queryForFieldValues(valteridMap);
+                    mitValpicMs = mitValpicMDao.queryForFieldValues(valteridMap);
+                }
+            } else {
+                // 只存放所有终端的最新一次拜访记录(分组)
+                QueryBuilder<MitValterM, String> visitQB = valterMDao.queryBuilder();
+                Where<MitValterM, String> visitWhere = visitQB.where();
+                visitWhere.eq("padisconsistent", "0");
+                //productQb.groupBy(DBConst.PROD_PARENT_PRODVAR_ID);
+                // 离线拜访时,针对同一家终端多次拜访,只上传最后一次拜访数据
+                visitQB.groupBy("terminalkey");
+                visitQB.orderBy("terminalkey", true);
+                mitValterMs = visitQB.query();
+
+
+                // 存放今天所有终端所有次数的拜访记录
+                QueryBuilder<MitValterM, String> visitQB1 = valterMDao.queryBuilder();
+                Where<MitValterM, String> visitWhere1 = visitQB1.where();
+                visitWhere1.eq("padisconsistent", "0");
+                //productQb.groupBy(DBConst.PROD_PARENT_PRODVAR_ID);
+                visitQB1.orderBy("terminalkey", true);
+                mitValterMsall = visitQB1.query();
+
+
+                if (mitValterMs != null && !mitValterMs.isEmpty()) {
+                    mitValchecktypeMs = mitValchecktypeMDao.queryForEq("padisconsistent", "0");
+                    mitValcheckitemMs = mitValcheckitemMDao.queryForEq("padisconsistent", "0");
+                    mitValpromotionsMs = mitValpromotionsMDao.queryForEq("padisconsistent", "0");
+                    mitValsupplyMs = mitValsupplyMDao.queryForEq("padisconsistent", "0");
+                    mitValcmpMs = mitValcmpMDao.queryForEq("padisconsistent", "0");
+                    mitValcmpotherMs = mitValcmpotherMDao.queryForEq("padisconsistent", "0");
+                    mitValpicMs = mitValpicMDao.queryForEq("padisconsistent", "0");
+                }
+            }
+
+            /*if (mitValterMs != null && !mitValterMs.isEmpty()) {
+                List<Map<String, String>> mainDatas = new ArrayList<Map<String, String>>();
+                // 根据表结果组织数据关系
+                for (MitValterM valterM : mitValterMs) {
+                    Map<String, String> childDatas = new HashMap<String, String>();
+                    valterM.setPadisconsistent("1");
+                    List<MitValterM> mstVisitMs = new ArrayList<MitValterM>();
+                    //String visitsss = JsonUtil.toJson(mstVisitm);
+                    mstVisitMs.add(valterM);
+                    //savFile(visitsss, "MstVisits");// 采集项记录表
+                    //FileUtil.writeTxt(visitsss,FileUtil.getSDPath()+"/MstVisits2.txt");//上传巡店拜访的json
+                    //childDatas.put("MIT_VISIT_M", JsonUtil.toJson(mstVisitm));
+                    childDatas.put("MIT_VALTER_M", JsonUtil.toJson(mstVisitMs));
+
+                    String visitkey = valterM.getId();
+                    String terminalkey = valterM.getTerminalkey();
+                    String terminalcode = "";
+                    List<MitTerminalinfoM> childTerminalinfoMs = new ArrayList<MitTerminalinfoM>();
+                    for (MitTerminalinfoM mTerminalinfoM : mTerminalinfoMs_visit) {
+                        if (terminalkey.equals(mTerminalinfoM.getTerminalkey())) {
+                            terminalcode = mTerminalinfoM.getTerminalcode();
+                            mTerminalinfoM.setPadisconsistent("1");
+                            childTerminalinfoMs.add(mTerminalinfoM);
+                        }
+                    }
+                    childDatas.put("MIT_TERMINALINFO_M", JsonUtil.toJson(childTerminalinfoMs));
+
+                    List<MitGroupproductM> childMstGroupproductMs = new ArrayList<MitGroupproductM>();
+                    for (MitGroupproductM mstgroupproductm : mMstGroupproductMs) {
+                        if (visitkey.equals(mstgroupproductm.getVisitkey())) {
+                            mstgroupproductm.setPadisconsistent("1");
+                            childMstGroupproductMs.add(mstgroupproductm);
+                        }
+                    }
+                    childDatas.put("MIT_GROUPPRODUCT_M", JsonUtil.toJson(childMstGroupproductMs));
+
+                    List<MitCmpsupplyInfo> childCmpsupplyInfos = new ArrayList<MitCmpsupplyInfo>();
+                    for (MitCmpsupplyInfo childCmpsupplyInfo : cmpsupplyInfos) {
+                        if (terminalkey.equals(childCmpsupplyInfo.getTerminalkey())) {
+                            childCmpsupplyInfo.setPadisconsistent("1");
+                            childCmpsupplyInfos.add(childCmpsupplyInfo);
+                        }
+                    }
+                    childDatas.put("MIT_CMPSUPPLY_INFO", JsonUtil.toJson(childCmpsupplyInfos));
+
+                    // 终端档案申请表
+                    List<MstInvalidapplayInfo> childInvalidapplayInfos = new ArrayList<MstInvalidapplayInfo>();
+                    for (MstInvalidapplayInfo mInvalidapplayInfo : mInvalidapplayInfos_visit) {
+                        if (visitkey.equals(mInvalidapplayInfo.getVisitkey())) {
+                            mInvalidapplayInfo.setPadisconsistent("1");
+                            childInvalidapplayInfos.add(mInvalidapplayInfo);
+                        }
+                    }
+                    childDatas.put("MIT_INVALIDAPPLAY_INFO", JsonUtil.toJson(childInvalidapplayInfos));
+
+                    // MST_PROMOTERM_INFO(终端参加活动信息表)
+                    List<MitPromotermInfo> childPromotermInfos = new ArrayList<MitPromotermInfo>();
+                    for (MitPromotermInfo mPromotermInfo : mPromotermInfos) {
+                        if (visitkey.equals(mPromotermInfo.getVisitkey())) {
+                            mPromotermInfo.setPadisconsistent("1");
+                            childPromotermInfos.add(mPromotermInfo);
+                        }
+                    }
+                    childDatas.put("MIT_PROMOTERM_INFO", JsonUtil.toJson(childPromotermInfos));
+
+                    // MST_VISTPRODUCT_INFO(拜访产品-竞品我品记录表)
+                    List<MitVistproductInfo> childMstVistproductInfos = new ArrayList<MitVistproductInfo>();
+                    for (MitVistproductInfo mVistproductInfo : mVistproductInfos) {
+                        if (visitkey.equals(mVistproductInfo.getVisitkey())) {
+                            mVistproductInfo.setPadisconsistent("1");
+                            childMstVistproductInfos.add(mVistproductInfo);
+                        }
+                    }
+                    String json = JsonUtil.toJson(childMstVistproductInfos);
+                    //FileUtil.writeTxt(json, FileUtil.getSDPath()+"/mVistproductInfos0808.txt");
+                    childDatas.put("MIT_VISTPRODUCT_INFO", JsonUtil.toJson(childMstVistproductInfos));
+
+
+                    // MST_VISTPRODUCT_INFO(照片)
+                    List<MitCameraInfoM> mitCameras = new ArrayList<MitCameraInfoM>();
+                    for (MitCameraInfoM mitCameraInfoM : mitCameraInfoMs) {
+                        if (visitkey.equals(mitCameraInfoM.getVisitkey())) {
+                            mitCameraInfoM.setIsupload("1");
+                            mitCameras.add(mitCameraInfoM);
+                        }
+                    }
+                    //String json = JsonUtil.toJson(mitCameras);
+                    //FileUtil.writeTxt(json, FileUtil.getSDPath()+"/mVistproductInfos0808.txt");
+                    childDatas.put("MIT_VISITPIC_INFO", JsonUtil.toJson(mitCameras));
+
+
+                    // MstAgencysupplyInfo MST_AGENCYSUPPLY_INFO(经销商供货关系信息表)
+                    List<MitAgencysupplyInfo> childMstAgencysupplyInfos = new ArrayList<MitAgencysupplyInfo>();
+                    for (MitAgencysupplyInfo mAgencysupplyInfo : mAgencysupplyInfos) {
+                        if (terminalkey.equals(mAgencysupplyInfo.getLowerkey())) {
+                            mAgencysupplyInfo.setPadisconsistent("1");
+                            mAgencysupplyInfo.setOrderbyno("1");// 上传时将今天新增的供货关系标记改为1
+                            childMstAgencysupplyInfos.add(mAgencysupplyInfo);
+                        }
+                    }
+                    childDatas.put("MIT_AGENCYSUPPLY_INFO", JsonUtil.toJson(childMstAgencysupplyInfos));
+
+                    // MST_COLLECTIONEXERECORD_INFO(拜访指标执行采集项记录表)
+                    List<MitCollectionexerecordInfo> childMstCollectionexerecordInfos = new ArrayList<MitCollectionexerecordInfo>();
+
+                    for (MitCollectionexerecordInfo mCollectionexerecordInfo : mCollectionexerecordInfos) {
+                        if (visitkey.equals(mCollectionexerecordInfo.getVisitkey())) {
+                            mCollectionexerecordInfo.setPadisconsistent("1");
+                            childMstCollectionexerecordInfos.add(mCollectionexerecordInfo);
+                        }
+                    }
+                    String collectionexerecord = JsonUtil.toJson(childMstCollectionexerecordInfos);
+                    //FileUtil.writeTxt(collectionexerecord, FileUtil.getSDPath()+"/collectionexerecord1.txt");
+                    childDatas.put("MIT_COLLECTIONEXERECORD_INFO", JsonUtil.toJson(childMstCollectionexerecordInfos));
+
+                    // MST_CHECKEXERECORD_INFO(拜访指标执行记录表)MstCheckexerecordInfo
+                    List<MitCheckexerecordInfo> childMstCheckexerecordInfos = new ArrayList<MitCheckexerecordInfo>();
+                    for (MitCheckexerecordInfo mCheckexerecordInfo : mCheckexerecordInfos) {
+                        if (null != visit) {
+                            mCheckexerecordInfo.setUpdateuser(visit.getUserid());
+                        }
+                        // 修改多家离线上传数据错误bug
+                        if (terminalkey.equals(mCheckexerecordInfo.getTerminalkey())) {
+
+                            // 只上传离线拜访的最后一次
+                            if ("temp".equals(mCheckexerecordInfo.getVisitkey())) {
+                                mCheckexerecordInfo.setPadisconsistent("1");
+                                childMstCheckexerecordInfos.add(mCheckexerecordInfo);
+                            }
+                            if (visitkey.equals(mCheckexerecordInfo.getVisitkey())) {
+                                mCheckexerecordInfo.setPadisconsistent("1");
+                                childMstCheckexerecordInfos.add(mCheckexerecordInfo);
+                            }
+                        }
+                    }
+
+                    //String checkexerecord = JsonUtil.toJson(childMstCheckexerecordInfos);
+                    //savFile(checkexerecord, "MST_CHECKEXERECORD_INFO");// 拉链表
+                    //FileUtil.writeTxt(checkexerecord, FileUtil.getSDPath()+"/checkexerecord3213.txt");
+                    childDatas.put("MIT_CHECKEXERECORD_INFO", JsonUtil.toJson(childMstCheckexerecordInfos));
+
+                    mainDatas.add(childDatas);
+                }
+
+                // 添加
+                String json = JsonUtil.toJson(mainDatas);
+                //FileUtil.writeTxt(json,FileUtil.getSDPath()+"/shopvisit1016.txt");//上传巡店拜访的json
+                // System.out.println("巡店拜访"+json);
+                Log.i(TAG, "巡店拜访send list size" + mainDatas.size() + json);
+
+                upVisitDataInService("opt_save_visit", "", json);
+
+            } else {
+                if (isNeedExit) {
+                    //上传所有的巡店拜访
+                    handler.sendEmptyMessage(TitleLayout.UPLOAD_DATA);
+                }
+            }*/
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     // 用户点击返回  删除文件夹中的照片
-    public void deleteDICM(String visitKey){
+    public void deleteDICM(String visitKey) {
 
         // 图片上传专用map
         Map<String, Object> visitKeyisuploadMap = new HashMap<String, Object>();
@@ -610,7 +884,7 @@ public class XtUploadService
         // 解析区域定格路线信息
         AreaGridRoute emp = JsonUtil.parseJson(json, AreaGridRoute.class);
         String MIT_VISIT_M = emp.getMIT_VISIT_M();
-        List<MitVisitM> mstVisitMs= (List<MitVisitM>) JsonUtil.parseList(json, MitVisitM.class);
+        List<MitVisitM> mstVisitMs = (List<MitVisitM>) JsonUtil.parseList(json, MitVisitM.class);
 
         try {
             //DatabaseHelper helper = DatabaseHelper.getHelper(context);
@@ -637,7 +911,7 @@ public class XtUploadService
             // 修改协同拉链表 状态为上传成功
             for (MitCheckexerecordInfo mCheckexerecordInfo : mCheckexerecordInfos) {
                 mCheckexerecordInfo.setPadisconsistent("1");
-                mitCheckexerecordInfoDao .createOrUpdate(mCheckexerecordInfo);
+                mitCheckexerecordInfoDao.createOrUpdate(mCheckexerecordInfo);
             }
             // 修改协同终端表 状态为上传成功
             for (MitTerminalinfoM mTerminalinfoM : mTerminalinfoMs_visit) {
@@ -656,48 +930,48 @@ public class XtUploadService
                 FileUtil.deleteFile(new File(FileTool.CAMERA_PHOTO_DIR + picname));
             }
 
-            for(MitVisitM mitVisitM:mstVisitMs){
+            for (MitVisitM mitVisitM : mstVisitMs) {
 
                 String terminalkey = mitVisitM.getTerminalkey();
                 String visitkey = mitVisitM.getVisitkey();
                 // 删除协同该终端其余的拜访记录
-                deleteMitVisitM(db,"MIT_VISIT_M",terminalkey,visitkey);
+                deleteMitVisitM(db, "MIT_VISIT_M", terminalkey, visitkey);
 
 
                 // 根据VisitKey 删除图片表
-                deleteTableInfoByVisitKey(db,"MIT_CAMERAINFO_M",terminalkey,visitkey);
+                deleteTableInfoByVisitKey(db, "MIT_CAMERAINFO_M", terminalkey, visitkey);
 
                 // 根据VisitKey 删除协同采集项
-                deleteTableInfoByVisitKey(db,"MIT_COLLECTIONEXERECORD_INFO",terminalkey,visitkey);
+                deleteTableInfoByVisitKey(db, "MIT_COLLECTIONEXERECORD_INFO", terminalkey, visitkey);
 
                 // 根据VisitKey 删除协同产品组合
-                deleteTableInfoByVisitKey(db,"MIT_GROUPPRODUCT_M",terminalkey,visitkey);
+                deleteTableInfoByVisitKey(db, "MIT_GROUPPRODUCT_M", terminalkey, visitkey);
 
                 // 根据VisitKey 删除协同活动终端
-                deleteTableInfoByVisitKey(db,"MIT_PROMOTERM_INFO",terminalkey,visitkey);
+                deleteTableInfoByVisitKey(db, "MIT_PROMOTERM_INFO", terminalkey, visitkey);
 
                 // 根据VisitKey 删除协同拜访产品表
-                deleteTableInfoByVisitKey(db,"MIT_VISTPRODUCT_INFO",terminalkey,visitkey);
+                deleteTableInfoByVisitKey(db, "MIT_VISTPRODUCT_INFO", terminalkey, visitkey);
 
 
                 // 根据Terminalkey 删除 协同我品供货关系
-                deleteTableInfoByLowerkey(db,"MIT_AGENCYSUPPLY_INFO ",terminalkey,visitkey);
+                deleteTableInfoByLowerkey(db, "MIT_AGENCYSUPPLY_INFO ", terminalkey, visitkey);
 
                 // 根据Terminalkey 删除协同竞品供货关系
-                deleteTableInfoByTerminalkey(db,"MIT_CHECKEXERECORD_INFO",terminalkey,visitkey);
+                deleteTableInfoByTerminalkey(db, "MIT_CHECKEXERECORD_INFO", terminalkey, visitkey);
 
                 // 根据Terminalkey 删除协同拉链表
-                deleteTableInfoByTerminalkey(db,"MIT_CMPSUPPLY_INFO",terminalkey,visitkey);
+                deleteTableInfoByTerminalkey(db, "MIT_CMPSUPPLY_INFO", terminalkey, visitkey);
 
                 // 根据Terminalkey 删除协同终端表
-                deleteTableInfoByTerminalkey(db,"MIT_TERMINALINFO_M",terminalkey,visitkey);
+                deleteTableInfoByTerminalkey(db, "MIT_TERMINALINFO_M", terminalkey, visitkey);
 
                 // 删除协同 客情备忘
                 //deleteTableInfoByTerminalkey(db,"MIT_VISITMEMO_INFO",terminalkey,visitkey);
 
                 //
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -715,23 +989,23 @@ public class XtUploadService
     }
 
     // 根据VisitKey 删除记录
-    private void deleteTableInfoByVisitKey(SQLiteDatabase db,String tableName, String terminalkey, String visitkey) {
+    private void deleteTableInfoByVisitKey(SQLiteDatabase db, String tableName, String terminalkey, String visitkey) {
         // 删除表记录
-        String sql = "delete from "+tableName+"  where visitkey = '"+visitkey+"'";
+        String sql = "delete from " + tableName + "  where visitkey = '" + visitkey + "'";
         db.execSQL(sql);
     }
 
     // 根据Terminalkey 删除记录
-    private void deleteTableInfoByTerminalkey(SQLiteDatabase db,String tableName, String terminalkey, String visitkey) {
+    private void deleteTableInfoByTerminalkey(SQLiteDatabase db, String tableName, String terminalkey, String visitkey) {
         // 删除表记录
-        String sql = "delete from "+tableName+"  where terminalkey = '"+terminalkey+"' and padisconsistent = '1'";
+        String sql = "delete from " + tableName + "  where terminalkey = '" + terminalkey + "' and padisconsistent = '1'";
         db.execSQL(sql);
     }
 
     // 根据lowerkey 删除记录
-    private void deleteTableInfoByLowerkey(SQLiteDatabase db,String tableName, String terminalkey, String visitkey) {
+    private void deleteTableInfoByLowerkey(SQLiteDatabase db, String tableName, String terminalkey, String visitkey) {
         // 删除表记录
-        String sql = "delete from "+tableName+"  where lowerkey = '"+terminalkey+"' and padisconsistent = '1'";
+        String sql = "delete from " + tableName + "  where lowerkey = '" + terminalkey + "' and padisconsistent = '1'";
         db.execSQL(sql);
     }
 
