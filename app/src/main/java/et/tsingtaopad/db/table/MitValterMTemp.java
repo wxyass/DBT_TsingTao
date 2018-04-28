@@ -12,13 +12,15 @@ import et.tsingtaopad.db.dao.impl.MitValterMTempDaoImpl;
 /**
  * MitValterMTemp entity. @author MyEclipse Persistence Tools
  */
-//MitValterMTemp(追溯主表)
+//MitValterMTemp(追溯主表临时表)
 @DatabaseTable(tableName = "MIT_VALTER_M_TEMP", daoClass = MitValterMTempDaoImpl.class)
 public class MitValterMTemp implements java.io.Serializable {
 
 	// Fields
 	@DatabaseField(canBeNull = false, id = true)
 	private String id;
+	@DatabaseField
+	private String padisconsistent;// 是否已上传  0:未上传 1:已上传
 	@DatabaseField
 	private String terminalkey;//
 	@DatabaseField
@@ -1100,5 +1102,13 @@ public class MitValterMTemp implements java.io.Serializable {
 
 	public void setVidvisitottrueval(String vidvisitottrueval) {
 		this.vidvisitottrueval = vidvisitottrueval;
+	}
+
+	public String getPadisconsistent() {
+		return padisconsistent;
+	}
+
+	public void setPadisconsistent(String padisconsistent) {
+		this.padisconsistent = padisconsistent;
 	}
 }

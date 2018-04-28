@@ -10,15 +10,17 @@ import et.tsingtaopad.db.dao.impl.MitValcmpotherMTempDaoImpl;
 
 
 /**
+ * 追溯聊竞品供货关系附表临时表
  * MitValterM entity. @author MyEclipse Persistence Tools
  */
-//MIT_VALTER_M(追溯主表)
 @DatabaseTable(tableName = "MIT_VALCMPOTHER_M_TEMP", daoClass = MitValcmpotherMTempDaoImpl.class)
 public class MitValcmpotherMTemp implements java.io.Serializable {
 
     // Fields
     @DatabaseField(canBeNull = false, id = true)
     private String id;//
+    @DatabaseField
+    private String padisconsistent;// 是否已上传  0:未上传 1:已上传
     @DatabaseField
     private String valterid;// 终端追溯主表ID
     @DatabaseField
@@ -125,5 +127,13 @@ public class MitValcmpotherMTemp implements java.io.Serializable {
 
     public void setUpdatedate(Date updatedate) {
         this.updatedate = updatedate;
+    }
+
+    public String getPadisconsistent() {
+        return padisconsistent;
+    }
+
+    public void setPadisconsistent(String padisconsistent) {
+        this.padisconsistent = padisconsistent;
     }
 }

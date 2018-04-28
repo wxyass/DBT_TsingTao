@@ -15,7 +15,7 @@ import et.tsingtaopad.db.dao.impl.MitVisitMDaoImpl;
  *
  * MitValcheckterM entity. @author MyEclipse Persistence Tools
  */
-//MitValcheckterM(拜访主表)
+//MitValcheckterM
 @DatabaseTable(tableName = "MIT_VALCHECKTER_M", daoClass = MitValcheckterMDaoImpl.class)
 public class MitValcheckterM implements java.io.Serializable {
 

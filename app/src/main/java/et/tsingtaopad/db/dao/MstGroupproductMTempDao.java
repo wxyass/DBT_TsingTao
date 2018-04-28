@@ -8,6 +8,7 @@ import com.j256.ormlite.dao.Dao;
 import java.util.List;
 
 import et.tsingtaopad.db.DatabaseHelper;
+import et.tsingtaopad.db.table.MitValgroupproMTemp;
 import et.tsingtaopad.db.table.MstGroupproductMTemp;
 
 
@@ -22,4 +23,11 @@ public interface MstGroupproductMTempDao extends Dao<MstGroupproductMTemp, Strin
 	 * @return
 	 */
 	public List<MstGroupproductMTemp> queryMstGroupproductMByTerminalcode(DatabaseHelper helper, String terminalcode);
+
+	/**
+	 * @param helper
+	 * @param valterid
+	 * @return
+	 */
+	public List<MitValgroupproMTemp> queryZsMitValgroupproMTempByValterid(DatabaseHelper helper, String valterid);
 }

@@ -429,13 +429,14 @@ public class XtCheckIndexService extends XtShopVisitService {
                             buffer.append(" (cc.colitemkey='").append(proItem.getItemId());
                             Double cnum = FunUtil.isNullToZero(proItem.getChangeNum());
                             Double fnum = FunUtil.isNullToZero(proItem.getFinalNum());
+                            String jieguo = FunUtil.isNullToZero(proItem.getValitemval());
                             /*buffer.append("' and coalesce(cc.addcount, 0) <= ").append(proItem.getChangeNum().intValue());
                             buffer.append(" and coalesce(cc.totalcount, 0) <= ").append(
                                     (proItem.getChangeNum().intValue() + proItem.getFinalNum().intValue())).append(") ");*/
                             buffer.append("' and coalesce(cc.addcount, 0) <= ").append(cnum.intValue());
                             buffer.append(" and coalesce(cc.totalcount, 0) <= ").append(
                                     //(cnum.intValue()+fnum.intValue())).append(") ");
-                                    (proItem.getValitemval())).append(") ");
+                                    (jieguo)).append(") ");
 
 
                             sqlMap.put(key, buffer.toString());

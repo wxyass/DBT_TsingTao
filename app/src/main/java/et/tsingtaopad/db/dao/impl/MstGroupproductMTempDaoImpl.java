@@ -13,8 +13,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.db.dao.MstGroupproductMTempDao;
+import et.tsingtaopad.db.table.MitValgroupproMTemp;
 import et.tsingtaopad.db.table.MstGroupproductMTemp;
 
 /**
@@ -57,6 +59,26 @@ public class MstGroupproductMTempDaoImpl extends BaseDaoImpl<MstGroupproductMTem
 			vo.setUpdateusereng(cursor.getString(cursor.getColumnIndex("updateusereng")));
 			vo.setUploadflag(cursor.getString(cursor.getColumnIndex("uploadflag")));
 			vo.setPadisconsistent(cursor.getString(cursor.getColumnIndex("padisconsistent")));
+			listvo.add(vo);
+		}
+		return listvo;
+	}
+	@Override
+	public List<MitValgroupproMTemp> queryZsMitValgroupproMTempByValterid(DatabaseHelper helper, String valterid) {
+		SQLiteDatabase db = helper.getReadableDatabase();
+		String sql = "select *   from MIT_VALGROUPPRO_M_TEMP  where  valterid = ?  ";
+		// 1 bdt.line_id=?
+		Cursor cursor = db.rawQuery(sql, new String[] {valterid});
+		List<MitValgroupproMTemp> listvo = new ArrayList<MitValgroupproMTemp>();
+		while (cursor.moveToNext()) {
+			MitValgroupproMTemp vo = new MitValgroupproMTemp();
+			vo.setId(cursor.getString(cursor.getColumnIndex("id")));
+			vo.setGproductid(cursor.getString(cursor.getColumnIndex("gproductid")));
+			vo.setTerminalcode(cursor.getString(cursor.getColumnIndex("terminalcode")));
+			vo.setValterid(cursor.getString(cursor.getColumnIndex("id")));// 追溯主键
+			vo.setValgrouppro(cursor.getString(cursor.getColumnIndex("valgrouppro")));// 产品组合是否达标原值
+            vo.setValgroupproflag(cursor.getString(cursor.getColumnIndex("valgroupproflag")));// 产品组合是否达标正确与否
+            vo.setValgroupproremark(cursor.getString(cursor.getColumnIndex("valgroupproremark")));// 产品组合是否达标备注
 			listvo.add(vo);
 		}
 		return listvo;

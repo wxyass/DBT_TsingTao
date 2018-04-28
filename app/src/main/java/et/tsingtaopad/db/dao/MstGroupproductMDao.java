@@ -29,4 +29,12 @@ public interface MstGroupproductMDao  extends Dao<MstGroupproductM, String> {
 	 * @return
 	 */
 	public List<MstGroupproductM> queryMstGroupproductMByCreatedate(DatabaseHelper helper, String terminalcode, String createdate);
+
+	/**
+	 * 追溯 根据终端code查找记录
+	 * @param helper
+	 * @param terminalcode
+	 * @return
+	 */
+	public List<MstGroupproductM> queryZsMstGroupproductMByCreatedate(DatabaseHelper helper, String terminalcode);
 }

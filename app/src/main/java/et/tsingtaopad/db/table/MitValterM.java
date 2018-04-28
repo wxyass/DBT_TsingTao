@@ -21,6 +21,8 @@ public class MitValterM implements java.io.Serializable {
 	@DatabaseField(canBeNull = false, id = true)
 	private String id;
 	@DatabaseField
+	private String padisconsistent;// 是否已上传  0:未上传 1:已上传
+	@DatabaseField
 	private String terminalkey;//
 	@DatabaseField
 	private String vidter               ;//char(1)                        null,
@@ -1101,5 +1103,13 @@ public class MitValterM implements java.io.Serializable {
 
 	public void setVidvisitottrueval(String vidvisitottrueval) {
 		this.vidvisitottrueval = vidvisitottrueval;
+	}
+
+	public String getPadisconsistent() {
+		return padisconsistent;
+	}
+
+	public void setPadisconsistent(String padisconsistent) {
+		this.padisconsistent = padisconsistent;
 	}
 }

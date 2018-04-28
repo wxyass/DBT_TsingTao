@@ -10,15 +10,17 @@ import et.tsingtaopad.db.dao.impl.MitValchecktypeMDaoImpl;
 
 
 /**
+ * 追溯采集项表
  * MitValterM entity. @author MyEclipse Persistence Tools
  */
-//MIT_VALTER_M(追溯主表)
 @DatabaseTable(tableName = "MIT_VALCHECKITEM_M", daoClass = MitValcheckitemMDaoImpl.class)
 public class MitValcheckitemM implements java.io.Serializable {
 
     // Fields
     @DatabaseField(canBeNull = false, id = true)
     private String id;//
+    @DatabaseField
+    private String padisconsistent;// 是否已上传  0:未上传 1:已上传
     @DatabaseField
     private String valterid;// 终端追溯主表ID
 
@@ -184,5 +186,13 @@ public class MitValcheckitemM implements java.io.Serializable {
 
     public void setVisitkey(String visitkey) {
         this.visitkey = visitkey;
+    }
+
+    public String getPadisconsistent() {
+        return padisconsistent;
+    }
+
+    public void setPadisconsistent(String padisconsistent) {
+        this.padisconsistent = padisconsistent;
     }
 }

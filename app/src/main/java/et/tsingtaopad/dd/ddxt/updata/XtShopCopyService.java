@@ -1854,6 +1854,7 @@ public class XtShopCopyService {
 
                 mitValterM.setVidvisitotherval(valterMTemp.getVidvisitotherval());//拜访对象原值value
                 mitValterM.setVidvisitottrueval(valterMTemp.getVidvisitottrueval());// 拜访对象其他VALUE正确值
+                mitValterM.setPadisconsistent("0");// 是否已上传 0:未上传 1:已上传
 
                 valterMDao.create(mitValterM);
             } catch (SQLException e) {
@@ -1887,6 +1888,7 @@ public class XtShopCopyService {
                     info.setDdremark(item.getDdremark());// 督导备注
                     info.setDdacresult(item.getDdacresult());// 督导自动计算值
                     info.setValchecktypeflag(item.getValchecktypeflag());// 指标正确与否   char(1)
+                    info.setPadisconsistent("0");// 是否已上传 0:未上传 1:已上传
                     mitValchecktypeMDao.create(info);
                 }
             }
@@ -1919,6 +1921,7 @@ public class XtShopCopyService {
                     info.setValitem(item.getValitem());  ;// 采集项原值结果量
                     info.setValitemval(item.getValitemval()); ;// 采集项正确值结果量
                     info.setValitemremark(item.getValitemremark()); ;// 采集项备注
+                    info.setPadisconsistent("0");// 是否已上传 0:未上传 1:已上传
                     mitValcheckitemMDao.create(info);
                 }
             }
@@ -1948,6 +1951,7 @@ public class XtShopCopyService {
                     info.setValistruenumflag(item.getValistruenumflag());// 达成数组是否正确
                     info.setValistruenumval(item.getValistruenumval());// 督导达成数组正确值
                     info.setVisitkey(item.getVisitkey());// 拜访主键
+                    info.setPadisconsistent("0");// 是否已上传 0:未上传 1:已上传
                     mitValpromotionsMDao.create(info);
                 }
             }
@@ -1994,7 +1998,7 @@ public class XtShopCopyService {
                     info.setValagencysupplysrxl(item.getValagencysupplysrxl());//供货关系正确日销量
                     info.setValagencysupplyljk(item.getValagencysupplyljk());//供货关系正确累计卡
                     info.setValagencysupplyremark(item.getValagencysupplyremark());//供货关系备注
-
+                    info.setPadisconsistent("0");// 是否已上传 0:未上传 1:已上传
                     mitValsupplyMDao.create(info);
                 }
             }
@@ -2039,6 +2043,7 @@ public class XtShopCopyService {
                     info.setValcmpkcval(item.getValcmpkcval());//正确竞品库存
                     info.setValcmpremarkval(item.getValcmpremarkval());//正确竞品描述
                     info.setValcmpsupremark(item.getValcmpsupremark());//竞品供货关系备注
+                    info.setPadisconsistent("0");// 是否已上传 0:未上传 1:已上传
                     mitValcmpMDao.create(info);
                 }
             }
@@ -2066,6 +2071,7 @@ public class XtShopCopyService {
                     info.setValistruecmpval(item.getValistruecmpval());// 是否成功瓦解竞品原值
                     info.setValiscmpremark(item.getValiscmpremark());// 是否成功瓦解竞品备注
                     info.setValvisitremark(item.getValvisitremark());// 拜访记录
+                    info.setPadisconsistent("0");// 是否已上传 0:未上传 1:已上传
                     mitValcmpotherMDao.create(info);
                 }
             }
@@ -2096,6 +2102,7 @@ public class XtShopCopyService {
                     info.setGridkey(item.getGridkey());//定格
                     info.setRoutekey(item.getRoutekey());// 路线
                     info.setTerminalkey(item.getTerminalkey());// 终端主键
+                    info.setPadisconsistent("0");// 是否已上传 0:未上传 1:已上传
                     mitValpicMDao.create(info);
                 }
             }

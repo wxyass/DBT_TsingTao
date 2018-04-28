@@ -37,6 +37,7 @@ import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.core.view.alertview.OnDismissListener;
 import et.tsingtaopad.core.view.alertview.OnItemClickListener;
+import et.tsingtaopad.db.table.MitValgroupproMTemp;
 import et.tsingtaopad.db.table.MstGroupproductMTemp;
 import et.tsingtaopad.db.table.MstTerminalinfoMTemp;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
@@ -80,15 +81,18 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
     public static final int INPUT_SUC = 3;
     public static final int INIT_AMEND = 33;// 促销活动修改完成
     public static final int INIT_INDEX_AMEND = 34;// 分项采集修改完成
-    public static final int INIT_INDEX_AUTO_AMEND = 36;// 分项采集后自动计算修改完成
+
     public static final int INIT_HPZ_AMEND = 35;// 合作配送占有率修改完成
+    public static final int INIT_INDEX_AUTO_AMEND = 36;// 分项采集后自动计算修改完成
+    public static final int INIT_GROUPPRO_AMEND = 37;// 产品组合修改完成
     MyHandler handler;
     ZsCaculateAdapter xtCaculateAdapter;
 
     private AlertView mAlertViewExt;//窗口拓展例子
 
     String zhanyoulvIndexValueId;//当前终端单店占有率 对应cstatuskey
-    MstGroupproductMTemp vo;
+    //MstGroupproductMTemp vo;
+    MitValgroupproMTemp vo;
 
 
     private RelativeLayout zdzs_sayhi_rl_prostatus;
@@ -246,11 +250,27 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
         }
 
         // 产品组合是否达标
-        vo = service.findMstGroupproductMTempByid(term.getTerminalcode());
-        if (CheckUtil.isBlankOrNull(vo.getIfrecstand()) || "N".equals(vo.getIfrecstand()) || "null".equals(vo.getIfrecstand())) {
+        vo = service.findZsMitValgroupproMTempByid(mitValterMTempKey);
+        if ("N".equals(vo.getValgrouppro())) {
             zdzs_sayhi_tv_prostatus_con1.setText("否");
-        }else{
+        }else if("Y".equals(vo.getValgrouppro())){
             zdzs_sayhi_tv_prostatus_con1.setText("是");
+        }else{
+            zdzs_sayhi_tv_prostatus_con1.setText("无数据");
+        }
+        setGroupproStatue();
+
+
+    }
+
+    // 设置产品组合的稽查结果
+    private void setGroupproStatue(){
+        if("N".equals(vo.getValgroupproflag())){// 产品组合是否达标正确与否
+            zdzs_sayhi_tv_prostatus_statue.setText("业代录错");
+        }else if("Y".equals(vo.getValgroupproflag())){
+            zdzs_sayhi_tv_prostatus_statue.setText("正确");
+        }else{
+            zdzs_sayhi_tv_prostatus_statue.setText("未稽查");
         }
     }
 
@@ -278,6 +298,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
 
 
             case R.id.zdzs_sayhi_rl_prostatus:// 产品组合
+                alertShow5(vo);
                 break;
             case R.id.zdzs_sayhi_rl_hezuo:// 合作是否到位
                 alertShow3(noProIndexLst.get(0));
@@ -343,6 +364,9 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                     break;
                 case INIT_HPZ_AMEND:// hezuo 配送 占有率 修改完成
                     fragment.showHpzAdapter();
+                    break;
+                case INIT_GROUPPRO_AMEND:// 设置产品组合稽查结果
+                    fragment.setGroupproStatue();
                     break;
             }
         }
@@ -624,6 +648,60 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                     zsInvocingAddDataFragment.setArguments(bundle);
                     ZsVisitShopActivity zsVisitShopActivity = (ZsVisitShopActivity) getActivity();
                     zsVisitShopActivity.changeXtvisitFragment(zsInvocingAddDataFragment, "zscheckpromoamendfragment");
+                }
+
+                mAlertViewExt.dismiss();
+            }
+        });
+        mAlertViewExt.addExtView(extView);
+        mAlertViewExt.setCancelable(true).setOnDismissListener(new OnDismissListener() {
+            @Override
+            public void onDismiss(Object o) {
+                DbtLog.logUtils(TAG, "取消选择结果");
+            }
+        });
+        mAlertViewExt.show();
+    }
+
+    /**
+     * 产品组合
+     * 参数1: 标题 ×
+     * 参数2: 主体内容    ×
+     * 参数3: 取消按钮    ×
+     * 参数4: 高亮按钮 数组 √
+     * 参数5: 普通按钮 数组 √
+     * 参数6: 上下文 √
+     * 参数7: 弹窗类型 (正常取消,确定按钮)   √
+     * 参数8: 条目点击监听  √
+     */
+    public void alertShow5(final MitValgroupproMTemp mitValgroupproMTemp) {
+        List<KvStc> sureOrFail = new ArrayList<>();
+        sureOrFail.add(new KvStc("zhengque","正确","-1"));
+        sureOrFail.add(new KvStc("cuowu","错误(去修正)","-1"));
+        mAlertViewExt = new AlertView(null, null, null, null,
+                null, getActivity(), AlertView.Style.ActionSheet, null);
+        ViewGroup extView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_list_form, null);
+        ListView listview = (ListView) extView.findViewById(R.id.alert_list);
+        AlertKeyValueAdapter keyValueAdapter = new AlertKeyValueAdapter(getActivity(), sureOrFail,
+                new String[]{"key", "value"}, "zhengque");
+        listview.setAdapter(keyValueAdapter);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(1==position){
+                    /*Bundle bundle = new Bundle();
+                    bundle.putString("proName", "");
+                    ZsSayhiAmendFragment zsAmendFragment = new ZsSayhiAmendFragment(handler);
+                    zsAmendFragment.setArguments(bundle);
+                    ZsVisitShopActivity zsVisitShopActivity = (ZsVisitShopActivity)getActivity();
+                    zsVisitShopActivity.changeXtvisitFragment(zsAmendFragment,"zsamendfragment");*/
+
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("mitValgroupproMTemp", (Serializable) mitValgroupproMTemp);
+                    ZsCheckIndexGroupproFragment zsInvocingAddDataFragment = new ZsCheckIndexGroupproFragment(handler);
+                    zsInvocingAddDataFragment.setArguments(bundle);
+                    ZsVisitShopActivity zsVisitShopActivity = (ZsVisitShopActivity) getActivity();
+                    zsVisitShopActivity.changeXtvisitFragment(zsInvocingAddDataFragment, "zscheckindexgroupprofragment");
                 }
 
                 mAlertViewExt.dismiss();

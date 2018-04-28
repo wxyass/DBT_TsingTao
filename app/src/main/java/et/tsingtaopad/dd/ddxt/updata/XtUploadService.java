@@ -11,6 +11,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -632,146 +633,92 @@ public class XtUploadService {
                 }
             }
 
-            /*if (mitValterMs != null && !mitValterMs.isEmpty()) {
+            if (mitValterMs != null && !mitValterMs.isEmpty()) {
                 List<Map<String, String>> mainDatas = new ArrayList<Map<String, String>>();
                 // 根据表结果组织数据关系
                 for (MitValterM valterM : mitValterMs) {
                     Map<String, String> childDatas = new HashMap<String, String>();
-                    valterM.setPadisconsistent("1");
+                    String valtermid = valterM.getId();
+                    String terminalkey = valterM.getTerminalkey();
+
+                    // 1 追溯主表
                     List<MitValterM> mstVisitMs = new ArrayList<MitValterM>();
-                    //String visitsss = JsonUtil.toJson(mstVisitm);
+                    valterM.setPadisconsistent("1");
                     mstVisitMs.add(valterM);
-                    //savFile(visitsss, "MstVisits");// 采集项记录表
-                    //FileUtil.writeTxt(visitsss,FileUtil.getSDPath()+"/MstVisits2.txt");//上传巡店拜访的json
-                    //childDatas.put("MIT_VISIT_M", JsonUtil.toJson(mstVisitm));
                     childDatas.put("MIT_VALTER_M", JsonUtil.toJson(mstVisitMs));
 
-                    String visitkey = valterM.getId();
-                    String terminalkey = valterM.getTerminalkey();
-                    String terminalcode = "";
-                    List<MitTerminalinfoM> childTerminalinfoMs = new ArrayList<MitTerminalinfoM>();
-                    for (MitTerminalinfoM mTerminalinfoM : mTerminalinfoMs_visit) {
-                        if (terminalkey.equals(mTerminalinfoM.getTerminalkey())) {
-                            terminalcode = mTerminalinfoM.getTerminalcode();
-                            mTerminalinfoM.setPadisconsistent("1");
-                            childTerminalinfoMs.add(mTerminalinfoM);
+                    // 2 追溯拉链表
+                    List<MitValchecktypeM> childValchecktypeMs = new ArrayList<MitValchecktypeM>();
+                    for (MitValchecktypeM mitValchecktypeM : mitValchecktypeMs) {
+                        if (valtermid.equals(mitValchecktypeM.getValterid())) {
+                            mitValchecktypeM.setPadisconsistent("1");
+                            childValchecktypeMs.add(mitValchecktypeM);
                         }
                     }
-                    childDatas.put("MIT_TERMINALINFO_M", JsonUtil.toJson(childTerminalinfoMs));
+                    childDatas.put("MIT_VALCHECKTYPE_M", JsonUtil.toJson(childValchecktypeMs));
 
-                    List<MitGroupproductM> childMstGroupproductMs = new ArrayList<MitGroupproductM>();
-                    for (MitGroupproductM mstgroupproductm : mMstGroupproductMs) {
-                        if (visitkey.equals(mstgroupproductm.getVisitkey())) {
-                            mstgroupproductm.setPadisconsistent("1");
-                            childMstGroupproductMs.add(mstgroupproductm);
+                    // 3 追溯采集项表
+                    List<MitValcheckitemM> childValcheckitems = new ArrayList<MitValcheckitemM>();
+                    for (MitValcheckitemM mitValcheckitemM : mitValcheckitemMs) {
+                        if (valtermid.equals(mitValcheckitemM.getValterid())) {
+                            mitValcheckitemM.setPadisconsistent("1");
+                            childValcheckitems.add(mitValcheckitemM);
                         }
                     }
-                    childDatas.put("MIT_GROUPPRODUCT_M", JsonUtil.toJson(childMstGroupproductMs));
+                    childDatas.put("MIT_VALCHECKITEM_M", JsonUtil.toJson(childValcheckitems));
 
-                    List<MitCmpsupplyInfo> childCmpsupplyInfos = new ArrayList<MitCmpsupplyInfo>();
-                    for (MitCmpsupplyInfo childCmpsupplyInfo : cmpsupplyInfos) {
-                        if (terminalkey.equals(childCmpsupplyInfo.getTerminalkey())) {
-                            childCmpsupplyInfo.setPadisconsistent("1");
-                            childCmpsupplyInfos.add(childCmpsupplyInfo);
+                    // 4 追溯促销活动终端表
+                    List<MitValpromotionsM> childValpromotionsMs = new ArrayList<MitValpromotionsM>();
+                    for (MitValpromotionsM mitValpromotionsM : mitValpromotionsMs) {
+                        if (valtermid.equals(mitValpromotionsM.getValterid())) {
+                            mitValpromotionsM.setPadisconsistent("1");
+                            childValpromotionsMs.add(mitValpromotionsM);
                         }
                     }
-                    childDatas.put("MIT_CMPSUPPLY_INFO", JsonUtil.toJson(childCmpsupplyInfos));
+                    childDatas.put("MIT_VALPROMOTIONS_M", JsonUtil.toJson(childValpromotionsMs));
 
-                    // 终端档案申请表
-                    List<MstInvalidapplayInfo> childInvalidapplayInfos = new ArrayList<MstInvalidapplayInfo>();
-                    for (MstInvalidapplayInfo mInvalidapplayInfo : mInvalidapplayInfos_visit) {
-                        if (visitkey.equals(mInvalidapplayInfo.getVisitkey())) {
-                            mInvalidapplayInfo.setPadisconsistent("1");
-                            childInvalidapplayInfos.add(mInvalidapplayInfo);
+                    // 5 追溯产品组合表
+
+
+                    // 6 追溯进销存 我品供货关系
+                    List<MitValsupplyM> childValsupplyMs = new ArrayList<MitValsupplyM>();
+                    for (MitValsupplyM mitValsupplyM : mitValsupplyMs) {
+                        if (valtermid.equals(mitValsupplyM.getValterid())) {
+                            mitValsupplyM.setPadisconsistent("1");
+                            childValsupplyMs.add(mitValsupplyM);
                         }
                     }
-                    childDatas.put("MIT_INVALIDAPPLAY_INFO", JsonUtil.toJson(childInvalidapplayInfos));
+                    childDatas.put("MIT_VALSUPPLY_M", JsonUtil.toJson(childValsupplyMs));
 
-                    // MST_PROMOTERM_INFO(终端参加活动信息表)
-                    List<MitPromotermInfo> childPromotermInfos = new ArrayList<MitPromotermInfo>();
-                    for (MitPromotermInfo mPromotermInfo : mPromotermInfos) {
-                        if (visitkey.equals(mPromotermInfo.getVisitkey())) {
-                            mPromotermInfo.setPadisconsistent("1");
-                            childPromotermInfos.add(mPromotermInfo);
+                    // 7 追溯聊竞品 竞品品供货关系
+                    List<MitValcmpM> childValcmpMs = new ArrayList<MitValcmpM>();
+                    for (MitValcmpM mitValcmpM : mitValcmpMs) {
+                        if (valtermid.equals(mitValcmpM.getValterid())) {
+                            mitValcmpM.setPadisconsistent("1");
+                            childValcmpMs.add(mitValcmpM);
                         }
                     }
-                    childDatas.put("MIT_PROMOTERM_INFO", JsonUtil.toJson(childPromotermInfos));
+                    childDatas.put("MIT_VALCMP_M", JsonUtil.toJson(childValcmpMs));
 
-                    // MST_VISTPRODUCT_INFO(拜访产品-竞品我品记录表)
-                    List<MitVistproductInfo> childMstVistproductInfos = new ArrayList<MitVistproductInfo>();
-                    for (MitVistproductInfo mVistproductInfo : mVistproductInfos) {
-                        if (visitkey.equals(mVistproductInfo.getVisitkey())) {
-                            mVistproductInfo.setPadisconsistent("1");
-                            childMstVistproductInfos.add(mVistproductInfo);
+                    // 8 追溯聊竞品附表 竞品品供货关系附表
+                    List<MitValcmpotherM> childValcmpothers = new ArrayList<MitValcmpotherM>();
+                    for (MitValcmpotherM mitValcmpotherM : mitValcmpotherMs) {
+                        if (terminalkey.equals(mitValcmpotherM.getValterid())) {
+                            mitValcmpotherM.setPadisconsistent("1");
+                            childValcmpothers.add(mitValcmpotherM);
                         }
                     }
-                    String json = JsonUtil.toJson(childMstVistproductInfos);
-                    //FileUtil.writeTxt(json, FileUtil.getSDPath()+"/mVistproductInfos0808.txt");
-                    childDatas.put("MIT_VISTPRODUCT_INFO", JsonUtil.toJson(childMstVistproductInfos));
+                    childDatas.put("MIT_VALCMPOTHER_M", JsonUtil.toJson(childValcmpothers));
 
-
-                    // MST_VISTPRODUCT_INFO(照片)
-                    List<MitCameraInfoM> mitCameras = new ArrayList<MitCameraInfoM>();
-                    for (MitCameraInfoM mitCameraInfoM : mitCameraInfoMs) {
-                        if (visitkey.equals(mitCameraInfoM.getVisitkey())) {
-                            mitCameraInfoM.setIsupload("1");
-                            mitCameras.add(mitCameraInfoM);
+                    // 9 追溯图片表
+                    List<MitValpicM> childValpicMs = new ArrayList<MitValpicM>();
+                    for (MitValpicM mitValpicM : mitValpicMs) {
+                        if (valtermid.equals(mitValpicM.getValterid())) {
+                            mitValpicM.setPadisconsistent("1");
+                            childValpicMs.add(mitValpicM);
                         }
                     }
-                    //String json = JsonUtil.toJson(mitCameras);
-                    //FileUtil.writeTxt(json, FileUtil.getSDPath()+"/mVistproductInfos0808.txt");
-                    childDatas.put("MIT_VISITPIC_INFO", JsonUtil.toJson(mitCameras));
-
-
-                    // MstAgencysupplyInfo MST_AGENCYSUPPLY_INFO(经销商供货关系信息表)
-                    List<MitAgencysupplyInfo> childMstAgencysupplyInfos = new ArrayList<MitAgencysupplyInfo>();
-                    for (MitAgencysupplyInfo mAgencysupplyInfo : mAgencysupplyInfos) {
-                        if (terminalkey.equals(mAgencysupplyInfo.getLowerkey())) {
-                            mAgencysupplyInfo.setPadisconsistent("1");
-                            mAgencysupplyInfo.setOrderbyno("1");// 上传时将今天新增的供货关系标记改为1
-                            childMstAgencysupplyInfos.add(mAgencysupplyInfo);
-                        }
-                    }
-                    childDatas.put("MIT_AGENCYSUPPLY_INFO", JsonUtil.toJson(childMstAgencysupplyInfos));
-
-                    // MST_COLLECTIONEXERECORD_INFO(拜访指标执行采集项记录表)
-                    List<MitCollectionexerecordInfo> childMstCollectionexerecordInfos = new ArrayList<MitCollectionexerecordInfo>();
-
-                    for (MitCollectionexerecordInfo mCollectionexerecordInfo : mCollectionexerecordInfos) {
-                        if (visitkey.equals(mCollectionexerecordInfo.getVisitkey())) {
-                            mCollectionexerecordInfo.setPadisconsistent("1");
-                            childMstCollectionexerecordInfos.add(mCollectionexerecordInfo);
-                        }
-                    }
-                    String collectionexerecord = JsonUtil.toJson(childMstCollectionexerecordInfos);
-                    //FileUtil.writeTxt(collectionexerecord, FileUtil.getSDPath()+"/collectionexerecord1.txt");
-                    childDatas.put("MIT_COLLECTIONEXERECORD_INFO", JsonUtil.toJson(childMstCollectionexerecordInfos));
-
-                    // MST_CHECKEXERECORD_INFO(拜访指标执行记录表)MstCheckexerecordInfo
-                    List<MitCheckexerecordInfo> childMstCheckexerecordInfos = new ArrayList<MitCheckexerecordInfo>();
-                    for (MitCheckexerecordInfo mCheckexerecordInfo : mCheckexerecordInfos) {
-                        if (null != visit) {
-                            mCheckexerecordInfo.setUpdateuser(visit.getUserid());
-                        }
-                        // 修改多家离线上传数据错误bug
-                        if (terminalkey.equals(mCheckexerecordInfo.getTerminalkey())) {
-
-                            // 只上传离线拜访的最后一次
-                            if ("temp".equals(mCheckexerecordInfo.getVisitkey())) {
-                                mCheckexerecordInfo.setPadisconsistent("1");
-                                childMstCheckexerecordInfos.add(mCheckexerecordInfo);
-                            }
-                            if (visitkey.equals(mCheckexerecordInfo.getVisitkey())) {
-                                mCheckexerecordInfo.setPadisconsistent("1");
-                                childMstCheckexerecordInfos.add(mCheckexerecordInfo);
-                            }
-                        }
-                    }
-
-                    //String checkexerecord = JsonUtil.toJson(childMstCheckexerecordInfos);
-                    //savFile(checkexerecord, "MST_CHECKEXERECORD_INFO");// 拉链表
-                    //FileUtil.writeTxt(checkexerecord, FileUtil.getSDPath()+"/checkexerecord3213.txt");
-                    childDatas.put("MIT_CHECKEXERECORD_INFO", JsonUtil.toJson(childMstCheckexerecordInfos));
+                    childDatas.put("MIT_VALPIC_M", JsonUtil.toJson(childValpicMs));
 
                     mainDatas.add(childDatas);
                 }
@@ -780,16 +727,16 @@ public class XtUploadService {
                 String json = JsonUtil.toJson(mainDatas);
                 //FileUtil.writeTxt(json,FileUtil.getSDPath()+"/shopvisit1016.txt");//上传巡店拜访的json
                 // System.out.println("巡店拜访"+json);
-                Log.i(TAG, "巡店拜访send list size" + mainDatas.size() + json);
+                Log.i(TAG, "终端追溯send list size" + mainDatas.size() + json);
 
-                upVisitDataInService("opt_save_visit", "", json);
+                upZsDataInService("opt_save_zdzs", "", json);
 
             } else {
                 if (isNeedExit) {
                     //上传所有的巡店拜访
                     handler.sendEmptyMessage(TitleLayout.UPLOAD_DATA);
                 }
-            }*/
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -822,7 +769,7 @@ public class XtUploadService {
     }
 
     /**
-     * 请求路线下的所有终端
+     * 上传协同拜访数据
      *
      * @param optcode   请求码
      * @param tableName 请求的表
@@ -859,6 +806,70 @@ public class XtUploadService {
                         } else {
                             Toast.makeText(context, resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
                         }
+                    }
+                })
+                .error(new IError() {
+                    @Override
+                    public void onError(int code, String msg) {
+                        ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_FAIL);
+                        //Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .failure(new IFailure() {
+                    @Override
+                    public void onFailure() {
+                        //Toast.makeText(context, "请求失败", Toast.LENGTH_SHORT).show();
+                        ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_FAIL);
+                    }
+                })
+                .builde()
+                .post();
+    }
+
+    /**
+     * 上传终端追溯数据
+     *
+     * @param optcode   请求码
+     * @param tableName 请求的表
+     * @param content   请求json
+     */
+    void upZsDataInService(final String optcode, final String tableName, String content) {
+
+        // 组建请求Json
+        RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(context);
+        requestHeadStc.setOptcode(PropertiesUtil.getProperties(optcode));
+        RequestStructBean reqObj = HttpParseJson.parseRequestStructBean(requestHeadStc, content);
+
+        // 压缩请求数据
+        String jsonZip = HttpParseJson.parseRequestJson(reqObj);
+
+        RestClient.builder()
+                .url(HttpUrl.IP_END)
+                .params("data", jsonZip)
+                //.loader(context)
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+                        String json = HttpParseJson.parseJsonResToString(response);
+                        if ("".equals(json) || json == null) {
+                            Toast.makeText(context, "后台成功接收,但返回的数据为null", Toast.LENGTH_SHORT).show();
+                        } else {
+                            ResponseStructBean resObj = new ResponseStructBean();
+                            resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
+                            // 保存登录信息
+                            if (ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())) {
+                                //
+                                // 处理上传后的数据,该删删,该处理
+                                String formjson = resObj.getResBody().getContent();
+                                parseZsUpData(formjson);
+                                ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_SUC);
+
+                            } else {
+                                Toast.makeText(context, resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+
                     }
                 })
                 .error(new IError() {
@@ -971,6 +982,18 @@ public class XtUploadService {
 
                 //
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 追溯上传成功后,解析数据 删除各个协同表数据
+    private void parseZsUpData(String json) {
+
+        try {
+            //DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            SQLiteDatabase db = helper.getWritableDatabase();
+
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -10,15 +10,17 @@ import et.tsingtaopad.db.dao.impl.MitValpromotionsMDaoImpl;
 
 
 /**
+ * 追溯活动终端表
  * MitValterM entity. @author MyEclipse Persistence Tools
  */
-//MIT_VALTER_M(追溯主表)
 @DatabaseTable(tableName = "MIT_VALPROMOTIONS_M", daoClass = MitValpromotionsMDaoImpl.class)
 public class MitValpromotionsM implements java.io.Serializable {
 
     // Fields
     @DatabaseField(canBeNull = false, id = true)
     private String id;//
+    @DatabaseField
+    private String padisconsistent;// 是否已上传  0:未上传 1:已上传
     @DatabaseField
     private String valterid;// 终端追溯主表ID
     @DatabaseField
@@ -177,5 +179,13 @@ public class MitValpromotionsM implements java.io.Serializable {
 
     public void setTerminalkey(String terminalkey) {
         this.terminalkey = terminalkey;
+    }
+
+    public String getPadisconsistent() {
+        return padisconsistent;
+    }
+
+    public void setPadisconsistent(String padisconsistent) {
+        this.padisconsistent = padisconsistent;
     }
 }
