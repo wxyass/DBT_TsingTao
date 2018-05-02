@@ -773,55 +773,93 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
             zdzs_sayhi_rl_city_con1.setText(zsSayhiService.getAreaName(termInfoTemp.getCity()));
             zdzs_sayhi_rl_country_con1.setText(zsSayhiService.getAreaName(mitValterMTemp.getVidcountry()));
 
-        }
+        };
 
-        ;
-
+        // 是否有效终端
         zdzs_sayhi_tv_termstatus_statue.setText(getYdInfo(mitValterMTemp.getVidterflag()));
-        zdzs_sayhi_tv_visitstatus_statue.setText(getYdInfo(mitValterMTemp.getVidvisitflag()));
+        zdzs_sayhi_tv_termstatus_statue.setTextColor(getYdInfoColor(mitValterMTemp.getVidterflag()));
 
+        // 是否有效拜访
+        zdzs_sayhi_tv_visitstatus_statue.setText(getYdInfo(mitValterMTemp.getVidvisitflag()));
+        zdzs_sayhi_tv_visitstatus_statue.setTextColor(getYdInfoColor(mitValterMTemp.getVidvisitflag()));
+
+        // 是否我品店招  d
         zdzs_sayhi_rl_wopindianzhao_statue.setText(getYdInfo(mitValterMTemp.getVidifmineflag()));
+        zdzs_sayhi_rl_wopindianzhao_statue.setTextColor(getYdInfoColor(mitValterMTemp.getVidifmineflag()));
 
         // 我品销售范围
         zdzs_sayhi_rl_selfstatus_statue.setText(getYdInfo(mitValterMTemp.getVidisselfflag()));
+        zdzs_sayhi_rl_selfstatus_statue.setTextColor(getYdInfoColor(mitValterMTemp.getVidisselfflag()));
         // 竞品销售
         zdzs_sayhi_rl_cmpstatus_statue.setText(getYdInfo(mitValterMTemp.getVidiscmpflag()));
+        zdzs_sayhi_rl_cmpstatus_statue.setTextColor(getYdInfoColor(mitValterMTemp.getVidiscmpflag()));
         // 我品合作
         zdzs_sayhi_rl_selfprotocol_statue.setText(getYdInfo(mitValterMTemp.getVidselftreatyflag()));
+        zdzs_sayhi_rl_selfprotocol_statue.setTextColor(getYdInfoColor(mitValterMTemp.getVidselftreatyflag()));
         // 竞品合作
         zdzs_sayhi_rl_cmpprotocol_statue.setText(getYdInfo(mitValterMTemp.getVidcmptreatyflag()));
+        zdzs_sayhi_rl_cmpprotocol_statue.setTextColor(getYdInfoColor(mitValterMTemp.getVidcmptreatyflag()));
 
+        // 终端名称
         zdzs_sayhi_rl_termname_statue.setText(getYdInfo(mitValterMTemp.getVidternameflag()));
+        zdzs_sayhi_rl_termname_statue.setTextColor(getYdInfoColor(mitValterMTemp.getVidternameflag()));
         // 终端编码
         zdzs_sayhi_rl_termcode_statue.setText(getYdInfo(mitValterMTemp.getVidtercodeflag()));
+        zdzs_sayhi_rl_termcode_statue.setTextColor(getYdInfoColor(mitValterMTemp.getVidtercodeflag()));
+        // 路线
         zdzs_sayhi_rl_belongline_statue.setText(getYdInfo(mitValterMTemp.getVidrtekeyflag()));
+        zdzs_sayhi_rl_belongline_statue.setTextColor(getYdInfoColor(mitValterMTemp.getVidrtekeyflag()));
         // 终端等级
         zdzs_sayhi_rl_level_statue.setText(getYdInfo(mitValterMTemp.getVidtervidterlevelflag()));//
+        zdzs_sayhi_rl_level_statue.setTextColor(getYdInfoColor(mitValterMTemp.getVidtervidterlevelflag()));
 
         // 县
         zdzs_sayhi_rl_country_statue.setText(getYdInfo(mitValterMTemp.getVidcountryflag()));
+        zdzs_sayhi_rl_country_statue.setTextColor(getYdInfoColor(mitValterMTemp.getVidcountryflag()));
 
         zdzs_sayhi_rl_address_statue.setText(getYdInfo(mitValterMTemp.getVidaddressflag()));
+        zdzs_sayhi_rl_address_statue.setTextColor(getYdInfoColor(mitValterMTemp.getVidaddressflag()));
+
         zdzs_sayhi_rl_person_statue.setText(getYdInfo(mitValterMTemp.getVidcontactflag()));
+        zdzs_sayhi_rl_person_statue.setTextColor(getYdInfoColor(mitValterMTemp.getVidcontactflag()));
+
         zdzs_sayhi_rl_tel_statue.setText(getYdInfo(mitValterMTemp.getVidmobileflag()));
+        zdzs_sayhi_rl_tel_statue.setTextColor(getYdInfoColor(mitValterMTemp.getVidmobileflag()));
+
         zdzs_sayhi_rl_cycle_statue.setText(getYdInfo(mitValterMTemp.getVidcycleflag()));
+        zdzs_sayhi_rl_cycle_statue.setTextColor(getYdInfoColor(mitValterMTemp.getVidcycleflag()));
+
         zdzs_sayhi_rl_sequence_statue.setText(getYdInfo(mitValterMTemp.getVidsequenceflag()));
+        zdzs_sayhi_rl_sequence_statue.setTextColor(getYdInfoColor(mitValterMTemp.getVidsequenceflag()));
 
         zdzs_sayhi_rl_hvolume_statue.setText(getYdInfo(mitValterMTemp.getVidhvolumeflag()));
+        zdzs_sayhi_rl_hvolume_statue.setTextColor(getYdInfoColor(mitValterMTemp.getVidhvolumeflag()));
+
         zdzs_sayhi_rl_mvolume_statue.setText(getYdInfo(mitValterMTemp.getVidzvolumeflag()));
+        zdzs_sayhi_rl_mvolume_statue.setTextColor(getYdInfoColor(mitValterMTemp.getVidzvolumeflag()));
+
         zdzs_sayhi_rl_pvolume_statue.setText(getYdInfo(mitValterMTemp.getVidpvolumeflag()));
+        zdzs_sayhi_rl_pvolume_statue.setTextColor(getYdInfoColor(mitValterMTemp.getVidpvolumeflag()));
+
         zdzs_sayhi_rl_lvolume_statue.setText(getYdInfo(mitValterMTemp.getVidlvolumeflag()));
+        zdzs_sayhi_rl_lvolume_statue.setTextColor(getYdInfoColor(mitValterMTemp.getVidlvolumeflag()));
+
         zdzs_sayhi_rl_totalvolume_statue.setText(getYdInfo(mitValterMTemp.getVidterflag()));//
+        zdzs_sayhi_rl_totalvolume_statue.setTextColor(getYdInfoColor(mitValterMTemp.getVidterflag()));
 
         zdzs_sayhi_rl_areatype_statue.setText(getYdInfo(mitValterMTemp.getVidareatypeflag()));
+        zdzs_sayhi_rl_areatype_statue.setTextColor(getYdInfoColor(mitValterMTemp.getVidareatypeflag()));
 
         // 次渠道
         zdzs_sayhi_rl_minorchannel_statue.setText(getYdInfo(mitValterMTemp.getVidminchannelflag()));
+        zdzs_sayhi_rl_minorchannel_statue.setTextColor(getYdInfoColor(mitValterMTemp.getVidminchannelflag()));
 
         zdzs_sayhi_rl_visitperson_statue.setText(getYdInfo(mitValterMTemp.getVidvisituserflag()));
+        zdzs_sayhi_rl_visitperson_statue.setTextColor(getYdInfoColor(mitValterMTemp.getVidvisituserflag()));
 
         PrefUtils.putBoolean(getActivity(),GlobalValues.SAYHIREADY,true);
     }
+
 
 
 
@@ -1164,5 +1202,17 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
             con = "未稽查";
         }
         return con;
+    }
+
+    private int getYdInfoColor(String flag) {
+        int color;
+        if("N".equals(flag)){
+            color = getResources().getColor(R.color.zdzs_dd_error);
+        }else if("Y".equals(flag)){
+            color = getResources().getColor(R.color.zdzs_dd_yes);
+        }else{
+            color = getResources().getColor(R.color.zdzs_dd_notcheck);
+        }
+        return color;
     }
 }

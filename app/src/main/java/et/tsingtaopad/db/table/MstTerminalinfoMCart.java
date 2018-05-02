@@ -95,6 +95,8 @@ public class MstTerminalinfoMCart implements java.io.Serializable {
 	private String ifminedate;//店招时间
 	@DatabaseField
 	private String ifmine;//店招
+	@DatabaseField
+	private String ddtype;// 督导类型 1:协同  2:追溯
 
 	// Constructors
 
@@ -488,7 +490,12 @@ public class MstTerminalinfoMCart implements java.io.Serializable {
 	public void setIfmine(String ifmine) {
 		this.ifmine = ifmine;
 	}
-	
-	
-	
+
+	public String getDdtype() {
+		return ddtype;
+	}
+
+	public void setDdtype(String ddtype) {
+		this.ddtype = ddtype;
+	}
 }

@@ -120,10 +120,11 @@
                 <TextView
                     android:id="@+id/item_zs_chatvie_et_prevstore"
                     android:layout_width="150dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_margin="3dp"
                     android:layout_toRightOf="@id/item_zs_chatvie_tv_prevstore"
-                    android:background="@drawable/bg_visit_record"/>
+                    />
 
             </RelativeLayout>
 
@@ -149,13 +150,13 @@
                     android:text="零售价:"
                     android:textSize="15sp"/>
 
-                <EditText
+                <TextView
                     android:id="@+id/item_zs_chatvie_et_daysellnum"
                     android:layout_width="150dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_margin="3dp"
                     android:layout_toRightOf="@id/item_zs_chatvie_tv_daysellnum"
-                    android:background="@drawable/bg_visit_record"
                     android:inputType="number"/>
             </RelativeLayout>
 
@@ -183,13 +184,13 @@
                     android:text="销量:"
                     android:textSize="18sp"/>
 
-                <EditText
+                <TextView
                     android:id="@+id/item_zs_chatvie_et_prevnum"
                     android:layout_width="150dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_margin="3dp"
                     android:layout_toRightOf="@id/item_zs_chatvie_tv_prevnum"
-                    android:background="@drawable/bg_visit_record"
                     android:inputType="number"/>
 
             </RelativeLayout>
@@ -217,13 +218,13 @@
                     android:text="当前库存:"
                     android:textSize="15sp"/>
 
-                <EditText
+                <TextView
                     android:id="@+id/item_zs_chatvie_et_addcard"
                     android:layout_width="150dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_margin="3dp"
                     android:layout_toRightOf="@id/item_zs_chatvie_tv_addcard"
-                    android:background="@drawable/bg_visit_record"
                     android:inputType="number"/>
             </RelativeLayout>
 

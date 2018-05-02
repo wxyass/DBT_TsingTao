@@ -215,10 +215,13 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                 // 未稽查
                 if("N".equals(item.getValchecktypeflag())){// 达成组数正确与否
                     zdzs_sayhi_tv_hezuo_statue.setText("业代录错");
+                    zdzs_sayhi_tv_hezuo_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_error));
                 }else if("Y".equals(item.getValchecktypeflag())){
                     zdzs_sayhi_tv_hezuo_statue.setText("正确");
+                    zdzs_sayhi_tv_hezuo_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_yes));
                 }else{
                     zdzs_sayhi_tv_hezuo_statue.setText("未稽查");
+                    zdzs_sayhi_tv_hezuo_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_notcheck));
                 }
             } else if ("df2e88c9-246f-40e2-b6e5-08cdebf8c281".equals(item.getIndexId())) {// 是否高质量配送
                 //tempLst = service.queryNoProIndexValueId2();
@@ -230,10 +233,13 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                 // 未稽查
                 if("N".equals(item.getValchecktypeflag())){// 达成组数正确与否
                     zdzs_sayhi_tv_peisong_statue.setText("业代录错");
+                    zdzs_sayhi_tv_peisong_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_error));
                 }else if("Y".equals(item.getValchecktypeflag())){
                     zdzs_sayhi_tv_peisong_statue.setText("正确");
+                    zdzs_sayhi_tv_peisong_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_yes));
                 }else{
                     zdzs_sayhi_tv_peisong_statue.setText("未稽查");
+                    zdzs_sayhi_tv_peisong_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_notcheck));
                 }
             } else if ("59802090-02ac-4146-9cc3-f09570c36a26".equals(item.getIndexId())) {// 我品占有率
                  zhanyoulvIndexValueId = item.getIndexValueId();
@@ -241,10 +247,13 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                 // 未稽查
                 if("N".equals(item.getValchecktypeflag())){// 达成组数正确与否
                     zdzs_sayhi_tv_zhanyoulv_statue.setText("业代录错");
+                    zdzs_sayhi_tv_zhanyoulv_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_error));
                 }else if("Y".equals(item.getValchecktypeflag())){
                     zdzs_sayhi_tv_zhanyoulv_statue.setText("正确");
+                    zdzs_sayhi_tv_zhanyoulv_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_yes));
                 }else{
                     zdzs_sayhi_tv_zhanyoulv_statue.setText("未稽查");
+                    zdzs_sayhi_tv_zhanyoulv_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_notcheck));
                 }
             }
         }
@@ -267,10 +276,13 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
     private void setGroupproStatue(){
         if("N".equals(vo.getValgroupproflag())){// 产品组合是否达标正确与否
             zdzs_sayhi_tv_prostatus_statue.setText("业代录错");
+            zdzs_sayhi_tv_prostatus_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_error));
         }else if("Y".equals(vo.getValgroupproflag())){
             zdzs_sayhi_tv_prostatus_statue.setText("正确");
+            zdzs_sayhi_tv_prostatus_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_yes));
         }else{
             zdzs_sayhi_tv_prostatus_statue.setText("未稽查");
+            zdzs_sayhi_tv_prostatus_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_notcheck));
         }
     }
 
@@ -550,7 +562,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
         // 保存查指标页面的数据
         service.saveZsCheckIndex(preVisitkey,mitValterMTempKey, termId, calculateLst, proItemLst, noProIndexLst);
         // 保存产品组合是否达标
-        //service.saveMstGroupproductMTemp(vo);
+        service.saveMitGroupproMTemp(mitValterMTempKey,vo);
         // 保存追溯
         service.saveZsPromotionTemp(mitValterMTempKey, termId, promotionLst);
     }

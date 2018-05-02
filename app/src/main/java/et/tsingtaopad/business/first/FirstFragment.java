@@ -1,15 +1,22 @@
 package et.tsingtaopad.business.first;
 
+import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.ref.SoftReference;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -51,8 +58,13 @@ import et.tsingtaopad.db.table.PadCheckaccomplishInfo;
 import et.tsingtaopad.db.table.PadCheckproInfo;
 import et.tsingtaopad.db.table.PadCheckstatusInfo;
 import et.tsingtaopad.db.table.PadChecktypeM;
+import et.tsingtaopad.dd.ddzs.zscheckindex.ZsCheckIndexFragment;
+import et.tsingtaopad.dd.ddzs.zsinvoicing.ZsInvoicingFragment;
+import et.tsingtaopad.dd.ddzs.zssayhi.ZsSayhiService;
 import et.tsingtaopad.home.app.MainService;
+import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.http.HttpParseJson;
+import et.tsingtaopad.initconstvalues.domain.KvStc;
 import et.tsingtaopad.login.domain.BsVisitEmpolyeeStc;
 import et.tsingtaopad.util.requestHeadUtil;
 
@@ -68,6 +80,14 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
     AppCompatButton syncgrid;
     AppCompatButton syncindex;
     AppCompatButton syncpro;
+    AppCompatButton startSync;
+
+    MyHandler handler;
+
+    public static final int SYNC_SUCCSE = 1101;// 同步成功返回
+    public static final int SYNC_START = 1102;// 发起同步请求
+    private int count = 0;
+
 
     @Nullable
     @Override
@@ -82,10 +102,19 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
         syncgrid = view.findViewById(R.id.btn_first_sync_grid);
         syncindex = view.findViewById(R.id.btn_first_sync_index);
         syncpro = view.findViewById(R.id.btn_first_sync_pro);
+        startSync = view.findViewById(R.id.btn_first_sync_start);
         login.setOnClickListener(this);
         syncgrid.setOnClickListener(this);
         syncindex.setOnClickListener(this);
         syncpro.setOnClickListener(this);
+        startSync.setOnClickListener(this);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        handler = new MyHandler(this);
     }
 
     @Override
@@ -118,12 +147,53 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                         "}";
                 ceshiHttp("opt_get_dates2","MST_BASEDATA_M",content1);
                 break;
+            case R.id.btn_first_sync_start:// 同步所有信息
+                startSyncInfo();
+                break;
             default:
                 break;
         }
     }
 
+    private void startSyncInfo() {
+        handler.sendEmptyMessage(FirstFragment.SYNC_START);
+        count = 0;
+        Thread thread = new Thread() {
+
+            @Override
+            public void run() {
+                try{
+                    Looper.prepare();
+                    getInfo();
+                    Looper.loop();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        };
+        thread.start();
+
+    }
     // 测试登录网络框架
+    private void getInfo(){
+        String gridjson  = "{"+
+                "areaid:'"+PrefUtils.getString(getActivity(),"departmentid","")+"'," +
+                "tablename:'"+"MST_MARKETAREA_GRID_ROUTE_M"+"'" +
+                "}";
+        ceshiHttp("opt_get_dates2","MST_MARKETAREA_GRID_ROUTE_M",gridjson);
+
+        String indexjson  = "{"+
+                "areaid:'"+PrefUtils.getString(getActivity(),"departmentid","")+"'," +
+                "tablename:'"+"MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO"+"'" +
+                "}";
+        ceshiHttp("opt_get_dates2","MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO",indexjson);
+
+        String basejson  = "{"+
+                "areaid:'"+PrefUtils.getString(getActivity(),"departmentid","")+"'," +
+                "tablename:'"+"MST_BASEDATA_M"+"'" +
+                "}";
+        ceshiHttp("opt_get_dates2","MST_BASEDATA_M",basejson);
+    }
 
     /**
      * 同步表数据
@@ -149,7 +219,7 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
         RestClient.builder()
                 .url(HttpUrl.IP_END)
                 .params("data", jsonZip)
-                .loader(getContext())
+                //.loader(getContext())// 滚动条
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
@@ -161,19 +231,49 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                         if(ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())){
                             // 保存信息
                             if("opt_get_dates2".equals(optcode)&&"MST_MARKETAREA_GRID_ROUTE_M".equals(table)){
+
                                 String formjson = resObj.getResBody().getContent();
                                 parseTableJson(formjson);
-                                Toast.makeText(getActivity(), "区域定格路线同步成功", Toast.LENGTH_SHORT).show();
+
+                                Bundle bundle = new Bundle();
+                                bundle.putString("msg","正在处理区域数据表");
+                                Message msg = new Message();
+                                msg.what = FirstFragment.SYNC_SUCCSE;//
+                                msg.setData(bundle);
+                                handler.sendMessage(msg);
+
+                                //Toast.makeText(getActivity(), "区域定格路线同步成功", Toast.LENGTH_SHORT).show();
                             }
                             if("opt_get_dates2".equals(optcode)&&"MST_BASEDATA_M".equals(table)){
+
+
                                 String formjson = resObj.getResBody().getContent();
                                 parseDatadicTableJson(formjson);
-                                Toast.makeText(getActivity(), "基础数据同步成功", Toast.LENGTH_SHORT).show();
+
+                                Bundle bundle = new Bundle();
+                                bundle.putString("msg","正在处理基础数据表");
+                                Message msg = new Message();
+                                msg.what = FirstFragment.SYNC_SUCCSE;//
+                                msg.setData(bundle);
+                                handler.sendMessage(msg);
+
+                                //Toast.makeText(getActivity(), "基础数据同步成功", Toast.LENGTH_SHORT).show();
                             }
                             if("opt_get_dates2".equals(optcode)&&"MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO".equals(table)){
+
+
+
                                 String formjson = resObj.getResBody().getContent();
                                 parseIndexTableJson(formjson);
-                                Toast.makeText(getActivity(), "指标数据同步成功", Toast.LENGTH_SHORT).show();
+
+                                Bundle bundle = new Bundle();
+                                bundle.putString("msg","正在处理指标数据表");
+                                Message msg = new Message();
+                                msg.what = FirstFragment.SYNC_SUCCSE;//
+                                msg.setData(bundle);
+                                handler.sendMessage(msg);
+
+                                //Toast.makeText(getActivity(), "指标数据同步成功", Toast.LENGTH_SHORT).show();
                             }
                         }else{
                             Toast.makeText(getActivity(), resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
@@ -319,6 +419,7 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
         }
     }
 
+
     // 解析区域定格路线成功
     private void parseTableJson(String json) {
         // 解析区域定格路线信息
@@ -371,6 +472,79 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
         MainService service = new MainService(getActivity(),null);
         service.createOrUpdateTable(PAD_CHECKSTATUS_INFO,"PAD_CHECKSTATUS_INFO",PadCheckstatusInfo.class);
         service.parsePadCheckType(MST_COLLECTIONTEMPLATE_M);
+    }
+
+
+
+    /**
+     * 接收子线程消息的 Handler
+     */
+    public static class MyHandler extends Handler {
+
+        // 软引用
+        SoftReference<FirstFragment> fragmentRef;
+
+        public MyHandler(FirstFragment fragment) {
+            fragmentRef = new SoftReference<FirstFragment>(fragment);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            FirstFragment fragment = fragmentRef.get();
+            if (fragment == null) {
+                return;
+            }
+
+            // 处理UI 变化
+            switch (msg.what) {
+                case SYNC_SUCCSE:// 同步成功返回
+                    Bundle bundle = msg.getData();
+                    String msgdate = (String) bundle.getSerializable("msg");
+                    fragment.closeProgress(msgdate);
+                    break;
+                case SYNC_START:// 发起同步请求
+                    fragment.showFirstDialog("正在同步数据");
+                    break;
+            }
+        }
+    }
+
+    private void  closeProgress(String msgdata){
+        count++;
+        showFirstDialog(msgdata);
+        if(count>=3){
+            closeFirstDialog();
+            Toast.makeText(getActivity(), "同步成功", Toast.LENGTH_SHORT).show();
+        }
+        /*closeFirstDialog();
+        Toast.makeText(getActivity(), "同步成功", Toast.LENGTH_SHORT).show();*/
+    }
+
+    private AlertDialog dialog;
+    /**
+     * 展示滚动条
+     */
+    public void showFirstDialog(String msgdata) {
+        View view = getActivity().getLayoutInflater().inflate(R.layout.sync_progress, null);
+        TextView dialog_tv_sync = (TextView)view.findViewById(R.id.dialog_tv_sync);
+        dialog_tv_sync.setText(msgdata);
+        if(dialog != null){
+            dialog.setView(view, 0, 0, 0, 0);
+            dialog.setCancelable(false); // 是否可以通过返回键 关闭
+            dialog.show();
+        }else{
+            dialog = new AlertDialog.Builder(getActivity()).setCancelable(false).create();
+            dialog.setView(view, 0, 0, 0, 0);
+            dialog.setCancelable(false); // 是否可以通过返回键 关闭
+            dialog.show();
+        }
+    }
+
+    // 关闭滚动条
+    public void closeFirstDialog() {
+        if (dialog != null) {
+            dialog.dismiss();
+        }
     }
 
 }

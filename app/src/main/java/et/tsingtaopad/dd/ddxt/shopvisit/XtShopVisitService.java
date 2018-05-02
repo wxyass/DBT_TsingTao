@@ -826,6 +826,7 @@ public class XtShopVisitService {
                 mitValterMTemp = new MitValterMTemp();
                 mitValterMTemp.setId(FunUtil.getUUID());// 追溯主键
                 mitValterMTemp.setTerminalkey(term.getTerminalkey());// 终端KEY
+                mitValterMTemp.setVisitdate(visitDate);
                 mitValterMTemp.setVidter(term.getStatus());// 是否有效终端原值
                 mitValterMTemp.setVidvisit(mstVisitM.getStatus());// 是否有效拜访原值
                 mitValterMTemp.setVidifmine(term.getIfmine());// 我品店招原值

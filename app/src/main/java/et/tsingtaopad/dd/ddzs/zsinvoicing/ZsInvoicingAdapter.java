@@ -108,9 +108,9 @@ public class ZsInvoicingAdapter extends
             holder.statueTv = (TextView)convertView.findViewById(R.id.item_zs_invoicing_tv_statue);// 未稽查tv
             holder.statueRl = (RelativeLayout)convertView.findViewById(R.id.item_zs_invoicing_Rl_statue);// 未稽查Rl
             holder.channelPriceEt = (TextView)convertView.findViewById(R.id.item_zs_invoicing_et_prevstore);// 渠道价
-            holder.sellPriceEt = (EditText)convertView.findViewById(R.id.item_zs_invoicing_et_daysellnum);// 零售价
-            holder.prevNumEt = (EditText)convertView.findViewById(R.id.item_zs_invoicing_et_prevnum);// 订单量
-            holder.addcardEt = (EditText)convertView.findViewById(R.id.item_zs_invoicing_et_addcard);// 累计卡
+            holder.sellPriceEt = (TextView)convertView.findViewById(R.id.item_zs_invoicing_et_daysellnum);// 零售价
+            holder.prevNumEt = (TextView)convertView.findViewById(R.id.item_zs_invoicing_et_prevnum);// 订单量
+            holder.addcardEt = (TextView)convertView.findViewById(R.id.item_zs_invoicing_et_addcard);// 累计卡
             
             convertView.setTag(holder);
         } else {
@@ -145,19 +145,20 @@ public class ZsInvoicingAdapter extends
             holder.addcardEt.setText(item.getValsljk());
         }
 
-
-
         if("Y".equals(item.getValaddagencysupply())){// 是否督导新增
             holder.statueTv.setText("督导新增");
-
+            holder.statueTv.setTextColor(context.getResources().getColor(R.color.zdzs_dd_notcheck));
         }else{// 业代的供货数据
             // 未稽查
             if("N".equals(item.getValagencysupplyflag())){
                 holder.statueTv.setText("业代录错");
+                holder.statueTv.setTextColor(context.getResources().getColor(R.color.zdzs_dd_error));
             }else if("Y".equals(item.getValagencysupplyflag())){
                 holder.statueTv.setText("正确");
+                holder.statueTv.setTextColor(context.getResources().getColor(R.color.zdzs_dd_yes));
             }else{
                 holder.statueTv.setText("未稽查");
+                holder.statueTv.setTextColor(context.getResources().getColor(R.color.zdzs_dd_notcheck));
             }
 
             // 背景
@@ -212,11 +213,11 @@ public class ZsInvoicingAdapter extends
         private TextView agencyTv;
         private TextView statueTv;
         private RelativeLayout statueRl;
-        private EditText prevNumEt;
+        private TextView prevNumEt;
         //private TextView prevNumSumTV;
         private TextView channelPriceEt;
-        private EditText sellPriceEt;
-        private EditText addcardEt;
+        private TextView sellPriceEt;
+        private TextView addcardEt;
         //private Button firstdate;
     }
     

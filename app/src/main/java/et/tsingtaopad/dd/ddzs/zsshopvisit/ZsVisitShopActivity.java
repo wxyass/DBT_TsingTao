@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTabHost;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -33,6 +34,7 @@ import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.core.view.alertview.OnDismissListener;
 import et.tsingtaopad.core.view.alertview.OnItemClickListener;
 import et.tsingtaopad.db.table.MstVisitM;
+import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
 import et.tsingtaopad.dd.ddxt.camera.XtCameraFragment;
 import et.tsingtaopad.dd.ddxt.chatvie.XtChatvieFragment;
 import et.tsingtaopad.dd.ddxt.checking.XtCheckIndexFragment;
@@ -384,6 +386,7 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
     private AlertView mAlertViewExt;//窗口拓展例子
 
     private void confirmXtUplad() {
+        ZsVisitShopActivity.this.onPause();
         // 普通窗口
         mAlertViewExt = new AlertView("上传拜访数据?", null, "取消", new String[]{"确定"}, null, this, AlertView.Style.Alert,
                 new OnItemClickListener() {
@@ -482,4 +485,6 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
         }*/
         return isallIn;
     }
+
+
 }

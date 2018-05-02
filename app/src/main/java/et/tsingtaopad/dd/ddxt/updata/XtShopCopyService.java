@@ -58,6 +58,8 @@ import et.tsingtaopad.db.table.MitValcmpM;
 import et.tsingtaopad.db.table.MitValcmpMTemp;
 import et.tsingtaopad.db.table.MitValcmpotherM;
 import et.tsingtaopad.db.table.MitValcmpotherMTemp;
+import et.tsingtaopad.db.table.MitValgroupproM;
+import et.tsingtaopad.db.table.MitValgroupproMTemp;
 import et.tsingtaopad.db.table.MitValpicM;
 import et.tsingtaopad.db.table.MitValpicMTemp;
 import et.tsingtaopad.db.table.MitValpromotionsM;
@@ -1664,8 +1666,8 @@ public class XtShopCopyService {
             Dao<MitValpromotionsMTemp, String> mitValpromotionsMTempDao = helper.getMitValpromotionsMTempDao();
 
             // 复制追溯产品组合表
-            //Dao<MitValpicM, String> mitValpicMDao = helper.getMitValpicMDao();
-            //Dao<MitValpicMTemp, String> mitValpicMTemppDao = helper.getMitValpicMTempDao();
+            Dao<MitValgroupproM, String> mitValgroupproMDao = helper.getMitValgroupproMDao();
+            Dao<MitValgroupproMTemp, String> mitValgroupproMTempDao = helper.getMitValgroupproMTempDao();
 
             // 复制追溯进销存表
             Dao<MitValsupplyM, String> mitValsupplyMDao = helper.getMitValsupplyMDao();
@@ -1701,7 +1703,7 @@ public class XtShopCopyService {
             createMitValpromotionsMByTemp(mitValpromotionsMDao,mitValpromotionsMTempDao,valterid);
 
             // 复制追溯产品组合表
-            //createMitValchecktypeMByTemp(mitValchecktypeMDao,mitValchecktypeMTempDao,valterMTemp);
+            createMitValgroupproMByTemp(mitValgroupproMDao,mitValgroupproMTempDao,valterid);
 
             // 复制追溯进销存表
             createMitValsupplyMByTemp(mitValsupplyMDao,mitValsupplyMTempDao,valterid);
@@ -1727,6 +1729,8 @@ public class XtShopCopyService {
         }
     }
 
+
+
     // 复制追溯主表 临时表到主表
     private void createMitValterMByTemp(MitValterMDao valterMDao, MitValterMTemp valterMTemp) {
         if (valterMTemp != null) {
@@ -1734,7 +1738,7 @@ public class XtShopCopyService {
                 MitValterM mitValterM = new MitValterM();
                 mitValterM.setId(valterMTemp.getId());// 追溯主键
                 mitValterM.setTerminalkey(valterMTemp.getTerminalkey());// 终端KEY
-
+                mitValterM.setVisitdate(valterMTemp.getVisitdate());
                 mitValterM.setVidter(valterMTemp.getVidter());// 是否有效终端原值
                 mitValterM.setVidterflag(valterMTemp.getVidterflag());// 是否有效终端正确与否
                 mitValterM.setVidterremaek(valterMTemp.getVidterremaek());// 是否有效终端错误备注内容
@@ -1953,6 +1957,35 @@ public class XtShopCopyService {
                     info.setVisitkey(item.getVisitkey());// 拜访主键
                     info.setPadisconsistent("0");// 是否已上传 0:未上传 1:已上传
                     mitValpromotionsMDao.create(info);
+                }
+            }
+        }catch (Exception e){
+            Log.e(TAG, "复制追溯聊竞品附表失败", e);
+        }
+    }
+
+
+    // 复制
+    private void createMitValgroupproMByTemp(Dao<MitValgroupproM, String> mitValgroupproMDao,
+                                             Dao<MitValgroupproMTemp, String> mitValgroupproMTempDao,
+                                             String valterid) {
+        try {
+            QueryBuilder<MitValgroupproMTemp, String> collectionQB = mitValgroupproMTempDao.queryBuilder();
+            Where<MitValgroupproMTemp, String> collectionWhere = collectionQB.where();
+            collectionWhere.eq("valterid", valterid);
+            List<MitValgroupproMTemp> cameraInfoMTemps = collectionQB.query();
+            if(cameraInfoMTemps.size()>0){
+                for (MitValgroupproMTemp vo:cameraInfoMTemps) {
+                    MitValgroupproM info = new MitValgroupproM();
+                    info.setId(vo.getId());
+                    info.setValterid(vo.getValterid());
+                    info.setValgrouppro(vo.getValgrouppro());
+                    info.setValgroupproflag(vo.getValgroupproflag());
+                    info.setValgroupproremark(vo.getValgroupproremark());
+                    info.setGproductid(vo.getGproductid());
+                    info.setTerminalcode(vo.getTerminalcode());
+                    info.setPadisconsistent("0");// 未上传
+                    mitValgroupproMDao.create(info);
                 }
             }
         }catch (Exception e){

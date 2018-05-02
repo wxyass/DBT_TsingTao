@@ -55,6 +55,7 @@ import et.tsingtaopad.db.table.MitValcmpM;
 import et.tsingtaopad.db.table.MitValcmpMTemp;
 import et.tsingtaopad.db.table.MitValcmpotherM;
 import et.tsingtaopad.db.table.MitValcmpotherMTemp;
+import et.tsingtaopad.db.table.MitValgroupproM;
 import et.tsingtaopad.db.table.MitValpicM;
 import et.tsingtaopad.db.table.MitValpicMTemp;
 import et.tsingtaopad.db.table.MitValpromotionsM;
@@ -155,6 +156,7 @@ public class XtUploadService {
     private Dao<MitValcmpM, String> mitValcmpMDao = null;
     private Dao<MitValcmpotherM, String> mitValcmpotherMDao = null;
     private Dao<MitValpicM, String> mitValpicMDao = null;
+    private Dao<MitValgroupproM, String> mitValgroupproMDao = null;
 
     public XtUploadService(Context context, Handler handler) {
         this.handler = handler;
@@ -212,7 +214,7 @@ public class XtUploadService {
             mitValpromotionsMDao = helper.getMitValpromotionsMDao();
 
             // 复制追溯产品组合表
-            //Dao<MitValpicM, String> mitValpicMDao = helper.getMitValpicMDao();
+            mitValgroupproMDao = helper.getMitValgroupproMDao();
 
             // 复制追溯进销存表
             mitValsupplyMDao = helper.getMitValsupplyMDao();
@@ -231,6 +233,19 @@ public class XtUploadService {
         }
     }
 
+    /**
+     * 上传数据
+     * @param isNeedExit true 的时候 上传数据后退出程序 ，不需要退出程序 请用false
+     */
+    public void uploadTables(boolean isNeedExit)
+    {
+
+        upload_xt_visit(isNeedExit, null,1);//
+        upload_zs_visit(isNeedExit, null,1);//
+
+
+    }
+
     List<MitVisitM> visits = new ArrayList<MitVisitM>();
     List<MitVisitM> visitsall = new ArrayList<MitVisitM>();
     List<MitVistproductInfo> mVistproductInfos = new ArrayList<MitVistproductInfo>();
@@ -241,11 +256,8 @@ public class XtUploadService {
     List<MitCollectionexerecordInfo> mCollectionexerecordInfos = new ArrayList<MitCollectionexerecordInfo>();
     List<MitAgencysupplyInfo> mAgencysupplyInfos = new ArrayList<MitAgencysupplyInfo>();
     List<MitCmpsupplyInfo> cmpsupplyInfos = new ArrayList<MitCmpsupplyInfo>();
-
-    // 上传图片列表
-    List<MitCameraInfoM> mitCameraInfoMs = new ArrayList<MitCameraInfoM>();
-    // 上传产品组合是否达标
-    List<MitGroupproductM> mMstGroupproductMs = new ArrayList<MitGroupproductM>();
+    List<MitCameraInfoM> mitCameraInfoMs = new ArrayList<MitCameraInfoM>();// 上传图片列表
+    List<MitGroupproductM> mMstGroupproductMs = new ArrayList<MitGroupproductM>(); // 上传产品组合是否达标
 
     public void upload_xt_visit(final boolean isNeedExit, final String visitKey, final int whatId) {
         try {
@@ -562,7 +574,7 @@ public class XtUploadService {
             } else {
                 if (isNeedExit) {
                     //上传所有的巡店拜访
-                    handler.sendEmptyMessage(TitleLayout.UPLOAD_DATA);
+                    //handler.sendEmptyMessage(TitleLayout.UPLOAD_DATA);
                 }
             }
         } catch (SQLException e) {
@@ -580,6 +592,7 @@ public class XtUploadService {
     List<MitValcmpM> mitValcmpMs = new ArrayList<MitValcmpM>();
     List<MitValcmpotherM> mitValcmpotherMs = new ArrayList<MitValcmpotherM>();
     List<MitValpicM> mitValpicMs = new ArrayList<MitValpicM>();
+    List<MitValgroupproM> mitValgroupproMs = new ArrayList<MitValgroupproM>();
 
     // 上传追溯数据
     public void upload_zs_visit(final boolean isNeedExit, final String valterid, final int whatId) {
@@ -600,6 +613,7 @@ public class XtUploadService {
                     mitValcmpMs = mitValcmpMDao.queryForFieldValues(valteridMap);
                     mitValcmpotherMs = mitValcmpotherMDao.queryForFieldValues(valteridMap);
                     mitValpicMs = mitValpicMDao.queryForFieldValues(valteridMap);
+                    mitValgroupproMs = mitValgroupproMDao.queryForFieldValues(valteridMap);
                 }
             } else {
                 // 只存放所有终端的最新一次拜访记录(分组)
@@ -630,6 +644,7 @@ public class XtUploadService {
                     mitValcmpMs = mitValcmpMDao.queryForEq("padisconsistent", "0");
                     mitValcmpotherMs = mitValcmpotherMDao.queryForEq("padisconsistent", "0");
                     mitValpicMs = mitValpicMDao.queryForEq("padisconsistent", "0");
+                    mitValgroupproMs = mitValgroupproMDao.queryForEq("padisconsistent", "0");
                 }
             }
 
@@ -678,6 +693,14 @@ public class XtUploadService {
                     childDatas.put("MIT_VALPROMOTIONS_M", JsonUtil.toJson(childValpromotionsMs));
 
                     // 5 追溯产品组合表
+                    List<MitValgroupproM> childValgroupproMs = new ArrayList<MitValgroupproM>();
+                    for (MitValgroupproM mitValgroupproM : mitValgroupproMs) {
+                        if (valtermid.equals(mitValgroupproM.getValterid())) {
+                            mitValgroupproM.setPadisconsistent("1");
+                            childValgroupproMs.add(mitValgroupproM);
+                        }
+                    }
+                    childDatas.put("MIT_VALGROUPPRO_M", JsonUtil.toJson(childValgroupproMs));
 
 
                     // 6 追溯进销存 我品供货关系
@@ -703,7 +726,7 @@ public class XtUploadService {
                     // 8 追溯聊竞品附表 竞品品供货关系附表
                     List<MitValcmpotherM> childValcmpothers = new ArrayList<MitValcmpotherM>();
                     for (MitValcmpotherM mitValcmpotherM : mitValcmpotherMs) {
-                        if (terminalkey.equals(mitValcmpotherM.getValterid())) {
+                        if (valtermid.equals(mitValcmpotherM.getValterid())) {
                             mitValcmpotherM.setPadisconsistent("1");
                             childValcmpothers.add(mitValcmpotherM);
                         }
@@ -734,14 +757,13 @@ public class XtUploadService {
             } else {
                 if (isNeedExit) {
                     //上传所有的巡店拜访
-                    handler.sendEmptyMessage(TitleLayout.UPLOAD_DATA);
+                    //handler.sendEmptyMessage(TitleLayout.UPLOAD_DATA);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
 
     // 用户点击返回  删除文件夹中的照片
     public void deleteDICM(String visitKey) {
@@ -795,7 +817,7 @@ public class XtUploadService {
                         String json = HttpParseJson.parseJsonResToString(response);
                         ResponseStructBean resObj = new ResponseStructBean();
                         resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
-                        // 保存登录信息
+                        // 处理成功上传
                         if (ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())) {
                             //
                             // 处理上传后的数据,该删删,该处理

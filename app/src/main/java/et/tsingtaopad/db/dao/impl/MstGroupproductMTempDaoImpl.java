@@ -75,7 +75,7 @@ public class MstGroupproductMTempDaoImpl extends BaseDaoImpl<MstGroupproductMTem
 			vo.setId(cursor.getString(cursor.getColumnIndex("id")));
 			vo.setGproductid(cursor.getString(cursor.getColumnIndex("gproductid")));
 			vo.setTerminalcode(cursor.getString(cursor.getColumnIndex("terminalcode")));
-			vo.setValterid(cursor.getString(cursor.getColumnIndex("id")));// 追溯主键
+			vo.setValterid(cursor.getString(cursor.getColumnIndex("valterid")));// 追溯主键
 			vo.setValgrouppro(cursor.getString(cursor.getColumnIndex("valgrouppro")));// 产品组合是否达标原值
             vo.setValgroupproflag(cursor.getString(cursor.getColumnIndex("valgroupproflag")));// 产品组合是否达标正确与否
             vo.setValgroupproremark(cursor.getString(cursor.getColumnIndex("valgroupproremark")));// 产品组合是否达标备注

@@ -102,15 +102,16 @@ public class ZsPromotionAdapter extends BaseAdapter {
             holder.reachnum.setHint("0");
         }
 
-
-
         // 未稽查
         if("N".equals(item.getValistruenumflag())){// 达成组数正确与否
             holder.statueTv.setText("业代录错");
+            holder.statueTv.setTextColor(context.getResources().getColor(R.color.zdzs_dd_error));
         }else if("Y".equals(item.getValistruenumflag())){
             holder.statueTv.setText("正确");
+            holder.statueTv.setTextColor(context.getResources().getColor(R.color.zdzs_dd_yes));
         }else{
             holder.statueTv.setText("未稽查");
+            holder.statueTv.setTextColor(context.getResources().getColor(R.color.zdzs_dd_notcheck));
         }
 
         // 是否达成监听

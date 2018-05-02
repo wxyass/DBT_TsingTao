@@ -70,7 +70,7 @@ public class XtTermSelectService {
     }
 
     /**
-     * 根据路线获取终端 获取相应的数据列表数据
+     * 根据路线获取终端 获取相应的数据列表数据(协同)
      *
      * @param lineKeys 线路表主键
      * @return
@@ -83,6 +83,27 @@ public class XtTermSelectService {
             MstTerminalinfoMDao dao = helper.getDao(MstTerminalinfoM.class);
             for (int i = 0; i < lineKeys.size(); i++) {
                 List<XtTermSelectMStc> termlst = dao.queryLineTermLst(helper, lineKeys.get(i));
+                terminalList.addAll(termlst);
+            }
+        } catch (SQLException e) {
+            Log.e(TAG, "获取线路表DAO对象失败", e);
+        }
+        return terminalList;
+    }
+    /**
+     * 根据路线获取终端 获取相应的数据列表数据(追溯)
+     *
+     * @param lineKeys 线路表主键
+     * @return
+     */
+    public List<XtTermSelectMStc> queryZsTerminal(List<String> lineKeys) {
+
+        List<XtTermSelectMStc> terminalList = new ArrayList<XtTermSelectMStc>();
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            MstTerminalinfoMDao dao = helper.getDao(MstTerminalinfoM.class);
+            for (int i = 0; i < lineKeys.size(); i++) {
+                List<XtTermSelectMStc> termlst = dao.queryZsLineTermLst(helper, lineKeys.get(i));
                 terminalList.addAll(termlst);
             }
         } catch (SQLException e) {
@@ -165,8 +186,14 @@ public class XtTermSelectService {
         }
     }
 
-    // 复制终端表 到终端购物车
-    public void toCopyMstTerminalinfoMCartData(MstTerminalinfoM xtTermSelectMStc) {
+    //
+
+    /**
+     * 复制终端表 到终端购物车
+     * @param xtTermSelectMStc
+     * @param ddType    督导业务类型 1:协同  2:追溯
+     */
+    public void toCopyMstTerminalinfoMCartData(MstTerminalinfoM xtTermSelectMStc,String ddType) {
 
         // 事务控制
         AndroidDatabaseConnection connection = null;
@@ -180,49 +207,50 @@ public class XtTermSelectService {
 
             // 复制终端临时表
             MstTerminalinfoM term = xtTermSelectMStc;
-            MstTerminalinfoMCart terminalinfoMTemp = null;
+            MstTerminalinfoMCart terminalinfoMCart = null;
             if (term != null) {
-                terminalinfoMTemp = new MstTerminalinfoMCart();
-                terminalinfoMTemp.setTerminalkey(term.getTerminalkey());
-                terminalinfoMTemp.setRoutekey(term.getRoutekey());
-                terminalinfoMTemp.setTerminalcode(term.getTerminalcode());
-                terminalinfoMTemp.setTerminalname(term.getTerminalname());
-                terminalinfoMTemp.setProvince(term.getProvince());
-                terminalinfoMTemp.setCity(term.getCity());
-                terminalinfoMTemp.setCounty(term.getCounty());
-                terminalinfoMTemp.setAddress(term.getAddress());
-                terminalinfoMTemp.setContact(term.getContact());
-                terminalinfoMTemp.setMobile(term.getMobile());
-                terminalinfoMTemp.setTlevel(term.getTlevel());
-                terminalinfoMTemp.setSequence(term.getSequence());
-                terminalinfoMTemp.setCycle(term.getCycle());
-                terminalinfoMTemp.setHvolume(term.getHvolume());
-                terminalinfoMTemp.setMvolume(term.getMvolume());
-                terminalinfoMTemp.setPvolume(term.getPvolume());
-                terminalinfoMTemp.setLvolume(term.getLvolume());
-                terminalinfoMTemp.setStatus(term.getStatus());
-                terminalinfoMTemp.setSellchannel(term.getSellchannel());
-                terminalinfoMTemp.setMainchannel(term.getMainchannel());
-                terminalinfoMTemp.setMinorchannel(term.getMinorchannel());
-                terminalinfoMTemp.setAreatype(term.getAreatype());
-                terminalinfoMTemp.setSisconsistent(term.getSisconsistent());
-                terminalinfoMTemp.setScondate(term.getScondate());
-                terminalinfoMTemp.setPadisconsistent(term.getPadisconsistent());
-                terminalinfoMTemp.setPadcondate(term.getPadcondate());
-                terminalinfoMTemp.setComid(term.getComid());
-                terminalinfoMTemp.setRemarks(term.getRemarks());
-                terminalinfoMTemp.setOrderbyno(term.getOrderbyno());
-                terminalinfoMTemp.setVersion(term.getVersion());
-                terminalinfoMTemp.setCredate(term.getCredate());
-                terminalinfoMTemp.setCreuser(term.getCreuser());
-                terminalinfoMTemp.setSelftreaty(term.getSelftreaty());
-                terminalinfoMTemp.setCmpselftreaty(term.getCmpselftreaty());
-                terminalinfoMTemp.setUpdatetime(term.getUpdatetime());
-                terminalinfoMTemp.setUpdateuser(term.getUpdateuser());
-                terminalinfoMTemp.setDeleteflag(term.getDeleteflag());
-                terminalinfoMTemp.setIfminedate(term.getIfminedate());
-                terminalinfoMTemp.setIfmine(term.getIfmine());
-                terminalinfoMCartDao.createOrUpdate(terminalinfoMTemp);
+                terminalinfoMCart = new MstTerminalinfoMCart();
+                terminalinfoMCart.setTerminalkey(term.getTerminalkey());
+                terminalinfoMCart.setRoutekey(term.getRoutekey());
+                terminalinfoMCart.setTerminalcode(term.getTerminalcode());
+                terminalinfoMCart.setTerminalname(term.getTerminalname());
+                terminalinfoMCart.setProvince(term.getProvince());
+                terminalinfoMCart.setDdtype(ddType);// 督导业务类型 1:协同  2:追溯
+                terminalinfoMCart.setCity(term.getCity());
+                terminalinfoMCart.setCounty(term.getCounty());
+                terminalinfoMCart.setAddress(term.getAddress());
+                terminalinfoMCart.setContact(term.getContact());
+                terminalinfoMCart.setMobile(term.getMobile());
+                terminalinfoMCart.setTlevel(term.getTlevel());
+                terminalinfoMCart.setSequence(term.getSequence());
+                terminalinfoMCart.setCycle(term.getCycle());
+                terminalinfoMCart.setHvolume(term.getHvolume());
+                terminalinfoMCart.setMvolume(term.getMvolume());
+                terminalinfoMCart.setPvolume(term.getPvolume());
+                terminalinfoMCart.setLvolume(term.getLvolume());
+                terminalinfoMCart.setStatus(term.getStatus());
+                terminalinfoMCart.setSellchannel(term.getSellchannel());
+                terminalinfoMCart.setMainchannel(term.getMainchannel());
+                terminalinfoMCart.setMinorchannel(term.getMinorchannel());
+                terminalinfoMCart.setAreatype(term.getAreatype());
+                terminalinfoMCart.setSisconsistent(term.getSisconsistent());
+                terminalinfoMCart.setScondate(term.getScondate());
+                terminalinfoMCart.setPadisconsistent(term.getPadisconsistent());
+                terminalinfoMCart.setPadcondate(term.getPadcondate());
+                terminalinfoMCart.setComid(term.getComid());
+                terminalinfoMCart.setRemarks(term.getRemarks());
+                terminalinfoMCart.setOrderbyno(term.getOrderbyno());
+                terminalinfoMCart.setVersion(term.getVersion());
+                terminalinfoMCart.setCredate(term.getCredate());
+                terminalinfoMCart.setCreuser(term.getCreuser());
+                terminalinfoMCart.setSelftreaty(term.getSelftreaty());
+                terminalinfoMCart.setCmpselftreaty(term.getCmpselftreaty());
+                terminalinfoMCart.setUpdatetime(term.getUpdatetime());
+                terminalinfoMCart.setUpdateuser(term.getUpdateuser());
+                terminalinfoMCart.setDeleteflag(term.getDeleteflag());
+                terminalinfoMCart.setIfminedate(term.getIfminedate());
+                terminalinfoMCart.setIfmine(term.getIfmine());
+                terminalinfoMCartDao.createOrUpdate(terminalinfoMCart);
 
             }
 
@@ -245,6 +273,24 @@ public class XtTermSelectService {
         try {
             DatabaseHelper helper = DatabaseHelper.getHelper(context);
             String sql = "DELETE FROM " + tabname + ";";
+            SQLiteDatabase db = helper.getWritableDatabase();
+            db.execSQL(sql);
+        } catch (Exception e) {
+            Log.e(TAG, "删除临时表数据失败", e);
+        }
+    }
+
+    /**
+     * 删除终端购物车表临时表数据
+     *
+     * @param tabname
+     * @param ddType 购物车表ddtype 1:协同  2:追溯
+     */
+    public void deleteCartData(String tabname,String ddType) {
+
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            String sql = "DELETE FROM " + tabname + " WHERE ddtype = '"+ddType+"' ;";
             SQLiteDatabase db = helper.getWritableDatabase();
             db.execSQL(sql);
         } catch (Exception e) {

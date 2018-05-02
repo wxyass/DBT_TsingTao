@@ -329,7 +329,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
         }
     }
 
-    // listview的条目点击事件
+    // listview的条目点击事件  单独拜访
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //view.setBackgroundColor(getResources().getColor(R.color.bg_content_color_gray));
@@ -342,7 +342,8 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
         xtTermSelectMStc = termList.get(position);
         // 复制到终端购物车
         copyMstTerminalinfoMCart(xtTermSelectMStc);
-        confirmXtUplad(xtTermSelectMStc);// 拜访
+        // 弹出提示 是否拜访这家终端
+        confirmXtUplad(xtTermSelectMStc);
     }
 
     /**
@@ -355,8 +356,8 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
 
         // 跳转购物车Fragment
         if (TOFRAGMENT == type) {
-            // 清空购物车表数据
-            xtSelectService.deleteData("MST_TERMINALINFO_M_CART");
+            // 清空购物车表数据  // 购物车表ddtype 1:协同  2:追溯
+            xtSelectService.deleteCartData("MST_TERMINALINFO_M_CART","1");
             // 复制终端临时表
             for (XtTermSelectMStc xtselect : selectedList) {
                 copyMstTerminalinfoMCart(xtselect);
@@ -371,13 +372,6 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
 
             // 跳转终端购物车
             changeHomeFragment(xtTermCartFragment, "xttermcartfragment");
-        } else if (TOACTIVITY == type) {// 跳转拜访Activity
-            // 复制到终端购物车
-            for (XtTermSelectMStc xtselect : selectedList) {
-                //copyMstTerminalinfoMTemp(xtselect);
-                copyMstTerminalinfoMCart(xtselect);
-            }
-            //confirmXtUplad();// 拜访
         }
     }
 
@@ -390,7 +384,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
     // 查找终端,并复制到终端购物车
     public void copyMstTerminalinfoMCart(XtTermSelectMStc termSelectMStc) {
         MstTerminalinfoM term = xtSelectService.findTermByTerminalkey(termSelectMStc.getTerminalkey());
-        xtSelectService.toCopyMstTerminalinfoMCartData(term);
+        xtSelectService.toCopyMstTerminalinfoMCartData(term,"1");
     }
 
 

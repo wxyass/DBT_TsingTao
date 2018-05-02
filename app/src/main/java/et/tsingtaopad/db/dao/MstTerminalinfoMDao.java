@@ -42,6 +42,16 @@ public interface MstTerminalinfoMDao extends Dao<MstTerminalinfoM, String> {
      */
     public List<XtTermSelectMStc> queryLineTermLst(SQLiteOpenHelper helper, String lineId);
     /**
+     *  (终端追溯,某条路线) 选择终端界面
+     * <p>
+     * 用于：终端追溯  -- 终端选择  (2018年5月2日新加 )
+     *
+     * @param helper
+     * @param lineId 线路主键
+     * @return
+     */
+    public List<XtTermSelectMStc> queryZsLineTermLst(SQLiteOpenHelper helper, String lineId);
+    /**
      * 获取购物车的终端列表
      * <p>
      * 用于：巡店拜访  -- 终端选择 (2018年3月23日16:50:54 新加 )
@@ -50,6 +60,24 @@ public interface MstTerminalinfoMDao extends Dao<MstTerminalinfoM, String> {
      * @return
      */
     public List<XtTermSelectMStc> queryCartTermLst(SQLiteOpenHelper helper);
+    /**
+     * 获取购物车的终端列表
+     * <p>
+     * 用于：巡店+追溯  -- 终端选择 (2018年3月23日16:50:54 新加 )
+     *
+     * @param helper
+     * @return
+     */
+    public List<XtTermSelectMStc> queryAllCartTermLst(SQLiteOpenHelper helper);
+    /**
+     * 获取购物车的终端列表
+     * <p>
+     * 用于：终端追溯  -- 终端选择 (2018年5月2日新加 )
+     *
+     * @param helper
+     * @return
+     */
+    public List<XtTermSelectMStc> queryZsCartTermLst(SQLiteOpenHelper helper);
 
     /***
      * 通过终端名称查询终端集合（模糊查询） (同时关联路线表,查看这个终端是那条路线的)

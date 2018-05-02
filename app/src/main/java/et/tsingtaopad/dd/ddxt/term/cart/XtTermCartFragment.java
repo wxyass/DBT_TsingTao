@@ -68,7 +68,8 @@ public class XtTermCartFragment extends BaseFragmentSupport implements View.OnCl
     private ListView termCartLv;
 
     private XtTermCartService cartService;
-    private List<XtTermSelectMStc> termList= new ArrayList<XtTermSelectMStc>();;
+    private List<XtTermSelectMStc> termList= new ArrayList<XtTermSelectMStc>();
+    private List<XtTermSelectMStc> termAllList= new ArrayList<XtTermSelectMStc>();
     private XtTermCartAdapter termCartAdapter;
     private List<XtTermSelectMStc> seqTermList;
 
@@ -140,9 +141,11 @@ public class XtTermCartFragment extends BaseFragmentSupport implements View.OnCl
     private void initData() {
 
         // 设置终端数据 // 判断购物车是协同,还是追溯  1协同  2追溯
-        if("1".equals(PrefUtils.getString(getActivity(), GlobalValues.DDXTZS,""))){
+        /*if("1".equals(PrefUtils.getString(getActivity(), GlobalValues.DDXTZS,""))){
             termList = cartService.queryCartTermList();
-        }
+        }*/
+        termList = cartService.queryCartTermList();// termList:只是协同用到的终端
+        termAllList = cartService.queryAllCartTermList();// termAllList:协同+追溯所有终端
 
         // 终端拼音集合
         termPinyinMap = cartService.getAllTermPinyin(termList);
@@ -308,7 +311,7 @@ public class XtTermCartFragment extends BaseFragmentSupport implements View.OnCl
     // 组建json  请求终端上次拜访详情
     private void buildJson() {
         List<String> termKeyLst = new ArrayList<String>();
-        for (XtTermSelectMStc xtTermSelectMStc:termList) {
+        for (XtTermSelectMStc xtTermSelectMStc:termAllList) {
             termKeyLst.add(xtTermSelectMStc.getTerminalkey());
         }
         String json = JsonUtil.toJson(termKeyLst);// ["1-AW46W7","1-B6FF9Z","1-84RFW5","1-DIOQDH","1-AX2BVT"]

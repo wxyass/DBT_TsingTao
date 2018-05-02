@@ -15,23 +15,36 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:text="登录"/>
+
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_first_sync_grid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="150dp"
-        android:text="同步 大区所有的定格,路线"/>
+        android:text="同步 大区所有的定格,路线"
+        android:visibility="invisible"/>
+
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_first_sync_index"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="250dp"
-        android:text="同步 大区所有的指标模板"/>
+        android:text="同步 大区所有的指标模板"
+        android:visibility="invisible"/>
+
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_first_sync_pro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="350dp"
-        android:text="同步 大区所有的基础数据表"/>
+        android:text="同步 大区所有的基础数据表"
+        android:visibility="invisible"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_first_sync_start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="450dp"
+        android:text="同步数据"/>
 
 </RelativeLayout>

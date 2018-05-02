@@ -66,7 +66,7 @@ import et.tsingtaopad.util.requestHeadUtil;
 
 public class ZsTermSelectFragment extends BaseFragmentSupport implements View.OnClickListener, AdapterView.OnItemClickListener {
 
-    private final String TAG = "XtTermSelectFragment";
+    private final String TAG = "ZsTermSelectFragment";
 
     private RelativeLayout backBtn;
     private RelativeLayout confirmBtn;
@@ -149,7 +149,6 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
 
         // 设置终端列表数据 假数据
         initTermListData("1-63UNEX");
-
 
         // 设置终端条目适配器,及条目点击事件
         setItemAdapterListener();
@@ -240,7 +239,7 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
         List<String> routes = new ArrayList<String>();
         routes.add(routekey);// 不同路线
         termList.clear();
-        termList = xtSelectService.queryTerminal(routes);
+        termList = xtSelectService.queryZsTerminal(routes);
     }
 
     XtTermSelectAdapter selectAdapter;
@@ -346,8 +345,8 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
 
         // 跳转购物车Fragment
         if (TOFRAGMENT == type) {
-            // 清空购物车表数据
-            xtSelectService.deleteData("MST_TERMINALINFO_M_CART");
+            // 清空购物车表数据  // 购物车表ddtype 1:协同  2:追溯
+            xtSelectService.deleteCartData("MST_TERMINALINFO_M_CART","2");
             // 复制终端临时表
             for (XtTermSelectMStc xtselect : selectedList) {
                 copyMstTerminalinfoMCart(xtselect);
@@ -362,13 +361,6 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
 
             // 跳转终端购物车
             changeHomeFragment(zsTermCartFragment, "xttermcartfragment");
-        } else if (TOACTIVITY == type) {// 跳转拜访Activity
-            // 复制到终端购物车
-            for (XtTermSelectMStc xtselect : selectedList) {
-                //copyMstTerminalinfoMTemp(xtselect);
-                copyMstTerminalinfoMCart(xtselect);
-            }
-            //confirmXtUplad();// 拜访
         }
     }
 
@@ -381,7 +373,7 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
     // 查找终端,并复制到终端购物车
     public void copyMstTerminalinfoMCart(XtTermSelectMStc termSelectMStc) {
         MstTerminalinfoM term = xtSelectService.findTermByTerminalkey(termSelectMStc.getTerminalkey());
-        xtSelectService.toCopyMstTerminalinfoMCartData(term);
+        xtSelectService.toCopyMstTerminalinfoMCartData(term,"2");
     }
 
 

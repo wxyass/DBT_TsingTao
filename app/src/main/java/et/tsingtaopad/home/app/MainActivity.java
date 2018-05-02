@@ -1,5 +1,6 @@
 package et.tsingtaopad.home.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -17,6 +18,8 @@ import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectFragment;
 import et.tsingtaopad.dd.ddzs.zsinvoicing.ZsInvoicingFragment;
 import et.tsingtaopad.dd.ddzs.zssayhi.ZsSayhiFragment;
 import et.tsingtaopad.home.homefragment.MainFragment;
+import et.tsingtaopad.initconstvalues.InitConstValues;
+import et.tsingtaopad.main.system.version.VersionService;
 
 public class MainActivity extends BaseActivity {
 
@@ -37,6 +40,18 @@ public class MainActivity extends BaseActivity {
         //changeFragment(new XtTermSelectFragment(), "mainfragment");
         //changeFragment(new ZsSayhiFragment(), "mainfragment");
         //changeFragment(new ZsInvoicingFragment(), "mainfragment");
+
+        dealOther();
+    }
+
+    /**
+     * 登录后的处理操作
+     */
+    private void dealOther() {
+
+        //启动服务
+        Intent service = new Intent(this, AutoUpService.class);
+        startService(service);
     }
 
 

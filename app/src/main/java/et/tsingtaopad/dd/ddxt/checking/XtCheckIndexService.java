@@ -38,6 +38,8 @@ import et.tsingtaopad.db.dao.MstGroupproductMTempDao;
 import et.tsingtaopad.db.dao.MstPromotionsmDao;
 import et.tsingtaopad.db.dao.MstVistproductInfoDao;
 import et.tsingtaopad.db.dao.PadChecktypeMDao;
+import et.tsingtaopad.db.table.MitValgroupproM;
+import et.tsingtaopad.db.table.MitValgroupproMTemp;
 import et.tsingtaopad.db.table.MitValpromotionsMTemp;
 import et.tsingtaopad.db.table.MstGroupproductM;
 import et.tsingtaopad.db.table.MstGroupproductMTemp;
@@ -105,6 +107,26 @@ public class XtCheckIndexService extends XtShopVisitService {
             buffer.append("update MST_GROUPPRODUCT_M_TEMP set ifrecstand = ? ");
             buffer.append("where gproductid = ?  ");
             indexValueDao.executeRaw(buffer.toString(), new String[]{vo.getIfrecstand(),vo.getGproductid()});
+            connection.commit(null);
+        } catch (SQLException e) {
+            Log.e(TAG, "获取失败", e);
+        }
+    }
+    /**
+     * @param vo
+     */
+    public void saveMitGroupproMTemp(String valterid,MitValgroupproMTemp vo) {
+
+        AndroidDatabaseConnection connection = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MitValgroupproM, String>  indexValueDao = helper.getMitValgroupproMDao();
+            Dao<MitValgroupproMTemp, String>  indexValueTempDao = helper.getMitValgroupproMTempDao();
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+            indexValueTempDao.createOrUpdate(vo);
+
             connection.commit(null);
         } catch (SQLException e) {
             Log.e(TAG, "获取失败", e);

@@ -48,7 +48,7 @@ public class XtTermCartService {
     }
 
     /**
-     * 获取购物车终端列表 获取相应的数据列表数据
+     * 获取购物车终端列表 获取相应的数据列表数据(协同)
      *
      * @return
      */
@@ -59,6 +59,42 @@ public class XtTermCartService {
             DatabaseHelper helper = DatabaseHelper.getHelper(context);
             MstTerminalinfoMDao dao = helper.getDao(MstTerminalinfoM.class);
             List<XtTermSelectMStc> termlst = dao.queryCartTermLst(helper);
+            terminalList.addAll(termlst);
+        } catch (SQLException e) {
+            Log.e(TAG, "获取线路表DAO对象失败", e);
+        }
+        return terminalList;
+    }
+    /**
+     * 获取购物车终端列表 获取相应的数据列表数据(协同+追溯 所有的终端)
+     *
+     * @return
+     */
+    public List<XtTermSelectMStc> queryAllCartTermList() {
+
+        List<XtTermSelectMStc> terminalList = new ArrayList<XtTermSelectMStc>();
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            MstTerminalinfoMDao dao = helper.getDao(MstTerminalinfoM.class);
+            List<XtTermSelectMStc> termlst = dao.queryAllCartTermLst(helper);
+            terminalList.addAll(termlst);
+        } catch (SQLException e) {
+            Log.e(TAG, "获取线路表DAO对象失败", e);
+        }
+        return terminalList;
+    }
+    /**
+     * 获取购物车终端列表 获取相应的数据列表数据(追溯)
+     *
+     * @return
+     */
+    public List<XtTermSelectMStc> queryZsCartTermList() {
+
+        List<XtTermSelectMStc> terminalList = new ArrayList<XtTermSelectMStc>();
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            MstTerminalinfoMDao dao = helper.getDao(MstTerminalinfoM.class);
+            List<XtTermSelectMStc> termlst = dao.queryZsCartTermLst(helper);
             terminalList.addAll(termlst);
         } catch (SQLException e) {
             Log.e(TAG, "获取线路表DAO对象失败", e);

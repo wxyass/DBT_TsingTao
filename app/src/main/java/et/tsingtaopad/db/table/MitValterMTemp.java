@@ -22,6 +22,8 @@ public class MitValterMTemp implements java.io.Serializable {
 	@DatabaseField
 	private String padisconsistent;// 是否已上传  0:未上传 1:已上传
 	@DatabaseField
+	private String visitdate;
+	@DatabaseField
 	private String terminalkey;//
 	@DatabaseField
 	private String vidter               ;//char(1)                        null,
@@ -1110,5 +1112,13 @@ public class MitValterMTemp implements java.io.Serializable {
 
 	public void setPadisconsistent(String padisconsistent) {
 		this.padisconsistent = padisconsistent;
+	}
+
+	public String getVisitdate() {
+		return visitdate;
+	}
+
+	public void setVisitdate(String visitdate) {
+		this.visitdate = visitdate;
 	}
 }

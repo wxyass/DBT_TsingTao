@@ -119,7 +119,7 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
         //mitValsupplyMTemps = invoicingService.queryMineProToValSupplyTemp(visitId, termId,mitValterMTempKey);
         dataLst = invoicingService.queryValSupplyTemp(mitValterMTempKey);
 
-        // 订单推荐
+        //
         zsInvoicingAdapter = new ZsInvoicingAdapter(getActivity(), dataLst, new IClick() {
             @Override
             public void listViewItemClick(int position, View v) {
