@@ -75,6 +75,7 @@ public class AutoUpService extends Service {
         }
     }
 
+    // 每间隔一段  上传数据
     class UploadTimerTask extends TimerTask {
 
         @Override

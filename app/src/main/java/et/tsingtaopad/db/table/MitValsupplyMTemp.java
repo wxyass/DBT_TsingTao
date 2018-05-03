@@ -84,6 +84,9 @@ public class MitValsupplyMTemp implements java.io.Serializable {
 	@DatabaseField
 	private Date updatedate           ;//date                           null
 
+	@DatabaseField
+	private String valtrueagencyname;// 正确经销商名称
+
 
 	// Constructors
 
@@ -377,5 +380,13 @@ public class MitValsupplyMTemp implements java.io.Serializable {
 
 	public void setPadisconsistent(String padisconsistent) {
 		this.padisconsistent = padisconsistent;
+	}
+
+	public String getValtrueagencyname() {
+		return valtrueagencyname;
+	}
+
+	public void setValtrueagencyname(String valtrueagencyname) {
+		this.valtrueagencyname = valtrueagencyname;
 	}
 }

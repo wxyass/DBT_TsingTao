@@ -12,6 +12,7 @@
         android:orientation="vertical">
         <!--活动名称,活动产品-->
         <LinearLayout
+            android:id="@+id/item_zs_checkindex_ll_promo"
             android:layout_width="match_parent"
             android:layout_height="@dimen/xtbf_item_h"
             android:orientation="horizontal">
@@ -43,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:paddingRight="10dp"
-                    android:text="产看产品详情"
+                    android:text="查看产品详情"
                     android:textSize="18sp"/>
 
             </RelativeLayout>
@@ -81,6 +82,7 @@
             android:background="@color/gray"/>
 
         <LinearLayout
+            android:id="@+id/item_zs_checkindex_ll_reachnum"
             android:layout_width="match_parent"
             android:layout_height="@dimen/xtbf_btn_h"
             android:orientation="horizontal">

@@ -18,7 +18,11 @@ import java.util.regex.Pattern;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.pinyin.PinYin4jUtil;
 import et.tsingtaopad.db.DatabaseHelper;
+import et.tsingtaopad.db.dao.MitValterMDao;
+import et.tsingtaopad.db.dao.MitVisitMDao;
 import et.tsingtaopad.db.dao.MstTerminalinfoMDao;
+import et.tsingtaopad.db.table.MitValterM;
+import et.tsingtaopad.db.table.MitVisitM;
 import et.tsingtaopad.db.table.MstTerminalinfoM;
 import et.tsingtaopad.db.table.MstTerminalinfoMTemp;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
@@ -103,6 +107,26 @@ public class XtTermCartService {
     }
 
     /**
+     * 根据终端key 获取上传信息(协同)
+     *
+     * @param terminalkey 终端key
+     * @return
+     */
+    public List<MitVisitM> getXtMitValterM(String terminalkey) {
+
+        List<MitVisitM> terminalList = new ArrayList<MitVisitM>();
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            MitVisitMDao dao = helper.getDao(MitVisitM.class);
+            List<MitVisitM> termlst = dao.queryXtMitVisitM(helper, terminalkey);
+            terminalList.addAll(termlst);
+        } catch (SQLException e) {
+            Log.e(TAG, "获取线路表DAO对象失败", e);
+        }
+        return terminalList;
+    }
+
+    /**
      * 按条件查询终端列表
      *
      * @param termLst       线路下所有终端
@@ -147,6 +171,26 @@ public class XtTermCartService {
         }
 
         return termPinyinMap;
+    }
+
+    /**
+     * 根据终端key 获取上传信息(追溯)
+     *
+     * @param terminalkey 终端key
+     * @return
+     */
+    public List<MitValterM> getZsMitValterM(String terminalkey) {
+
+        List<MitValterM> terminalList = new ArrayList<MitValterM>();
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            MitValterMDao dao = helper.getDao(MitValterM.class);
+            List<MitValterM> termlst = dao.queryZsMitValterMData(helper, terminalkey);
+            terminalList.addAll(termlst);
+        } catch (SQLException e) {
+            Log.e(TAG, "获取线路表DAO对象失败", e);
+        }
+        return terminalList;
     }
 
     /***

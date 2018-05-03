@@ -202,6 +202,7 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             } else {
                 zdzs_sayhi_amend_rl_con1.setText("否");
             }
+            zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidterremaek());
         }
         // 是否有效拜访
         if ("vidvisit".equals(ydkey)) {
@@ -210,6 +211,7 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             } else {
                 zdzs_sayhi_amend_rl_con1.setText("否");
             }
+            zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidvisitremark());
         }
         // 是否我品店招
         if ("vidifmine".equals(ydkey)) {
@@ -218,6 +220,7 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             } else {
                 zdzs_sayhi_amend_rl_con1.setText("否");
             }
+            zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidifminermark());
         }
         // 是否我品销售范围
         if ("vidisself".equals(ydkey)) {
@@ -226,6 +229,7 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             } else {
                 zdzs_sayhi_amend_rl_con1.setText("否");
             }
+            zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidisselfremark());
         }
         // 是否竞品销售范围
         if ("vidiscmp".equals(ydkey)) {
@@ -234,6 +238,7 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             } else {
                 zdzs_sayhi_amend_rl_con1.setText("否");
             }
+            zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidiscmpremark());
         }
         // 是否我品终端合作
         if ("vidselftreaty".equals(ydkey)) {
@@ -242,6 +247,7 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             } else {
                 zdzs_sayhi_amend_rl_con1.setText("否");
             }
+            zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidselftreatyremark());
         }
         // 是否竞品终端合作
         if ("vidcmptreaty".equals(ydkey)) {
@@ -250,6 +256,7 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             } else {
                 zdzs_sayhi_amend_rl_con1.setText("否");
             }
+            zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidcmptreatyremark());
         }
 
         // 终端名称
@@ -260,6 +267,8 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             zdzs_sayhi_amend_rl_ll_head.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_et.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_con1_et.setText(mitValterMTemp.getVidternameval());
+
+            zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidternameremark());
         }
         // 终端编码
         if ("vidterminalcode".equals(ydkey)) {
@@ -269,6 +278,8 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             zdzs_sayhi_amend_rl_ll_head.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_et.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_con1_et.setText(mitValterMTemp.getVidtercodeval());
+
+            zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidtercoderemark());
         }
         // 地址
         if ("vidaddress".equals(ydkey)) {
@@ -278,6 +289,8 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             zdzs_sayhi_amend_rl_ll_head.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_et.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_con1_et.setText(mitValterMTemp.getVidaddressval());
+
+            zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidaddressremark());
         }
         // 联系人
         if ("vidcontact".equals(ydkey)) {
@@ -287,6 +300,8 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             zdzs_sayhi_amend_rl_ll_head.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_et.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_con1_et.setText(mitValterMTemp.getVidcontactval());
+
+            zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidcontactremark());
         }
         // 电话
         if ("vidmobile".equals(ydkey)) {
@@ -296,6 +311,8 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             zdzs_sayhi_amend_rl_ll_head.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_et.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_con1_et.setText(mitValterMTemp.getVidmobileval());
+
+            zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidmobileremark());
         }
         // 拜访顺序
         if ("vidsequence".equals(ydkey)) {
@@ -305,6 +322,8 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             zdzs_sayhi_amend_rl_ll_head.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_et.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_con1_et.setText(mitValterMTemp.getVidsequenceval());
+
+            zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidvidsequenceremark());
         }
 
         // 拜访周期
@@ -318,6 +337,8 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             zdzs_sayhi_amend_rl_dd_con1_et.setMaxWidth(10);
             zdzs_sayhi_amend_rl_dd_con1_et.setText(mitValterMTemp.getVidcycleval());
             zdzs_sayhi_amend_rl_con2_et.setText("天/次");
+
+            zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidcycleremark2());
         }
 
         // 高档容量
@@ -331,6 +352,8 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             zdzs_sayhi_amend_rl_dd_con1_et.setWidth(10);
             zdzs_sayhi_amend_rl_dd_con1_et.setText(mitValterMTemp.getVidhvolumeval());
             zdzs_sayhi_amend_rl_con2_et.setText("件/年");
+
+            zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidhvolumeremark());
         }
         // 中档容量
         if ("vidzvolume".equals(ydkey)) {
@@ -343,6 +366,8 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             zdzs_sayhi_amend_rl_dd_con1_et.setWidth(10);
             zdzs_sayhi_amend_rl_dd_con1_et.setText(mitValterMTemp.getVidzvolumeval());
             zdzs_sayhi_amend_rl_con2_et.setText("件/年");
+
+            zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidxvolumeremark());
         }
         // 普档容量
         if ("vidpvolume".equals(ydkey)) {
@@ -355,6 +380,8 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             zdzs_sayhi_amend_rl_dd_con1_et.setWidth(10);
             zdzs_sayhi_amend_rl_dd_con1_et.setText(mitValterMTemp.getVidpvolumeval());
             zdzs_sayhi_amend_rl_con2_et.setText("件/年");
+
+            zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidpvolumeremark());
         }
         // 低档容量
         if ("vidlvolume".equals(ydkey)) {
@@ -367,6 +394,8 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             zdzs_sayhi_amend_rl_dd_con1_et.setWidth(10);
             zdzs_sayhi_amend_rl_dd_con1_et.setText(mitValterMTemp.getVidlvolumeval());
             zdzs_sayhi_amend_rl_con2_et.setText("件/年");
+
+            zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidlvolumeremark());
         }
 
         // 所属路线
@@ -384,6 +413,8 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
                             mitValterMTemp.getVidrtekeyval());
                 }
             });
+
+            zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidroutremark());
         }
         // 终端等级
         if ("vidterlevel".equals(ydkey)) {
@@ -400,6 +431,8 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
                             mitValterMTemp.getVidtervidterlevelval());
                 }
             });
+
+            zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidtervidterlevelremark());
         }
         // 县
         if ("vidcountry".equals(ydkey)) {
@@ -416,6 +449,8 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
                             mitValterMTemp.getVidcountryval());
                 }
             });
+
+            zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidcountryremark());
         }
         // 区域类型
         if ("vidareatype".equals(ydkey)) {
@@ -432,6 +467,8 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
                             mitValterMTemp.getVidareatypeval());
                 }
             });
+
+            zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidareatyperemark());
         }
         // 次渠道
         if ("vidminchannel".equals(ydkey)) {
@@ -448,6 +485,8 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
                             mitValterMTemp.getVidminchannelval());
                 }
             });
+
+            zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidminchannelremark());
         }
         // 拜访对象
         if ("vidvisituser".equals(ydkey)) {
@@ -465,6 +504,8 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
                             mitValterMTemp.getVidvisituserval());
                 }
             });
+
+            zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidvisituserremark());
         }
     }
 
@@ -597,38 +638,7 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
         FunUtil.setFieldValue(mitValterMTemp, setDdRemark, remark);
 
         handler.sendEmptyMessage(ZsSayhiFragment.INIT_DATA);
-
     }
-
-
-    /*// 写入
-    private <T> void setFieldValue(T data, String key, String value) {
-        Class<? extends Object> clazz = data.getClass();
-        try {
-            Method padisconsistentMethod = data.getClass().getMethod(key, String.class);
-            padisconsistentMethod.invoke(data, value);
-        } catch (Exception e) {
-            // e.printStackTrace();
-        }
-    }*/
-
-    /**
-     * 根据属性名获取属性值
-     *
-     * @param fieldName
-     * @param object
-     * @return
-     */
-    /*private String getFieldValueByFieldName(String fieldName, Object object) {
-        try {
-            Field field = object.getClass().getDeclaredField(fieldName);
-            //设置对象的访问权限，保证对private的属性的访问
-            field.setAccessible(true);
-            return (String) field.get(object);
-        } catch (Exception e) {
-            return null;
-        }
-    }*/
 
     AlertView mAlertViewExt;
 

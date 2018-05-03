@@ -128,6 +128,8 @@ public class MitValcheckterM implements java.io.Serializable {
     private String updateuser;
     @DatabaseField
     private Date updatedate;
+    @DatabaseField
+    private String padisconsistent;
 
     // Constructors
     /**
@@ -623,5 +625,13 @@ public class MitValcheckterM implements java.io.Serializable {
 
     public void setUpdatedate(Date updatedate) {
         this.updatedate = updatedate;
+    }
+
+    public String getPadisconsistent() {
+        return padisconsistent;
+    }
+
+    public void setPadisconsistent(String padisconsistent) {
+        this.padisconsistent = padisconsistent;
     }
 }

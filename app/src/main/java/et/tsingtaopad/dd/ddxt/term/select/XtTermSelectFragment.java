@@ -45,6 +45,8 @@ import et.tsingtaopad.core.view.alertview.OnDismissListener;
 import et.tsingtaopad.core.view.alertview.OnItemClickListener;
 import et.tsingtaopad.core.view.dropdownmenu.DropBean;
 import et.tsingtaopad.core.view.dropdownmenu.DropdownButton;
+import et.tsingtaopad.db.table.MitValterM;
+import et.tsingtaopad.db.table.MitVisitM;
 import et.tsingtaopad.db.table.MstAgencygridInfo;
 import et.tsingtaopad.db.table.MstAgencyinfoM;
 import et.tsingtaopad.db.table.MstAgencysupplyInfo;
@@ -64,6 +66,7 @@ import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
 import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartFragment;
 import et.tsingtaopad.dd.ddxt.term.select.adapter.XtTermSelectAdapter;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
+import et.tsingtaopad.dd.ddxt.updata.XtUploadService;
 import et.tsingtaopad.home.app.MainService;
 import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.http.HttpParseJson;
@@ -340,10 +343,17 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
         breakNextLayout(TOACTIVITY, selectedList);*/
 
         xtTermSelectMStc = termList.get(position);
-        // 复制到终端购物车
-        copyMstTerminalinfoMCart(xtTermSelectMStc);
+
         // 弹出提示 是否拜访这家终端
         confirmXtUplad(xtTermSelectMStc);
+
+        // 检测条数是否已上传
+        List<MitVisitM> terminalList = xtSelectService.getXtMitValterM(xtTermSelectMStc.getTerminalkey());
+        if(terminalList.size()>0){
+            deleteOrXtUplad(terminalList.get(0));
+        }else{
+            confirmXtUplad(xtTermSelectMStc);// 拜访
+        }
     }
 
     /**
@@ -375,6 +385,35 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
         }
     }
 
+    // 条目点击 是否删除/上传这家记录
+    private void deleteOrXtUplad(final MitVisitM mitVisitM) {
+        final XtUploadService xtUploadService = new XtUploadService(getActivity(),null);
+        // 普通窗口
+        mAlertViewExt = new AlertView("检测到这家终端上次数据未上传", null, null, new String[]{"删除","上传"}, null, getActivity(), AlertView.Style.Alert,
+                new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Object o, int position) {
+                        //Toast.makeText(getApplicationContext(), "点击了第" + position + "个", Toast.LENGTH_SHORT).show();
+                        if (0 == position) {// 确定按钮:0   取消按钮:-1
+                            //if (ViewUtil.isDoubleClick(v.getId(), 2500)) return;
+                            DbtLog.logUtils(TAG, "前往拜访：删除");
+                            xtUploadService.deleteXt(mitVisitM.getVisitkey(),mitVisitM.getTerminalkey());
+                        }else if(1 == position){
+                            DbtLog.logUtils(TAG, "前往拜访：上传");
+                            xtUploadService.upload_xt_visit(false,mitVisitM.getVisitkey(),1);
+                        }
+                    }
+                })
+                .setCancelable(true)
+                .setOnDismissListener(new OnDismissListener() {
+                    @Override
+                    public void onDismiss(Object o) {
+                        DbtLog.logUtils(TAG, "前往拜访：否");
+                    }
+                });
+        mAlertViewExt.show();
+    }
+
     // 查找终端,并复制到终端临时表
     public void copyMstTerminalinfoMTemp(XtTermSelectMStc xtselect) {
         MstTerminalinfoM term = xtSelectService.findTermByTerminalkey(xtselect.getTerminalkey());
@@ -401,6 +440,10 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
                         if (0 == position) {// 确定按钮:0   取消按钮:-1
                             //if (ViewUtil.isDoubleClick(v.getId(), 2500)) return;
                             DbtLog.logUtils(TAG, "前往拜访：是");
+
+                            // 复制到终端购物车
+                            copyMstTerminalinfoMCart(xtTermSelectMStc);
+
                             List<String> termKeyLst = new ArrayList<String>();
                             termKeyLst.add(termSelectMStc.getTerminalkey());
                             String json = JsonUtil.toJson(termKeyLst);

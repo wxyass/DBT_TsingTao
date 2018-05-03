@@ -20,6 +20,7 @@ import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.db.dao.MitVisitMDao;
 import et.tsingtaopad.db.dao.MstVisitMDao;
+import et.tsingtaopad.db.table.MitValterM;
 import et.tsingtaopad.db.table.MitVisitM;
 import et.tsingtaopad.db.table.MstVisitM;
 import et.tsingtaopad.main.operation.indexstatus.domain.IndexStatusStc;
@@ -38,6 +39,29 @@ public class MitVisitMDaoImpl extends BaseDaoImpl<MitVisitM, String> implements 
 	public MitVisitMDaoImpl(ConnectionSource connectionSource,
                             Class<MitVisitM> dataClass) throws SQLException {
 		super(connectionSource, dataClass);
+	}
+
+	/***
+	 * 根据终端key 获取未上传记录
+	 * @param helper
+	 * @param terminalkey  终端key
+	 * @return
+	 */
+	public List<MitVisitM> queryXtMitVisitM(SQLiteOpenHelper helper, String terminalkey) {
+		List<MitVisitM> lst = new ArrayList<MitVisitM>();
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("select * from MIT_VISIT_M where terminalkey = ? and padisconsistent = '0' ");
+
+		SQLiteDatabase db = helper.getReadableDatabase();
+		Cursor cursor = db.rawQuery(buffer.toString(), new String[]{terminalkey});
+		MitVisitM item;
+		while (cursor.moveToNext()) {
+			item = new MitVisitM();
+			item.setVisitkey(cursor.getString(cursor.getColumnIndex("visitkey")));
+			item.setTerminalkey(cursor.getString(cursor.getColumnIndex("terminalkey")));
+			lst.add(item);
+		}
+		return lst;
 	}
 
 

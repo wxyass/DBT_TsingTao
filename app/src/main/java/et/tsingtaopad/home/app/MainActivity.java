@@ -2,14 +2,19 @@ package et.tsingtaopad.home.app;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
+import java.lang.ref.SoftReference;
+
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseActivity;
 import et.tsingtaopad.base.BaseFragmentSupport;
+import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.dd.ddxt.sayhi.XtSayhiFragment;
@@ -18,6 +23,7 @@ import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectFragment;
 import et.tsingtaopad.dd.ddzs.zsinvoicing.ZsInvoicingFragment;
 import et.tsingtaopad.dd.ddzs.zssayhi.ZsSayhiFragment;
 import et.tsingtaopad.home.homefragment.MainFragment;
+import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.initconstvalues.InitConstValues;
 import et.tsingtaopad.main.system.version.VersionService;
 
@@ -48,6 +54,9 @@ public class MainActivity extends BaseActivity {
      * 登录后的处理操作
      */
     private void dealOther() {
+
+        handler = new MyHandler(this);
+        ConstValues.handler = handler;
 
         //启动服务
         Intent service = new Intent(this, AutoUpService.class);
@@ -93,5 +102,43 @@ public class MainActivity extends BaseActivity {
         }
         return true;
 
+    }
+
+    MyHandler handler;
+
+    /**
+     * 接收子线程消息的 Handler
+     */
+    public static class MyHandler extends Handler {
+
+        // 软引用
+        SoftReference<MainActivity> fragmentRef;
+
+        public MyHandler(MainActivity fragment) {
+            fragmentRef = new SoftReference<MainActivity>(fragment);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            MainActivity fragment = fragmentRef.get();
+            if (fragment == null) {
+                return;
+            }
+
+
+            // 处理UI 变化
+            switch (msg.what) {
+                case ConstValues.WAIT0://  结束上传  刷新本页面
+                    //fragment.shuaxinXtTermSelect(0);
+                    break;
+                case GlobalValues.SINGLE_UP_SUC://  协同拜访上传成功
+                    //fragment.shuaxinXtTermSelect(1);
+                    break;
+                case GlobalValues.SINGLE_UP_FAIL://  协同拜访上传失败
+                    //fragment.shuaxinXtTermSelect(2);
+                    break;
+
+            }
+        }
     }
 }

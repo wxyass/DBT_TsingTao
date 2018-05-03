@@ -68,8 +68,6 @@ public class MitValterMTemp implements java.io.Serializable {
 	@DatabaseField
 	private String vidcmptreatyflag     ;//char(1)                        null,
 	@DatabaseField
-	private String vidcmptreatyremark   ;//varchar2(300)                  null,
-	@DatabaseField
 	private String vidterminalcode      ;//varchar2(50)                   null,
 	@DatabaseField
 	private String vidtercodeflag       ;//char(1)                        null,
@@ -220,6 +218,15 @@ public class MitValterMTemp implements java.io.Serializable {
 
 	@DatabaseField
 	private String vidvisitottrueval;
+
+	@DatabaseField
+	private String vidisselfremark;//销售产品范围我品备注内容
+	@DatabaseField
+	private String vidiscmpremark;//销售产品范围竞品备注内容
+	@DatabaseField
+	private String vidselftreatyremark;//终端合作状态我品备注内容
+	@DatabaseField
+	private String vidcmptreatyremark;//终端合作状态竞品备注内容
 
 	// Constructors
 
@@ -1120,5 +1127,29 @@ public class MitValterMTemp implements java.io.Serializable {
 
 	public void setVisitdate(String visitdate) {
 		this.visitdate = visitdate;
+	}
+
+	public String getVidisselfremark() {
+		return vidisselfremark;
+	}
+
+	public void setVidisselfremark(String vidisselfremark) {
+		this.vidisselfremark = vidisselfremark;
+	}
+
+	public String getVidiscmpremark() {
+		return vidiscmpremark;
+	}
+
+	public void setVidiscmpremark(String vidiscmpremark) {
+		this.vidiscmpremark = vidiscmpremark;
+	}
+
+	public String getVidselftreatyremark() {
+		return vidselftreatyremark;
+	}
+
+	public void setVidselftreatyremark(String vidselftreatyremark) {
+		this.vidselftreatyremark = vidselftreatyremark;
 	}
 }

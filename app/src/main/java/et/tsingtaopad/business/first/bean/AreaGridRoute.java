@@ -41,6 +41,8 @@ public class AreaGridRoute {
 
     private String MST_VISTPRODUCT_INFO;//
     private String MIT_VISIT_M;//
+    private String MIT_VALTER_M;//
+    private String MIT_VALCHECKTER_M;//
 
 
 
@@ -251,5 +253,21 @@ public class AreaGridRoute {
 
     public void setMIT_VISIT_M(String MIT_VISIT_M) {
         this.MIT_VISIT_M = MIT_VISIT_M;
+    }
+
+    public String getMIT_VALTER_M() {
+        return MIT_VALTER_M;
+    }
+
+    public void setMIT_VALTER_M(String MIT_VALTER_M) {
+        this.MIT_VALTER_M = MIT_VALTER_M;
+    }
+
+    public String getMIT_VALCHECKTER_M() {
+        return MIT_VALCHECKTER_M;
+    }
+
+    public void setMIT_VALCHECKTER_M(String MIT_VALCHECKTER_M) {
+        this.MIT_VALCHECKTER_M = MIT_VALCHECKTER_M;
     }
 }

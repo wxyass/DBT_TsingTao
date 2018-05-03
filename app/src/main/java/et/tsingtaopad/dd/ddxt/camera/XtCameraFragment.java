@@ -37,6 +37,7 @@ import et.tsingtaopad.core.util.dbtutil.FileUtil;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.util.file.FileTool;
+import et.tsingtaopad.db.table.MstTerminalinfoMCart;
 import et.tsingtaopad.db.table.MstTerminalinfoMTemp;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.camera.domain.CameraInfoStc;
@@ -67,6 +68,7 @@ public class XtCameraFragment extends XtBaseVisitFragment implements View.OnClic
 
     // 最新终端信息
     private MstTerminalinfoMTemp termTemp;
+    //private MstTerminalinfoMCart termCart;
 
     // 读取数据库图片表已拍照记录
     private List<CameraInfoStc> piclst;
@@ -145,6 +147,7 @@ public class XtCameraFragment extends XtBaseVisitFragment implements View.OnClic
         valueLst = xtCameraService.queryPictypeMAll();
         // 获取最新的终端数据
         termTemp = xtCameraService.findTermTempById(termId);
+
 
         mstTerminalInfoMStc = xtCameraService.findTermKeyById(termId);
 

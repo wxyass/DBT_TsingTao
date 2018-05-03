@@ -34,6 +34,7 @@ import et.tsingtaopad.db.dao.MstPictypeMDao;
 import et.tsingtaopad.db.table.CmmAreaM;
 import et.tsingtaopad.db.table.CmmBoardM;
 import et.tsingtaopad.db.table.CmmDatadicM;
+import et.tsingtaopad.db.table.MitValcheckterM;
 import et.tsingtaopad.db.table.MstAgencyKFM;
 import et.tsingtaopad.db.table.MstAgencygridInfo;
 import et.tsingtaopad.db.table.MstAgencyinfoM;
@@ -113,6 +114,7 @@ public class MainService extends XtShopVisitService {
     private Dao<MstInvoicingInfo, String> mstInvoicingInfoDao = null;
     private Dao<MstAgencytransferInfo, String> mstAgencytransferInfoDao = null;
     private Dao<MstVistproductInfo, String> mstVistproductInfoDao = null;
+    private Dao<MitValcheckterM, String> mitValcheckterMDao = null;
     private Dao<MstCheckexerecordInfo, String> mstCheckexerecordInfoDao = null;
     private Dao<MstPromotermInfo, String> mstPromotermInfoDao = null;
     private Dao<MstCollectionexerecordInfo, String> mstCollectionexerecordInfoDao = null;
@@ -179,6 +181,7 @@ public class MainService extends XtShopVisitService {
             mstInvoicingInfoDao = helper.getMstInvoicingInfoDao();
             mstAgencytransferInfoDao = helper.getMstAgencytransferInfoDao();
             mstVistproductInfoDao = helper.getMstVistproductInfoDao();
+            //mitValcheckterMDao = helper.getMitVal;
             mstCheckexerecordInfoDao = helper.getMstCheckexerecordInfoDao();
             mstCollectionexerecordInfoDao = helper.getMstCollectionexerecordInfoDao();
             mstPromotermInfoDao = helper.getMstPromotermInfoDao();
@@ -266,6 +269,7 @@ public class MainService extends XtShopVisitService {
     List<MstVisitM> mstVisitMs = null;
     List<MstVistproductInfo> MstVistproductInfos = null;
     List<PadCheckstatusInfo> padCheckstatusInfos = null;
+    List<MitValcheckterM> MitValcheckterMs = null;
 
     /**
      * 同步表数据
@@ -403,6 +407,10 @@ public class MainService extends XtShopVisitService {
             else if(mClass.contains("MstVistproductInfo")){
                 MstVistproductInfos= (List<MstVistproductInfo>) JsonUtil.parseList(json, cls);
                 updateData(mstVistproductInfoDao, MstVistproductInfos);
+            }
+            else if(mClass.contains("MitValcheckterM")){
+                MitValcheckterMs= (List<MitValcheckterM>) JsonUtil.parseList(json, cls);
+                updateData(mitValcheckterMDao, MitValcheckterMs);
             }
 
             connection.commit(null);

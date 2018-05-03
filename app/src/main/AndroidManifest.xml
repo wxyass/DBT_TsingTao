@@ -26,12 +26,18 @@
             </intent-filter>
         </activity>
 
+        <!--协同终端 主Activity-->
         <activity android:name=".dd.ddxt.shopvisit.XtVisitShopActivity"
                   android:screenOrientation="portrait"/>
+        <!--追溯终端 主Activity-->
         <activity android:name=".dd.ddzs.zsshopvisit.ZsVisitShopActivity"
                   android:screenOrientation="portrait"/>
+        <!--拍照图片预览-->
         <activity android:name=".dd.ddxt.camera.XtShowPicActivity"
                   android:screenOrientation="portrait"/>
+
+        <!-- 启动应用的时候开启servic 主要负责监听网络变化 执行上传功能 -->
+        <service android:name=".home.app.AutoUpService" />
 
     </application>
 

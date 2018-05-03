@@ -916,8 +916,8 @@ public class XtUploadService {
     private void parseUpData(String json) {
         // 解析区域定格路线信息
         AreaGridRoute emp = JsonUtil.parseJson(json, AreaGridRoute.class);
-        String MIT_VISIT_M = emp.getMIT_VISIT_M();
-        List<MitVisitM> mstVisitMs = (List<MitVisitM>) JsonUtil.parseList(json, MitVisitM.class);
+        String mit_visit_m = emp.getMIT_VISIT_M();
+        List<MitVisitM> mstVisitMs = (List<MitVisitM>) JsonUtil.parseList(mit_visit_m, MitVisitM.class);
 
         try {
             //DatabaseHelper helper = DatabaseHelper.getHelper(context);
@@ -928,25 +928,25 @@ public class XtUploadService {
                 visit.setPadisconsistent("1");
                 mitVisitMDao.createOrUpdate(visit);
             }
-            // 修改协同我品供货关系 状态为上传成功
+            // 修改协同我品供货关系 状态为上传成功 (因为没有visitkey,需要上传成功的标记)
             for (MitAgencysupplyInfo mAgencysupplyInfo : mAgencysupplyInfos) {
                 mAgencysupplyInfo.setPadisconsistent("1");
                 mAgencysupplyInfo.setOrderbyno("1");// 上传成功将今天新增的供货关系标记改为1
                 mitAgencysupplyInfoDao.createOrUpdate(mAgencysupplyInfo);
             }
-            // 修改协同竞品供货关系 状态为上传成功
+            // 修改协同竞品供货关系 状态为上传成功 (因为没有visitkey,需要上传成功的标记)
             for (MitCmpsupplyInfo mAgencysupplyInfo : cmpsupplyInfos) {
                 mAgencysupplyInfo.setPadisconsistent("1");
                 mAgencysupplyInfo.setOrderbyno("1");// 上传成功将今天新增的供货关系标记改为1
                 mitCmpsupplyInfoDao.createOrUpdate(mAgencysupplyInfo);
             }
 
-            // 修改协同拉链表 状态为上传成功
+            // 修改协同拉链表 状态为上传成功 (因为没有visitkey,需要上传成功的标记)
             for (MitCheckexerecordInfo mCheckexerecordInfo : mCheckexerecordInfos) {
                 mCheckexerecordInfo.setPadisconsistent("1");
                 mitCheckexerecordInfoDao.createOrUpdate(mCheckexerecordInfo);
             }
-            // 修改协同终端表 状态为上传成功
+            // 修改协同终端表 状态为上传成功 (因为没有visitkey,需要上传成功的标记)
             for (MitTerminalinfoM mTerminalinfoM : mTerminalinfoMs_visit) {
                 mTerminalinfoM.setPadisconsistent("1");
                 mitTerminalinfoMDao.createOrUpdate(mTerminalinfoM);
@@ -967,7 +967,7 @@ public class XtUploadService {
 
                 String terminalkey = mitVisitM.getTerminalkey();
                 String visitkey = mitVisitM.getVisitkey();
-                // 删除协同该终端其余的拜访记录
+                // 删除协同该终端其余的拜访记录  padisconsistent = 1
                 deleteMitVisitM(db, "MIT_VISIT_M", terminalkey, visitkey);
 
 
@@ -987,16 +987,16 @@ public class XtUploadService {
                 deleteTableInfoByVisitKey(db, "MIT_VISTPRODUCT_INFO", terminalkey, visitkey);
 
 
-                // 根据Terminalkey 删除 协同我品供货关系
+                // 根据Terminalkey 删除 协同我品供货关系 padisconsistent = '1'
                 deleteTableInfoByLowerkey(db, "MIT_AGENCYSUPPLY_INFO ", terminalkey, visitkey);
 
-                // 根据Terminalkey 删除协同竞品供货关系
+                // 根据Terminalkey 删除协同竞品供货关系  padisconsistent = '1'
                 deleteTableInfoByTerminalkey(db, "MIT_CHECKEXERECORD_INFO", terminalkey, visitkey);
 
-                // 根据Terminalkey 删除协同拉链表
+                // 根据Terminalkey 删除协同拉链表  padisconsistent = '1'
                 deleteTableInfoByTerminalkey(db, "MIT_CMPSUPPLY_INFO", terminalkey, visitkey);
 
-                // 根据Terminalkey 删除协同终端表
+                // 根据Terminalkey 删除协同终端表  padisconsistent = '1'
                 deleteTableInfoByTerminalkey(db, "MIT_TERMINALINFO_M", terminalkey, visitkey);
 
                 // 删除协同 客情备忘
@@ -1009,16 +1009,81 @@ public class XtUploadService {
         }
     }
 
+    // 删除协同数据 包含协同主表
+    public void deleteXt(String visitkey,String terminalkey){
+        SQLiteDatabase db = helper.getWritableDatabase();
+        deleteTableInfoByVisitKey(db, "MIT_VISIT_M",terminalkey, visitkey);
+        deleteTableInfoByVisitKey(db, "MIT_CAMERAINFO_M", terminalkey, visitkey);
+        deleteTableInfoByVisitKey(db, "MIT_COLLECTIONEXERECORD_INFO", terminalkey, visitkey);
+        deleteTableInfoByVisitKey(db, "MIT_GROUPPRODUCT_M", terminalkey, visitkey);
+        deleteTableInfoByVisitKey(db, "MIT_PROMOTERM_INFO", terminalkey, visitkey);
+        deleteTableInfoByVisitKey(db, "MIT_VISTPRODUCT_INFO", terminalkey, visitkey);
+        deleteXtTableInfoByLowerkey(db, "MIT_AGENCYSUPPLY_INFO ", terminalkey, visitkey);
+        deleteXtTableInfoByTerminalkey(db, "MIT_CHECKEXERECORD_INFO", terminalkey, visitkey);
+        deleteXtTableInfoByTerminalkey(db, "MIT_CMPSUPPLY_INFO", terminalkey, visitkey);
+        deleteXtTableInfoByTerminalkey(db, "MIT_TERMINALINFO_M", terminalkey, visitkey);
+    }
+
     // 追溯上传成功后,解析数据 删除各个协同表数据
     private void parseZsUpData(String json) {
+
+        // 解析区域定格路线信息
+        List<MitValterM> valterMs = (List<MitValterM>) JsonUtil.parseList(json, MitValterM.class);
 
         try {
             //DatabaseHelper helper = DatabaseHelper.getHelper(context);
             SQLiteDatabase db = helper.getWritableDatabase();
 
+            // 修改协同的拜访主表 状态为上传成功
+            for (MitValterM mitValterM : mitValterMs) {
+                mitValterM.setPadisconsistent("1");
+                valterMDao.createOrUpdate(mitValterM);
+            }
+
+            // 删除文件夹下的照片
+            for (MitValpicM mTerminalinfoM : mitValpicMs) {
+
+                String picname = mTerminalinfoM.getPicname();
+                // 删除文件夹照片
+                /*String sdcardPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/dbt/et.tsingtaopad" + "/photo/";
+                FileUtil.deleteFile(new File(sdcardPath));*/
+                // 删除原图
+                FileUtil.deleteFile(new File(FileTool.CAMERA_PHOTO_DIR + picname));
+            }
+
+            for (MitValterM valterM : mitValterMs) {
+
+                String valterId = valterM.getId();
+                String terminalkey = valterM.getTerminalkey();
+                // 删除协同该终端其余的拜访记录
+                deleteZsMitVisitM(db, "MIT_VALTER_M", terminalkey,valterId);
+                deleteZsTable(db, "MIT_VALCHECKTYPE_M", valterId);
+                deleteZsTable(db, "MIT_VALCHECKITEM_M", valterId);
+                deleteZsTable(db, "MIT_VALPROMOTIONS_M", valterId);
+                deleteZsTable(db, "MIT_VALGROUPPRO_M", valterId);
+                deleteZsTable(db, "MIT_VALSUPPLY_M", valterId);
+                deleteZsTable(db, "MIT_VALCMP_M", valterId);
+                deleteZsTable(db, "MIT_VALCMPOTHER_M", valterId);
+                deleteZsTable(db, "MIT_VALPIC_M", valterId);
+
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    // 删除追溯时的数据 包含追溯主表
+    public void deleteZs(String valterId,String terminalkey){
+        SQLiteDatabase db = helper.getWritableDatabase();
+        deleteZsTable(db, "MIT_VALTER_M", valterId);
+        deleteZsTable(db, "MIT_VALCHECKTYPE_M", valterId);
+        deleteZsTable(db, "MIT_VALCHECKITEM_M", valterId);
+        deleteZsTable(db, "MIT_VALPROMOTIONS_M", valterId);
+        deleteZsTable(db, "MIT_VALGROUPPRO_M", valterId);
+        deleteZsTable(db, "MIT_VALSUPPLY_M", valterId);
+        deleteZsTable(db, "MIT_VALCMP_M", valterId);
+        deleteZsTable(db, "MIT_VALCMPOTHER_M", valterId);
+        deleteZsTable(db, "MIT_VALPIC_M", valterId);
     }
 
 
@@ -1051,6 +1116,40 @@ public class XtUploadService {
     private void deleteTableInfoByLowerkey(SQLiteDatabase db, String tableName, String terminalkey, String visitkey) {
         // 删除表记录
         String sql = "delete from " + tableName + "  where lowerkey = '" + terminalkey + "' and padisconsistent = '1'";
+        db.execSQL(sql);
+    }
+    // 根据Terminalkey 删除记录
+    private void deleteXtTableInfoByTerminalkey(SQLiteDatabase db, String tableName, String terminalkey, String visitkey) {
+        // 删除表记录
+        String sql = "delete from " + tableName + "  where terminalkey = '" + terminalkey + "' ";
+        db.execSQL(sql);
+    }
+
+    // 根据lowerkey 删除记录
+    private void deleteXtTableInfoByLowerkey(SQLiteDatabase db, String tableName, String terminalkey, String visitkey) {
+        // 删除表记录
+        String sql = "delete from " + tableName + "  where lowerkey = '" + terminalkey + "' ";
+        db.execSQL(sql);
+    }
+
+
+    // 删除追溯主表(条件: terminalkey相等 visitkey不相等 padisconsistent=1 )
+    private void deleteZsMitVisitM(SQLiteDatabase db, String tableName, String terminalkey, String valterid) {
+
+        // 删除表记录
+        String sql = "delete from " + tableName +
+                "  where terminalkey = '" + terminalkey +
+                "' and id <> '" + valterid + "'" +
+                "  and  padisconsistent = 1 ";
+        db.execSQL(sql);
+    }
+
+    // 删除住宿表数据拜访主表(条件: terminalkey相等 visitkey不相等 padisconsistent=1 )
+    private void deleteZsTable(SQLiteDatabase db, String tableName, String valterid) {
+
+        // 删除表记录
+        // 删除表记录
+        String sql = "delete from " + tableName + "  where valterid = '" + valterid + "'";
         db.execSQL(sql);
     }
 

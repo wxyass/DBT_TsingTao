@@ -35,6 +35,7 @@ import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.util.file.FileTool;
 import et.tsingtaopad.db.table.MitValpicMTemp;
+import et.tsingtaopad.db.table.MstTerminalinfoMCart;
 import et.tsingtaopad.db.table.MstTerminalinfoMTemp;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
 import et.tsingtaopad.dd.ddxt.camera.XtCameraAdapter;
@@ -69,6 +70,7 @@ public class ZsCameraFragment extends XtBaseVisitFragment implements View.OnClic
 
     // 最新终端信息
     private MstTerminalinfoMTemp termTemp;
+    private MstTerminalinfoMCart termCart;
 
     // 读取数据库图片表已拍照记录
     private List<MitValpicMTemp> piclst;
@@ -147,6 +149,7 @@ public class ZsCameraFragment extends XtBaseVisitFragment implements View.OnClic
         valueLst = xtCameraService.queryZsPictypeMAll();
         // 获取最新的终端数据
         termTemp = xtCameraService.findTermTempById(termId);
+        termCart = xtCameraService.findTermById(termId);
 
         mstTerminalInfoMStc = xtCameraService.findTermKeyById(termId);
 
@@ -227,7 +230,7 @@ public class ZsCameraFragment extends XtBaseVisitFragment implements View.OnClic
                                     imagefileString = FileUtil.fileToString(FileTool.CAMERA_PHOTO_DIR + picname);
                                     // 将图片记录保存到数据库
                                     String id = xtCameraService.saveZsPicData(valpicMTemp, picname,
-                                            imagefileString, termId, mitValterMTempKey, mstTerminalInfoMStc);
+                                            imagefileString, termId,termCart, mitValterMTempKey, mstTerminalInfoMStc);
 
                                     // 更新UI界面 刷新适配器
                                     Message message1 = new Message();

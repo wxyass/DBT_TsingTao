@@ -33,6 +33,8 @@ public class MitValpicMTemp implements java.io.Serializable {
     @DatabaseField
     private String picpath ;// 照片路劲 varchar2(36) null,
     @DatabaseField
+    private String areapid ;// 大区
+    @DatabaseField
     private String areaid ;// 二级区域ID varchar2(36) null,
     @DatabaseField
     private String gridkey ;//定格id  varchar2(36) null,
@@ -48,6 +50,11 @@ public class MitValpicMTemp implements java.io.Serializable {
     private String updateuser;//  varchar2(128) null,
     @DatabaseField
     private Date updatedate ;// date null
+
+    @DatabaseField
+    private String terminalname;//  终端名称
+    @DatabaseField
+    private String cameradata;//  拍照时间
 
 
 
@@ -185,5 +192,29 @@ public class MitValpicMTemp implements java.io.Serializable {
 
     public void setPadisconsistent(String padisconsistent) {
         this.padisconsistent = padisconsistent;
+    }
+
+    public String getTerminalname() {
+        return terminalname;
+    }
+
+    public void setTerminalname(String terminalname) {
+        this.terminalname = terminalname;
+    }
+
+    public String getCameradata() {
+        return cameradata;
+    }
+
+    public void setCameradata(String cameradata) {
+        this.cameradata = cameradata;
+    }
+
+    public String getAreapid() {
+        return areapid;
+    }
+
+    public void setAreapid(String areapid) {
+        this.areapid = areapid;
     }
 }

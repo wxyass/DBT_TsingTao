@@ -50,6 +50,13 @@ public class MitValpicM implements java.io.Serializable {
     @DatabaseField
     private Date updatedate ;// date null
 
+    @DatabaseField
+    private String terminalname;//  终端名称
+    @DatabaseField
+    private String cameradata;//  拍照时间
+
+    @DatabaseField
+    private String areapid ;// 大区
 
 
     // Constructors
@@ -186,5 +193,29 @@ public class MitValpicM implements java.io.Serializable {
 
     public void setPadisconsistent(String padisconsistent) {
         this.padisconsistent = padisconsistent;
+    }
+
+    public String getTerminalname() {
+        return terminalname;
+    }
+
+    public void setTerminalname(String terminalname) {
+        this.terminalname = terminalname;
+    }
+
+    public String getCameradata() {
+        return cameradata;
+    }
+
+    public void setCameradata(String cameradata) {
+        this.cameradata = cameradata;
+    }
+
+    public String getAreapid() {
+        return areapid;
+    }
+
+    public void setAreapid(String areapid) {
+        this.areapid = areapid;
     }
 }

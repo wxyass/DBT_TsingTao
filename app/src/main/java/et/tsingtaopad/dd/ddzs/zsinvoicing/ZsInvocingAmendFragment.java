@@ -178,9 +178,9 @@ public class ZsInvocingAmendFragment extends BaseFragmentSupport implements View
         dataLst = (List<MitValsupplyMTemp>) bundle.getSerializable("dataLst");
 
 
-        valagencyerror = bundle.getBoolean("valagencyerror");
-        valdataerror = bundle.getBoolean("valdataerror");
-        valiffleeing = bundle.getBoolean("valiffleeing");
+        valagencyerror = bundle.getBoolean("valagencyerror");// 经销商显示
+        valdataerror = bundle.getBoolean("valdataerror");// 数据显示
+        valiffleeing = bundle.getBoolean("valiffleeing");// 窜货显示
 
 
 
@@ -210,7 +210,7 @@ public class ZsInvocingAmendFragment extends BaseFragmentSupport implements View
             zdzs_invoicing_amend_rl_ll_cuanhuo.setVisibility(View.GONE);
         }
 
-        zdzs_invoicing_amend_rl_dd_con1_sp_agency.setText(valsupplyMTemp.getValagencyname());// 经销商名称
+        zdzs_invoicing_amend_rl_dd_con1_sp_agency.setText(valsupplyMTemp.getValtrueagencyname());// 经销商名称
 
         zdzs_invoicing_amend_rl_dd_con1_qd.setText(valsupplyMTemp.getValsqd());// 渠道价
         zdzs_invoicing_amend_rl_con2_qd.setText(valsupplyMTemp.getValagencysupplyqd());// 渠道价
@@ -309,6 +309,7 @@ public class ZsInvocingAmendFragment extends BaseFragmentSupport implements View
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 zdzs_invoicing_amend_rl_dd_con1_sp_agency.setText(datas.get(position).getValue());
                 valsupplyMTemp.setValtrueagency(datas.get(position).getKey());
+                valsupplyMTemp.setValtrueagencyname(datas.get(position).getValue());
                 mAlertViewExt.dismiss();
             }
         });

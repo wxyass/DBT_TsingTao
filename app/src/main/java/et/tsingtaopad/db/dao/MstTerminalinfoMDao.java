@@ -7,6 +7,7 @@ import com.j256.ormlite.dao.Dao;
 import java.util.List;
 
 import et.tsingtaopad.db.DatabaseHelper;
+import et.tsingtaopad.db.table.MitValterM;
 import et.tsingtaopad.db.table.MstTerminalinfoM;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 import et.tsingtaopad.main.visit.shopvisit.term.domain.MstTermListMStc;
@@ -51,6 +52,8 @@ public interface MstTerminalinfoMDao extends Dao<MstTerminalinfoM, String> {
      * @return
      */
     public List<XtTermSelectMStc> queryZsLineTermLst(SQLiteOpenHelper helper, String lineId);
+
+
     /**
      * 获取购物车的终端列表
      * <p>

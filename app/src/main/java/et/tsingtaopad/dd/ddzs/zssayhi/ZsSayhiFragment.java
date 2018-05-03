@@ -289,13 +289,11 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         zdzs_sayhi_rl_cmpstatus_con2 = (TextView) view.findViewById(R.id.zdzs_sayhi_rl_cmpstatus_con2);
         zdzs_sayhi_rl_cmpstatus_statue = (TextView) view.findViewById(R.id.zdzs_sayhi_rl_cmpstatus_statue);
 
-
         // 我品合作
         zdzs_sayhi_rl_selfprotocol = (RelativeLayout) view.findViewById(R.id.zdzs_sayhi_rl_selfprotocol);
         zdzs_sayhi_rl_selfprotocol_con1 = (TextView) view.findViewById(R.id.zdzs_sayhi_rl_selfprotocol_con1);
         zdzs_sayhi_rl_selfprotocol_con2 = (TextView) view.findViewById(R.id.zdzs_sayhi_rl_selfprotocol_con2);
         zdzs_sayhi_rl_selfprotocol_statue = (TextView) view.findViewById(R.id.zdzs_sayhi_rl_selfprotocol_statue);
-
 
         // 竞品合作
         zdzs_sayhi_rl_cmpprotocol = (RelativeLayout) view.findViewById(R.id.zdzs_sayhi_rl_cmpprotocol);
@@ -888,25 +886,25 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
                 // 是否我品销售范围
             case R.id.zdzs_sayhi_rl_selfstatus:
                 alertShow3(mitValterMTemp,"是否我品销售范围","vidisself","",
-                        "","setVidisselfflag","setVidterremaek");
+                        "","setVidisselfflag","setVidisselfremark");
                 break;
 
             // 是否竞品销售范围
             case R.id.zdzs_sayhi_rl_cmpstatus:
                 alertShow3(mitValterMTemp,"是否竞品销售范围","vidiscmp","",
-                        "","setVidiscmpflag","setVidterremaek");
+                        "","setVidiscmpflag","setVidiscmpremark");
                 break;
 
             // 是否我品终端合作
             case R.id.zdzs_sayhi_rl_selfprotocol:
                 alertShow3(mitValterMTemp,"是否我品终端合作","vidselftreaty","",
-                        "","setVidselftreatyflag","setVidterremaek");
+                        "","setVidselftreatyflag","setVidselftreatyremark");
                 break;
 
             // 是否竞品终端合作
             case R.id.zdzs_sayhi_rl_cmpprotocol:
                 alertShow3(mitValterMTemp,"是否竞品终端合作","vidcmptreaty","",
-                        "","setVidcmptreatyflag","setVidterremaek");
+                        "","setVidcmptreatyflag","setVidcmptreatyremark");
                 break;
 
 

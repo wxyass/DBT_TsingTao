@@ -31,6 +31,7 @@ import et.tsingtaopad.db.dao.MitValchecktypeMDao;
 import et.tsingtaopad.db.dao.MitValcmpotherMTempDao;
 import et.tsingtaopad.db.dao.MitValsupplyMTempDao;
 import et.tsingtaopad.db.dao.MitValterMTempDao;
+import et.tsingtaopad.db.dao.MitVisitMDao;
 import et.tsingtaopad.db.dao.MstAgencysupplyInfoDao;
 import et.tsingtaopad.db.dao.MstCheckexerecordInfoDao;
 import et.tsingtaopad.db.dao.MstGroupproductMDao;
@@ -52,6 +53,7 @@ import et.tsingtaopad.db.table.MitValgroupproMTemp;
 import et.tsingtaopad.db.table.MitValpromotionsMTemp;
 import et.tsingtaopad.db.table.MitValsupplyMTemp;
 import et.tsingtaopad.db.table.MitValterMTemp;
+import et.tsingtaopad.db.table.MitVisitM;
 import et.tsingtaopad.db.table.MstAgencysupplyInfo;
 import et.tsingtaopad.db.table.MstAgencysupplyInfoTemp;
 import et.tsingtaopad.db.table.MstCameraInfoM;
@@ -139,6 +141,38 @@ public class XtShopVisitService {
         }
 
         return termInfo;
+    }
+
+    /***
+     * 更新拜访离店时间及是否要上传标志
+     * @param visitId
+     * @param longitude 经度
+     * @param latitude  维度
+     * @param gpsStatus
+     */
+    public void updateZsGps(String visitId,double longitude, double latitude, String gpsStatus) {
+        try {
+            if(0!=latitude && 0!=longitude){
+                DatabaseHelper helper = DatabaseHelper.getHelper(context);
+
+                MstVisitMTempDao visitTempDao = helper.getDao(MstVisitMTemp.class);
+
+
+                StringBuffer buffer = new StringBuffer();
+                buffer.append("update mst_visit_m_temp set longitude=?, ");
+                buffer.append("latitude=?, gpsstatus=? ");
+                buffer.append("where visitkey=? ");
+                String[] args = new String[4];
+                args[0] = String.valueOf(longitude);
+                args[1] = String.valueOf(latitude);
+                args[2] = gpsStatus;
+                args[3] = visitId;
+                visitTempDao.executeRaw(buffer.toString(), args);
+            }
+
+        } catch (SQLException e) {
+            Log.e(TAG, "更新拜访GPS信息失败", e);
+        }
     }
 
     /**

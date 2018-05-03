@@ -43,6 +43,7 @@ import et.tsingtaopad.core.view.alertview.OnDismissListener;
 import et.tsingtaopad.core.view.alertview.OnItemClickListener;
 import et.tsingtaopad.core.view.dropdownmenu.DropBean;
 import et.tsingtaopad.core.view.dropdownmenu.DropdownButton;
+import et.tsingtaopad.db.table.MitValterM;
 import et.tsingtaopad.db.table.MstGridM;
 import et.tsingtaopad.db.table.MstMarketareaM;
 import et.tsingtaopad.db.table.MstRouteM;
@@ -53,6 +54,7 @@ import et.tsingtaopad.dd.ddxt.term.select.IXtTermSelectClick;
 import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectService;
 import et.tsingtaopad.dd.ddxt.term.select.adapter.XtTermSelectAdapter;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
+import et.tsingtaopad.dd.ddxt.updata.XtUploadService;
 import et.tsingtaopad.dd.ddzs.zsshopvisit.ZsVisitShopActivity;
 import et.tsingtaopad.dd.ddzs.zsterm.zscart.ZsTermCartFragment;
 import et.tsingtaopad.home.app.MainService;
@@ -329,10 +331,17 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
         // 生成临时表,跳转终端拜访
         breakNextLayout(TOACTIVITY, selectedList);*/
 
+
+
         xtTermSelectMStc = termList.get(position);
-        // 复制到终端购物车
-        copyMstTerminalinfoMCart(xtTermSelectMStc);
-        confirmXtUplad(xtTermSelectMStc);// 拜访
+
+        // 检测条数是否已上传
+        List<MitValterM> terminalList = xtSelectService.getZsMitValterM(xtTermSelectMStc.getTerminalkey());
+        if(terminalList.size()>0){
+            deleteOrXtUplad(terminalList.get(0));
+        }else{
+            confirmXtUplad(xtTermSelectMStc);// 拜访
+        }
     }
 
     /**
@@ -380,7 +389,6 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
     // 条目点击 确定拜访一家终端
     private void confirmXtUplad(final XtTermSelectMStc termSelectMStc) {
         String termName = termSelectMStc.getTerminalname();
-
         // 普通窗口
         mAlertViewExt = new AlertView("拜访: "+termName, null, "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert,
                 new OnItemClickListener() {
@@ -390,6 +398,10 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
                         if (0 == position) {// 确定按钮:0   取消按钮:-1
                             //if (ViewUtil.isDoubleClick(v.getId(), 2500)) return;
                             DbtLog.logUtils(TAG, "前往拜访：是");
+
+                            // 复制到终端购物车
+                            copyMstTerminalinfoMCart(xtTermSelectMStc);
+
                             List<String> termKeyLst = new ArrayList<String>();
                             termKeyLst.add(termSelectMStc.getTerminalkey());
                             String json = JsonUtil.toJson(termKeyLst);
@@ -399,6 +411,35 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
                                     "}";
 
                             getDataByHttp("opt_get_dates2", "MST_VISITDATA_M", content);
+                        }
+                    }
+                })
+                .setCancelable(true)
+                .setOnDismissListener(new OnDismissListener() {
+                    @Override
+                    public void onDismiss(Object o) {
+                        DbtLog.logUtils(TAG, "前往拜访：否");
+                    }
+                });
+        mAlertViewExt.show();
+    }
+
+    // 条目点击 是否删除/上传这家记录
+    private void deleteOrXtUplad(final MitValterM mitValterM) {
+        final XtUploadService xtUploadService = new XtUploadService(getActivity(),null);
+        // 普通窗口
+        mAlertViewExt = new AlertView("检测到这家终端上次数据未上传", null, null, new String[]{"删除","上传"}, null, getActivity(), AlertView.Style.Alert,
+                new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Object o, int position) {
+                        //Toast.makeText(getApplicationContext(), "点击了第" + position + "个", Toast.LENGTH_SHORT).show();
+                        if (0 == position) {// 确定按钮:0   取消按钮:-1
+                            //if (ViewUtil.isDoubleClick(v.getId(), 2500)) return;
+                            DbtLog.logUtils(TAG, "前往拜访：删除");
+                            xtUploadService.deleteZs(mitValterM.getId(),mitValterM.getTerminalkey());
+                        }else if(1 == position){
+                            DbtLog.logUtils(TAG, "前往拜访：上传");
+                            xtUploadService.upload_zs_visit(false,mitValterM.getId(),1);
                         }
                     }
                 })

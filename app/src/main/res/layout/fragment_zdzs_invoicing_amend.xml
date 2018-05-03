@@ -42,7 +42,7 @@
                         style="@style/page_label_big"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="重选经销商"/>
+                        android:text="督导重选经销商"/>
                 </LinearLayout>
 
                 <View

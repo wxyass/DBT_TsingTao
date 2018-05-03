@@ -601,6 +601,7 @@ public class XtShopCopyService {
                     info.setMainchannel(item.getMainchannel());
                     info.setMinorchannel(item.getMinorchannel());
                     info.setAreatype(item.getAreatype());
+                    info.setSelftreaty(item.getSelftreaty());
                     info.setCmpselftreaty(item.getCmpselftreaty());
                     info.setIfminedate(item.getIfminedate());//店招时间
                     info.setIfmine(item.getIfmine());//店招
@@ -1462,7 +1463,7 @@ public class XtShopCopyService {
                 mstVisitM.setGridkey(visitTemp.getGridkey());
                 mstVisitM.setAreaid(visitTemp.getAreaid());
                 mstVisitM.setVisitdate(visitTemp.getVisitdate());
-                mstVisitM.setEnddate(visitTemp.getEnddate());
+                mstVisitM.setEnddate(DateUtil.formatDate(new Date(), "yyyyMMddHHmmss"));// 拜访结束时间
                 mstVisitM.setTempkey(visitTemp.getTempkey());
                 mstVisitM.setUserid(visitTemp.getUserid());
                 mstVisitM.setVisituser(visitTemp.getVisituser());
@@ -1500,6 +1501,7 @@ public class XtShopCopyService {
                 mstVisitM.setIfmine(visitTemp.getIfmine());
                 mstVisitM.setVisitposition(visitTemp.getVisitposition());
                 mstVisitM.setPadisconsistent("0");
+                mstVisitM.setCredate(new Date());
                 mstVisitM.setUploadFlag("1");
                 //dao.create(mstVisitM);
                 mitVisitMDao.create(mstVisitM);
@@ -1757,15 +1759,15 @@ public class XtShopCopyService {
 
                 mitValterM.setVidisself(valterMTemp.getVidisself());// 销售产品范围我品原值
                 mitValterM.setVidisselfflag(valterMTemp.getVidisselfflag());// 销售产品范围我品正确与否
-                //mitValterM.setvidisselfremark(valterMTemp.getVidter());// 销售产品范围我品备注内容
+                mitValterM.setVidisselfremark(valterMTemp.getVidisselfremark());// 销售产品范围我品备注内容
 
                 mitValterM.setVidiscmp(valterMTemp.getVidiscmp());// 销售产品范围竞品原值
                 mitValterM.setVidiscmpflag(valterMTemp.getVidiscmpflag());// 销售产品范围竞品正确与否
-                //mitValterM.setvidiscmpremark(valterMTemp.getVidter());// 销售产品范围竞品备注内容
+                mitValterM.setVidiscmpremark(valterMTemp.getVidiscmpremark());// 销售产品范围竞品备注内容
 
                 mitValterM.setVidselftreaty(valterMTemp.getVidselftreaty());// 终端合作状态我品原值
                 mitValterM.setVidselftreatyflag(valterMTemp.getVidselftreatyflag());// 终端合作状态我品正确与否
-                //mitValterM.setvidselftreatyremark(valterMTemp.getVidter());// 终端合作状态我品备注内容
+                mitValterM.setVidselftreatyremark(valterMTemp.getVidselftreatyremark());// 终端合作状态我品备注内容
 
                 mitValterM.setVidcmptreaty(valterMTemp.getVidcmptreaty());// 终端合作状态竞品原值
                 mitValterM.setVidcmptreatyflag(valterMTemp.getVidcmptreatyflag());// 终端合作状态竞品原值正确与否
@@ -2022,7 +2024,8 @@ public class XtShopCopyService {
                     info.setValagencysupplyflag(item.getValagencysupplyflag());//供货关系正确与否
                     info.setValproerror(item.getValproerror());//品项有误
                     info.setValagencyerror(item.getValagencyerror());//经销商有误
-                    info.setValtrueagency(item.getValtrueagency());//正确的经销商
+                    info.setValtrueagency(item.getValtrueagency());//正确的经销商key
+                    info.setValtrueagencyname(item.getValtrueagencyname());//正确的经销商name
                     info.setValdataerror(item.getValdataerror());//数据有误
                     info.setValiffleeing(item.getValiffleeing());//是否窜货
                     info.setValagencysupplyqd(item.getValagencysupplyqd());//供货关系正确渠道价
@@ -2127,10 +2130,13 @@ public class XtShopCopyService {
                     MitValpicM info = new MitValpicM();
                     info.setId(item.getId());// 图片主键
                     info.setValterid(item.getValterid()); // 追溯主键
+                    info.setTerminalname(item.getTerminalname()); // 终端名称
+                    info.setCameradata(item.getCameradata()); // 拍照时间
                     info.setPictypekey(item.getPictypekey());// 图片类型主键(UUID)
                     info.setPicname(item.getPicname());// 图片名称
                     info.setPictypename(item.getPictypename());// 图片类型(中文名称)
                     info.setImagefileString(item.getImagefileString());// 将图片文件转成String保存在数据库
+                    info.setAreapid(item.getAreapid());// 大区
                     info.setAreaid(item.getAreaid());// 二级区域
                     info.setGridkey(item.getGridkey());//定格
                     info.setRoutekey(item.getRoutekey());// 路线

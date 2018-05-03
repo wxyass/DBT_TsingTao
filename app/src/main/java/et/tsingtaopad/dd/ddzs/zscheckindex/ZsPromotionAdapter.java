@@ -71,8 +71,11 @@ public class ZsPromotionAdapter extends BaseAdapter {
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.item_zdzs_checkindex_promotion, null);
+            holder.promotionLl = (LinearLayout) convertView.findViewById(R.id.item_zs_checkindex_ll_promo);// 第一行
             holder.promotionNameTv = (TextView) convertView.findViewById(R.id.item_zs_checkindex_tv_promotionname);// 活动名称
             holder.showProTv = (TextView) convertView.findViewById(R.id.item_zs_checkindex_tv_proname);// 产品名称
+
+            holder.reachnumLl = (LinearLayout) convertView.findViewById(R.id.item_zs_checkindex_ll_reachnum);//第二行
             holder.statueTv = (TextView)convertView.findViewById(R.id.item_zs_checkindex_tv_statue);// 未稽查tv
             holder.statueRl = (RelativeLayout)convertView.findViewById(R.id.item_zs_checkindex_rl_statue);// 未稽查Rl
             holder.reachnum = (TextView) convertView.findViewById(R.id.item_zs_checkindex_et_zushu);//达成组数
@@ -83,8 +86,6 @@ public class ZsPromotionAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
-        holder.showProTv.setTag(position);
 
         CheckIndexPromotionStc item = dataLst.get(position);
         holder.promotionNameTv.setHint(item.getPromotKey());
@@ -129,13 +130,15 @@ public class ZsPromotionAdapter extends BaseAdapter {
             }
         });*/
 
+        holder.promotionLl.setTag(position);
+
         // 是否展示产品列表
         if(currentItem == position){
             holder.proLl.setVisibility(View.VISIBLE);
         }else{
             holder.proLl.setVisibility(View.GONE);
         }
-        holder.showProTv.setOnClickListener(new OnClickListener() {
+        holder.promotionLl.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 int tag = (Integer) v.getTag();
@@ -149,17 +152,19 @@ public class ZsPromotionAdapter extends BaseAdapter {
         });
 
         // 未稽查
-        holder.statueRl.setTag(position);
-        holder.statueRl.setOnClickListener(listener);
+        holder.reachnumLl.setTag(position);
+        holder.reachnumLl.setOnClickListener(listener);
 
         return convertView;
     }
 
     private class ViewHolder {
+        private LinearLayout promotionLl;
         private TextView promotionNameTv;
         private TextView showProTv;
         private TextView statueTv;
         private RelativeLayout statueRl;
+        private LinearLayout reachnumLl;
         private TextView reachnum;
         private LinearLayout proLl;
         private TextView proNameTv;

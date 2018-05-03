@@ -41,6 +41,7 @@ import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.db.table.CmmAreaM;
 import et.tsingtaopad.db.table.CmmDatadicM;
+import et.tsingtaopad.db.table.MitValcheckterM;
 import et.tsingtaopad.db.table.MstAgencygridInfo;
 import et.tsingtaopad.db.table.MstAgencyinfoM;
 import et.tsingtaopad.db.table.MstCmpbrandsM;
@@ -261,8 +262,6 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                             }
                             if("opt_get_dates2".equals(optcode)&&"MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO".equals(table)){
 
-
-
                                 String formjson = resObj.getResBody().getContent();
                                 parseIndexTableJson(formjson);
 
@@ -448,6 +447,7 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
         String MST_CMPCOMPANY_M = emp.getMST_CMPCOMPANY_M();
         String MST_CMPBRANDS_M = emp.getMST_CMPBRANDS_M();
         String MST_CMPRODUCTINFO_M = emp.getMST_CMPRODUCTINFO_M();
+        String MIT_VALCHECKTER_M = emp.getMIT_VALCHECKTER_M();
 
         MainService service = new MainService(getActivity(),null);
         service.createOrUpdateTable(CMM_DATADIC_M,"CMM_DATADIC_M",CmmDatadicM.class);
@@ -459,6 +459,7 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
         service.createOrUpdateTable(MST_CMPCOMPANY_M,"MST_CMPCOMPANY_M",MstCmpcompanyM.class);
         service.createOrUpdateTable(MST_CMPBRANDS_M,"MST_CMPBRANDS_M",MstCmpbrandsM.class);
         service.createOrUpdateTable(MST_CMPRODUCTINFO_M,"MST_CMPRODUCTINFO_M",MstCmproductinfoM.class);
+        service.createOrUpdateTable(MIT_VALCHECKTER_M,"MIT_VALCHECKTER_M",MitValcheckterM.class);
     }
 
     // 解析指标数据成功

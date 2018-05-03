@@ -37,9 +37,15 @@ import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.JsonUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
+import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
+import et.tsingtaopad.core.view.alertview.AlertView;
+import et.tsingtaopad.core.view.alertview.OnDismissListener;
+import et.tsingtaopad.core.view.alertview.OnItemClickListener;
+import et.tsingtaopad.db.table.MitVisitM;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
 import et.tsingtaopad.dd.ddxt.term.cart.adapter.XtTermCartAdapter;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
+import et.tsingtaopad.dd.ddxt.updata.XtUploadService;
 import et.tsingtaopad.home.app.MainService;
 import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.http.HttpParseJson;
@@ -51,6 +57,8 @@ import et.tsingtaopad.util.requestHeadUtil;
  */
 
 public class XtTermCartFragment extends BaseFragmentSupport implements View.OnClickListener {
+
+    private final String TAG = "XtTermCartFragment";
 
     private RelativeLayout backBtn;
     private RelativeLayout confirmBtn;
@@ -174,11 +182,19 @@ public class XtTermCartFragment extends BaseFragmentSupport implements View.OnCl
                 boolean issync = PrefUtils.getBoolean(getActivity(),GlobalValues.XT_CART_SYNC,false);
                 if(issync){
                     termStc = (XtTermSelectMStc)confirmBtn.getTag();
-                    Intent intent = new Intent(getActivity(), XtVisitShopActivity.class);
-                    intent.putExtra("isFirstVisit", "1");// 非第一次拜访1
-                    intent.putExtra("termStc", termStc);
-                    intent.putExtra("seeFlag", "0"); // 0拜访 1查看标识
-                    startActivity(intent);
+
+                    List<MitVisitM> terminalList = cartService.getXtMitValterM(termStc.getTerminalkey());
+                    if(terminalList.size()>0){
+                        deleteOrXtUplad(terminalList.get(0));
+                    }else{
+                        Intent intent = new Intent(getActivity(), XtVisitShopActivity.class);
+                        intent.putExtra("isFirstVisit", "1");// 非第一次拜访1
+                        intent.putExtra("termStc", termStc);
+                        intent.putExtra("seeFlag", "0"); // 0拜访 1查看标识
+                        startActivity(intent);
+                    }
+
+
                 }else{
                     Toast.makeText(getActivity(),"请先点击全部同步",Toast.LENGTH_SHORT).show();
                 }
@@ -254,6 +270,37 @@ public class XtTermCartFragment extends BaseFragmentSupport implements View.OnCl
         } else {
             confirmBtn.setVisibility(View.INVISIBLE);
         }
+    }
+
+
+    AlertView mAlertViewExt;
+    // 条目点击 是否删除/上传这家记录
+    private void deleteOrXtUplad(final MitVisitM mitVisitM) {
+        final XtUploadService xtUploadService = new XtUploadService(getActivity(),null);
+        // 普通窗口
+        mAlertViewExt = new AlertView("检测到这家终端上次数据未上传", null, null, new String[]{"删除","上传"}, null, getActivity(), AlertView.Style.Alert,
+                new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Object o, int position) {
+                        //Toast.makeText(getApplicationContext(), "点击了第" + position + "个", Toast.LENGTH_SHORT).show();
+                        if (0 == position) {// 确定按钮:0   取消按钮:-1
+                            //if (ViewUtil.isDoubleClick(v.getId(), 2500)) return;
+                            DbtLog.logUtils(TAG, "前往拜访：删除");
+                            xtUploadService.deleteXt(mitVisitM.getVisitkey(),mitVisitM.getTerminalkey());
+                        }else if(1 == position){
+                            DbtLog.logUtils(TAG, "前往拜访：上传");
+                            xtUploadService.upload_xt_visit(false,mitVisitM.getVisitkey(),1);
+                        }
+                    }
+                })
+                .setCancelable(true)
+                .setOnDismissListener(new OnDismissListener() {
+                    @Override
+                    public void onDismiss(Object o) {
+                        DbtLog.logUtils(TAG, "前往拜访：否");
+                    }
+                });
+        mAlertViewExt.show();
     }
 
 

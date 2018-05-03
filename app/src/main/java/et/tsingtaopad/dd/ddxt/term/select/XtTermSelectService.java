@@ -19,10 +19,14 @@ import et.tsingtaopad.R;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.db.DatabaseHelper;
+import et.tsingtaopad.db.dao.MitValterMDao;
+import et.tsingtaopad.db.dao.MitVisitMDao;
 import et.tsingtaopad.db.dao.MstAgencysupplyInfoDao;
 import et.tsingtaopad.db.dao.MstTerminalinfoMDao;
 import et.tsingtaopad.db.dao.MstVisitMDao;
 import et.tsingtaopad.db.dao.MstVisitMTempDao;
+import et.tsingtaopad.db.table.MitValterM;
+import et.tsingtaopad.db.table.MitVisitM;
 import et.tsingtaopad.db.table.MstAgencysupplyInfo;
 import et.tsingtaopad.db.table.MstAgencysupplyInfoTemp;
 import et.tsingtaopad.db.table.MstCheckexerecordInfo;
@@ -90,6 +94,7 @@ public class XtTermSelectService {
         }
         return terminalList;
     }
+
     /**
      * 根据路线获取终端 获取相应的数据列表数据(追溯)
      *
@@ -106,6 +111,46 @@ public class XtTermSelectService {
                 List<XtTermSelectMStc> termlst = dao.queryZsLineTermLst(helper, lineKeys.get(i));
                 terminalList.addAll(termlst);
             }
+        } catch (SQLException e) {
+            Log.e(TAG, "获取线路表DAO对象失败", e);
+        }
+        return terminalList;
+    }
+
+    /**
+     * 根据终端key 获取上传信息(追溯)
+     *
+     * @param terminalkey 终端key
+     * @return
+     */
+    public List<MitValterM> getZsMitValterM(String terminalkey) {
+
+        List<MitValterM> terminalList = new ArrayList<MitValterM>();
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            MitValterMDao dao = helper.getDao(MitValterM.class);
+            List<MitValterM> termlst = dao.queryZsMitValterMData(helper, terminalkey);
+            terminalList.addAll(termlst);
+        } catch (SQLException e) {
+            Log.e(TAG, "获取线路表DAO对象失败", e);
+        }
+        return terminalList;
+    }
+
+    /**
+     * 根据终端key 获取上传信息(协同)
+     *
+     * @param terminalkey 终端key
+     * @return
+     */
+    public List<MitVisitM> getXtMitValterM(String terminalkey) {
+
+        List<MitVisitM> terminalList = new ArrayList<MitVisitM>();
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            MitVisitMDao dao = helper.getDao(MitVisitM.class);
+            List<MitVisitM> termlst = dao.queryXtMitVisitM(helper, terminalkey);
+            terminalList.addAll(termlst);
         } catch (SQLException e) {
             Log.e(TAG, "获取线路表DAO对象失败", e);
         }
@@ -175,7 +220,7 @@ public class XtTermSelectService {
 
 
             connection.commit(null);
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, "复制数据出错", e);
             try {
                 connection.rollback(null);
@@ -190,10 +235,11 @@ public class XtTermSelectService {
 
     /**
      * 复制终端表 到终端购物车
+     *
      * @param xtTermSelectMStc
-     * @param ddType    督导业务类型 1:协同  2:追溯
+     * @param ddType           督导业务类型 1:协同  2:追溯
      */
-    public void toCopyMstTerminalinfoMCartData(MstTerminalinfoM xtTermSelectMStc,String ddType) {
+    public void toCopyMstTerminalinfoMCartData(MstTerminalinfoM xtTermSelectMStc, String ddType) {
 
         // 事务控制
         AndroidDatabaseConnection connection = null;
@@ -256,7 +302,7 @@ public class XtTermSelectService {
 
 
             connection.commit(null);
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, "复制数据出错", e);
             try {
                 connection.rollback(null);
@@ -284,13 +330,13 @@ public class XtTermSelectService {
      * 删除终端购物车表临时表数据
      *
      * @param tabname
-     * @param ddType 购物车表ddtype 1:协同  2:追溯
+     * @param ddType  购物车表ddtype 1:协同  2:追溯
      */
-    public void deleteCartData(String tabname,String ddType) {
+    public void deleteCartData(String tabname, String ddType) {
 
         try {
             DatabaseHelper helper = DatabaseHelper.getHelper(context);
-            String sql = "DELETE FROM " + tabname + " WHERE ddtype = '"+ddType+"' ;";
+            String sql = "DELETE FROM " + tabname + " WHERE ddtype = '" + ddType + "' ;";
             SQLiteDatabase db = helper.getWritableDatabase();
             db.execSQL(sql);
         } catch (Exception e) {

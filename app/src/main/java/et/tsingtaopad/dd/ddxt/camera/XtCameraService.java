@@ -21,6 +21,7 @@ import et.tsingtaopad.db.dao.MstCameraiInfoMDao;
 import et.tsingtaopad.db.dao.MstPictypeMDao;
 import et.tsingtaopad.db.table.MitValpicMTemp;
 import et.tsingtaopad.db.table.MstCameraInfoMTemp;
+import et.tsingtaopad.db.table.MstTerminalinfoMCart;
 import et.tsingtaopad.db.table.MstTerminalinfoMTemp;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtShopVisitService;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.camera.domain.CameraInfoStc;
@@ -189,31 +190,33 @@ public class XtCameraService extends XtShopVisitService {
         return mstCameraInfoMTemp.getCamerakey();
     }
 
-
     // 保存照片记录到追溯 数据库
     public String saveZsPicData(MitValpicMTemp valpicMTemp, String picname, String imagefileString,
-                              String termId,  String valterid,MstTerminalInfoMStc mstTerminalInfoMStc) {
+                              String termId, MstTerminalinfoMCart termCart, String valterid,MstTerminalInfoMStc mstTerminalInfoMStc) {
 
         DbtLog.logUtils(TAG, "queryCurrentPicRecord()-获取当天拍照记录");
         //List<CameraInfoStc> lst = new ArrayList<CameraInfoStc>();
-        MitValpicMTemp mstCameraInfoMTemp = null;
+        MitValpicMTemp mitValpicMTemp = null;
         try {
             DatabaseHelper helper = DatabaseHelper.getHelper(context);
             Dao<MitValpicMTemp, String> proItemTempDao = helper.getMitValpicMTempDao();
 
             if (CheckUtil.isBlankOrNull(valpicMTemp.getId()) || "".equals(valpicMTemp.getId())) {
-                mstCameraInfoMTemp = new MitValpicMTemp();
-                mstCameraInfoMTemp.setId(FunUtil.getUUID());// 图片主键
-                mstCameraInfoMTemp.setValterid(valterid); // 追溯主键
-                mstCameraInfoMTemp.setPictypekey(valpicMTemp.getPictypekey());// 图片类型主键(UUID)
-                mstCameraInfoMTemp.setPicname(picname);// 图片名称
-                mstCameraInfoMTemp.setPictypename(valpicMTemp.getPictypename());// 图片类型(中文名称)
-                mstCameraInfoMTemp.setImagefileString(imagefileString);// 将图片文件转成String保存在数据库
-                mstCameraInfoMTemp.setAreaid(mstTerminalInfoMStc.getAreaid());// 二级区域
-                mstCameraInfoMTemp.setGridkey(mstTerminalInfoMStc.getGridkey());//定格
-                mstCameraInfoMTemp.setRoutekey(mstTerminalInfoMStc.getRoutekey());// 路线
-                mstCameraInfoMTemp.setTerminalkey(termId);// 终端主键
-                proItemTempDao.create(mstCameraInfoMTemp);
+                mitValpicMTemp = new MitValpicMTemp();
+                mitValpicMTemp.setId(FunUtil.getUUID());// 图片主键
+                mitValpicMTemp.setValterid(valterid); // 追溯主键
+                mitValpicMTemp.setPictypekey(valpicMTemp.getPictypekey());// 图片类型主键(UUID)
+                mitValpicMTemp.setPicname(picname);// 图片名称
+                mitValpicMTemp.setTerminalname(termCart.getTerminalname());// 本地图片路径 -> 改为终端名称
+                mitValpicMTemp.setCameradata(DateUtil.getDateTimeStr(1));// 拍照时间
+                mitValpicMTemp.setPictypename(valpicMTemp.getPictypename());// 图片类型(中文名称)
+                mitValpicMTemp.setImagefileString(imagefileString);// 将图片文件转成String保存在数据库
+                mitValpicMTemp.setAreapid(mstTerminalInfoMStc.getAreapid());// 大区
+                mitValpicMTemp.setAreaid(mstTerminalInfoMStc.getAreaid());// 二级区域
+                mitValpicMTemp.setGridkey(mstTerminalInfoMStc.getGridkey());//定格
+                mitValpicMTemp.setRoutekey(mstTerminalInfoMStc.getRoutekey());// 路线
+                mitValpicMTemp.setTerminalkey(termId);// 终端主键
+                proItemTempDao.create(mitValpicMTemp);
             } else {// 更新照片记录
                 /*mstCameraInfoMTemp = new MitValpicMTemp();
                 mstCameraInfoMTemp.setId(valpicMTemp.getId());// 图片主键
@@ -229,13 +232,13 @@ public class XtCameraService extends XtShopVisitService {
 
                 valpicMTemp.setPicname(picname);// 图片名称
                 valpicMTemp.setImagefileString(imagefileString);// 将图片文件转成String保存在数据库
-                proItemTempDao.createOrUpdate(mstCameraInfoMTemp);
+                proItemTempDao.createOrUpdate(mitValpicMTemp);
             }
         } catch (Exception e) {
             Log.e(TAG, "获取拜访拍照临时表DAO对象失败", e);
         }
 
-        return mstCameraInfoMTemp.getId();
+        return mitValpicMTemp.getId();
     }
 
 }
