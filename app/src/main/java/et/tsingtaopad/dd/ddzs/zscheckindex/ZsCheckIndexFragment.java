@@ -32,6 +32,7 @@ import et.tsingtaopad.adapter.AlertKeyValueAdapter;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
+import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.view.alertview.AlertView;
@@ -125,7 +126,6 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
         quickCollectBt = (Button) view.findViewById(R.id.zdzs_checkindex_bt_quickcollect);
         promotionLv = (ListView) view.findViewById(R.id.zdzs_checkindex_lv_promotion);
 
-
         zdzs_sayhi_rl_prostatus = (RelativeLayout) view.findViewById(R.id.zdzs_sayhi_rl_prostatus);
         zdzs_sayhi_tv_prostatus_con1 = (TextView) view.findViewById(R.id.zdzs_sayhi_tv_prostatus_con1);
         zdzs_sayhi_tv_prostatus_statue = (TextView) view.findViewById(R.id.zdzs_sayhi_tv_prostatus_statue);
@@ -139,9 +139,6 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
         zdzs_sayhi_tv_zhanyoulv_con1 = (TextView) view.findViewById(R.id.zdzs_sayhi_tv_zhanyoulv_con1);
         zdzs_sayhi_tv_zhanyoulv_statue = (TextView) view.findViewById(R.id.zdzs_sayhi_tv_zhanyoulv_statue);
 
-
-
-
         quickCollectBt.setOnClickListener(this);
         zdzs_sayhi_rl_prostatus.setOnClickListener(this);
         zdzs_sayhi_rl_hezuo.setOnClickListener(this);
@@ -150,17 +147,21 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
     }
 
     List<XtProIndex> calculateLst = new ArrayList<XtProIndex>();
+    List<XtProIndex> checkCalculateLst = new ArrayList<XtProIndex>();
     List<KvStc> indexValuelst = new ArrayList<KvStc>();
     List<XtProItem> proItemLst = new ArrayList<XtProItem>();
 
     List<XtCheckIndexCalculateStc> noProIndexLst;
     ZsPromotionAdapter xtPromotionAdapter;
 
+    String checkkeyAll;
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        //Toast.makeText(getActivity(), "查指标" + "/" + termId + "/" + termName, Toast.LENGTH_SHORT).show();
+        // 根据追溯模板 设置各个控件是否显示
+        initViewVisible();
 
         // 指标模拟数据
         service = new XtCheckIndexService(getActivity(), null);
@@ -168,9 +169,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
         // 查询最新终端临时表数据
         term = service.findTermTempById(termId);
         // 获取最新的终端数据
-
         channelId = term.getMinorchannel();// 次渠道
-
 
         // 获取分项采集页面显示数据 // 获取指标采集前3列数据 // 铺货状态,道具生动化,产品生动化,冰冻化
         //calculateLst = service.queryCalculateIndex(visitId, termId, term.getMinorchannel(), seeFlag);
@@ -183,7 +182,14 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
         service.initCheckTypeStatus();
         indexValuelst = GlobalValues.indexLst;
 
-        xtCaculateAdapter = new ZsCaculateAdapter(getActivity(), calculateLst, indexValuelst, proItemLst, handler);
+        // 根据追溯指标配置,显示不同条目
+        for (XtProIndex xtProIndex:calculateLst){
+            if (checkkeyAll.contains(xtProIndex.getIndexId())){
+                checkCalculateLst.add(xtProIndex);
+            }
+        }
+        //xtCaculateAdapter = new ZsCaculateAdapter(getActivity(), calculateLst, indexValuelst, proItemLst, handler);
+        xtCaculateAdapter = new ZsCaculateAdapter(getActivity(), checkCalculateLst, indexValuelst, proItemLst, handler);
         calculateLv.setAdapter(xtCaculateAdapter);
         ViewUtil.setListViewHeight(calculateLv);
 
@@ -272,6 +278,53 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
 
     }
 
+
+    // 根据追溯模板 设置各个控件是否显示
+    private void initViewVisible() {
+        // 促销活动
+        if("Y".equals(mitValcheckterM.getSalespromotion())){
+            promotionLv.setVisibility(View.VISIBLE);
+        }
+        // 产品组合是否达标
+        if("Y".equals(mitValcheckterM.getGrouppro())){
+            zdzs_sayhi_rl_prostatus.setVisibility(View.VISIBLE);
+        }
+        // 合作执行是否到位
+        if("Y".equals(mitValcheckterM.getCooperation())){
+            zdzs_sayhi_rl_hezuo.setVisibility(View.VISIBLE);
+        }
+        // 是否高质量配送
+        if("Y".equals(mitValcheckterM.getHighps())){
+            zdzs_sayhi_rl_peisong.setVisibility(View.VISIBLE);
+        }
+        // 我品单店占有率
+        if("Y".equals(mitValcheckterM.getProoccupy())){
+            zdzs_sayhi_rl_zhanyoulv.setVisibility(View.VISIBLE);
+        }
+
+        StringBuffer buffer = new StringBuffer();
+        // 铺货状态
+        if("Y".equals(mitValcheckterM.getDistrbution())){
+            buffer.append(PropertiesUtil.getProperties("check_puhuo")+" , ");
+        }
+        // 道具生动化
+        if("Y".equals(mitValcheckterM.getGoodsvivi())){
+            buffer.append(PropertiesUtil.getProperties("check_daoju")+" , ");
+        }
+        // 产品生动化
+        if("Y".equals(mitValcheckterM.getProvivi())){
+            buffer.append(PropertiesUtil.getProperties("check_chanpin")+" , ");
+        }
+        // 冰冻化
+        if("Y".equals(mitValcheckterM.getIcevivi())){
+            buffer.append(PropertiesUtil.getProperties("check_bingdong")+" ");
+        }
+
+         checkkeyAll = buffer.toString();
+
+    }
+
+
     // 设置产品组合的稽查结果
     private void setGroupproStatue(){
         if("N".equals(vo.getValgroupproflag())){// 产品组合是否达标正确与否
@@ -299,7 +352,8 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                 bundle.putSerializable("termStc", termStc);
                 bundle.putSerializable("visitKey", visitId);//visitId
                 bundle.putSerializable("proItemLst", (Serializable) proItemLst);// 默认0   0:拜访 1:查看
-                bundle.putSerializable("calculateLst", (Serializable) calculateLst);// 默认0   0:拜访 1:查看//
+                // bundle.putSerializable("calculateLst", (Serializable) calculateLst);// 默认0   0:拜访 1:查看//
+                bundle.putSerializable("calculateLst", (Serializable) checkCalculateLst);// 默认0   0:拜访 1:查看//
 
                 ZsQuickCollectFragment xtquickcollectfragment = new ZsQuickCollectFragment(handler);
                 xtquickcollectfragment.setArguments(bundle);
@@ -307,7 +361,6 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                 ZsVisitShopActivity xtVisitShopActivity = (ZsVisitShopActivity) getActivity();
                 xtVisitShopActivity.changeXtvisitFragment(xtquickcollectfragment, "xtnuminputfragment");
                 break;
-
 
             case R.id.zdzs_sayhi_rl_prostatus:// 产品组合
                 alertShow5(vo);

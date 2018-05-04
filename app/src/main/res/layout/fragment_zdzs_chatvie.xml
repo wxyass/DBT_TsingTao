@@ -10,8 +10,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="none"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -59,6 +59,7 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:text="添加竞品"
+                        android:visibility="gone"
                         />
                 </RelativeLayout>
             </RelativeLayout>
@@ -75,10 +76,12 @@
 
             <!--WJ竞品-->
             <LinearLayout
+                android:id="@+id/zdzs_chatvie_ll_clearvie"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:visibility="gone">
 
                 <ImageView
                     style="@style/point"
@@ -96,8 +99,9 @@
             <!--是否瓦解竞品-->
             <RelativeLayout
                 android:id="@+id/zdzs_chatvie_rl_clearvie"
+                style="@style/xtbf_sayhi_rl"
                 android:layout_marginTop="15dp"
-                style="@style/xtbf_sayhi_rl">
+                android:visibility="gone">
 
                 <!--标题-->
                 <TextView
@@ -125,17 +129,20 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"/>
 
             <!--拜访记录标题-->
             <LinearLayout
+                android:id="@+id/zdzs_chatvie_ll_visitreport_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <ImageView
                     style="@style/point"
@@ -152,11 +159,13 @@
 
             <!--拜访记录输入框-->
             <LinearLayout
+                android:id="@+id/zdzs_chatvie_ll_visitreport"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:layout_marginTop="15dp"
                 android:background="@color/white"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:visibility="gone">
 
                 <EditText
                     android:id="@+id/zdzs_chatvie_et_visitreport"

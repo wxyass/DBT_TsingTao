@@ -28,9 +28,7 @@ import et.tsingtaopad.base.BaseActivity;
 /**
  * 项目名称：营销移动智能工作平台 </br>
  * 文件名：LoginCoreActivity.java</br>
- * 作者：@吴承磊    </br>
- * 创建时间：2013/11/26</br>      
- * 功能描述: 用户登录的控制层Activity</br>      
+ * 功能描述: 用户登录的控制层Activity</br>
  * 版本 V 1.0</br>               
  * 修改履历</br>
  * 日期      原因  BUG号    修改人 修改版本</br>

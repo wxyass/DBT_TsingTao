@@ -41,6 +41,7 @@ import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.core.view.alertview.OnDismissListener;
 import et.tsingtaopad.core.view.alertview.OnItemClickListener;
+import et.tsingtaopad.db.table.MitValcheckterM;
 import et.tsingtaopad.db.table.MitValterM;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
 import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartService;
@@ -78,8 +79,8 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
     private ListView termCartLv;
 
     private XtTermCartService cartService;
-    private List<XtTermSelectMStc> termList= new ArrayList<XtTermSelectMStc>();;
-    private List<XtTermSelectMStc> termAllList= new ArrayList<XtTermSelectMStc>();;
+    private List<XtTermSelectMStc> termList= new ArrayList<XtTermSelectMStc>();
+    private List<XtTermSelectMStc> termAllList= new ArrayList<XtTermSelectMStc>();
     private XtTermCartAdapter termCartAdapter;
     private List<XtTermSelectMStc> seqTermList;
 
@@ -87,6 +88,8 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
     private String termId;
     private Map<String, String> termPinyinMap;
     private List<XtTermSelectMStc> tempLst;
+    protected MitValcheckterM mitValcheckterM;// 追溯模板
+    private List<MitValcheckterM>  mitValcheckterMs;
 
     @Nullable
     @Override
@@ -133,13 +136,14 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
         confirmTv.setText("追溯");
         cartService = new XtTermCartService(getActivity());
 
-
         // 获取从上个界面传递过来的数据
-        String fromFragment = (String) getArguments().get("fromFragment");
+        Bundle bundle = getArguments();
+        String fromFragment = (String) bundle.getString("fromFragment");
         if("ZsTermSelectFragment".equals(fromFragment)){// 如果从选择终端过来,设置需要同步
             // 购物车是否已经同步数据  false:没有  true:已同步
             PrefUtils.putBoolean(getActivity(),GlobalValues.ZS_CART_SYNC,false);
         }
+        //mitValcheckterM = (MitValcheckterM) bundle.getSerializable("mitValcheckterM");
 
         // 初始化页面数据
         initData();
@@ -172,6 +176,11 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
         // 设置数据,适配器
         searchTerm();
 
+        // // 获取追溯模板 大区id
+        String areapid = PrefUtils.getString(getActivity(),"departmentid","");
+        mitValcheckterMs = cartService.getValCheckterMList(areapid);
+        mitValcheckterM = mitValcheckterMs.get(0);
+
     }
 
     @Override
@@ -191,11 +200,17 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
                     if(terminalList.size()>0){
                         deleteOrXtUpladCart(terminalList.get(0));
                     }else{
-                        Intent intent = new Intent(getActivity(), ZsVisitShopActivity.class);
-                        intent.putExtra("isFirstVisit", "1");// 非第一次拜访1
-                        intent.putExtra("termStc", termStc);
-                        intent.putExtra("seeFlag", "0"); // 0拜访 1查看标识
-                        startActivity(intent);
+                        if(mitValcheckterMs.size()>0){// 配置了督导模板
+                            Intent intent = new Intent(getActivity(), ZsVisitShopActivity.class);
+                            intent.putExtra("isFirstVisit", "1");// 非第一次拜访1
+                            intent.putExtra("termStc", termStc);
+                            intent.putExtra("mitValcheckterM", mitValcheckterM);
+                            intent.putExtra("seeFlag", "0"); // 0拜访 1查看标识
+                            startActivity(intent);
+                        }else{
+                            Toast.makeText(getActivity(),"请先联系文员,配置督导模板",Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 }else{
                     Toast.makeText(getActivity(),"请先点击全部同步",Toast.LENGTH_SHORT).show();

@@ -784,8 +784,8 @@ public class MstTerminalinfoMDaoImpl extends BaseDaoImpl<MstTerminalinfoM, Strin
         buffer.append("from mst_terminalinfo_m_temp t  ");
         buffer.append("left join mst_route_m r on t.routekey = r.routekey  ");
         buffer.append("left join mst_grid_m g on g.gridkey = r.gridkey  ");
-        buffer.append("left join mst_marketarea_m sm on sm.areaid=g.areaid  ");
-        buffer.append("where t.terminalkey= ? ");
+        buffer.append("left join mst_marketarea_m sm on sm.areaid = g.areaid  ");
+        buffer.append("where t.terminalkey = ? ");
 
         SQLiteDatabase db = helper.getReadableDatabase();
         Cursor cursor = db.rawQuery(buffer.toString(), new String[]{termId});

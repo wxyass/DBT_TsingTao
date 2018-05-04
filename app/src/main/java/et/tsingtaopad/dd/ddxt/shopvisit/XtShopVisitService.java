@@ -44,6 +44,7 @@ import et.tsingtaopad.db.dao.MstVisitMDao;
 import et.tsingtaopad.db.dao.MstVisitMTempDao;
 import et.tsingtaopad.db.dao.MstVistproductInfoDao;
 import et.tsingtaopad.db.table.MitValcheckitemMTemp;
+import et.tsingtaopad.db.table.MitValcheckterM;
 import et.tsingtaopad.db.table.MitValchecktypeM;
 import et.tsingtaopad.db.table.MitValchecktypeMTemp;
 import et.tsingtaopad.db.table.MitValcmpM;

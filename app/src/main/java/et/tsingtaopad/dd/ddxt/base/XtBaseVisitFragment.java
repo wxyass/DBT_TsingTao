@@ -15,6 +15,7 @@ import java.io.InputStream;
 
 import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
+import et.tsingtaopad.db.table.MitValcheckterM;
 import et.tsingtaopad.db.table.MstTerminalinfoM;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 
@@ -22,22 +23,23 @@ import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
  * Created by yangwenmin on 2018/3/26.
  */
 
-public class XtBaseVisitFragment extends BaseFragmentSupport{
+public class XtBaseVisitFragment extends BaseFragmentSupport {
 
-    protected String visitId="ec02b3a89d9e45baa60a3d837133b945";// 拜访主表key
-    protected String preVisitkey="";// 拜访主表key
-    protected String termId="1-5A5LNU";// 终端key
-    protected String areaid="1-5A5LNU";// 二级区域id
-    protected String areapid="1-5A5LNU";// 大区id
-    protected String gridkey="1-5A5LNU";// 定格key
-    protected String routekey="1-5A5LNU";// 路线key
-    protected String termName="张家烤全羊";// 终端名称
-    protected String seeFlag="0";// 0:拜访  1:查看
+    protected String visitId = "ec02b3a89d9e45baa60a3d837133b945";// 拜访主表key
+    protected String preVisitkey = "";// 拜访主表key
+    protected String termId = "1-5A5LNU";// 终端key
+    protected String areaid = "1-5A5LNU";// 二级区域id
+    protected String areapid = "1-5A5LNU";// 大区id
+    protected String gridkey = "1-5A5LNU";// 定格key
+    protected String routekey = "1-5A5LNU";// 路线key
+    protected String termName = "张家烤全羊";// 终端名称
+    protected String seeFlag = "0";// 0:拜访  1:查看
     protected String visitDate;//
     protected String lastTime;//
     protected String mitValterMTempKey;//
     protected XtTermSelectMStc termStc;// 终端信息
-    protected String channelId="39DD41A399298C68E05010ACE0016FCD";// 终端次渠道(废弃,因为由A->F后,可能在F中修改,但在另一个F中,还是用的A传递过来的,所以废弃)
+    protected MitValcheckterM mitValcheckterM;// 追溯模板
+    protected String channelId = "39DD41A399298C68E05010ACE0016FCD";// 终端次渠道(废弃,因为由A->F后,可能在F中修改,但在另一个F中,还是用的A传递过来的,所以废弃)
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -47,7 +49,7 @@ public class XtBaseVisitFragment extends BaseFragmentSupport{
         Bundle bundle = getArguments();
         visitId = bundle.getString("visitKey");
         preVisitkey = bundle.getString("preVisitkey");
-        areaid =bundle.getString("areaid");
+        areaid = bundle.getString("areaid");
         areapid = bundle.getString("areapid");
         gridkey = bundle.getString("gridkey");
         routekey = bundle.getString("routekey");
@@ -55,10 +57,12 @@ public class XtBaseVisitFragment extends BaseFragmentSupport{
         termName = bundle.getString("termname");
         visitDate = bundle.getString("visitDate");
         lastTime = bundle.getString("lastTime");
-        seeFlag = bundle.getString("seeFlag");
+
         channelId = bundle.getString("channelId");
         mitValterMTempKey = bundle.getString("mitValterMTempKey");//bundle.putSerializable("mitValterMTempKey", mitValterMTempKey);// 追溯主键
         termStc = (XtTermSelectMStc) bundle.getSerializable("termStc");
+        mitValcheckterM = (MitValcheckterM) bundle.getSerializable("mitValcheckterM");
+        seeFlag = bundle.getString("seeFlag");
     }
 
     /**

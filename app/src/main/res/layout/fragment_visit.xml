@@ -1,16 +1,10 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/bg_app"
-              android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/ico_guide_page_t"
+    >
 
-
-    <android.support.v7.widget.AppCompatTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="30sp"
-        android:text="@string/platform_visit"/>
     <LinearLayout
         android:id="@+id/platform_view_top"
         android:layout_width="match_parent"
@@ -42,36 +36,35 @@
             android:layout_height="match_parent"/>
     </LinearLayout>
 
-    <!-- 下 -->
-    <View
-        android:id="@+id/platform_view_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_alignBottom="@id/platform_view_top"
-        android:background="@color/bg_plantform_color"/>
-
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="200dp"
         android:text="@string/dxtbf"/>
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_xt_term"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="300dp"
         android:text="协同终端夹"/>
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_zdzs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="500dp"
+        android:layout_centerHorizontal="true"
         android:text="@string/ddzdzs"/>
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_zs_term"
         android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="600dp"
         android:layout_height="wrap_content"
         android:text="追溯终端夹"/>
 
-</LinearLayout>
+</RelativeLayout>

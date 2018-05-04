@@ -83,7 +83,7 @@ import et.tsingtaopad.main.visit.shopvisit.termvisit.sayhi.domain.MstTerminalInf
  * Created by yangwenmin on 2018/3/12.
  */
 
-public class XtVisitShopActivity extends BaseActivity implements View.OnClickListener,TabHost.OnTabChangeListener {
+public class XtVisitShopActivity extends BaseActivity implements View.OnClickListener, TabHost.OnTabChangeListener {
 
     private final String TAG = "XtVisitShopActivity";
 
@@ -127,14 +127,14 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
     private String channelId;
 
     private FragmentTabHost tabHost;
-    private Class fragmentArray[] = { XtSayhiFragment.class,
+    private Class fragmentArray[] = {XtSayhiFragment.class,
             XtInvoicingFragment.class, XtCheckIndexFragment.class,
-            XtChatvieFragment.class ,XtCameraFragment.class};
+            XtChatvieFragment.class, XtCameraFragment.class};
 
-    private int imageViewArray[] = { R.drawable.bt_shopvisit_sayhi,
+    private int imageViewArray[] = {R.drawable.bt_shopvisit_sayhi,
             R.drawable.bt_shopvisit_invoicing,
             R.drawable.bt_shopvisit_checkindex, R.drawable.bt_shopvisit_chatvie,
-            R.drawable.bt_shopvisit_camera };
+            R.drawable.bt_shopvisit_camera};
 
     MstTerminalInfoMStc mstTerminalInfoMStc;
 
@@ -144,7 +144,13 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
         setContentView(R.layout.activity_xtvisitshop);
         initView();
         initData();
-        registerGPS();
+        if (hasPermission(GlobalValues.LOCAL_PERMISSION)) {
+            // 拥有了此权限,那么直接执行业务逻辑
+            registerGPS();
+        } else {
+            // 还没有对一个权限(请求码,权限数组)这两个参数都事先定义好
+            requestPermission(GlobalValues.LOCAL_CODE, GlobalValues.LOCAL_PERMISSION);
+        }
     }
 
     // 初始化控件
@@ -158,7 +164,6 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
         confirmBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
         //titleTv.setOnClickListener(this);
-
 
         mDataTv = (AppCompatTextView) findViewById(R.id.xtvisit_tv_date);
         mDayTv = (AppCompatTextView) findViewById(R.id.xtvisit_tv_day);
@@ -178,8 +183,6 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
         xtvisit_rb_chatvie.setOnClickListener(this);
         xtvisit_rb_camera.setOnClickListener(this);
         xtvisit_rb_other.setOnClickListener(this);
-
-
     }
 
     // 初始化数据
@@ -196,13 +199,14 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
         xtShopVisitService = new XtShopVisitService(getApplicationContext(), null);
         // 从拜访主表中获取最后一次拜访数据
         MstVisitM preMstVisitM = xtShopVisitService.findNewLastVisit(termStc.getTerminalkey(), false);
-        // 获取终端区域id,定格key,路线id
-        mstTerminalInfoMStc = xtShopVisitService.findTermKeyById(termStc.getTerminalkey());
+
         // 获取上次拜访主键
         prevVisitId = preMstVisitM.getVisitkey();
         prevVisitDate = preMstVisitM.getVisitdate();
         // 复制各个临时表
         configVisitData(bundle);
+        // 获取终端区域id,定格key,路线id
+        mstTerminalInfoMStc = xtShopVisitService.findTermKeyById(termStc.getTerminalkey());
 
         // 展示打招呼页面
         /*XtSayhiFragment xtSayhiFragment = new XtSayhiFragment();
@@ -248,7 +252,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
         xtShopVisitService.deleteData();
 
         // 再复制
-        visitId = xtShopVisitService.toCopyData(termStc,mstTerminalInfoMStc);
+        visitId = xtShopVisitService.toCopyData(termStc, mstTerminalInfoMStc);
         channelId = termStc.getMinorchannel();
 
         // 保存初始数据(上面虽然复制了数据库,但有些表是没有复制的,在这里把一些数据)
@@ -331,7 +335,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
                 if (fragmentType == 5) {
                     return;
                 } else {
-                    if(GlobalValues.isSayHiSure){
+                    if (GlobalValues.isSayHiSure) {
                         fragmentType = 5;
                         XtCameraFragment xtCameraFragment = new XtCameraFragment();
                         xtCameraFragment.setArguments(returnBundle());
@@ -405,7 +409,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
             DbtLog.logUtils(TAG, "XtCheckIndexFragment:查指标");
         } else if (tabId.equals("3")) {
             DbtLog.logUtils(TAG, "XtChatVieFragment:聊竞品");
-        }else if (tabId.equals("4")) {
+        } else if (tabId.equals("4")) {
             DbtLog.logUtils(TAG, "XtCameraFragment:拍照");
         }
 
@@ -419,10 +423,10 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
             TextView belongLineSp = (TextView) view.findViewById(R.id.xtbf_sayhi_termroude);
             TextView levelSp = (TextView) view.findViewById(R.id.xtbf_sayhi_termlv);
 
-            EditText addressEt = (EditText) view .findViewById(R.id.xtbf_sayhi_termaddress);
+            EditText addressEt = (EditText) view.findViewById(R.id.xtbf_sayhi_termaddress);
             EditText linkmanEt = (EditText) view.findViewById(R.id.xtbf_sayhi_termcontact);
             EditText telEt = (EditText) view.findViewById(R.id.xtbf_sayhi_termphone);
-            EditText sequenceEt = (EditText) view .findViewById(R.id.xtbf_sayhi_termsequence);
+            EditText sequenceEt = (EditText) view.findViewById(R.id.xtbf_sayhi_termsequence);
             TextView sellChannelSp = (TextView) view.findViewById(R.id.xtbf_sayhi_termsellchannel);
             TextView mainChannelSp = (TextView) view.findViewById(R.id.xtbf_sayhi_termtmainchannel);
             TextView minorChannelSp = (TextView) view.findViewById(R.id.xtbf_sayhi_termminorchannel);
@@ -443,10 +447,10 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
             if ("-1".equals(FunUtil.isBlankOrNullTo(belongLineSp.getText(), "-1"))) {
                 msgId = R.string.termadd_msg_invalbelogline;
 
-            } else if ("-1".equals(FunUtil.isBlankOrNullTo(levelSp.getText(),"-1"))) {
+            } else if ("-1".equals(FunUtil.isBlankOrNullTo(levelSp.getText(), "-1"))) {
                 msgId = R.string.termadd_msg_invaltermlevel;
 
-            }  else if ("-1".equals(FunUtil.isBlankOrNullTo(sellChannelSp.getText(), "-1"))) {
+            } else if ("-1".equals(FunUtil.isBlankOrNullTo(sellChannelSp.getText(), "-1"))) {
                 msgId = R.string.termadd_msg_invalsellchannel;
 
             } else if ("-1".equals(FunUtil.isBlankOrNullTo(mainChannelSp.getText(), "-1"))) {
@@ -460,7 +464,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
 
             if (msgId != -1) {
                 tabHost.setCurrentTab(0);
-                Toast.makeText(getApplicationContext(),getString(msgId),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(msgId), Toast.LENGTH_SHORT).show();
                 //ViewUtil.sendMsg(getApplicationContext(), msgId);
 
             }
@@ -512,12 +516,12 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
                             String visitEndDate = DateUtil.formatDate(new Date(), "yyyyMMddHHmmss");
 
                             // 开始复制 更新拜访离店时间及是否要上传标志 以及对去除拜访指标采集项重复(collectionexerecord表)
-                            XtShopCopyService xtShopCopyService = new XtShopCopyService(getApplicationContext(),null);
-                            xtShopCopyService.copyXtUpload(visitId, termStc.getTerminalkey(),termStc.getTerminalcode(), visitEndDate, "1");
+                            XtShopCopyService xtShopCopyService = new XtShopCopyService(getApplicationContext(), null);
+                            xtShopCopyService.copyXtUpload(visitId, termStc.getTerminalkey(), termStc.getTerminalcode(), visitEndDate, "1");
 
                             // 上传协同拜访数据
-                            XtUploadService xtUploadService = new XtUploadService(getApplicationContext(),null);
-                            xtUploadService.upload_xt_visit(false,visitId,1);
+                            XtUploadService xtUploadService = new XtUploadService(getApplicationContext(), null);
+                            xtUploadService.upload_xt_visit(false, visitId, 1);
 
                             ConstValues.handler.sendEmptyMessage(ConstValues.WAIT0);
 
@@ -547,7 +551,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
                             //if (ViewUtil.isDoubleClick(v.getId(), 2500)) return;
                             DbtLog.logUtils(TAG, "返回拜访：是");
                             // 删除图片表
-                            XtUploadService xtUploadService = new XtUploadService(getApplicationContext(),null);
+                            XtUploadService xtUploadService = new XtUploadService(getApplicationContext(), null);
                             xtUploadService.deleteDICM(visitId);
 
                             XtVisitShopActivity.this.finish();
@@ -565,9 +569,8 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
     }
 
 
-
     // 检测现有量变化量是否为空  true:全不为空 可以上传   false:有为空的 不可上传
-    private boolean checkCollectionexrecord(){
+    private boolean checkCollectionexrecord() {
 
         boolean isallIn = true;
         // (查出所有采集项)
@@ -592,21 +595,28 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
         return super.onKeyDown(keyCode, event);
     }
 
-    // 原生经纬度 处理
+    // 原生经纬度 处理 --------------------------------------------------------
 
     private double longitude;// 经度
     private double latitude;// 维度
-
     public LocationManager lm;
-    private void registerGPS(){
-        lm=(LocationManager)getSystemService(Context.LOCATION_SERVICE);
+
+    // 拥有定位权限 开启注册定位
+    @Override
+    public void doLocation() {
+        registerGPS();
+    }
+
+    private void registerGPS() {
+
+        lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         //判断GPS是否正常启动
-        if(!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+        if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             Toast.makeText(this, "请开启GPS导航...", Toast.LENGTH_SHORT).show();
             //返回开启GPS导航设置界面
             Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivityForResult(intent,0);
+            startActivityForResult(intent, 0);
             return;
         }
 
@@ -614,7 +624,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
         String bestProvider = lm.getBestProvider(getCriteria(), true);
         //获取位置信息
         //如果不设置查询要求，getLastKnownLocation方法传人的参数为LocationManager.GPS_PROVIDER
-        Location location= lm.getLastKnownLocation(bestProvider);
+        Location location = lm.getLastKnownLocation(bestProvider);
         //        Location location= lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         updateView(location);
         //监听状态
@@ -628,22 +638,22 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
 
         // 1秒更新一次，或最小位移变化超过1米更新一次；
         //注意：此处更新准确度非常低，推荐在service里面启动一个Thread，在run中sleep(10000);然后执行handler.sendMessage(),更新位置
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 0, locationListener);
         //        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, locationListener);
     }
 
     //位置监听
-    private LocationListener locationListener=new LocationListener() {
+    private LocationListener locationListener = new LocationListener() {
 
         /**
          * 位置信息变化时触发
          */
         public void onLocationChanged(Location location) {
             updateView(location);
-            Log.i(TAG, "时间："+location.getTime());
-            Log.i(TAG, "经度："+location.getLongitude());
-            Log.i(TAG, "纬度："+location.getLatitude());
-            Log.i(TAG, "海拔："+location.getAltitude());
+            Log.i(TAG, "时间：" + location.getTime());
+            Log.i(TAG, "经度：" + location.getLongitude());
+            Log.i(TAG, "纬度：" + location.getLatitude());
+            Log.i(TAG, "海拔：" + location.getAltitude());
         }
 
         /**
@@ -670,7 +680,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
          * GPS开启时触发
          */
         public void onProviderEnabled(String provider) {
-            Location location=lm.getLastKnownLocation(provider);
+            Location location = lm.getLastKnownLocation(provider);
             updateView(location);
         }
 
@@ -716,7 +726,9 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
                     Log.i(TAG, "定位结束");
                     break;
             }
-        };
+        }
+
+        ;
     };
 
     /**
@@ -724,13 +736,13 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
      *
      * @param location
      */
-    private void updateView(Location location){
-        if(location!=null){
+    private void updateView(Location location) {
+        if (location != null) {
             // 经度
             longitude = location.getLongitude();
             // 纬度
             latitude = location.getLatitude();
-        }else{
+        } else {
             //清空EditText对象
             //editText.getEditableText().clear();
         }
@@ -738,10 +750,11 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
 
     /**
      * 返回查询条件
+     *
      * @return
      */
-    private Criteria getCriteria(){
-        Criteria criteria=new Criteria();
+    private Criteria getCriteria() {
+        Criteria criteria = new Criteria();
         //设置定位精确度 Criteria.ACCURACY_COARSE比较粗略，Criteria.ACCURACY_FINE则比较精细
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
         //设置是否要求速度

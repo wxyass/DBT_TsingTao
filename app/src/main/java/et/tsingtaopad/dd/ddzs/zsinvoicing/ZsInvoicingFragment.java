@@ -31,6 +31,7 @@ import et.tsingtaopad.adapter.AlertKeyValueAdapter;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
+import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.view.alertview.AlertView;
@@ -105,10 +106,22 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
         handler = new MyHandler(this);
         invoicingService = new ZsInvoicingService(getActivity(), null);
 
+        // 根据追溯模板 设置各个控件是否显示
+        initViewVisible();
+
         // 初始化产品数据
         initProData();
 
     }
+
+    // 根据追溯模板 设置各个控件是否显示
+    private void initViewVisible() {
+        // 新增供货关系
+        if("Y".equals(mitValcheckterM.getAddsupply())){
+            zdzs_invoicing_rl_addrelation.setVisibility(View.VISIBLE);
+        }
+    }
+
 
     // 初始化产品数据
     private void initProData() {
@@ -124,10 +137,10 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
             @Override
             public void listViewItemClick(int position, View v) {
 
-                if("Y".equals(dataLst.get(position).getValaddagencysupply())){// 督导新增的供货关系
+                if ("Y".equals(dataLst.get(position).getValaddagencysupply())) {// 督导新增的供货关系
                     alertShow4(position);
                     //Toast.makeText(getActivity(),dataLst.get(position).getValproname(),Toast.LENGTH_SHORT).show();
-                }else{// 处理业代新增的供货关系
+                } else {// 处理业代新增的供货关系
                     alertShow3(position);
                 }
 
@@ -135,8 +148,6 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
         });
         zsInvoicingLv.setAdapter(zsInvoicingAdapter);
         ViewUtil.setListViewHeight(zsInvoicingLv);
-
-
     }
 
     @Override
@@ -335,12 +346,29 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
         android.support.v7.widget.AppCompatTextView bt_confirm1 = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_bt_confirm1);
 
 
-        final RadioButton right_rb = (RadioButton) extView.findViewById(R.id.right_rb);
-        final RadioGroup right_rg = (RadioGroup) extView.findViewById(R.id.right_rg);
-        final CheckBox cb1 = (CheckBox) extView.findViewById(R.id.cb1);
-        final CheckBox cb2 = (CheckBox) extView.findViewById(R.id.cb2);
-        final CheckBox cb3 = (CheckBox) extView.findViewById(R.id.cb3);
-        final CheckBox cb4 = (CheckBox) extView.findViewById(R.id.cb4);
+        final RadioButton right_rb = (RadioButton) extView.findViewById(R.id.result_right_rb);
+        final RadioGroup right_rg = (RadioGroup) extView.findViewById(R.id.result_right_rg);
+        final CheckBox cb1 = (CheckBox) extView.findViewById(R.id.result_cb1);
+        final CheckBox cb2 = (CheckBox) extView.findViewById(R.id.result_cb2);
+        final CheckBox cb3 = (CheckBox) extView.findViewById(R.id.result_cb3);
+        final CheckBox cb4 = (CheckBox) extView.findViewById(R.id.result_cb4);
+
+        // 品项有误
+        if("Y".equals(mitValcheckterM.getProerror())){
+            cb1.setVisibility(View.VISIBLE);
+        }
+        // 经销商有误
+        if("Y".equals(mitValcheckterM.getAgencyerror())){
+            cb2.setVisibility(View.VISIBLE);
+        }
+        // 数据有误
+        if("Y".equals(mitValcheckterM.getDataerror())){
+            cb3.setVisibility(View.VISIBLE);
+        }
+        // 是否窜货
+        if("Y".equals(mitValcheckterM.getIffleeing())){
+            cb4.setVisibility(View.VISIBLE);
+        }
 
         valsupplyMTemp = dataLst.get(position);
         String flag = valsupplyMTemp.getValagencysupplyflag();
@@ -482,7 +510,7 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
         });
 
         mAlertViewExt.addExtView(extView);
-        mAlertViewExt.setOnDismissListener(new OnDismissListener() {
+        mAlertViewExt.setCancelable(true).setOnDismissListener(new OnDismissListener() {
             @Override
             public void onDismiss(Object o) {
                 DbtLog.logUtils(TAG, "取消选择结果");
@@ -503,8 +531,8 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
      */
     public void alertShow4(final int posi) {
         List<KvStc> sureOrFail = new ArrayList<>();
-        sureOrFail.add(new KvStc("zhengque","失效这条供货关系","-1"));
-        sureOrFail.add(new KvStc("cuowu","录入该条记录数据","-1"));
+        sureOrFail.add(new KvStc("zhengque", "失效这条供货关系", "-1"));
+        sureOrFail.add(new KvStc("cuowu", "录入该条记录数据", "-1"));
         mAlertViewExt = new AlertView(null, null, null, null,
                 null, getActivity(), AlertView.Style.ActionSheet, null);
         ViewGroup extView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_list_form, null);
@@ -515,10 +543,10 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(0==position){// 失效
+                if (0 == position) {// 失效
                     dataLst.remove(posi);
                     handler.sendEmptyMessage(ZsInvoicingFragment.INIT_AMEND);
-                }else{// 跳转数据录入
+                } else {// 跳转数据录入
                     Bundle bundle = new Bundle();
                     bundle.putInt("position", posi);//
                     bundle.putString("termId", termId);//

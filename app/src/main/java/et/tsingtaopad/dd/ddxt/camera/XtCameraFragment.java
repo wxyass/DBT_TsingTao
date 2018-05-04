@@ -40,6 +40,7 @@ import et.tsingtaopad.core.util.file.FileTool;
 import et.tsingtaopad.db.table.MstTerminalinfoMCart;
 import et.tsingtaopad.db.table.MstTerminalinfoMTemp;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
+import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.camera.domain.CameraInfoStc;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.sayhi.domain.MstTerminalInfoMStc;
 import et.tsingtaopad.view.MyGridView;
@@ -182,12 +183,15 @@ public class XtCameraFragment extends XtBaseVisitFragment implements View.OnClic
         picGv.setAdapter(gridAdapter);
     }
 
+    int current = -1;
     private void setGridItemListener() {
         // 设置item的点击监听
         picGv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, final int position, long id) {
+
+                current = position;
 
                 CallbackManager.getInstance().addCallback(CallbackType.ON_CROP, new IGlobalCallback() {
                     @Override
@@ -244,14 +248,38 @@ public class XtCameraFragment extends XtBaseVisitFragment implements View.OnClic
                     }
                 });
 
-                // 拍照弹窗
-                if(TextUtils.isEmpty(valueLst.get(position).getCamerakey())||"".equals(valueLst.get(position).getCamerakey())){
-                    new XtCameraHandler(XtCameraFragment.this).takePhoto();
-                }else{
-                    new XtCameraHandler(XtCameraFragment.this).beginCameraDialog(valueLst.get(position).getPicname());
+                /*if (hasPermission(GlobalValues.HARDWEAR_CAMERA_PERMISSION)) {
+                    // 拥有了此权限,那么直接执行业务逻辑
+                    startCamera(current);
+                } else {
+                    // 还没有对一个权限(请求码,权限数组)这两个参数都事先定义好
+                    requestPermission(GlobalValues.HARDWEAR_CAMERA_CODE, GlobalValues.HARDWEAR_CAMERA_PERMISSION);
+                }*/
+
+                if (hasPermission(GlobalValues.WRITE_EXTERNAL_CAMERA_PERMISSION)) {
+                    // 拥有了此权限,那么直接执行业务逻辑
+                    startCamera(current);
+                } else {
+                    // 还没有对一个权限(请求码,权限数组)这两个参数都事先定义好
+                    requestPermission(GlobalValues.WRITE_LOCAL_CODE, GlobalValues.WRITE_EXTERNAL_CAMERA_PERMISSION);
                 }
+
             }
         });
+    }
+
+    @Override
+    public void doCameraWriteSD() {
+        startCamera(current);
+    }
+
+    private void startCamera(int position){
+        // 拍照弹窗
+        if(TextUtils.isEmpty(valueLst.get(position).getCamerakey())||"".equals(valueLst.get(position).getCamerakey())){
+            new XtCameraHandler(XtCameraFragment.this).takePhoto();
+        }else{
+            new XtCameraHandler(XtCameraFragment.this).beginCameraDialog(valueLst.get(position).getPicname());
+        }
     }
 
     @Override

@@ -29,10 +29,12 @@ import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
+import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.core.view.alertview.OnDismissListener;
 import et.tsingtaopad.core.view.alertview.OnItemClickListener;
+import et.tsingtaopad.db.table.MitValcheckterM;
 import et.tsingtaopad.db.table.MstVisitM;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
 import et.tsingtaopad.dd.ddxt.camera.XtCameraFragment;
@@ -116,6 +118,8 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
             R.drawable.bt_shopvisit_camera };
 
     MstTerminalInfoMStc mstTerminalInfoMStc;
+    List<MitValcheckterM>  mitValcheckterMs;
+    MitValcheckterM  mitValcheckterM;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,15 +141,11 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
         backBtn.setOnClickListener(this);
         //titleTv.setOnClickListener(this);
 
-
         mDataTv = (AppCompatTextView) findViewById(R.id.zs_tv_date);
         mDayTv = (AppCompatTextView) findViewById(R.id.zs_tv_day);
         //mTextTv = (AppCompatTextView) findViewById(R.id.xtvisit_tv_textView2);
         mContentFl = (FrameLayout) findViewById(R.id.zs_fl_content);
         mMemoImg = (AppCompatImageView) findViewById(R.id.zs_bt_memo);
-
-
-
 
     }
 
@@ -157,18 +157,26 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
         seeFlag = bundle.getString("seeFlag");
         isFirstVisit = bundle.getString("isFirstVisit");
         termStc = (XtTermSelectMStc) bundle.getSerializable("termStc");
+        mitValcheckterM = (MitValcheckterM) bundle.getSerializable("mitValcheckterM");
 
         titleTv.setText("追溯: "+termStc.getTerminalname());
 
         xtShopVisitService = new XtShopVisitService(getApplicationContext(), null);
         // 从拜访主表中获取最后一次拜访数据
         MstVisitM preMstVisitM = xtShopVisitService.findNewLastVisit(termStc.getTerminalkey(), false);
-        mstTerminalInfoMStc = xtShopVisitService.findTermKeyById(termStc.getTerminalkey());
+
+        // // 获取追溯模板 大区id
+        /*String areapid = PrefUtils.getString(this,"departmentid","");
+        mitValcheckterMs = xtShopVisitService.getValCheckterMList(areapid);
+        mitValcheckterM = mitValcheckterMs.get(0);*/
+
         // 获取上次拜访主键
         preVisitkey = preMstVisitM.getVisitkey();
         prevVisitDate = preMstVisitM.getVisitdate();
         // 复制各个临时表
         configVisitData(bundle);
+        // 获取终端区域id,定格key,路线id
+        mstTerminalInfoMStc = xtShopVisitService.findTermKeyById(termStc.getTerminalkey());
 
         // 展示打招呼页面
         /*XtSayhiFragment xtSayhiFragment = new XtSayhiFragment();
@@ -355,6 +363,7 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
         bundle.putSerializable("preVisitkey", preVisitkey);//visitId
         bundle.putSerializable("seeFlag", seeFlag);// 默认0   0:拜访 1:查看
         bundle.putSerializable("mitValterMTempKey", mitValterMTempKey);// 追溯主键
+        bundle.putSerializable("mitValcheckterM", mitValcheckterM);// 追溯主键
 
         bundle.putSerializable("visitDate", "");// visitDate上一次的拜访时间(用于促销活动 状态隔天关闭)
         bundle.putSerializable("lastTime", "");// lastTime上一次的拜访时间(用于促销活动 状态隔天关闭)
@@ -430,7 +439,6 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
                             xtUploadService.upload_zs_visit(false,mitValterMTempKey,1);
 
                             ConstValues.handler.sendEmptyMessage(ConstValues.WAIT0);
-
 
                             ZsVisitShopActivity.this.finish();
                         }

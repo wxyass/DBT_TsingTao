@@ -428,10 +428,117 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         handler = new MyHandler(this);
         zsSayhiService = new ZsSayhiService(getActivity(), handler);
 
+        // 根据追溯模板 设置各个控件是否显示
+        initViewVisible();
 
         PrefUtils.putBoolean(getActivity(),GlobalValues.SAYHIREADY,true);
         // 初始化页面数据
         initViewData();// 子线程查找数据
+
+    }
+
+    // 根据追溯模板 设置各个控件是否显示
+    private void initViewVisible() {
+
+        // 是否有效终端
+        if("Y".equals(mitValcheckterM.getVaildter())){
+            zdzs_sayhi_rl_termstatus.setVisibility(View.VISIBLE);
+        }
+        // 是否有效拜访
+        if("Y".equals(mitValcheckterM.getVaildvisit())){
+            zdzs_sayhi_rl_visitstatus.setVisibility(View.VISIBLE);
+        }
+        // 是否我品店招
+        if("Y".equals(mitValcheckterM.getIfmine())){
+            zdzs_sayhi_rl_wopindianzhao.setVisibility(View.VISIBLE);
+        }
+        // 销售产品范围
+        if("Y".equals(mitValcheckterM.getSalesarea())){
+            zdzs_sayhi_rl_selfstatus.setVisibility(View.VISIBLE);
+            zdzs_sayhi_rl_cmpstatus.setVisibility(View.VISIBLE);
+        }
+        // 终端合作状态
+        if("Y".equals(mitValcheckterM.getTerworkstatus())){
+            zdzs_sayhi_rl_selfprotocol.setVisibility(View.VISIBLE);
+            zdzs_sayhi_rl_cmpprotocol.setVisibility(View.VISIBLE);
+        }
+
+
+
+        // 终端编码
+        if("Y".equals(mitValcheckterM.getTerminalcode())){
+            zdzs_sayhi_rl_termcode.setVisibility(View.VISIBLE);
+        }
+        // 所属路线
+        if("Y".equals(mitValcheckterM.getRoutecode())){
+            zdzs_sayhi_rl_belongline.setVisibility(View.VISIBLE);
+        }
+        // 终端名称
+        if("Y".equals(mitValcheckterM.getTername())){
+            zdzs_sayhi_rl_termname.setVisibility(View.VISIBLE);
+        }
+        // 终端等级
+        if("Y".equals(mitValcheckterM.getTerlevel())){
+            zdzs_sayhi_rl_level.setVisibility(View.VISIBLE);
+        }
+        // 县
+        if("Y".equals(mitValcheckterM.getCountry())){
+            zdzs_sayhi_rl_prov.setVisibility(View.VISIBLE);
+            zdzs_sayhi_rl_city.setVisibility(View.VISIBLE);
+            zdzs_sayhi_rl_country.setVisibility(View.VISIBLE);
+        }
+        // 地址
+        if("Y".equals(mitValcheckterM.getAddress())){
+            zdzs_sayhi_rl_address.setVisibility(View.VISIBLE);
+        }
+        // 联系人
+        if("Y".equals(mitValcheckterM.getContact())){
+            zdzs_sayhi_rl_person.setVisibility(View.VISIBLE);
+        }
+        // 电话
+        if("Y".equals(mitValcheckterM.getMobile())){
+            zdzs_sayhi_rl_tel.setVisibility(View.VISIBLE);
+        }
+        // 拜访周期
+        if("Y".equals(mitValcheckterM.getCylie())){
+            zdzs_sayhi_rl_cycle.setVisibility(View.VISIBLE);
+        }
+        // 拜访顺序
+        if("Y".equals(mitValcheckterM.getVisitorder())){
+            zdzs_sayhi_rl_sequence.setVisibility(View.VISIBLE);
+        }
+        // 高档容量
+        if("Y".equals(mitValcheckterM.getHvolume())){
+            zdzs_sayhi_rl_hvolume.setVisibility(View.VISIBLE);
+        }
+        // 中档容量
+        if("Y".equals(mitValcheckterM.getZvolume())){
+            zdzs_sayhi_rl_mvolume.setVisibility(View.VISIBLE);
+        }
+        // 普档容量
+        if("Y".equals(mitValcheckterM.getPvolume())){
+            zdzs_sayhi_rl_pvolume.setVisibility(View.VISIBLE);
+        }
+        // 底档容量
+        if("Y".equals(mitValcheckterM.getLvolume())){
+            zdzs_sayhi_rl_lvolume.setVisibility(View.VISIBLE);
+        }
+        // 区域类型
+        if("Y".equals(mitValcheckterM.getAreatype())){
+            zdzs_sayhi_rl_areatype.setVisibility(View.VISIBLE);
+        }
+        // 销售次渠道
+        if("Y".equals(mitValcheckterM.getMinorchannel())){
+            zdzs_sayhi_rl_sellchannel.setVisibility(View.VISIBLE);
+            zdzs_sayhi_rl_mainchannel.setVisibility(View.VISIBLE);
+            zdzs_sayhi_rl_minorchannel.setVisibility(View.VISIBLE);
+        }
+        // 拜访对象
+        if("Y".equals(mitValcheckterM.getVisituser())){
+            zdzs_sayhi_rl_visitperson.setVisibility(View.VISIBLE);
+        }
+
+
 
     }
 

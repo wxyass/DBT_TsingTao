@@ -22,7 +22,7 @@
             <!-- 是否有效终端： -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_termstatus"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -50,13 +50,10 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
             <!-- 是否有效拜访：  -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_visitstatus"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -84,13 +81,10 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
             <!-- 是否我品店招：  -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_wopindianzhao"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -119,13 +113,10 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
             <!-- 是否我品销售范围：  -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_selfstatus"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -154,15 +145,10 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
-
-
             <!-- 是否竞品销售范围：  -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_cmpstatus"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -191,15 +177,10 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
-
-
             <!-- 我品终端合作状态 -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_selfprotocol"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -228,14 +209,10 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
-
             <!-- 竞品终端合作状态 -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_cmpprotocol"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -264,9 +241,6 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
 
 
             <!--终端信息确认-->
@@ -288,14 +262,11 @@
                     android:layout_height="wrap_content"
                     android:text="@string/sayhi_terminfo"/>
             </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
 
             <!-- 终端名称： -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_termname"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -323,13 +294,10 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
             <!-- 终端编码： -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_termcode"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -357,13 +325,10 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
             <!--  所属路线： -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_belongline"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -391,13 +356,11 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
+
             <!-- 终端等级： -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_level"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -425,13 +388,10 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
             <!-- 所在省： -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_prov"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -460,13 +420,10 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="gone"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
             <!-- 所在市：-->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_city"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -495,13 +452,10 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="gone"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
             <!-- 所在县： -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_country"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -529,13 +483,10 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
             <!-- 地址： -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_address"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -563,13 +514,10 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
             <!-- 联系人： -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_person"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -597,13 +545,10 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
             <!-- 电话：-->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_tel"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -631,13 +576,10 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
             <!-- 拜访周期： -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_cycle"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -665,13 +607,10 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
             <!-- 拜访顺序： -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_sequence"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -699,13 +638,10 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
             <!-- 高档容量： -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_hvolume"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -733,13 +669,10 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
             <!--  中档容量： -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_mvolume"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -767,13 +700,10 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
             <!-- 普通容量：  -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_pvolume"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -801,13 +731,10 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
             <!-- 低档容量： -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_lvolume"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -835,14 +762,11 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
             <!-- 总容量： -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_totalvolume"
                 android:visibility="gone"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -870,13 +794,10 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
             <!-- 区域类型： -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_areatype"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -904,13 +825,10 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
             <!-- 销售渠道： -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_sellchannel"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -939,13 +857,10 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="gone"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
             <!-- 主渠道：  -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_mainchannel"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -974,13 +889,10 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="gone"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
             <!-- 次渠道： -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_minorchannel"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -1008,13 +920,10 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
             <!-- 拜访对象： -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_visitperson"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
                 <TextView
@@ -1042,9 +951,6 @@
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
 
             <!-- layout_gravity属性是**指定当前控件在父元素的位置layout_gravity属性是**指定当前控件在父元素的位置- -->
 

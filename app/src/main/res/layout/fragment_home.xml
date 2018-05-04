@@ -2,17 +2,16 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/gray"
+                android:background="@drawable/bg_login"
     >
-
-
-    <!-- TODO: Update blank fragment layout -->
 
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_first_login"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:layout_marginTop="50dp"
         android:text="登录"/>
 
@@ -42,9 +41,11 @@
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_first_sync_start"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="450dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:layout_below="@id/btn_first_login"
         android:text="同步数据"/>
 
 </RelativeLayout>

@@ -23,9 +23,7 @@ import et.tsingtaopad.dd.ddxt.chatvie.domain.XtChatVieStc;
 /**
  * 项目名称：营销移动智能工作平台 </br>
  * 文件名：VieStatusAdapter.java</br>
- * 作者：吴承磊   </br>
- * 创建时间：2013-12-6</br>      
- * 功能描述: 巡店拜访--聊竞品，竞品情况Adapter</br>      
+ * 功能描述: 巡店拜访--聊竞品，竞品情况Adapter</br>
  * 版本 V 1.0</br>               
  * 修改履历</br>
  * 日期      原因  BUG号    修改人 修改版本</br>

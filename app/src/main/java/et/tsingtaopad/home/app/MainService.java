@@ -181,7 +181,7 @@ public class MainService extends XtShopVisitService {
             mstInvoicingInfoDao = helper.getMstInvoicingInfoDao();
             mstAgencytransferInfoDao = helper.getMstAgencytransferInfoDao();
             mstVistproductInfoDao = helper.getMstVistproductInfoDao();
-            //mitValcheckterMDao = helper.getMitVal;
+            mitValcheckterMDao = helper.getMitValcheckterMDao();
             mstCheckexerecordInfoDao = helper.getMstCheckexerecordInfoDao();
             mstCollectionexerecordInfoDao = helper.getMstCollectionexerecordInfoDao();
             mstPromotermInfoDao = helper.getMstPromotermInfoDao();

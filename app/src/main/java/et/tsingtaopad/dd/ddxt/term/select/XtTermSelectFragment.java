@@ -344,14 +344,12 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
 
         xtTermSelectMStc = termList.get(position);
 
-        // 弹出提示 是否拜访这家终端
-        confirmXtUplad(xtTermSelectMStc);
-
         // 检测条数是否已上传
         List<MitVisitM> terminalList = xtSelectService.getXtMitValterM(xtTermSelectMStc.getTerminalkey());
         if(terminalList.size()>0){
             deleteOrXtUplad(terminalList.get(0));
         }else{
+            // 弹出提示 是否拜访这家终端
             confirmXtUplad(xtTermSelectMStc);// 拜访
         }
     }

@@ -25,6 +25,7 @@ import et.tsingtaopad.db.dao.MstAgencysupplyInfoDao;
 import et.tsingtaopad.db.dao.MstTerminalinfoMDao;
 import et.tsingtaopad.db.dao.MstVisitMDao;
 import et.tsingtaopad.db.dao.MstVisitMTempDao;
+import et.tsingtaopad.db.table.MitValcheckterM;
 import et.tsingtaopad.db.table.MitValterM;
 import et.tsingtaopad.db.table.MitVisitM;
 import et.tsingtaopad.db.table.MstAgencysupplyInfo;
@@ -55,8 +56,6 @@ import et.tsingtaopad.main.visit.shopvisit.term.domain.MstTermListMStc;
 /**
  * 项目名称：营销移动智能工作平台 </br>
  * 文件名：TermListService.java</br>
- * 作者：吴承磊   </br>
- * 创建时间：2013-11-28</br>
  * 功能描述: 巡店拜访_终端列表的业务逻辑</br>
  * 版本 V 1.0</br>
  * 修改履历</br>
@@ -299,8 +298,6 @@ public class XtTermSelectService {
                 terminalinfoMCartDao.createOrUpdate(terminalinfoMCart);
 
             }
-
-
             connection.commit(null);
         } catch (Exception e) {
             Log.e(TAG, "复制数据出错", e);
@@ -470,5 +467,23 @@ public class XtTermSelectService {
         return valueLst;
     }
 
+    /***
+     * 通过大区ID 获取追溯模板表
+     * @param areapid
+     * @return
+     */
+    public List<MitValcheckterM> getValCheckterMList(String areapid) {
+        List<MitValcheckterM> list = new ArrayList<MitValcheckterM>();
+        try {
+            Dao<MitValcheckterM, String> mitValcheckterMDao = DatabaseHelper.getHelper(context).getMitValcheckterMDao();
+            QueryBuilder<MitValcheckterM, String> qb = mitValcheckterMDao.queryBuilder();
+            Where<MitValcheckterM, String> where = qb.where();
+            where.eq("areaid", areapid);
+            list = qb.query();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 
 }

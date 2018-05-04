@@ -43,6 +43,7 @@ import et.tsingtaopad.core.view.alertview.OnDismissListener;
 import et.tsingtaopad.core.view.alertview.OnItemClickListener;
 import et.tsingtaopad.core.view.dropdownmenu.DropBean;
 import et.tsingtaopad.core.view.dropdownmenu.DropdownButton;
+import et.tsingtaopad.db.table.MitValcheckterM;
 import et.tsingtaopad.db.table.MitValterM;
 import et.tsingtaopad.db.table.MstGridM;
 import et.tsingtaopad.db.table.MstMarketareaM;
@@ -90,6 +91,7 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
     private Button addAllTermBtn;
 
     private XtTermSelectMStc xtTermSelectMStc;
+    private List<MitValcheckterM>  mitValcheckterMs;
 
     private XtTermSelectService xtSelectService;
     // MstTerminalinfoM term = xtSelectService.findTermByTerminalkey(xtselect.getTerminalkey());
@@ -154,6 +156,11 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
 
         // 设置终端条目适配器,及条目点击事件
         setItemAdapterListener();
+
+        // // 获取追溯模板 大区id
+        String areapid = PrefUtils.getString(getActivity(),"departmentid","");
+        mitValcheckterMs = xtSelectService.getValCheckterMList(areapid);
+        //mitValcheckterM = mitValcheckterMs.get(0);
 
     }
 
@@ -300,9 +307,14 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
                 supportFragmentManager.popBackStack();
                 break;
             case R.id.top_navigation_rl_confirm:// 确定
-                // 生成临时表,跳转终端购物车
-                breakNextLayout(TOFRAGMENT, selectedList);
-                PrefUtils.putString(getActivity(), GlobalValues.DDXTZS,"2");
+                if(mitValcheckterMs.size()>0){// 配置了督导模板
+                    // 生成临时表,跳转终端购物车
+                    breakNextLayout(TOFRAGMENT, selectedList);
+                    PrefUtils.putString(getActivity(), GlobalValues.DDXTZS,"2");
+                }else{
+                    Toast.makeText(getActivity(),"请先联系文员,配置督导模板",Toast.LENGTH_SHORT).show();
+                }
+
                 break;
             case R.id.xtbf_termselect_bt_add:// 全部添加
                 for (XtTermSelectMStc selectMStc : termList) {
@@ -331,17 +343,21 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
         // 生成临时表,跳转终端拜访
         breakNextLayout(TOACTIVITY, selectedList);*/
 
-
-
-        xtTermSelectMStc = termList.get(position);
-
-        // 检测条数是否已上传
-        List<MitValterM> terminalList = xtSelectService.getZsMitValterM(xtTermSelectMStc.getTerminalkey());
-        if(terminalList.size()>0){
-            deleteOrXtUplad(terminalList.get(0));
+        if(mitValcheckterMs.size()>0){// 配置了督导模板
+            xtTermSelectMStc = termList.get(position);
+            // 检测条数是否已上传
+            List<MitValterM> terminalList = xtSelectService.getZsMitValterM(xtTermSelectMStc.getTerminalkey());
+            if(terminalList.size()>0){
+                deleteOrXtUplad(terminalList.get(0));
+            }else{
+                confirmXtUplad(xtTermSelectMStc);// 拜访
+            }
         }else{
-            confirmXtUplad(xtTermSelectMStc);// 拜访
+            Toast.makeText(getActivity(),"请先联系文员,配置督导模板",Toast.LENGTH_SHORT).show();
         }
+
+
+
     }
 
     /**
@@ -365,6 +381,7 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
 
             Bundle bundle = new Bundle();
             bundle.putSerializable("fromFragment", "ZsTermSelectFragment");
+            //bundle.putSerializable("mitValcheckterM", mitValcheckterMs.get(0));
             ZsTermCartFragment zsTermCartFragment = new ZsTermCartFragment();
             zsTermCartFragment.setArguments(bundle);
 
@@ -539,6 +556,7 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
         Intent intent = new Intent(getActivity(), ZsVisitShopActivity.class);
         intent.putExtra("isFirstVisit", "1");// 非第一次拜访1
         intent.putExtra("termStc", xtTermSelectMStc);
+        intent.putExtra("mitValcheckterM", mitValcheckterMs.get(0));
         intent.putExtra("seeFlag", "0"); // 0拜访 1查看标识
         startActivity(intent);
     }

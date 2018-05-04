@@ -32,6 +32,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<MstAgencysupplyInfoTemp, String> mstAgencysupplyInfoTempDao = null;
     private Dao<MitAgencysupplyInfo, String> mitAgencysupplyInfoDao = null;
     private Dao<MitValcmpM, String> mitValcmpMDao = null;
+    private Dao<MitValcheckterM, String> mitValcheckterMDao = null;
     private Dao<MitValcmpMTemp, String> mitValcmpMTempDao = null;
     private Dao<MitValgroupproM, String> mitValgroupproMDao = null;
     private Dao<MitValgroupproMTemp, String> mitValgroupproMTempDao = null;
@@ -1251,6 +1252,16 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mitValcmpMTempDao;
     }
+
+    public Dao<MitValcheckterM, String> getMitValcheckterMDao() throws SQLException {
+
+        if (mitValcheckterMDao == null) {
+            mitValcheckterMDao = getDao(MitValcheckterM.class);
+        }
+        return mitValcheckterMDao;
+    }
+
+
 
     public Dao<MitValgroupproM, String> getMitValgroupproMDao() throws SQLException {
 

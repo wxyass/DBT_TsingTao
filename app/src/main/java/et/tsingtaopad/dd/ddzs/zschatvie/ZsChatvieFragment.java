@@ -13,6 +13,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -67,9 +68,12 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
     private TextView zdzs_chatvie_textview01;
     private Button zdzs_chatvie_bt_addrelation;
     private ListView zsChatvieLv;
+    private LinearLayout zdzs_chatvie_ll_clearvie;
     private RelativeLayout zdzs_chatvie_rl_clearvie;
     private TextView zdzs_chatvie_rl_clearvie_con1;
     private TextView zdzs_chatvie_rl_clearvie_statue;
+    private LinearLayout zdzs_chatvie_ll_visitreport_title;
+    private LinearLayout zdzs_chatvie_ll_visitreport;
     private EditText zdzs_chatvie_et_visitreport;
 
     ZsChatvieAdapter zsChatvieAdapter;
@@ -95,9 +99,12 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
         zdzs_chatvie_textview01 = (TextView) view.findViewById(R.id.zdzs_chatvie_textview01);
         zdzs_chatvie_bt_addrelation = (Button) view.findViewById(R.id.zdzs_chatvie_bt_addrelation);
         zsChatvieLv = (ListView) view.findViewById(R.id.zdzs_chatvie_lv_viesource);
+        zdzs_chatvie_ll_clearvie = (LinearLayout) view.findViewById(R.id.zdzs_chatvie_ll_clearvie);
         zdzs_chatvie_rl_clearvie = (RelativeLayout) view.findViewById(R.id.zdzs_chatvie_rl_clearvie);
         zdzs_chatvie_rl_clearvie_con1 = (TextView) view.findViewById(R.id.zdzs_chatvie_rl_clearvie_con1);
         zdzs_chatvie_rl_clearvie_statue = (TextView) view.findViewById(R.id.zdzs_chatvie_rl_clearvie_statue);
+        zdzs_chatvie_ll_visitreport_title = (LinearLayout) view.findViewById(R.id.zdzs_chatvie_ll_visitreport_title);
+        zdzs_chatvie_ll_visitreport = (LinearLayout) view.findViewById(R.id.zdzs_chatvie_ll_visitreport);
         zdzs_chatvie_et_visitreport = (EditText) view.findViewById(R.id.zdzs_chatvie_et_visitreport);
 
 
@@ -112,9 +119,28 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
         zsChatVieService = new ZsChatVieService(getActivity(), null);
         handler = new MyHandler(this);
 
+        // 根据追溯模板 设置各个控件是否显示
+        initViewVisible();
+
         initProData();
+    }
 
-
+    // 根据追溯模板 设置各个控件是否显示
+    private void initViewVisible() {
+        // 新增供货关系
+        if("Y".equals(mitValcheckterM.getAddsupply())){
+            zdzs_chatvie_bt_addrelation.setVisibility(View.VISIBLE);
+        }
+        // 是否成功瓦解竞品
+        if("Y".equals(mitValcheckterM.getIfcmp())){
+            zdzs_chatvie_rl_clearvie.setVisibility(View.VISIBLE);
+            zdzs_chatvie_ll_clearvie.setVisibility(View.VISIBLE);
+        }
+        // 拜访记录
+        if("Y".equals(mitValcheckterM.getVisinote())){
+            zdzs_chatvie_ll_visitreport_title.setVisibility(View.VISIBLE);
+            zdzs_chatvie_ll_visitreport.setVisibility(View.VISIBLE);
+        }
     }
 
     //List<XtChatVieStc> dataLst;
@@ -313,6 +339,19 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
         final CheckBox cb1 = (CheckBox) extView.findViewById(R.id.cb1);
         final CheckBox cb2 = (CheckBox) extView.findViewById(R.id.cb2);
         final CheckBox cb3 = (CheckBox) extView.findViewById(R.id.cb3);
+
+        // 竞品品项有误
+        if("Y".equals(mitValcheckterM.getCmperror())){
+            cb1.setVisibility(View.VISIBLE);
+        }
+        // 竞品经销商有误
+        if("Y".equals(mitValcheckterM.getCmpagencyerror())){
+            cb2.setVisibility(View.VISIBLE);
+        }
+        // 竞品数据错误
+        if("Y".equals(mitValcheckterM.getCmpdataerror())){
+            cb3.setVisibility(View.VISIBLE);
+        }
 
         valsupplyMTemp = dataLst.get(position);
         String flag = valsupplyMTemp.getValagencysupplyflag();

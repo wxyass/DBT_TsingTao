@@ -30,8 +30,8 @@
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:layout_weight="7">
+            android:layout_weight="7"
+            android:background="@color/white">
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/top_navigation_tv_title1"
@@ -39,12 +39,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="65dp"
                 android:layout_centerInParent="true"
-                android:textColor="@color/bg_top_navigation_title"
-                android:text="选择结果"
                 android:gravity="center"
                 android:maxLength="15"
                 android:paddingLeft="30dp"
-                android:paddingRight="30dp"/>
+                android:paddingRight="30dp"
+                android:text="选择结果"
+                android:textColor="@color/bg_top_navigation_title"/>
         </RelativeLayout>
 
         <!-- 确定 -->
@@ -71,20 +71,20 @@
     </LinearLayout>
 
     <RadioGroup
-        android:id="@+id/right_rg"
+        android:id="@+id/result_right_rg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <RadioButton
-            android:id="@+id/right_rb"
+            android:id="@+id/result_right_rb"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:text="正确" />
+            android:text="正确"/>
     </RadioGroup>
 
     <View
@@ -97,37 +97,40 @@
 
 
     <CheckBox
+        android:id="@+id/result_cb1"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         android:text="品项有误"
-        android:id="@+id/cb1" />
+        android:visibility="gone"/>
 
     <CheckBox
+        android:id="@+id/result_cb2"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         android:text="经销商有误"
-        android:id="@+id/cb2" />
+        android:visibility="gone"/>
 
     <CheckBox
+        android:id="@+id/result_cb3"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         android:text="数据有误"
-        android:id="@+id/cb3" />
+        android:visibility="gone"/>
 
     <CheckBox
+        android:id="@+id/result_cb4"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         android:text="窜货"
-        android:id="@+id/cb4" />
-
+        android:visibility="gone"/>
 
 
     <View
