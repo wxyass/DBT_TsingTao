@@ -104,12 +104,16 @@ public class XtCameraHandler implements View.OnClickListener {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             //intent = toCameraByFileProvider(intent,tempFile);
             //intent = toCameraByContentResolver(intent,tempFile,currentPhotoName);
-            fileuri = toCameraByContentResolverUri(tempFile,currentPhotoName);
 
+            /*fileuri = toCameraByContentResolverUri(tempFile,currentPhotoName);
             CameraImageBean cameraImageBean = CameraImageBean.getInstance();
             cameraImageBean.setmPath(fileuri);
             cameraImageBean.setPicname(currentPhotoName);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, fileuri);
+            DELEGATE.startActivityForResult(intent, RequestCodes.TAKE_PHONE);*/
+
+
+            intent = toCameraByContentResolver(intent,tempFile,currentPhotoName);
             DELEGATE.startActivityForResult(intent, RequestCodes.TAKE_PHONE);
         } else {
             fileuri = Uri.fromFile(tempFile);// 将File转为Uri
