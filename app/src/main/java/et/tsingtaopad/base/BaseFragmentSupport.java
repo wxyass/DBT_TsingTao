@@ -14,9 +14,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import et.tsingtaopad.R;
+import et.tsingtaopad.fragmentback.HandleBackInterface;
+import et.tsingtaopad.fragmentback.HandleBackUtil;
 import et.tsingtaopad.home.initadapter.GlobalValues;
 
-public class BaseFragmentSupport extends Fragment {
+public class BaseFragmentSupport extends Fragment implements HandleBackInterface{
 
 	public FragmentManager supportFragmentManager;
     @Override
@@ -151,4 +153,8 @@ public class BaseFragmentSupport extends Fragment {
 
 	// 权限相关 ↑--------------------------------------------------------------------------
 
+	@Override
+	public boolean onBackPressed() {
+		return HandleBackUtil.handleBackPress(this);
+	}
 }

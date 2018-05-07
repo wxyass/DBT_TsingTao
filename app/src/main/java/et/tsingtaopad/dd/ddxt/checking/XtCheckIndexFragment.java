@@ -434,4 +434,16 @@ public class XtCheckIndexFragment extends XtBaseVisitFragment implements View.On
         Log.e("Optimization", "查指标执行数据库"+(time4-time3));
     }
 
+
+    // 监听返回键
+    @Override
+    public boolean onBackPressed() {
+        if (mAlertViewExt != null && mAlertViewExt.isShowing()) {
+            mAlertViewExt.dismiss();
+            return true;
+        } else {
+            return super.onBackPressed();
+        }
+    }
+
 }

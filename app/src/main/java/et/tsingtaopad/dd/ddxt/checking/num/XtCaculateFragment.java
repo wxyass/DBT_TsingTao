@@ -107,12 +107,10 @@ public class XtCaculateFragment extends BaseFragmentSupport implements View.OnCl
                 supportFragmentManager.popBackStack();// 取消
                 break;
             case R.id.top_navigation_rl_confirm:// 确定
-                saveValue(v);
-                supportFragmentManager.popBackStack();
+
                 break;
-            case R.id.xtbf_caculate_bt_next:// 确定
+            case R.id.xtbf_caculate_bt_next:// 保存
                 saveValue(v);
-                supportFragmentManager.popBackStack();
                 break;
 
             default:
@@ -169,6 +167,9 @@ public class XtCaculateFragment extends BaseFragmentSupport implements View.OnCl
         msg.what = XtCheckIndexFragment.INPUT_SUC;
         msg.setData(bundle);
         handler.sendMessage(msg);
+
+        // 关闭界面
+        supportFragmentManager.popBackStack();
 
     }
 }

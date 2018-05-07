@@ -735,4 +735,15 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
         mAlertViewExt.show();
     }
 
+    // 监听返回键
+    @Override
+    public boolean onBackPressed() {
+        if (mAlertViewExt != null && mAlertViewExt.isShowing()) {
+            mAlertViewExt.dismiss();
+            return true;
+        } else {
+            return super.onBackPressed();
+        }
+    }
+
 }

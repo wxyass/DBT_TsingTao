@@ -1,0 +1,62 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/ico_guide_page_t"
+    >
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/dd_btn_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="100dp"
+        android:text="@string/dxtbf"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/dd_btn_xt_term"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="150dp"
+        android:text="协同终端夹"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/dd_btn_zdzs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="250dp"
+        android:text="@string/ddzdzs"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/dd_btn_zs_term"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="300dp"
+        android:text="追溯终端夹"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/dd_btn_zs_agencyres"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="400dp"
+        android:text="经销商资料库"/>
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/dd_btn_zs_agencycheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="450dp"
+        android:text="经销商库存盘点"/>
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/dd_btn_zs_addterm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="500dp"
+        android:text="漏店补录"/>
+
+</RelativeLayout>

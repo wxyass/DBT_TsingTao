@@ -100,6 +100,7 @@ public class XtInvoicingFragment extends XtBaseVisitFragment implements View.OnC
         invoicingService.delRepeatVistProduct(visitId);
         //获取某次拜访的我品的进销存数据情况
         dataLst = invoicingService.queryMineProFromTemp(visitId, termId);
+        List<String> proIdLst = FunUtil.getPropertyByName(dataLst, "proId", String.class);
 
         //问货源Adapter
         askAdapter = new XtInvoicingAskGoodsAdapter(getActivity(), "", dataLst,
@@ -248,7 +249,7 @@ public class XtInvoicingFragment extends XtBaseVisitFragment implements View.OnC
     private AlertView mAlertViewExt;//窗口拓展例子
 
     // 长按删除我品供货关系弹窗
-    private void deletesupply(int position,final XtInvoicingStc xtInvoicingStc) {
+    private void deletesupply(final int posi, final XtInvoicingStc xtInvoicingStc) {
         String proName = xtInvoicingStc.getProName();
         // 普通窗口
         mAlertViewExt = new AlertView("解除我品: "+proName, null, "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert,
@@ -266,9 +267,9 @@ public class XtInvoicingFragment extends XtBaseVisitFragment implements View.OnC
                                 boolean isFlag = service.deleteSupply(xtInvoicingStc.getRecordId(), termId, visitId, xtInvoicingStc.getProId());
                                 if(isFlag){
                                     // 删除界面listView相应行
-                                    dataLst.remove(position);
+                                    dataLst.remove(posi);
                                     askAdapter.notifyDataSetChanged();
-                                    askAdapter.setDelPosition(position);
+                                    askAdapter.setDelPosition(posi);
                                     checkGoodsAdapter.notifyDataSetChanged();
 
                                     ViewUtil.setListViewHeight(askGoodsLv);
@@ -278,9 +279,9 @@ public class XtInvoicingFragment extends XtBaseVisitFragment implements View.OnC
                                 }
                             }else{
                                 // 删除界面listView相应行
-                                dataLst.remove(position);
+                                dataLst.remove(posi);
                                 askAdapter.notifyDataSetChanged();
-                                askAdapter.setDelPosition(position);
+                                askAdapter.setDelPosition(posi);
                                 checkGoodsAdapter.notifyDataSetChanged();
 
                                 ViewUtil.setListViewHeight(askGoodsLv);

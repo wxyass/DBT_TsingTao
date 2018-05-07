@@ -120,7 +120,6 @@ public class XtQuickCollectFragment extends BaseFragmentSupport implements View.
                 break;
             case R.id.xtbf_quickcollect_bt_next:
                 saveValue(v);
-
                 break;
             default:
                 break;
@@ -168,6 +167,8 @@ public class XtQuickCollectFragment extends BaseFragmentSupport implements View.
         //quicklyDialog.cancel();
 
         handler.sendEmptyMessage(XtCheckIndexFragment.INPUT_SUC);
+
+        // 关闭界面
         supportFragmentManager.popBackStack();
 
     }

@@ -145,7 +145,7 @@ public class XtShopVisitService {
     }
 
     /***
-     * 更新拜访离店时间及是否要上传标志
+     * 更新拜访经纬度
      * @param visitId
      * @param longitude 经度
      * @param latitude  维度

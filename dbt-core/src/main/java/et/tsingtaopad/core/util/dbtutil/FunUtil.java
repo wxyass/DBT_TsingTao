@@ -946,6 +946,8 @@ public class FunUtil {
         String data;
         if (".".equals(content)) {//
             data = "0.0";
+        } else if ("0.0".equals(content)) {
+            data = "0.0";
         } else if (content.length() > 1 && content.endsWith(".")) {
             data = content + "0";
         } else if (content.length() > 1 && content.startsWith(".")) {
@@ -958,7 +960,8 @@ public class FunUtil {
         } else {
             if (content != null && (!"".equals(content))) {
                 Double d = Double.parseDouble(content);
-                String[] split = String.valueOf(d + 0.000001).split("\\.");
+                d = d + 0.000001;
+                String[] split = String.valueOf(d).split("\\.");
                 data = split[0] + "." + split[1].substring(0, 2);
             } else {
                 data = content;

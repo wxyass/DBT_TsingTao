@@ -229,6 +229,8 @@ public class XtInvoicingService extends XtShopVisitService {
             List<MstAgencysupplyInfoTemp> supplyLst = supplyDao.queryBuilder()
                     .where().eq("lowerkey", termId).and().ne("status", "1").query();
 
+            List<String> proIdLst = FunUtil.getPropertyByName(supplyLst, "productkey", String.class);
+
             MstAgencysupplyInfoTemp supply;
             for (XtInvoicingStc pro : dataLst) {
                 supply = null;

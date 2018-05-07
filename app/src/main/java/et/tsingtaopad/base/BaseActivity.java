@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import et.tsingtaopad.core.util.exit.ExitAppUtils;
+import et.tsingtaopad.fragmentback.HandleBackUtil;
 import et.tsingtaopad.home.app.MyApplication;
 import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.login.LockScreenActivity;
@@ -296,5 +297,12 @@ public class BaseActivity extends AppCompatActivity {
 	 }
 
 	// 权限相关 ↑--------------------------------------------------------------------------
+
+	 @Override
+	 public void onBackPressed() {
+		 if (!HandleBackUtil.handleBackPress(this)) {
+			 super.onBackPressed();
+		 }
+	 }
 
 }

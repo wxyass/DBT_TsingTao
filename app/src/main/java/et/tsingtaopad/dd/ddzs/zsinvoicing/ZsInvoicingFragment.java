@@ -571,4 +571,15 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
         mAlertViewExt.show();
     }
 
+    // 监听返回键
+    @Override
+    public boolean onBackPressed() {
+        if (mAlertViewExt != null && mAlertViewExt.isShowing()) {
+            mAlertViewExt.dismiss();
+            return true;
+        } else {
+            return super.onBackPressed();
+        }
+    }
+
 }

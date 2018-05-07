@@ -55,6 +55,7 @@ import et.tsingtaopad.dd.ddzs.zscheckindex.ZsCheckIndexFragment;
 import et.tsingtaopad.dd.ddzs.zsfees.ZsFeesFragment;
 import et.tsingtaopad.dd.ddzs.zsinvoicing.ZsInvoicingFragment;
 import et.tsingtaopad.dd.ddzs.zssayhi.ZsSayhiFragment;
+import et.tsingtaopad.fragmentback.HandleBackUtil;
 import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.sayhi.domain.MstTerminalInfoMStc;
@@ -494,5 +495,13 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
         return isallIn;
     }
 
+    // 监听返回键
+    @Override
+    public void onBackPressed() {
+        // 确定返回上一界面  先检查栈中的fragment是否监听了返回键
+        if (!HandleBackUtil.handleBackPress(this)) {
+            backFinish();
+        }
+    }
 
 }

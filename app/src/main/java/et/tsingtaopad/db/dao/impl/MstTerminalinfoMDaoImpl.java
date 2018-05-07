@@ -289,6 +289,7 @@ public class MstTerminalinfoMDaoImpl extends BaseDaoImpl<MstTerminalinfoM, Strin
             }
             item.setMinorchannel(FunUtil.isNullSetSpace(cursor.getString(cursor.getColumnIndex("minorchannel"))));
             item.setTerminalType(cursor.getString(cursor.getColumnIndex("terminalType")));
+            item.setRoutekey(lineId);
             String status = item.getStatus();
             if (!"2".equals(status)) {//有效终端
                 lst.add(item);
@@ -370,7 +371,7 @@ public class MstTerminalinfoMDaoImpl extends BaseDaoImpl<MstTerminalinfoM, Strin
     private List<XtTermSelectMStc> getCartTermList_sequence(SQLiteOpenHelper helper, boolean isSequence) {
         List<XtTermSelectMStc> lst = new ArrayList<XtTermSelectMStc>();
         StringBuffer buffer = new StringBuffer();
-        buffer.append("select m.terminalkey, m.terminalcode, m.terminalname,m.status,m.sequence, ");
+        buffer.append("select m.terminalkey, m.terminalcode,m.routekey, m.terminalname,m.status,m.sequence, ");
         //buffer.append("vm.isself, vm.iscmp, vm.selftreaty, vm.cmptreaty, ");
         buffer.append("vm.isself, vm.iscmp, m.selftreaty, vm.cmptreaty, ");// 我品 竞品 我品协议店,竞品协议店
         buffer.append("vm.padisconsistent, vm.uploadFlag, m.minorchannel, ");// 销售渠道编码
@@ -417,6 +418,7 @@ public class MstTerminalinfoMDaoImpl extends BaseDaoImpl<MstTerminalinfoM, Strin
             }
             item.setMinorchannel(FunUtil.isNullSetSpace(cursor.getString(cursor.getColumnIndex("minorchannel"))));
             item.setTerminalType(cursor.getString(cursor.getColumnIndex("terminalType")));
+            item.setRoutekey(cursor.getString(cursor.getColumnIndex("routekey")));
             String status = item.getStatus();
             if (!"2".equals(status)) {//有效终端
                 lst.add(item);
@@ -433,7 +435,7 @@ public class MstTerminalinfoMDaoImpl extends BaseDaoImpl<MstTerminalinfoM, Strin
     private List<XtTermSelectMStc> getAllCartTermList_sequence(SQLiteOpenHelper helper, boolean isSequence) {
         List<XtTermSelectMStc> lst = new ArrayList<XtTermSelectMStc>();
         StringBuffer buffer = new StringBuffer();
-        buffer.append("select m.terminalkey, m.terminalcode, m.terminalname,m.status,m.sequence, ");
+        buffer.append("select m.terminalkey, m.terminalcode,m.routekey, m.terminalname,m.status,m.sequence, ");
         //buffer.append("vm.isself, vm.iscmp, vm.selftreaty, vm.cmptreaty, ");
         buffer.append("vm.isself, vm.iscmp, m.selftreaty, vm.cmptreaty, ");// 我品 竞品 我品协议店,竞品协议店
         buffer.append("vm.padisconsistent, vm.uploadFlag, m.minorchannel, ");// 销售渠道编码
@@ -479,6 +481,7 @@ public class MstTerminalinfoMDaoImpl extends BaseDaoImpl<MstTerminalinfoM, Strin
             }
             item.setMinorchannel(FunUtil.isNullSetSpace(cursor.getString(cursor.getColumnIndex("minorchannel"))));
             item.setTerminalType(cursor.getString(cursor.getColumnIndex("terminalType")));
+            item.setRoutekey(cursor.getString(cursor.getColumnIndex("routekey")));
             String status = item.getStatus();
             if (!"2".equals(status)) {//有效终端
                 lst.add(item);

@@ -29,7 +29,7 @@ import et.tsingtaopad.initconstvalues.domain.KvStc;
 /**
  * Created by yangwenmin on 2018/3/12.
  * <p>
- * 进销存 录入正确数据
+ * 追溯查指标 产品组合  数据修改界面
  */
 
 public class ZsCheckIndexGroupproFragment extends BaseFragmentSupport implements View.OnClickListener {

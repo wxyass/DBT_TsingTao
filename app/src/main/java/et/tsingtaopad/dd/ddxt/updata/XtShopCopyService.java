@@ -294,13 +294,19 @@ public class XtShopCopyService {
                     info.setIfrecstand(item.getIfrecstand());
                     info.setStartdate(item.getStartdate());// 默认: 当天时间 yyyy-MM-dd +"  00:00:00"
                     info.setEnddate(item.getEnddate());//  默认: "3000-12-01"+"  00:00:00"
-                    info.setCreateusereng(item.getCreateusereng());
-                    info.setCreatedate(item.getCreatedate());
-                    info.setUpdateusereng(item.getUpdateusereng());
                     info.setVisitkey(item.getVisitkey());
                     info.setUploadflag("1");//  0:该条记录不上传  1:该条记录需要上传 ;
                     info.setPadisconsistent("0");
                     info.setUpdatetime(item.getUpdatetime());
+                    info.setCreateusereng(item.getCreateusereng());
+                    /*info.setCreatedate(item.getCreatedate());
+                    info.setUpdateusereng(item.getUpdateusereng());
+
+                    info.setCreatedate(new Date());
+                    info.setUpdatetime(new Date());*/
+                    info.setCreateusereng(PrefUtils.getString(context,"userid",""));
+                    info.setUpdateusereng(PrefUtils.getString(context,"userid",""));
+
                     mitGroupproMDao.createOrUpdate(info);
                 }
             }
@@ -389,10 +395,16 @@ public class XtShopCopyService {
                     info.setOrderbyno(item.getOrderbyno());
                     info.setDeleteflag(item.getDeleteflag());
                     info.setVersion(item.getVersion());
-                    info.setCredate(item.getCredate());
+                    /*info.setCredate(item.getCredate());
                     info.setCreuser(item.getCreuser());
                     info.setUpdatetime(item.getUpdatetime());
-                    info.setUpdateuser(item.getUpdateuser());
+                    info.setUpdateuser(item.getUpdateuser());*/
+
+                    info.setCredate(new Date());
+                    info.setUpdatetime(new Date());
+                    info.setCreuser(PrefUtils.getString(context,"userid",""));
+                    info.setUpdateuser(PrefUtils.getString(context,"userid",""));
+
                     mitCmpsupplyDao.createOrUpdate(info);
                 }
             }
@@ -485,10 +497,16 @@ public class XtShopCopyService {
                     info.setOrderbyno(item.getOrderbyno());
                     info.setDeleteflag(item.getDeleteflag());
                     info.setVersion(item.getVersion());
-                    info.setCredate(item.getCredate());
+                    /*info.setCredate(item.getCredate());
                     info.setCreuser(item.getCreuser());
                     info.setUpdatetime(item.getUpdatetime());
-                    info.setUpdateuser(item.getUpdateuser());
+                    info.setUpdateuser(item.getUpdateuser());*/
+
+                    info.setCredate(new Date());
+                    info.setUpdatetime(new Date());
+                    info.setCreuser(PrefUtils.getString(context,"userid",""));
+                    info.setUpdateuser(PrefUtils.getString(context,"userid",""));
+
                     mitAgencysupplyDao.createOrUpdate(info);
                 }
             }
@@ -615,10 +633,16 @@ public class XtShopCopyService {
                     info.setOrderbyno(item.getOrderbyno());
                     info.setDeleteflag(item.getDeleteflag());
                     info.setVersion(item.getVersion());
-                    info.setCredate(item.getCredate());
+                    /*info.setCredate(item.getCredate());
                     info.setCreuser(item.getCreuser());
                     info.setUpdatetime(item.getUpdatetime());
-                    info.setUpdateuser(item.getUpdateuser());
+                    info.setUpdateuser(item.getUpdateuser());*/
+
+                    info.setCredate(new Date());
+                    info.setUpdatetime(new Date());
+                    info.setCreuser(PrefUtils.getString(context,"userid",""));
+                    info.setUpdateuser(PrefUtils.getString(context,"userid",""));
+
                     mitTerminalDao.createOrUpdate(info);
                 }
             }
@@ -719,10 +743,16 @@ public class XtShopCopyService {
                     info.setOrderbyno(item.getOrderbyno());
                     info.setDeleteflag(item.getDeleteflag());
                     info.setVersion(item.getVersion());
-                    info.setCredate(item.getCredate());
+                    /*info.setCredate(item.getCredate());
                     info.setCreuser(item.getCreuser());
                     info.setUpdatetime(item.getUpdatetime());
-                    info.setUpdateuser(item.getUpdateuser());
+                    info.setUpdateuser(item.getUpdateuser());*/
+
+                    info.setCredate(new Date());
+                    info.setUpdatetime(new Date());
+                    info.setCreuser(PrefUtils.getString(context,"userid",""));
+                    info.setUpdateuser(PrefUtils.getString(context,"userid",""));
+
                     mitVistproductDao.create(info);
                 }
             }
@@ -808,10 +838,16 @@ public class XtShopCopyService {
                     info.setOrderbyno(item.getOrderbyno());
                     info.setDeleteflag(item.getDeleteflag());
                     info.setVersion(item.getVersion());
-                    info.setCredate(item.getCredate());
+                    /*info.setCredate(item.getCredate());
                     info.setCreuser(item.getCreuser());
                     info.setUpdatetime(item.getUpdatetime());
-                    info.setUpdateuser(item.getUpdateuser());
+                    info.setUpdateuser(item.getUpdateuser());*/
+
+                    info.setCredate(new Date());
+                    info.setUpdatetime(new Date());
+                    info.setCreuser(PrefUtils.getString(context,"userid",""));
+                    info.setUpdateuser(PrefUtils.getString(context,"userid",""));
+
                     mitPromotermDao.create(info);
                 }
             }
@@ -997,8 +1033,6 @@ public class XtShopCopyService {
                     info.setFreshness(item.getFreshness());// 新鲜度
                     info.setOrderbyno(item.getOrderbyno());
                     info.setVersion(item.getVersion());
-                    info.setCreuser(item.getCreuser());
-                    info.setUpdateuser(item.getUpdateuser());
                     info.setBianhualiang(item.getBianhualiang());//变化量 (用于最后上传时 现有量变化量必须填值,才能上传)
                     info.setXianyouliang(item.getXianyouliang());// 现有量 (用于最后上传时 现有量变化量必须填值,才能上传)
 
@@ -1007,8 +1041,12 @@ public class XtShopCopyService {
                     info.setPadisconsistent(item.getPadisconsistent());
                     info.setPadcondate(item.getPadcondate());
                     info.setDeleteflag(item.getDeleteflag());
-                    info.setCredate(item.getCredate());
-                    info.setUpdatetime(item.getUpdatetime());
+
+                    info.setCredate(new Date());
+                    info.setUpdatetime(new Date());
+                    info.setCreuser(PrefUtils.getString(context,"userid",""));
+                    info.setUpdateuser(PrefUtils.getString(context,"userid",""));
+
                     mitCollectionDao.create(info);
                 }
             }
@@ -1263,8 +1301,12 @@ public class XtShopCopyService {
                     item.setTerminalkey(tempItem.getTerminalkey());
                     item.setPadisconsistent(ConstValues.FLAG_0);
                     item.setPadcondate(null);
-                    item.setCreuser(PrefUtils.getString(context, "userCode", ""));
-                    item.setUpdateuser(item.getCreuser());
+
+                    item.setCredate(new Date());
+                    item.setUpdatetime(new Date());
+                    item.setCreuser(PrefUtils.getString(context,"userid",""));
+                    item.setUpdateuser(PrefUtils.getString(context,"userid",""));
+
                     mitCheckInfoDao.create(item);
                 }
                 //关联产品的指标 比如:铺货状态,冰冻化（临时表的） true表示有productkey
@@ -1331,9 +1373,15 @@ public class XtShopCopyService {
                                     item.setTerminalkey(valueItem.getTerminalkey());
                                     item.setSisconsistent(ConstValues.FLAG_0);
                                     item.setPadisconsistent(ConstValues.FLAG_0);
-                                    item.setCreuser(PrefUtils.getString(context, "userid", ""));
-                                    item.setUpdateuser(item.getCreuser());
+                                    /*item.setCreuser(PrefUtils.getString(context, "userid", ""));
+                                    item.setUpdateuser(item.getCreuser());*/
                                     item.setResultstatus(new BigDecimal(0));
+
+                                    item.setCredate(new Date());
+                                    item.setUpdatetime(new Date());
+                                    item.setCreuser(PrefUtils.getString(context,"userid",""));
+                                    item.setUpdateuser(PrefUtils.getString(context,"userid",""));
+
                                     mitCheckInfoDao.create(item);
                                 } else {
                                     // 如果指标结果不同
@@ -1353,9 +1401,13 @@ public class XtShopCopyService {
                                         item.setTerminalkey(valueItem.getTerminalkey());
                                         item.setSisconsistent(ConstValues.FLAG_0);
                                         item.setPadisconsistent(ConstValues.FLAG_0);
-                                        item.setCreuser(PrefUtils.getString(context, "userCode", ""));
-                                        item.setUpdateuser(item.getCreuser());
                                         item.setResultstatus(new BigDecimal(0));
+
+                                        item.setCredate(new Date());
+                                        item.setUpdatetime(new Date());
+                                        item.setCreuser(PrefUtils.getString(context,"userid",""));
+                                        item.setUpdateuser(PrefUtils.getString(context,"userid",""));
+
                                         mitCheckInfoDao.create(item);
                                     }
                                 }
@@ -1376,9 +1428,13 @@ public class XtShopCopyService {
                             item.setStartdate(endDate);
                             item.setEnddate("30001201");
                             item.setTerminalkey(tempItem.getTerminalkey());
-                            item.setCreuser(PrefUtils.getString(context, "userCode", ""));
-                            item.setUpdateuser(item.getCreuser());
                             item.setResultstatus(new BigDecimal(0));
+
+                            item.setCredate(new Date());
+                            item.setUpdatetime(new Date());
+                            item.setCreuser(PrefUtils.getString(context,"userid",""));
+                            item.setUpdateuser(PrefUtils.getString(context,"userid",""));
+
                             mitCheckInfoDao.create(item);
                         }
                     }
@@ -1501,8 +1557,13 @@ public class XtShopCopyService {
                 mstVisitM.setIfmine(visitTemp.getIfmine());
                 mstVisitM.setVisitposition(visitTemp.getVisitposition());
                 mstVisitM.setPadisconsistent("0");
-                mstVisitM.setCredate(new Date());
                 mstVisitM.setUploadFlag("1");
+
+                mstVisitM.setCredate(new Date());
+                mstVisitM.setUpdatetime(new Date());
+                mstVisitM.setCreuser(PrefUtils.getString(context,"userid",""));
+                mstVisitM.setUpdateuser(PrefUtils.getString(context,"userid",""));
+
                 //dao.create(mstVisitM);
                 mitVisitMDao.create(mstVisitM);
             } catch (SQLException e) {
@@ -1862,6 +1923,11 @@ public class XtShopCopyService {
                 mitValterM.setVidvisitottrueval(valterMTemp.getVidvisitottrueval());// 拜访对象其他VALUE正确值
                 mitValterM.setPadisconsistent("0");// 是否已上传 0:未上传 1:已上传
 
+                mitValterM.setCredate(new Date());
+                mitValterM.setUpdatedate(new Date());
+                mitValterM.setCreuser(PrefUtils.getString(context,"userid",""));
+                mitValterM.setUpdateuser(PrefUtils.getString(context,"userid",""));
+
                 valterMDao.create(mitValterM);
             } catch (SQLException e) {
                 Log.e(TAG, "复制到拜访主表正式表失败", e);
@@ -1895,6 +1961,12 @@ public class XtShopCopyService {
                     info.setDdacresult(item.getDdacresult());// 督导自动计算值
                     info.setValchecktypeflag(item.getValchecktypeflag());// 指标正确与否   char(1)
                     info.setPadisconsistent("0");// 是否已上传 0:未上传 1:已上传
+
+                    info.setCredate(new Date());
+                    info.setUpdatedate(new Date());
+                    info.setCreuser(PrefUtils.getString(context,"userid",""));
+                    info.setUpdateuser(PrefUtils.getString(context,"userid",""));
+
                     mitValchecktypeMDao.create(info);
                 }
             }
@@ -1928,6 +2000,12 @@ public class XtShopCopyService {
                     info.setValitemval(item.getValitemval()); ;// 采集项正确值结果量
                     info.setValitemremark(item.getValitemremark()); ;// 采集项备注
                     info.setPadisconsistent("0");// 是否已上传 0:未上传 1:已上传
+
+                    info.setCredate(new Date());
+                    info.setUpdatedate(new Date());
+                    info.setCreuser(PrefUtils.getString(context,"userid",""));
+                    info.setUpdateuser(PrefUtils.getString(context,"userid",""));
+
                     mitValcheckitemMDao.create(info);
                 }
             }
@@ -1958,6 +2036,12 @@ public class XtShopCopyService {
                     info.setValistruenumval(item.getValistruenumval());// 督导达成数组正确值
                     info.setVisitkey(item.getVisitkey());// 拜访主键
                     info.setPadisconsistent("0");// 是否已上传 0:未上传 1:已上传
+
+                    info.setCredate(new Date());
+                    info.setUpdatedate(new Date());
+                    info.setCreuser(PrefUtils.getString(context,"userid",""));
+                    info.setUpdateuser(PrefUtils.getString(context,"userid",""));
+
                     mitValpromotionsMDao.create(info);
                 }
             }
@@ -1967,7 +2051,7 @@ public class XtShopCopyService {
     }
 
 
-    // 复制
+    // 复制 追溯产品组合
     private void createMitValgroupproMByTemp(Dao<MitValgroupproM, String> mitValgroupproMDao,
                                              Dao<MitValgroupproMTemp, String> mitValgroupproMTempDao,
                                              String valterid) {
@@ -1987,6 +2071,12 @@ public class XtShopCopyService {
                     info.setGproductid(vo.getGproductid());
                     info.setTerminalcode(vo.getTerminalcode());
                     info.setPadisconsistent("0");// 未上传
+
+                    info.setCredate(new Date());
+                    info.setUpdatedate(new Date());
+                    info.setCreuser(PrefUtils.getString(context,"userid",""));
+                    info.setUpdateuser(PrefUtils.getString(context,"userid",""));
+
                     mitValgroupproMDao.create(info);
                 }
             }
@@ -2035,6 +2125,12 @@ public class XtShopCopyService {
                     info.setValagencysupplyljk(item.getValagencysupplyljk());//供货关系正确累计卡
                     info.setValagencysupplyremark(item.getValagencysupplyremark());//供货关系备注
                     info.setPadisconsistent("0");// 是否已上传 0:未上传 1:已上传
+
+                    info.setCredate(new Date());
+                    info.setUpdatedate(new Date());
+                    info.setCreuser(PrefUtils.getString(context,"userid",""));
+                    info.setUpdateuser(PrefUtils.getString(context,"userid",""));
+
                     mitValsupplyMDao.create(info);
                 }
             }
@@ -2080,6 +2176,12 @@ public class XtShopCopyService {
                     info.setValcmpremarkval(item.getValcmpremarkval());//正确竞品描述
                     info.setValcmpsupremark(item.getValcmpsupremark());//竞品供货关系备注
                     info.setPadisconsistent("0");// 是否已上传 0:未上传 1:已上传
+
+                    info.setCredate(new Date());
+                    info.setUpdatedate(new Date());
+                    info.setCreuser(PrefUtils.getString(context,"userid",""));
+                    info.setUpdateuser(PrefUtils.getString(context,"userid",""));
+
                     mitValcmpMDao.create(info);
                 }
             }
@@ -2108,6 +2210,12 @@ public class XtShopCopyService {
                     info.setValiscmpremark(item.getValiscmpremark());// 是否成功瓦解竞品备注
                     info.setValvisitremark(item.getValvisitremark());// 拜访记录
                     info.setPadisconsistent("0");// 是否已上传 0:未上传 1:已上传
+
+                    info.setCredate(new Date());
+                    info.setUpdatedate(new Date());
+                    info.setCreuser(PrefUtils.getString(context,"userid",""));
+                    info.setUpdateuser(PrefUtils.getString(context,"userid",""));
+
                     mitValcmpotherMDao.create(info);
                 }
             }
@@ -2142,6 +2250,12 @@ public class XtShopCopyService {
                     info.setRoutekey(item.getRoutekey());// 路线
                     info.setTerminalkey(item.getTerminalkey());// 终端主键
                     info.setPadisconsistent("0");// 是否已上传 0:未上传 1:已上传
+
+                    info.setCredate(new Date());
+                    info.setUpdatedate(new Date());
+                    info.setCreuser(PrefUtils.getString(context,"userid",""));
+                    info.setUpdateuser(PrefUtils.getString(context,"userid",""));
+
                     mitValpicMDao.create(info);
                 }
             }

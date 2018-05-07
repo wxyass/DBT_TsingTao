@@ -93,17 +93,17 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_dd_home, container, false);
         initView(view);
         return view;
     }
 
     private void initView(View view) {
-        login = view.findViewById(R.id.btn_first_login);
-        syncgrid = view.findViewById(R.id.btn_first_sync_grid);
-        syncindex = view.findViewById(R.id.btn_first_sync_index);
-        syncpro = view.findViewById(R.id.btn_first_sync_pro);
-        startSync = view.findViewById(R.id.btn_first_sync_start);
+        login = view.findViewById(R.id.dd_btn_first_login);
+        syncgrid = view.findViewById(R.id.dd_btn_first_sync_grid);
+        syncindex = view.findViewById(R.id.dd_btn_first_sync_index);
+        syncpro = view.findViewById(R.id.dd_btn_first_sync_pro);
+        startSync = view.findViewById(R.id.dd_btn_first_sync_start);
         login.setOnClickListener(this);
         syncgrid.setOnClickListener(this);
         syncindex.setOnClickListener(this);
@@ -121,18 +121,18 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_first_login:// 登录
+            case R.id.dd_btn_first_login:// 登录
                 String   loginjson = "{usercode:'50000', password:'a1234567',version:'2.5',padid:'dsfwerolkjqiwurywhl'}";
                 toLogin("opt_get_login","","",loginjson);
                 break;
-            case R.id.btn_first_sync_grid:// 同步 定格,路线
+            case R.id.dd_btn_first_sync_grid:// 同步 定格,路线
                 String content  = "{"+
                         "areaid:'"+PrefUtils.getString(getActivity(),"departmentid","")+"'," +
                         "tablename:'"+"MST_MARKETAREA_GRID_ROUTE_M"+"'" +
                         "}";
                 ceshiHttp("opt_get_dates2","MST_MARKETAREA_GRID_ROUTE_M",content);
                 break;
-            case R.id.btn_first_sync_index:// 同步 指标模板
+            case R.id.dd_btn_first_sync_index:// 同步 指标模板
 
 
                 String content2  = "{"+
@@ -141,14 +141,14 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                         "}";
                 ceshiHttp("opt_get_dates2","MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO",content2);
                 break;
-            case R.id.btn_first_sync_pro:// 同步 基础数据表
+            case R.id.dd_btn_first_sync_pro:// 同步 基础数据表
                 String content1  = "{"+
                         "areaid:'"+PrefUtils.getString(getActivity(),"departmentid","")+"'," +
                         "tablename:'"+"MST_BASEDATA_M"+"'" +
                         "}";
                 ceshiHttp("opt_get_dates2","MST_BASEDATA_M",content1);
                 break;
-            case R.id.btn_first_sync_start:// 同步所有信息
+            case R.id.dd_btn_first_sync_start:// 同步所有信息
                 startSyncInfo();
                 break;
             default:

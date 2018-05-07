@@ -287,6 +287,7 @@ public class XtTermCartFragment extends BaseFragmentSupport implements View.OnCl
                             //if (ViewUtil.isDoubleClick(v.getId(), 2500)) return;
                             DbtLog.logUtils(TAG, "前往拜访：删除");
                             xtUploadService.deleteXt(mitVisitM.getVisitkey(),mitVisitM.getTerminalkey());
+                            ConstValues.handler.sendEmptyMessage(ConstValues.WAIT0);
                         }else if(1 == position){
                             DbtLog.logUtils(TAG, "前往拜访：上传");
                             xtUploadService.upload_xt_visit(false,mitVisitM.getVisitkey(),1);

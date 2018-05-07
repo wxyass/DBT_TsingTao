@@ -17,7 +17,7 @@ public class OperationFragment extends BaseFragmentSupport{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_operation, container, false);
+        View view = inflater.inflate(R.layout.fragment_dd_operation, container, false);
         return view;
     }
 

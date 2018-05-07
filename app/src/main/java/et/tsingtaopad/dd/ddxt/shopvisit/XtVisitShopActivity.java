@@ -71,6 +71,7 @@ import et.tsingtaopad.dd.ddxt.sayhi.XtSayhiFragment;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 import et.tsingtaopad.dd.ddxt.updata.XtShopCopyService;
 import et.tsingtaopad.dd.ddxt.updata.XtUploadService;
+import et.tsingtaopad.fragmentback.HandleBackUtil;
 import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
 import et.tsingtaopad.main.visit.shopvisit.term.domain.MstTermListMStc;
@@ -584,7 +585,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
         return isallIn;
     }
 
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    /*public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             // do something...
@@ -593,7 +594,17 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }*/
+
+    // 监听返回键
+    @Override
+    public void onBackPressed() {
+        // 确定返回上一界面  先检查栈中的fragment是否监听了返回键
+        if (!HandleBackUtil.handleBackPress(this)) {
+            backFinish();
+        }
     }
+
 
     // 原生经纬度 处理 --------------------------------------------------------
 

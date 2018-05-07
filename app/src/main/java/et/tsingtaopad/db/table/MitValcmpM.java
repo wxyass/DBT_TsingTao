@@ -76,6 +76,14 @@ public class MitValcmpM implements java.io.Serializable {
     @DatabaseField
     private String valcmpagencyval;// 竞品经销商正确值
 
+    @DatabaseField
+    private String creuser ;//varchar2(128) null,
+    @DatabaseField
+    private Date credate ;//date null,
+    @DatabaseField
+    private String updateuser ;//varchar2(128) null,
+    @DatabaseField
+    private Date updatedate ;//date null
 
     // Constructors
 
@@ -344,5 +352,37 @@ public class MitValcmpM implements java.io.Serializable {
 
     public void setPadisconsistent(String padisconsistent) {
         this.padisconsistent = padisconsistent;
+    }
+
+    public String getCreuser() {
+        return creuser;
+    }
+
+    public void setCreuser(String creuser) {
+        this.creuser = creuser;
+    }
+
+    public Date getCredate() {
+        return credate;
+    }
+
+    public void setCredate(Date credate) {
+        this.credate = credate;
+    }
+
+    public String getUpdateuser() {
+        return updateuser;
+    }
+
+    public void setUpdateuser(String updateuser) {
+        this.updateuser = updateuser;
+    }
+
+    public Date getUpdatedate() {
+        return updatedate;
+    }
+
+    public void setUpdatedate(Date updatedate) {
+        this.updatedate = updatedate;
     }
 }

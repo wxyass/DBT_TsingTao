@@ -29,7 +29,7 @@ import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.CheckInde
 /**
  * Created by yangwenmin on 2018/3/12.
  * <p>
- * 进销存 录入正确数据
+ * 追溯查指标 合作是否执行到位 是否高质量配送 占有率  数据修改界面
  */
 
 public class ZsCheckIndexAmendFragment extends BaseFragmentSupport implements View.OnClickListener {
@@ -181,7 +181,7 @@ public class ZsCheckIndexAmendFragment extends BaseFragmentSupport implements Vi
 
         checkIndexCalculateStc.setValchecktypeflag("N");// 达成组数正确与否
 
-        // 督导达成组数
+        // 我品占有率
         if ("59802090-02ac-4146-9cc3-f09570c36a26".equals(checkIndexCalculateStc.getIndexId())) {// 我品占有率
             // 督导占有率 数据
             checkIndexCalculateStc.setDdacresult(zhanyoulvIndexValueId);
@@ -218,5 +218,16 @@ public class ZsCheckIndexAmendFragment extends BaseFragmentSupport implements Vi
         mAlertViewExt.addExtView(areaextView);
         mAlertViewExt.setCancelable(true).setOnDismissListener(null);
         mAlertViewExt.show();
+    }
+
+    // 监听返回键
+    @Override
+    public boolean onBackPressed() {
+        if (mAlertViewExt != null && mAlertViewExt.isShowing()) {
+            mAlertViewExt.dismiss();
+            return true;
+        } else {
+            return super.onBackPressed();
+        }
     }
 }

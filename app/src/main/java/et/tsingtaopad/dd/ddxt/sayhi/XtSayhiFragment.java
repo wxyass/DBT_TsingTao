@@ -907,4 +907,15 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         Long time6 = new Date().getTime();
         Log.e("Optimization", "保存数据" + (time6 - time5));
     }
+
+    // 监听返回键
+    @Override
+    public boolean onBackPressed() {
+        if (mAlertViewExt != null && mAlertViewExt.isShowing()) {
+            mAlertViewExt.dismiss();
+            return true;
+        } else {
+            return super.onBackPressed();
+        }
+    }
 }

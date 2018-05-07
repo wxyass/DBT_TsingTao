@@ -268,7 +268,7 @@ public class XtChatvieFragment extends XtBaseVisitFragment implements View.OnCli
     private AlertView mAlertViewExt;//窗口拓展例子
 
     // 长按删除我品供货关系弹窗
-    private void deleteviesupply(int position, final XtChatVieStc xtChatVieStc) {
+    private void deleteviesupply(final int posi, final XtChatVieStc xtChatVieStc) {
         String proName = xtChatVieStc.getProName();
         // 普通窗口
         mAlertViewExt = new AlertView("删除竞品: " + proName, null, "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert,
@@ -284,9 +284,9 @@ public class XtChatvieFragment extends XtBaseVisitFragment implements View.OnCli
                                 boolean isFlag = service.deleteSupply(xtChatVieStc.getRecordId(), termId, xtChatVieStc.getProId());
                                 if (isFlag) {
                                     // 删除界面listView相应行
-                                    dataLst.remove(position);
+                                    dataLst.remove(posi);
                                     xtVieSourceAdapter.notifyDataSetChanged();
-                                    xtstatusAdapter.setDelPosition(position);
+                                    xtstatusAdapter.setDelPosition(posi);
                                     xtstatusAdapter.notifyDataSetChanged();
                                     ViewUtil.setListViewHeight(viesourceLv);
                                     ViewUtil.setListViewHeight(viestatusLv);
@@ -296,9 +296,9 @@ public class XtChatvieFragment extends XtBaseVisitFragment implements View.OnCli
                                 }
                             } else {
                                 // 删除界面listView相应行
-                                dataLst.remove(position);
+                                dataLst.remove(posi);
                                 xtVieSourceAdapter.notifyDataSetChanged();
-                                xtstatusAdapter.setDelPosition(position);
+                                xtstatusAdapter.setDelPosition(posi);
                                 xtstatusAdapter.notifyDataSetChanged();
                                 ViewUtil.setListViewHeight(viesourceLv);
                                 ViewUtil.setListViewHeight(viestatusLv);

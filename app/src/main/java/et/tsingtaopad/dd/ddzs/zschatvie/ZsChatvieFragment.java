@@ -657,4 +657,15 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
         mAlertViewExt.show();
     }
 
+    // 监听返回键
+    @Override
+    public boolean onBackPressed() {
+        if (mAlertViewExt != null && mAlertViewExt.isShowing()) {
+            mAlertViewExt.dismiss();
+            return true;
+        } else {
+            return super.onBackPressed();
+        }
+    }
+
 }

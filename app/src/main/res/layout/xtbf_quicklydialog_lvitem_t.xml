@@ -39,6 +39,9 @@
                 android:layout_width="150dp"
                 android:layout_height="match_parent"
                 android:layout_margin="3dp"
+                android:ems="8"
+                android:inputType="number"
+                android:maxLength="8"
                 android:layout_toRightOf="@id/xtbf_quicklydialog_tv_finalnum"
                 android:background="@drawable/bg_visit_record"/>
 
@@ -72,6 +75,9 @@
                 android:layout_width="150dp"
                 android:layout_height="match_parent"
                 android:layout_margin="3dp"
+                android:ems="8"
+                android:inputType="number"
+                android:maxLength="8"
                 android:layout_toRightOf="@id/xtbf_quicklydialog_tv_changenum"
                 android:background="@drawable/bg_visit_record"/>
         </RelativeLayout>
