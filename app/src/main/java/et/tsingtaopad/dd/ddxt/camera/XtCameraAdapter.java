@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -71,16 +72,23 @@ public class XtCameraAdapter extends BaseAdapter {
 			final File tempFile = new File(FileTool.CAMERA_PHOTO_DIR, camerainfostc.getPicname());
 			//final File tempFile = new File(FileUtil.getPhotoPath()+camerainfostc.getLocalpath());
 
+
 			Uri fileUri = null;
 			// // 兼容7.0及以上的写法
 			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-				final ContentValues contentValues = new ContentValues(1);// ?
-				contentValues.put(MediaStore.Images.Media.DATA, tempFile.getPath());//?
-				final Uri uri = context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+				/*final ContentValues contentValues = new ContentValues(1);// ?
+				String path = tempFile.getPath();
+				contentValues.put(MediaStore.Images.Media.DATA, path);//?
+				//final Uri uri = context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+				//final Uri uri = context.getApplicationContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+				final Uri uri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", tempFile);
 				// 需要将Uri路径转化为实际路径?
 				final File realFile = FileUtils.getFileByPath(FileTool.getRealFilePath(context, uri));
 				// 将File转为Uri
-				fileUri = Uri.fromFile(realFile);
+				fileUri = Uri.fromFile(realFile);*/
+
+				fileUri = Uri.fromFile(tempFile);// 将File转为Uri
+
 			}else{
 				fileUri = Uri.fromFile(tempFile);// 将File转为Uri
 			}

@@ -8,14 +8,23 @@ import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import java.lang.ref.SoftReference;
+import java.util.ArrayList;
+import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
+import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
-import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
+import et.tsingtaopad.core.view.dropdownmenu.DropBean;
+import et.tsingtaopad.core.view.dropdownmenu.DropdownButton;
+import et.tsingtaopad.db.table.MstAgencyKFM;
+import et.tsingtaopad.db.table.MstMarketareaM;
+import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 
 /**
  * 经销商资料库 选择经销商
@@ -38,6 +47,15 @@ public class DdAgencySelectFragment extends BaseFragmentSupport implements View.
     public static final int DD_AGENCY_SELECT_SUC = 2301;//
     public static final int DD_AGENCY_SELECT_FAIL = 2302;//
 
+    private DropdownButton areaBtn;
+    private ListView agencyLv;
+    private List<DropBean> areaList;
+
+    private DdAgencySelectService service;
+
+    private ArrayList<MstAgencyKFM> kFMLst;// 经销商集合
+    private MstAgencyKFM mstAgencyKFM;// 选中的经销商
+
 
 
     @Nullable
@@ -59,6 +77,9 @@ public class DdAgencySelectFragment extends BaseFragmentSupport implements View.
         confirmBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
 
+        areaBtn = (DropdownButton) view.findViewById(R.id.agency_select_ddb_area);
+        agencyLv = (ListView) view.findViewById(R.id.agency_select_lv_list);
+
     }
 
     @Override
@@ -70,11 +91,53 @@ public class DdAgencySelectFragment extends BaseFragmentSupport implements View.
         // 初始化数据
         initData();
 
+        initAreaData();
+
+        setDropdownListener();
+
     }
 
     private void initData() {
         titleTv.setText("选择经销商");
         confirmTv.setText("查询");
+
+        service = new DdAgencySelectService(getActivity());
+    }
+
+    // 下来菜单设置数据  设置区域数据
+    private void initAreaData() {
+        areaList = new ArrayList<>();
+        areaList.add(new DropBean("请选择区域"));
+        String bigAreaId = PrefUtils.getString(getActivity(), "departmentid", "");
+        List<MstMarketareaM> valueLst = service.getMstMarketareaMList(bigAreaId);
+        for (MstMarketareaM mstMarketareaM : valueLst) {
+            areaList.add(new DropBean(mstMarketareaM.getAreaname(), mstMarketareaM.getAreaid()));
+        }
+    }
+
+    // 下拉按钮的点击监听
+    private void setDropdownListener() {
+
+        areaBtn.setData(areaList);
+
+        areaBtn.setText("选择区域");
+
+        // 区域选择
+        areaBtn.setOnDropItemSelectListener(new DropdownButton.OnDropItemSelectListener() {
+            @Override
+            public void onDropItemSelect(int Postion) {
+                //Toast.makeText(getContext(), "您选择了 " + areaList.get(Postion).getName(), Toast.LENGTH_SHORT).show();
+                if (Postion == 0) {
+                    Toast.makeText(getActivity(),"清空当前界面的经销商",Toast.LENGTH_SHORT).show();
+                } else {
+                    // 展示经销商
+                    kFMLst = service.queryDdMstAgencyKFMAll();
+                    DdAgencySelectAdapter agencyAdapter = new DdAgencySelectAdapter(getActivity(),kFMLst,confirmBtn,"");
+                    agencyLv.setAdapter(agencyAdapter);
+                }
+            }
+        });
+
     }
 
 
@@ -87,6 +150,9 @@ public class DdAgencySelectFragment extends BaseFragmentSupport implements View.
                 supportFragmentManager.popBackStack();
                 break;
             case R.id.top_navigation_rl_confirm:// 确定
+
+                // mstAgencyKFM = (MstAgencyKFM)confirmBtn.getTag();
+
                 Bundle bundle = new Bundle();
                 //bundle.putSerializable("fromFragment", "XtTermSelectFragment");
                 DdAgencyContentFragment agencyContentFragment = new DdAgencyContentFragment();

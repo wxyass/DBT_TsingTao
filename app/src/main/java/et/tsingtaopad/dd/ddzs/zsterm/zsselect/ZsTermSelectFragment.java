@@ -345,11 +345,11 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
 
         if(mitValcheckterMs.size()>0){// 配置了督导模板
             xtTermSelectMStc = termList.get(position);
-            // 检测条数是否已上传
+            // 检测条数是否已上传  // 该终端追溯数据是否全部上传
             List<MitValterM> terminalList = xtSelectService.getZsMitValterM(xtTermSelectMStc.getTerminalkey());
-            if(terminalList.size()>0){
+            if(terminalList.size()>0){// 未上传,弹窗上传
                 deleteOrXtUplad(terminalList.get(0));
-            }else{
+            }else{// 已上传,去追溯
                 confirmXtUplad(xtTermSelectMStc);// 拜访
             }
         }else{

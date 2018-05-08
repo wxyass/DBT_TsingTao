@@ -344,11 +344,11 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
 
         xtTermSelectMStc = termList.get(position);
 
-        // 检测条数是否已上传
+        // 检测条数是否已上传  // 该终端协同数据是否全部上传
         List<MitVisitM> terminalList = xtSelectService.getXtMitValterM(xtTermSelectMStc.getTerminalkey());
-        if(terminalList.size()>0){
+        if(terminalList.size()>0){// 未上传,弹窗上传
             deleteOrXtUplad(terminalList.get(0));
-        }else{
+        }else{// 已上传 去拜访
             // 弹出提示 是否拜访这家终端
             confirmXtUplad(xtTermSelectMStc);// 拜访
         }

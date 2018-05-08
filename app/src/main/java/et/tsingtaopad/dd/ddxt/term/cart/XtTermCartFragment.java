@@ -179,23 +179,22 @@ public class XtTermCartFragment extends BaseFragmentSupport implements View.OnCl
                 supportFragmentManager.popBackStack();
                 break;
             case R.id.top_navigation_rl_confirm:
+                // 购物车是否已经同步数据  false:没有  true:已同步
                 boolean issync = PrefUtils.getBoolean(getActivity(),GlobalValues.XT_CART_SYNC,false);
-                if(issync){
+                if(issync){// 已同步
                     termStc = (XtTermSelectMStc)confirmBtn.getTag();
-
+                    // 该终端协同数据是否全部上传
                     List<MitVisitM> terminalList = cartService.getXtMitValterM(termStc.getTerminalkey());
-                    if(terminalList.size()>0){
+                    if(terminalList.size()>0){// 未上传
                         deleteOrXtUplad(terminalList.get(0));
-                    }else{
+                    }else{// 已上传
                         Intent intent = new Intent(getActivity(), XtVisitShopActivity.class);
                         intent.putExtra("isFirstVisit", "1");// 非第一次拜访1
                         intent.putExtra("termStc", termStc);
                         intent.putExtra("seeFlag", "0"); // 0拜访 1查看标识
                         startActivity(intent);
                     }
-
-
-                }else{
+                }else{// 未同步
                     Toast.makeText(getActivity(),"请先点击全部同步",Toast.LENGTH_SHORT).show();
                 }
 
