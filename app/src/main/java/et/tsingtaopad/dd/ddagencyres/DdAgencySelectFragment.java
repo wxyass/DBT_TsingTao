@@ -151,10 +151,13 @@ public class DdAgencySelectFragment extends BaseFragmentSupport implements View.
                 break;
             case R.id.top_navigation_rl_confirm:// 确定
 
-                // mstAgencyKFM = (MstAgencyKFM)confirmBtn.getTag();
+                // 记得删除 下面2行
+                MstAgencyKFM agencySelectStc = new MstAgencyKFM();
+                confirmBtn.setTag(agencySelectStc);
 
+                mstAgencyKFM = (MstAgencyKFM)confirmBtn.getTag();
                 Bundle bundle = new Bundle();
-                //bundle.putSerializable("fromFragment", "XtTermSelectFragment");
+                bundle.putSerializable("mstagencykfm", mstAgencyKFM);
                 DdAgencyContentFragment agencyContentFragment = new DdAgencyContentFragment();
                 agencyContentFragment.setArguments(bundle);
                 // 跳转 经销商库存盘点 填充数据

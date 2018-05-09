@@ -22,6 +22,7 @@ import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartFragment;
 import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectFragment;
 import et.tsingtaopad.dd.ddzs.zsinvoicing.ZsInvoicingFragment;
 import et.tsingtaopad.dd.ddzs.zssayhi.ZsSayhiFragment;
+import et.tsingtaopad.fragmentback.HandleBackUtil;
 import et.tsingtaopad.home.homefragment.MainFragment;
 import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.initconstvalues.InitConstValues;
@@ -86,7 +87,7 @@ public class MainActivity extends BaseActivity {
      * 在此处返回false,所以会继续传播该事件.
      * 在具体项目中此处的返回值视情况而定.
      */
-    @Override
+    /*@Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             // 获取Fragment管理者
@@ -101,7 +102,24 @@ public class MainActivity extends BaseActivity {
             }
         }
         return true;
+    }*/
 
+    // 监听返回键
+    @Override
+    public void onBackPressed() {
+        // 确定返回上一界面  先检查栈中的fragment是否监听了返回键
+        if (!HandleBackUtil.handleBackPress(this)) {
+            // 获取Fragment管理者
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            // 获取当前回退栈中的Fragment个数
+            int backStackEntryCount = fragmentManager.getBackStackEntryCount();
+            if (backStackEntryCount > 1) {
+                // 立即回退一步
+                fragmentManager.popBackStackImmediate();
+            } else {
+                finish();
+            }
+        }
     }
 
     MyHandler handler;

@@ -1,5 +1,6 @@
 package et.tsingtaopad.dd.ddagencycheck;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -8,14 +9,25 @@ import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.lang.ref.SoftReference;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
+import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
+import et.tsingtaopad.db.table.MitValcheckterM;
+import et.tsingtaopad.db.table.MstAgencyvisitM;
+import et.tsingtaopad.dd.ddagencycheck.domain.InOutSaveStc;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
+import et.tsingtaopad.main.visit.agencyvisit.domain.AgencySelectStc;
 
 /**
  * 经销商库存盘点 填充数据
@@ -39,6 +51,19 @@ public class DdAgencyCheckContentFragment extends BaseFragmentSupport implements
     public static final int DD_AGENCY_CONTENT_FAIL = 2412;//
 
 
+    private TextView agencycodeTv;
+    private TextView contactTv;
+    private TextView phoneTv;
+    private ListView proList;
+
+    private MstAgencyvisitM visitM;
+    private String visitDate;
+    private CheckService service ;
+    //记录上传拜访的主键
+    private String prevVisitKey;
+    private List<InOutSaveStc> iosStcLst;
+
+    private AgencySelectStc asStc;
 
     @Nullable
     @Override
@@ -59,6 +84,11 @@ public class DdAgencyCheckContentFragment extends BaseFragmentSupport implements
         //confirmBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
 
+        agencycodeTv = (TextView) view.findViewById(R.id.agency_check_tv_agencycode);
+        contactTv = (TextView) view.findViewById(R.id.agency_check_tv_contact);
+        phoneTv = (TextView) view.findViewById(R.id.agency_check_tv_phone);
+        proList = (ListView) view.findViewById(R.id.agency_check_lv_list);
+
     }
 
     @Override
@@ -74,6 +104,30 @@ public class DdAgencyCheckContentFragment extends BaseFragmentSupport implements
 
     private void initData() {
         titleTv.setText("经销商库存盘点");
+
+
+         service = new CheckService(getActivity());
+
+        //记录拜访开始日期
+        visitDate = DateUtil.formatDate(new Date(), "yyyyMMddHHmmss");
+
+        //获取参数
+
+        Bundle bundle = getArguments();
+        // 获取传递过来的 经销商主键,名称,地址,联系电话
+        asStc = (AgencySelectStc) bundle.getSerializable("agencyselectstc");
+
+        // 获取当天的这次和上次拜访记录 mapLedger
+        Map<String, Object> mapLedger = service.getMstAgencyvisitM(asStc.getAgencyKey(), visitDate);//一天多次拜访显示数据
+        // 获取这次经销商拜访的记录,包含主键,拜访时间等等
+        visitM = (MstAgencyvisitM) mapLedger.get("LsMstAgencyvisitM");
+        // 获取上次经销商拜访的主键
+        prevVisitKey = (String) mapLedger.get("LsprevVisitKey");
+
+        //获取进销存台账数据
+        iosStcLst = service.getInOutSave(asStc.getAgencyKey(), prevVisitKey, visitM,mapLedger);
+        DdAgencyCheckContentAdapter adapter = new DdAgencyCheckContentAdapter(getActivity(),iosStcLst);
+        proList.setAdapter(adapter);
     }
 
 

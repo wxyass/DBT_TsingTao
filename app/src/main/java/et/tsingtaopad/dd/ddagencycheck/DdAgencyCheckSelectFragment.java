@@ -58,6 +58,8 @@ public class DdAgencyCheckSelectFragment extends BaseFragmentSupport implements 
 
     private List<AgencySelectStc> selectLst; //可选择的经销商集合
 
+    private AgencySelectStc agencySelectStc; //选择的经销商
+
 
     @Nullable
     @Override
@@ -139,9 +141,7 @@ public class DdAgencyCheckSelectFragment extends BaseFragmentSupport implements 
                 }
             }
         });
-
     }
-
 
     @Override
     public void onClick(View v) {
@@ -152,8 +152,14 @@ public class DdAgencyCheckSelectFragment extends BaseFragmentSupport implements 
                 supportFragmentManager.popBackStack();
                 break;
             case R.id.top_navigation_rl_confirm:// 确定
+
+                // 记得删除 下面2行
+                AgencySelectStc agencySelectStc = new AgencySelectStc();
+                confirmBtn.setTag(agencySelectStc);
+
+                agencySelectStc = (AgencySelectStc)confirmBtn.getTag();
                 Bundle bundle = new Bundle();
-                //bundle.putSerializable("fromFragment", "XtTermSelectFragment");
+                bundle.putSerializable("agencyselectstc", agencySelectStc);
                 DdAgencyCheckContentFragment agencyCheckContentFragment = new DdAgencyCheckContentFragment();
                 agencyCheckContentFragment.setArguments(bundle);
                 // 跳转 经销商库存盘点 填充数据
@@ -193,16 +199,6 @@ public class DdAgencyCheckSelectFragment extends BaseFragmentSupport implements 
                     break;
             }
         }
-    }
-
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        DbtLog.logUtils(TAG, "onPause()");
-
-        // 保存追溯 进销存数据  MitValsupplyMTemp
-        //invoicingService.saveZsInvoicing(dataLst);
     }
 
 }

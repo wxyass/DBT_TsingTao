@@ -412,8 +412,16 @@
         <item name="android:layout_marginTop">1dp</item>
     </style>
 
+    <!--督导稽查 经销商开发 的内容-->
     <style name="agency_content_rl_all" parent="@style/xtbf_sayhi_rl">
         <item name="android:layout_marginTop">1dp</item>
+    </style>
+
+    <!--督导稽查 经销商库存盘点 的内容-->
+    <style name="agency_check_content_rl_all" parent="@style/xtbf_sayhi_rl">
+        <item name="android:layout_marginTop">1dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
     </style>
 
     <!-- xtbf_sayhi_打招呼 标题一列 -->

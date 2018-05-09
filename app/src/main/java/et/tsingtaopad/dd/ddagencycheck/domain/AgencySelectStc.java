@@ -1,10 +1,16 @@
-package et.tsingtaopad.main.visit.agencyvisit.domain;
+package et.tsingtaopad.dd.ddagencycheck.domain;
 
 import java.io.Serializable;
 
 /**
- * Created by yangwenmin on 2017/12/12.
- * 功能描述: 选择经销商结构体</br>
+ * 项目名称：营销移动智能工作平台 </br>
+ * 文件名：VisitAgencyStc.java</br>
+ * 作者：吴欣伟   </br>
+ * 创建时间：2013-11-27</br>      
+ * 功能描述: 选择经销商结构体</br>      
+ * 版本 V 1.0</br>               
+ * 修改履历</br>
+ * 日期      原因  BUG号    修改人 修改版本</br>
  */
 public class AgencySelectStc implements Serializable{
     
@@ -21,11 +27,6 @@ public class AgencySelectStc implements Serializable{
     
     //联系电话
     private String phone;
-
-    //经销商负责人
-    private String contact;
-    //经销商编码
-    private String agencycode;
 
     public String getAgencyKey() {
         return agencyKey;
@@ -62,20 +63,5 @@ public class AgencySelectStc implements Serializable{
     public static long getSerialversionuid() {
         return serialVersionUID;
     }
-
-    public String getContact() {
-        return contact;
-    }
-
-    public void setContact(String contact) {
-        this.contact = contact;
-    }
-
-    public String getAgencycode() {
-        return agencycode;
-    }
-
-    public void setAgencycode(String agencycode) {
-        this.agencycode = agencycode;
-    }
+    
 }

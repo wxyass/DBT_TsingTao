@@ -45,7 +45,7 @@ public class MstAgencyvisitMDaoImpl extends
         SQLiteDatabase db = helper.getReadableDatabase();
 
         String sql = "select a.agencykey,a.agencyname,prov.areaname as province,city.areaname as city," +
-        		"county.areaname as county,a.address,a.mobile from MST_VISITAUTHORIZE_INFO" +
+        		"county.areaname as county,a.address,a.mobile,a.contact,a.agencycode from MST_VISITAUTHORIZE_INFO" +
         		" m inner join MST_AGENCYINFO_M a on m.agencykey = a.agencykey " +
         		"left join CMM_AREA_M prov on a.province = prov.areacode left " +
         		"join CMM_AREA_M city on a.city = city.areacode left join " +
@@ -65,6 +65,8 @@ public class MstAgencyvisitMDaoImpl extends
                                              + FunUtil.isNullSetSpace(address);
             asStc.setAddr(addr);
             asStc.setPhone(cursor.getString(cursor.getColumnIndex("mobile")));
+            asStc.setContact(cursor.getString(cursor.getColumnIndex("contact")));
+            asStc.setAgencycode(cursor.getString(cursor.getColumnIndex("agencycode")));
             asStcLst.add(asStc);
         }
 

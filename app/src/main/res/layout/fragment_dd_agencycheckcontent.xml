@@ -2,11 +2,124 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+
               android:background="@color/bg_app"
               android:orientation="vertical">
 
     <include layout="@layout/top_navigation"/>
 
+    <!--经销商基本信息-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            style="@style/point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/ico_point"/>
+
+        <TextView
+            style="@style/page_label_big"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="经销商基本信息"/>
+    </LinearLayout>
+
+    <!-- 经销商编码： -->
+    <RelativeLayout
+        android:id="@+id/agency_check_rl_agencycode"
+        style="@style/agency_check_content_rl_all">
+
+        <!--标题-->
+        <TextView
+            style="@style/zdzs_sayhi_title"
+            android:text="经销商编码"/>
+
+        <!--未稽查-->
+        <TextView
+            android:id="@+id/agency_check_tv_agencycode"
+            style="@style/zdzs_sayhi_statue"
+            android:text="S123424353243225"/>
+    </RelativeLayout>
+    <!-- 经销商负责人： -->
+    <RelativeLayout
+        android:id="@+id/agency_check_rl_contact"
+        style="@style/agency_check_content_rl_all">
+
+        <!--标题-->
+        <TextView
+            style="@style/zdzs_sayhi_title"
+            android:text="经销商负责人"/>
+
+        <!--未稽查-->
+        <TextView
+            android:id="@+id/agency_check_tv_contact"
+            style="@style/zdzs_sayhi_statue"
+            android:text="张三,李四"/>
+
+    </RelativeLayout>
+    <!-- 联系电话： -->
+    <RelativeLayout
+        android:id="@+id/agency_check_rl_phone"
+        style="@style/agency_check_content_rl_all">
+
+        <!--标题-->
+        <TextView
+            style="@style/zdzs_sayhi_title"
+            android:text="联系电话"/>
+
+        <!--未稽查-->
+        <TextView
+            android:id="@+id/agency_check_tv_phone"
+            style="@style/zdzs_sayhi_statue"
+            android:text="13100005678"/>
+    </RelativeLayout>
+
+    <!--经销商库存稽查-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            style="@style/point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/ico_point"/>
+
+        <TextView
+            style="@style/page_label_big"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="经销商库存稽查"/>
+    </LinearLayout>
+
+    <!--终端列表-->
+    <LinearLayout
+        android:id="@+id/agency_check_ll_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/listview_line"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        android:padding="1dp">
+
+        <ListView
+            android:id="@+id/agency_check_lv_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:cacheColorHint="@color/bg_lv_item"
+            android:divider="@color/listview_line"
+            android:dividerHeight="1dp">
+        </ListView>
+    </LinearLayout>
 
 
 </LinearLayout>

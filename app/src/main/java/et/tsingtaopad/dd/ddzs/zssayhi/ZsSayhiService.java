@@ -370,7 +370,6 @@ public class ZsSayhiService extends XtShopVisitService {
         KvStc kvItem = new KvStc();
         for (CmmAreaM areaItem : areaLst) {
             if (parentId.equals(FunUtil.isBlankOrNullTo(areaItem.getParentcode(), "-1"))) {
-
                 kvItem = new KvStc(areaItem.getAreacode(), areaItem.getAreaname(), areaItem.getParentcode());
                 kvLst.add(kvItem);
             }

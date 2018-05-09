@@ -74,6 +74,8 @@
     <string name="termadd_star">*</string>
     <string name="termadd_title">新增终端</string>
     <string name="termadd_termcode">终端编码：</string>
+    <string name="termadd_areaid">所属区域：</string>
+    <string name="termadd_gridid">所属定格：</string>
     <string name="termadd_belongline">所属线路：</string>
     <string name="termadd_termname">终端名称：</string>
     <string name="termadd_level">终端等级：</string>

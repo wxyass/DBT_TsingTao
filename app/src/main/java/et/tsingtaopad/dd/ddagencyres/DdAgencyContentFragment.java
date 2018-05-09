@@ -27,6 +27,7 @@ import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.db.table.MitValterMTemp;
+import et.tsingtaopad.db.table.MstAgencyKFM;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
 import et.tsingtaopad.dd.ddzs.zssayhi.ZsSayhiAmendFragment;
 import et.tsingtaopad.dd.ddzs.zssayhi.ZsSayhiFragment;
@@ -101,6 +102,7 @@ public class DdAgencyContentFragment extends BaseFragmentSupport implements View
     private EditText agencyReport;
     private Button dd_bt_save;
 
+    private MstAgencyKFM mstAgencyKFM;
 
     @Nullable
     @Override
@@ -218,6 +220,10 @@ public class DdAgencyContentFragment extends BaseFragmentSupport implements View
     private void initData() {
         titleTv.setText("青岛啤酒北京销售有限公司");
         confirmTv.setText("更正");
+
+        Bundle bundle = getArguments();
+        // 获取传递过来的 经销商主键,名称,地址,联系电话
+        mstAgencyKFM = (MstAgencyKFM) bundle.getSerializable("mstagencykfm");
     }
 
 
