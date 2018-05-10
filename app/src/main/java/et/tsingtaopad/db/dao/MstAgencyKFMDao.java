@@ -23,6 +23,14 @@ public interface MstAgencyKFMDao extends Dao<MstAgencyKFM, String> {
 	 * @return
 	 */
 	public ArrayList<MstAgencyKFM> queryMstAgencyKFMLst(SQLiteOpenHelper helper, String status);
+	/**
+	 * 查询二级区域下的 经销商开发
+	 *
+	 * @param helper
+	 * @param areaid 二级区域ID
+	 * @return
+	 */
+	public ArrayList<MstAgencyKFM> queryZsMstAgencyKFMLst(SQLiteOpenHelper helper, String areaid);
 
 	/**
 	 * 更新一条经销商开发记录

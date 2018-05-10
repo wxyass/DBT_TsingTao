@@ -13,8 +13,10 @@ import java.util.List;
 
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
+import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.db.dao.MstAgencyvisitMDao;
 import et.tsingtaopad.db.table.MstAgencyvisitM;
+import et.tsingtaopad.dd.ddagencycheck.domain.ZsInOutSaveStc;
 import et.tsingtaopad.main.visit.agencyvisit.domain.AgencySelectStc;
 import et.tsingtaopad.main.visit.agencyvisit.domain.TransferStc;
 
@@ -72,7 +74,39 @@ public class MstAgencyvisitMDaoImpl extends
 
         return asStcLst;
     }
-    
+    /**
+     * 查询二级区域下 所有经销商
+     * @param helper
+     * @param areaid 二级区域id
+     * @return
+     */
+    @Override
+    public List<AgencySelectStc> agencyZsSelectQuery(SQLiteOpenHelper helper, String areaid) {
+
+        List<AgencySelectStc> asStcLst = new ArrayList<AgencySelectStc>();
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        String sql = "select distinct agen.agencykey,agen.agencyname,agen.address, " +
+                " agen.mobile,agen.contact,agen.agencycode " +
+        		"  from mst_visitauthorize_info visita" +
+        		"  left join mst_grid_m j on visita.gridkey = j.gridkey " +
+        		"  left join mst_agencyinfo_m agen on  agen.agencykey=visita.agencykey " +
+        		" where j.areaid = ? " ;
+        Cursor cursor = db.rawQuery(sql, new String[]{areaid});
+        while (cursor.moveToNext()) {
+            AgencySelectStc asStc = new AgencySelectStc();
+            asStc.setAgencyKey(cursor.getString(cursor.getColumnIndex("agencykey")));// 经销商key
+            asStc.setAgencyName(cursor.getString(cursor.getColumnIndex("agencyname")));//经销商名称
+            asStc.setAddr(cursor.getString(cursor.getColumnIndex("address")));// 地址
+            asStc.setPhone(cursor.getString(cursor.getColumnIndex("mobile")));// 电话
+            asStc.setContact(cursor.getString(cursor.getColumnIndex("contact")));// 负责人
+            asStc.setAgencycode(cursor.getString(cursor.getColumnIndex("agencycode")));// 经销商编码
+            asStcLst.add(asStc);
+        }
+
+        return asStcLst;
+    }
+
 
     /**
      * 依据拜访请键获取经销商调货记录
@@ -125,5 +159,29 @@ public class MstAgencyvisitMDaoImpl extends
             isExist=true;
         }
         return isExist;
+    }
+    @Override
+    public List<ZsInOutSaveStc> queryZsInOutSaveStc(DatabaseHelper helper, String agevisitkey,String agencykey)
+    {
+        List<ZsInOutSaveStc> list = new ArrayList<ZsInOutSaveStc>();
+        StringBuffer buffer = new StringBuffer();
+        SQLiteDatabase db = helper.getReadableDatabase();
+        buffer.append("select vp.proname,vp.procode,am.* from MST_INVOICING_INFO am  ");
+        buffer.append("left join MST_PRODUCT_M vp on am.productkey = vp.productkey  ");
+        buffer.append("where am.agevisitkey = ? and  am.agencykey = ? ");
+        Cursor cursor = db.rawQuery(buffer.toString(), new String[] {agevisitkey,agencykey});
+
+        ZsInOutSaveStc item;
+        while (cursor.moveToNext()) {
+            item = new ZsInOutSaveStc();
+            item.setAgevisitkey(cursor.getString(cursor.getColumnIndex("agevisitkey")));// 拜访主键key
+            item.setAgencykey(cursor.getString(cursor.getColumnIndex("agencykey")));// 经销商key
+            item.setProductkey(cursor.getString(cursor.getColumnIndex("productkey")));// 产品key
+            item.setProname(cursor.getString(cursor.getColumnIndex("proname")));// 产品名称
+            item.setProcode(cursor.getString(cursor.getColumnIndex("procode")));// 产品编码
+            item.setStorenum(cursor.getDouble(cursor.getColumnIndex("storenum")));// 期末库存
+            list.add(item);
+        }
+        return list;
     }
 }

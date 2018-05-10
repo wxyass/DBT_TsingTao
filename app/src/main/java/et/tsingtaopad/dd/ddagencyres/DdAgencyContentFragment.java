@@ -224,6 +224,34 @@ public class DdAgencyContentFragment extends BaseFragmentSupport implements View
         Bundle bundle = getArguments();
         // 获取传递过来的 经销商主键,名称,地址,联系电话
         mstAgencyKFM = (MstAgencyKFM) bundle.getSerializable("mstagencykfm");
+
+        agencyname_con1.setText(mstAgencyKFM.getAgencyname());
+        contact_con1.setText(mstAgencyKFM.getContact());
+        mobile_con1.setText(mstAgencyKFM.getMobile());
+        address_con1.setText(mstAgencyKFM.getAddress());
+        area_con1.setText(mstAgencyKFM.getArea());
+        money_con1.setText(mstAgencyKFM.getMoney());
+        persion_con1.setText(mstAgencyKFM.getPersion());
+        carnum_con1.setText(mstAgencyKFM.getCarnum());
+        isone_con1.setText(parseIsone(mstAgencyKFM.getIsone()));
+        kfdata_con1.setText(mstAgencyKFM.getKfdate());
+        passdata_con1.setText(mstAgencyKFM.getPassdate());
+        productname_con1.setText(mstAgencyKFM.getProductname());
+        business_con1.setText(mstAgencyKFM.getBusiness());
+        coverterms_con1.setText(mstAgencyKFM.getCoverterms());
+        supplyterms_con1.setText(mstAgencyKFM.getSupplyterms());
+
+    }
+
+    // 判定是否数一数二经销商
+    private String parseIsone(int type){
+        String isone ="";
+        if(0 == type){
+            isone = "否";
+        }else{
+            isone = "是";
+        }
+        return isone;
     }
 
 

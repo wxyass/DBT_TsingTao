@@ -44,6 +44,12 @@ public class AreaGridRoute {
     private String MIT_VALTER_M;//
     private String MIT_VALCHECKTER_M;//
 
+    private String MST_AGENCYKF_M;//
+    private String MST_AGENCYVISIT_M;//
+    private String MST_INVOICING_INFO;//
+    private String MST_VISITAUTHORIZE_INFO;//
+
+
 
 
     public String getMST_GRID_M() {
@@ -269,5 +275,37 @@ public class AreaGridRoute {
 
     public void setMIT_VALCHECKTER_M(String MIT_VALCHECKTER_M) {
         this.MIT_VALCHECKTER_M = MIT_VALCHECKTER_M;
+    }
+
+    public String getMST_AGENCYKF_M() {
+        return MST_AGENCYKF_M;
+    }
+
+    public void setMST_AGENCYKF_M(String MST_AGENCYKF_M) {
+        this.MST_AGENCYKF_M = MST_AGENCYKF_M;
+    }
+
+    public String getMST_AGENCYVISIT_M() {
+        return MST_AGENCYVISIT_M;
+    }
+
+    public void setMST_AGENCYVISIT_M(String MST_AGENCYVISIT_M) {
+        this.MST_AGENCYVISIT_M = MST_AGENCYVISIT_M;
+    }
+
+    public String getMST_INVOICING_INFO() {
+        return MST_INVOICING_INFO;
+    }
+
+    public void setMST_INVOICING_INFO(String MST_INVOICING_INFO) {
+        this.MST_INVOICING_INFO = MST_INVOICING_INFO;
+    }
+
+    public String getMST_VISITAUTHORIZE_INFO() {
+        return MST_VISITAUTHORIZE_INFO;
+    }
+
+    public void setMST_VISITAUTHORIZE_INFO(String MST_VISITAUTHORIZE_INFO) {
+        this.MST_VISITAUTHORIZE_INFO = MST_VISITAUTHORIZE_INFO;
     }
 }

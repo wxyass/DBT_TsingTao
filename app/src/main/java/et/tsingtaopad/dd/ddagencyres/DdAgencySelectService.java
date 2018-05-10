@@ -61,15 +61,17 @@ public class DdAgencySelectService extends XtTermSelectService{
 
     /***
      * 查询经销商开发表所有记录
+     *
+     * areaid 二级区域ID
      */
-    public ArrayList<MstAgencyKFM> queryDdMstAgencyKFMAll(){
+    public ArrayList<MstAgencyKFM> queryDdMstAgencyKFMAll(String areaid){
         ArrayList<MstAgencyKFM> valueLst =new ArrayList<MstAgencyKFM>();
         try {
 
             DatabaseHelper helper = DatabaseHelper.getHelper(context);
             MstAgencyKFMDao dao = (MstAgencyKFMDao) helper.getMstAgencyKFMDao();
 
-            valueLst =dao.queryMstAgencyKFMLst(helper,"0");
+            valueLst =dao.queryZsMstAgencyKFMLst(helper,areaid);
         } catch (SQLException e) {
             e.printStackTrace();
             Log.e(TAG, "查询图片类型表中所有记录", e);
@@ -78,16 +80,16 @@ public class DdAgencySelectService extends XtTermSelectService{
     }
 
     /**
-     * 选择经销商的数据查询
+     * 查询二级区域下 所有经销商
+     * areaid 二级区域id
      * @return
      */
-    public List<AgencySelectStc> queryDdagencySelectLst() {
+    public List<AgencySelectStc> queryZsDdagencySelectLst(String areaid) {
         List<AgencySelectStc> agencySelectStcLst = new ArrayList<AgencySelectStc>();
         try {
             DatabaseHelper helper = DatabaseHelper.getHelper(context);
             MstAgencyvisitMDao dao = helper.getDao(MstAgencyvisitM.class);
-            //agencySelectStcLst = dao.agencySelectQuery(helper, ConstValues.loginSession.getGridId());
-            agencySelectStcLst = dao.agencySelectQuery(helper, PrefUtils.getString(context, "gridId", ""));
+            agencySelectStcLst = dao.agencyZsSelectQuery(helper,areaid);
         } catch (SQLException e) {
             Log.e(TAG, "选择经销商的数据查询时报错", e);
         }

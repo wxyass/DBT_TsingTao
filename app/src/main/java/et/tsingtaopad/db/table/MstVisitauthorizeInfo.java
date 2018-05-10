@@ -211,4 +211,11 @@ public class MstVisitauthorizeInfo implements java.io.Serializable {
 		this.updateuser = updateuser;
 	}
 
+	public String getGridkey() {
+		return gridkey;
+	}
+
+	public void setGridkey(String gridkey) {
+		this.gridkey = gridkey;
+	}
 }

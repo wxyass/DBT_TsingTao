@@ -105,7 +105,7 @@ public class ZsPromotionAdapter extends BaseAdapter {
 
         // 未稽查
         if("N".equals(item.getValistruenumflag())){// 达成组数正确与否
-            holder.statueTv.setText("业代录错");
+            holder.statueTv.setText("错误");
             holder.statueTv.setTextColor(context.getResources().getColor(R.color.zdzs_dd_error));
         }else if("Y".equals(item.getValistruenumflag())){
             holder.statueTv.setText("正确");

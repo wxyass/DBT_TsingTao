@@ -123,7 +123,7 @@ public class ZsCaculateItemAdapter extends BaseAdapter implements OnClickListene
 
         // 未稽查
         if("N".equals(item.getValchecktypeflag())){// 达成组数正确与否
-            holder.statueTv.setText("业代录错");
+            holder.statueTv.setText("错误");
             holder.statueTv.setTextColor(context.getResources().getColor(R.color.zdzs_dd_error));
         }else if("Y".equals(item.getValchecktypeflag())){
             holder.statueTv.setText("正确");

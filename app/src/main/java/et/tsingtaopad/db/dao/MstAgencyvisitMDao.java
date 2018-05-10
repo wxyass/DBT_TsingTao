@@ -6,7 +6,9 @@ import com.j256.ormlite.dao.Dao;
 
 import java.util.List;
 
+import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.db.table.MstAgencyvisitM;
+import et.tsingtaopad.dd.ddagencycheck.domain.ZsInOutSaveStc;
 import et.tsingtaopad.main.visit.agencyvisit.domain.AgencySelectStc;
 import et.tsingtaopad.main.visit.agencyvisit.domain.TransferStc;
 
@@ -24,7 +26,14 @@ public interface MstAgencyvisitMDao extends Dao<MstAgencyvisitM, String> {
      * @return
      */
     public List<AgencySelectStc> agencySelectQuery(SQLiteOpenHelper helper, String gridId);
-    
+    /**
+     * 查询二级区域下 所有经销商
+     * @param helper
+     * @param areaid 二级区域id
+     * @return
+     */
+    public List<AgencySelectStc> agencyZsSelectQuery(SQLiteOpenHelper helper, String areaid);
+
     /**
      * 依据拜访请键获取经销商调货记录
      * 
@@ -41,4 +50,12 @@ public interface MstAgencyvisitMDao extends Dao<MstAgencyvisitM, String> {
      * @return
      */
     public boolean isExistAgencyVisit(SQLiteOpenHelper helper, String agencyKey, String visitDate);
+
+    /**
+     * 根据上次visitkey , 查询所有
+     * @param helper
+     * @param agevisitkey
+     * @return
+     */
+    List<ZsInOutSaveStc> queryZsInOutSaveStc(DatabaseHelper helper, String agevisitkey,String agencykey);
 }

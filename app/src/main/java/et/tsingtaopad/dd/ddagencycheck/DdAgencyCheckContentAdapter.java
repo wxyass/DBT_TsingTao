@@ -24,7 +24,9 @@ import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.db.table.MitValcmpMTemp;
+import et.tsingtaopad.db.table.MstInvoicingInfo;
 import et.tsingtaopad.dd.ddagencycheck.domain.InOutSaveStc;
+import et.tsingtaopad.dd.ddagencycheck.domain.ZsInOutSaveStc;
 import et.tsingtaopad.listviewintf.IClick;
 
 /**
@@ -39,14 +41,14 @@ public class DdAgencyCheckContentAdapter extends
                     BaseAdapter implements OnFocusChangeListener {
 
     private Activity context;
-    List<InOutSaveStc> dataLst;
+    List<ZsInOutSaveStc> dataLst;
     private int delPosition = -1;
 
     // 时间控件
 
 
 
-    public DdAgencyCheckContentAdapter(Activity context, List<InOutSaveStc> dataLst) {
+    public DdAgencyCheckContentAdapter(Activity context, List<ZsInOutSaveStc> dataLst) {
         this.context = context;
         this.dataLst = dataLst;
 
@@ -93,15 +95,15 @@ public class DdAgencyCheckContentAdapter extends
             holder = (ViewHolder)convertView.getTag();
         }
         
-        final InOutSaveStc item = dataLst.get(position);
+        final ZsInOutSaveStc item = dataLst.get(position);
 
         // 产品名称
-        holder.productNameTv.setHint(item.getProName());
-        holder.productNameTv.setText(item.getProName());
+        holder.productNameTv.setHint(item.getProductkey());
+        holder.productNameTv.setText(item.getProductkey());
 
         // 产品编码
         holder.procodeTv.setHint("未输入产品编码");
-        holder.procodeTv.setText(item.getProductkey());
+        holder.procodeTv.setText(item.getProcode());
 
         // 期末库存
         if (ConstValues.FLAG_0.equals(item.getStorenum())) {
@@ -117,16 +119,19 @@ public class DdAgencyCheckContentAdapter extends
         //holder.channelPriceEt.setOnFocusChangeListener(this);
 
         // 实际库存
-        if (ConstValues.FLAG_0.equals(item.getPrestorenum())) {
-            holder.realStoreEt.setHint(item.getPrestorenum()+"");
+        if (ConstValues.FLAG_0.equals(item.getRealstore())) {
+            holder.realStoreEt.setHint(item.getRealstore()+"");
             holder.realStoreEt.setText(null);
-        } else if(!CheckUtil.isBlankOrNull(item.getPrestorenum()+"")){
-            holder.realStoreEt.setText(item.getPrestorenum()+"");
+        } else if(!CheckUtil.isBlankOrNull(item.getRealstore()+"")){
+            holder.realStoreEt.setText(item.getRealstore()+"");
         }else{
             holder.realStoreEt.setHint(R.string.hit_input);
             holder.realStoreEt.setText(null);
         }
         holder.realStoreEt.setTag(position);
+
+        // 备注信息
+        holder.desEt.setText(item.getDes());
         
         return convertView;
     }
@@ -148,7 +153,7 @@ public class DdAgencyCheckContentAdapter extends
             position = position -1;
         }
         if (position > -1) {
-            InOutSaveStc stc = dataLst.get(position);
+            MstInvoicingInfo stc = dataLst.get(position);
             String content = et.getText().toString();
             switch (et.getId()) {
             case R.id.checkgoods_et_prevnum:

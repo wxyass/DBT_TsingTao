@@ -220,7 +220,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                 }
                 // 未稽查
                 if("N".equals(item.getValchecktypeflag())){// 达成组数正确与否
-                    zdzs_sayhi_tv_hezuo_statue.setText("业代录错");
+                    zdzs_sayhi_tv_hezuo_statue.setText("错误");
                     zdzs_sayhi_tv_hezuo_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_error));
                 }else if("Y".equals(item.getValchecktypeflag())){
                     zdzs_sayhi_tv_hezuo_statue.setText("正确");
@@ -238,7 +238,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                 }
                 // 未稽查
                 if("N".equals(item.getValchecktypeflag())){// 达成组数正确与否
-                    zdzs_sayhi_tv_peisong_statue.setText("业代录错");
+                    zdzs_sayhi_tv_peisong_statue.setText("错误");
                     zdzs_sayhi_tv_peisong_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_error));
                 }else if("Y".equals(item.getValchecktypeflag())){
                     zdzs_sayhi_tv_peisong_statue.setText("正确");
@@ -252,7 +252,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                 zdzs_sayhi_tv_zhanyoulv_con1.setText(service.getCheckStatusName(zhanyoulvIndexValueId));
                 // 未稽查
                 if("N".equals(item.getValchecktypeflag())){// 达成组数正确与否
-                    zdzs_sayhi_tv_zhanyoulv_statue.setText("业代录错");
+                    zdzs_sayhi_tv_zhanyoulv_statue.setText("错误");
                     zdzs_sayhi_tv_zhanyoulv_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_error));
                 }else if("Y".equals(item.getValchecktypeflag())){
                     zdzs_sayhi_tv_zhanyoulv_statue.setText("正确");
@@ -328,7 +328,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
     // 设置产品组合的稽查结果
     private void setGroupproStatue(){
         if("N".equals(vo.getValgroupproflag())){// 产品组合是否达标正确与否
-            zdzs_sayhi_tv_prostatus_statue.setText("业代录错");
+            zdzs_sayhi_tv_prostatus_statue.setText("错误");
             zdzs_sayhi_tv_prostatus_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_error));
         }else if("Y".equals(vo.getValgroupproflag())){
             zdzs_sayhi_tv_prostatus_statue.setText("正确");
@@ -445,7 +445,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
             if ("666b74b3-b221-4920-b549-d9ec39a463fd".equals(item.getIndexId())) {// 合作是否到位
                 // 未稽查
                 if("N".equals(item.getValchecktypeflag())){// 达成组数正确与否
-                    zdzs_sayhi_tv_hezuo_statue.setText("业代录错");
+                    zdzs_sayhi_tv_hezuo_statue.setText("错误");
                 }else if("Y".equals(item.getValchecktypeflag())){
                     zdzs_sayhi_tv_hezuo_statue.setText("正确");
                 }else{
@@ -454,7 +454,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
             } else if ("df2e88c9-246f-40e2-b6e5-08cdebf8c281".equals(item.getIndexId())) {// 是否高质量配送
                 // 未稽查
                 if("N".equals(item.getValchecktypeflag())){// 达成组数正确与否
-                    zdzs_sayhi_tv_peisong_statue.setText("业代录错");
+                    zdzs_sayhi_tv_peisong_statue.setText("错误");
                 }else if("Y".equals(item.getValchecktypeflag())){
                     zdzs_sayhi_tv_peisong_statue.setText("正确");
                 }else{
@@ -463,7 +463,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
             } else if ("59802090-02ac-4146-9cc3-f09570c36a26".equals(item.getIndexId())) {// 我品占有率
                 // 未稽查
                 if("N".equals(item.getValchecktypeflag())){// 达成组数正确与否
-                    zdzs_sayhi_tv_zhanyoulv_statue.setText("业代录错");
+                    zdzs_sayhi_tv_zhanyoulv_statue.setText("错误");
                 }else if("Y".equals(item.getValchecktypeflag())){
                     zdzs_sayhi_tv_zhanyoulv_statue.setText("正确");
                 }else{

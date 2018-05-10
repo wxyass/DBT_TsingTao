@@ -9,6 +9,8 @@ import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -21,11 +23,14 @@ import java.util.Map;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
+import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.db.table.MitValcheckterM;
 import et.tsingtaopad.db.table.MstAgencyvisitM;
+import et.tsingtaopad.db.table.MstInvoicingInfo;
 import et.tsingtaopad.dd.ddagencycheck.domain.InOutSaveStc;
+import et.tsingtaopad.dd.ddagencycheck.domain.ZsInOutSaveStc;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
 import et.tsingtaopad.main.visit.agencyvisit.domain.AgencySelectStc;
 
@@ -55,13 +60,16 @@ public class DdAgencyCheckContentFragment extends BaseFragmentSupport implements
     private TextView contactTv;
     private TextView phoneTv;
     private ListView proList;
+    private Button saveBtn;
 
     private MstAgencyvisitM visitM;
     private String visitDate;
     private CheckService service ;
     //记录上传拜访的主键
     private String prevVisitKey;
-    private List<InOutSaveStc> iosStcLst;
+    // private List<InOutSaveStc> iosStcLst;
+    //private List<MstInvoicingInfo> mstInvoicingInfos;
+    private List<ZsInOutSaveStc> zsInOutSaveStcs;
 
     private AgencySelectStc asStc;
 
@@ -88,6 +96,8 @@ public class DdAgencyCheckContentFragment extends BaseFragmentSupport implements
         contactTv = (TextView) view.findViewById(R.id.agency_check_tv_contact);
         phoneTv = (TextView) view.findViewById(R.id.agency_check_tv_phone);
         proList = (ListView) view.findViewById(R.id.agency_check_lv_list);
+        saveBtn = (Button) view.findViewById(R.id.dd_agencychenck_bt_next);
+        saveBtn.setOnClickListener(this);
 
     }
 
@@ -125,8 +135,8 @@ public class DdAgencyCheckContentFragment extends BaseFragmentSupport implements
         prevVisitKey = (String) mapLedger.get("LsprevVisitKey");
 
         //获取进销存台账数据
-        iosStcLst = service.getInOutSave(asStc.getAgencyKey(), prevVisitKey, visitM,mapLedger);
-        DdAgencyCheckContentAdapter adapter = new DdAgencyCheckContentAdapter(getActivity(),iosStcLst);
+        zsInOutSaveStcs = service.getZsInOutSave(asStc.getAgencyKey());
+        DdAgencyCheckContentAdapter adapter = new DdAgencyCheckContentAdapter(getActivity(),zsInOutSaveStcs);
         proList.setAdapter(adapter);
     }
 
@@ -142,10 +152,35 @@ public class DdAgencyCheckContentFragment extends BaseFragmentSupport implements
             case R.id.top_navigation_rl_confirm:// 确定
 
                 break;
+            case R.id.dd_agencychenck_bt_next:// 保存
+                saveValue();
+
+                break;
 
             default:
                 break;
         }
+    }
+
+    // 保存提交数据
+    private void saveValue() {
+
+        //
+        View itemV;
+        // 遍历活动状态的达成情况
+        EditText realStoreEt;
+        EditText desEt;
+        for (int i = 0; i < zsInOutSaveStcs.size(); i++) {
+            itemV = proList.getChildAt(i);
+            if (itemV == null || itemV.findViewById(R.id.item_xt_checkindex_sw_isacomplish) == null) continue;
+            realStoreEt = (EditText)itemV.findViewById(R.id.item_agency_check_content_et_daysellnum);
+            desEt = (EditText)itemV.findViewById(R.id.item_agency_check_content_et_daysellnum);
+            ZsInOutSaveStc zsInOutSaveStc = zsInOutSaveStcs.get(i);
+            zsInOutSaveStc.setRealstore(realStoreEt.getText().toString());
+            zsInOutSaveStc.setDes(desEt.getText().toString());
+        }
+        zsInOutSaveStcs.get(0);
+
     }
 
     /**

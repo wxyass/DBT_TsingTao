@@ -135,7 +135,7 @@ public class DdAgencyCheckSelectFragment extends BaseFragmentSupport implements 
                     Toast.makeText(getActivity(),"清空当前界面的经销商",Toast.LENGTH_SHORT).show();
                 } else {
                     // 展示经销商
-                    selectLst = service.queryDdagencySelectLst();
+                    selectLst = service.queryZsDdagencySelectLst(areaList.get(Postion).getKey());
                     DdAgencyCheckSelectAdapter agencyAdapter = new DdAgencyCheckSelectAdapter(getActivity(),selectLst,confirmBtn,"");
                     agencyLv.setAdapter(agencyAdapter);
                 }

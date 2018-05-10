@@ -196,7 +196,7 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
     private void setWjFalg(){
         // 未稽查
         if("N".equals(mitValcmpotherMTemp.getValistrueflag())){// 达成组数正确与否
-            zdzs_chatvie_rl_clearvie_statue.setText("业代录错");
+            zdzs_chatvie_rl_clearvie_statue.setText("错误");
         }else if("Y".equals(mitValcmpotherMTemp.getValistrueflag())){
             zdzs_chatvie_rl_clearvie_statue.setText("正确");
         }else{

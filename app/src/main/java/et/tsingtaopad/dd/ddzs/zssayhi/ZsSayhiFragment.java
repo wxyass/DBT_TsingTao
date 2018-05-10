@@ -1300,7 +1300,7 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
     private String getYdInfo(String flag){
         String con ="";
         if("N".equals(flag)){
-            con = "业代录错";
+            con = "错误";
         }else if("Y".equals(flag)){
             con = "正确";
         }else{

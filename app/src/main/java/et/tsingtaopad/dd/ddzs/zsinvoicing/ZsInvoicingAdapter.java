@@ -149,7 +149,7 @@ public class ZsInvoicingAdapter extends
         }else{// 业代的供货数据
             // 未稽查
             if("N".equals(item.getValagencysupplyflag())){
-                holder.statueTv.setText("业代录错");
+                holder.statueTv.setText("错误");
                 holder.statueTv.setTextColor(context.getResources().getColor(R.color.zdzs_dd_error));
             }else if("Y".equals(item.getValagencysupplyflag())){
                 holder.statueTv.setText("正确");
@@ -162,7 +162,7 @@ public class ZsInvoicingAdapter extends
             // 背景
             if("Y".equals(item.getValproerror())){
                 holder.ll_all.setBackgroundColor(Color.LTGRAY);
-                holder.statueTv.setText("督导失效");
+                holder.statueTv.setText("失效");
             }else{
                 holder.ll_all.setBackgroundColor(Color.WHITE);
             }

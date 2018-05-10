@@ -271,6 +271,11 @@ public class MainService extends XtShopVisitService {
     List<PadCheckstatusInfo> padCheckstatusInfos = null;
     List<MitValcheckterM> MitValcheckterMs = null;
 
+    List<MstAgencyKFM> mstAgencyKFMs = null;
+    List<MstAgencyvisitM> mstAgencyvisitMs = null;
+    List<MstInvoicingInfo> mstInvoicingInfos = null;
+    List<MstVisitauthorizeInfo> mstVisitauthorizeInfos = null;
+
     /**
      * 同步表数据
      *
@@ -411,6 +416,23 @@ public class MainService extends XtShopVisitService {
             else if(mClass.contains("MitValcheckterM")){
                 MitValcheckterMs= (List<MitValcheckterM>) JsonUtil.parseList(json, cls);
                 updateData(mitValcheckterMDao, MitValcheckterMs);
+            }
+
+            else if(mClass.contains("MstAgencyKFM")){
+                mstAgencyKFMs= (List<MstAgencyKFM>) JsonUtil.parseList(json, cls);
+                updateData(mstAgencyKFMDao, mstAgencyKFMs);
+            }
+            else if(mClass.contains("MstAgencyvisitM")){
+                mstAgencyvisitMs= (List<MstAgencyvisitM>) JsonUtil.parseList(json, cls);
+                updateData(mstAgencyvisitMDao, mstAgencyvisitMs);
+            }
+            else if(mClass.contains("MstInvoicingInfo")){
+                mstInvoicingInfos= (List<MstInvoicingInfo>) JsonUtil.parseList(json, cls);
+                updateData(mstInvoicingInfoDao, mstInvoicingInfos);
+            }
+            else if(mClass.contains("MstVisitauthorizeInfo")){
+                mstVisitauthorizeInfos= (List<MstVisitauthorizeInfo>) JsonUtil.parseList(json, cls);
+                updateData(mstVisitauthorizeInfoDao, mstVisitauthorizeInfos);
             }
 
             connection.commit(null);

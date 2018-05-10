@@ -91,11 +91,11 @@ public class DdAgencyCheckSelectAdapter extends BaseAdapter implements OnClickLi
             holder = (ViewHolder) convertView.getTag();
         }
 
-
         AgencySelectStc item = dataLst.get(position);
+        // 经销商名称
         holder.agencyNameTv.setHint(item.getAgencyName());
-
         holder.agencyNameTv.setText(item.getAgencyName());
+        // 电话
         holder.phoneTv.setText(item.getPhone());
 
         /*// 上传标记  SyncFlag对应拜访表Padisconsistent

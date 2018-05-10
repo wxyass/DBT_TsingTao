@@ -131,7 +131,7 @@ public class DdAgencySelectFragment extends BaseFragmentSupport implements View.
                     Toast.makeText(getActivity(),"清空当前界面的经销商",Toast.LENGTH_SHORT).show();
                 } else {
                     // 展示经销商
-                    kFMLst = service.queryDdMstAgencyKFMAll();
+                    kFMLst = service.queryDdMstAgencyKFMAll(areaList.get(Postion).getKey());
                     DdAgencySelectAdapter agencyAdapter = new DdAgencySelectAdapter(getActivity(),kFMLst,confirmBtn,"");
                     agencyLv.setAdapter(agencyAdapter);
                 }
@@ -152,8 +152,8 @@ public class DdAgencySelectFragment extends BaseFragmentSupport implements View.
             case R.id.top_navigation_rl_confirm:// 确定
 
                 // 记得删除 下面2行
-                MstAgencyKFM agencySelectStc = new MstAgencyKFM();
-                confirmBtn.setTag(agencySelectStc);
+                /*MstAgencyKFM agencySelectStc = new MstAgencyKFM();
+                confirmBtn.setTag(agencySelectStc);*/
 
                 mstAgencyKFM = (MstAgencyKFM)confirmBtn.getTag();
                 Bundle bundle = new Bundle();

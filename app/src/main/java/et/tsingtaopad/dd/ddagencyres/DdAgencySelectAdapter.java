@@ -93,6 +93,8 @@ public class DdAgencySelectAdapter extends BaseAdapter implements OnClickListene
             holder = (ViewHolder) convertView.getTag();
         }
 
+        holder.itermLayout.setOnClickListener(this);
+        holder.itermLayout.setTag(position);
 
         MstAgencyKFM item = dataLst.get(position);
         holder.agencyNameTv.setHint(item.getAgencyname());
@@ -120,7 +122,7 @@ public class DdAgencySelectAdapter extends BaseAdapter implements OnClickListene
         // 当结束拜访,拜访界面消失,显示购物车的时候,用到这个判断
         if (selectItem == -1 && item.getTerminalkey().equals(termId)) {
             selectItem = position;
-        }
+        }*/
 
         // 整体的字变色
         if (position == selectItem) {
@@ -131,7 +133,7 @@ public class DdAgencySelectAdapter extends BaseAdapter implements OnClickListene
         } else {
             // 未选中的条目,变成白色
             holder.itermLayout.setBackgroundColor(Color.WHITE);
-            if (ConstValues.FLAG_1.equals(item.getUploadFlag())) {
+            /*if (ConstValues.FLAG_1.equals(item.getUploadFlag())) {
                 // 已提交过的
                 holder.agencyNameTv.setTextColor(context.getResources().getColor(R.color.termlst_sync_font_color));
                 holder.phoneTv.setTextColor(context.getResources().getColor(R.color.termlst_sync_font_color));
@@ -144,8 +146,8 @@ public class DdAgencySelectAdapter extends BaseAdapter implements OnClickListene
                 holder.agencyNameTv.setTextColor(Color.BLACK);
                 holder.agencyNameTv.setTextColor(context.getResources().getColor(R.color.listview_item_font_color));
                 holder.phoneTv.setTextColor(context.getResources().getColor(R.color.listview_item_font_color));
-            }
-        }*/
+            }*/
+        }
 
         return convertView;
     }

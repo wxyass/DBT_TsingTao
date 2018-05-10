@@ -42,12 +42,15 @@ import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.db.table.CmmAreaM;
 import et.tsingtaopad.db.table.CmmDatadicM;
 import et.tsingtaopad.db.table.MitValcheckterM;
+import et.tsingtaopad.db.table.MstAgencyKFM;
 import et.tsingtaopad.db.table.MstAgencygridInfo;
 import et.tsingtaopad.db.table.MstAgencyinfoM;
+import et.tsingtaopad.db.table.MstAgencyvisitM;
 import et.tsingtaopad.db.table.MstCmpbrandsM;
 import et.tsingtaopad.db.table.MstCmpcompanyM;
 import et.tsingtaopad.db.table.MstCmproductinfoM;
 import et.tsingtaopad.db.table.MstGridM;
+import et.tsingtaopad.db.table.MstInvoicingInfo;
 import et.tsingtaopad.db.table.MstMarketareaM;
 import et.tsingtaopad.db.table.MstPictypeM;
 import et.tsingtaopad.db.table.MstProductM;
@@ -55,6 +58,7 @@ import et.tsingtaopad.db.table.MstProductareaInfo;
 import et.tsingtaopad.db.table.MstPromoproductInfo;
 import et.tsingtaopad.db.table.MstPromotionsM;
 import et.tsingtaopad.db.table.MstRouteM;
+import et.tsingtaopad.db.table.MstVisitauthorizeInfo;
 import et.tsingtaopad.db.table.PadCheckaccomplishInfo;
 import et.tsingtaopad.db.table.PadCheckproInfo;
 import et.tsingtaopad.db.table.PadCheckstatusInfo;
@@ -87,6 +91,7 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
 
     public static final int SYNC_SUCCSE = 1101;// 同步成功返回
     public static final int SYNC_START = 1102;// 发起同步请求
+    public static final int SYNC_CLOSE = 1103;// 关闭进度条
     private int count = 0;
 
 
@@ -276,6 +281,9 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                             }
                         }else{
                             Toast.makeText(getActivity(), resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
+                            Message msg = new Message();
+                            msg.what = FirstFragment.SYNC_CLOSE;//
+                            handler.sendMessage(msg);
                         }
                     }
                 })
@@ -283,12 +291,18 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                     @Override
                     public void onError(int code, String msg) {
                         Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                        Message msg1 = new Message();
+                        msg1.what = FirstFragment.SYNC_CLOSE;//
+                        handler.sendMessage(msg1);
                     }
                 })
                 .failure(new IFailure() {
                     @Override
                     public void onFailure() {
                         Toast.makeText(getContext(), "请求失败", Toast.LENGTH_SHORT).show();
+                        Message msg2 = new Message();
+                        msg2.what = FirstFragment.SYNC_CLOSE;//
+                        handler.sendMessage(msg2);
                     }
                 })
                 .builde()
@@ -449,6 +463,15 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
         String MST_CMPRODUCTINFO_M = emp.getMST_CMPRODUCTINFO_M();
         String MIT_VALCHECKTER_M = emp.getMIT_VALCHECKTER_M();
 
+        String MST_AGENCYKF_M = emp.getMST_AGENCYKF_M();
+        String MST_AGENCYVISIT_M = emp.getMST_AGENCYVISIT_M();
+        String MST_INVOICING_INFO = emp.getMST_INVOICING_INFO();
+        String MST_VISITAUTHORIZE_INFO = emp.getMST_VISITAUTHORIZE_INFO();
+
+
+
+
+
         MainService service = new MainService(getActivity(),null);
         service.createOrUpdateTable(CMM_DATADIC_M,"CMM_DATADIC_M",CmmDatadicM.class);
         service.createOrUpdateTable(CMM_AREA_M,"CMM_AREA_M",CmmAreaM.class);
@@ -460,6 +483,12 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
         service.createOrUpdateTable(MST_CMPBRANDS_M,"MST_CMPBRANDS_M",MstCmpbrandsM.class);
         service.createOrUpdateTable(MST_CMPRODUCTINFO_M,"MST_CMPRODUCTINFO_M",MstCmproductinfoM.class);
         service.createOrUpdateTable(MIT_VALCHECKTER_M,"MIT_VALCHECKTER_M",MitValcheckterM.class);
+
+        service.createOrUpdateTable(MST_AGENCYKF_M,"MST_AGENCYKF_M",MstAgencyKFM.class);
+        service.createOrUpdateTable(MST_AGENCYVISIT_M,"MST_AGENCYVISIT_M",MstAgencyvisitM.class);
+        service.createOrUpdateTable(MST_INVOICING_INFO,"MST_INVOICING_INFO",MstInvoicingInfo.class);
+        service.createOrUpdateTable(MST_VISITAUTHORIZE_INFO,"MST_VISITAUTHORIZE_INFO",MstVisitauthorizeInfo.class);
+
     }
 
     // 解析指标数据成功
@@ -505,6 +534,9 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                     break;
                 case SYNC_START:// 发起同步请求
                     fragment.showFirstDialog("正在同步数据");
+                    break;
+                case SYNC_CLOSE:// 发起同步请求
+                    fragment.closeFirstDialog();
                     break;
             }
         }

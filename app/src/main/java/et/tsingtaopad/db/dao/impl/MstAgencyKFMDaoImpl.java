@@ -75,6 +75,56 @@ public class MstAgencyKFMDaoImpl extends
 		}
 		return lst;
 	}
+    /**
+	 * 查询二级区域下的 经销商开发
+	 *
+	 * @param helper
+	 * @param areaid 二级区域ID
+	 * @return
+	 */
+	public ArrayList<MstAgencyKFM> queryZsMstAgencyKFMLst(SQLiteOpenHelper helper,String areaid) {
+		ArrayList<MstAgencyKFM> lst = new ArrayList<MstAgencyKFM>();
+
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(" select * from MST_AGENCYKF_M visita " +
+				"   left join mst_grid_m g on g.gridkey = visita.gridkey" +
+				"   where g.areaid= ? ");
+		SQLiteDatabase db = helper.getReadableDatabase();
+		Cursor cursor = db.rawQuery(buffer.toString(), new String[] {areaid });
+		MstAgencyKFM mstAgencyKFM;
+		while (cursor.moveToNext()) {
+			mstAgencyKFM = new MstAgencyKFM();
+
+			mstAgencyKFM.setAgencykfkey(cursor.getString(cursor.getColumnIndex("agencykfkey")));
+			mstAgencyKFM.setGridkey(cursor.getString(cursor.getColumnIndex("gridkey")));
+			mstAgencyKFM.setAgencyname(cursor.getString(cursor.getColumnIndex("agencyname")));
+			mstAgencyKFM.setContact(cursor.getString(cursor.getColumnIndex("contact")));
+			mstAgencyKFM.setMobile(cursor.getString(cursor.getColumnIndex("mobile")));
+			mstAgencyKFM.setAddress(cursor.getString(cursor.getColumnIndex("address")));
+			mstAgencyKFM.setArea(cursor.getString(cursor.getColumnIndex("area")));
+			mstAgencyKFM.setMoney(cursor.getString(cursor.getColumnIndex("money")));
+			mstAgencyKFM.setCarnum(cursor.getString(cursor.getColumnIndex("carnum")));
+			mstAgencyKFM.setProductname(cursor.getString(cursor.getColumnIndex("productname")));
+			mstAgencyKFM.setKfdate(cursor.getString(cursor.getColumnIndex("kfdate")));
+			mstAgencyKFM.setStatus(cursor.getString(cursor.getColumnIndex("status")));
+			mstAgencyKFM.setCreatedate(cursor.getString(cursor.getColumnIndex("createdate")));
+			mstAgencyKFM.setCreateuser(cursor.getString(cursor.getColumnIndex("createuser")));
+			mstAgencyKFM.setUpdatedate(cursor.getString(cursor.getColumnIndex("updatedate")));
+			mstAgencyKFM.setUpdateuser(cursor.getString(cursor.getColumnIndex("updateuser")));
+			mstAgencyKFM.setUpload(cursor.getString(cursor.getColumnIndex("upload")));
+			// 新加6个字段
+			mstAgencyKFM.setPersion(cursor.getString(cursor.getColumnIndex("persion")));
+			mstAgencyKFM.setBusiness(cursor.getString(cursor.getColumnIndex("business")));
+			mstAgencyKFM.setIsone(cursor.getInt(cursor.getColumnIndex("isone")));
+			mstAgencyKFM.setCoverterms(cursor.getString(cursor.getColumnIndex("coverterms")));
+			mstAgencyKFM.setSupplyterms(cursor.getString(cursor.getColumnIndex("supplyterms")));
+			mstAgencyKFM.setPassdate(cursor.getString(cursor.getColumnIndex("passdate")));
+
+			//lst.add(mstAgencyKFM);
+			lst.add(0,mstAgencyKFM);
+		}
+		return lst;
+	}
 
 	/**
 	 * 更新一条经销商开发记录
@@ -95,8 +145,7 @@ public class MstAgencyKFMDaoImpl extends
 	 * 删除一条经销商开发记录
 	 * 
 	 * @param helper
-	 * @param localpath
-	 * @param camerakey
+	 * @param agencykfkey
 	 */
 	@Override
 	public void deleteAgencykfRecord(SQLiteOpenHelper helper, String agencykfkey) {
