@@ -54,6 +54,22 @@ public class DdAgencyContentFragment extends BaseFragmentSupport implements View
     public static final int DD_AGENCY_CONTENT_SUC = 2311;//
     public static final int DD_AGENCY_CONTENT_FAIL = 2312;//
 
+    public static final String AGENCYNAME ="agencyname";
+    public static final String CONTACT ="contact";
+    public static final String MOBILE ="mobile";
+    public static final String ADDRESS ="address";
+    public static final String AREA ="area";
+    public static final String MONEY ="money";
+    public static final String PERSION ="persion";
+    public static final String CARNUM ="carnum";
+    public static final String ISONE ="isone";
+    public static final String KFDATA ="kfdata";
+    public static final String PASSDATA ="passdata";
+    public static final String PRODUCTNAME ="productname";
+    public static final String BUSINESS ="business";
+    public static final String COVERTERMS ="coverterms";
+    public static final String SUPPLYTERMS ="supplyterms";
+
     private RelativeLayout agencyname;
     private TextView agencyname_con1;
     private TextView agencyname_statue;
@@ -267,49 +283,49 @@ public class DdAgencyContentFragment extends BaseFragmentSupport implements View
 
                 break;
             case R.id.agency_content_rl_agencyname:// 经销商名称
-                alertShow3();
+                alertShow3(AGENCYNAME);
                 break;
             case R.id.agency_content_rl_contact:// 法定代表人
-                alertShow3();
+                alertShow3(CONTACT);
                 break;
             case R.id.agency_content_rl_mobile:// 电话
-                alertShow3();
+                alertShow3(MOBILE);
                 break;
             case R.id.agency_content_rl_address:// 地址
-                alertShow3();
+                alertShow3(ADDRESS);
                 break;
             case R.id.agency_content_rl_area:// 面积
-                alertShow3();
+                alertShow3(AREA);
                 break;
             case R.id.agency_content_rl_money:// 资金
-                alertShow3();
+                alertShow3(MONEY);
                 break;
             case R.id.agency_content_rl_persion://人员
-                alertShow3();
+                alertShow3(PERSION);
                 break;
             case R.id.agency_content_rl_carnum:// 车辆
-                alertShow3();
+                alertShow3(CARNUM);
                 break;
             case R.id.agency_content_rl_isone:// 数一数二经销商
-                alertShow3();
+                alertShow3(ISONE);
                 break;
             case R.id.agency_content_rl_kfdata:// 开发时间
-                alertShow3();
+                alertShow3(KFDATA);
                 break;
             case R.id.agency_content_rl_passdata:// 达成时间
-                alertShow3();
+                alertShow3(PASSDATA);
                 break;
             case R.id.agency_content_rl_productname:// 销售产品
-                alertShow3();
+                alertShow3(PRODUCTNAME);
                 break;
             case R.id.agency_content_rl_business:// 经营状况
-                alertShow3();
+                alertShow3(BUSINESS);
                 break;
             case R.id.agency_content_rl_coverterms:// 覆盖终端
-                alertShow3();
+                alertShow3(COVERTERMS);
                 break;
             case R.id.agency_content_rl_supplyterms:// 直供终端
-                alertShow3();
+                alertShow3(SUPPLYTERMS);
                 break;
             case R.id.agency_content_dd_bt_save:// 保存上传
                 saveValue();
@@ -357,16 +373,6 @@ public class DdAgencyContentFragment extends BaseFragmentSupport implements View
         }
     }
 
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        DbtLog.logUtils(TAG, "onPause()");
-
-        // 保存追溯 进销存数据  MitValsupplyMTemp
-        //invoicingService.saveZsInvoicing(dataLst);
-    }
-
     /**
      * 正确 错误(去修正)
      * 参数1: 标题 ×
@@ -379,7 +385,7 @@ public class DdAgencyContentFragment extends BaseFragmentSupport implements View
      * 参数8: 条目点击监听  √
      */
     private AlertView mAlertViewExt;//窗口拓展例子
-    public void alertShow3() {
+    public void alertShow3(final String type) {
         List<KvStc> sureOrFail = new ArrayList<>();
         sureOrFail.add(new KvStc("zhengque","正确","-1"));
         sureOrFail.add(new KvStc("cuowu","错误(去修正)","-1"));
@@ -415,7 +421,8 @@ public class DdAgencyContentFragment extends BaseFragmentSupport implements View
                     zsVisitShopActivity.changeXtvisitFragment(zsSayhiAmendFragment,"zssayhiamendfragment");*/
 
                     Bundle bundle = new Bundle();
-                    //bundle.putSerializable("fromFragment", "XtTermSelectFragment");
+                    bundle.putString("type", type);
+                    bundle.putSerializable("mstAgencyKFM", mstAgencyKFM);
                     DdAgencyAmendFragment agencyAmendFragment = new DdAgencyAmendFragment();
                     agencyAmendFragment.setArguments(bundle);
                     // 跳转 经销商库存盘点 填充数据

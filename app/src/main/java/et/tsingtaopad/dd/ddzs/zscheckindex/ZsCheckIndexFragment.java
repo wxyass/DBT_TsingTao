@@ -182,6 +182,9 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
         service.initCheckTypeStatus();
         indexValuelst = GlobalValues.indexLst;
 
+        // 每次打开这个界面, 先将集合中数据清除  (因为这个集合中 放着需要展示的指标数据 防止数据一直递增)
+        checkCalculateLst.clear();
+
         // 根据追溯指标配置,显示不同条目
         for (XtProIndex xtProIndex:calculateLst){
             if (checkkeyAll.contains(xtProIndex.getIndexId())){

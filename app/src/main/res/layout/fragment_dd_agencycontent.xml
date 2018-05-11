@@ -31,7 +31,7 @@
                 <!--标题-->
                 <TextView
                     style="@style/zdzs_sayhi_title"
-                    android:text="经销商名称"/>
+                    android:text="@string/agencykf_agencyname"/>
 
                 <!--内容1-->
                 <TextView
@@ -62,7 +62,7 @@
                 <!--标题-->
                 <TextView
                     style="@style/zdzs_sayhi_title"
-                    android:text="法定代表人"/>
+                    android:text="@string/agencykf_contact"/>
 
                 <!--内容1-->
                 <TextView
@@ -93,7 +93,7 @@
                 <!--标题-->
                 <TextView
                     style="@style/zdzs_sayhi_title"
-                    android:text="联系电话"/>
+                    android:text="@string/agencykf_mobile"/>
 
                 <!--内容1-->
                 <TextView
@@ -124,7 +124,7 @@
                 <!--标题-->
                 <TextView
                     style="@style/zdzs_sayhi_title"
-                    android:text="仓库地址"/>
+                    android:text="@string/agencykf_address"/>
 
                 <!--内容1-->
                 <TextView
@@ -155,7 +155,7 @@
                 <!--标题-->
                 <TextView
                     style="@style/zdzs_sayhi_title"
-                    android:text="仓库面积"/>
+                    android:text="@string/agencykf_area"/>
 
                 <!--内容1-->
                 <TextView
@@ -186,7 +186,7 @@
                 <!--标题-->
                 <TextView
                     style="@style/zdzs_sayhi_title"
-                    android:text="资金"/>
+                    android:text="@string/agencykf_money"/>
 
                 <!--内容1-->
                 <TextView
@@ -217,7 +217,7 @@
                 <!--标题-->
                 <TextView
                     style="@style/zdzs_sayhi_title"
-                    android:text="人员"/>
+                    android:text="@string/agencykf_persion"/>
 
                 <!--内容1-->
                 <TextView
@@ -248,7 +248,7 @@
                 <!--标题-->
                 <TextView
                     style="@style/zdzs_sayhi_title"
-                    android:text="配送车辆"/>
+                    android:text="@string/agencykf_carnum"/>
 
                 <!--内容1-->
                 <TextView
@@ -279,7 +279,7 @@
                 <!--标题-->
                 <TextView
                     style="@style/zdzs_sayhi_title"
-                    android:text="数一数二经销商"/>
+                    android:text="@string/agencykf_isone"/>
 
                 <!--内容1-->
                 <TextView
@@ -310,7 +310,7 @@
                 <!--标题-->
                 <TextView
                     style="@style/zdzs_sayhi_title"
-                    android:text="开发时间"/>
+                    android:text="@string/agencykf_kfdata"/>
 
                 <!--内容1-->
                 <TextView
@@ -341,7 +341,7 @@
                 <!--标题-->
                 <TextView
                     style="@style/zdzs_sayhi_title"
-                    android:text="达成时间"/>
+                    android:text="@string/agencykf_passdate"/>
 
                 <!--内容1-->
                 <TextView
@@ -372,7 +372,7 @@
                 <!--标题-->
                 <TextView
                     style="@style/zdzs_sayhi_title"
-                    android:text="销售产品"/>
+                    android:text="@string/agencykf_productname"/>
 
                 <!--内容1-->
                 <TextView
@@ -403,7 +403,7 @@
                 <!--标题-->
                 <TextView
                     style="@style/zdzs_sayhi_title"
-                    android:text="经营状况"/>
+                    android:text="@string/agencykf_business"/>
 
                 <!--内容1-->
                 <TextView
@@ -434,7 +434,7 @@
                 <!--标题-->
                 <TextView
                     style="@style/zdzs_sayhi_title"
-                    android:text="覆盖终端"/>
+                    android:text="@string/agencykf_coverterms"/>
 
                 <!--内容1-->
                 <TextView
@@ -465,7 +465,7 @@
                 <!--标题-->
                 <TextView
                     style="@style/zdzs_sayhi_title"
-                    android:text="直供终端"/>
+                    android:text="@string/agencykf_supplyterms"/>
 
                 <!--内容1-->
                 <TextView

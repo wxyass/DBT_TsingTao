@@ -73,7 +73,7 @@ public class DdAgencySelectFragment extends BaseFragmentSupport implements View.
         confirmTv = (AppCompatTextView) view.findViewById(R.id.top_navigation_bt_confirm);
         backTv = (AppCompatTextView) view.findViewById(R.id.top_navigation_bt_back);
         titleTv = (AppCompatTextView) view.findViewById(R.id.top_navigation_tv_title);
-        confirmBtn.setVisibility(View.VISIBLE);
+        // confirmBtn.setVisibility(View.VISIBLE);
         confirmBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
 
@@ -150,10 +150,6 @@ public class DdAgencySelectFragment extends BaseFragmentSupport implements View.
                 supportFragmentManager.popBackStack();
                 break;
             case R.id.top_navigation_rl_confirm:// 确定
-
-                // 记得删除 下面2行
-                /*MstAgencyKFM agencySelectStc = new MstAgencyKFM();
-                confirmBtn.setTag(agencySelectStc);*/
 
                 mstAgencyKFM = (MstAgencyKFM)confirmBtn.getTag();
                 Bundle bundle = new Bundle();

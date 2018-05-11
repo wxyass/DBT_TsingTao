@@ -134,6 +134,8 @@ public class DdAgencyCheckSelectAdapter extends BaseAdapter implements OnClickLi
         } else {
             // 未选中的条目,变成白色
             holder.itermLayout.setBackgroundColor(Color.WHITE);
+            holder.agencyNameTv.setTextColor(context.getResources().getColor(R.color.listview_item_font_color));
+            holder.phoneTv.setTextColor(context.getResources().getColor(R.color.listview_item_font_color));
             /*if (ConstValues.FLAG_1.equals(item.getUploadFlag())) {
                 // 已提交过的
                 holder.agencyNameTv.setTextColor(context.getResources().getColor(R.color.termlst_sync_font_color));

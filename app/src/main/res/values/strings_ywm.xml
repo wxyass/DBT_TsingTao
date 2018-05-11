@@ -555,6 +555,48 @@
     <!--终端追溯-->
     <string name="zdzs_selectterm">选择将要追溯的终端</string>
 
+    <!-- 经销商开发 -->
+    <string name="agencykf_details">经销商开发</string>
+    <string name="agencykf_agencyselect">选择</string>
+    <string name="agencykf_agencyname">经销商名称</string>
+    <string name="agencykf_contact">法定人</string>
+    <string name="agencykf_mobile">联系电话</string>
+    <string name="agencykf_address">仓库地址</string>
+    <string name="agencykf_persion">人员</string>
+    <string name="agencykf_business">经营状况</string>
+    <string name="agencykf_isone">是否数一数二经销商</string>
+    <string name="agencykf_coverterms">覆盖终端</string>
+    <string name="agencykf_supplyterms">直供终端</string>
+    <string name="agencykf_passdate">达成时间</string>
+    <string name="agencykf_area">仓库面积</string>
+    <string name="agencykf_money">资金</string>
+    <string name="agencykf_carnum">车辆配送</string>
+    <string name="agencykf_productname">销售产品</string>
+    <string name="agencykf_kfdata">开发时间</string>
+    <string name="agencykf_unit_mxm">平方米</string>
+    <string name="agencykf_unit_money">万元</string>
+    <string name="agencykf_unit_l">辆</string>
+    <string name="agencykf_product_product">产品之间以逗号隔开(不超过500汉字)</string>
+    <string name="agencykf_agencyname_more">不能超过50汉字</string>
+    <string name="agencykf_agencymaohao">:</string>
+
+    <string name="agencykf_add_noname">经销商名称未填写</string>
+    <string name="agencykf_add_marename">经销商名称不能超过50汉字</string>
+    <string name="agencykf_add_nocontact">法定人未填写</string>
+    <string name="agencykf_add_morecontact">法定人不能超过50汉字</string>
+    <string name="agencykf_add_area">仓库地址不能超过100汉字</string>
+    <string name="agencykf_add_product">销售产品不能超过500汉字</string>
+    <string name="agencykf_add_address">不能超过100汉字</string>
+    <string name="agencykf_add_coverterm">终端之间以逗号隔开</string>
+
+    <string name="agencykf_delete">是否删除此条经销商记录</string>
+    <string name="agencykf_isdelete">确定要删除此经销商记录</string>
+    <string name="agencykf_all">经销商详情</string>
+    <string-array name="isyesno">
+        <item>请选择</item>
+        <item>是</item>
+        <item>否</item>
+    </string-array>
 
 
 </resources>
