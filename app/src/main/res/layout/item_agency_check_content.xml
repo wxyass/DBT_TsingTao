@@ -62,13 +62,14 @@
                     android:layout_marginLeft="15dp"
                     android:text="产品编码: "
                     android:textSize="18sp"/>
+
                 <TextView
                     android:id="@+id/item_agency_check_content_tv_agencyname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@id/item_agency_check_content_tv_agencyname1"
                     android:layout_marginLeft="15dp"
+                    android:layout_toRightOf="@id/item_agency_check_content_tv_agencyname1"
                     android:text="S948569325237982357932"
                     android:textSize="18sp"/>
 
@@ -138,12 +139,13 @@
                     android:layout_centerVertical="true"
                     android:layout_margin="3dp"
                     android:layout_toRightOf="@id/item_agency_check_content_tv_daysellnum"
+                    android:background="@drawable/bg_visit_record"
                     android:inputType="number"/>
             </RelativeLayout>
 
         </LinearLayout>
 
-        <!--竞品描述-->
+        <!--请输入备注信息(偏差原因等)-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/xtbf_btn_h"
@@ -159,19 +161,14 @@
                     android:id="@+id/item_agency_check_content_et_des"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="3dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
                     android:layout_marginTop="3dp"
-                    android:layout_marginBottom="3dp"
-                    android:hint="请输入竞品描述"
-                    android:background="@drawable/bg_visit_record"/>
+                    android:background="@drawable/bg_visit_record"
+                    android:hint="请输入备注信息(偏差原因等)"/>
 
             </RelativeLayout>
-
-
-
         </LinearLayout>
-
-
     </LinearLayout>
 </LinearLayout>

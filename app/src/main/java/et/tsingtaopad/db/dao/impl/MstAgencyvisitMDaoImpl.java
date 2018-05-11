@@ -89,9 +89,9 @@ public class MstAgencyvisitMDaoImpl extends
         String sql = "select distinct agen.agencykey,agen.agencyname,agen.address, " +
                 " agen.mobile,agen.contact,agen.agencycode " +
         		"  from mst_visitauthorize_info visita" +
+                "  inner join mst_agencyinfo_m agen on  agen.agencykey=visita.agencykey " +
         		"  left join mst_grid_m j on visita.gridkey = j.gridkey " +
-        		"  left join mst_agencyinfo_m agen on  agen.agencykey=visita.agencykey " +
-        		" where j.areaid = ? " ;
+        		"  where j.areaid = ? " ;
         Cursor cursor = db.rawQuery(sql, new String[]{areaid});
         while (cursor.moveToNext()) {
             AgencySelectStc asStc = new AgencySelectStc();
@@ -167,9 +167,14 @@ public class MstAgencyvisitMDaoImpl extends
         StringBuffer buffer = new StringBuffer();
         SQLiteDatabase db = helper.getReadableDatabase();
         buffer.append("select vp.proname,vp.procode,am.* from MST_INVOICING_INFO am  ");
-        buffer.append("left join MST_PRODUCT_M vp on am.productkey = vp.productkey  ");
-        buffer.append("where am.agevisitkey = ? and  am.agencykey = ? ");
-        Cursor cursor = db.rawQuery(buffer.toString(), new String[] {agevisitkey,agencykey});
+        //buffer.append("left join MST_PRODUCT_M vp on am.productkey = vp.productkey  ");
+        buffer.append("inner join MST_PRODUCT_M vp on am.productkey = vp.productkey  ");
+
+
+        //buffer.append("where am.agevisitkey = ? and  am.agencykey = ? ");
+        //Cursor cursor = db.rawQuery(buffer.toString(), new String[] {agevisitkey,agencykey});
+        buffer.append("where   am.agencykey = ? ");
+        Cursor cursor = db.rawQuery(buffer.toString(), new String[] {agencykey});
 
         ZsInOutSaveStc item;
         while (cursor.moveToNext()) {
@@ -180,6 +185,7 @@ public class MstAgencyvisitMDaoImpl extends
             item.setProname(cursor.getString(cursor.getColumnIndex("proname")));// 产品名称
             item.setProcode(cursor.getString(cursor.getColumnIndex("procode")));// 产品编码
             item.setStorenum(cursor.getDouble(cursor.getColumnIndex("storenum")));// 期末库存
+            item.setRealstore("");
             list.add(item);
         }
         return list;

@@ -37,7 +37,6 @@ import et.tsingtaopad.main.visit.agencyvisit.domain.AgencySelectStc;
 /**
  * 经销商库存盘点 填充数据
  * Created by yangwenmin on 2018/3/12.
- *
  */
 
 public class DdAgencyCheckContentFragment extends BaseFragmentSupport implements View.OnClickListener {
@@ -64,7 +63,7 @@ public class DdAgencyCheckContentFragment extends BaseFragmentSupport implements
 
     private MstAgencyvisitM visitM;
     private String visitDate;
-    private CheckService service ;
+    private CheckService service;
     //记录上传拜访的主键
     private String prevVisitKey;
     // private List<InOutSaveStc> iosStcLst;
@@ -113,10 +112,10 @@ public class DdAgencyCheckContentFragment extends BaseFragmentSupport implements
     }
 
     private void initData() {
-        titleTv.setText("经销商库存盘点");
 
 
-         service = new CheckService(getActivity());
+
+        service = new CheckService(getActivity());
 
         //记录拜访开始日期
         visitDate = DateUtil.formatDate(new Date(), "yyyyMMddHHmmss");
@@ -127,16 +126,23 @@ public class DdAgencyCheckContentFragment extends BaseFragmentSupport implements
         // 获取传递过来的 经销商主键,名称,地址,联系电话
         asStc = (AgencySelectStc) bundle.getSerializable("agencyselectstc");
 
-        // 获取当天的这次和上次拜访记录 mapLedger
+        // titleTv.setText("经销商库存盘点");
+        titleTv.setText(asStc.getAgencyName());
+        agencycodeTv.setText(asStc.getAgencycode());
+        contactTv.setText(asStc.getContact());
+        phoneTv.setText(asStc.getPhone());
+
+
+        /*// 获取当天的这次和上次拜访记录 mapLedger
         Map<String, Object> mapLedger = service.getMstAgencyvisitM(asStc.getAgencyKey(), visitDate);//一天多次拜访显示数据
         // 获取这次经销商拜访的记录,包含主键,拜访时间等等
         visitM = (MstAgencyvisitM) mapLedger.get("LsMstAgencyvisitM");
         // 获取上次经销商拜访的主键
-        prevVisitKey = (String) mapLedger.get("LsprevVisitKey");
+        prevVisitKey = (String) mapLedger.get("LsprevVisitKey");*/
 
         //获取进销存台账数据
         zsInOutSaveStcs = service.getZsInOutSave(asStc.getAgencyKey());
-        DdAgencyCheckContentAdapter adapter = new DdAgencyCheckContentAdapter(getActivity(),zsInOutSaveStcs);
+        DdAgencyCheckContentAdapter adapter = new DdAgencyCheckContentAdapter(getActivity(), zsInOutSaveStcs);
         proList.setAdapter(adapter);
     }
 
@@ -164,7 +170,6 @@ public class DdAgencyCheckContentFragment extends BaseFragmentSupport implements
 
     // 保存提交数据
     private void saveValue() {
-
         //
         View itemV;
         // 遍历活动状态的达成情况
@@ -172,15 +177,14 @@ public class DdAgencyCheckContentFragment extends BaseFragmentSupport implements
         EditText desEt;
         for (int i = 0; i < zsInOutSaveStcs.size(); i++) {
             itemV = proList.getChildAt(i);
-            if (itemV == null || itemV.findViewById(R.id.item_xt_checkindex_sw_isacomplish) == null) continue;
-            realStoreEt = (EditText)itemV.findViewById(R.id.item_agency_check_content_et_daysellnum);
-            desEt = (EditText)itemV.findViewById(R.id.item_agency_check_content_et_daysellnum);
+            if (itemV == null || itemV.findViewById(R.id.item_agency_check_content_et_daysellnum) == null)continue;
+            realStoreEt = (EditText) itemV.findViewById(R.id.item_agency_check_content_et_daysellnum);
+            desEt = (EditText) itemV.findViewById(R.id.item_agency_check_content_et_des);
             ZsInOutSaveStc zsInOutSaveStc = zsInOutSaveStcs.get(i);
             zsInOutSaveStc.setRealstore(realStoreEt.getText().toString());
             zsInOutSaveStc.setDes(desEt.getText().toString());
         }
         zsInOutSaveStcs.get(0);
-
     }
 
     /**
@@ -213,7 +217,6 @@ public class DdAgencyCheckContentFragment extends BaseFragmentSupport implements
             }
         }
     }
-
 
 
     @Override

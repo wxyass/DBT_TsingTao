@@ -98,8 +98,8 @@ public class DdAgencyCheckContentAdapter extends
         final ZsInOutSaveStc item = dataLst.get(position);
 
         // 产品名称
-        holder.productNameTv.setHint(item.getProductkey());
-        holder.productNameTv.setText(item.getProductkey());
+        holder.productNameTv.setHint(item.getProname());
+        holder.productNameTv.setText(item.getProname());
 
         // 产品编码
         holder.procodeTv.setHint("未输入产品编码");

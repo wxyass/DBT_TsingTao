@@ -615,7 +615,7 @@ public class MainService extends XtShopVisitService {
         // 解析区域定格路线信息
         AreaGridRoute emp = JsonUtil.parseJson(json, AreaGridRoute.class);
         String MST_AGENCYGRID_INFO = emp.getMST_AGENCYGRID_INFO();
-        String MST_AGENCYINFO_M = emp.getMST_AGENCYINFO_M();
+        // String MST_AGENCYINFO_M = emp.getMST_AGENCYINFO_M();
         String MST_AGENCYSUPPLY_INFO = emp.getMST_AGENCYSUPPLY_INFO();
         String MST_CHECKEXERECORD_INFO = emp.getMST_CHECKEXERECORD_INFO();
         String MST_CMPSUPPLY_INFO = emp.getMST_CMPSUPPLY_INFO();
@@ -626,7 +626,7 @@ public class MainService extends XtShopVisitService {
         String MST_VISTPRODUCT_INFO = emp.getMST_VISTPRODUCT_INFO();
 
         createOrUpdateTable(MST_AGENCYGRID_INFO, "MST_AGENCYGRID_INFO", MstAgencygridInfo.class);
-        createOrUpdateTable(MST_AGENCYINFO_M, "MST_AGENCYINFO_M", MstAgencyinfoM.class);
+        // createOrUpdateTable(MST_AGENCYINFO_M, "MST_AGENCYINFO_M", MstAgencyinfoM.class);
         createOrUpdateTable(MST_AGENCYSUPPLY_INFO, "MST_AGENCYSUPPLY_INFO", MstAgencysupplyInfo.class);
         createOrUpdateTable(MST_CHECKEXERECORD_INFO, "MST_CHECKEXERECORD_INFO", MstCheckexerecordInfo.class);
         createOrUpdateTable(MST_CMPSUPPLY_INFO, "MST_CMPSUPPLY_INFO", MstCmpsupplyInfo.class);

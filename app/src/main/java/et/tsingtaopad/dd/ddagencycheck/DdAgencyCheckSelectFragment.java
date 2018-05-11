@@ -60,6 +60,8 @@ public class DdAgencyCheckSelectFragment extends BaseFragmentSupport implements 
 
     private AgencySelectStc agencySelectStc; //选择的经销商
 
+    DdAgencyCheckSelectAdapter agencyAdapter; // 经销商适配器
+
 
     @Nullable
     @Override
@@ -76,13 +78,12 @@ public class DdAgencyCheckSelectFragment extends BaseFragmentSupport implements 
         confirmTv = (AppCompatTextView) view.findViewById(R.id.top_navigation_bt_confirm);
         backTv = (AppCompatTextView) view.findViewById(R.id.top_navigation_bt_back);
         titleTv = (AppCompatTextView) view.findViewById(R.id.top_navigation_tv_title);
-        confirmBtn.setVisibility(View.VISIBLE);
+        // confirmBtn.setVisibility(View.VISIBLE);
         confirmBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
 
         areaBtn = (et.tsingtaopad.core.view.dropdownmenu.DropdownButton) view.findViewById(R.id.agency_check_ddb_area);
-        agencyLv = (ListView) view.findViewById(R.id.agency_check_lv_list);
-
+        agencyLv = (ListView) view.findViewById(R.id.agency_check_select_lv_list);
 
     }
 
@@ -132,11 +133,13 @@ public class DdAgencyCheckSelectFragment extends BaseFragmentSupport implements 
             public void onDropItemSelect(int Postion) {
                 //Toast.makeText(getContext(), "您选择了 " + areaList.get(Postion).getName(), Toast.LENGTH_SHORT).show();
                 if (Postion == 0) {
-                    Toast.makeText(getActivity(),"清空当前界面的经销商",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "请选择区域", Toast.LENGTH_SHORT).show();
+                    selectLst.clear();
+                    agencyAdapter.notifyDataSetChanged();
                 } else {
                     // 展示经销商
                     selectLst = service.queryZsDdagencySelectLst(areaList.get(Postion).getKey());
-                    DdAgencyCheckSelectAdapter agencyAdapter = new DdAgencyCheckSelectAdapter(getActivity(),selectLst,confirmBtn,"");
+                    agencyAdapter = new DdAgencyCheckSelectAdapter(getActivity(), selectLst, confirmBtn, "");
                     agencyLv.setAdapter(agencyAdapter);
                 }
             }
@@ -153,11 +156,8 @@ public class DdAgencyCheckSelectFragment extends BaseFragmentSupport implements 
                 break;
             case R.id.top_navigation_rl_confirm:// 确定
 
-                // 记得删除 下面2行
-                AgencySelectStc agencySelectStc = new AgencySelectStc();
-                confirmBtn.setTag(agencySelectStc);
+                agencySelectStc = (AgencySelectStc) confirmBtn.getTag();
 
-                agencySelectStc = (AgencySelectStc)confirmBtn.getTag();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("agencyselectstc", agencySelectStc);
                 DdAgencyCheckContentFragment agencyCheckContentFragment = new DdAgencyCheckContentFragment();

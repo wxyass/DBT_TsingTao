@@ -467,6 +467,7 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
         String MST_AGENCYVISIT_M = emp.getMST_AGENCYVISIT_M();
         String MST_INVOICING_INFO = emp.getMST_INVOICING_INFO();
         String MST_VISITAUTHORIZE_INFO = emp.getMST_VISITAUTHORIZE_INFO();
+        String MST_AGENCYINFO_M = emp.getMST_AGENCYINFO_M();
 
 
 
@@ -488,6 +489,7 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
         service.createOrUpdateTable(MST_AGENCYVISIT_M,"MST_AGENCYVISIT_M",MstAgencyvisitM.class);
         service.createOrUpdateTable(MST_INVOICING_INFO,"MST_INVOICING_INFO",MstInvoicingInfo.class);
         service.createOrUpdateTable(MST_VISITAUTHORIZE_INFO,"MST_VISITAUTHORIZE_INFO",MstVisitauthorizeInfo.class);
+        service.createOrUpdateTable(MST_AGENCYINFO_M, "MST_AGENCYINFO_M", MstAgencyinfoM.class);
 
     }
 

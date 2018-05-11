@@ -1,6 +1,7 @@
 package et.tsingtaopad.dd.ddagencycheck;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,6 +16,7 @@ import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
+import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.db.table.MstAgencyKFM;
 import et.tsingtaopad.main.visit.agencyvisit.domain.AgencySelectStc;
 
@@ -91,6 +93,9 @@ public class DdAgencyCheckSelectAdapter extends BaseAdapter implements OnClickLi
             holder = (ViewHolder) convertView.getTag();
         }
 
+        holder.itermLayout.setOnClickListener(this);
+        holder.itermLayout.setTag(position);
+
         AgencySelectStc item = dataLst.get(position);
         // 经销商名称
         holder.agencyNameTv.setHint(item.getAgencyName());
@@ -118,7 +123,7 @@ public class DdAgencyCheckSelectAdapter extends BaseAdapter implements OnClickLi
         // 当结束拜访,拜访界面消失,显示购物车的时候,用到这个判断
         if (selectItem == -1 && item.getTerminalkey().equals(termId)) {
             selectItem = position;
-        }
+        }*/
 
         // 整体的字变色
         if (position == selectItem) {
@@ -129,7 +134,7 @@ public class DdAgencyCheckSelectAdapter extends BaseAdapter implements OnClickLi
         } else {
             // 未选中的条目,变成白色
             holder.itermLayout.setBackgroundColor(Color.WHITE);
-            if (ConstValues.FLAG_1.equals(item.getUploadFlag())) {
+            /*if (ConstValues.FLAG_1.equals(item.getUploadFlag())) {
                 // 已提交过的
                 holder.agencyNameTv.setTextColor(context.getResources().getColor(R.color.termlst_sync_font_color));
                 holder.phoneTv.setTextColor(context.getResources().getColor(R.color.termlst_sync_font_color));
@@ -142,8 +147,8 @@ public class DdAgencyCheckSelectAdapter extends BaseAdapter implements OnClickLi
                 holder.agencyNameTv.setTextColor(Color.BLACK);
                 holder.agencyNameTv.setTextColor(context.getResources().getColor(R.color.listview_item_font_color));
                 holder.phoneTv.setTextColor(context.getResources().getColor(R.color.listview_item_font_color));
-            }
-        }*/
+            }*/
+        }
 
         return convertView;
     }
