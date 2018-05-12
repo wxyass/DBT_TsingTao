@@ -28,6 +28,8 @@ import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.core.view.dropdownmenu.DropBean;
+import et.tsingtaopad.db.table.MitTerminalM;
+import et.tsingtaopad.db.table.MitValagencykfM;
 import et.tsingtaopad.db.table.MstGridM;
 import et.tsingtaopad.db.table.MstMarketareaM;
 import et.tsingtaopad.db.table.MstRouteM;
@@ -869,6 +871,50 @@ public class DdAddTermFragment extends BaseFragmentSupport implements View.OnCli
         String termsellchannel = (String) termsellchannelTv.getTag();
         String termtmainchannel = (String) termtmainchannelTv.getTag();
         String termminorchannel = (String) termminorchannelTv.getTag();
+
+        MitTerminalM mitTerminalM = new MitTerminalM();
+        // mitTerminalM.setTerminalkey();
+        // mitTerminalM.setTerminalcode();
+        mitTerminalM.setTerminalname(termname);
+        mitTerminalM.setRoutekey(termroude);
+        mitTerminalM.setAreatype(termarea);
+        mitTerminalM.setTlevel(termlv);
+        mitTerminalM.setProvince(termprovince);
+        mitTerminalM.setCity(termcity);
+        mitTerminalM.setCounty(termcountry);
+        mitTerminalM.setAddress(termaddress);
+        mitTerminalM.setContact(termcontact);
+        mitTerminalM.setMobile(termphone);
+
+        mitTerminalM.setSequence(termsequence);
+
+        mitTerminalM.setCycle(termcycle);
+
+        mitTerminalM.setHvolume(termhvolume);
+
+        mitTerminalM.setZvolume(termmvolume);
+
+        mitTerminalM.setPvolume(termpvolume);
+
+        mitTerminalM.setDvolume(termlvolume);
+
+        mitTerminalM.setSellchannel(termsellchannel);
+
+        mitTerminalM.setMainchannel(termtmainchannel);
+
+        mitTerminalM.setMinorchannel(termminorchannel);
+
+        mitTerminalM.setUploadflag("1");
+
+        mitTerminalM.setPadisconsistent("0");
+
+        // 保存数据库
+        service.saveMitTerminalM(mitTerminalM);
+
+        // 上传数据
+
+
+
     }
 
 }

@@ -141,6 +141,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<MstGroupproductMTemp, String> mstGroupproductMTempDao = null;
     private Dao<MitGroupproductM, String> mitGroupproductMDao = null;
 
+    private Dao<MitAgencynumM, String> mitAgencynumMDao = null;
+    private Dao<MitAgencyproM, String> mitAgencyproMDao = null;
+    private Dao<MitTerminalM, String> mitTerminalMDao = null;
+    private Dao<MitValagencykfM, String> mitValagencykfMDao = null;
+
     public DatabaseHelper(Context context) {
 
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -298,6 +303,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
             TableUtils.createTable(connectionSource, MitValgroupproM.class);// 终端产品组合表
             TableUtils.createTable(connectionSource, MitValgroupproMTemp.class);// 终端产品组合表 临时表
+
+            TableUtils.createTable(connectionSource, MitAgencynumM.class);// 经销商库存盘点主表
+            TableUtils.createTable(connectionSource, MitAgencyproM.class);// 经销商判断产品表
+            TableUtils.createTable(connectionSource, MitTerminalM.class);// 督导新增终端表
+            TableUtils.createTable(connectionSource, MitValagencykfM.class);// 经销商开发核查表
 
 
             this.initView(db);
@@ -1036,10 +1046,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 
                 // 6.1 追溯供货关系
-                String mit_valsupply_m = "create table MIT_VALSUPPLY_M ( id varchar2(36) not null,valtrueagencyname varchar2(100)  null, padisconsistent  char(1)   null,valterid varchar2(36) null, valaddagencysupply char(1) null, valsuplyid varchar2(36) null, valsqd varchar2(10) null, valsls varchar2(10) null, valsdd varchar2(10) null, valsrxl  char(10) null, valsljk  varchar2(10) null, valter varchar2(36) null, valpro varchar2(36) null, valagency varchar2(36) null,valproname varchar2(36) null, valagencyname varchar2(36) null, valagencysupplyflag  char(1) null, valproerror  char(1) null, valagencyerror char(1) null,valtrueagency varchar2(10) null, valdataerror char(1) null, valiffleeing char(1) null,valiffleeingremark varchar2(300) null, valagencysupplyqd varchar2(10) null, valagencysupplyls varchar2(10) null, valagencysupplydd varchar2(10) null, valagencysupplysrxl  char(10) null, valagencysupplyljk varchar2(10) null, valagencysupplyremark varchar2(300)  null, creuser  varchar2(128)  null, credate  date null, updateuser varchar2(128)  null, updatedate date null )";
+                String mit_valsupply_m = "create table MIT_VALSUPPLY_M ( id varchar2(36) not null,valagencyqdflag char(1) null,valagencylsflag char(1) null,valtrueagencyname varchar2(100)  null, padisconsistent  char(1)   null,valterid varchar2(36) null, valaddagencysupply char(1) null, valsuplyid varchar2(36) null, valsqd varchar2(10) null, valsls varchar2(10) null, valsdd varchar2(10) null, valsrxl  char(10) null, valsljk  varchar2(10) null, valter varchar2(36) null, valpro varchar2(36) null, valagency varchar2(36) null,valproname varchar2(36) null, valagencyname varchar2(36) null, valagencysupplyflag  char(1) null, valproerror  char(1) null, valagencyerror char(1) null,valtrueagency varchar2(10) null, valdataerror char(1) null, valiffleeing char(1) null,valiffleeingremark varchar2(300) null, valagencysupplyqd varchar2(10) null, valagencysupplyls varchar2(10) null, valagencysupplydd varchar2(10) null, valagencysupplysrxl  char(10) null, valagencysupplyljk varchar2(10) null, valagencysupplyremark varchar2(300)  null, creuser  varchar2(128)  null, credate  date null, updateuser varchar2(128)  null, updatedate date null )";
                 db.execSQL(mit_valsupply_m);
                 // 6.2 追溯供货关系
-                String mit_valsupply_m_temp = "create table MIT_VALSUPPLY_M_TEMP ( id varchar2(36) not null,valtrueagencyname varchar2(100)  null, padisconsistent  char(1)   null, valterid varchar2(36) null, valaddagencysupply char(1) null, valsuplyid varchar2(36) null, valsqd varchar2(10) null, valsls varchar2(10) null, valsdd varchar2(10) null, valsrxl  char(10) null, valsljk  varchar2(10) null, valter varchar2(36) null, valpro varchar2(36) null, valagency varchar2(36) null,valproname varchar2(36) null, valagencyname varchar2(36) null, valagencysupplyflag  char(1) null, valproerror  char(1) null, valagencyerror char(1) null,valtrueagency varchar2(10) null, valdataerror char(1) null, valiffleeing char(1) null,valiffleeingremark varchar2(300) null, valagencysupplyqd varchar2(10) null, valagencysupplyls varchar2(10) null, valagencysupplydd varchar2(10) null, valagencysupplysrxl  char(10) null, valagencysupplyljk varchar2(10) null, valagencysupplyremark varchar2(300)  null, creuser  varchar2(128)  null, credate  date null, updateuser varchar2(128)  null, updatedate date null )";
+                String mit_valsupply_m_temp = "create table MIT_VALSUPPLY_M_TEMP ( id varchar2(36) not null,valagencyqdflag char(1) null,valagencylsflag char(1) null,valtrueagencyname varchar2(100)  null, padisconsistent  char(1)   null, valterid varchar2(36) null, valaddagencysupply char(1) null, valsuplyid varchar2(36) null, valsqd varchar2(10) null, valsls varchar2(10) null, valsdd varchar2(10) null, valsrxl  char(10) null, valsljk  varchar2(10) null, valter varchar2(36) null, valpro varchar2(36) null, valagency varchar2(36) null,valproname varchar2(36) null, valagencyname varchar2(36) null, valagencysupplyflag  char(1) null, valproerror  char(1) null, valagencyerror char(1) null,valtrueagency varchar2(10) null, valdataerror char(1) null, valiffleeing char(1) null,valiffleeingremark varchar2(300) null, valagencysupplyqd varchar2(10) null, valagencysupplyls varchar2(10) null, valagencysupplydd varchar2(10) null, valagencysupplysrxl  char(10) null, valagencysupplyljk varchar2(10) null, valagencysupplyremark varchar2(300)  null, creuser  varchar2(128)  null, credate  date null, updateuser varchar2(128)  null, updatedate date null )";
                 db.execSQL(mit_valsupply_m_temp);
 
                 // 7.1 追溯竞品供货关系
@@ -1091,6 +1101,19 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 buffer.append("  on m.terminalkey = v.maxterminalkey  ");
                 buffer.append("    and m.visitdate = v.maxvisitdate");
                 db.execSQL(buffer.toString());
+
+                // 经销商库存盘点主表
+                String MIT_AGENCYNUM_M = "create table MIT_AGENCYNUM_M ( id varchar2(36) not null, agencyid varchar2(36) null, creuser varchar2(128) null, creuserareaid varchar(36) null, credate date  null, updateuser  varchar2(128) null, updatedate  date  null )";
+                db.execSQL(MIT_AGENCYNUM_M);
+                // 经销商判断产品表
+                String MIT_AGENCYPRO_M = "create table MIT_AGENCYPRO_M (  id varchar2(36) not null, agencynumid varchar2(36) null, proid varchar2(36) null, stocktotal varchar2(36) null, stockfact  varchar2(36) null, remark  varchar2(300) null, uploadflag varchar2(1) null, padisconsistent varchar2(1) null )";
+                db.execSQL(MIT_AGENCYPRO_M);
+                // 督导新增终端表
+                String MIT_TERMINAL_M = "create table MIT_TERMINAL_M ( id varchar(36) not null, terminalkey varchar(36) null, terminalcode varchar(36) null, terminalname varchar(200) null, routekey varchar(36) null, areatype varchar(36) null, tlevel  varchar(36) null, province varchar2(36) null, city varchar2(36) null, county  varchar2(36) null, address varchar2(250) null, contact varchar2(50) null, mobile  varchar2(100) null, sequence varchar2(10) null, cycle  varchar2(36) null, hvolume varchar2(10) null, zvolume varchar2(10) null, pvolume varchar2(10) null, dvolume varchar2(10) null, sellchannel varchar2(36) null, mainchannel varchar2(36) null, minorchannel varchar2(36) null, creuser varchar2(128) null, creuserareaid  varchar(36) null, credate date  null, updateuser  varchar2(128) null, updatedate  date  null, uploadflag varchar2(1) null, padisconsistent varchar2(1) null )";
+                db.execSQL(MIT_TERMINAL_M);
+                // 经销商开发核查表
+                String MIT_VALAGENCYKF_M = "create table MIT_VALAGENCYKF_M   ( id varchar2(36) not null, gridkey varchar2(36) null, agencyname varchar2(200) null, agencynameflag char(1)  null, agencyrealname varchar2(200) null, agencynameremark varchar2(300) null, contact varchar2(200) null, contactflag  char(1)  null, contactreal  varchar2(200) null, contactremark  varchar2(300) null, mobile  varchar2(50) null, mobileflag char(1)  null, mobilereal varchar2(50) null, mobileremark   varchar2(300) null, address varchar2(300) null, addressflag  char(1)  null, addressreal  varchar2(300) null, addressremark  varchar2(300) null, area  number null, areaflag   char(1)  null, areareal   number null, arearemark varchar2(300) null, money number null, moneyflag  char(1)  null, moneyreal  number null, moneyremark  varchar2(300) null, carnum  number null, carnumflag char(1)  null, carnumreal number null, carnumremark   varchar2(300) null, productname  varchar2(500) null, productnameflag  char(1)  null, productnamereal  varchar2(500) null, productnameremark  varchar2(300) null, business   varchar2(300) null, businessflag   char(1)  null, businessreal   varchar2(300) null, businessremark varchar2(300) null, status  char(1)  null, statusflag char(1)  null, statusremark   varchar2(300) null, coverterms varchar2(600) null, covertermflag  char(1)  null, covertermreal  varchar2(600) null, covertermremark  varchar2(300) null, supplyterms  varchar2(600) null, supplytermsflag  char(1)  null, supplytermsreal  varchar2(600) null, supplytermsremark  varchar2(300) null, kfdate  date null, kfdateflag char(1)  null, kfdatereal date null, kfdateremark   varchar2(300) null, passdate   date null, passdateflag   char(1)  null, passdatereal   date null, passdateremark varchar2(300) null, remark  varchar2(300) null, creuser varchar2(128) null, creuserareaid  varchar(36)  null, credate date null, updateuser varchar2(128) null, updatedate date null, uploadflag varchar2(1) null,  padisconsistent varchar2(1) null )";
+                db.execSQL(MIT_VALAGENCYKF_M);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -2071,6 +2094,35 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             mitGroupproductMDao = getDao(MitGroupproductM.class);
         }
         return mitGroupproductMDao;
+    }
+
+    public Dao<MitAgencynumM, String> getMitAgencynumMDao() throws SQLException {
+
+        if (mitAgencynumMDao == null) {
+            mitAgencynumMDao = getDao(MitAgencynumM.class);
+        }
+        return mitAgencynumMDao;
+    }
+    public Dao<MitAgencyproM, String> getMitAgencyproMDao() throws SQLException {
+
+        if (mitAgencyproMDao == null) {
+            mitAgencyproMDao = getDao(MitAgencyproM.class);
+        }
+        return mitAgencyproMDao;
+    }
+    public Dao<MitTerminalM, String> getMitTerminalMDao() throws SQLException {
+
+        if (mitTerminalMDao == null) {
+            mitTerminalMDao = getDao(MitTerminalM.class);
+        }
+        return mitTerminalMDao;
+    }
+    public Dao<MitValagencykfM, String> getMitValagencykfMDao() throws SQLException {
+
+        if (mitValagencykfMDao == null) {
+            mitValagencykfMDao = getDao(MitValagencykfM.class);
+        }
+        return mitValagencykfMDao;
     }
 
     /**

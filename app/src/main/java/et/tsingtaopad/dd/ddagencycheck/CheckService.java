@@ -37,13 +37,20 @@ import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.db.dao.MstAgencyinfoMDao;
 import et.tsingtaopad.db.dao.MstAgencyvisitMDao;
 import et.tsingtaopad.db.dao.MstPictypeMDao;
+import et.tsingtaopad.db.table.MitAgencynumM;
+import et.tsingtaopad.db.table.MitAgencyproM;
 import et.tsingtaopad.db.table.MstAgencyinfoM;
 import et.tsingtaopad.db.table.MstAgencytransferInfo;
 import et.tsingtaopad.db.table.MstAgencyvisitM;
+import et.tsingtaopad.db.table.MstCmpsupplyInfoTemp;
 import et.tsingtaopad.db.table.MstInvoicingInfo;
+import et.tsingtaopad.db.table.MstVisitMTemp;
+import et.tsingtaopad.db.table.MstVistproductInfoTemp;
 import et.tsingtaopad.dd.ddagencycheck.domain.InOutSaveStc;
 import et.tsingtaopad.dd.ddagencycheck.domain.ZsInOutSaveStc;
+import et.tsingtaopad.dd.ddxt.chatvie.domain.XtChatVieStc;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
+import et.tsingtaopad.main.visit.agencyvisit.domain.AgencySelectStc;
 import et.tsingtaopad.main.visit.agencyvisit.domain.TransferStc;
 
 /**
@@ -729,5 +736,73 @@ public class CheckService {
             }
         }
         return tagAgencySearchLst;
+    }
+
+    public MitAgencynumM saveMitAgencynumM(AgencySelectStc asStc) {
+        AndroidDatabaseConnection connection = null;
+        MitAgencynumM info = new MitAgencynumM();
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MitAgencynumM, String> itAgencynumMDao = helper.getDao(MitAgencynumM.class);
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+            info.setId(FunUtil.getUUID());
+            info.setAgencyid(asStc.getAgencyKey());
+            info.setCreuserareaid(PrefUtils.getString(context,"departmentid",""));
+            info.setCredate(new Date());
+            info.setUpdatedate(new Date());
+            info.setCreuser(PrefUtils.getString(context,"userid",""));
+            info.setUpdateuser(PrefUtils.getString(context,"userid",""));
+            info.setUploadflag("1");//是否上传 0:不上传  1: 需上传
+            info.setPadisconsistent("0");// 是否已上传  0:未上传 1:已上传
+            itAgencynumMDao.create(info);
+
+            connection.commit(null);
+        } catch (Exception e) {
+            Log.e(TAG, "保存经销商库存盘点主表 数据发生异常", e);
+            try {
+                connection.rollback(null);
+            } catch (SQLException e1) {
+                Log.e(TAG, "回滚经销商库存盘点主表 数据发生异常", e1);
+            }
+        }
+        return  info;
+    }
+
+    public List<MitAgencyproM> saveMitAgencyproM(String agencynumid, List<ZsInOutSaveStc> zsInOutSaveStcs) {
+
+        AndroidDatabaseConnection connection = null;
+        List<MitAgencyproM>  mitAgencyproMS = new ArrayList<>();
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MitAgencyproM, String> mitAgencyproMDao = helper.getDao(MitAgencyproM.class);
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+            MitAgencyproM info;
+            for (ZsInOutSaveStc zsInOutSaveStc:zsInOutSaveStcs){
+                info = new MitAgencyproM();
+                info.setId(FunUtil.getUUID());
+                info.setAgencynumid(agencynumid);
+                info.setProid(zsInOutSaveStc.getProcode());
+                info.setStocktotal(zsInOutSaveStc.getStorenum()+"");
+                info.setStockfact(zsInOutSaveStc.getRealstore());
+                info.setRemark(zsInOutSaveStc.getDes());
+                info.setUploadflag("1");//是否上传 0:不上传  1: 需上传
+                info.setPadisconsistent("0");// 是否已上传  0:未上传 1:已上传
+                mitAgencyproMDao.create(info);
+                mitAgencyproMS.add(info);
+            }
+            connection.commit(null);
+        } catch (Exception e) {
+            Log.e(TAG, "保存经销商库存盘点主表 数据发生异常", e);
+            try {
+                connection.rollback(null);
+            } catch (SQLException e1) {
+                Log.e(TAG, "回滚经销商库存盘点主表 数据发生异常", e1);
+            }
+        }
+        return  mitAgencyproMS;
+
     }
 }

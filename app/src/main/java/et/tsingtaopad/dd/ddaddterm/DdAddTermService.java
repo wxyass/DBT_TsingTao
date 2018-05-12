@@ -38,6 +38,8 @@ import et.tsingtaopad.db.dao.MstTerminalinfoMTempDao;
 import et.tsingtaopad.db.dao.MstVisitMTempDao;
 import et.tsingtaopad.db.table.CmmAreaM;
 import et.tsingtaopad.db.table.CmmDatadicM;
+import et.tsingtaopad.db.table.MitAgencynumM;
+import et.tsingtaopad.db.table.MitTerminalM;
 import et.tsingtaopad.db.table.MstAgencyinfoM;
 import et.tsingtaopad.db.table.MstGridM;
 import et.tsingtaopad.db.table.MstInvalidapplayInfo;
@@ -320,6 +322,33 @@ public class DdAddTermService extends XtShopVisitService {
     }
 
 
+    // 保存督导新增终端
+    public void saveMitTerminalM(MitTerminalM info) {
+        AndroidDatabaseConnection connection = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MitTerminalM, String> mitTerminalMDao = helper.getDao(MitTerminalM.class);
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
 
+            info.setId(FunUtil.getUUID());
+            info.setCreuserareaid(PrefUtils.getString(context,"departmentid",""));
+            info.setCredate(new Date());
+            info.setUpdatedate(new Date());
+            info.setCreuser(PrefUtils.getString(context,"userid",""));
+            info.setUpdateuser(PrefUtils.getString(context,"userid",""));
+            info.setUploadflag("1");//是否上传 0:不上传  1: 需上传
+            info.setPadisconsistent("0");// 是否已上传  0:未上传 1:已上传
+            mitTerminalMDao.create(info);
 
+            connection.commit(null);
+        } catch (Exception e) {
+            Log.e(TAG, "保存督导新增终端 数据发生异常", e);
+            try {
+                connection.rollback(null);
+            } catch (SQLException e1) {
+                Log.e(TAG, "回滚督导新增终端 数据发生异常", e1);
+            }
+        }
+    }
 }

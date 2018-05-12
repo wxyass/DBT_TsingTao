@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.lang.ref.SoftReference;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,8 @@ import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
+import et.tsingtaopad.db.table.MitAgencynumM;
+import et.tsingtaopad.db.table.MitAgencyproM;
 import et.tsingtaopad.db.table.MitValcheckterM;
 import et.tsingtaopad.db.table.MstAgencyvisitM;
 import et.tsingtaopad.db.table.MstInvoicingInfo;
@@ -71,6 +74,7 @@ public class DdAgencyCheckContentFragment extends BaseFragmentSupport implements
     private List<ZsInOutSaveStc> zsInOutSaveStcs;
 
     private AgencySelectStc asStc;
+    private List<MitAgencyproM>  mitAgencyproMS;// 核查产品数据
 
     @Nullable
     @Override
@@ -185,6 +189,12 @@ public class DdAgencyCheckContentFragment extends BaseFragmentSupport implements
             zsInOutSaveStc.setDes(desEt.getText().toString());
         }
         zsInOutSaveStcs.get(0);
+
+        // 存储 经销商库存盘点主表
+        MitAgencynumM mitAgencynumM = service.saveMitAgencynumM(asStc);
+
+        // 存储 经销商判断产品表
+        mitAgencyproMS = service.saveMitAgencyproM(mitAgencynumM.getId(),zsInOutSaveStcs);
     }
 
     /**

@@ -87,6 +87,11 @@ public class MitValsupplyMTemp implements java.io.Serializable {
 	@DatabaseField
 	private String valtrueagencyname;// 正确经销商名称
 
+	@DatabaseField
+	private String valagencyqdflag;// 供货关系正确渠道价状态
+	@DatabaseField
+	private String valagencylsflag;// 供货关系正确零售价状态
+
 
 	// Constructors
 
@@ -388,5 +393,21 @@ public class MitValsupplyMTemp implements java.io.Serializable {
 
 	public void setValtrueagencyname(String valtrueagencyname) {
 		this.valtrueagencyname = valtrueagencyname;
+	}
+
+	public String getValagencyqdflag() {
+		return valagencyqdflag;
+	}
+
+	public void setValagencyqdflag(String valagencyqdflag) {
+		this.valagencyqdflag = valagencyqdflag;
+	}
+
+	public String getValagencylsflag() {
+		return valagencylsflag;
+	}
+
+	public void setValagencylsflag(String valagencylsflag) {
+		this.valagencylsflag = valagencylsflag;
 	}
 }
