@@ -41,13 +41,20 @@ public class MainActivity extends BaseActivity {
         // 测试SharedPreferences
         PrefUtils.putString(getApplicationContext(),"ceshi","ceshi");
 
+        // 处理主Activity业务
+        showFragmentAll();
+    }
+
+
+    // 处理主Activity业务
+    private void showFragmentAll(){
+
         //一开始进入程序,就往容器中替换Fragment
         changeFragment(MainFragment.newInstance(), "mainfragment");
         //changeFragment(new XtTermCartFragment(), "mainfragment");
         //changeFragment(new XtTermSelectFragment(), "mainfragment");
         //changeFragment(new ZsSayhiFragment(), "mainfragment");
         //changeFragment(new ZsInvoicingFragment(), "mainfragment");
-
         dealOther();
     }
 

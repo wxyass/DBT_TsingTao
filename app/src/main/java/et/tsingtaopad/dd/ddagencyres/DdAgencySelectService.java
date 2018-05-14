@@ -12,17 +12,21 @@ import com.j256.ormlite.stmt.Where;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import et.tsingtaopad.R;
+import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.db.dao.MitValterMDao;
 import et.tsingtaopad.db.dao.MitVisitMDao;
+import et.tsingtaopad.db.dao.MitvalagencykfMDao;
 import et.tsingtaopad.db.dao.MstAgencyKFMDao;
 import et.tsingtaopad.db.dao.MstAgencyvisitMDao;
 import et.tsingtaopad.db.dao.MstTerminalinfoMDao;
+import et.tsingtaopad.db.table.MitValagencykfM;
 import et.tsingtaopad.db.table.MitValcheckterM;
 import et.tsingtaopad.db.table.MitValterM;
 import et.tsingtaopad.db.table.MitVisitM;
@@ -97,4 +101,98 @@ public class DdAgencySelectService extends XtTermSelectService{
     }
 
 
+    // 保存数据
+    public MitValagencykfM saveMitValagencykfM(String des, MstAgencyKFM mstAgencyKFM, MitValagencykfM valagencykfM) {
+        MitValagencykfM mitValagencykfM = new MitValagencykfM();
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            MitvalagencykfMDao dao = helper.getDao(MitValagencykfM.class);
+            mitValagencykfM.setId(FunUtil.getUUID());
+            mitValagencykfM.setGridkey(mstAgencyKFM.getGridkey());
+
+            mitValagencykfM.setAgencyname(mstAgencyKFM.getAgencyname());
+            mitValagencykfM.setAgencynameflag(valagencykfM.getAgencynameflag());
+            mitValagencykfM.setAgencyrealname(valagencykfM.getAgencyrealname());
+            mitValagencykfM.setAgencynameremark(valagencykfM.getAgencynameremark());
+
+            mitValagencykfM.setContact(mstAgencyKFM.getContact());
+            mitValagencykfM.setContactflag(valagencykfM.getContactflag());
+            mitValagencykfM.setContactreal(valagencykfM.getContactreal());
+            mitValagencykfM.setContactremark(valagencykfM.getContactremark());
+
+            mitValagencykfM.setMobile(mstAgencyKFM.getMobile());
+            mitValagencykfM.setMobileflag(valagencykfM.getMobileflag());
+            mitValagencykfM.setMobilereal(valagencykfM.getMobilereal());
+            mitValagencykfM.setMobileremark(valagencykfM.getMobileremark());
+
+            mitValagencykfM.setAddress(mstAgencyKFM.getAddress());
+            mitValagencykfM.setAddressflag(valagencykfM.getAddressflag());
+            mitValagencykfM.setAddressreal(valagencykfM.getAddressreal());
+            mitValagencykfM.setAddressremark(valagencykfM.getAddressremark());
+
+            mitValagencykfM.setArea(mstAgencyKFM.getArea());
+            mitValagencykfM.setAreaflag(valagencykfM.getAreaflag());
+            mitValagencykfM.setAreareal(valagencykfM.getAreareal());
+            mitValagencykfM.setArearemark(valagencykfM.getArearemark());
+
+            mitValagencykfM.setMoney(mstAgencyKFM.getMoney());
+            mitValagencykfM.setMoneyflag(valagencykfM.getMoneyflag());
+            mitValagencykfM.setMoneyreal(valagencykfM.getMoneyreal());
+            mitValagencykfM.setMoneyremark(valagencykfM.getMoneyremark());
+
+            mitValagencykfM.setCarnum(mstAgencyKFM.getCarnum());
+            mitValagencykfM.setCarnumflag(valagencykfM.getCarnumflag());
+            mitValagencykfM.setCarnumreal(valagencykfM.getCarnumreal());
+            mitValagencykfM.setCarnumremark(valagencykfM.getCarnumremark());
+
+            mitValagencykfM.setProductname(mstAgencyKFM.getProductname());
+            mitValagencykfM.setProductnameflag(valagencykfM.getProductnameflag());
+            mitValagencykfM.setProductnamereal(valagencykfM.getProductnamereal());
+            mitValagencykfM.setProductnameremark(valagencykfM.getProductnameremark());
+
+            mitValagencykfM.setBusiness(mstAgencyKFM.getBusiness());
+            mitValagencykfM.setBusinessflag(valagencykfM.getBusinessflag());
+            mitValagencykfM.setBusinessreal(valagencykfM.getBusinessreal());
+            mitValagencykfM.setBusinessremark(valagencykfM.getBusinessremark());
+
+            mitValagencykfM.setStatus(mstAgencyKFM.getStatus());
+            mitValagencykfM.setStatusflag(valagencykfM.getStatusflag());
+            mitValagencykfM.setStatusremark(valagencykfM.getStatusremark());
+
+            mitValagencykfM.setCoverterms(mstAgencyKFM.getCoverterms());
+            mitValagencykfM.setCovertermflag(valagencykfM.getCovertermflag());
+            mitValagencykfM.setCovertermreal(valagencykfM.getCovertermreal());
+            mitValagencykfM.setCovertermremark(valagencykfM.getCovertermremark());
+
+            mitValagencykfM.setSupplyterms(mstAgencyKFM.getSupplyterms());
+            mitValagencykfM.setSupplytermsflag(valagencykfM.getSupplytermsflag());
+            mitValagencykfM.setSupplytermsreal(valagencykfM.getSupplytermsreal());
+            mitValagencykfM.setSupplytermsremark(valagencykfM.getSupplytermsremark());
+
+            mitValagencykfM.setKfdate(mstAgencyKFM.getKfdate());
+            mitValagencykfM.setKfdateflag(valagencykfM.getKfdateflag());
+            mitValagencykfM.setKfdatereal(valagencykfM.getKfdatereal());
+            mitValagencykfM.setKfdateremark(valagencykfM.getKfdateremark());
+
+            mitValagencykfM.setPassdate(mstAgencyKFM.getPassdate());
+            mitValagencykfM.setPassdateflag(valagencykfM.getPassdateflag());
+            mitValagencykfM.setPassdatereal(valagencykfM.getPassdatereal());
+            mitValagencykfM.setPassdateremark(valagencykfM.getPassdateremark());
+
+            mitValagencykfM.setRemark(des);
+
+            mitValagencykfM.setCreuserareaid(PrefUtils.getString(context,"departmentid",""));
+            mitValagencykfM.setCredate(new Date());
+            mitValagencykfM.setUpdatedate(new Date());
+            mitValagencykfM.setCreuser(PrefUtils.getString(context,"userid",""));
+            mitValagencykfM.setUpdateuser(PrefUtils.getString(context,"userid",""));
+
+            mitValagencykfM.setUploadflag("1");// 0:该条记录不上传  1:该条记录需要上传
+            mitValagencykfM.setPadisconsistent("0");// padisconsistent  0:还未上传  1:已上传
+            dao.create(mitValagencykfM);
+        } catch (SQLException e) {
+            Log.e(TAG, "选择经销商的数据查询时报错", e);
+        }
+        return mitValagencykfM;
+    }
 }

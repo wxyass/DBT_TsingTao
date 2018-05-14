@@ -1142,14 +1142,17 @@ public class XtShopVisitService {
                 mitValsupplyMTemp.setValproname(xtInvoicingStc.getProName());//产品name
                 mitValsupplyMTemp.setValagency(xtInvoicingStc.getAgencyId());//经销商key
                 mitValsupplyMTemp.setValagencyname(xtInvoicingStc.getAgencyName());//经销商name
+
+                mitValsupplyMTemp.setValagencysupplyqd(xtInvoicingStc.getChannelPrice());//供货关系正确渠道价,要展示并上传所以这里直接使用业代的
+                mitValsupplyMTemp.setValagencysupplyls(xtInvoicingStc.getSellPrice());//供货关系正确零售价,要展示并上传所以这里直接使用业代的
+
                 /*mitValsupplyMTemp.setValagencysupplyflag();//供货关系正确与否
                 mitValsupplyMTemp.setValproerror();//品项有误
                 mitValsupplyMTemp.setValagencyerror();//经销商有误
                 mitValsupplyMTemp.setValtrueagency();//正确的经销商
                 mitValsupplyMTemp.setValdataerror();//数据有误
                 mitValsupplyMTemp.setValiffleeing();//是否窜货
-                mitValsupplyMTemp.setValagencysupplyqd();//供货关系正确渠道价
-                mitValsupplyMTemp.setValagencysupplyls();//供货关系正确零售价
+
                 mitValsupplyMTemp.setValagencysupplydd();//供货关系正确订单量
                 mitValsupplyMTemp.setValagencysupplysrxl();//供货关系正确日销量
                 mitValsupplyMTemp.setValagencysupplyljk();//供货关系正确累计卡

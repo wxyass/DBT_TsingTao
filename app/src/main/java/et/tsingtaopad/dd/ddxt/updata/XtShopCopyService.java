@@ -2119,7 +2119,9 @@ public class XtShopCopyService {
                     info.setValdataerror(item.getValdataerror());//数据有误
                     info.setValiffleeing(item.getValiffleeing());//是否窜货
                     info.setValagencysupplyqd(item.getValagencysupplyqd());//供货关系正确渠道价
+                    info.setValagencyqdflag(item.getValagencyqdflag());//供货关系正确渠道价状态
                     info.setValagencysupplyls(item.getValagencysupplyls());//供货关系正确零售价
+                    info.setValagencylsflag(item.getValagencylsflag());//供货关系正确零售价状态
                     info.setValagencysupplydd(item.getValagencysupplydd());//供货关系正确订单量
                     info.setValagencysupplysrxl(item.getValagencysupplysrxl());//供货关系正确日销量
                     info.setValagencysupplyljk(item.getValagencysupplyljk());//供货关系正确累计卡

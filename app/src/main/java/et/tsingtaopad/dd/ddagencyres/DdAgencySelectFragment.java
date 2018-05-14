@@ -29,7 +29,6 @@ import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 /**
  * 经销商资料库 选择经销商
  * Created by yangwenmin on 2018/3/12.
- *
  */
 
 public class DdAgencySelectFragment extends BaseFragmentSupport implements View.OnClickListener {
@@ -55,7 +54,6 @@ public class DdAgencySelectFragment extends BaseFragmentSupport implements View.
 
     private ArrayList<MstAgencyKFM> kFMLst;// 经销商集合
     private MstAgencyKFM mstAgencyKFM;// 选中的经销商
-
 
 
     @Nullable
@@ -91,10 +89,8 @@ public class DdAgencySelectFragment extends BaseFragmentSupport implements View.
         // 初始化数据
         initData();
 
-        initAreaData();
-
+        // 下拉按钮的点击监听
         setDropdownListener();
-
     }
 
     private void initData() {
@@ -102,10 +98,8 @@ public class DdAgencySelectFragment extends BaseFragmentSupport implements View.
         confirmTv.setText("查询");
 
         service = new DdAgencySelectService(getActivity());
-    }
 
-    // 下来菜单设置数据  设置区域数据
-    private void initAreaData() {
+        // 初始化区域  下拉菜单设置数据  设置区域数据
         areaList = new ArrayList<>();
         areaList.add(new DropBean("请选择区域"));
         String bigAreaId = PrefUtils.getString(getActivity(), "departmentid", "");
@@ -128,11 +122,11 @@ public class DdAgencySelectFragment extends BaseFragmentSupport implements View.
             public void onDropItemSelect(int Postion) {
                 //Toast.makeText(getContext(), "您选择了 " + areaList.get(Postion).getName(), Toast.LENGTH_SHORT).show();
                 if (Postion == 0) {
-                    Toast.makeText(getActivity(),"清空当前界面的经销商",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "清空当前界面的经销商", Toast.LENGTH_SHORT).show();
                 } else {
                     // 展示经销商
                     kFMLst = service.queryDdMstAgencyKFMAll(areaList.get(Postion).getKey());
-                    DdAgencySelectAdapter agencyAdapter = new DdAgencySelectAdapter(getActivity(),kFMLst,confirmBtn,"");
+                    DdAgencySelectAdapter agencyAdapter = new DdAgencySelectAdapter(getActivity(), kFMLst, confirmBtn, "");
                     agencyLv.setAdapter(agencyAdapter);
                 }
             }
@@ -151,7 +145,7 @@ public class DdAgencySelectFragment extends BaseFragmentSupport implements View.
                 break;
             case R.id.top_navigation_rl_confirm:// 确定
 
-                mstAgencyKFM = (MstAgencyKFM)confirmBtn.getTag();
+                mstAgencyKFM = (MstAgencyKFM) confirmBtn.getTag();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("mstagencykfm", mstAgencyKFM);
                 DdAgencyContentFragment agencyContentFragment = new DdAgencyContentFragment();
@@ -195,7 +189,6 @@ public class DdAgencySelectFragment extends BaseFragmentSupport implements View.
             }
         }
     }
-
 
 
     @Override

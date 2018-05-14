@@ -1,5 +1,7 @@
 package et.tsingtaopad.dd.ddagencyres;
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -9,16 +11,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.lang.ref.SoftReference;
+import java.util.Calendar;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
+import et.tsingtaopad.db.table.MitValagencykfM;
 import et.tsingtaopad.db.table.MstAgencyKFM;
 
 /**
@@ -36,12 +41,15 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
     private AppCompatTextView backTv;
     private AppCompatTextView titleTv;
 
-    MyHandler handler;
+    DdAgencyContentFragment.MyHandler handler;
 
     public static final int DD_AGENCY_AMEND_SUC = 2321;//
     public static final int DD_AGENCY_AMEND_FAIL = 2322;//
+    public static final String ERROR = "N";// 业代错误
+    public static final String RIGHT = "Y";// 业代错误
 
     private MstAgencyKFM mstAgencyKFM;
+    private MitValagencykfM mitValagencykfM;
     private String type;
 
     private RelativeLayout yd_all_rl;
@@ -63,6 +71,22 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
     private EditText dd_report_et;
     private Button saveBtn;
 
+    // 时间控件
+    private String selectDate;
+    private String aday;
+    private Calendar calendar;
+    private int yearr;
+    private int month;
+    private int day;
+
+    public DdAgencyAmendFragment() {
+
+    }
+
+    @SuppressLint("ValidFragment")
+    public DdAgencyAmendFragment(DdAgencyContentFragment.MyHandler handler) {
+        this.handler = handler;
+    }
 
     @Nullable
     @Override
@@ -107,13 +131,14 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
         dd_report_et = (EditText) view.findViewById(R.id.agency_res_amend_dd_et_report);
 
         saveBtn = (Button) view.findViewById(R.id.agency_res_amend_dd_bt_save);
+
+        dd_sp_rl.setOnClickListener(this);
+        saveBtn.setOnClickListener(this);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        handler = new MyHandler(this);
 
         // 初始化数据
         initData();
@@ -123,10 +148,16 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
     private void initData() {
         titleTv.setText("更正信息");
 
+        calendar = Calendar.getInstance();
+        yearr = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+
         // 获取传递过来的数据
         Bundle bundle = getArguments();
         type = bundle.getString("type");
         mstAgencyKFM = (MstAgencyKFM) bundle.getSerializable("mstAgencyKFM");
+        mitValagencykfM = (MitValagencykfM) bundle.getSerializable("valagencykfM");
 
         if (DdAgencyContentFragment.AGENCYNAME.equals(type)) {
             yd_title_tv.setText(R.string.agencykf_agencyname);
@@ -134,6 +165,7 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             dd_title_sp.setText(R.string.agencykf_agencyname);
 
             yd_con1_tv.setText(mstAgencyKFM.getAgencyname());
+            dd_con1_et.setText(mitValagencykfM.getAgencyrealname());
             dd_et_rl.setVisibility(View.VISIBLE);
 
         } else if (DdAgencyContentFragment.CONTACT.equals(type)) {
@@ -142,6 +174,7 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             dd_title_sp.setText(R.string.agencykf_contact);
 
             yd_con1_tv.setText(mstAgencyKFM.getContact());
+            dd_con1_et.setText(mitValagencykfM.getContactreal());
             dd_et_rl.setVisibility(View.VISIBLE);
 
         } else if (DdAgencyContentFragment.MOBILE.equals(type)) {
@@ -150,13 +183,16 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             dd_title_sp.setText(R.string.agencykf_mobile);
 
             yd_con1_tv.setText(mstAgencyKFM.getMobile());
+            dd_con1_et.setText(mitValagencykfM.getMobilereal());
             dd_et_rl.setVisibility(View.VISIBLE);
+
         } else if (DdAgencyContentFragment.ADDRESS.equals(type)) {
             yd_title_tv.setText(R.string.agencykf_address);
             dd_title_tv.setText(R.string.agencykf_address);
             dd_title_sp.setText(R.string.agencykf_address);
 
             yd_con1_tv.setText(mstAgencyKFM.getAddress());
+            dd_con1_et.setText(mitValagencykfM.getAddressreal());
             dd_et_rl.setVisibility(View.VISIBLE);
         } else if (DdAgencyContentFragment.AREA.equals(type)) {
             yd_title_tv.setText(R.string.agencykf_area);
@@ -164,6 +200,7 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             dd_title_sp.setText(R.string.agencykf_area);
 
             yd_con1_tv.setText(mstAgencyKFM.getArea());
+            dd_con1_et.setText(mitValagencykfM.getAreareal());
             dd_et_rl.setVisibility(View.VISIBLE);
         } else if (DdAgencyContentFragment.MONEY.equals(type)) {
             yd_title_tv.setText(R.string.agencykf_money);
@@ -171,6 +208,7 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             dd_title_sp.setText(R.string.agencykf_money);
 
             yd_con1_tv.setText(mstAgencyKFM.getMoney());
+            dd_con1_et.setText(mitValagencykfM.getMoneyreal());
             dd_et_rl.setVisibility(View.VISIBLE);
         } else if (DdAgencyContentFragment.PERSION.equals(type)) {
             yd_title_tv.setText(R.string.agencykf_persion);
@@ -178,6 +216,7 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             dd_title_sp.setText(R.string.agencykf_persion);
 
             yd_con1_tv.setText(mstAgencyKFM.getPersion());
+            dd_con1_et.setText(mitValagencykfM.getCarnumreal());// 错误的
             dd_et_rl.setVisibility(View.VISIBLE);
         } else if (DdAgencyContentFragment.CARNUM.equals(type)) {
             yd_title_tv.setText(R.string.agencykf_carnum);
@@ -185,6 +224,7 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             dd_title_sp.setText(R.string.agencykf_carnum);
 
             yd_con1_tv.setText(mstAgencyKFM.getCarnum());
+            dd_con1_et.setText(mitValagencykfM.getCarnumreal());
             dd_et_rl.setVisibility(View.VISIBLE);
         } else if (DdAgencyContentFragment.ISONE.equals(type)) {
             yd_title_tv.setText(R.string.agencykf_isone);
@@ -192,6 +232,7 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             dd_title_sp.setText(R.string.agencykf_isone);
 
             yd_con1_tv.setText(parseIsone(mstAgencyKFM.getIsone()));
+            dd_con1_et.setText(mitValagencykfM.getAgencyrealname());
 
             // 是否数一数二
             dd_sp_rl.setVisibility(View.VISIBLE);
@@ -202,6 +243,7 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             dd_title_sp.setText(R.string.agencykf_kfdata);
 
             yd_con1_tv.setText(mstAgencyKFM.getKfdate());
+            dd_con1_sp.setText(mitValagencykfM.getKfdatereal());
 
             // 开发时间
             dd_sp_rl.setVisibility(View.VISIBLE);
@@ -211,6 +253,7 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             dd_title_tv.setText(R.string.agencykf_passdate);
             dd_title_sp.setText(R.string.agencykf_passdate);
             yd_con1_tv.setText(mstAgencyKFM.getPassdate());
+            dd_con1_sp.setText(mitValagencykfM.getPassdatereal());
 
             // 达成时间
             dd_sp_rl.setVisibility(View.VISIBLE);
@@ -221,6 +264,7 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             dd_title_sp.setText(R.string.agencykf_productname);
 
             yd_con1_tv.setText(mstAgencyKFM.getProductname());
+            dd_con1_et.setText(mitValagencykfM.getProductnamereal());
             dd_et_rl.setVisibility(View.VISIBLE);
 
         } else if (DdAgencyContentFragment.BUSINESS.equals(type)) {
@@ -229,6 +273,7 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             dd_title_sp.setText(R.string.agencykf_business);
 
             yd_con1_tv.setText(mstAgencyKFM.getBusiness());
+            dd_con1_et.setText(mitValagencykfM.getBusinessreal());
             dd_et_rl.setVisibility(View.VISIBLE);
 
         } else if (DdAgencyContentFragment.COVERTERMS.equals(type)) {
@@ -237,6 +282,7 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             dd_title_sp.setText(R.string.agencykf_coverterms);
 
             yd_con1_tv.setText(mstAgencyKFM.getCoverterms());
+            dd_con1_et.setText(mitValagencykfM.getCovertermreal());
             dd_et_rl.setVisibility(View.VISIBLE);
 
         } else if (DdAgencyContentFragment.SUPPLYTERMS.equals(type)) {
@@ -245,6 +291,7 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             dd_title_sp.setText(R.string.agencykf_supplyterms);
 
             yd_con1_tv.setText(mstAgencyKFM.getSupplyterms());
+            dd_con1_et.setText(mitValagencykfM.getSupplytermsreal());
             dd_et_rl.setVisibility(View.VISIBLE);
         }
 
@@ -271,14 +318,46 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             case R.id.top_navigation_rl_back:
                 supportFragmentManager.popBackStack();
                 break;
+            // 返回
+            case R.id.agency_res_amend_rl_dd_sp:// 选择时间
+                // supportFragmentManager.popBackStack();
+                selectTime();
+                break;
             case R.id.top_navigation_rl_confirm:// 确定
-                saveValue();// 保存并上传数据
+                break;
+            case R.id.agency_res_amend_dd_bt_save:// 保存
+                saveValue();// 保存
                 break;
             default:
                 break;
         }
     }
 
+    // 督导选择时间
+    private void selectTime() {
+        DatePickerDialog dateDialog = new DatePickerDialog(getActivity(),
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+                        calendar.set(year, monthOfYear, dayOfMonth);
+                        yearr = year;
+                        month = monthOfYear;
+                        day = dayOfMonth;
+                        if (dayOfMonth < 10) {
+                            aday = "0" + dayOfMonth;
+                        } else {
+                            aday = Integer.toString(dayOfMonth);
+                        }
+                        selectDate = (Integer.toString(year) + "-" + String.format("%02d", monthOfYear + 1) + "-" + aday);
+                        dd_con1_sp.setText(selectDate);
+                    }
+                }, yearr, month, day);
+        if (!dateDialog.isShowing()) {
+            dateDialog.show();
+        }
+
+    }
 
 
     // 保存并上传数据
@@ -286,83 +365,85 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
 
         String dd_et = dd_con1_et.getText().toString();// 督导填写的内容
         String dd_tv = dd_con1_sp.getText().toString();// 督导选择的内容
+        String report_tv = dd_report_et.getText().toString();// 督导备注内容
 
         if (DdAgencyContentFragment.AGENCYNAME.equals(type)) {// 经销商名称
 
-            mstAgencyKFM.setAgencyname(dd_et);
+            mitValagencykfM.setAgencynameflag(ERROR);
+            mitValagencykfM.setAgencyrealname(dd_et);
+            mitValagencykfM.setAgencynameremark(report_tv);
 
         } else if (DdAgencyContentFragment.CONTACT.equals(type)) {// 法定人
-            mstAgencyKFM.setContact(dd_et);
+            mitValagencykfM.setContactflag(ERROR);
+            mitValagencykfM.setContactreal(dd_et);
+            mitValagencykfM.setContactremark(report_tv);
 
         } else if (DdAgencyContentFragment.MOBILE.equals(type)) {// 电话
-            mstAgencyKFM.setMobile(dd_et);
+            mitValagencykfM.setMobileflag(ERROR);
+            mitValagencykfM.setMobilereal(dd_et);
+            mitValagencykfM.setMobileremark(report_tv);
 
         } else if (DdAgencyContentFragment.ADDRESS.equals(type)) {// 仓库地址
-            mstAgencyKFM.setAddress(dd_et);
+            mitValagencykfM.setAddressflag(ERROR);
+            mitValagencykfM.setAddressreal(dd_et);
+            mitValagencykfM.setAddressremark(report_tv);
 
         } else if (DdAgencyContentFragment.AREA.equals(type)) {// 仓库面积
-            mstAgencyKFM.setArea(dd_et);
+            mitValagencykfM.setAreaflag(ERROR);
+            mitValagencykfM.setAreareal(dd_et);
+            mitValagencykfM.setArearemark(report_tv);
 
         } else if (DdAgencyContentFragment.MONEY.equals(type)) {// 资金
-            mstAgencyKFM.setMoney(dd_et);
+            mitValagencykfM.setMoneyflag(ERROR);
+            mitValagencykfM.setMoneyreal(dd_et);
+            mitValagencykfM.setMoneyremark(report_tv);
 
         } else if (DdAgencyContentFragment.PERSION.equals(type)) {// 人员
-            mstAgencyKFM.setPersion(dd_et);
+            // valagencykfM.setPersion(dd_et);
 
         } else if (DdAgencyContentFragment.CARNUM.equals(type)) {// 车辆
-            mstAgencyKFM.setCarnum(dd_et);
+            mitValagencykfM.setCarnumflag(ERROR);
+            mitValagencykfM.setCarnumreal(dd_et);
+            mitValagencykfM.setCarnumremark(report_tv);
 
         } else if (DdAgencyContentFragment.ISONE.equals(type)) {// 是否数一数二经销商
-            // mstAgencyKFM.setIsone(dd_et);
+            // valagencykfM.setIsone(dd_et);
+            mitValagencykfM.setStatusflag(ERROR);
+            mitValagencykfM.setStatusremark(report_tv);
 
         } else if (DdAgencyContentFragment.KFDATA.equals(type)) {// 开发时间
-            mstAgencyKFM.setKfdate(dd_tv);
+            mitValagencykfM.setKfdateflag(ERROR);
+            mitValagencykfM.setKfdatereal(dd_tv);
+            mitValagencykfM.setKfdateremark(report_tv);
 
         } else if (DdAgencyContentFragment.PASSDATA.equals(type)) {// 达成时间
-            mstAgencyKFM.setPassdate(dd_tv);
+            mitValagencykfM.setPassdateflag(ERROR);
+            mitValagencykfM.setPassdatereal(dd_tv);
+            mitValagencykfM.setPassdateremark(report_tv);
 
         } else if (DdAgencyContentFragment.PRODUCTNAME.equals(type)) {// 销售产品
-            mstAgencyKFM.setProductname(dd_et);
+            mitValagencykfM.setProductnameflag(ERROR);
+            mitValagencykfM.setProductnamereal(dd_et);
+            mitValagencykfM.setProductnameremark(report_tv);
 
         } else if (DdAgencyContentFragment.BUSINESS.equals(type)) {// 经营状况
-            mstAgencyKFM.setBusiness(dd_et);
+            mitValagencykfM.setBusinessflag(ERROR);
+            mitValagencykfM.setBusinessreal(dd_et);
+            mitValagencykfM.setBusinessremark(report_tv);
 
         } else if (DdAgencyContentFragment.COVERTERMS.equals(type)) {// 覆盖终端
-            mstAgencyKFM.setCoverterms(dd_et);
+            mitValagencykfM.setCovertermflag(ERROR);
+            mitValagencykfM.setCovertermreal(dd_et);
+            mitValagencykfM.setCovertermremark(report_tv);
 
         } else if (DdAgencyContentFragment.SUPPLYTERMS.equals(type)) {// 直供终端
-            mstAgencyKFM.setSupplyterms(dd_et);
+            mitValagencykfM.setSupplytermsflag(ERROR);
+            mitValagencykfM.setSupplytermsreal(dd_et);
+            mitValagencykfM.setSupplytermsremark(report_tv);
         }
+
+        handler.sendEmptyMessage(DdAgencyContentFragment.DD_AGENCY_CONTENT_SUC);
+        supportFragmentManager.popBackStack();
     }
 
-    /**
-     * 接收子线程消息的 Handler
-     */
-    public static class MyHandler extends Handler {
-
-        // 软引用
-        SoftReference<DdAgencyAmendFragment> fragmentRef;
-
-        public MyHandler(DdAgencyAmendFragment fragment) {
-            fragmentRef = new SoftReference<DdAgencyAmendFragment>(fragment);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            DdAgencyAmendFragment fragment = fragmentRef.get();
-            if (fragment == null) {
-                return;
-            }
-
-            // 处理UI 变化
-            switch (msg.what) {
-                case DD_AGENCY_AMEND_SUC:
-                    //fragment.showAddProSuc(products, agency);
-                    break;
-                case DD_AGENCY_AMEND_FAIL: // 督导输入数据后
-                    //fragment.showAdapter();
-                    break;
-            }
-        }
-    }
 }

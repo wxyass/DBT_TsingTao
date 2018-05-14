@@ -798,10 +798,19 @@
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_visitperson"/>
 
+                <!--内容1-->
                 <TextView
                     android:id="@+id/xtbf_sayhi_termpersion"
                     style="@style/xtbf_sayhi_two_tv"
                     />
+                <!--内容1-->
+                <EditText
+                    android:id="@+id/xtbf_sayhi_termpersion_et"
+                    style="@style/zdzs_sayhi_content1"
+                    android:layout_marginRight="200dp"
+                    android:background="@drawable/bg_visit_record"
+                    android:text=""
+                    android:visibility="gone"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"

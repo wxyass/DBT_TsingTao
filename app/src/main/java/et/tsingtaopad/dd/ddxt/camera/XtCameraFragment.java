@@ -256,20 +256,19 @@ public class XtCameraFragment extends XtBaseVisitFragment implements View.OnClic
                     requestPermission(GlobalValues.HARDWEAR_CAMERA_CODE, GlobalValues.HARDWEAR_CAMERA_PERMISSION);
                 }*/
 
-                if (hasPermission(GlobalValues.WRITE_EXTERNAL_CAMERA_PERMISSION)) {
+                if (hasPermission(GlobalValues.HARDWEAR_CAMERA_PERMISSION)) {
                     // 拥有了此权限,那么直接执行业务逻辑
                     startCamera(current);
                 } else {
                     // 还没有对一个权限(请求码,权限数组)这两个参数都事先定义好
-                    requestPermission(GlobalValues.WRITE_LOCAL_CODE, GlobalValues.WRITE_EXTERNAL_CAMERA_PERMISSION);
+                    requestPermission(GlobalValues.HARDWEAR_CAMERA_CODE, GlobalValues.HARDWEAR_CAMERA_PERMISSION);
                 }
-
             }
         });
     }
 
     @Override
-    public void doCameraWriteSD() {
+    public void doOpenCamera() {
         startCamera(current);
     }
 

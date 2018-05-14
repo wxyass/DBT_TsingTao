@@ -253,6 +253,17 @@ public class ZsInvocingAmendFragment extends BaseFragmentSupport implements View
 
     private void saveValue() {
 
+        // 督导渠道价
+        String qdinfo = zdzs_invoicing_amend_rl_con2_qd.getText().toString();
+        // 督导零售价
+        String lsinfo = zdzs_invoicing_amend_rl_con2_ls.getText().toString();
+        // 督导订单量
+        String ddlqdinfo = zdzs_invoicing_amend_rl_con2_ddl.getText().toString();
+        // 督导累计卡
+        String ljkqdinfo = zdzs_invoicing_amend_rl_con2_ljk.getText().toString();
+
+
+
         valsupplyMTemp.setValagencysupplyflag("N");
         // 经销商显示
         if(valagencyerror){
@@ -262,10 +273,28 @@ public class ZsInvocingAmendFragment extends BaseFragmentSupport implements View
         }
         // 数据显示
         if(valdataerror){
-            valsupplyMTemp.setValdataerror("Y");
+            valsupplyMTemp.setValdataerror("Y");// 数据异常
+            // 供货关系正确渠道价状态
+            if(valsupplyMTemp.getValsqd().equals(qdinfo)){
+                valsupplyMTemp.setValagencyqdflag("Y");// 与业代数据一致
+            }else{
+                valsupplyMTemp.setValagencyqdflag("N");// 与业代数据不一致
+            }
+            // 供货关系正确零售价状态
+            if(valsupplyMTemp.getValsls().equals(lsinfo)){
+                valsupplyMTemp.setValagencysupplyls("Y");// 与业代数据一致
+            }else{
+                valsupplyMTemp.setValagencysupplyls("N");// 与业代数据不一致
+            }
+
         }else{
-            valsupplyMTemp.setValdataerror("N");
+            valsupplyMTemp.setValdataerror("N");// 数据正常
+            valsupplyMTemp.setValagencyqdflag("Y");// 与业代数据一致
+            valsupplyMTemp.setValagencysupplyls("Y");// 与业代数据一致
         }
+
+
+
         // 窜货显示
         if(valiffleeing){
             valsupplyMTemp.setValiffleeing("Y");
@@ -273,10 +302,7 @@ public class ZsInvocingAmendFragment extends BaseFragmentSupport implements View
             valsupplyMTemp.setValiffleeing("N");
         }
 
-        String qdinfo = zdzs_invoicing_amend_rl_con2_qd.getText().toString();
-        String lsinfo = zdzs_invoicing_amend_rl_con2_ls.getText().toString();
-        String ddlqdinfo = zdzs_invoicing_amend_rl_con2_ddl.getText().toString();
-        String ljkqdinfo = zdzs_invoicing_amend_rl_con2_ljk.getText().toString();
+
 
         valsupplyMTemp.setValagencysupplyqd(qdinfo);
         valsupplyMTemp.setValagencysupplyls(lsinfo);

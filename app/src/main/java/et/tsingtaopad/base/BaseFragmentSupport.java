@@ -110,8 +110,7 @@ public class BaseFragmentSupport extends Fragment implements HandleBackInterface
 				}
 				break;
 			case GlobalValues.WRITE_READ_EXTERNAL_CODE:
-				if (grantResults.length > 0
-						&& grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+				if (grantResults.length > 0&& grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 					doWriteSDCard();
 				}
 				break;

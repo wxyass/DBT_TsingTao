@@ -26,6 +26,7 @@ import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.view.alertview.AlertView;
+import et.tsingtaopad.db.table.MitValagencykfM;
 import et.tsingtaopad.db.table.MitValterMTemp;
 import et.tsingtaopad.db.table.MstAgencyKFM;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
@@ -51,7 +52,7 @@ public class DdAgencyContentFragment extends BaseFragmentSupport implements View
 
     MyHandler handler;
 
-    public static final int DD_AGENCY_CONTENT_SUC = 2311;//
+    public static final int DD_AGENCY_CONTENT_SUC = 2311;// 修改成功
     public static final int DD_AGENCY_CONTENT_FAIL = 2312;//
 
     public static final String AGENCYNAME ="agencyname";
@@ -119,6 +120,8 @@ public class DdAgencyContentFragment extends BaseFragmentSupport implements View
     private Button dd_bt_save;
 
     private MstAgencyKFM mstAgencyKFM;
+    private DdAgencySelectService service;
+    private MitValagencykfM valagencykfM;
 
     @Nullable
     @Override
@@ -237,6 +240,8 @@ public class DdAgencyContentFragment extends BaseFragmentSupport implements View
         titleTv.setText("青岛啤酒北京销售有限公司");
         confirmTv.setText("更正");
 
+         service = new DdAgencySelectService(getActivity());
+
         Bundle bundle = getArguments();
         // 获取传递过来的 经销商主键,名称,地址,联系电话
         mstAgencyKFM = (MstAgencyKFM) bundle.getSerializable("mstagencykfm");
@@ -257,6 +262,60 @@ public class DdAgencyContentFragment extends BaseFragmentSupport implements View
         coverterms_con1.setText(mstAgencyKFM.getCoverterms());
         supplyterms_con1.setText(mstAgencyKFM.getSupplyterms());
 
+        if(valagencykfM == null){
+            valagencykfM = new MitValagencykfM();
+        }
+
+         // 设置稽查状态和颜色
+        setCheckColor();
+    }
+
+    private void setCheckColor(){
+        agencyname_statue.setText(getYdKfInfo(valagencykfM.getAgencynameflag()));
+        agencyname_statue.setTextColor(getYdKfInfoColor(valagencykfM.getAgencynameflag()));
+
+        contact_statue.setText(getYdKfInfo(valagencykfM.getContactflag()));
+        contact_statue.setTextColor(getYdKfInfoColor(valagencykfM.getContactflag()));
+
+        mobile_statue.setText(getYdKfInfo(valagencykfM.getMobileflag()));
+        mobile_statue.setTextColor(getYdKfInfoColor(valagencykfM.getMobileflag()));
+
+        address_statue.setText(getYdKfInfo(valagencykfM.getAddressflag()));
+        address_statue.setTextColor(getYdKfInfoColor(valagencykfM.getAddressflag()));
+
+        area_statue.setText(getYdKfInfo(valagencykfM.getAreaflag()));
+        area_statue.setTextColor(getYdKfInfoColor(valagencykfM.getAreaflag()));
+
+        money_statue.setText(getYdKfInfo(valagencykfM.getMoneyflag()));
+        money_statue.setTextColor(getYdKfInfoColor(valagencykfM.getMoneyflag()));
+
+        //persion_statue.setText(getYdKfInfo(valagencykfM.getCarnumflag()));
+        //persion_statue.setTextColor(getYdKfInfoColor(valagencykfM.getCarnumflag()));
+
+        carnum_statue.setText(getYdKfInfo(valagencykfM.getCarnumflag()));
+        carnum_statue.setTextColor(getYdKfInfoColor(valagencykfM.getCarnumflag()));
+
+        isone_statue.setText(getYdKfInfo(valagencykfM.getStatusflag()));
+        isone_statue.setTextColor(getYdKfInfoColor(valagencykfM.getStatusflag()));
+
+        kfdata_statue.setText(getYdKfInfo(valagencykfM.getKfdateflag()));
+        kfdata_statue.setTextColor(getYdKfInfoColor(valagencykfM.getKfdateflag()));
+
+        passdata_statue.setText(getYdKfInfo(valagencykfM.getPassdateflag()));
+        passdata_statue.setTextColor(getYdKfInfoColor(valagencykfM.getPassdateflag()));
+
+        productname_statue.setText(getYdKfInfo(valagencykfM.getProductnameflag()));
+        productname_statue.setTextColor(getYdKfInfoColor(valagencykfM.getProductnameflag()));
+
+        business_statue.setText(getYdKfInfo(valagencykfM.getBusinessflag()));
+        business_statue.setTextColor(getYdKfInfoColor(valagencykfM.getBusinessflag()));
+
+        coverterms_statue.setText(getYdKfInfo(valagencykfM.getCovertermflag()));
+        coverterms_statue.setTextColor(getYdKfInfoColor(valagencykfM.getCovertermflag()));
+
+        supplyterms_statue.setText(getYdKfInfo(valagencykfM.getSupplytermsflag()));
+        supplyterms_statue.setTextColor(getYdKfInfoColor(valagencykfM.getSupplytermsflag()));
+
     }
 
     // 判定是否数一数二经销商
@@ -268,6 +327,31 @@ public class DdAgencyContentFragment extends BaseFragmentSupport implements View
             isone = "是";
         }
         return isone;
+    }
+
+    // 判定业代录入的状态
+    private String getYdKfInfo(String flag){
+        String con ="";
+        if("N".equals(flag)){
+            con = "错误";
+        }else if("Y".equals(flag)){
+            con = "正确";
+        }else{
+            con = "未稽查";
+        }
+        return con;
+    }
+
+    private int getYdKfInfoColor(String flag) {
+        int color;
+        if("N".equals(flag)){
+            color = getResources().getColor(R.color.zdzs_dd_error);
+        }else if("Y".equals(flag)){
+            color = getResources().getColor(R.color.zdzs_dd_yes);
+        }else{
+            color = getResources().getColor(R.color.zdzs_dd_notcheck);
+        }
+        return color;
     }
 
 
@@ -339,6 +423,12 @@ public class DdAgencyContentFragment extends BaseFragmentSupport implements View
 
     // 上传数据
     private void saveValue() {
+        // 被追
+        String des = agencyReport.getText().toString();
+        // 保存数据
+        MitValagencykfM valagencykf = service.saveMitValagencykfM(des,mstAgencyKFM,valagencykfM);
+        // 上传数据
+
 
     }
 
@@ -364,7 +454,7 @@ public class DdAgencyContentFragment extends BaseFragmentSupport implements View
             // 处理UI 变化
             switch (msg.what) {
                 case DD_AGENCY_CONTENT_SUC:
-                    //fragment.showAddProSuc(products, agency);
+                    fragment.setCheckColor();
                     break;
                 case DD_AGENCY_CONTENT_FAIL: // 督导输入数据后
                     //fragment.showAdapter();
@@ -423,7 +513,8 @@ public class DdAgencyContentFragment extends BaseFragmentSupport implements View
                     Bundle bundle = new Bundle();
                     bundle.putString("type", type);
                     bundle.putSerializable("mstAgencyKFM", mstAgencyKFM);
-                    DdAgencyAmendFragment agencyAmendFragment = new DdAgencyAmendFragment();
+                    bundle.putSerializable("valagencykfM", valagencykfM);
+                    DdAgencyAmendFragment agencyAmendFragment = new DdAgencyAmendFragment(handler);
                     agencyAmendFragment.setArguments(bundle);
                     // 跳转 经销商库存盘点 填充数据
                     changeHomeFragment(agencyAmendFragment, "DdAgencyAmendFragment");

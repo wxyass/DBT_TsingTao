@@ -154,11 +154,24 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                 ceshiHttp("opt_get_dates2","MST_BASEDATA_M",content1);
                 break;
             case R.id.dd_btn_first_sync_start:// 同步所有信息
-                startSyncInfo();
+
+                if (hasPermission(GlobalValues.WRITE_READ_EXTERNAL_PERMISSION)) {
+                    // 拥有了此权限,那么直接执行业务逻辑
+                    startSyncInfo();
+                } else {
+                    // 还没有对一个权限(请求码,权限数组)这两个参数都事先定义好
+                    requestPermission(GlobalValues.WRITE_READ_EXTERNAL_CODE, GlobalValues.WRITE_READ_EXTERNAL_PERMISSION);
+                }
+
                 break;
             default:
                 break;
         }
+    }
+
+    @Override
+    public void doWriteSDCard() {
+        startSyncInfo();
     }
 
     private void startSyncInfo() {
@@ -180,6 +193,7 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
         thread.start();
 
     }
+
     // 测试登录网络框架
     private void getInfo(){
         String gridjson  = "{"+

@@ -500,8 +500,7 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             zdzs_sayhi_amend_rl_dd_sp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setSelectVisitPosition(xtSayhiService.initZsVisitPosition(),
-                            mitValterMTemp.getVidvisituserval());
+                    setSelectVisitPosition(xtSayhiService.initZsVisitPosition(),mitValterMTemp.getVidvisituserval());
                 }
             });
 

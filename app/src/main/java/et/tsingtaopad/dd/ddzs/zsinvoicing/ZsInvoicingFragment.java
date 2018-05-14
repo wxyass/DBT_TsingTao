@@ -353,6 +353,7 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
         final CheckBox cb3 = (CheckBox) extView.findViewById(R.id.result_cb3);
         final CheckBox cb4 = (CheckBox) extView.findViewById(R.id.result_cb4);
 
+        // 根据督导模板配置选项
         // 品项有误
         if("Y".equals(mitValcheckterM.getProerror())){
             cb1.setVisibility(View.VISIBLE);
