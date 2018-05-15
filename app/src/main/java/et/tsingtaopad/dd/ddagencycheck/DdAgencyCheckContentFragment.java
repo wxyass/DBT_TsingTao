@@ -35,6 +35,7 @@ import et.tsingtaopad.db.table.MstInvoicingInfo;
 import et.tsingtaopad.dd.ddagencycheck.domain.InOutSaveStc;
 import et.tsingtaopad.dd.ddagencycheck.domain.ZsInOutSaveStc;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
+import et.tsingtaopad.dd.ddxt.updata.XtUploadService;
 import et.tsingtaopad.main.visit.agencyvisit.domain.AgencySelectStc;
 
 /**
@@ -195,6 +196,10 @@ public class DdAgencyCheckContentFragment extends BaseFragmentSupport implements
 
         // 存储 经销商判断产品表
         mitAgencyproMS = service.saveMitAgencyproM(mitAgencynumM.getId(),zsInOutSaveStcs);
+
+        // 上传
+        XtUploadService xtUploadService = new XtUploadService(getActivity(), null);
+        xtUploadService.uploadMitAgencynumM(false, mitAgencynumM,mitAgencyproMS, 1);
     }
 
     /**

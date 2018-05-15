@@ -75,6 +75,39 @@
                 android:divider="@null"
                 android:dividerHeight="10dp"/>
 
+            <!--终端进货台账-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <ImageView
+                    android:id="@+id/zdzs_invoicing_point2"
+                    style="@style/point"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ico_point"/>
+
+                <TextView
+                    android:id="@+id/zdzs_invocing_textview02"
+                    style="@style/page_label_big"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/zdzs_invoicing_point2"
+                    android:text="终端进货台账"/>
+
+            </RelativeLayout>
+
+            <!--终端进货台账列表-->
+            <ListView
+                android:id="@+id/zdzs_invoicing_lv_tz"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:divider="@null"
+                android:dividerHeight="10dp"/>
 
             <View
                 android:layout_width="match_parent"

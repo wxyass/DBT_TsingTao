@@ -33,6 +33,7 @@ import et.tsingtaopad.db.table.MitValagencykfM;
 import et.tsingtaopad.db.table.MstGridM;
 import et.tsingtaopad.db.table.MstMarketareaM;
 import et.tsingtaopad.db.table.MstRouteM;
+import et.tsingtaopad.dd.ddxt.updata.XtUploadService;
 import et.tsingtaopad.dd.ddzs.zschatvie.ZsChatvieFragment;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
 
@@ -885,36 +886,25 @@ public class DdAddTermFragment extends BaseFragmentSupport implements View.OnCli
         mitTerminalM.setAddress(termaddress);
         mitTerminalM.setContact(termcontact);
         mitTerminalM.setMobile(termphone);
-
         mitTerminalM.setSequence(termsequence);
-
         mitTerminalM.setCycle(termcycle);
-
         mitTerminalM.setHvolume(termhvolume);
-
         mitTerminalM.setZvolume(termmvolume);
-
         mitTerminalM.setPvolume(termpvolume);
-
         mitTerminalM.setDvolume(termlvolume);
-
         mitTerminalM.setSellchannel(termsellchannel);
-
         mitTerminalM.setMainchannel(termtmainchannel);
-
         mitTerminalM.setMinorchannel(termminorchannel);
-
         mitTerminalM.setUploadflag("1");
-
         mitTerminalM.setPadisconsistent("0");
 
         // 保存数据库
         service.saveMitTerminalM(mitTerminalM);
 
         // 上传数据
-
-
-
+        XtUploadService xtUploadService = new XtUploadService(getActivity(), null);
+        xtUploadService.uploadMitTerminalM(false, mitTerminalM, 1);
     }
+
 
 }

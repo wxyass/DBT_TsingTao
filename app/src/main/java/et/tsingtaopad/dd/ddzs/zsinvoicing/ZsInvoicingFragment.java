@@ -38,6 +38,7 @@ import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.core.view.alertview.OnDismissListener;
 import et.tsingtaopad.core.view.alertview.OnItemClickListener;
 import et.tsingtaopad.db.table.MitValsupplyMTemp;
+import et.tsingtaopad.db.table.MstTermLedgerInfo;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
 import et.tsingtaopad.dd.ddxt.invoicing.XtInvoicingService;
 import et.tsingtaopad.dd.ddxt.invoicing.domain.XtInvoicingStc;
@@ -58,6 +59,7 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
 
     //List<XtInvoicingStc> dataLst;
     List<MitValsupplyMTemp> dataLst;
+    List<MstTermLedgerInfo> termLedgerInfos;
     ZsInvoicingService invoicingService;
     MyHandler handler;
 
@@ -65,6 +67,7 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
     public static final int INIT_AMEND = 22;// 督导输入数据成功
 
     ZsInvoicingAdapter zsInvoicingAdapter;
+    ZsInvoicingTzAdapter tzAdapter;
 
 
     private ScrollView zdzs_invoicing_scrollView;
@@ -73,6 +76,7 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
     private RelativeLayout zdzs_invoicing_rl_addrelation;
     private Button zdzs_invoicing_bt_addrelation;
     private ListView zsInvoicingLv;
+    private ListView zsTermtzLv;
 
 
     @Nullable
@@ -92,6 +96,7 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
         zdzs_invoicing_rl_addrelation = (RelativeLayout) view.findViewById(R.id.zdzs_invoicing_rl_addrelation);
         zdzs_invoicing_bt_addrelation = (Button) view.findViewById(R.id.zdzs_invoicing_bt_addrelation);
         zsInvoicingLv = (ListView) view.findViewById(R.id.zdzs_invoicing_lv_invoicing);
+        zsTermtzLv = (ListView) view.findViewById(R.id.zdzs_invoicing_lv_tz);
 
 
         zdzs_invoicing_bt_addrelation.setOnClickListener(this);
@@ -117,7 +122,7 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
     // 根据追溯模板 设置各个控件是否显示
     private void initViewVisible() {
         // 新增供货关系
-        if("Y".equals(mitValcheckterM.getAddsupply())){
+        if ("Y".equals(mitValcheckterM.getAddsupply())) {
             zdzs_invoicing_rl_addrelation.setVisibility(View.VISIBLE);
         }
     }
@@ -148,6 +153,18 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
         });
         zsInvoicingLv.setAdapter(zsInvoicingAdapter);
         ViewUtil.setListViewHeight(zsInvoicingLv);
+
+        // 从督导台账临时表获取数据(这张表 在进入前会复制到临时表中)
+
+        // 查出该终端 所有业代终端台账表
+        termLedgerInfos = invoicingService.queryValTermLedger(termId);
+
+        // 临时表关联 业代终端台账表  对象
+
+
+        tzAdapter = new ZsInvoicingTzAdapter(getActivity(), dataLst, null);
+        zsTermtzLv.setAdapter(tzAdapter);
+        ViewUtil.setListViewHeight(zsTermtzLv);
     }
 
     @Override
@@ -355,19 +372,19 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
 
         // 根据督导模板配置选项
         // 品项有误
-        if("Y".equals(mitValcheckterM.getProerror())){
+        if ("Y".equals(mitValcheckterM.getProerror())) {
             cb1.setVisibility(View.VISIBLE);
         }
         // 经销商有误
-        if("Y".equals(mitValcheckterM.getAgencyerror())){
+        if ("Y".equals(mitValcheckterM.getAgencyerror())) {
             cb2.setVisibility(View.VISIBLE);
         }
         // 数据有误
-        if("Y".equals(mitValcheckterM.getDataerror())){
+        if ("Y".equals(mitValcheckterM.getDataerror())) {
             cb3.setVisibility(View.VISIBLE);
         }
         // 是否窜货
-        if("Y".equals(mitValcheckterM.getIffleeing())){
+        if ("Y".equals(mitValcheckterM.getIffleeing())) {
             cb4.setVisibility(View.VISIBLE);
         }
 

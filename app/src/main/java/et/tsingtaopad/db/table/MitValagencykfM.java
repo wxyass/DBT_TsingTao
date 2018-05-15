@@ -92,6 +92,16 @@ public class MitValagencykfM implements java.io.Serializable {
     private String businessreal   ;//
     @DatabaseField
     private String businessremark ;//
+
+    @DatabaseField
+    private String persion   ;//
+    @DatabaseField
+    private String persionflag   ;//
+    @DatabaseField
+    private String persionreal   ;//
+    @DatabaseField
+    private String persionremark ;//
+
     @DatabaseField
     private String status  ;//
     @DatabaseField
@@ -673,5 +683,37 @@ public class MitValagencykfM implements java.io.Serializable {
 
     public void setPadisconsistent(String padisconsistent) {
         this.padisconsistent = padisconsistent;
+    }
+
+    public String getPersion() {
+        return persion;
+    }
+
+    public void setPersion(String persion) {
+        this.persion = persion;
+    }
+
+    public String getPersionflag() {
+        return persionflag;
+    }
+
+    public void setPersionflag(String persionflag) {
+        this.persionflag = persionflag;
+    }
+
+    public String getPersionreal() {
+        return persionreal;
+    }
+
+    public void setPersionreal(String persionreal) {
+        this.persionreal = persionreal;
+    }
+
+    public String getPersionremark() {
+        return persionremark;
+    }
+
+    public void setPersionremark(String persionremark) {
+        this.persionremark = persionremark;
     }
 }

@@ -21,12 +21,14 @@ import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.db.dao.MitValsupplyMTempDao;
+import et.tsingtaopad.db.dao.MstTermLedgerInfoDao;
 import et.tsingtaopad.db.dao.MstVistproductInfoDao;
 import et.tsingtaopad.db.dao.MstVistproductInfoTempDao;
 import et.tsingtaopad.db.table.MitValsupplyMTemp;
 import et.tsingtaopad.db.table.MstAgencysupplyInfo;
 import et.tsingtaopad.db.table.MstAgencysupplyInfoTemp;
 import et.tsingtaopad.db.table.MstCheckexerecordInfoTemp;
+import et.tsingtaopad.db.table.MstTermLedgerInfo;
 import et.tsingtaopad.db.table.MstVistproductInfo;
 import et.tsingtaopad.db.table.MstVistproductInfoTemp;
 import et.tsingtaopad.dd.ddxt.invoicing.domain.XtInvoicingStc;
@@ -171,6 +173,25 @@ public class ZsInvoicingService extends XtShopVisitService {
             QueryBuilder<MitValsupplyMTemp, String> qb = mitValsupplyMTempDao.queryBuilder();
             Where<MitValsupplyMTemp, String> where = qb.where();
             where.eq("valterid", valterid);
+            list = qb.query();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    /***
+     * 通过终端key 获取此终端 进货台账
+     * @param terminalkey
+     * @return
+     */
+    public List<MstTermLedgerInfo> queryValTermLedger(String terminalkey) {
+        List<MstTermLedgerInfo> list = new ArrayList<MstTermLedgerInfo>();
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            MstTermLedgerInfoDao ledgerInfoDao = helper.getDao(MstTermLedgerInfo.class);
+            QueryBuilder<MstTermLedgerInfo, String> qb = ledgerInfoDao.queryBuilder();
+            Where<MstTermLedgerInfo, String> where = qb.where();
+            where.eq("terminalkey", terminalkey);
             list = qb.query();
         } catch (SQLException e) {
             e.printStackTrace();

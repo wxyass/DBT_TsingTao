@@ -206,6 +206,7 @@ public class MainService extends XtShopVisitService {
             mstProductMDao = helper.getMstProductMDao();
             mstCheckmiddleInfoDao = helper.getMstCheckmiddleInfoDao();
             mstVisitauthorizeInfoDao = helper.getMstVisitauthorizeInfoDao();
+
             padChecktypeMDao = helper.getPadChecktypeMDao();
             padCheckstatusInfoDao = helper.getPadCheckstatusInfoDao();
             padCheckaccomplishInfoDao = helper.getPadCheckaccomplishInfoDao();
@@ -275,6 +276,7 @@ public class MainService extends XtShopVisitService {
     List<MstAgencyvisitM> mstAgencyvisitMs = null;
     List<MstInvoicingInfo> mstInvoicingInfos = null;
     List<MstVisitauthorizeInfo> mstVisitauthorizeInfos = null;
+    List<MstTermLedgerInfo> mstTermLedgerInfos = null;
 
     /**
      * 同步表数据
@@ -433,6 +435,10 @@ public class MainService extends XtShopVisitService {
             else if(mClass.contains("MstVisitauthorizeInfo")){
                 mstVisitauthorizeInfos= (List<MstVisitauthorizeInfo>) JsonUtil.parseList(json, cls);
                 updateData(mstVisitauthorizeInfoDao, mstVisitauthorizeInfos);
+            }
+            else if(mClass.contains("MstTermLedgerInfo")){
+                mstTermLedgerInfos= (List<MstTermLedgerInfo>) JsonUtil.parseList(json, cls);
+                updateData(mstTermLedgerInfoDao, mstTermLedgerInfos);
             }
 
             connection.commit(null);
@@ -624,6 +630,7 @@ public class MainService extends XtShopVisitService {
         String MST_PROMOTERM_INFO = emp.getMST_PROMOTERM_INFO();
         String MST_VISIT_M = emp.getMST_VISIT_M();
         String MST_VISTPRODUCT_INFO = emp.getMST_VISTPRODUCT_INFO();
+        String MST_AGENCYACCOUNT_M = emp.getMST_AGENCYACCOUNT_M();
 
         createOrUpdateTable(MST_AGENCYGRID_INFO, "MST_AGENCYGRID_INFO", MstAgencygridInfo.class);
         // createOrUpdateTable(MST_AGENCYINFO_M, "MST_AGENCYINFO_M", MstAgencyinfoM.class);
@@ -635,6 +642,7 @@ public class MainService extends XtShopVisitService {
         createOrUpdateTable(MST_PROMOTERM_INFO, "MST_PROMOTERM_INFO", MstPromotermInfo.class);
         createOrUpdateTable(MST_VISIT_M, "MST_VISIT_M", MstVisitM.class);
         createOrUpdateTable(MST_VISTPRODUCT_INFO, "MST_VISTPRODUCT_INFO", MstVistproductInfo.class);
+        createOrUpdateTable(MST_AGENCYACCOUNT_M, "MST_TERMLEDGER_INFO", MstTermLedgerInfo.class);
     }
 
 }

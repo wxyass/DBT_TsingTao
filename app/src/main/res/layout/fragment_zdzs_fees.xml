@@ -18,14 +18,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!--进销存标题-->
+            <!--协议内容-->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 >
 
                 <ImageView
-                    android:id="@+id/zdzs_invoicing_point1"
+                    android:id="@+id/zdzs_fees_point1"
                     style="@style/point"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
                     android:src="@drawable/ico_point"/>
 
                 <TextView
-                    android:id="@+id/zdzs_invocing_textview01"
+                    android:id="@+id/zdzs_fees_textview01"
                     style="@style/page_label_big"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -42,7 +42,7 @@
                     android:text="协议内容"/>
 
 
-                <!-- 新增供货关系 -->
+                <!-- 新增协议内容 -->
 
                 <RelativeLayout
                     android:id="@+id/zdzs_invoicing_rl_addrelation"
@@ -50,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@id/zdzs_invocing_textview01">
+                    android:layout_toRightOf="@id/zdzs_fees_textview01">
 
                     <Button
                         android:id="@+id/zdzs_invoicing_bt_addrelation"
@@ -65,14 +65,7 @@
                 </RelativeLayout>
             </RelativeLayout>
 
-            <!--问货源列表-->
-            <ListView
-                android:id="@+id/zdzs_invoicing_lv_invoicing"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:divider="@null"
-                android:dividerHeight="10dp"/>
+
 
 
             <View

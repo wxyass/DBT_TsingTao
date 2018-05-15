@@ -216,7 +216,7 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             dd_title_sp.setText(R.string.agencykf_persion);
 
             yd_con1_tv.setText(mstAgencyKFM.getPersion());
-            dd_con1_et.setText(mitValagencykfM.getCarnumreal());// 错误的
+            dd_con1_et.setText(mitValagencykfM.getPersionreal());// 错误的
             dd_et_rl.setVisibility(View.VISIBLE);
         } else if (DdAgencyContentFragment.CARNUM.equals(type)) {
             yd_title_tv.setText(R.string.agencykf_carnum);
@@ -399,7 +399,9 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             mitValagencykfM.setMoneyremark(report_tv);
 
         } else if (DdAgencyContentFragment.PERSION.equals(type)) {// 人员
-            // valagencykfM.setPersion(dd_et);
+            mitValagencykfM.setPersionflag(ERROR);
+            mitValagencykfM.setPersionreal(dd_et);
+            mitValagencykfM.setPersionremark(report_tv);
 
         } else if (DdAgencyContentFragment.CARNUM.equals(type)) {// 车辆
             mitValagencykfM.setCarnumflag(ERROR);

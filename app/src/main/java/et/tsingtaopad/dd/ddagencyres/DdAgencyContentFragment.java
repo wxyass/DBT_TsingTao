@@ -30,6 +30,7 @@ import et.tsingtaopad.db.table.MitValagencykfM;
 import et.tsingtaopad.db.table.MitValterMTemp;
 import et.tsingtaopad.db.table.MstAgencyKFM;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
+import et.tsingtaopad.dd.ddxt.updata.XtUploadService;
 import et.tsingtaopad.dd.ddzs.zssayhi.ZsSayhiAmendFragment;
 import et.tsingtaopad.dd.ddzs.zssayhi.ZsSayhiFragment;
 import et.tsingtaopad.dd.ddzs.zsshopvisit.ZsVisitShopActivity;
@@ -289,8 +290,8 @@ public class DdAgencyContentFragment extends BaseFragmentSupport implements View
         money_statue.setText(getYdKfInfo(valagencykfM.getMoneyflag()));
         money_statue.setTextColor(getYdKfInfoColor(valagencykfM.getMoneyflag()));
 
-        //persion_statue.setText(getYdKfInfo(valagencykfM.getCarnumflag()));
-        //persion_statue.setTextColor(getYdKfInfoColor(valagencykfM.getCarnumflag()));
+        persion_statue.setText(getYdKfInfo(valagencykfM.getPersionflag()));
+        persion_statue.setTextColor(getYdKfInfoColor(valagencykfM.getPersionflag()));
 
         carnum_statue.setText(getYdKfInfo(valagencykfM.getCarnumflag()));
         carnum_statue.setTextColor(getYdKfInfoColor(valagencykfM.getCarnumflag()));
@@ -428,6 +429,8 @@ public class DdAgencyContentFragment extends BaseFragmentSupport implements View
         // 保存数据
         MitValagencykfM valagencykf = service.saveMitValagencykfM(des,mstAgencyKFM,valagencykfM);
         // 上传数据
+        XtUploadService xtUploadService = new XtUploadService(getActivity(), null);
+        xtUploadService.uploadMitValagencykfM(false, valagencykf, 1);
 
 
     }

@@ -48,6 +48,7 @@ public class AreaGridRoute {
     private String MST_AGENCYVISIT_M;//
     private String MST_INVOICING_INFO;//
     private String MST_VISITAUTHORIZE_INFO;//
+    private String MST_AGENCYACCOUNT_M;//
 
 
 
@@ -307,5 +308,13 @@ public class AreaGridRoute {
 
     public void setMST_VISITAUTHORIZE_INFO(String MST_VISITAUTHORIZE_INFO) {
         this.MST_VISITAUTHORIZE_INFO = MST_VISITAUTHORIZE_INFO;
+    }
+
+    public String getMST_AGENCYACCOUNT_M() {
+        return MST_AGENCYACCOUNT_M;
+    }
+
+    public void setMST_AGENCYACCOUNT_M(String MST_AGENCYACCOUNT_M) {
+        this.MST_AGENCYACCOUNT_M = MST_AGENCYACCOUNT_M;
     }
 }

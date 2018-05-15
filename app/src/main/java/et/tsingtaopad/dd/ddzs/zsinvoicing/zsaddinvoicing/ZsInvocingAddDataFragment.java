@@ -130,15 +130,15 @@ public class ZsInvocingAddDataFragment extends BaseFragmentSupport implements Vi
 
         valsupplyMTemp = dataLst.get(position);
 
-        zdzs_invoicing_adddata_rl_con2_qd.setText(valsupplyMTemp.getValsqd());// 渠道价
+        zdzs_invoicing_adddata_rl_con2_qd.setText(valsupplyMTemp.getValagencysupplyqd());// 督导 渠道价
 
-        zdzs_invoicing_adddata_rl_con2_ls.setText(valsupplyMTemp.getValsls());// 零售价
+        zdzs_invoicing_adddata_rl_con2_ls.setText(valsupplyMTemp.getValagencysupplyls());// 督导 零售价
 
-        zdzs_invoicing_adddata_rl_con2_ddl.setText(valsupplyMTemp.getValsdd());// 订单量价
+        zdzs_invoicing_adddata_rl_con2_ddl.setText(valsupplyMTemp.getValagencysupplydd());// 督导 订单量价
 
-        zdzs_invoicing_adddata_rl_con2_ljk.setText(valsupplyMTemp.getValsljk());// 累计卡
+        zdzs_invoicing_adddata_rl_con2_ljk.setText(valsupplyMTemp.getValagencysupplyljk());// 督导 累计卡
 
-        zdzs_invoicing_adddata_dd_et_report.setText(valsupplyMTemp.getValagencysupplyremark());// 备注
+        zdzs_invoicing_adddata_dd_et_report.setText(valsupplyMTemp.getValagencysupplyremark());// 督导 备注
     }
 
     @Override
@@ -171,9 +171,13 @@ public class ZsInvocingAddDataFragment extends BaseFragmentSupport implements Vi
         String ljkqdinfo = zdzs_invoicing_adddata_rl_con2_ljk.getText().toString();
 
         valsupplyMTemp.setValsqd(qdinfo);
+        valsupplyMTemp.setValagencysupplyqd(qdinfo);
         valsupplyMTemp.setValsls(lsinfo);
+        valsupplyMTemp.setValagencysupplyls(lsinfo);
         valsupplyMTemp.setValsdd(ddlqdinfo);
+        valsupplyMTemp.setValagencysupplydd(ddlqdinfo);
         valsupplyMTemp.setValsljk(ljkqdinfo);
+        valsupplyMTemp.setValagencysupplyljk(ljkqdinfo);
 
         // 备注
         String report = zdzs_invoicing_adddata_dd_et_report.getText().toString();
