@@ -881,6 +881,7 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
                 // termInfo.getCounty()));
                 // }
                 // }
+
                 termInfoTemp.setAddress(FunUtil.isNullSetSpace(xttermaddress.getText()).toString());
                 termInfoTemp.setContact(FunUtil.isNullSetSpace(xttermcontact.getText()).toString());
                 if(xttermphone.getText().toString().length()>30)xttermphone.setText(xttermphone.getText().toString().substring(0, 30));
