@@ -88,7 +88,7 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
     private String termId;
     private Map<String, String> termPinyinMap;
     private List<XtTermSelectMStc> tempLst;
-    protected MitValcheckterM mitValcheckterM;// 追溯模板
+    // protected MitValcheckterM mitValcheckterM;// 追溯模板
     private List<MitValcheckterM>  mitValcheckterMs;
 
     @Nullable
@@ -179,7 +179,7 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
         // // 获取追溯模板 大区id
         String areapid = PrefUtils.getString(getActivity(),"departmentid","");
         mitValcheckterMs = cartService.getValCheckterMList(areapid);
-        mitValcheckterM = mitValcheckterMs.get(0);
+        // mitValcheckterM = mitValcheckterMs.get(0);
 
     }
 
@@ -203,7 +203,7 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
                             Intent intent = new Intent(getActivity(), ZsVisitShopActivity.class);
                             intent.putExtra("isFirstVisit", "1");// 非第一次拜访1
                             intent.putExtra("termStc", termStc);
-                            intent.putExtra("mitValcheckterM", mitValcheckterM);
+                            intent.putExtra("mitValcheckterM", mitValcheckterMs.get(0));
                             intent.putExtra("seeFlag", "0"); // 0拜访 1查看标识
                             startActivity(intent);
                         }else{// 未配置督导模板

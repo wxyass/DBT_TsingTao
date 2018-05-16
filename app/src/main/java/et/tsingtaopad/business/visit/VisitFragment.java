@@ -3,17 +3,23 @@ package et.tsingtaopad.business.visit;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
+import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.dd.ddaddterm.DdAddTermFragment;
 import et.tsingtaopad.dd.ddagencycheck.DdAgencyCheckSelectFragment;
 import et.tsingtaopad.dd.ddagencyres.DdAgencySelectFragment;
 import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartFragment;
 import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectFragment;
+import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectService;
 import et.tsingtaopad.dd.ddzs.zsterm.zscart.ZsTermCartFragment;
 import et.tsingtaopad.dd.ddzs.zsterm.zsselect.ZsTermSelectFragment;
 
@@ -22,13 +28,20 @@ import et.tsingtaopad.dd.ddzs.zsterm.zsselect.ZsTermSelectFragment;
  */
 
 public class VisitFragment extends BaseFragmentSupport implements View.OnClickListener{
-    AppCompatButton button;
-    AppCompatButton xtTermBtn;
-    AppCompatButton zdzsBtn;
-    AppCompatButton zsTermBtn;
-    AppCompatButton agencyresBtn;
-    AppCompatButton agencycheckBtn;
-    AppCompatButton addtermBtn;
+
+    private RelativeLayout backBtn;
+    private RelativeLayout confirmBtn;
+    private AppCompatTextView confirmTv;
+    private AppCompatTextView backTv;
+    private AppCompatTextView titleTv;
+
+    LinearLayout button;
+    RelativeLayout xtTermBtn;
+    LinearLayout zdzsBtn;
+    RelativeLayout zsTermBtn;
+    RelativeLayout agencyresBtn;
+    RelativeLayout agencycheckBtn;
+    RelativeLayout addtermBtn;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -38,20 +51,58 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
     }
 
     private void initView(View view){
-        button = view.findViewById(R.id.dd_btn_test);
+
+        backBtn = (RelativeLayout) view.findViewById(R.id.top_navigation_rl_back);
+        confirmBtn = (RelativeLayout) view.findViewById(R.id.top_navigation_rl_confirm);
+        confirmTv = (AppCompatTextView) view.findViewById(R.id.top_navigation_bt_confirm);
+        backTv = (AppCompatTextView) view.findViewById(R.id.top_navigation_bt_back);
+        titleTv = (AppCompatTextView) view.findViewById(R.id.top_navigation_tv_title);
+        backBtn.setVisibility(View.INVISIBLE);
+        confirmBtn.setVisibility(View.INVISIBLE);
+        confirmBtn.setOnClickListener(this);
+        backBtn.setOnClickListener(this);
+
+        /*button = view.findViewById(R.id.dd_btn_test);
         xtTermBtn = view.findViewById(R.id.dd_btn_xt_term);
         zdzsBtn = view.findViewById(R.id.dd_btn_zdzs);
         zsTermBtn = view.findViewById(R.id.dd_btn_zs_term);
         agencyresBtn = view.findViewById(R.id.dd_btn_zs_agencyres);
         agencycheckBtn = view.findViewById(R.id.dd_btn_zs_agencycheck);
         addtermBtn = view.findViewById(R.id.dd_btn_zs_addterm);
+
         button.setOnClickListener(this);
         xtTermBtn.setOnClickListener(this);
         zdzsBtn.setOnClickListener(this);
         zsTermBtn.setOnClickListener(this);
         agencyresBtn.setOnClickListener(this);
         agencycheckBtn.setOnClickListener(this);
+        addtermBtn.setOnClickListener(this);*/
+
+        button = (LinearLayout)view.findViewById(R.id.dd_btn_test);
+        xtTermBtn = (RelativeLayout)view.findViewById(R.id.dd_btn_xt_term);
+        zdzsBtn = (LinearLayout)view.findViewById(R.id.dd_btn_zdzs);
+        zsTermBtn = (RelativeLayout)view.findViewById(R.id.dd_btn_zs_term);
+
+        agencyresBtn = (RelativeLayout)view.findViewById(R.id.dd_btn_zs_agencyres);
+        agencycheckBtn = (RelativeLayout)view.findViewById(R.id.dd_btn_zs_agencycheck);
+        addtermBtn = (RelativeLayout)view.findViewById(R.id.dd_btn_zs_addterm);
+
+        button.setOnClickListener(this);
+        xtTermBtn.setOnClickListener(this);
+        zdzsBtn.setOnClickListener(this);
+        zsTermBtn.setOnClickListener(this);
+
+        agencyresBtn.setOnClickListener(this);
+        agencycheckBtn.setOnClickListener(this);
         addtermBtn.setOnClickListener(this);
+
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        titleTv.setText("拜访管理");
     }
 
 

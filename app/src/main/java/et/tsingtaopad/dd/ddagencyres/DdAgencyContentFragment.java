@@ -72,6 +72,9 @@ public class DdAgencyContentFragment extends BaseFragmentSupport implements View
     public static final String COVERTERMS ="coverterms";
     public static final String SUPPLYTERMS ="supplyterms";
 
+    public static final String ERROR = "N";// 业代错误
+    public static final String RIGHT = "Y";// 业代错误
+
     private RelativeLayout agencyname;
     private TextView agencyname_con1;
     private TextView agencyname_statue;
@@ -432,7 +435,57 @@ public class DdAgencyContentFragment extends BaseFragmentSupport implements View
         XtUploadService xtUploadService = new XtUploadService(getActivity(), null);
         xtUploadService.uploadMitValagencykfM(false, valagencykf, 1);
 
+    }
 
+    // 设置正确选项
+    public void setMstAgencyKFMFlag(MitValagencykfM valagencykfM, String type) {
+        if (DdAgencyContentFragment.AGENCYNAME.equals(type)) {// 经销商名称
+
+            valagencykfM.setAgencynameflag(RIGHT);
+
+        } else if (DdAgencyContentFragment.CONTACT.equals(type)) {// 法定人
+            valagencykfM.setContactflag(RIGHT);
+
+        } else if (DdAgencyContentFragment.MOBILE.equals(type)) {// 电话
+            valagencykfM.setMobileflag(RIGHT);
+
+        } else if (DdAgencyContentFragment.ADDRESS.equals(type)) {// 仓库地址
+            valagencykfM.setAddressflag(RIGHT);
+
+        } else if (DdAgencyContentFragment.AREA.equals(type)) {// 仓库面积
+            valagencykfM.setAreaflag(RIGHT);
+
+        } else if (DdAgencyContentFragment.MONEY.equals(type)) {// 资金
+            valagencykfM.setMoneyflag(RIGHT);
+
+        } else if (DdAgencyContentFragment.PERSION.equals(type)) {// 人员
+            valagencykfM.setPersionflag(RIGHT);
+
+        } else if (DdAgencyContentFragment.CARNUM.equals(type)) {// 车辆
+            valagencykfM.setCarnumflag(RIGHT);
+
+        } else if (DdAgencyContentFragment.ISONE.equals(type)) {// 是否数一数二经销商
+            // valagencykfM.setIsone(dd_et);
+            valagencykfM.setStatusflag(RIGHT);
+
+        } else if (DdAgencyContentFragment.KFDATA.equals(type)) {// 开发时间
+            valagencykfM.setKfdateflag(RIGHT);
+
+        } else if (DdAgencyContentFragment.PASSDATA.equals(type)) {// 达成时间
+            valagencykfM.setPassdateflag(RIGHT);
+
+        } else if (DdAgencyContentFragment.PRODUCTNAME.equals(type)) {// 销售产品
+            valagencykfM.setProductnameflag(RIGHT);
+
+        } else if (DdAgencyContentFragment.BUSINESS.equals(type)) {// 经营状况
+            valagencykfM.setBusinessflag(RIGHT);
+
+        } else if (DdAgencyContentFragment.COVERTERMS.equals(type)) {// 覆盖终端
+            valagencykfM.setCovertermflag(RIGHT);
+
+        } else if (DdAgencyContentFragment.SUPPLYTERMS.equals(type)) {// 直供终端
+            valagencykfM.setSupplytermsflag(RIGHT);
+        }
     }
 
     /**
@@ -493,25 +546,10 @@ public class DdAgencyContentFragment extends BaseFragmentSupport implements View
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(0==position){
-                    /*FunUtil.setFieldValue(mitValterMTemp, ddflag, "Y");
-                    handler.sendEmptyMessage(ZsSayhiFragment.INIT_DATA);*/
+                    setMstAgencyKFMFlag(valagencykfM,type);
+                    handler.sendEmptyMessage(DdAgencyContentFragment.DD_AGENCY_CONTENT_SUC);
                 }
                 else if(1==position){
-                    /*Bundle bundle = new Bundle();
-                    bundle.putString("titleName", titleName);// 标题内容,比如:是否有效终端
-                    bundle.putString("ydkey", ydkey);// 对象属性,比如: vidroutekey(属性)
-                    bundle.putString("onlyddkey", onlyddkey);// 对象属性,比如: vidroutekey(属性)
-                    bundle.putString("setDdValue", ddkey);// 对象方法名,比如: setVidrtekeyval(督导输入的值)
-                    bundle.putString("setDdFlag", ddflag);// 对象方法名,比如: setVidrtekeyflag(正确与否)
-                    bundle.putString("setDdRemark", ddremark);// 对象方法名,比如: setVidroutremark(备注)
-                    //bundle.putString("type", type);// 页面类型,比如: "1"
-                    bundle.putString("termId", termId);// 页面类型,比如: "1"
-                    bundle.putString("mitValterMTempKey", mitValterMTempKey);
-                    bundle.putSerializable("mitValterMTemp", mitValterMTemp);
-                    ZsSayhiAmendFragment zsSayhiAmendFragment = new ZsSayhiAmendFragment(handler);
-                    zsSayhiAmendFragment.setArguments(bundle);
-                    ZsVisitShopActivity zsVisitShopActivity = (ZsVisitShopActivity)getActivity();
-                    zsVisitShopActivity.changeXtvisitFragment(zsSayhiAmendFragment,"zssayhiamendfragment");*/
 
                     Bundle bundle = new Bundle();
                     bundle.putString("type", type);

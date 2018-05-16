@@ -24,6 +24,7 @@ import et.tsingtaopad.R;
 import et.tsingtaopad.adapter.AlertKeyValueAdapter;
 import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.DbtUtils;
+import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.view.alertview.AlertView;
@@ -876,6 +877,7 @@ public class DdAddTermFragment extends BaseFragmentSupport implements View.OnCli
         MitTerminalM mitTerminalM = new MitTerminalM();
         // mitTerminalM.setTerminalkey();
         // mitTerminalM.setTerminalcode();
+        mitTerminalM.setId(FunUtil.getUUID());
         mitTerminalM.setTerminalname(termname);
         mitTerminalM.setRoutekey(termroude);
         mitTerminalM.setAreatype(termarea);

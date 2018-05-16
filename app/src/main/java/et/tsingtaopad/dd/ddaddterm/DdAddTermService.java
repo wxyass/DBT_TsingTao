@@ -331,7 +331,7 @@ public class DdAddTermService extends XtShopVisitService {
             connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
             connection.setAutoCommit(false);
 
-            info.setId(FunUtil.getUUID());
+
             info.setCreuserareaid(PrefUtils.getString(context,"departmentid",""));
             info.setCredate(new Date());
             info.setUpdatedate(new Date());

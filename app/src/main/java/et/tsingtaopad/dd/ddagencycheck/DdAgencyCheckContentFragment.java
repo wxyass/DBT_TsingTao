@@ -165,7 +165,7 @@ public class DdAgencyCheckContentFragment extends BaseFragmentSupport implements
                 break;
             case R.id.dd_agencychenck_bt_next:// 保存
                 saveValue();
-
+                supportFragmentManager.popBackStack();
                 break;
 
             default:

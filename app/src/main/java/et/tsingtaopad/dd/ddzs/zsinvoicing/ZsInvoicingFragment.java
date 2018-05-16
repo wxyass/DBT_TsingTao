@@ -161,8 +161,12 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
 
         // 临时表关联 业代终端台账表  对象
 
-
-        tzAdapter = new ZsInvoicingTzAdapter(getActivity(), dataLst, null);
+        tzAdapter = new ZsInvoicingTzAdapter(getActivity(), dataLst, new IClick() {
+            @Override
+            public void listViewItemClick(int position, View v) {
+                Toast.makeText(getActivity(),dataLst.get(position).getValproname(),Toast.LENGTH_SHORT).show();
+            }
+        });
         zsTermtzLv.setAdapter(tzAdapter);
         ViewUtil.setListViewHeight(zsTermtzLv);
     }

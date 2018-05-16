@@ -139,7 +139,7 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        titleTv.setText(R.string.xtbf_selectterm);
+        titleTv.setText(R.string.zdzs_selectterm);
         handler = new MyHandler(this);
         ConstValues.handler = handler;
 
