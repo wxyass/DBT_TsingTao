@@ -1,8 +1,6 @@
-package et.tsingtaopad.dd.ddzs.zsinvoicing;
+package et.tsingtaopad.dd.ddzs.zsinvoicing.zsinvocingtz;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,24 +8,18 @@ import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
-import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.db.table.MitValsupplyMTemp;
-import et.tsingtaopad.dd.ddzs.zscheckindex.ZsCaculateItemAdapter;
+import et.tsingtaopad.dd.ddzs.zsinvoicing.zsinvocingtz.domain.ZsTzItemIndex;
 import et.tsingtaopad.listviewintf.IClick;
 
 /**
@@ -42,11 +34,11 @@ public class ZsInvoicingTzAdapter extends
                     BaseAdapter implements OnFocusChangeListener ,OnClickListener {
 
     private Activity context;
-    private List<MitValsupplyMTemp> dataLst;
+    private List<ZsTzItemIndex> dataLst;
     private int delPosition = -1;
     private IClick listener;
 
-    public ZsInvoicingTzAdapter(Activity context, List<MitValsupplyMTemp> dataLst, IClick listener) {
+    public ZsInvoicingTzAdapter(Activity context, List<ZsTzItemIndex> dataLst, IClick listener) {
         this.context = context;
         this.dataLst = dataLst;
         this.listener=listener;
@@ -93,10 +85,10 @@ public class ZsInvoicingTzAdapter extends
             holder = (ViewHolder)convertView.getTag();
         }
         
-        final MitValsupplyMTemp item = dataLst.get(position);
+        final ZsTzItemIndex item = dataLst.get(position);
 
         // 产品名称
-        holder.productNameTv.setHint(item.getValpro());
+        holder.productNameTv.setHint(item.getValproid());
         holder.productNameTv.setText(item.getValproname());
 
         // 未稽查
@@ -104,10 +96,10 @@ public class ZsInvoicingTzAdapter extends
         holder.statueRl.setOnClickListener(listener);
 
         // 未稽查
-        if("N".equals(item.getValagencysupplyflag())){
+        if("N".equals(item.getValprostatus())){
             holder.statueTv.setText("错误");
             holder.statueTv.setTextColor(context.getResources().getColor(R.color.zdzs_dd_error));
-        }else if("Y".equals(item.getValagencysupplyflag())){
+        }else if("Y".equals(item.getValprostatus())){
             holder.statueTv.setText("正确");
             holder.statueTv.setTextColor(context.getResources().getColor(R.color.zdzs_dd_yes));
         }else{
@@ -116,7 +108,7 @@ public class ZsInvoicingTzAdapter extends
         }
 
         // (上下文,有几个产品,指标标准,所有的采集项数据,当前指标key)
-        holder.valueLv.setAdapter(new ZsInvoicingTznumAdapter(context, null));
+        holder.valueLv.setAdapter(new ZsInvoicingTznumAdapter(context, item.getIndexValueLst()));
         return convertView;
     }
 

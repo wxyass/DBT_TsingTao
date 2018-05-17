@@ -179,25 +179,7 @@ public class ZsInvoicingService extends XtShopVisitService {
         }
         return list;
     }
-    /***
-     * 通过终端key 获取此终端 进货台账
-     * @param terminalkey
-     * @return
-     */
-    public List<MstTermLedgerInfo> queryValTermLedger(String terminalkey) {
-        List<MstTermLedgerInfo> list = new ArrayList<MstTermLedgerInfo>();
-        try {
-            DatabaseHelper helper = DatabaseHelper.getHelper(context);
-            MstTermLedgerInfoDao ledgerInfoDao = helper.getDao(MstTermLedgerInfo.class);
-            QueryBuilder<MstTermLedgerInfo, String> qb = ledgerInfoDao.queryBuilder();
-            Where<MstTermLedgerInfo, String> where = qb.where();
-            where.eq("terminalkey", terminalkey);
-            list = qb.query();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
+
 
     /**
      * 新增供货关系指标记录表进行更新

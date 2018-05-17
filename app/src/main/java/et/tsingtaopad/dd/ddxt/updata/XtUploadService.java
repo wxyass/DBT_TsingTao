@@ -1291,6 +1291,7 @@ public class XtUploadService {
         // 压缩请求数据
         String jsonZip = HttpParseJson.parseRequestJson(reqObj);
 
+
         RestClient.builder()
                 .url(HttpUrl.IP_END)
                 .params("data", jsonZip)

@@ -146,6 +146,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<MitTerminalM, String> mitTerminalMDao = null;
     private Dao<MitValagencykfM, String> mitValagencykfMDao = null;
 
+    private Dao<MitValaddaccountMTemp, String> mitValaddaccountMTempDao = null;
+    private Dao<MitValaddaccountM, String> mitValaddaccountMDao = null;
+    private Dao<MitValaddaccountproMTemp, String> mitValaddaccountproMTempDao = null;
+    private Dao<MitValaddaccountproM, String> mitValaddaccountproMDao = null;
+
     public DatabaseHelper(Context context) {
 
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -308,6 +313,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, MitAgencyproM.class);// 经销商判断产品表
             TableUtils.createTable(connectionSource, MitTerminalM.class);// 督导新增终端表
             TableUtils.createTable(connectionSource, MitValagencykfM.class);// 经销商开发核查表
+
+            TableUtils.createTable(connectionSource, MitValaddaccountM.class);// 终端进货台账主表
+            TableUtils.createTable(connectionSource, MitValaddaccountMTemp.class);// 终端进货台账主表 临时表
+            TableUtils.createTable(connectionSource, MitValaddaccountproM.class);// 终端追溯台账产品详情表
+            TableUtils.createTable(connectionSource, MitValaddaccountproMTemp.class);// 终端追溯台账产品详情表 临时表
 
 
             this.initView(db);
@@ -1114,6 +1124,20 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 // 经销商开发核查表
                 String MIT_VALAGENCYKF_M = "create table MIT_VALAGENCYKF_M   ( id varchar2(36) not null, gridkey varchar2(36) null, agencyname varchar2(200) null, agencynameflag char(1)  null, agencyrealname varchar2(200) null, agencynameremark varchar2(300) null,persion varchar2(200) null, persionflag char(1)  null, persionreal varchar2(200) null, persionremark varchar2(300) null, contact varchar2(200) null, contactflag  char(1)  null, contactreal  varchar2(200) null, contactremark  varchar2(300) null, mobile  varchar2(50) null, mobileflag char(1)  null, mobilereal varchar2(50) null, mobileremark   varchar2(300) null, address varchar2(300) null, addressflag  char(1)  null, addressreal  varchar2(300) null, addressremark  varchar2(300) null, area  number null, areaflag   char(1)  null, areareal   number null, arearemark varchar2(300) null, money number null, moneyflag  char(1)  null, moneyreal  number null, moneyremark  varchar2(300) null, carnum  number null, carnumflag char(1)  null, carnumreal number null, carnumremark   varchar2(300) null, productname  varchar2(500) null, productnameflag  char(1)  null, productnamereal  varchar2(500) null, productnameremark  varchar2(300) null, business   varchar2(300) null, businessflag   char(1)  null, businessreal   varchar2(300) null, businessremark varchar2(300) null, status  char(1)  null, statusflag char(1)  null, statusremark   varchar2(300) null, coverterms varchar2(600) null, covertermflag  char(1)  null, covertermreal  varchar2(600) null, covertermremark  varchar2(300) null, supplyterms  varchar2(600) null, supplytermsflag  char(1)  null, supplytermsreal  varchar2(600) null, supplytermsremark  varchar2(300) null, kfdate  date null, kfdateflag char(1)  null, kfdatereal date null, kfdateremark   varchar2(300) null, passdate   date null, passdateflag   char(1)  null, passdatereal   date null, passdateremark varchar2(300) null, remark  varchar2(300) null, creuser varchar2(128) null, creuserareaid  varchar(36)  null, credate date null, updateuser varchar2(128) null, updatedate date null, uploadflag varchar2(1) null,  padisconsistent varchar2(1) null )";
                 db.execSQL(MIT_VALAGENCYKF_M);
+
+
+                // 终端进货台账主表
+                String MIT_VALADDACCOUNT_M = "create table MIT_VALADDACCOUNT_M ( id varchar2(36) not null, valsupplyid varchar2(36) null, valagencyid varchar2(36) null, valagencyname varchar2(36) null, valterid    varchar2(36) null, valtername   varchar2(36) null, valproid    varchar2(36) null, valproname    varchar2(36) null, valprostatus   char(1) null, creuser varchar2(128)  null, credate date   null, updateuser  varchar2(128)  null, updatedate  date   null, uploadflag varchar2(1) null, padisconsistent varchar2(1) null )";
+                db.execSQL(MIT_VALADDACCOUNT_M);
+                // 终端进货台账主表
+                String MIT_VALADDACCOUNT_M_TEMP = "create table MIT_VALADDACCOUNT_M_TEMP ( id varchar2(36) not null, valsupplyid varchar2(36) null, valagencyid varchar2(36) null, valagencyname varchar2(36) null, valterid    varchar2(36) null, valtername   varchar2(36) null, valproid    varchar2(36) null, valproname    varchar2(36) null, valprostatus   char(1) null, creuser varchar2(128)  null, credate date   null, updateuser  varchar2(128)  null, updatedate  date   null, uploadflag varchar2(1) null, padisconsistent varchar2(1) null )";
+                db.execSQL(MIT_VALADDACCOUNT_M_TEMP);
+                // 终端追溯台账产品详情表
+                String MIT_VALADDACCOUNTPRO_M = "create table MIT_VALADDACCOUNTPRO_M ( id varchar2(36) not null, valaddaccountid varchar2(36) null, valprotime  varchar2(36) null, valpronumfalg  char(1) null, valpronum   varchar2(10) null, valprotruenum  varchar2(10) null, valproremark   varchar2(300)  null, uploadflag varchar2(1) null, padisconsistent varchar2(1) null )";
+                db.execSQL(MIT_VALADDACCOUNTPRO_M);
+                // 终端追溯台账产品详情表
+                String MIT_VALADDACCOUNTPRO_M_TEMP = "create table MIT_VALADDACCOUNTPRO_M_TEMP ( id varchar2(36) not null, valaddaccountid varchar2(36) null, valprotime  varchar2(36) null, valpronumfalg  char(1) null, valpronum   varchar2(10) null, valprotruenum  varchar2(10) null, valproremark   varchar2(300)  null, uploadflag varchar2(1) null, padisconsistent varchar2(1) null )";
+                db.execSQL(MIT_VALADDACCOUNTPRO_M_TEMP);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -2123,6 +2147,37 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             mitValagencykfMDao = getDao(MitValagencykfM.class);
         }
         return mitValagencykfMDao;
+    }
+
+
+    public Dao<MitValaddaccountMTemp, String> getMitValaddaccountMTempDao() throws SQLException {
+
+        if (mitValaddaccountMTempDao == null) {
+            mitValaddaccountMTempDao = getDao(MitValaddaccountMTemp.class);
+        }
+        return mitValaddaccountMTempDao;
+    }
+    public Dao<MitValaddaccountM, String> getMitValaddaccountMDao() throws SQLException {
+
+        if (mitValaddaccountMDao == null) {
+            mitValaddaccountMDao = getDao(MitValaddaccountM.class);
+        }
+        return mitValaddaccountMDao;
+    }
+
+    public Dao<MitValaddaccountproMTemp, String> getMitValaddaccountproMTempDao() throws SQLException {
+
+        if (mitValaddaccountproMTempDao == null) {
+            mitValaddaccountproMTempDao = getDao(MitValaddaccountproMTemp.class);
+        }
+        return mitValaddaccountproMTempDao;
+    }
+    public Dao<MitValaddaccountproM, String> getMitValaddaccountproMDao() throws SQLException {
+
+        if (mitValaddaccountproMDao == null) {
+            mitValaddaccountproMDao = getDao(MitValaddaccountproM.class);
+        }
+        return mitValaddaccountproMDao;
     }
 
     /**

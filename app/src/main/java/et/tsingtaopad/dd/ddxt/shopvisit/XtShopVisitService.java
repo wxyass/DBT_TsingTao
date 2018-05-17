@@ -13,12 +13,9 @@ import java.util.Set;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.location.Location;
-import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 
-import cn.com.benyoyo.manage.bs.IntStc.BsVisitEmpolyeeStc;
 import et.tsingtaopad.R;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
@@ -28,34 +25,32 @@ import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.db.DatabaseHelper;
-import et.tsingtaopad.db.dao.MitValchecktypeMDao;
+import et.tsingtaopad.db.dao.MitValaddaccountMDao;
 import et.tsingtaopad.db.dao.MitValcmpotherMTempDao;
-import et.tsingtaopad.db.dao.MitValsupplyMTempDao;
 import et.tsingtaopad.db.dao.MitValterMTempDao;
-import et.tsingtaopad.db.dao.MitVisitMDao;
 import et.tsingtaopad.db.dao.MstAgencysupplyInfoDao;
 import et.tsingtaopad.db.dao.MstCheckexerecordInfoDao;
 import et.tsingtaopad.db.dao.MstGroupproductMDao;
 import et.tsingtaopad.db.dao.MstGroupproductMTempDao;
 import et.tsingtaopad.db.dao.MstPromotionsmDao;
+import et.tsingtaopad.db.dao.MstTermLedgerInfoDao;
 import et.tsingtaopad.db.dao.MstTerminalinfoMCartDao;
 import et.tsingtaopad.db.dao.MstTerminalinfoMDao;
 import et.tsingtaopad.db.dao.MstTerminalinfoMTempDao;
 import et.tsingtaopad.db.dao.MstVisitMDao;
 import et.tsingtaopad.db.dao.MstVisitMTempDao;
 import et.tsingtaopad.db.dao.MstVistproductInfoDao;
+import et.tsingtaopad.db.table.MitValaddaccountM;
+import et.tsingtaopad.db.table.MitValaddaccountMTemp;
+import et.tsingtaopad.db.table.MitValaddaccountproMTemp;
 import et.tsingtaopad.db.table.MitValcheckitemMTemp;
-import et.tsingtaopad.db.table.MitValcheckterM;
-import et.tsingtaopad.db.table.MitValchecktypeM;
 import et.tsingtaopad.db.table.MitValchecktypeMTemp;
-import et.tsingtaopad.db.table.MitValcmpM;
 import et.tsingtaopad.db.table.MitValcmpMTemp;
 import et.tsingtaopad.db.table.MitValcmpotherMTemp;
 import et.tsingtaopad.db.table.MitValgroupproMTemp;
 import et.tsingtaopad.db.table.MitValpromotionsMTemp;
 import et.tsingtaopad.db.table.MitValsupplyMTemp;
 import et.tsingtaopad.db.table.MitValterMTemp;
-import et.tsingtaopad.db.table.MitVisitM;
 import et.tsingtaopad.db.table.MstAgencysupplyInfo;
 import et.tsingtaopad.db.table.MstAgencysupplyInfoTemp;
 import et.tsingtaopad.db.table.MstCameraInfoM;
@@ -72,6 +67,7 @@ import et.tsingtaopad.db.table.MstPromotermInfo;
 import et.tsingtaopad.db.table.MstPromotermInfoTemp;
 import et.tsingtaopad.db.table.MstPromotionsM;
 import et.tsingtaopad.db.table.MstRouteM;
+import et.tsingtaopad.db.table.MstTermLedgerInfo;
 import et.tsingtaopad.db.table.MstTerminalinfoM;
 import et.tsingtaopad.db.table.MstTerminalinfoMCart;
 import et.tsingtaopad.db.table.MstTerminalinfoMTemp;
@@ -87,18 +83,15 @@ import et.tsingtaopad.dd.ddxt.checking.domain.XtProIndexValue;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProItem;
 import et.tsingtaopad.dd.ddxt.invoicing.domain.XtInvoicingStc;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
-import et.tsingtaopad.main.visit.shopvisit.term.domain.MstTermListMStc;
+import et.tsingtaopad.dd.ddzs.zsinvoicing.zsinvocingtz.domain.ZsTzItemIndex;
+import et.tsingtaopad.dd.ddzs.zsinvoicing.zsinvocingtz.domain.ZsTzLedger;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.CheckIndexCalculateStc;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.CheckIndexPromotionStc;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.CheckIndexQuicklyStc;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.ProIndex;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.ProIndexValue;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.ProItem;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.sayhi.domain.MstTerminalInfoMStc;
 
 import com.j256.ormlite.android.AndroidDatabaseConnection;
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 
@@ -196,9 +189,9 @@ public class XtShopVisitService {
      * @param latitude  维度
      * @param gpsStatus
      */
-    public void updateZsGps(String visitId,double longitude, double latitude, String gpsStatus) {
+    public void updateZsGps(String visitId, double longitude, double latitude, String gpsStatus) {
         try {
-            if(0!=latitude && 0!=longitude){
+            if (0 != latitude && 0 != longitude) {
                 DatabaseHelper helper = DatabaseHelper.getHelper(context);
 
                 MstVisitMTempDao visitTempDao = helper.getDao(MstVisitMTemp.class);
@@ -681,6 +674,9 @@ public class XtShopVisitService {
 
             Dao<MitValpromotionsMTemp, String> mitValpromotionsMTempDao = helper.getMitValpromotionsMTempDao();
 
+            Dao<MitValaddaccountMTemp, String> mitValaddaccountMTempDao = helper.getMitValaddaccountMTempDao();
+            Dao<MitValaddaccountproMTemp, String> mitValaddaccountproMTempDao = helper.getMitValaddaccountproMTempDao();
+
             connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
             connection.setAutoCommit(false);
 
@@ -1041,6 +1037,9 @@ public class XtShopVisitService {
             //  复制 追溯产品组合表
             createMitGroupproMTemp(mitValgroupproMTempDao, term, mitValterMTemp.getId());
 
+            // 复制追溯台账主表 临时表
+            createMitValaddaccountMTemp(mitValaddaccountMTempDao,mitValaddaccountproMTempDao, term, mitValterMTemp.getId());
+
 
             connection.commit(null);
         } catch (Exception e) {
@@ -1059,6 +1058,85 @@ public class XtShopVisitService {
         keys.add(mitValterMTemp.getId());
         keys.add(prevVisitId);
         return keys;
+    }
+
+    // 复制追溯台账主表 临时表   复制追溯台账附表 临时表
+    private void createMitValaddaccountMTemp(Dao<MitValaddaccountMTemp, String> mitValaddaccountMTempDao,
+                                             Dao<MitValaddaccountproMTemp, String> mitValaddaccountproMTempDao,
+                                             MstTerminalinfoMCart term,
+                                             String id) {
+
+        List<MstTermLedgerInfo> list = new ArrayList<MstTermLedgerInfo>();
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            MstTermLedgerInfoDao ledgerInfoDao = helper.getDao(MstTermLedgerInfo.class);
+            QueryBuilder<MstTermLedgerInfo, String> qb = ledgerInfoDao.queryBuilder();
+            Where<MstTermLedgerInfo, String> where = qb.where();
+            where.eq("terminalkey", term.getTerminalkey());
+            qb.orderBy("productkey", true);
+            list = qb.query();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // 组建成界面显示所需要的数据结构
+        List<ZsTzItemIndex> proIndexLst = new ArrayList<ZsTzItemIndex>();
+        ZsTzItemIndex zsTzItemIndex = new ZsTzItemIndex();//
+        String productkey = "";
+        MitValaddaccountproMTemp indexValueItem;
+
+        for (MstTermLedgerInfo ledgerInfo : list) {
+            if (!productkey.equals(ledgerInfo.getProductkey())) {
+                zsTzItemIndex = new ZsTzItemIndex();
+                zsTzItemIndex.setId(FunUtil.getUUID());
+                zsTzItemIndex.setValsupplyid(id);// 终端追溯终端表ID
+                zsTzItemIndex.setValagencyid(ledgerInfo.getAgencykey());//经销商ID
+                zsTzItemIndex.setValagencyname(ledgerInfo.getAgencyname());// 经销商名称
+                zsTzItemIndex.setValterid(ledgerInfo.getTerminalkey());// 终端ID
+                zsTzItemIndex.setValtername(ledgerInfo.getTerminalname());// 终端名称
+                zsTzItemIndex.setValproid(ledgerInfo.getProductkey());//产品ID
+                zsTzItemIndex.setValproname(ledgerInfo.getProname());//  产品名称
+                zsTzItemIndex.setUploadflag("0");//
+                zsTzItemIndex.setPadisconsistent("0");//
+                zsTzItemIndex.setIndexValueLst(new ArrayList<MitValaddaccountproMTemp>());
+                proIndexLst.add(zsTzItemIndex);
+                productkey = ledgerInfo.getProductkey();
+            }
+            // 复制附表
+            indexValueItem = new MitValaddaccountproMTemp();
+            indexValueItem.setId(FunUtil.getUUID());//
+            indexValueItem.setValaddaccountid(zsTzItemIndex.getId());// 终端进货台账主表ID
+            indexValueItem.setValprotime(ledgerInfo.getPurchasetime());// 台账日期
+            //indexValueItem.setValpronumfalg();// 进货量正确与否
+            indexValueItem.setValpronum(ledgerInfo.getPurchase());// 进货量原值
+            indexValueItem.setValprotruenum(ledgerInfo.getPurchase());// 进货量正确值
+            // indexValueItem.setValproremark();// 备注
+            indexValueItem.setUploadflag("0");//
+            indexValueItem.setPadisconsistent("0");//
+            zsTzItemIndex.getIndexValueLst().add(indexValueItem);
+        }
+        try {
+            MitValaddaccountMTemp valaddaccountMTemp ;
+            for (ZsTzItemIndex tzItemIndex : proIndexLst){
+                valaddaccountMTemp = new MitValaddaccountMTemp();
+                valaddaccountMTemp.setId(tzItemIndex.getId());
+                valaddaccountMTemp.setValsupplyid(tzItemIndex.getValsupplyid());// 终端追溯终端表ID
+                valaddaccountMTemp.setValagencyid(tzItemIndex.getValagencyid());//经销商ID
+                valaddaccountMTemp.setValagencyname(tzItemIndex.getValagencyname());// 经销商名称
+                valaddaccountMTemp.setValterid(tzItemIndex.getValterid());// 终端ID
+                valaddaccountMTemp.setValtername(tzItemIndex.getValtername());// 终端名称
+                valaddaccountMTemp.setValproid(tzItemIndex.getValproid());//产品ID
+                valaddaccountMTemp.setValproname(tzItemIndex.getValproname());//  产品名称
+                valaddaccountMTemp.setUploadflag("0");//
+                valaddaccountMTemp.setPadisconsistent("0");//
+                mitValaddaccountMTempDao.create(valaddaccountMTemp);
+                for(MitValaddaccountproMTemp valaddaccountproMTemp : tzItemIndex.getIndexValueLst()){
+                    mitValaddaccountproMTempDao.create(valaddaccountproMTemp);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // 复制追溯产品组合表
@@ -2014,6 +2092,10 @@ public class XtShopVisitService {
             deleteTable(helper, "MIT_VALCHECKITEM_M_TEMP");// 追溯采集项表临时表
             deleteTable(helper, "MIT_VALCMPOTHER_M_TEMP");// 终端追溯竞品附表 临时表
             deleteTable(helper, "MIT_VALPIC_M_TEMP");// 终端追溯图片表 临时表
+
+            deleteTable(helper, "MIT_VALADDACCOUNT_M_TEMP");// 终端进货台账主表 临时表
+            deleteTable(helper, "MIT_VALADDACCOUNTPRO_M_TEMP");// 终端追溯台账产品详情表 临时表
+
             //deleteTable(helper, "MST_CHECKGROUP_INFO");
             //deleteTable(helper, "MST_CHECKGROUP_INFO_TEMP");
         } catch (Exception e) {
@@ -3628,6 +3710,58 @@ public class XtShopVisitService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /***
+     * 通过终端key 获取此终端 进货台账
+     * @param terminalkey
+     * @return
+     */
+    public List<ZsTzItemIndex> queryValTermLedger(String terminalkey) {
+        List<ZsTzItemIndex> lst = new ArrayList<ZsTzItemIndex>();
+        List<ZsTzLedger> zsTzLedgers = new ArrayList<ZsTzLedger>();
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            MitValaddaccountMDao dao = helper.getDao(MitValaddaccountM.class);
+            zsTzLedgers = dao.queryValTzByTemp(helper, terminalkey);
+        } catch (SQLException e) {
+            Log.e(TAG, "获取终端表DAO对象失败", e);
+        }
+
+        // 组建成界面显示所需要的数据结构
+        ZsTzItemIndex zsTzItemIndex = new ZsTzItemIndex();//
+        String productkey = "";
+        MitValaddaccountproMTemp indexValueItem;
+
+        for (ZsTzLedger tzLedger : zsTzLedgers) {
+            if (!productkey.equals(tzLedger.getValproid())) {
+                zsTzItemIndex = new ZsTzItemIndex();
+                zsTzItemIndex.setId(tzLedger.getValaddaccountid());
+                zsTzItemIndex.setValsupplyid(tzLedger.getValsupplyid());// 终端追溯终端表ID
+                zsTzItemIndex.setValagencyid(tzLedger.getValagencyid());//经销商ID
+                zsTzItemIndex.setValagencyname(tzLedger.getValagencyname());// 经销商名称
+                zsTzItemIndex.setValterid(tzLedger.getValterid());// 终端ID
+                zsTzItemIndex.setValtername(tzLedger.getValtername());// 终端名称
+                zsTzItemIndex.setValproid(tzLedger.getValproid());//产品ID
+                zsTzItemIndex.setValproname(tzLedger.getValproname());//  产品名称
+                zsTzItemIndex.setValprostatus(tzLedger.getValprostatus());//  稽查状态
+                zsTzItemIndex.setIndexValueLst(new ArrayList<MitValaddaccountproMTemp>());
+                lst.add(zsTzItemIndex);
+                productkey = tzLedger.getValproid();
+            }
+            // 复制附表
+            indexValueItem = new MitValaddaccountproMTemp();
+            indexValueItem.setId(tzLedger.getValaddaccountproid());//
+            indexValueItem.setValaddaccountid(tzLedger.getValaddaccountid());// 终端进货台账主表ID
+            indexValueItem.setValprotime(tzLedger.getValprotime());// 台账日期
+            indexValueItem.setValpronumfalg(tzLedger.getValpronumfalg());// 进货量正确与否
+            indexValueItem.setValpronum(tzLedger.getValpronum());// 进货量原值
+            indexValueItem.setValprotruenum(tzLedger.getValprotruenum());// 进货量正确值
+            indexValueItem.setValproremark(tzLedger.getValproremark());// 备注
+            zsTzItemIndex.getIndexValueLst().add(indexValueItem);
+        }
+
+        return lst;
     }
 
 }

@@ -11,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -29,22 +28,21 @@ import java.util.List;
 import et.tsingtaopad.R;
 import et.tsingtaopad.adapter.AlertKeyValueAdapter;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
-import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
-import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.core.view.alertview.OnDismissListener;
 import et.tsingtaopad.core.view.alertview.OnItemClickListener;
 import et.tsingtaopad.db.table.MitValsupplyMTemp;
-import et.tsingtaopad.db.table.MstTermLedgerInfo;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
 import et.tsingtaopad.dd.ddxt.invoicing.XtInvoicingService;
 import et.tsingtaopad.dd.ddxt.invoicing.domain.XtInvoicingStc;
 import et.tsingtaopad.dd.ddzs.zsinvoicing.zsaddinvoicing.ZsAddInvoicingFragment;
 import et.tsingtaopad.dd.ddzs.zsinvoicing.zsaddinvoicing.ZsInvocingAddDataFragment;
-import et.tsingtaopad.dd.ddzs.zssayhi.ZsSayhiAmendFragment;
+import et.tsingtaopad.dd.ddzs.zsinvoicing.zsinvocingtz.ZsInvoicingTzAmendFragment;
+import et.tsingtaopad.dd.ddzs.zsinvoicing.zsinvocingtz.ZsInvoicingTzAdapter;
+import et.tsingtaopad.dd.ddzs.zsinvoicing.zsinvocingtz.domain.ZsTzItemIndex;
 import et.tsingtaopad.dd.ddzs.zsshopvisit.ZsVisitShopActivity;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
 import et.tsingtaopad.listviewintf.IClick;
@@ -59,12 +57,14 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
 
     //List<XtInvoicingStc> dataLst;
     List<MitValsupplyMTemp> dataLst;
-    List<MstTermLedgerInfo> termLedgerInfos;
+    List<ZsTzItemIndex> termLedgerInfos;
     ZsInvoicingService invoicingService;
     MyHandler handler;
 
     public static final int ZS_ADD_SUC = 2;// 追溯-新增我品供货关系成功
     public static final int INIT_AMEND = 22;// 督导输入数据成功
+
+    public static final int MAKE_RIGHT_TZ = 23;// 台账稽查正确
 
     ZsInvoicingAdapter zsInvoicingAdapter;
     ZsInvoicingTzAdapter tzAdapter;
@@ -154,17 +154,15 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
         zsInvoicingLv.setAdapter(zsInvoicingAdapter);
         ViewUtil.setListViewHeight(zsInvoicingLv);
 
-        // 从督导台账临时表获取数据(这张表 在进入前会复制到临时表中)
 
         // 查出该终端 所有业代终端台账表
         termLedgerInfos = invoicingService.queryValTermLedger(termId);
 
-        // 临时表关联 业代终端台账表  对象
-
-        tzAdapter = new ZsInvoicingTzAdapter(getActivity(), dataLst, new IClick() {
+        tzAdapter = new ZsInvoicingTzAdapter(getActivity(), termLedgerInfos, new IClick() {
             @Override
             public void listViewItemClick(int position, View v) {
-                Toast.makeText(getActivity(),dataLst.get(position).getValproname(),Toast.LENGTH_SHORT).show();
+                alertShow5(position);
+                // Toast.makeText(getActivity(),termLedgerInfos.get(position).getValproname(),Toast.LENGTH_SHORT).show();
             }
         });
         zsTermtzLv.setAdapter(tzAdapter);
@@ -538,6 +536,42 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
                 DbtLog.logUtils(TAG, "取消选择结果");
             }
         });
+        mAlertViewExt.show();
+    }
+    public void alertShow5(final int posi) {
+
+        List<KvStc> sureOrFail = new ArrayList<>();
+        sureOrFail.add(new KvStc("zhengque","正确","-1"));
+        sureOrFail.add(new KvStc("cuowu","错误(去修正)","-1"));
+        mAlertViewExt = new AlertView("请选择结果", null, null, null,
+                null, getActivity(), AlertView.Style.ActionSheet, null);
+        ViewGroup extView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_list_form, null);
+        ListView listview = (ListView) extView.findViewById(R.id.alert_list);
+        AlertKeyValueAdapter keyValueAdapter = new AlertKeyValueAdapter(getActivity(), sureOrFail,
+                new String[]{"key", "value"}, "zhengque");
+        listview.setAdapter(keyValueAdapter);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(0==position){
+                    termLedgerInfos.get(posi).setValprostatus("Y");
+                    handler.sendEmptyMessage(ZsInvoicingFragment.MAKE_RIGHT_TZ);
+                }
+                else if(1==position){
+                    Bundle bundle = new Bundle();
+                    // bundle.putString("mitValterMTempKey", mitValterMTempKey);
+                    bundle.putSerializable("zstzitemindex", termLedgerInfos.get(posi));
+                    ZsInvoicingTzAmendFragment tzFragment = new ZsInvoicingTzAmendFragment(handler);
+                    tzFragment.setArguments(bundle);
+                    ZsVisitShopActivity zsVisitShopActivity = (ZsVisitShopActivity)getActivity();
+                    zsVisitShopActivity.changeXtvisitFragment(tzFragment,"zssayhiamendfragment");
+                }
+
+                mAlertViewExt.dismiss();
+            }
+        });
+        mAlertViewExt.addExtView(extView);
+        mAlertViewExt.setCancelable(true).setOnDismissListener(null);
         mAlertViewExt.show();
     }
 

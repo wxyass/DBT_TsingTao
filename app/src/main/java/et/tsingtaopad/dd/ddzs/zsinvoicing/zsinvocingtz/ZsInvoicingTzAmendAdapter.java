@@ -1,29 +1,21 @@
-package et.tsingtaopad.dd.ddzs.zsinvoicing;
+package et.tsingtaopad.dd.ddzs.zsinvoicing.zsinvocingtz;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
-import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
-import et.tsingtaopad.core.util.dbtutil.FunUtil;
-import et.tsingtaopad.dd.ddxt.checking.domain.XtProIndexValue;
-import et.tsingtaopad.dd.ddxt.checking.domain.XtProItem;
-import et.tsingtaopad.initconstvalues.domain.KvStc;
+import et.tsingtaopad.db.table.MitValaddaccountproMTemp;
 
 
 /**
@@ -36,10 +28,10 @@ import et.tsingtaopad.initconstvalues.domain.KvStc;
  * 修改履历</br>
  * 日期      原因  BUG号    修改人 修改版本</br>
  */
-public class ZsInvoicingTznumAdapter extends BaseAdapter implements OnClickListener {
+public class ZsInvoicingTzAmendAdapter extends BaseAdapter implements OnClickListener {
 
     private Activity context;
-    private List<XtProIndexValue> dataLst;
+    private List<MitValaddaccountproMTemp> dataLst;
 
     /**
      * 构造函数
@@ -48,7 +40,7 @@ public class ZsInvoicingTznumAdapter extends BaseAdapter implements OnClickListe
      * @param dataLst
      * @param //itemLst
      */
-    public ZsInvoicingTznumAdapter(Activity context, List<XtProIndexValue> dataLst) {
+    public ZsInvoicingTzAmendAdapter(Activity context, List<MitValaddaccountproMTemp> dataLst) {
         this.context = context;
         this.dataLst = dataLst;//
     }
@@ -82,14 +74,17 @@ public class ZsInvoicingTznumAdapter extends BaseAdapter implements OnClickListe
         ViewHolder holder = null;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_zdzs_invocing_tz_num, null);
-            holder.numTv = (TextView)convertView.findViewById(R.id.item_zs_invocing_tz_num);
-            holder.timeTv = (TextView)convertView.findViewById(R.id.item_zs_invocing_tz_time);
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_zdzs_invocing_tz_amend, null);
+            holder.timeTv = (TextView)convertView.findViewById(R.id.item_tz_amend_time);
+            holder.numTv = (TextView)convertView.findViewById(R.id.item_tz_amend_num);
+            holder.nullTv = (TextView)convertView.findViewById(R.id.item_tz_amend_null);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder)convertView.getTag();
         }
-        XtProIndexValue item = dataLst.get(position);
+        MitValaddaccountproMTemp item = dataLst.get(position);
+        holder.numTv.setText(item.getValpronum());
+        holder.timeTv.setText(item.getValprotime().substring(0,10));
 
         return convertView;
     }
@@ -97,6 +92,7 @@ public class ZsInvoicingTznumAdapter extends BaseAdapter implements OnClickListe
     private class ViewHolder {
         private TextView numTv;
         private TextView timeTv;
+        private TextView nullTv;
     }
 
     @Override
