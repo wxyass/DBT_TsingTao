@@ -50,6 +50,8 @@ import et.tsingtaopad.db.table.MitGroupproductM;
 import et.tsingtaopad.db.table.MitPromotermInfo;
 import et.tsingtaopad.db.table.MitTerminalM;
 import et.tsingtaopad.db.table.MitTerminalinfoM;
+import et.tsingtaopad.db.table.MitValaddaccountM;
+import et.tsingtaopad.db.table.MitValaddaccountproM;
 import et.tsingtaopad.db.table.MitValagencykfM;
 import et.tsingtaopad.db.table.MitValcheckitemM;
 import et.tsingtaopad.db.table.MitValcheckitemMTemp;
@@ -166,6 +168,8 @@ public class XtUploadService {
     private Dao<MitAgencyproM, String> mitAgencyproMDao = null;
 
     private Dao<MitValgroupproM, String> mitValgroupproMDao = null;
+    private Dao<MitValaddaccountM, String> mitValaddaccountMDao = null;
+    private Dao<MitValaddaccountproM, String> mitValaddaccountproMDao = null;
 
     public XtUploadService(Context context, Handler handler) {
         this.handler = handler;
@@ -245,6 +249,10 @@ public class XtUploadService {
             mitAgencynumMDao = helper.getMitAgencynumMDao();
 
             mitAgencyproMDao = helper.getMitAgencyproMDao();
+
+            //
+            mitValaddaccountMDao = helper.getMitValaddaccountMDao();
+            mitValaddaccountproMDao = helper.getMitValaddaccountproMDao();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -611,6 +619,8 @@ public class XtUploadService {
     List<MitValcmpotherM> mitValcmpotherMs = new ArrayList<MitValcmpotherM>();
     List<MitValpicM> mitValpicMs = new ArrayList<MitValpicM>();
     List<MitValgroupproM> mitValgroupproMs = new ArrayList<MitValgroupproM>();
+    List<MitValaddaccountM> mitValaddaccountMs = new ArrayList<MitValaddaccountM>();
+    List<MitValaddaccountproM> mitValaddaccountproMs = new ArrayList<MitValaddaccountproM>();
 
     // 上传追溯数据
     public void upload_zs_visit(final boolean isNeedExit, final String valterid, final int whatId) {
@@ -632,6 +642,13 @@ public class XtUploadService {
                     mitValcmpotherMs = mitValcmpotherMDao.queryForFieldValues(valteridMap);
                     mitValpicMs = mitValpicMDao.queryForFieldValues(valteridMap);
                     mitValgroupproMs = mitValgroupproMDao.queryForFieldValues(valteridMap);
+
+                    Map<String, Object> idMap = new HashMap<String, Object>();
+                    idMap.put("valsupplyid", valterid);
+                    idMap.put("padisconsistent", "0");
+                    mitValaddaccountMs = mitValaddaccountMDao.queryForFieldValues(idMap);
+                    mitValaddaccountproMs = mitValaddaccountproMDao.queryForFieldValues(valteridMap);
+                    String sfd = "";
                 }
             } else {
                 // 只存放所有终端的最新一次拜访记录(分组)
@@ -663,6 +680,8 @@ public class XtUploadService {
                     mitValcmpotherMs = mitValcmpotherMDao.queryForEq("padisconsistent", "0");
                     mitValpicMs = mitValpicMDao.queryForEq("padisconsistent", "0");
                     mitValgroupproMs = mitValgroupproMDao.queryForEq("padisconsistent", "0");
+                    mitValaddaccountMs = mitValaddaccountMDao.queryForEq("padisconsistent", "0");
+                    mitValaddaccountproMs = mitValaddaccountproMDao.queryForEq("padisconsistent", "0");
                 }
             }
 
@@ -760,6 +779,26 @@ public class XtUploadService {
                         }
                     }
                     childDatas.put("MIT_VALPIC_M", JsonUtil.toJson(childValpicMs));
+
+                    // 10 终端进货台账主表
+                    List<MitValaddaccountM> childValaddaccountMs = new ArrayList<MitValaddaccountM>();
+                    for (MitValaddaccountM mitValpicM : mitValaddaccountMs) {
+                        if (valtermid.equals(mitValpicM.getValsupplyid())) {
+                            mitValpicM.setPadisconsistent("1");
+                            childValaddaccountMs.add(mitValpicM);
+                        }
+                    }
+                    childDatas.put("MIT_VALADDACCOUNT_M", JsonUtil.toJson(childValaddaccountMs));
+
+                    // 11 终端追溯台账产品详情表
+                    List<MitValaddaccountproM> childValaddaccountproMs = new ArrayList<MitValaddaccountproM>();
+                    for (MitValaddaccountproM mitValpicM : mitValaddaccountproMs) {
+                        if (valtermid.equals(mitValpicM.getValterid())) {
+                            mitValpicM.setPadisconsistent("1");
+                            childValaddaccountproMs.add(mitValpicM);
+                        }
+                    }
+                    childDatas.put("MIT_VALADDACCOUNTPRO_M", JsonUtil.toJson(childValaddaccountproMs));
 
                     mainDatas.add(childDatas);
                 }
@@ -1073,16 +1112,9 @@ public class XtUploadService {
 
                 String valterId = valterM.getId();
                 String terminalkey = valterM.getTerminalkey();
-                // 删除协同该终端其余的拜访记录
-                deleteZsMitVisitM(db, "MIT_VALTER_M", terminalkey, valterId);
-                deleteZsTable(db, "MIT_VALCHECKTYPE_M", valterId);
-                deleteZsTable(db, "MIT_VALCHECKITEM_M", valterId);
-                deleteZsTable(db, "MIT_VALPROMOTIONS_M", valterId);
-                deleteZsTable(db, "MIT_VALGROUPPRO_M", valterId);
-                deleteZsTable(db, "MIT_VALSUPPLY_M", valterId);
-                deleteZsTable(db, "MIT_VALCMP_M", valterId);
-                deleteZsTable(db, "MIT_VALCMPOTHER_M", valterId);
-                deleteZsTable(db, "MIT_VALPIC_M", valterId);
+
+                // 删除追溯时的数据 包含追溯主表
+                deleteZs(valterId,terminalkey,0);
 
             }
         } catch (Exception e) {
@@ -1090,10 +1122,22 @@ public class XtUploadService {
         }
     }
 
-    // 删除追溯时的数据 包含追溯主表
-    public void deleteZs(String valterId, String terminalkey) {
+    //
+
+    /**
+     * 删除追溯时的数据 包含追溯主表
+     * @param valterId
+     * @param terminalkey
+     * @param type  0:上传成功后,通知删除(除本次外)  1:这条记录不上传了,通知全部删除
+     */
+    public void deleteZs(String valterId, String terminalkey,int type) {
         SQLiteDatabase db = helper.getWritableDatabase();
-        deleteZsTable(db, "MIT_VALTER_M", valterId);
+        if(0==type){
+            // 删除追溯该终端(除本次外)其余的拜访记录
+            deleteZsMitVisitM(db, "MIT_VALTER_M", terminalkey, valterId);
+        }else if(1== type){
+            deleteZsTable(db, "MIT_VALTER_M", valterId);
+        }
         deleteZsTable(db, "MIT_VALCHECKTYPE_M", valterId);
         deleteZsTable(db, "MIT_VALCHECKITEM_M", valterId);
         deleteZsTable(db, "MIT_VALPROMOTIONS_M", valterId);

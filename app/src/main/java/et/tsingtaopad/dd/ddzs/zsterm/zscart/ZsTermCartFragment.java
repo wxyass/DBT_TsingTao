@@ -257,7 +257,7 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
                         if (0 == position) {// 确定按钮:0   取消按钮:-1
                             //if (ViewUtil.isDoubleClick(v.getId(), 2500)) return;
                             DbtLog.logUtils(TAG, "前往拜访：删除");
-                            xtUploadService.deleteZs(mitValterM.getId(),mitValterM.getTerminalkey());
+                            xtUploadService.deleteZs(mitValterM.getId(),mitValterM.getTerminalkey(),1);
                         }else if(1 == position){
                             DbtLog.logUtils(TAG, "前往拜访：上传");
                             xtUploadService.upload_zs_visit(false,mitValterM.getId(),1);

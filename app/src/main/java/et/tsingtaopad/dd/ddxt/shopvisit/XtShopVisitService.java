@@ -836,14 +836,14 @@ public class XtShopVisitService {
                     // 复制拉链表 MstCheckexerecordInfoTemp 全部复制   只有当天重复拜访才会复制上次数据,若是当天第一次拜访,只复制与产品无关的指标
                     createMstCheckexerecordInfoTemp(prevVisitId, visitDate, visitMTemp, valueDao, valueTempDao);
                     // 复制活动拜访终端表  true:当天重复拜访
-                    createMstPromotermInfoTemp(helper, prevVisitId, visitDate, visitMTemp, promDao, promTempDao, true);
+                    // createMstPromotermInfoTemp(helper, prevVisitId, visitDate, visitMTemp, promDao, promTempDao, true);
                     //
 
                 } else {// 当天第一次拜访
                     // 复制拉链表 MstCheckexerecordInfoTemp 当天第一次拜访,MstCheckexerecordInfoTemp 只复制与产品无关的指标
                     createMstCheckexerecordInfoTemp1(prevVisitId, visitDate, visitMTemp, valueDao, valueTempDao);
                     // 复制活动拜访终端表 false:当天第一次拜访
-                    createMstPromotermInfoTemp(helper, prevVisitId, visitDate, visitMTemp, promDao, promTempDao, false);
+                    // createMstPromotermInfoTemp(helper, prevVisitId, visitDate, visitMTemp, promDao, promTempDao, false);
                     // 复制采集项表
                     createMstCollectionexerecordInfoTemp(collectionDao, collectionTempDao, padCheckaccomplishInfoDao, prevVisitId, termStc, visitMTemp);
 
@@ -1105,6 +1105,7 @@ public class XtShopVisitService {
             // 复制附表
             indexValueItem = new MitValaddaccountproMTemp();
             indexValueItem.setId(FunUtil.getUUID());//
+            indexValueItem.setValterid(id);// 追溯主表ID
             indexValueItem.setValaddaccountid(zsTzItemIndex.getId());// 终端进货台账主表ID
             indexValueItem.setValprotime(ledgerInfo.getPurchasetime());// 台账日期
             //indexValueItem.setValpronumfalg();// 进货量正确与否
@@ -1421,13 +1422,16 @@ public class XtShopVisitService {
                     promotermInfoTemp = new MstPromotermInfoTemp();
                     promotermInfoTemp.setPtypekey(item.getPtypekey());
                     promotermInfoTemp.setTerminalkey(item.getTerminalkey());
-                    if (iscomflag) {// 重复拜访
+                    /*if (iscomflag) {// 重复拜访
                         promotermInfoTemp.setIsaccomplish(item.getIsaccomplish());// 是否达成
                         promotermInfoTemp.setRemarks(item.getRemarks());// 达成数组
                     } else {
                         promotermInfoTemp.setIsaccomplish("0");// 第一次拜访默认 未达成
                         promotermInfoTemp.setRemarks(null);
-                    }
+                    }*/
+                    promotermInfoTemp.setIsaccomplish(item.getIsaccomplish());// 是否达成
+                    promotermInfoTemp.setRemarks(item.getRemarks());// 达成数组
+
                     promotermInfoTemp.setCreuser(item.getCreuser());
                     promotermInfoTemp.setUpdateuser(item.getUpdateuser());
 
@@ -2086,8 +2090,8 @@ public class XtShopVisitService {
 
             deleteTable(helper, "MIT_VALTER_M_TEMP");// 追溯主表临时表
             deleteTable(helper, "MIT_VALSUPPLY_M_TEMP");// 追溯进销存表临时表
-            deleteTable(helper, "MIT_VALSUPPLY_M_TEMP");// 追溯聊竞品临时表
-            deleteTable(helper, "MIT_VALSUPPLY_M_TEMP");// 追溯促销活动终端表临时表
+            deleteTable(helper, "MIT_VALCMP_M_TEMP");// 追溯聊竞品临时表
+            deleteTable(helper, "MIT_VALPROMOTIONS_M_TEMP");// 追溯促销活动终端表临时表
             deleteTable(helper, "MIT_VALCHECKTYPE_M_TEMP");// 追溯拉链表临时表
             deleteTable(helper, "MIT_VALCHECKITEM_M_TEMP");// 追溯采集项表临时表
             deleteTable(helper, "MIT_VALCMPOTHER_M_TEMP");// 终端追溯竞品附表 临时表
@@ -3752,6 +3756,7 @@ public class XtShopVisitService {
             // 复制附表
             indexValueItem = new MitValaddaccountproMTemp();
             indexValueItem.setId(tzLedger.getValaddaccountproid());//
+            indexValueItem.setValterid(tzLedger.getValsupplyid());//
             indexValueItem.setValaddaccountid(tzLedger.getValaddaccountid());// 终端进货台账主表ID
             indexValueItem.setValprotime(tzLedger.getValprotime());// 台账日期
             indexValueItem.setValpronumfalg(tzLedger.getValpronumfalg());// 进货量正确与否

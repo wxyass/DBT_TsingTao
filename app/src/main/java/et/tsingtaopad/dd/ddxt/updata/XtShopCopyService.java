@@ -50,6 +50,10 @@ import et.tsingtaopad.db.table.MitCollectionexerecordInfo;
 import et.tsingtaopad.db.table.MitGroupproductM;
 import et.tsingtaopad.db.table.MitPromotermInfo;
 import et.tsingtaopad.db.table.MitTerminalinfoM;
+import et.tsingtaopad.db.table.MitValaddaccountM;
+import et.tsingtaopad.db.table.MitValaddaccountMTemp;
+import et.tsingtaopad.db.table.MitValaddaccountproM;
+import et.tsingtaopad.db.table.MitValaddaccountproMTemp;
 import et.tsingtaopad.db.table.MitValcheckitemM;
 import et.tsingtaopad.db.table.MitValcheckitemMTemp;
 import et.tsingtaopad.db.table.MitValchecktypeM;
@@ -1748,6 +1752,13 @@ public class XtShopCopyService {
             Dao<MitValpicM, String> mitValpicMDao = helper.getMitValpicMDao();
             Dao<MitValpicMTemp, String> mitValpicMTemppDao = helper.getMitValpicMTempDao();
 
+            // 复制 终端进货台账主表
+            Dao<MitValaddaccountM, String> mitValaddaccountMDao = helper.getMitValaddaccountMDao();
+            Dao<MitValaddaccountMTemp, String> mitValaddaccountMTempDao = helper.getMitValaddaccountMTempDao();
+            // 复制 终端追溯台账产品详情表
+            Dao<MitValaddaccountproM, String> mitValaddaccountproMDao = helper.getMitValaddaccountproMDao();
+            Dao<MitValaddaccountproMTemp, String> mitValaddaccountproMTempDao = helper.getMitValaddaccountproMTempDao();
+
             connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
             connection.setAutoCommit(false);
 
@@ -1780,6 +1791,10 @@ public class XtShopCopyService {
             // 复制追溯图片表
             createMitValpicMByTemp(mitValpicMDao,mitValpicMTemppDao,valterid);
 
+            // 复制 终端进货台账主表
+            createMitValaddaccountMByTemp(mitValaddaccountMDao,mitValaddaccountMTempDao,valterid);
+            createMitValaddaccountproMTempByTemp(mitValaddaccountproMDao,mitValaddaccountproMTempDao,valterid);
+
             connection.commit(null);
         } catch (Exception e) {
             Log.e(TAG, "更新拜访离店时间及是否要上传标志失败", e);
@@ -1792,6 +1807,77 @@ public class XtShopCopyService {
         }
     }
 
+    private void createMitValaddaccountproMTempByTemp(Dao<MitValaddaccountproM, String> mitValaddaccountproMDao,
+                                                      Dao<MitValaddaccountproMTemp, String> mitValaddaccountproMTempDao,
+                                                      String valterid) {
+        try {
+            QueryBuilder<MitValaddaccountproMTemp, String> collectionQB = mitValaddaccountproMTempDao.queryBuilder();
+            Where<MitValaddaccountproMTemp, String> collectionWhere = collectionQB.where();
+            collectionWhere.eq("valterid", valterid);
+            List<MitValaddaccountproMTemp> cameraInfoMTemps = collectionQB.query();
+            if(cameraInfoMTemps.size()>0){
+                for (MitValaddaccountproMTemp item:cameraInfoMTemps) {
+                    MitValaddaccountproM info = new MitValaddaccountproM();
+                    info.setId(item.getId());// 主键
+                    info.setValterid(item.getValterid());// 终端ID
+
+                    info.setValaddaccountid(item.getValaddaccountid());// 终端进货台账主表ID
+                    info.setValprotime(item.getValprotime());// 台账日期
+                    info.setValpronumfalg(item.getValpronumfalg());// 进货量正确与否
+                    info.setValpronum(item.getValpronum());// 进货量原值
+                    info.setValprotruenum(item.getValprotruenum());// 进货量正确值
+                    info.setValproremark(item.getValproremark());// 备注
+
+                    info.setUploadflag("1");
+                    info.setPadisconsistent("0");// 是否已上传 0:未上传 1:已上传
+
+                    mitValaddaccountproMDao.create(info);
+                }
+            }
+        }catch (Exception e){
+            Log.e(TAG, "复制追溯图片表失败", e);
+        }
+    }
+
+    // 复制 终端进货台账主表
+    private void createMitValaddaccountMByTemp(Dao<MitValaddaccountM, String> mitValaddaccountMDao,
+                                               Dao<MitValaddaccountMTemp, String> mitValaddaccountMTempDao,
+                                               String valterid) {
+
+        try {
+            QueryBuilder<MitValaddaccountMTemp, String> collectionQB = mitValaddaccountMTempDao.queryBuilder();
+            Where<MitValaddaccountMTemp, String> collectionWhere = collectionQB.where();
+            collectionWhere.eq("valsupplyid", valterid);
+            List<MitValaddaccountMTemp> cameraInfoMTemps = collectionQB.query();
+            if(cameraInfoMTemps.size()>0){
+                for (MitValaddaccountMTemp item:cameraInfoMTemps) {
+                    MitValaddaccountM info = new MitValaddaccountM();
+                    info.setId(item.getId());// 主键
+
+                    info.setValsupplyid(item.getValsupplyid());// 追溯主表ID
+                    info.setValagencyid(item.getValagencyid());//经销商ID
+                    info.setValagencyname(item.getValagencyname());// 经销商名称
+                    info.setValterid(item.getValterid());// 终端ID
+                    info.setValtername(item.getValtername());// 终端名称
+                    info.setValproid(item.getValproid());//产品ID
+                    info.setValproname(item.getValproname());//  产品名称
+                    info.setValprostatus(item.getValprostatus());//  稽查状态
+
+                    info.setUploadflag("1");
+                    info.setPadisconsistent("0");// 是否已上传 0:未上传 1:已上传
+
+                    info.setCredate(new Date());
+                    info.setUpdatedate(new Date());
+                    info.setCreuser(PrefUtils.getString(context,"userid",""));
+                    info.setUpdateuser(PrefUtils.getString(context,"userid",""));
+
+                    mitValaddaccountMDao.create(info);
+                }
+            }
+        }catch (Exception e){
+            Log.e(TAG, "复制追溯图片表失败", e);
+        }
+    }
 
 
     // 复制追溯主表 临时表到主表

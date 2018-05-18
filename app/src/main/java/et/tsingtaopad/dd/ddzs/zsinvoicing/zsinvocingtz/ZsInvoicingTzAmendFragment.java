@@ -8,13 +8,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
+import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.db.table.MitValaddaccountproMTemp;
+import et.tsingtaopad.dd.ddagencycheck.domain.ZsInOutSaveStc;
 import et.tsingtaopad.dd.ddzs.zsinvoicing.ZsInvoicingFragment;
 import et.tsingtaopad.dd.ddzs.zsinvoicing.zsinvocingtz.domain.ZsTzItemIndex;
 
@@ -37,6 +40,7 @@ public class ZsInvoicingTzAmendFragment extends BaseFragmentSupport implements V
     private Button sureBtn;
 
     protected ZsTzItemIndex zstzitemindex;//
+    protected List<MitValaddaccountproMTemp> valaddaccountproMTemps;//
 
     public ZsInvoicingTzAmendFragment() {
 
@@ -66,14 +70,16 @@ public class ZsInvoicingTzAmendFragment extends BaseFragmentSupport implements V
         confirmBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
 
+
         amend_lv = (et.tsingtaopad.view.NoScrollListView) view.findViewById(R.id.zs_invoicing_tz_amend_lv);
+        sureBtn = (Button) view.findViewById(R.id.zs_invoicing_tz_amend_btn);
+        sureBtn.setOnClickListener(this);
 
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
 
 
         // 获取传递过来的数据
@@ -87,7 +93,7 @@ public class ZsInvoicingTzAmendFragment extends BaseFragmentSupport implements V
 
     private void initData() {
 
-        List<MitValaddaccountproMTemp>  valaddaccountproMTemps = zstzitemindex.getIndexValueLst();
+        valaddaccountproMTemps = zstzitemindex.getIndexValueLst();
         amend_lv.setAdapter(new ZsInvoicingTzAmendAdapter(getActivity(), valaddaccountproMTemps));
 
     }
@@ -102,7 +108,7 @@ public class ZsInvoicingTzAmendFragment extends BaseFragmentSupport implements V
                 break;
 
 
-            case R.id.zdzs_invoicing_amend_dd_bt_save:// 确定
+            case R.id.zs_invoicing_tz_amend_btn:// 确定
                 saveValue();
                 supportFragmentManager.popBackStack();
                 break;
@@ -114,9 +120,30 @@ public class ZsInvoicingTzAmendFragment extends BaseFragmentSupport implements V
 
     private void saveValue() {
 
+        //
+        View itemV;
+        // 遍历活动状态的达成情况
+        EditText protruenum;
+        for (int i = 0; i < valaddaccountproMTemps.size(); i++) {
+            itemV = amend_lv.getChildAt(i);
+            if (itemV == null || itemV.findViewById(R.id.item_tz_amend_num) == null)
+                continue;
+            protruenum = (EditText) itemV.findViewById(R.id.item_tz_amend_num);
+            String ddpronum = protruenum.getText().toString();
+            MitValaddaccountproMTemp mTemp = valaddaccountproMTemps.get(i);
+            mTemp.setValprotruenum(ddpronum);
+            if (FunUtil.isBlankOrNullTo(mTemp.getValpronum(), "").equals(FunUtil.isBlankOrNullTo(ddpronum, ""))) {
+                mTemp.setValpronumfalg("Y");
+            } else {
+                mTemp.setValpronumfalg("N");
+            }
+        }
+
+        //
+        zstzitemindex.setValprostatus("N");
+        handler.sendEmptyMessage(ZsInvoicingFragment.MAKE_RIGHT_TZ);
 
     }
-
 
 
 }

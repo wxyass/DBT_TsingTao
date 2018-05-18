@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.Date;
@@ -76,21 +77,21 @@ public class ZsInvoicingTzAmendAdapter extends BaseAdapter implements OnClickLis
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.item_zdzs_invocing_tz_amend, null);
             holder.timeTv = (TextView)convertView.findViewById(R.id.item_tz_amend_time);
-            holder.numTv = (TextView)convertView.findViewById(R.id.item_tz_amend_num);
+            holder.numTv = (EditText)convertView.findViewById(R.id.item_tz_amend_num);
             holder.nullTv = (TextView)convertView.findViewById(R.id.item_tz_amend_null);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder)convertView.getTag();
         }
         MitValaddaccountproMTemp item = dataLst.get(position);
-        holder.numTv.setText(item.getValpronum());
+        holder.numTv.setText(item.getValprotruenum());
         holder.timeTv.setText(item.getValprotime().substring(0,10));
 
         return convertView;
     }
 
     private class ViewHolder {
-        private TextView numTv;
+        private EditText numTv;
         private TextView timeTv;
         private TextView nullTv;
     }

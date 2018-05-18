@@ -1133,10 +1133,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 String MIT_VALADDACCOUNT_M_TEMP = "create table MIT_VALADDACCOUNT_M_TEMP ( id varchar2(36) not null, valsupplyid varchar2(36) null, valagencyid varchar2(36) null, valagencyname varchar2(36) null, valterid    varchar2(36) null, valtername   varchar2(36) null, valproid    varchar2(36) null, valproname    varchar2(36) null, valprostatus   char(1) null, creuser varchar2(128)  null, credate date   null, updateuser  varchar2(128)  null, updatedate  date   null, uploadflag varchar2(1) null, padisconsistent varchar2(1) null )";
                 db.execSQL(MIT_VALADDACCOUNT_M_TEMP);
                 // 终端追溯台账产品详情表
-                String MIT_VALADDACCOUNTPRO_M = "create table MIT_VALADDACCOUNTPRO_M ( id varchar2(36) not null, valaddaccountid varchar2(36) null, valprotime  varchar2(36) null, valpronumfalg  char(1) null, valpronum   varchar2(10) null, valprotruenum  varchar2(10) null, valproremark   varchar2(300)  null, uploadflag varchar2(1) null, padisconsistent varchar2(1) null )";
+                String MIT_VALADDACCOUNTPRO_M = "create table MIT_VALADDACCOUNTPRO_M ( id varchar2(36) not null,valterid varchar2(36) null, valaddaccountid varchar2(36) null, valprotime  varchar2(36) null, valpronumfalg  char(1) null, valpronum   varchar2(10) null, valprotruenum  varchar2(10) null, valproremark   varchar2(300)  null, uploadflag varchar2(1) null, padisconsistent varchar2(1) null )";
                 db.execSQL(MIT_VALADDACCOUNTPRO_M);
                 // 终端追溯台账产品详情表
-                String MIT_VALADDACCOUNTPRO_M_TEMP = "create table MIT_VALADDACCOUNTPRO_M_TEMP ( id varchar2(36) not null, valaddaccountid varchar2(36) null, valprotime  varchar2(36) null, valpronumfalg  char(1) null, valpronum   varchar2(10) null, valprotruenum  varchar2(10) null, valproremark   varchar2(300)  null, uploadflag varchar2(1) null, padisconsistent varchar2(1) null )";
+                String MIT_VALADDACCOUNTPRO_M_TEMP = "create table MIT_VALADDACCOUNTPRO_M_TEMP ( id varchar2(36) not null,valterid varchar2(36) null, valaddaccountid varchar2(36) null, valprotime  varchar2(36) null, valpronumfalg  char(1) null, valpronum   varchar2(10) null, valprotruenum  varchar2(10) null, valproremark   varchar2(300)  null, uploadflag varchar2(1) null, padisconsistent varchar2(1) null )";
                 db.execSQL(MIT_VALADDACCOUNTPRO_M_TEMP);
 
             } catch (Exception e) {

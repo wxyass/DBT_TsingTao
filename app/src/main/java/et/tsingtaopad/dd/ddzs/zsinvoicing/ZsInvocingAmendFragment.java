@@ -24,6 +24,7 @@ import et.tsingtaopad.R;
 import et.tsingtaopad.adapter.AlertKeyValueAdapter;
 import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.db.table.MitValsupplyMTemp;
 import et.tsingtaopad.db.table.MitValterMTemp;
@@ -275,22 +276,21 @@ public class ZsInvocingAmendFragment extends BaseFragmentSupport implements View
         if(valdataerror){
             valsupplyMTemp.setValdataerror("Y");// 数据异常
             // 供货关系正确渠道价状态
-            if(valsupplyMTemp.getValsqd().equals(qdinfo)){
+            if(FunUtil.isBlankOrNullTo(valsupplyMTemp.getValsqd(),"").equals(qdinfo)){
                 valsupplyMTemp.setValagencyqdflag("Y");// 与业代数据一致
             }else{
                 valsupplyMTemp.setValagencyqdflag("N");// 与业代数据不一致
             }
             // 供货关系正确零售价状态
-            if(valsupplyMTemp.getValsls().equals(lsinfo)){
-                valsupplyMTemp.setValagencysupplyls("Y");// 与业代数据一致
+            if(FunUtil.isBlankOrNullTo(valsupplyMTemp.getValsls(),"").equals(lsinfo)){
+                valsupplyMTemp.setValagencylsflag("Y");// 与业代数据一致
             }else{
-                valsupplyMTemp.setValagencysupplyls("N");// 与业代数据不一致
+                valsupplyMTemp.setValagencylsflag("N");// 与业代数据不一致
             }
-
         }else{
             valsupplyMTemp.setValdataerror("N");// 数据正常
             valsupplyMTemp.setValagencyqdflag("Y");// 与业代数据一致
-            valsupplyMTemp.setValagencysupplyls("Y");// 与业代数据一致
+            valsupplyMTemp.setValagencylsflag("Y");// 与业代数据一致
         }
 
 

@@ -24,6 +24,8 @@ import et.tsingtaopad.db.dao.MitValsupplyMTempDao;
 import et.tsingtaopad.db.dao.MstTermLedgerInfoDao;
 import et.tsingtaopad.db.dao.MstVistproductInfoDao;
 import et.tsingtaopad.db.dao.MstVistproductInfoTempDao;
+import et.tsingtaopad.db.table.MitValaddaccountMTemp;
+import et.tsingtaopad.db.table.MitValaddaccountproMTemp;
 import et.tsingtaopad.db.table.MitValsupplyMTemp;
 import et.tsingtaopad.db.table.MstAgencysupplyInfo;
 import et.tsingtaopad.db.table.MstAgencysupplyInfoTemp;
@@ -33,6 +35,7 @@ import et.tsingtaopad.db.table.MstVistproductInfo;
 import et.tsingtaopad.db.table.MstVistproductInfoTemp;
 import et.tsingtaopad.dd.ddxt.invoicing.domain.XtInvoicingStc;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtShopVisitService;
+import et.tsingtaopad.dd.ddzs.zsinvoicing.zsinvocingtz.domain.ZsTzItemIndex;
 
 /**
  * 文件名：XtShopVisitService.java</br>
@@ -258,4 +261,33 @@ public class ZsInvoicingService extends XtShopVisitService {
         }
     }
 
+    public void saveZsInvoicingTz(List<ZsTzItemIndex> termLedgerInfos) {
+        if (CheckUtil.IsEmpty(termLedgerInfos)) {
+            return;
+        }
+        AndroidDatabaseConnection connection = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MitValaddaccountMTemp, String> supplyDao = helper.getDao(MitValaddaccountMTemp.class);
+            Dao<MitValaddaccountproMTemp, String> valaddaccountproMTempDao = helper.getDao(MitValaddaccountproMTemp.class);
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+            MitValaddaccountMTemp valaddaccountMTemp ;
+            for (ZsTzItemIndex pro : termLedgerInfos) {
+                // valaddaccountMTemp = new MitValaddaccountMTemp();
+                supplyDao.createOrUpdate(pro);
+                for (MitValaddaccountproMTemp mTemp :pro.getIndexValueLst()){
+                    valaddaccountproMTempDao.createOrUpdate(mTemp);
+                }
+            }
+            connection.commit(null);
+        } catch (Exception e) {
+            Log.e(TAG, "保存进销存数据发生异常", e);
+            try {
+                connection.rollback(null);
+            } catch (SQLException e1) {
+                Log.e(TAG, "回滚进销存数据发生异常", e1);
+            }
+        }
+    }
 }

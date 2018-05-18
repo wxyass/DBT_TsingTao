@@ -35,8 +35,8 @@ public class MitValaddaccountMDaoImpl extends BaseDaoImpl<MitValaddaccountM, Str
         List<ZsTzLedger> lst = new ArrayList<ZsTzLedger>();
         StringBuffer buffer = new StringBuffer();
         buffer.append("select mv.id valaddaccountid, g.id valaddaccountproid, mv.valsupplyid,  ");
-        buffer.append("   mv.valagencyid, mv.valagencyname, mv.valterid, mv.valtername,  ");
-        buffer.append("   mv.valproid, mv.valproname,  mv.valprostatus,  g.valprotime,    ");
+        buffer.append("   mv.valagencyid, mv.valagencyname, mv.valterid termid, mv.valtername,  ");
+        buffer.append("   mv.valproid, mv.valproname,  mv.valprostatus,  g.valprotime,   ");
         buffer.append("   g.valpronumfalg, g.valpronum,  g.valprotruenum,  g.valproremark    ");
         buffer.append("   from MIT_VALADDACCOUNT_M_TEMP mv   ");
         buffer.append("   left join MIT_VALADDACCOUNTPRO_M_TEMP g on g.valaddaccountid = mv.id   ");
@@ -53,7 +53,7 @@ public class MitValaddaccountMDaoImpl extends BaseDaoImpl<MitValaddaccountM, Str
 
             item.setValagencyid(cursor.getString(cursor.getColumnIndex("valagencyid")));//经销商ID
             item.setValagencyname(cursor.getString(cursor.getColumnIndex("valagencyname")));// 经销商名称
-            item.setValterid(cursor.getString(cursor.getColumnIndex("valterid")));// 终端ID
+            item.setValterid(cursor.getString(cursor.getColumnIndex("termid")));// 终端ID
             item.setValtername(cursor.getString(cursor.getColumnIndex("valtername")));// 终端名称
             item.setValproid(cursor.getString(cursor.getColumnIndex("valproid")));//产品ID
             item.setValproname(cursor.getString(cursor.getColumnIndex("valproname")));//  产品名称

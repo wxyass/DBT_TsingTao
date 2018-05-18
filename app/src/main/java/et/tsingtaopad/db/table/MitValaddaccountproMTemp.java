@@ -16,6 +16,8 @@ public class MitValaddaccountproMTemp implements java.io.Serializable {
     @DatabaseField(canBeNull = false, id = true)
     private String id;//
     @DatabaseField
+    private String valterid;// 追溯主表ID
+    @DatabaseField
     private String valaddaccountid;// 终端进货台账主表ID
     @DatabaseField
     private String valprotime;// 台账日期
@@ -109,5 +111,13 @@ public class MitValaddaccountproMTemp implements java.io.Serializable {
 
     public void setPadisconsistent(String padisconsistent) {
         this.padisconsistent = padisconsistent;
+    }
+
+    public String getValterid() {
+        return valterid;
+    }
+
+    public void setValterid(String valterid) {
+        this.valterid = valterid;
     }
 }

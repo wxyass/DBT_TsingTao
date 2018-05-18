@@ -206,7 +206,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
             }
         });
         promotionLv.setAdapter(xtPromotionAdapter);
-        //ViewUtil.setListViewHeight(promotionLv);
+        ViewUtil.setListViewHeight(promotionLv);
 
         // 其他信息
         noProIndexLst = service.queryZsNoProIndex(preVisitkey, term.getMinorchannel(), seeFlag);

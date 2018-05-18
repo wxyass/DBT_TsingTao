@@ -20,12 +20,13 @@
             android:gravity="center_vertical"
             android:text="进货量"/>
 
-        <TextView
+        <EditText
             android:id="@+id/item_tz_amend_num"
             android:layout_width="0dp"
             android:layout_height="@dimen/xtbf_item_h"
             android:layout_weight="3"
             android:gravity="center_vertical"
+            android:background="@drawable/bg_visit_record"
             android:text="40"/>
 
         <TextView

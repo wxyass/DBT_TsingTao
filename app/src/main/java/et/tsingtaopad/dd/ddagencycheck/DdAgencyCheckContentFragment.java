@@ -189,7 +189,7 @@ public class DdAgencyCheckContentFragment extends BaseFragmentSupport implements
             zsInOutSaveStc.setRealstore(realStoreEt.getText().toString());
             zsInOutSaveStc.setDes(desEt.getText().toString());
         }
-        zsInOutSaveStcs.get(0);
+        // zsInOutSaveStcs.get(0);
 
         // 存储 经销商库存盘点主表
         MitAgencynumM mitAgencynumM = service.saveMitAgencynumM(asStc);

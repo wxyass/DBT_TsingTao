@@ -223,8 +223,15 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
                 case INIT_AMEND: // 督导输入数据后
                     fragment.showAdapter();
                     break;
+                case MAKE_RIGHT_TZ: // 台账输入数据后
+                    fragment.showTzAdapter();
+                    break;
             }
         }
+    }
+
+    private void showTzAdapter() {
+        tzAdapter.notifyDataSetChanged();
     }
 
     private void showAdapter() {
@@ -289,6 +296,9 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
 
         // 保存追溯 进销存数据  MitValsupplyMTemp
         invoicingService.saveZsInvoicing(dataLst);
+        invoicingService.saveZsInvoicingTz(termLedgerInfos);
+
+
     }
 
     private AlertView mAlertViewExt;//窗口拓展例子
