@@ -132,6 +132,7 @@
                         style="@style/zdzs_sayhi_content2"
                         android:background="@drawable/bg_visit_record"
                         android:inputType="number|numberDecimal"
+                        android:maxLength="10"
                         android:text=""/>
 
 
@@ -159,6 +160,7 @@
                         style="@style/zdzs_sayhi_content2"
                         android:background="@drawable/bg_visit_record"
                         android:inputType="number|numberDecimal"
+                        android:maxLength="10"
                         android:text=""/>
 
 
@@ -186,6 +188,7 @@
                         style="@style/zdzs_sayhi_content2"
                         android:background="@drawable/bg_visit_record"
                         android:inputType="number|numberDecimal"
+                        android:maxLength="10"
                         android:text=""/>
 
 
@@ -213,6 +216,7 @@
                         style="@style/zdzs_sayhi_content2"
                         android:background="@drawable/bg_visit_record"
                         android:inputType="number|numberDecimal"
+                        android:maxLength="10"
                         android:text=""/>
 
 
@@ -267,7 +271,8 @@
                         android:layout_marginRight="10dp"
                         android:background="@drawable/bg_visit_record"
                         android:hint="请输入窜货信息"
-                        android:inputType="textMultiLine"/>
+                        android:inputType="textMultiLine"
+                        android:maxLength="150"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -311,7 +316,8 @@
                     android:layout_marginRight="10dp"
                     android:background="@drawable/bg_visit_record"
                     android:hint="请输入备注内容"
-                    android:inputType="textMultiLine"/>
+                    android:inputType="textMultiLine"
+                    android:maxLength="150"/>
             </LinearLayout>
 
             <View

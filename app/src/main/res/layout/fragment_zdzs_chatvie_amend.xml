@@ -63,6 +63,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:background="@drawable/bg_visit_record"
+                        android:maxLength="50"
                         android:hint="请输入经销商信息"
                         android:inputType="textMultiLine"/>
                 </LinearLayout>
@@ -123,6 +124,7 @@
                         style="@style/zdzs_sayhi_content2"
                         android:background="@drawable/bg_visit_record"
                         android:inputType="number|numberDecimal"
+                        android:maxLength="10"
                         android:text=""/>
 
 
@@ -150,6 +152,7 @@
                         style="@style/zdzs_sayhi_content2"
                         android:background="@drawable/bg_visit_record"
                         android:inputType="number|numberDecimal"
+                        android:maxLength="10"
                         android:text=""/>
 
 
@@ -177,6 +180,7 @@
                         style="@style/zdzs_sayhi_content2"
                         android:background="@drawable/bg_visit_record"
                         android:inputType="number|numberDecimal"
+                        android:maxLength="10"
                         android:text=""/>
 
 
@@ -204,6 +208,7 @@
                         style="@style/zdzs_sayhi_content2"
                         android:background="@drawable/bg_visit_record"
                         android:inputType="number|numberDecimal"
+                        android:maxLength="10"
                         android:text=""/>
 
 
@@ -250,6 +255,7 @@
                     android:layout_marginRight="10dp"
                     android:background="@drawable/bg_visit_record"
                     android:hint="请输入备注内容"
+                    android:maxLength="150"
                     android:inputType="textMultiLine"/>
             </LinearLayout>
 

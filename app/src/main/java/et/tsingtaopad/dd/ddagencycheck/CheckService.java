@@ -738,7 +738,7 @@ public class CheckService {
         return tagAgencySearchLst;
     }
 
-    public MitAgencynumM saveMitAgencynumM(AgencySelectStc asStc) {
+    public MitAgencynumM saveMitAgencynumM(AgencySelectStc asStc, String secondAreaid) {
         AndroidDatabaseConnection connection = null;
         MitAgencynumM info = new MitAgencynumM();
         try {
@@ -750,6 +750,7 @@ public class CheckService {
             info.setId(FunUtil.getUUID());
             info.setAgencyid(asStc.getAgencyKey());
             info.setCreuserareaid(PrefUtils.getString(context,"departmentid",""));
+            info.setAgencyareaid(secondAreaid);
             info.setCredate(new Date());
             info.setUpdatedate(new Date());
             info.setCreuser(PrefUtils.getString(context,"userid",""));
@@ -770,7 +771,7 @@ public class CheckService {
         return  info;
     }
 
-    public List<MitAgencyproM> saveMitAgencyproM(String agencynumid, List<ZsInOutSaveStc> zsInOutSaveStcs) {
+    public List<MitAgencyproM> saveMitAgencyproM(String agencynumid, List<ZsInOutSaveStc> zsInOutSaveStcs, String secondAreaid) {
 
         AndroidDatabaseConnection connection = null;
         List<MitAgencyproM>  mitAgencyproMS = new ArrayList<>();

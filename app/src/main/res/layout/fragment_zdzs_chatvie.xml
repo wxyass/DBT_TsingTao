@@ -175,6 +175,7 @@
                     android:layout_marginRight="10dp"
                     android:background="@drawable/bg_visit_record"
                     android:hint="请输入拜访记录"
+                    android:maxLength="150"
                     android:inputType="textMultiLine"/>
             </LinearLayout>
 

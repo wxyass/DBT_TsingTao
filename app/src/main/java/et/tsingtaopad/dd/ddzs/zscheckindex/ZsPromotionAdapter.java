@@ -51,7 +51,7 @@ public class ZsPromotionAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int arg0) {
+    public CheckIndexPromotionStc getItem(int arg0) {
         if (CheckUtil.IsEmpty(dataLst)) {
             return null;
         } else {
@@ -71,6 +71,7 @@ public class ZsPromotionAdapter extends BaseAdapter {
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.item_zdzs_checkindex_promotion, null);
+
             holder.promotionLl = (LinearLayout) convertView.findViewById(R.id.item_zs_checkindex_ll_promo);// 第一行
             holder.promotionNameTv = (TextView) convertView.findViewById(R.id.item_zs_checkindex_tv_promotionname);// 活动名称
             holder.showProTv = (TextView) convertView.findViewById(R.id.item_zs_checkindex_tv_proname);// 产品名称
@@ -79,6 +80,7 @@ public class ZsPromotionAdapter extends BaseAdapter {
             holder.statueTv = (TextView)convertView.findViewById(R.id.item_zs_checkindex_tv_statue);// 未稽查tv
             holder.statueRl = (RelativeLayout)convertView.findViewById(R.id.item_zs_checkindex_rl_statue);// 未稽查Rl
             holder.reachnum = (TextView) convertView.findViewById(R.id.item_zs_checkindex_et_zushu);//达成组数
+
             holder.proLl = (LinearLayout) convertView.findViewById(R.id.item_zs_checkindex_ll_pro);//产品展示,整体
             holder.proNameTv = (TextView) convertView.findViewById(R.id.item_zs_checkindex_lv_proname);//产品展示.Tv
 

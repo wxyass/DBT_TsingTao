@@ -6,6 +6,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatTextView;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
@@ -23,7 +27,9 @@ import java.util.List;
 import et.tsingtaopad.R;
 import et.tsingtaopad.adapter.AlertKeyValueAdapter;
 import et.tsingtaopad.base.BaseFragmentSupport;
+import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.DbtUtils;
+import et.tsingtaopad.core.util.dbtutil.FileUtil;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
@@ -71,7 +77,6 @@ public class DdAddTermFragment extends BaseFragmentSupport implements View.OnCli
     public static final int TERMROUDE = 25013;// 路线
 
     private EditText termnameEt;
-    private TextView termcodeEt;
 
     private RelativeLayout termareaidRl;
     private TextView termareaidTv;
@@ -155,7 +160,6 @@ public class DdAddTermFragment extends BaseFragmentSupport implements View.OnCli
         backBtn.setOnClickListener(this);
 
         termnameEt = (EditText) view.findViewById(R.id.dd_addterm_termname);
-        termcodeEt = (TextView) view.findViewById(R.id.dd_addterm_termcode);
 
         termroudeRl = (RelativeLayout) view.findViewById(R.id.dd_addterm_rl_termroude);
         termroudeTv = (TextView) view.findViewById(R.id.dd_addterm_termroude);
@@ -231,6 +235,40 @@ public class DdAddTermFragment extends BaseFragmentSupport implements View.OnCli
     private void initData() {
         titleTv.setText("漏店补录");
         service = new DdAddTermService(getActivity(), handler);
+
+        // 终端名称 过滤
+        termnameEt.addTextChangedListener(new TextWatcher() {
+            private int cou = 0;
+            int selectionEnd = 0;
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                cou = before + count;
+                String editable = termnameEt.getText().toString();
+                String str = CheckUtil.stringFilter(editable); // 过滤特殊字符
+                if (!editable.equals(str)) {
+                    Toast.makeText(getActivity(), "不能输入特殊字符", Toast.LENGTH_SHORT).show();
+                    termnameEt.setText(str);
+                }
+                termnameEt.setSelection(termnameEt.length());
+                cou = termnameEt.length();
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (cou > 20) {
+                    selectionEnd = termnameEt.getSelectionEnd();
+                    s.delete(20, selectionEnd);
+                }
+            }
+        });
+
     }
 
     @Override
@@ -455,14 +493,13 @@ public class DdAddTermFragment extends BaseFragmentSupport implements View.OnCli
 
             case R.id.dd_addterm_bt_next:// 保存
                 saveValue();
-                supportFragmentManager.popBackStack();
+
                 break;
 
             default:
                 break;
         }
     }
-
 
 
     /***
@@ -850,29 +887,55 @@ public class DdAddTermFragment extends BaseFragmentSupport implements View.OnCli
         }
     }
 
+    String termname;
+    String termareaid;
+    String termgridid;
+    String termroude;
+    String termlv;
+    String termprovince;
+    String termcity;
+    String termcountry;
+    String termaddress;
+    String termcontact;
+    String termphone;
+    String termcycle;
+    String termsequence;
+    String termhvolume;
+    String termmvolume;
+    String termpvolume;
+    String termlvolume;
+    String termarea;
+    String termsellchannel;
+    String termtmainchannel;
+    String termminorchannel;
+
     // 保存数据
     private void saveValue() {
-        String termname = termnameEt.getText().toString();
-        String termareaid = (String) termareaidTv.getTag();
-        String termgridid = (String) termgrididTv.getTag();
-        String termroude = (String) termroudeTv.getTag();
-        String termlv = (String) termlvTv.getTag();
-        String termprovince = (String) termprovinceTv.getTag();
-        String termcity = (String) termcityTv.getTag();
-        String termcountry = (String) termcountryTv.getTag();
-        String termaddress = termaddressEt.getText().toString();
-        String termcontact = termcontactEt.getText().toString();
-        String termphone = termphoneEt.getText().toString();
-        String termcycle = termcycleEt.getText().toString();
-        String termsequence = termsequenceEt.getText().toString();
-        String termhvolume = termhvolumeEt.getText().toString();
-        String termmvolume = termmvolumeEt.getText().toString();
-        String termpvolume = termpvolumeEt.getText().toString();
-        String termlvolume = termlvolumeEt.getText().toString();
-        String termarea = (String) termareaTv.getTag();
-        String termsellchannel = (String) termsellchannelTv.getTag();
-        String termtmainchannel = (String) termtmainchannelTv.getTag();
-        String termminorchannel = (String) termminorchannelTv.getTag();
+        termname = termnameEt.getText().toString();
+        termareaid = (String) termareaidTv.getTag();
+        termgridid = (String) termgrididTv.getTag();
+        termroude = (String) termroudeTv.getTag();
+        termlv = (String) termlvTv.getTag();
+        termprovince = (String) termprovinceTv.getTag();
+        termcity = (String) termcityTv.getTag();
+        termcountry = (String) termcountryTv.getTag();
+        termaddress = termaddressEt.getText().toString();
+        termcontact = termcontactEt.getText().toString();
+        termphone = termphoneEt.getText().toString();
+        termcycle = termcycleEt.getText().toString();
+        termsequence = termsequenceEt.getText().toString();
+        termhvolume = termhvolumeEt.getText().toString();
+        termmvolume = termmvolumeEt.getText().toString();
+        termpvolume = termpvolumeEt.getText().toString();
+        termlvolume = termlvolumeEt.getText().toString();
+        termarea = (String) termareaTv.getTag();
+        termsellchannel = (String) termsellchannelTv.getTag();
+        termtmainchannel = (String) termtmainchannelTv.getTag();
+        termminorchannel = (String) termminorchannelTv.getTag();
+
+        if (!checkAddTerm()) {
+            return;
+        }
 
         MitTerminalM mitTerminalM = new MitTerminalM();
         // mitTerminalM.setTerminalkey();
@@ -906,6 +969,49 @@ public class DdAddTermFragment extends BaseFragmentSupport implements View.OnCli
         // 上传数据
         XtUploadService xtUploadService = new XtUploadService(getActivity(), null);
         xtUploadService.uploadMitTerminalM(false, mitTerminalM, 1);
+
+        supportFragmentManager.popBackStack();
+    }
+
+    private boolean checkAddTerm() {
+        boolean right = true;
+        if (termname == null || "".equals(termname.trim())) {
+            Toast.makeText(getActivity(), "请输入终端名称", Toast.LENGTH_SHORT).show();
+            right = false;
+        } else if (termroude == null || "".equals(termroude.trim())) {
+            Toast.makeText(getActivity(), "请选择所属路线", Toast.LENGTH_SHORT).show();
+            right = false;
+        } else if (termlv == null || "".equals(termlv.trim())) {
+            Toast.makeText(getActivity(), "请选择终端等级", Toast.LENGTH_SHORT).show();
+            right = false;
+        } else if (termcity == null || "".equals(termcity.trim())) {
+            Toast.makeText(getActivity(), "请选择所在市", Toast.LENGTH_SHORT).show();
+            right = false;
+        } else if (termcountry == null || "".equals(termcountry.trim())) {
+            Toast.makeText(getActivity(), "请选择所在县", Toast.LENGTH_SHORT).show();
+            right = false;
+        } else if (termaddress == null || "".equals(termaddress.trim())) {
+            Toast.makeText(getActivity(), "请输入地址", Toast.LENGTH_SHORT).show();
+            right = false;
+        } else if (termcontact == null || "".equals(termcontact.trim())) {
+            Toast.makeText(getActivity(), "请输入联系人", Toast.LENGTH_SHORT).show();
+            right = false;
+        } else if (termphone == null || "".equals(termphone.trim())) {
+            Toast.makeText(getActivity(), "请输入电话", Toast.LENGTH_SHORT).show();
+            right = false;
+        } else if (termsellchannel == null || "".equals(termsellchannel.trim())) {
+            Toast.makeText(getActivity(), "请选择销售渠道", Toast.LENGTH_SHORT).show();
+            right = false;
+        } else if (termtmainchannel == null || "".equals(termtmainchannel.trim())) {
+            Toast.makeText(getActivity(), "请选择主渠道", Toast.LENGTH_SHORT).show();
+            right = false;
+        } else if (termminorchannel == null || "".equals(termminorchannel.trim())) {
+            Toast.makeText(getActivity(), "请选择次渠道", Toast.LENGTH_SHORT).show();
+            right = false;
+        }
+
+
+        return right;
     }
 
 

@@ -21,6 +21,8 @@ public class MitAgencynumM implements java.io.Serializable {
     private String id;//
     @DatabaseField
     private String agencyid;
+    @DatabaseField
+    private String agencyareaid;// 经销商所属二级区域ID
 
     @DatabaseField
     private String creuser;//
@@ -116,5 +118,13 @@ public class MitAgencynumM implements java.io.Serializable {
 
     public void setUpdatedate(Date updatedate) {
         this.updatedate = updatedate;
+    }
+
+    public String getAgencyareaid() {
+        return agencyareaid;
+    }
+
+    public void setAgencyareaid(String agencyareaid) {
+        this.agencyareaid = agencyareaid;
     }
 }

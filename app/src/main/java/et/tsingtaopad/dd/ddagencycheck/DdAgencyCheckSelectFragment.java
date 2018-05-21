@@ -62,6 +62,8 @@ public class DdAgencyCheckSelectFragment extends BaseFragmentSupport implements 
 
     DdAgencyCheckSelectAdapter agencyAdapter; // 经销商适配器
 
+    private String secondAreaid;// 二级区域ID
+
 
     @Nullable
     @Override
@@ -138,6 +140,8 @@ public class DdAgencyCheckSelectFragment extends BaseFragmentSupport implements 
                     agencyAdapter.notifyDataSetChanged();
                 } else {
                     // 展示经销商
+
+                     secondAreaid = areaList.get(Postion).getKey();
                     selectLst = service.queryZsDdagencySelectLst(areaList.get(Postion).getKey());
                     agencyAdapter = new DdAgencyCheckSelectAdapter(getActivity(), selectLst, confirmBtn, "");
                     agencyLv.setAdapter(agencyAdapter);
@@ -160,6 +164,7 @@ public class DdAgencyCheckSelectFragment extends BaseFragmentSupport implements 
 
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("agencyselectstc", agencySelectStc);
+                bundle.putSerializable("secondAreaid", secondAreaid);
                 DdAgencyCheckContentFragment agencyCheckContentFragment = new DdAgencyCheckContentFragment();
                 agencyCheckContentFragment.setArguments(bundle);
                 // 跳转 经销商库存盘点 填充数据

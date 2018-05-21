@@ -538,7 +538,7 @@
     <string name="hello_world">Hello world!</string>
 
     <!--协同拜访-选择终端-->
-    <string name="xtbf_selectterm">选择协同拜访的终端</string>
+    <string name="xtbf_selectterm">选择协同拜访终端</string>
     <string name="xtbf_selectterm_route">3号路线</string>
     <string name="xtbf_selectterm_date">2018-02-15 10:23:44</string>
     <string name="xtbf_selectterm_day">12</string>
@@ -553,7 +553,7 @@
     <string name="xtbf_title_numinput">现有量,变化量</string>
 
     <!--终端追溯-->
-    <string name="zdzs_selectterm">选择将要追溯的终端</string>
+    <string name="zdzs_selectterm">选择追溯终端</string>
 
     <!-- 经销商开发 -->
     <string name="agencykf_details">经销商开发</string>

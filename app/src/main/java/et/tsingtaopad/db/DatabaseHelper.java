@@ -1113,7 +1113,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 db.execSQL(buffer.toString());
 
                 // 经销商库存盘点主表
-                String MIT_AGENCYNUM_M = "create table MIT_AGENCYNUM_M ( id varchar2(36) not null, agencyid varchar2(36) null, creuser varchar2(128) null, creuserareaid varchar(36) null, credate date  null, updateuser  varchar2(128) null, updatedate  date  null )";
+                String MIT_AGENCYNUM_M = "create table MIT_AGENCYNUM_M ( id varchar2(36) not null, agencyid varchar2(36) null,agencyareaid varchar2(36) null, creuser varchar2(128) null, creuserareaid varchar(36) null, credate date  null, updateuser  varchar2(128) null, updatedate  date  null )";
                 db.execSQL(MIT_AGENCYNUM_M);
                 // 经销商判断产品表
                 String MIT_AGENCYPRO_M = "create table MIT_AGENCYPRO_M (  id varchar2(36) not null, agencynumid varchar2(36) null, proid varchar2(36) null, stocktotal varchar2(36) null, stockfact  varchar2(36) null, remark  varchar2(300) null, uploadflag varchar2(1) null, padisconsistent varchar2(1) null )";

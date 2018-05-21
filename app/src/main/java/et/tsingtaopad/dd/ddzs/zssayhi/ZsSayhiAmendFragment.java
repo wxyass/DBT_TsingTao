@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatTextView;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -266,6 +268,7 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             // 督导终端名称
             zdzs_sayhi_amend_rl_ll_head.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_et.setVisibility(View.VISIBLE);
+            zdzs_sayhi_amend_rl_dd_con1_et.setFilters( new InputFilter[]{ new  InputFilter.LengthFilter( 30 )});// 设置输入长度
             zdzs_sayhi_amend_rl_dd_con1_et.setText(mitValterMTemp.getVidternameval());
 
             zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidternameremark());
@@ -277,6 +280,7 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             // 督导终端编码
             zdzs_sayhi_amend_rl_ll_head.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_et.setVisibility(View.VISIBLE);
+            zdzs_sayhi_amend_rl_dd_con1_et.setFilters( new InputFilter[]{ new  InputFilter.LengthFilter( 36 )});// 设置输入长度
             zdzs_sayhi_amend_rl_dd_con1_et.setText(mitValterMTemp.getVidtercodeval());
 
             zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidtercoderemark());
@@ -288,6 +292,7 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             // 督导地址
             zdzs_sayhi_amend_rl_ll_head.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_et.setVisibility(View.VISIBLE);
+            zdzs_sayhi_amend_rl_dd_con1_et.setFilters( new InputFilter[]{ new  InputFilter.LengthFilter( 50 )});// 设置输入长度
             zdzs_sayhi_amend_rl_dd_con1_et.setText(mitValterMTemp.getVidaddressval());
 
             zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidaddressremark());
@@ -299,6 +304,7 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             // 督导联系人
             zdzs_sayhi_amend_rl_ll_head.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_et.setVisibility(View.VISIBLE);
+            zdzs_sayhi_amend_rl_dd_con1_et.setFilters( new InputFilter[]{ new  InputFilter.LengthFilter( 10 )});// 设置输入长度
             zdzs_sayhi_amend_rl_dd_con1_et.setText(mitValterMTemp.getVidcontactval());
 
             zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidcontactremark());
@@ -310,6 +316,8 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             // 督导电话
             zdzs_sayhi_amend_rl_ll_head.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_et.setVisibility(View.VISIBLE);
+            zdzs_sayhi_amend_rl_dd_con1_et.setInputType(InputType.TYPE_CLASS_NUMBER);//输入类型为数字文本
+            zdzs_sayhi_amend_rl_dd_con1_et.setFilters( new InputFilter[]{ new  InputFilter.LengthFilter( 30 )});// 设置输入长度
             zdzs_sayhi_amend_rl_dd_con1_et.setText(mitValterMTemp.getVidmobileval());
 
             zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidmobileremark());
@@ -321,6 +329,8 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             // 督导拜访顺序
             zdzs_sayhi_amend_rl_ll_head.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_et.setVisibility(View.VISIBLE);
+            zdzs_sayhi_amend_rl_dd_con1_et.setInputType(InputType.TYPE_CLASS_NUMBER);//输入类型为数字文本
+            zdzs_sayhi_amend_rl_dd_con1_et.setFilters( new InputFilter[]{ new  InputFilter.LengthFilter( 3 )});// 设置输入长度
             zdzs_sayhi_amend_rl_dd_con1_et.setText(mitValterMTemp.getVidsequenceval());
 
             zdzs_sayhi_amend_dd_et_report.setText(mitValterMTemp.getVidvidsequenceremark());
@@ -335,6 +345,8 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             zdzs_sayhi_amend_rl_ll_head.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_et.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_con1_et.setMaxWidth(10);
+            zdzs_sayhi_amend_rl_dd_con1_et.setInputType(InputType.TYPE_CLASS_NUMBER);//输入类型为数字文本
+            zdzs_sayhi_amend_rl_dd_con1_et.setFilters( new InputFilter[]{ new  InputFilter.LengthFilter( 2 )});// 设置输入长度
             zdzs_sayhi_amend_rl_dd_con1_et.setText(mitValterMTemp.getVidcycleval());
             zdzs_sayhi_amend_rl_con2_et.setText("天/次");
 
@@ -350,6 +362,8 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             zdzs_sayhi_amend_rl_ll_head.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_et.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_con1_et.setWidth(10);
+            zdzs_sayhi_amend_rl_dd_con1_et.setInputType(InputType.TYPE_CLASS_NUMBER);//输入类型为数字文本
+            zdzs_sayhi_amend_rl_dd_con1_et.setFilters( new InputFilter[]{ new  InputFilter.LengthFilter( 10 )});// 设置输入长度
             zdzs_sayhi_amend_rl_dd_con1_et.setText(mitValterMTemp.getVidhvolumeval());
             zdzs_sayhi_amend_rl_con2_et.setText("件/年");
 
@@ -364,6 +378,8 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             zdzs_sayhi_amend_rl_ll_head.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_et.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_con1_et.setWidth(10);
+            zdzs_sayhi_amend_rl_dd_con1_et.setInputType(InputType.TYPE_CLASS_NUMBER);//输入类型为数字文本
+            zdzs_sayhi_amend_rl_dd_con1_et.setFilters( new InputFilter[]{ new  InputFilter.LengthFilter( 10 )});// 设置输入长度
             zdzs_sayhi_amend_rl_dd_con1_et.setText(mitValterMTemp.getVidzvolumeval());
             zdzs_sayhi_amend_rl_con2_et.setText("件/年");
 
@@ -378,6 +394,8 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             zdzs_sayhi_amend_rl_ll_head.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_et.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_con1_et.setWidth(10);
+            zdzs_sayhi_amend_rl_dd_con1_et.setInputType(InputType.TYPE_CLASS_NUMBER);//输入类型为数字文本
+            zdzs_sayhi_amend_rl_dd_con1_et.setFilters( new InputFilter[]{ new  InputFilter.LengthFilter( 10 )});// 设置输入长度
             zdzs_sayhi_amend_rl_dd_con1_et.setText(mitValterMTemp.getVidpvolumeval());
             zdzs_sayhi_amend_rl_con2_et.setText("件/年");
 
@@ -392,6 +410,8 @@ public class ZsSayhiAmendFragment extends BaseFragmentSupport implements View.On
             zdzs_sayhi_amend_rl_ll_head.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_et.setVisibility(View.VISIBLE);
             zdzs_sayhi_amend_rl_dd_con1_et.setWidth(10);
+            zdzs_sayhi_amend_rl_dd_con1_et.setInputType(InputType.TYPE_CLASS_NUMBER);//输入类型为数字文本
+            zdzs_sayhi_amend_rl_dd_con1_et.setFilters( new InputFilter[]{ new  InputFilter.LengthFilter( 10 )});// 设置输入长度
             zdzs_sayhi_amend_rl_dd_con1_et.setText(mitValterMTemp.getVidlvolumeval());
             zdzs_sayhi_amend_rl_con2_et.setText("件/年");
 

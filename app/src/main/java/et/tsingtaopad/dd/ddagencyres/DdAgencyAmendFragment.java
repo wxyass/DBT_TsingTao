@@ -7,6 +7,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatTextView;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -165,6 +167,7 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             dd_title_sp.setText(R.string.agencykf_agencyname);
 
             yd_con1_tv.setText(mstAgencyKFM.getAgencyname());
+            dd_con1_et.setFilters( new InputFilter[]{ new  InputFilter.LengthFilter( 140 )});// 设置输入长度
             dd_con1_et.setText(mitValagencykfM.getAgencyrealname());
             dd_et_rl.setVisibility(View.VISIBLE);
 
@@ -174,6 +177,7 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             dd_title_sp.setText(R.string.agencykf_contact);
 
             yd_con1_tv.setText(mstAgencyKFM.getContact());
+            dd_con1_et.setFilters( new InputFilter[]{ new  InputFilter.LengthFilter( 140 )});// 设置输入长度
             dd_con1_et.setText(mitValagencykfM.getContactreal());
             dd_et_rl.setVisibility(View.VISIBLE);
 
@@ -183,6 +187,8 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             dd_title_sp.setText(R.string.agencykf_mobile);
 
             yd_con1_tv.setText(mstAgencyKFM.getMobile());
+            dd_con1_et.setInputType(InputType.TYPE_CLASS_NUMBER);//输入类型为数字文本
+            dd_con1_et.setFilters( new InputFilter[]{ new  InputFilter.LengthFilter( 40 )});// 设置输入长度
             dd_con1_et.setText(mitValagencykfM.getMobilereal());
             dd_et_rl.setVisibility(View.VISIBLE);
 
@@ -192,6 +198,7 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             dd_title_sp.setText(R.string.agencykf_address);
 
             yd_con1_tv.setText(mstAgencyKFM.getAddress());
+            dd_con1_et.setFilters( new InputFilter[]{ new  InputFilter.LengthFilter( 280 )});// 设置输入长度
             dd_con1_et.setText(mitValagencykfM.getAddressreal());
             dd_et_rl.setVisibility(View.VISIBLE);
         } else if (DdAgencyContentFragment.AREA.equals(type)) {
@@ -200,6 +207,8 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             dd_title_sp.setText(R.string.agencykf_area);
 
             yd_con1_tv.setText(mstAgencyKFM.getArea());
+            dd_con1_et.setInputType(InputType.TYPE_CLASS_NUMBER);//输入类型为数字文本
+            dd_con1_et.setFilters( new InputFilter[]{ new  InputFilter.LengthFilter( 10 )});// 设置输入长度
             dd_con1_et.setText(mitValagencykfM.getAreareal());
             dd_et_rl.setVisibility(View.VISIBLE);
         } else if (DdAgencyContentFragment.MONEY.equals(type)) {
@@ -208,6 +217,8 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             dd_title_sp.setText(R.string.agencykf_money);
 
             yd_con1_tv.setText(mstAgencyKFM.getMoney());
+            dd_con1_et.setInputType(InputType.TYPE_CLASS_NUMBER);//输入类型为数字文本
+            dd_con1_et.setFilters( new InputFilter[]{ new  InputFilter.LengthFilter( 10 )});// 设置输入长度
             dd_con1_et.setText(mitValagencykfM.getMoneyreal());
             dd_et_rl.setVisibility(View.VISIBLE);
         } else if (DdAgencyContentFragment.PERSION.equals(type)) {
@@ -216,6 +227,7 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             dd_title_sp.setText(R.string.agencykf_persion);
 
             yd_con1_tv.setText(mstAgencyKFM.getPersion());
+            dd_con1_et.setFilters( new InputFilter[]{ new  InputFilter.LengthFilter( 240 )});// 设置输入长度
             dd_con1_et.setText(mitValagencykfM.getPersionreal());// 错误的
             dd_et_rl.setVisibility(View.VISIBLE);
         } else if (DdAgencyContentFragment.CARNUM.equals(type)) {
@@ -224,6 +236,8 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             dd_title_sp.setText(R.string.agencykf_carnum);
 
             yd_con1_tv.setText(mstAgencyKFM.getCarnum());
+            dd_con1_et.setInputType(InputType.TYPE_CLASS_NUMBER);//输入类型为数字文本
+            dd_con1_et.setFilters( new InputFilter[]{ new  InputFilter.LengthFilter( 10 )});// 设置输入长度
             dd_con1_et.setText(mitValagencykfM.getCarnumreal());
             dd_et_rl.setVisibility(View.VISIBLE);
         } else if (DdAgencyContentFragment.ISONE.equals(type)) {
@@ -264,6 +278,7 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             dd_title_sp.setText(R.string.agencykf_productname);
 
             yd_con1_tv.setText(mstAgencyKFM.getProductname());
+            dd_con1_et.setFilters( new InputFilter[]{ new  InputFilter.LengthFilter( 480 )});// 设置输入长度
             dd_con1_et.setText(mitValagencykfM.getProductnamereal());
             dd_et_rl.setVisibility(View.VISIBLE);
 
@@ -273,6 +288,7 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             dd_title_sp.setText(R.string.agencykf_business);
 
             yd_con1_tv.setText(mstAgencyKFM.getBusiness());
+            dd_con1_et.setFilters( new InputFilter[]{ new  InputFilter.LengthFilter( 80 )});// 设置输入长度
             dd_con1_et.setText(mitValagencykfM.getBusinessreal());
             dd_et_rl.setVisibility(View.VISIBLE);
 
@@ -282,6 +298,7 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             dd_title_sp.setText(R.string.agencykf_coverterms);
 
             yd_con1_tv.setText(mstAgencyKFM.getCoverterms());
+            dd_con1_et.setFilters( new InputFilter[]{ new  InputFilter.LengthFilter( 500 )});// 设置输入长度
             dd_con1_et.setText(mitValagencykfM.getCovertermreal());
             dd_et_rl.setVisibility(View.VISIBLE);
 
@@ -291,6 +308,7 @@ public class DdAgencyAmendFragment extends BaseFragmentSupport implements View.O
             dd_title_sp.setText(R.string.agencykf_supplyterms);
 
             yd_con1_tv.setText(mstAgencyKFM.getSupplyterms());
+            dd_con1_et.setFilters( new InputFilter[]{ new  InputFilter.LengthFilter( 500 )});// 设置输入长度
             dd_con1_et.setText(mitValagencykfM.getSupplytermsreal());
             dd_et_rl.setVisibility(View.VISIBLE);
         }

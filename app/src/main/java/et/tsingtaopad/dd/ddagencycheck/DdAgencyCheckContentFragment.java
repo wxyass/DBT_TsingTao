@@ -75,6 +75,7 @@ public class DdAgencyCheckContentFragment extends BaseFragmentSupport implements
     private List<ZsInOutSaveStc> zsInOutSaveStcs;
 
     private AgencySelectStc asStc;
+    private String secondAreaid;// 二级区域ID
     private List<MitAgencyproM>  mitAgencyproMS;// 核查产品数据
 
     @Nullable
@@ -130,6 +131,7 @@ public class DdAgencyCheckContentFragment extends BaseFragmentSupport implements
         Bundle bundle = getArguments();
         // 获取传递过来的 经销商主键,名称,地址,联系电话
         asStc = (AgencySelectStc) bundle.getSerializable("agencyselectstc");
+        secondAreaid = (String) bundle.getSerializable("secondAreaid");
 
         // titleTv.setText("经销商库存盘点");
         titleTv.setText(asStc.getAgencyName());
@@ -192,10 +194,10 @@ public class DdAgencyCheckContentFragment extends BaseFragmentSupport implements
         // zsInOutSaveStcs.get(0);
 
         // 存储 经销商库存盘点主表
-        MitAgencynumM mitAgencynumM = service.saveMitAgencynumM(asStc);
+        MitAgencynumM mitAgencynumM = service.saveMitAgencynumM(asStc,secondAreaid);
 
         // 存储 经销商判断产品表
-        mitAgencyproMS = service.saveMitAgencyproM(mitAgencynumM.getId(),zsInOutSaveStcs);
+        mitAgencyproMS = service.saveMitAgencyproM(mitAgencynumM.getId(),zsInOutSaveStcs,secondAreaid);
 
         // 上传
         XtUploadService xtUploadService = new XtUploadService(getActivity(), null);

@@ -271,6 +271,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginRight="100dp"
                     android:layout_marginTop="5dp"
+                    android:maxLength="30"
                     android:background="@drawable/bg_visit_record"
                     />
 
@@ -429,6 +430,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginRight="100dp"
                     android:layout_marginTop="5dp"
+                    android:maxLength="50"
                     android:background="@drawable/bg_visit_record"
                     />
 
@@ -455,6 +457,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginRight="100dp"
                     android:layout_marginTop="5dp"
+                    android:maxLength="30"
                     android:background="@drawable/bg_visit_record"
                     />
 
@@ -508,6 +511,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
+                    android:maxLength="3"
                     android:background="@drawable/bg_visit_record"
                     android:inputType="number"
                     />
@@ -539,6 +543,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginRight="100dp"
                     android:layout_marginTop="5dp"
+                    android:maxLength="3"
                     android:background="@drawable/bg_visit_record"
                     android:inputType="number"
                     />
@@ -565,6 +570,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
+                    android:maxLength="10"
                     android:background="@drawable/bg_visit_record"
                     android:hint="0"
                     android:inputType="number"
@@ -598,6 +604,7 @@
                     android:layout_marginTop="5dp"
                     android:background="@drawable/bg_visit_record"
                     android:hint="0"
+                    android:maxLength="10"
                     android:inputType="number"/>
 
                 <TextView
@@ -628,6 +635,7 @@
                     android:layout_marginTop="5dp"
                     android:background="@drawable/bg_visit_record"
                     android:hint="0"
+                    android:maxLength="10"
                     android:inputType="number"/>
 
                 <TextView
@@ -658,6 +666,7 @@
                     android:layout_marginTop="5dp"
                     android:background="@drawable/bg_visit_record"
                     android:hint="0"
+                    android:maxLength="10"
                     android:inputType="number"/>
 
                 <TextView
@@ -688,6 +697,7 @@
                     android:layout_marginTop="5dp"
                     android:background="@drawable/bg_visit_record"
                     android:hint="0"
+                    android:maxLength="20"
                     android:inputType="number"/>
 
                 <TextView
@@ -810,6 +820,7 @@
                     android:layout_marginRight="200dp"
                     android:background="@drawable/bg_visit_record"
                     android:text=""
+                    android:maxLength="10"
                     android:visibility="gone"/>
 
                 <ImageView

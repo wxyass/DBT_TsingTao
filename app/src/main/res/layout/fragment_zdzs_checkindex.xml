@@ -97,12 +97,12 @@
             </LinearLayout>
 
             <!-- 促销活动列表 -->
-            <ListView
+            <et.tsingtaopad.view.NoScrollListView
                 android:id="@+id/zdzs_checkindex_lv_promotion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:divider="@color/listview_line"
-                android:dividerHeight="1dp" />
+                android:dividerHeight="3dp" />
 
             <View
                 android:layout_width="match_parent"
