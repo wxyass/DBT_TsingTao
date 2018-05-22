@@ -14,6 +14,9 @@ import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.dd.ddaddterm.DdAddTermFragment;
 import et.tsingtaopad.dd.ddagencycheck.DdAgencyCheckSelectFragment;
 import et.tsingtaopad.dd.ddagencyres.DdAgencySelectFragment;
+import et.tsingtaopad.dd.dddaysummary.DdDaySummaryFragment;
+import et.tsingtaopad.dd.dddealplan.DdDealPlanFragment;
+import et.tsingtaopad.dd.ddweekplan.DdWeekPlanFragment;
 import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartFragment;
 import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectFragment;
 import et.tsingtaopad.dd.ddzs.zsterm.zscart.ZsTermCartFragment;
@@ -75,14 +78,14 @@ public class OperationFragment extends BaseFragmentSupport implements View.OnCli
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.dd_operation_btn_plan:
-                changeHomeFragment(new DdAgencySelectFragment(), "ddagencyselectfragment");
+            case R.id.dd_operation_btn_plan:// 周计划
+                changeHomeFragment(new DdWeekPlanFragment(), "ddweekplanfragment");
                 break;
-            case R.id.dd_operation_btn_summer:
-                changeHomeFragment(new DdAgencyCheckSelectFragment(), "ddagencycheckselectfragment");
+            case R.id.dd_operation_btn_summer:// 日工作记录及总结
+                changeHomeFragment(new DdDaySummaryFragment(), "dddaysummaryfragment");
                 break;
-            case R.id.dd_operation_btn_zhenggai:
-                changeHomeFragment(new DdAddTermFragment(), "ddaddtermfragment");
+            case R.id.dd_operation_btn_zhenggai:// 整改计划
+                changeHomeFragment(new DdDealPlanFragment(), "dddealplanfragment");
                 break;
         }
 

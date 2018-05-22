@@ -1207,7 +1207,7 @@ public class XtUploadService {
         db.execSQL(sql);
     }
 
-    // 删除住宿表数据拜访主表(条件: terminalkey相等 visitkey不相等 padisconsistent=1 )
+    // 删除追溯表数据拜访主表(条件: terminalkey相等 visitkey不相等 padisconsistent=1 )
     private void deleteZsTable(SQLiteDatabase db, String tableName, String valterid) {
 
         // 删除表记录
@@ -1299,7 +1299,26 @@ public class XtUploadService {
 
     // 处理督导删除新增终端
     private void parseMitTerminalM(String formjson) {
+
         // 删除这条记录
+        // 解析区域定格路线信息
+        AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
+        String mit_terminal_m = emp.getMIT_TERMINAL_M();
+        List<MitTerminalM> mitTerminalMS = (List<MitTerminalM>) JsonUtil.parseList(mit_terminal_m, MitTerminalM.class);
+
+        try {
+            //DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            SQLiteDatabase db = helper.getWritableDatabase();
+
+            // 处理督导删除新增终端
+            for (MitTerminalM mitTerminalM : mitTerminalMS) {
+                // 删除表记录
+                String sql = "delete from  MIT_TERMINAL_M   where id = '" + mitTerminalM.getId() + "'";
+                db.execSQL(sql);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // 上传 经销商开发核查表
@@ -1382,9 +1401,27 @@ public class XtUploadService {
                 .post();
     }
 
-    // 处理
+    // 处理 经销商开发核查表
     private void parseMitValagencykfM(String formjson) {
+        // 删除这条记录
+        // 解析区域定格路线信息
+        AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
+        String Mit_Valagencykf_M = emp.getMIT_VALAGENCYKF_M();
+        List<MitValagencykfM> valagencykfMS = (List<MitValagencykfM>) JsonUtil.parseList(Mit_Valagencykf_M, MitValagencykfM.class);
 
+        try {
+            //DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            SQLiteDatabase db = helper.getWritableDatabase();
+
+            // 处理经销商开发核查表  删除
+            for (MitValagencykfM mitTerminalM : valagencykfMS) {
+                // 删除表记录
+                String sql = "delete from  MIT_VALAGENCYKF_M   where id = '" + mitTerminalM.getId() + "'";
+                db.execSQL(sql);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // 上传 督导 经销商库存盘点
@@ -1474,5 +1511,28 @@ public class XtUploadService {
     // 处理 督导经销商库存盘点
     private void parseMitAgencynumM(String formjson) {
 
+        // 删除这条记录
+        // 解析区域定格路线信息
+        AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
+        String MIT_AGENCYNUM_M = emp.getMIT_AGENCYNUM_M();
+        List<MitAgencynumM> agencynumMS = (List<MitAgencynumM>) JsonUtil.parseList(MIT_AGENCYNUM_M, MitAgencynumM.class);
+
+        try {
+            //DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            SQLiteDatabase db = helper.getWritableDatabase();
+
+            // 处理经销商开发核查表  删除
+            for (MitAgencynumM mitTerminalM : agencynumMS) {
+                // 删除表记录
+                String sql = "delete from  MIT_AGENCYNUM_M   where id = '" + mitTerminalM.getId() + "'";
+                db.execSQL(sql);
+
+                // 删除表记录
+                String sqlid = "delete from  MIT_AGENCYPRO_M   where agencynumid = '" + mitTerminalM.getId() + "'";
+                db.execSQL(sqlid);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

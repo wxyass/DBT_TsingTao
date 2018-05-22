@@ -49,6 +49,9 @@ public class AreaGridRoute {
     private String MST_INVOICING_INFO;//
     private String MST_VISITAUTHORIZE_INFO;//
     private String MST_AGENCYACCOUNT_M;//
+    private String MIT_TERMINAL_M;// 督导新增终端表
+    private String MIT_VALAGENCYKF_M;// 经销商开发核查表
+    private String MIT_AGENCYNUM_M;// 经销商库存盘点主表
 
 
 
@@ -316,5 +319,29 @@ public class AreaGridRoute {
 
     public void setMST_AGENCYACCOUNT_M(String MST_AGENCYACCOUNT_M) {
         this.MST_AGENCYACCOUNT_M = MST_AGENCYACCOUNT_M;
+    }
+
+    public String getMIT_TERMINAL_M() {
+        return MIT_TERMINAL_M;
+    }
+
+    public void setMIT_TERMINAL_M(String MIT_TERMINAL_M) {
+        this.MIT_TERMINAL_M = MIT_TERMINAL_M;
+    }
+
+    public String getMIT_VALAGENCYKF_M() {
+        return MIT_VALAGENCYKF_M;
+    }
+
+    public void setMIT_VALAGENCYKF_M(String MIT_VALAGENCYKF_M) {
+        this.MIT_VALAGENCYKF_M = MIT_VALAGENCYKF_M;
+    }
+
+    public String getMIT_AGENCYNUM_M() {
+        return MIT_AGENCYNUM_M;
+    }
+
+    public void setMIT_AGENCYNUM_M(String MIT_AGENCYNUM_M) {
+        this.MIT_AGENCYNUM_M = MIT_AGENCYNUM_M;
     }
 }
