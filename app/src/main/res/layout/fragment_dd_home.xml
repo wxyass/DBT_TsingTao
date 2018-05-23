@@ -13,7 +13,17 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_marginTop="50dp"
-        android:text="登录"/>
+        android:text="50000 登录"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/dd_btn_first_login2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_below="@id/dd_btn_first_login"
+        android:layout_marginTop="50dp"
+        android:text="2029298 登录"/>
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/dd_btn_first_sync_grid"

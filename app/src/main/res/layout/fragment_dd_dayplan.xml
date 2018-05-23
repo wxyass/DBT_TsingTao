@@ -16,46 +16,20 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:orientation="vertical">
 
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"/>
-
-            <!--时间-->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/xtbf_btn_h"
-                android:background="@color/bg_app"
-                >
-
-                <TextView
-                    android:id="@+id/item_weekplan_tv_weektime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:text="2018-03-13  --  2018-03-14"
-                    android:textSize="18sp"/>
-
-            </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"/>
-
-            <!-- 7天计划 -->
+            <!-- 计划 -->
             <et.tsingtaopad.view.NoScrollListView
-                android:id="@+id/dd_weekplan_lv_"
+                android:id="@+id/dd_dayplan_lv_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:divider="@color/listview_line"
-                android:dividerHeight="3dp"/>
+                android:dividerHeight="3dp" />
 
             <View
                 android:layout_width="match_parent"
@@ -67,14 +41,35 @@
                 >
 
                 <Button
-                    android:id="@+id/dd_weekplan_bt_submit"
+                    android:id="@+id/dd_dayplan_bt_add"
                     style="@style/xtbf_btn_tv"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/xtbf_btn_h"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:background="@drawable/bg_select_green"
-                    android:text="保存"
+                    android:text="增加计划"
+                    />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <Button
+                    android:id="@+id/dd_dayplan_bt_submit"
+                    style="@style/xtbf_btn_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/xtbf_btn_h"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/bg_select_green"
+                    android:text="确定"
                     />
             </RelativeLayout>
 
@@ -83,6 +78,7 @@
                 android:layout_height="80dp"/>
         </LinearLayout>
     </ScrollView>
+
 
 
 </LinearLayout>

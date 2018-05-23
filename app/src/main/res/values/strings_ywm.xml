@@ -598,5 +598,34 @@
         <item>否</item>
     </string-array>
 
+    <!-- 日工作计划 -->
+    <string name="workplan_select_time">请选择时间：</string>
+    <string name="workplan_visit_time">预计拜访时间</string>
+    <string name="workplan_time">日期</string>
+    <string name="workplan_state">状态</string>
+    <string name="workplan_operation">操作</string>
+    <string name="workplan_statea">未制定</string>
+    <string name="workplan_stateb">等待提交</string>
+    <string name="workplan_statec">已提交</string>
+    <string name="workplan_stated">审核未通过</string>
+    <string name="workplan_statef">审核通过</string>
+    <string name="workplan_auto_statef">自动通过</string>
+    <string name="workplan_title">周工作计划制定</string>
+    <string name="workplan_msg1">第</string>
+    <string name="workplan_msg2">周</string>
+    <string name="workplan_msg3">年</string>
+    <string name="workplan_msgyear">年第</string>
+    <string name="workplan_msg4">月第</string>
+    <string name="workplan_rmonth">月工作计划</string>
+    <string name="workplan_msg5">周工作计划</string>
+    <string name="workplan_msg6">日周</string>
+    <string name="workplan_week">星期</string>
+    <string name="workplan_month">月</string>
+
+    <!--日计划-->
+    <string name="workplan_basedata">基础数据群</string>
+    <string name="workplan_netdata">网络数据群</string>
+    <string name="workplan_viedata">竞品数据群</string>
+    <string name="workplan_privicedata">价格数据群</string>
 
 </resources>

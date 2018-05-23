@@ -82,6 +82,7 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
     private final String TAG = "FirstFragment";
 
     AppCompatButton login;
+    AppCompatButton login2;
     AppCompatButton syncgrid;
     AppCompatButton syncindex;
     AppCompatButton syncpro;
@@ -105,11 +106,13 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
 
     private void initView(View view) {
         login = view.findViewById(R.id.dd_btn_first_login);
+        login2 = view.findViewById(R.id.dd_btn_first_login2);
         syncgrid = view.findViewById(R.id.dd_btn_first_sync_grid);
         syncindex = view.findViewById(R.id.dd_btn_first_sync_index);
         syncpro = view.findViewById(R.id.dd_btn_first_sync_pro);
         startSync = view.findViewById(R.id.dd_btn_first_sync_start);
         login.setOnClickListener(this);
+        login2.setOnClickListener(this);
         syncgrid.setOnClickListener(this);
         syncindex.setOnClickListener(this);
         syncpro.setOnClickListener(this);
@@ -129,6 +132,10 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
             case R.id.dd_btn_first_login:// 登录
                 String   loginjson = "{usercode:'50000', password:'a1234567',version:'2.5',padid:'dsfwerolkjqiwurywhl'}";
                 toLogin("opt_get_login","","",loginjson);
+                break;
+            case R.id.dd_btn_first_login2:// 登录
+                String   loginjson1 = "{usercode:'2029298', password:'a1234567',version:'2.5',padid:'gfdahtgnfdsddvdsGd'}";
+                toLogin("opt_get_login","","",loginjson1);
                 break;
             case R.id.dd_btn_first_sync_grid:// 同步 定格,路线
                 String content  = "{"+
@@ -336,10 +343,10 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
 
         // 组建请求Json
         RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(getContext());
-        if("opt_get_login".equals(optcode)){
+        /*if("opt_get_login".equals(optcode)){
             requestHeadStc.setUsercode("50000");
             requestHeadStc.setPassword("a1234567");
-        }
+        }*/
         requestHeadStc.setOptcode(PropertiesUtil.getProperties(optcode));
         RequestStructBean reqObj = HttpParseJson.parseRequestStructBean(requestHeadStc, content);
 

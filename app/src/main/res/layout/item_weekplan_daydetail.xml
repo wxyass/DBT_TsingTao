@@ -1,0 +1,131 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="163dp"
+              android:background="@color/white"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/item_daydetail_ll_all"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!--追溯项 -->
+        <RelativeLayout
+            android:id="@+id/item_daydetail_rl_check"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/xtbf_btn_h"
+            >
+
+            <TextView
+                android:id="@+id/item_daydetail_tv_check01"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:text="追溯项:"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/item_daydetail_tv_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:lines="1"
+                android:layout_margin="3dp"
+                android:layout_toRightOf="@id/item_daydetail_tv_check01"
+                android:inputType="number"/>
+
+        </RelativeLayout>
+
+
+        <!--追溯区域:-->
+        <RelativeLayout
+            android:id="@+id/item_daydetail_rl_areaid"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/xtbf_btn_h"
+            >
+
+            <TextView
+                android:id="@+id/item_daydetail_tv_area01"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:text="追溯区域:"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/item_daydetail_tv_areaid"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_margin="3dp"
+                android:layout_toRightOf="@id/item_daydetail_tv_area01"
+                />
+
+        </RelativeLayout>
+
+
+        <!--追溯定格 -->
+        <RelativeLayout
+            android:id="@+id/item_daydetail_tv_gridkey"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/xtbf_btn_h"
+            >
+
+            <TextView
+                android:id="@+id/item_daydetail_tv_valgrid01"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:text="追溯定格:"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/item_daydetail_tv_valgridkey"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_margin="3dp"
+                android:layout_toRightOf="@id/item_daydetail_tv_valgrid01"
+                android:inputType="number"/>
+
+        </RelativeLayout>
+
+
+        <!--追溯路线 -->
+        <RelativeLayout
+            android:id="@+id/item_daydetail_rl_routekey"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/xtbf_btn_h"
+            >
+
+            <TextView
+                android:id="@+id/item_daydetail_tv_route01"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:text="追溯路线:"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/item_daydetail_tv_routekey"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_margin="3dp"
+                android:layout_toRightOf="@id/item_daydetail_tv_route01"
+                android:inputType="number"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

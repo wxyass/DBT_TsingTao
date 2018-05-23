@@ -1,19 +1,17 @@
 package et.tsingtaopad.dd.ddweekplan;
 
-import android.content.Intent;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatTextView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -22,51 +20,15 @@ import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
-import et.tsingtaopad.business.first.bean.AreaGridRoute;
-import et.tsingtaopad.core.net.HttpUrl;
-import et.tsingtaopad.core.net.RestClient;
-import et.tsingtaopad.core.net.callback.IError;
-import et.tsingtaopad.core.net.callback.IFailure;
-import et.tsingtaopad.core.net.callback.ISuccess;
-import et.tsingtaopad.core.net.domain.RequestHeadStc;
-import et.tsingtaopad.core.net.domain.RequestStructBean;
-import et.tsingtaopad.core.net.domain.ResponseStructBean;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
-import et.tsingtaopad.core.util.dbtutil.JsonUtil;
-import et.tsingtaopad.core.util.dbtutil.PrefUtils;
-import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
-import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
-import et.tsingtaopad.core.view.alertview.AlertView;
-import et.tsingtaopad.core.view.alertview.OnDismissListener;
-import et.tsingtaopad.core.view.alertview.OnItemClickListener;
-import et.tsingtaopad.core.view.dropdownmenu.DropBean;
-import et.tsingtaopad.core.view.dropdownmenu.DropdownButton;
-import et.tsingtaopad.db.table.MitValcheckterM;
-import et.tsingtaopad.db.table.MitValterM;
-import et.tsingtaopad.db.table.MstGridM;
-import et.tsingtaopad.db.table.MstMarketareaM;
-import et.tsingtaopad.db.table.MstPlanforuserM;
-import et.tsingtaopad.db.table.MstRouteM;
-import et.tsingtaopad.db.table.MstTerminalinfoM;
-import et.tsingtaopad.dd.ddxt.term.select.IXtTermSelectClick;
-import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectService;
-import et.tsingtaopad.dd.ddxt.term.select.adapter.XtTermSelectAdapter;
-import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
-import et.tsingtaopad.dd.ddxt.updata.XtUploadService;
-import et.tsingtaopad.dd.ddzs.zsshopvisit.ZsVisitShopActivity;
-import et.tsingtaopad.dd.ddzs.zsterm.zscart.ZsTermCartFragment;
-import et.tsingtaopad.home.app.MainService;
-import et.tsingtaopad.home.initadapter.GlobalValues;
-import et.tsingtaopad.http.HttpParseJson;
-import et.tsingtaopad.util.requestHeadUtil;
+import et.tsingtaopad.dd.ddweekplan.domain.DayPlanStc;
+import et.tsingtaopad.listviewintf.IClick;
 
 /**
  * Created by yangwenmin on 2018/3/12.
@@ -94,9 +56,14 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
     private int yearr;
     private int month;
     private int day;
+    private Button submitTv;
+    private ListView planLv;
+    private WeekPlanAdapter adapter;
 
     String weekDateStart = "";
     String weekDateEnd = "";
+
+    List<DayPlanStc> workPlanStcs = new ArrayList<DayPlanStc>();
 
 
     @Nullable
@@ -113,10 +80,16 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
         confirmBtn = (RelativeLayout) view.findViewById(R.id.top_navigation_rl_confirm);
         confirmTv = (AppCompatTextView) view.findViewById(R.id.top_navigation_bt_confirm);
         backTv = (AppCompatTextView) view.findViewById(R.id.top_navigation_bt_back);
+
         titleTv = (AppCompatTextView) view.findViewById(R.id.top_navigation_tv_title);
         confirmBtn.setVisibility(View.VISIBLE);
         confirmBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
+
+
+        submitTv = (Button) view.findViewById(R.id.dd_weekplan_bt_submit);
+        planLv = (ListView) view.findViewById(R.id.dd_weekplan_lv_);
+        submitTv.setOnClickListener(this);
 
     }
 
@@ -129,17 +102,15 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
         ConstValues.handler = handler;
         confirmTv.setText("日历");
 
-        initData();
-
-    }
-
-    private void initData() {
-
         // 获取系统时间
         calendar = Calendar.getInstance();
         yearr = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
+
+    }
+
+    private void initData() {
 
         calendar.setTime(this.calendar.getTime());//把随意设置的时间或者是系统的时间赋值给    caleendar
 
@@ -155,9 +126,32 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
                 // 获取本周的结束时间(定义为全局)
                 weekDateEnd = plandate;
             }
+
+            // 搭建每周 日计划记录(7条)
+            DayPlanStc dayPlanStc = new DayPlanStc();
+            dayPlanStc.setPlanKey(FunUtil.getUUID());
+            dayPlanStc.setState("0");
+            dayPlanStc.setDate(date);
+            dayPlanStc.setWeekday("周" + datePreview(i));
+            workPlanStcs.add(dayPlanStc);
         }
+
+        adapter = new WeekPlanAdapter(getActivity(), workPlanStcs, new IClick() {
+            @Override
+            public void listViewItemClick(int position, View v) {
+                toDayPlanFragment();
+            }
+        });
+        planLv.setAdapter(adapter);
+
+
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        initData();
+    }
 
     // 点击事件
     @Override
@@ -167,10 +161,38 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
             case R.id.top_navigation_rl_back:
                 supportFragmentManager.popBackStack();
                 break;
+
             case R.id.top_navigation_rl_confirm:// 确定
 
                 Toast.makeText(getActivity(), "弹出日历", Toast.LENGTH_SHORT).show();
+                DatePickerDialog dateDialog = new DatePickerDialog(v.getContext(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        calendar.set(year, monthOfYear, dayOfMonth);
+                        yearr = year;
+                        month = monthOfYear;
+                        day = dayOfMonth;
+                        if (dayOfMonth < 10) {
+                            aday = "0" + dayOfMonth;
+                        } else {
+                            aday = Integer.toString(dayOfMonth);
+                        }
+                        time = (Integer.toString(year) + "-" + String.format("%02d", monthOfYear + 1) + "-" + aday);
 
+                        String workplan_tv_rounds = (getString(R.string.workplan_msg1) + calendar.get(Calendar.WEEK_OF_MONTH) + getString(R.string.workplan_msg2));
+                        String tv_plantitle = (calendar.get(Calendar.YEAR) + getString(R.string.workplan_msg3) + (calendar.get(Calendar.MONTH) + 1) + getString(R.string.workplan_msg4) + calendar.get(Calendar.WEEK_OF_MONTH) + getString(R.string.workplan_msg5));
+
+                        initData();
+
+                    }
+                }, yearr, month, day);
+                if (!dateDialog.isShowing()) {
+                    dateDialog.show();
+                }
+
+                break;
+            case R.id.dd_weekplan_bt_submit:// 跳转到日计划
+                // toDayPlanFragment();
                 break;
             default:
                 break;
@@ -216,6 +238,52 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
     // 结束上传  刷新页面  0:确定上传  1上传成功  2上传失败
     private void shuaxinXtTermSelect(int upType) {
 
+    }
+
+    // 跳转到日计划
+    private void toDayPlanFragment() {
+        Bundle bundle = new Bundle();
+        // bundle.putSerializable("fromFragment", "ZsTermSelectFragment");
+        //bundle.putSerializable("mitValcheckterM", mitValcheckterMs.get(0));
+        DdDayPlanFragment ddDayPlanFragment = new DdDayPlanFragment();
+        ddDayPlanFragment.setArguments(bundle);
+        // 跳转日计划制定
+        addHomeFragment(ddDayPlanFragment, "dddayplanfragment");
+    }
+
+    private String datePreview(int num) {
+        String temp = null;
+        switch (num) {
+            case 1:
+                temp = "日";
+
+                break;
+            case 2:
+                temp = "一";
+
+                break;
+            case 3:
+                temp = "二";
+
+                break;
+            case 4:
+                temp = "三";
+
+                break;
+            case 5:
+                temp = "四";
+
+                break;
+            case 6:
+                temp = "五";
+
+                break;
+            case 7:
+                temp = "六";
+                break;
+
+        }
+        return temp;
     }
 
 }

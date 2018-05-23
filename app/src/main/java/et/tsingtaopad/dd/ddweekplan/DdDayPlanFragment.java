@@ -8,14 +8,21 @@ import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.lang.ref.SoftReference;
+import java.util.ArrayList;
+import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.dd.ddweekplan.domain.DayDetailStc;
+import et.tsingtaopad.dd.ddweekplan.domain.DayPlanStc;
+import et.tsingtaopad.listviewintf.ILongClick;
 
 /**
  * Created by yangwenmin on 2018/3/12.
@@ -30,18 +37,23 @@ public class DdDayPlanFragment extends BaseFragmentSupport implements View.OnCli
     private AppCompatTextView confirmTv;
     private AppCompatTextView backTv;
     private AppCompatTextView titleTv;
+    private Button addTv;
+    private Button submitTv;
+    private ListView planLv;
+    private DayDetailAdapter detailAdapter;
 
     //
     public static final int DAYPLAN_UP_SUC = 310001;
     //
     public static final int DAYPLAN_UP_FAIL = 310002;
 
+    List<DayDetailStc> dayDetailStcs = new ArrayList<DayDetailStc>();
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_dd_weekplan, container, false);
+        View view = inflater.inflate(R.layout.fragment_dd_dayplan, container, false);
         initView(view);
         return view;
     }
@@ -53,9 +65,15 @@ public class DdDayPlanFragment extends BaseFragmentSupport implements View.OnCli
         confirmTv = (AppCompatTextView) view.findViewById(R.id.top_navigation_bt_confirm);
         backTv = (AppCompatTextView) view.findViewById(R.id.top_navigation_bt_back);
         titleTv = (AppCompatTextView) view.findViewById(R.id.top_navigation_tv_title);
-        confirmBtn.setVisibility(View.VISIBLE);
+        confirmBtn.setVisibility(View.INVISIBLE);
         confirmBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
+
+        addTv = (Button) view.findViewById(R.id.dd_dayplan_bt_add);
+        submitTv = (Button) view.findViewById(R.id.dd_dayplan_bt_submit);
+        planLv = (ListView) view.findViewById(R.id.dd_dayplan_lv_details);
+        addTv.setOnClickListener(this);
+        submitTv.setOnClickListener(this);
 
     }
 
@@ -66,12 +84,25 @@ public class DdDayPlanFragment extends BaseFragmentSupport implements View.OnCli
         titleTv.setText("制定计划");
         handler = new MyHandler(this);
         ConstValues.handler = handler;
-        confirmTv.setText("日历");
 
-
+        initData();
     }
 
+    private void initData() {
 
+        /*DayDetailStc detailStc = new DayDetailStc();
+        dayDetailStcs.add(detailStc);*/
+        detailAdapter = new DayDetailAdapter(getActivity(), dayDetailStcs,new ILongClick() {
+            @Override
+            public void listViewItemLongClick(int position, View v) {
+                dayDetailStcs.remove(position);
+                Toast.makeText(getActivity(),"删除"+position+"项",Toast.LENGTH_SHORT).show();
+                detailAdapter.notifyDataSetChanged();
+            }
+        });
+        planLv.setAdapter(detailAdapter);
+
+    }
 
     // 点击事件
     @Override
@@ -83,14 +114,20 @@ public class DdDayPlanFragment extends BaseFragmentSupport implements View.OnCli
                 break;
             case R.id.top_navigation_rl_confirm:// 确定
 
-                Toast.makeText(getActivity(),"弹出日历",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "弹出日历", Toast.LENGTH_SHORT).show();
 
+                break;
+            case R.id.dd_dayplan_bt_add:// 确定
+                DayDetailStc detailStc = new DayDetailStc();
+                List<String> checknames = new ArrayList<>();
+                detailStc.setValchecknameLv(checknames);
+                dayDetailStcs.add(detailStc);
+                detailAdapter.notifyDataSetChanged();
                 break;
             default:
                 break;
         }
     }
-
 
 
     MyHandler handler;
