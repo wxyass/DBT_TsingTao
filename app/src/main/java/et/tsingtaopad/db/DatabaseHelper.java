@@ -319,6 +319,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, MitValaddaccountproM.class);// 终端追溯台账产品详情表
             TableUtils.createTable(connectionSource, MitValaddaccountproMTemp.class);// 终端追溯台账产品详情表 临时表
 
+            TableUtils.createTable(connectionSource, MitPlanweekM.class);// 周计划主表
+            TableUtils.createTable(connectionSource, MitPlandayM.class);// 日计划主表
+            TableUtils.createTable(connectionSource, MitPlandaydetailM.class);// 详细日计划
+            TableUtils.createTable(connectionSource, MitPlandayvalM.class);// 日计划追溯项主表
+
 
             this.initView(db);
             this.initData(db);
@@ -1140,7 +1145,18 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 db.execSQL(MIT_VALADDACCOUNTPRO_M_TEMP);
 
 
-                //
+                // 周计划主表
+                String MIT_PLANWEEK_M = "create table MIT_PLANWEEK_M ( id varchar(36) not null, status char(1) null, starttime  date null, endtime date null, creuser varchar2(128) null, creuserareaid varchar(36) null, credate date null, updateuser varchar2(128) null, updatedate date null, uploadflag varchar2(1) null, padisconsistent varchar2(1) null )";
+                db.execSQL(MIT_PLANWEEK_M);
+                // 日计划主表
+                String MIT_PLANDAY_M = "create table MIT_PLANDAY_M   ( id varchar(36) not null, planweekid varchar(36) null, plandate   date   null, uploadflag varchar2(1) null, padisconsistent varchar2(1) null )";
+                db.execSQL(MIT_PLANDAY_M);
+                // 详细日计划
+                String MIT_PLANDAYDETAIL_M = "create table MIT_PLANDAYDETAIL_M   ( id varchar(36) not null, planweekid varchar(36) null, plandayid  varchar(36) null, planareaid varchar(36) null, plangridid varchar(36) null, uploadflag varchar2(1) null, padisconsistent varchar2(1) null )";
+                db.execSQL(MIT_PLANDAYDETAIL_M);
+                // 日计划追溯项主表
+                String MIT_PLANDAYVAL_M = "create table MIT_PLANDAYVAL_M   ( id varchar(36) not null, planweekid varchar(36) null, plandaydetailid  varchar(36) null, plancomtype  char(1)    null, plancomid  varchar(36) null, uploadflag varchar2(1) null, padisconsistent varchar2(1) null )";
+                db.execSQL(MIT_PLANDAYVAL_M);
 
             } catch (Exception e) {
                 e.printStackTrace();
