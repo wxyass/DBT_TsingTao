@@ -66,6 +66,7 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
     List<DayPlanStc> workPlanStcs = new ArrayList<DayPlanStc>();
 
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

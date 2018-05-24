@@ -1,38 +1,41 @@
 package et.tsingtaopad.dd.ddweekplan;
 
 import android.app.Activity;
-import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import et.tsingtaopad.R;
+import et.tsingtaopad.adapter.AlertKeyValueAdapter;
+import et.tsingtaopad.adapter.DayDetailSelectKeyValueAdapter;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
+import et.tsingtaopad.core.util.dbtutil.FunUtil;
+import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.core.view.alertview.OnDismissListener;
+import et.tsingtaopad.db.table.MstGridM;
+import et.tsingtaopad.db.table.MstMarketareaM;
+import et.tsingtaopad.db.table.MstRouteM;
 import et.tsingtaopad.dd.ddweekplan.domain.DayDetailStc;
-import et.tsingtaopad.dd.ddweekplan.domain.DayPlanStc;
-import et.tsingtaopad.dd.ddzs.zsinvoicing.ZsInvocingAmendFragment;
-import et.tsingtaopad.dd.ddzs.zsinvoicing.ZsInvoicingFragment;
-import et.tsingtaopad.dd.ddzs.zsshopvisit.ZsVisitShopActivity;
-import et.tsingtaopad.listviewintf.IClick;
+import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectService;
+import et.tsingtaopad.initconstvalues.domain.KvStc;
 import et.tsingtaopad.listviewintf.ILongClick;
 
 /**
@@ -48,11 +51,13 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
     private ILongClick listener;
     private AlertView mAlertViewExt;//窗口拓展例子
     private DayDetailStc dayDetailStc;
+    private XtTermSelectService xtSelectService;
 
     public DayDetailAdapter(Activity context, List<DayDetailStc> dataLst, ILongClick listener) {
         this.context = context;
         this.dataLst = dataLst;
         this.listener = listener;
+        xtSelectService = new XtTermSelectService(context);
     }
 
     @Override
@@ -105,7 +110,18 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
         holder.ll_all.setTag(position);
         holder.ll_all.setOnLongClickListener(listener);
 
-        holder.tv_check.setText(item.getValchecknameLv().toString());
+        // 追溯项
+        holder.tv_check.setText(item.getValchecknameLv().toString().substring(1,item.getValchecknameLv().toString().length()-1));
+        // 追溯区域
+        holder.tv_areaid.setText(item.getValareaname());
+        // 追溯定格
+        holder.tv_valgridkey.setText(item.getValgridname());
+        // 追溯路线
+        if(item.getValroutenames()!=null){
+            holder.tv_routekey.setText(item.getValroutenames().substring(0,item.getValroutenames().length()-1));
+        }else{
+            holder.tv_routekey.setText("");
+        }
 
         holder.rl_check.setTag(position);
         holder.rl_areaid.setTag(position);
@@ -125,16 +141,18 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
         switch (v.getId()) {
             case R.id.item_daydetail_rl_check:// 追溯项
                 alertShow3(posi);
-                //Toast.makeText(context, "点击了第" + posi + "追溯项", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.item_daydetail_rl_areaid:// 追溯区域
-                Toast.makeText(context, "点击了第" + posi + "追溯区域", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "点击了第" + posi + "追溯区域", Toast.LENGTH_SHORT).show();
+                alertShow4(posi);
                 break;
             case R.id.item_daydetail_tv_gridkey:// 追溯定格
-                Toast.makeText(context, "点击了第" + posi + "追溯定格", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "点击了第" + posi + "追溯定格", Toast.LENGTH_SHORT).show();
+                alertShow5(posi);
                 break;
             case R.id.item_daydetail_rl_routekey:// 追溯路线
-                Toast.makeText(context, "点击了第" + posi + "追溯路线", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "点击了第" + posi + "追溯路线", Toast.LENGTH_SHORT).show();
+                alertShow6(posi);
                 break;
             default:
                 break;
@@ -222,6 +240,175 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
                 notifyDataSetChanged();
             }
         });
+
+
+        mAlertViewExt.addExtView(extView);
+        mAlertViewExt.setCancelable(true).setOnDismissListener(new OnDismissListener() {
+            @Override
+            public void onDismiss(Object o) {
+                DbtLog.logUtils(TAG, "取消选择结果");
+            }
+        });
+        mAlertViewExt.show();
+    }
+
+    // 追溯区域
+    public void alertShow4(final int position) {
+
+        final DayDetailStc item = dataLst.get(position);
+        final List<MstMarketareaM> valueLst = xtSelectService.getMstMarketareaMList(PrefUtils.getString(context, "departmentid", ""));
+
+        mAlertViewExt = new AlertView("请选择区域", null, null, null,
+                null, context, AlertView.Style.ActionSheet, null);
+
+        ViewGroup lvextView = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.alert_list_form, null);
+        ListView lvlistview = (ListView) lvextView.findViewById(R.id.alert_list);
+        AlertKeyValueAdapter lvkeyValueAdapter = new AlertKeyValueAdapter(context, valueLst,
+                new String[]{"areaid", "areaname"}, item.getValareakey());
+        lvlistview.setAdapter(lvkeyValueAdapter);
+        lvlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                item.setValareaname(valueLst.get(position).getAreaname());
+                item.setValareakey(valueLst.get(position).getAreaid());
+                mAlertViewExt.dismiss();
+                notifyDataSetChanged();
+            }
+        });
+
+
+        mAlertViewExt.addExtView(lvextView);
+        mAlertViewExt.setCancelable(true).setOnDismissListener(new OnDismissListener() {
+            @Override
+            public void onDismiss(Object o) {
+                DbtLog.logUtils(TAG, "取消选择结果");
+            }
+        });
+        mAlertViewExt.show();
+    }
+
+    // 追溯定格
+    public void alertShow5(final int position) {
+
+        final DayDetailStc item = dataLst.get(position);
+        final List<MstGridM> valueLst = xtSelectService.getMstGridMList(FunUtil.isBlankOrNullTo(item.getValareakey(),""));
+
+        mAlertViewExt = new AlertView("请选择定格", null, null, null,
+                null, context, AlertView.Style.ActionSheet, null);
+
+        ViewGroup lvextView = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.alert_list_form, null);
+        ListView lvlistview = (ListView) lvextView.findViewById(R.id.alert_list);
+        AlertKeyValueAdapter lvkeyValueAdapter = new AlertKeyValueAdapter(context, valueLst,
+                new String[]{"gridkey", "gridname"}, item.getValgridkey());
+        lvlistview.setAdapter(lvkeyValueAdapter);
+        lvlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                item.setValgridkey(valueLst.get(position).getGridkey());
+                item.setValgridname(valueLst.get(position).getGridname());
+                mAlertViewExt.dismiss();
+                notifyDataSetChanged();
+            }
+        });
+
+
+        mAlertViewExt.addExtView(lvextView);
+        mAlertViewExt.setCancelable(true).setOnDismissListener(new OnDismissListener() {
+            @Override
+            public void onDismiss(Object o) {
+                DbtLog.logUtils(TAG, "取消选择结果");
+            }
+        });
+        mAlertViewExt.show();
+    }
+
+    // 追溯路线
+    public void alertShow6(final int position) {
+
+        final DayDetailStc item = dataLst.get(position);
+        List<MstRouteM> valueLst = xtSelectService.getMstRouteMList(FunUtil.isBlankOrNullTo(item.getValgridkey(),""));
+        final List<KvStc> typeLst = new ArrayList<KvStc>();
+        for (MstRouteM routeM : valueLst) {
+            KvStc kvStc =new KvStc();
+            kvStc.setKey(routeM.getRoutekey());
+            kvStc.setValue(routeM.getRoutename());
+            kvStc.setIsDefault("");
+            typeLst.add(kvStc);
+        }
+
+        mAlertViewExt = new AlertView(null, null, null, null,
+                null, context, AlertView.Style.ActionSheet, null);
+        ViewGroup extView = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.alert_dayroute_form, null);
+
+        final ListView dataLv = (ListView) extView.findViewById(R.id.alert_dayroute_lv);
+        RelativeLayout rl_back1 = (RelativeLayout) extView.findViewById(R.id.top_navigation_rl_back1);
+        android.support.v7.widget.AppCompatTextView bt_back1 = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_bt_back1);
+        RelativeLayout rl_confirm1 = (RelativeLayout) extView.findViewById(R.id.top_navigation_rl_confirm1);
+        android.support.v7.widget.AppCompatTextView bt_confirm1 = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_bt_confirm1);
+
+        // 获取已选中的集合
+        List<String>  selectedId = new ArrayList<String>();
+        if(!TextUtils.isEmpty(item.getValroutekeys())){
+            selectedId = Arrays.asList(item.getValroutekeys().split(","));
+        }
+
+        // 标记选中状态
+        for (KvStc kvstc : typeLst) {
+            for (String itemselect : selectedId) {
+                if (kvstc.getKey().equals(itemselect)) {
+                    kvstc.setIsDefault("1");// 0:没选中 1已选中
+                }
+            }
+        }
+
+        final DayDetailSelectKeyValueAdapter sadapter = new DayDetailSelectKeyValueAdapter(context,
+                typeLst, new String[]{"key","value"}, item.getValroutekeys());
+        dataLv.setAdapter(sadapter);
+        dataLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                CheckBox itemCB = (CheckBox) arg1.findViewById(R.id.common_multiple_cb_lvitem);
+                TextView itemTv = (TextView) arg1.findViewById(R.id.common_multiple_tv_lvitem);
+                itemCB.toggle();//点击整行可以显示效果
+
+                String routekey = FunUtil.isBlankOrNullTo(itemTv.getHint(), " ") + ",";
+                String routename = FunUtil.isBlankOrNullTo(itemTv.getText().toString(), " ") + ",";
+                if (itemCB.isChecked()) {
+                    item.setValroutekeys(FunUtil.isBlankOrNullTo(item.getValroutekeys(),"")  + routekey);
+                    item.setValroutenames(FunUtil.isBlankOrNullTo(item.getValroutenames(),"") + routename);
+                    ((KvStc)typeLst.get(arg2)).setIsDefault("1");
+                } else {
+                    item.setValroutekeys(FunUtil.isBlankOrNullTo(item.getValroutekeys(),"") .replace(routekey, ""));
+                    item.setValroutenames(FunUtil.isBlankOrNullTo(item.getValroutenames(),"").replace(routename, ""));
+                    ((KvStc)typeLst.get(arg2)).setIsDefault("0");
+                }
+                sadapter.notifyDataSetChanged();
+            }
+        });
+
+
+        // 确定
+        rl_confirm1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+
+                /*item.setValroutekeys(item.getValroutekeys().substring(0,item.getValroutekeys().length()-1));
+                item.setValroutenames(item.getValroutenames().substring(0,item.getValroutenames().length()-1));*/
+
+                mAlertViewExt.dismiss();
+                notifyDataSetChanged();
+            }
+        });
+
+        // 取消
+        rl_back1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+
+                mAlertViewExt.dismiss();
+            }
+        });
+
 
 
         mAlertViewExt.addExtView(extView);

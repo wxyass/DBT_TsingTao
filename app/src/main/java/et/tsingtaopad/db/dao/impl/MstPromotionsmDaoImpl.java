@@ -214,7 +214,8 @@ public class MstPromotionsmDaoImpl extends
         buffer.append(" on pm.promotkey = pp.promotkey and pp.typekey='0' ");
         buffer.append("inner join mst_product_m p ");
         buffer.append(" on pp.productkey = p.productkey ");
-        buffer.append("left join mit_valpromotions_m_temp pt ");
+        //buffer.append("left join mit_valpromotions_m_temp pt ");
+        buffer.append("inner join mit_valpromotions_m_temp pt ");
         buffer.append(" on pm.promotkey = pt.valpromotionsid and pt.visitkey =? ");
         buffer.append("where ? between pm.startdate and pm.enddate ");
         buffer.append("order by pm.promotkey ");

@@ -117,16 +117,24 @@ public class DdDayPlanFragment extends BaseFragmentSupport implements View.OnCli
                 Toast.makeText(getActivity(), "弹出日历", Toast.LENGTH_SHORT).show();
 
                 break;
-            case R.id.dd_dayplan_bt_add:// 确定
+            case R.id.dd_dayplan_bt_add:// 新增计划
                 DayDetailStc detailStc = new DayDetailStc();
                 List<String> checknames = new ArrayList<>();
                 detailStc.setValchecknameLv(checknames);
                 dayDetailStcs.add(detailStc);
                 detailAdapter.notifyDataSetChanged();
                 break;
+            case R.id.dd_dayplan_bt_submit:// 保存计划
+                saveDayDetailPlan();
+                break;
             default:
                 break;
         }
+    }
+
+    // 保存每日计划
+    private void saveDayDetailPlan() {
+
     }
 
 

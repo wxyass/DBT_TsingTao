@@ -1139,6 +1139,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 String MIT_VALADDACCOUNTPRO_M_TEMP = "create table MIT_VALADDACCOUNTPRO_M_TEMP ( id varchar2(36) not null,valterid varchar2(36) null, valaddaccountid varchar2(36) null, valprotime  varchar2(36) null, valpronumfalg  char(1) null, valpronum   varchar2(10) null, valprotruenum  varchar2(10) null, valproremark   varchar2(300)  null, uploadflag varchar2(1) null, padisconsistent varchar2(1) null )";
                 db.execSQL(MIT_VALADDACCOUNTPRO_M_TEMP);
 
+
+                //
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -952,9 +952,12 @@ public class FunUtil {
             data = content + "0";
         } else if (content.length() > 1 && content.startsWith(".")) {
             // 以小数点开头,截取小数点后两位
-            Double d = Double.parseDouble("0" + content);
-            String[] split = String.valueOf(d + 0.000001).split("\\.");
-            data = split[0] + "." + split[1].substring(0, 2);
+            String realnum = "0" + content;
+            if(realnum.length()>4){
+                data = realnum.substring(0, 4);
+            }else{
+                data = realnum;
+            }
         } else if ("".equals(content)) {
             data = "0";
         } else {

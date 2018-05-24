@@ -2,6 +2,7 @@ package et.tsingtaopad.dd.ddweekplan.domain;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,18 +24,26 @@ public class DayDetailStc implements Serializable{
 	// 日计划单个详情主键
 	private String detailkey;
 
-	// 追溯区域
-	private String valarea;
-	// 追溯定格
-	private String valgrid;
 	// 追溯项key 集合
-	private List<String> valcheckkeyLv;
+	// private List<String> valcheckkeyLv;
 	// 追溯项name 集合
 	private List<String> valchecknameLv;
-	// 追溯路线key 集合
-	private List<String> valroutekeyLv;
-	// 追溯路线name 集合
-	private List<String> valroutenameLv;
+
+	// 追溯区域
+	private String valareakey;
+	// 追溯区域
+	private String valareaname;
+
+	// 追溯定格
+	private String valgridkey;
+	// 追溯定格
+	private String valgridname;
+
+	// 追溯路线key
+	private String valroutekeys;
+	// 追溯路线name
+	private String valroutenames;
+
 
 	public static long getSerialVersionUID() {
 		return serialVersionUID;
@@ -64,29 +73,45 @@ public class DayDetailStc implements Serializable{
 		this.detailkey = detailkey;
 	}
 
-	public String getValarea() {
-		return valarea;
+	public String getValareakey() {
+		return valareakey;
 	}
 
-	public void setValarea(String valarea) {
-		this.valarea = valarea;
+	public void setValareakey(String valareakey) {
+		this.valareakey = valareakey;
 	}
 
-	public String getValgrid() {
-		return valgrid;
+	public String getValareaname() {
+		return valareaname;
 	}
 
-	public void setValgrid(String valgrid) {
-		this.valgrid = valgrid;
+	public void setValareaname(String valareaname) {
+		this.valareaname = valareaname;
 	}
 
-	public List<String> getValcheckkeyLv() {
+	public String getValgridkey() {
+		return valgridkey;
+	}
+
+	public void setValgridkey(String valgridkey) {
+		this.valgridkey = valgridkey;
+	}
+
+	public String getValgridname() {
+		return valgridname;
+	}
+
+	public void setValgridname(String valgridname) {
+		this.valgridname = valgridname;
+	}
+
+	/*public List<String> getValcheckkeyLv() {
 		return valcheckkeyLv;
 	}
 
 	public void setValcheckkeyLv(List<String> valcheckkeyLv) {
 		this.valcheckkeyLv = valcheckkeyLv;
-	}
+	}*/
 
 	public List<String> getValchecknameLv() {
 		return valchecknameLv;
@@ -95,20 +120,19 @@ public class DayDetailStc implements Serializable{
 	public void setValchecknameLv(List<String> valchecknameLv) {
 		this.valchecknameLv = valchecknameLv;
 	}
-
-	public List<String> getValroutekeyLv() {
-		return valroutekeyLv;
+	public String getValroutenames() {
+		return valroutenames;
 	}
 
-	public void setValroutekeyLv(List<String> valroutekeyLv) {
-		this.valroutekeyLv = valroutekeyLv;
+	public void setValroutenames(String valroutenames) {
+		this.valroutenames = valroutenames;
 	}
 
-	public List<String> getValroutenameLv() {
-		return valroutenameLv;
+	public String getValroutekeys() {
+		return valroutekeys;
 	}
 
-	public void setValroutenameLv(List<String> valroutenameLv) {
-		this.valroutenameLv = valroutenameLv;
+	public void setValroutekeys(String valroutekeys) {
+		this.valroutekeys = valroutekeys;
 	}
 }

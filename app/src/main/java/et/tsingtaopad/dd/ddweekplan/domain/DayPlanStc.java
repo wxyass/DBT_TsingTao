@@ -3,6 +3,7 @@ package et.tsingtaopad.dd.ddweekplan.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 项目名称：营销移动智能工作平台 </br>
@@ -25,6 +26,8 @@ public class DayPlanStc implements Serializable{
 	private String visitEndDate;//拜访结束日期
 	private Date date;
 
+	// 追溯项name 集合
+	private List<DayDetailStc> detailStcs;
 
 	public DayPlanStc() {
 	}
@@ -123,5 +126,13 @@ public class DayPlanStc implements Serializable{
 
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	public List<DayDetailStc> getDetailStcs() {
+		return detailStcs;
+	}
+
+	public void setDetailStcs(List<DayDetailStc> detailStcs) {
+		this.detailStcs = detailStcs;
 	}
 }
