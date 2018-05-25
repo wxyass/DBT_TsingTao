@@ -151,6 +151,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<MitValaddaccountproMTemp, String> mitValaddaccountproMTempDao = null;
     private Dao<MitValaddaccountproM, String> mitValaddaccountproMDao = null;
 
+    private Dao<MitPlanweekM, String> mitPlanweekMDao = null;
+    private Dao<MitPlandayM, String> mitPlandayMDao = null;
+    private Dao<MitPlandaydetailM, String> mitPlandaydetailMDao = null;
+    private Dao<MitPlandayvalM, String> mitPlandayvalMDao = null;
+
     public DatabaseHelper(Context context) {
 
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -1146,16 +1151,16 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 
                 // 周计划主表
-                String MIT_PLANWEEK_M = "create table MIT_PLANWEEK_M ( id varchar(36) not null, status char(1) null, starttime  date null, endtime date null, creuser varchar2(128) null, creuserareaid varchar(36) null, credate date null, updateuser varchar2(128) null, updatedate date null, uploadflag varchar2(1) null, padisconsistent varchar2(1) null )";
+                String MIT_PLANWEEK_M = "create table MIT_PLANWEEK_M ( id varchar(36) not null, status char(1) null, starttime  varchar(36) null, endtime varchar(36) null, creuser varchar2(128) null, creuserareaid varchar(36) null, credate date null, updateuser varchar2(128) null, updatedate date null, uploadflag varchar2(1) null, padisconsistent varchar2(1) null )";
                 db.execSQL(MIT_PLANWEEK_M);
                 // 日计划主表
-                String MIT_PLANDAY_M = "create table MIT_PLANDAY_M   ( id varchar(36) not null, planweekid varchar(36) null, plandate   date   null, uploadflag varchar2(1) null, padisconsistent varchar2(1) null )";
+                String MIT_PLANDAY_M = "create table MIT_PLANDAY_M   ( id varchar(36) not null, planweekid varchar(36) null, status char(1) null,plandate   date   null, uploadflag varchar2(1) null, padisconsistent varchar2(1) null )";
                 db.execSQL(MIT_PLANDAY_M);
                 // 详细日计划
                 String MIT_PLANDAYDETAIL_M = "create table MIT_PLANDAYDETAIL_M   ( id varchar(36) not null, planweekid varchar(36) null, plandayid  varchar(36) null, planareaid varchar(36) null, plangridid varchar(36) null, uploadflag varchar2(1) null, padisconsistent varchar2(1) null )";
                 db.execSQL(MIT_PLANDAYDETAIL_M);
                 // 日计划追溯项主表
-                String MIT_PLANDAYVAL_M = "create table MIT_PLANDAYVAL_M   ( id varchar(36) not null, planweekid varchar(36) null, plandaydetailid  varchar(36) null, plancomtype  char(1)    null, plancomid  varchar(36) null, uploadflag varchar2(1) null, padisconsistent varchar2(1) null )";
+                String MIT_PLANDAYVAL_M = "create table MIT_PLANDAYVAL_M   ( id varchar(36) not null, planweekid varchar(36) null, plandaydetailid  varchar(36) null,planareaid varchar(36) null, plangridid varchar(36) null, plancomtype  char(1)    null, plancomid  varchar(36) null, uploadflag varchar2(1) null, padisconsistent varchar2(1) null )";
                 db.execSQL(MIT_PLANDAYVAL_M);
 
             } catch (Exception e) {
@@ -2197,6 +2202,37 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             mitValaddaccountproMDao = getDao(MitValaddaccountproM.class);
         }
         return mitValaddaccountproMDao;
+    }
+
+
+
+    public Dao<MitPlanweekM, String> getMitPlanweekMDao() throws SQLException {
+
+        if (mitPlanweekMDao == null) {
+            mitPlanweekMDao = getDao(MitPlanweekM.class);
+        }
+        return mitPlanweekMDao;
+    }
+    public Dao<MitPlandayM, String> getMitPlandayMDao() throws SQLException {
+
+        if (mitPlandayMDao == null) {
+            mitPlandayMDao = getDao(MitPlandayM.class);
+        }
+        return mitPlandayMDao;
+    }
+    public Dao<MitPlandaydetailM, String> getMitPlandaydetailMDao() throws SQLException {
+
+        if (mitPlandaydetailMDao == null) {
+            mitPlandaydetailMDao = getDao(MitPlandaydetailM.class);
+        }
+        return mitPlandaydetailMDao;
+    }
+    public Dao<MitPlandayvalM, String> getMitPlandayvalMDao() throws SQLException {
+
+        if (mitPlandayvalMDao == null) {
+            mitPlandayvalMDao = getDao(MitPlandayvalM.class);
+        }
+        return mitPlandayvalMDao;
     }
 
     /**

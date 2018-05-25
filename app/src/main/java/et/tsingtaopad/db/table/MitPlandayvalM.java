@@ -29,6 +29,10 @@ public class MitPlandayvalM implements java.io.Serializable {
     private String uploadflag;//
     @DatabaseField
     private String padisconsistent;//
+    @DatabaseField
+    private String planareaid ;// 追溯区域
+    @DatabaseField
+    private String plangridid ;// 追溯定格
 
 
     // Constructors
@@ -93,5 +97,21 @@ public class MitPlandayvalM implements java.io.Serializable {
 
     public void setPadisconsistent(String padisconsistent) {
         this.padisconsistent = padisconsistent;
+    }
+
+    public String getPlanareaid() {
+        return planareaid;
+    }
+
+    public void setPlanareaid(String planareaid) {
+        this.planareaid = planareaid;
+    }
+
+    public String getPlangridid() {
+        return plangridid;
+    }
+
+    public void setPlangridid(String plangridid) {
+        this.plangridid = plangridid;
     }
 }

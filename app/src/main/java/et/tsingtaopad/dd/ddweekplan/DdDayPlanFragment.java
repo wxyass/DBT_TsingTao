@@ -1,5 +1,6 @@
 package et.tsingtaopad.dd.ddweekplan;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,8 +21,11 @@ import java.util.List;
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.db.table.MitPlanweekM;
 import et.tsingtaopad.dd.ddweekplan.domain.DayDetailStc;
 import et.tsingtaopad.dd.ddweekplan.domain.DayPlanStc;
+import et.tsingtaopad.dd.ddxt.invoicing.XtInvoicingFragment;
+import et.tsingtaopad.dd.ddzs.zscheckindex.ZsCheckIndexFragment;
 import et.tsingtaopad.listviewintf.ILongClick;
 
 /**
@@ -41,6 +45,13 @@ public class DdDayPlanFragment extends BaseFragmentSupport implements View.OnCli
     private Button submitTv;
     private ListView planLv;
     private DayDetailAdapter detailAdapter;
+    private MitPlanweekM weekplan;
+    private WeekPlanService service;
+    private String weekDateStart;
+    private String weekDateEnd;
+    private DayPlanStc dayplanstc;
+
+    DdWeekPlanFragment.MyHandler handler;
 
     //
     public static final int DAYPLAN_UP_SUC = 310001;
@@ -49,6 +60,13 @@ public class DdDayPlanFragment extends BaseFragmentSupport implements View.OnCli
 
     List<DayDetailStc> dayDetailStcs = new ArrayList<DayDetailStc>();
 
+    public DdDayPlanFragment() {
+    }
+
+    @SuppressLint("ValidFragment")
+    public DdDayPlanFragment(DdWeekPlanFragment.MyHandler handler) {
+        this.handler = handler;
+    }
 
     @Nullable
     @Override
@@ -82,21 +100,29 @@ public class DdDayPlanFragment extends BaseFragmentSupport implements View.OnCli
         super.onActivityCreated(savedInstanceState);
 
         titleTv.setText("制定计划");
-        handler = new MyHandler(this);
-        ConstValues.handler = handler;
+
+        service = new WeekPlanService(getActivity());
 
         initData();
     }
 
     private void initData() {
 
-        /*DayDetailStc detailStc = new DayDetailStc();
-        dayDetailStcs.add(detailStc);*/
-        detailAdapter = new DayDetailAdapter(getActivity(), dayDetailStcs,new ILongClick() {
+        // 获取传递过来的数据
+        Bundle bundle = getArguments();
+        dayplanstc = (DayPlanStc) bundle.getSerializable("dayplanstc");
+        weekplan = (MitPlanweekM) bundle.getSerializable("weekplan");
+        weekDateStart = (String) bundle.getSerializable("weekDateStart");
+        weekDateEnd = (String) bundle.getSerializable("weekDateEnd");
+
+        /*DayDetailStc detailStc = new DayDetailStc();*/
+        // dayDetailStcs.add((DayDetailStc) dayplanstc.getDetailStcs());
+        dayDetailStcs.addAll(dayplanstc.getDetailStcs());
+        detailAdapter = new DayDetailAdapter(getActivity(), dayDetailStcs, new ILongClick() {
             @Override
             public void listViewItemLongClick(int position, View v) {
                 dayDetailStcs.remove(position);
-                Toast.makeText(getActivity(),"删除"+position+"项",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "删除" + position + "项", Toast.LENGTH_SHORT).show();
                 detailAdapter.notifyDataSetChanged();
             }
         });
@@ -126,56 +152,33 @@ public class DdDayPlanFragment extends BaseFragmentSupport implements View.OnCli
                 break;
             case R.id.dd_dayplan_bt_submit:// 保存计划
                 saveDayDetailPlan();
+                // Toast.makeText(getActivity(), "保存成功", Toast.LENGTH_SHORT).show();
+                handler.sendEmptyMessage(ConstValues.WAIT0);
+                supportFragmentManager.popBackStack();
                 break;
             default:
                 break;
         }
     }
 
-    // 保存每日计划
+    // 保存每日的计划
     private void saveDayDetailPlan() {
-
+        checkdayDetailStcs(dayDetailStcs);
+        service.saveTable(weekplan, dayplanstc, dayDetailStcs, weekDateStart, weekDateEnd);
     }
 
-
-    MyHandler handler;
-
-    /**
-     * 接收子线程消息的 Handler
-     */
-    public static class MyHandler extends Handler {
-
-        // 软引用
-        SoftReference<DdDayPlanFragment> fragmentRef;
-
-        public MyHandler(DdDayPlanFragment fragment) {
-            fragmentRef = new SoftReference<DdDayPlanFragment>(fragment);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            DdDayPlanFragment fragment = fragmentRef.get();
-            if (fragment == null) {
-                return;
-            }
-
-
-            // 处理UI 变化
-            switch (msg.what) {
-                case DAYPLAN_UP_SUC://
-                    fragment.shuaxinXtTermSelect(1);
-                    break;
-                case DAYPLAN_UP_FAIL://
-                    fragment.shuaxinXtTermSelect(2);
-                    break;
+    // 保存前的检测
+    private void checkdayDetailStcs(List<DayDetailStc> dayDetailStcs) {
+        for (DayDetailStc detailStc:dayDetailStcs){
+            if("".equals(detailStc.getValchecknameLv())
+                    ||"".equals(detailStc.getValchecknameLv())
+                    ||"".equals(detailStc.getValchecknameLv())
+                    ||"".equals(detailStc.getValchecknameLv())
+                    ||"".equals(detailStc.getValchecknameLv())){
 
             }
         }
     }
 
-    // 结束上传  刷新页面  0:确定上传  1上传成功  2上传失败
-    private void shuaxinXtTermSelect(int upType) {
-
-    }
 
 }

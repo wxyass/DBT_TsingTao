@@ -12,9 +12,9 @@ import java.util.List;
  */
 public class DayPlanStc implements Serializable{
 
-	private String planKey;//绑定的MstPlanforuserM 的plankey
+	private String planKey;//绑定的
 	private String weekday;//周几 (周日)
-	private String visitTime;//预计拜访时间 (2018-03-12)
+	private String visitTime;// (2018-03-12)
 	private String operation;//操作
 	private String state = "0";//状态
 	private String plancheck;//追溯项
@@ -24,7 +24,7 @@ public class DayPlanStc implements Serializable{
 
 	private String visitStartDate;//拜访开始日期yyMMdd
 	private String visitEndDate;//拜访结束日期
-	private Date date;
+	private String plandate;//计划日期
 
 	// 追溯项name 集合
 	private List<DayDetailStc> detailStcs;
@@ -120,12 +120,12 @@ public class DayPlanStc implements Serializable{
 		this.visitEndDate = visitEndDate;
 	}
 
-	public Date getDate() {
-		return date;
+	public String getPlandate() {
+		return plandate;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setPlandate(String plandate) {
+		this.plandate = plandate;
 	}
 
 	public List<DayDetailStc> getDetailStcs() {

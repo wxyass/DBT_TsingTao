@@ -85,13 +85,21 @@ public class WeekPlanAdapter extends BaseAdapter {
         holder.ll_all.setTag(position);
         holder.ll_all.setOnClickListener(listener);
 
-        // 周几
-        holder.statueTv.setHint(item.getState());
+        // 未制定
         holder.statueTv.setText(item.getState());
 
-        // 未指定
-        holder.weekday.setHint(item.getWeekday());
+        // 周几
         holder.weekday.setText(item.getWeekday());
+
+        // 时间
+        holder.time.setText(item.getVisitTime());
+
+        // 区域
+        holder.tv_area.setText(item.getPlanareaid());
+        // 路线
+        holder.tv_route .setText(item.getPlanroute());
+        // 追溯项
+        holder.tv_check .setText(item.getPlancheck());
 
         return convertView;
     }

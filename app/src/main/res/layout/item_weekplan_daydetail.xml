@@ -32,10 +32,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:lines="1"
                 android:layout_margin="3dp"
                 android:layout_toRightOf="@id/item_daydetail_tv_check01"
-                android:inputType="number"/>
+                android:ellipsize="end"
+                android:maxLines="1"
+                />
 
         </RelativeLayout>
 
@@ -64,6 +65,8 @@
                 android:layout_centerVertical="true"
                 android:layout_margin="3dp"
                 android:layout_toRightOf="@id/item_daydetail_tv_area01"
+                android:ellipsize="end"
+                android:maxLines="1"
                 />
 
         </RelativeLayout>
@@ -91,10 +94,11 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:lines="1"
                 android:layout_margin="3dp"
                 android:layout_toRightOf="@id/item_daydetail_tv_valgrid01"
-                android:inputType="number"/>
+                android:ellipsize="end"
+                android:maxLines="1"
+                />
 
         </RelativeLayout>
 
@@ -121,10 +125,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:lines="1"
                 android:layout_margin="3dp"
                 android:layout_toRightOf="@id/item_daydetail_tv_route01"
-                android:inputType="number"/>
+                android:ellipsize="end"
+                android:maxLines="1"/>
 
         </RelativeLayout>
 

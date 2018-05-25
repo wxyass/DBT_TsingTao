@@ -92,13 +92,13 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
             convertView = LayoutInflater.from(context).inflate(R.layout.item_weekplan_daydetail, null);
             holder.ll_all = (LinearLayout) convertView.findViewById(R.id.item_daydetail_ll_all);
             holder.rl_check = (RelativeLayout) convertView.findViewById(R.id.item_daydetail_rl_check);
-            holder.tv_check = (TextView) convertView.findViewById(R.id.item_daydetail_tv_check);
+            holder.tv_checkname = (TextView) convertView.findViewById(R.id.item_daydetail_tv_check);
             holder.rl_areaid = (RelativeLayout) convertView.findViewById(R.id.item_daydetail_rl_areaid);
-            holder.tv_areaid = (TextView) convertView.findViewById(R.id.item_daydetail_tv_areaid);
+            holder.tv_areaname = (TextView) convertView.findViewById(R.id.item_daydetail_tv_areaid);
             holder.tv_gridkey = (RelativeLayout) convertView.findViewById(R.id.item_daydetail_tv_gridkey);
-            holder.tv_valgridkey = (TextView) convertView.findViewById(R.id.item_daydetail_tv_valgridkey);
+            holder.tv_valgridname = (TextView) convertView.findViewById(R.id.item_daydetail_tv_valgridkey);
             holder.rl_routekey = (RelativeLayout) convertView.findViewById(R.id.item_daydetail_rl_routekey);
-            holder.tv_routekey = (TextView) convertView.findViewById(R.id.item_daydetail_tv_routekey);
+            holder.tv_routename = (TextView) convertView.findViewById(R.id.item_daydetail_tv_routekey);
 
             convertView.setTag(holder);
         } else {
@@ -111,16 +111,17 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
         holder.ll_all.setOnLongClickListener(listener);
 
         // 追溯项
-        holder.tv_check.setText(item.getValchecknameLv().toString().substring(1,item.getValchecknameLv().toString().length()-1));
+        holder.tv_checkname.setText(item.getValchecknameLv().toString().substring(1,item.getValchecknameLv().toString().length()-1));
         // 追溯区域
-        holder.tv_areaid.setText(item.getValareaname());
+        holder.tv_areaname.setText(item.getValareaname());
         // 追溯定格
-        holder.tv_valgridkey.setText(item.getValgridname());
+        holder.tv_valgridname.setText(item.getValgridname());
         // 追溯路线
         if(item.getValroutenames()!=null){
-            holder.tv_routekey.setText(item.getValroutenames().substring(0,item.getValroutenames().length()-1));
+            //holder.tv_routename.setText(item.getValroutenames().substring(0,item.getValroutenames().length()-1));
+            holder.tv_routename.setText(item.getValroutenames());
         }else{
-            holder.tv_routekey.setText("");
+            holder.tv_routename.setText("");
         }
 
         holder.rl_check.setTag(position);
@@ -162,13 +163,13 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
     private class ViewHolder {
         private LinearLayout ll_all;
         private RelativeLayout rl_check;
-        private TextView tv_check;
+        private TextView tv_checkname;
         private RelativeLayout rl_areaid;
-        private TextView tv_areaid;
+        private TextView tv_areaname;
         private RelativeLayout tv_gridkey;
-        private TextView tv_valgridkey;
+        private TextView tv_valgridname;
         private RelativeLayout rl_routekey;
-        private TextView tv_routekey;
+        private TextView tv_routename;
     }
 
     // 追溯项

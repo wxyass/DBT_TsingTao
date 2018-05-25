@@ -22,9 +22,9 @@ public class MitPlanweekM implements java.io.Serializable {
     @DatabaseField
     private String status ;//状态
     @DatabaseField
-    private Date starttime  ;//周开始日期
+    private String starttime  ;//周开始日期
     @DatabaseField
-    private Date endtime ;//周结束日期
+    private String endtime ;//周结束日期
     @DatabaseField
     private String creuser ;//创建人
     @DatabaseField
@@ -65,19 +65,19 @@ public class MitPlanweekM implements java.io.Serializable {
         this.status = status;
     }
 
-    public Date getStarttime() {
+    public String getStarttime() {
         return starttime;
     }
 
-    public void setStarttime(Date starttime) {
+    public void setStarttime(String starttime) {
         this.starttime = starttime;
     }
 
-    public Date getEndtime() {
+    public String getEndtime() {
         return endtime;
     }
 
-    public void setEndtime(Date endtime) {
+    public void setEndtime(String endtime) {
         this.endtime = endtime;
     }
 

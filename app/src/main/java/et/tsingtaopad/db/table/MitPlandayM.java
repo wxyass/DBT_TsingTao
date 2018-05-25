@@ -22,11 +22,13 @@ public class MitPlandayM implements java.io.Serializable {
     @DatabaseField
     private String planweekid;//周计划主键
     @DatabaseField
-    private Date plandate;//日计划日期
+    private String plandate;//日计划日期
     @DatabaseField
     private String uploadflag;//varchar2(1) null,
     @DatabaseField
     private String padisconsistent;// varchar2(1) null
+    @DatabaseField
+    private String status ;//状态
 
     // Constructors
 
@@ -52,11 +54,11 @@ public class MitPlandayM implements java.io.Serializable {
         this.planweekid = planweekid;
     }
 
-    public Date getPlandate() {
+    public String getPlandate() {
         return plandate;
     }
 
-    public void setPlandate(Date plandate) {
+    public void setPlandate(String plandate) {
         this.plandate = plandate;
     }
 
@@ -74,5 +76,13 @@ public class MitPlandayM implements java.io.Serializable {
 
     public void setPadisconsistent(String padisconsistent) {
         this.padisconsistent = padisconsistent;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
