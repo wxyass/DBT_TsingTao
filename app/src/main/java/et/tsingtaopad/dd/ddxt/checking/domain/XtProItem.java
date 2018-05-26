@@ -36,6 +36,8 @@ public class XtProItem implements Serializable{
 
     // 督导采集项表主键
     private String id;
+    // 追溯拉链表主键
+    private String valchecktypeid;
 
     // 业代结果量(现有量+变化量)
     private String valitem;
@@ -210,5 +212,13 @@ public class XtProItem implements Serializable{
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getValchecktypeid() {
+        return valchecktypeid;
+    }
+
+    public void setValchecktypeid(String valchecktypeid) {
+        this.valchecktypeid = valchecktypeid;
     }
 }

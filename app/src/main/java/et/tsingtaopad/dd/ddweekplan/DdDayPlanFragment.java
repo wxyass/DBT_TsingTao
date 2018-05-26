@@ -153,8 +153,7 @@ public class DdDayPlanFragment extends BaseFragmentSupport implements View.OnCli
             case R.id.dd_dayplan_bt_submit:// 保存计划
                 saveDayDetailPlan();
                 // Toast.makeText(getActivity(), "保存成功", Toast.LENGTH_SHORT).show();
-                handler.sendEmptyMessage(ConstValues.WAIT0);
-                supportFragmentManager.popBackStack();
+
                 break;
             default:
                 break;
@@ -163,21 +162,28 @@ public class DdDayPlanFragment extends BaseFragmentSupport implements View.OnCli
 
     // 保存每日的计划
     private void saveDayDetailPlan() {
-        checkdayDetailStcs(dayDetailStcs);
-        service.saveTable(weekplan, dayplanstc, dayDetailStcs, weekDateStart, weekDateEnd);
+        if (checkdayDetailStcs(dayDetailStcs)) {
+            service.saveTable(weekplan, dayplanstc, dayDetailStcs, weekDateStart, weekDateEnd);
+            handler.sendEmptyMessage(ConstValues.WAIT0);
+            supportFragmentManager.popBackStack();
+        } else {
+            Toast.makeText(getActivity(), "各项输入不完整", Toast.LENGTH_SHORT).show();
+        }
     }
 
     // 保存前的检测
-    private void checkdayDetailStcs(List<DayDetailStc> dayDetailStcs) {
-        for (DayDetailStc detailStc:dayDetailStcs){
-            if("".equals(detailStc.getValchecknameLv())
-                    ||"".equals(detailStc.getValchecknameLv())
-                    ||"".equals(detailStc.getValchecknameLv())
-                    ||"".equals(detailStc.getValchecknameLv())
-                    ||"".equals(detailStc.getValchecknameLv())){
-
+    private boolean checkdayDetailStcs(List<DayDetailStc> dayDetailStcs) {
+        boolean ischeck = true;
+        for (DayDetailStc detailStc : dayDetailStcs) {
+            if (detailStc.getValchecknameLv().size()<=0||detailStc.getValchecknameLv()==null
+                    || "".equals(detailStc.getValareakey())|| detailStc.getValareakey() ==null
+                    || "".equals(detailStc.getValgridkey())|| detailStc.getValgridkey() ==null
+                    || "".equals(detailStc.getValroutekeys())|| detailStc.getValroutekeys() ==null) {
+                ischeck = false;
+                break;
             }
         }
+        return ischeck;
     }
 
 

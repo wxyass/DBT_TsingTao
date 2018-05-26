@@ -1023,13 +1023,16 @@ public class XtShopVisitService {
             // 复制活动拜访终端表 false:当天第一次拜访
             createMitPromotermInfoTemp(helper, mitValterMTemp.getId(), promDao, mitValpromotionsMTempDao);
 
-            // 复制到拉链表临时表 -> 追溯拉链表临时表
+            // 复制到拉链表临时表 -> 追溯拉链表临时表   // 复制采集项表 -> 追溯 采集项表
             createZsMstCheckexerecordInfoTemp(prevVisitId, term.getTerminalkey(), visitDate,
-                    visitMTemp, valueDao, mitValchecktypeMTempDao, mitValterMTemp.getId());
+                    visitMTemp, valueDao, mitValchecktypeMTempDao, mitValterMTemp.getId(),
+
+                    collectionDao, mitValcheckitemMTempDao, padCheckaccomplishInfoDao,  termStc
+            );
 
 
             // 复制采集项表 -> 追溯 采集项表
-            createZsMstCollectionexerecordInfoTemp(collectionDao, mitValcheckitemMTempDao, padCheckaccomplishInfoDao, prevVisitId, termStc, mitValterMTemp.getId());
+            // createZsMstCollectionexerecordInfoTemp(collectionDao, mitValcheckitemMTempDao, padCheckaccomplishInfoDao, prevVisitId, termStc, mitValterMTemp.getId());
 
             // 复制 终端追溯竞品附表 临时表
             createZsMitValcmpotherMTemp(mitValcmpotherMTempDao, mstVisitM, mitValterMTemp.getId());
@@ -1381,12 +1384,18 @@ public class XtShopVisitService {
     private void createZsMstCheckexerecordInfoTemp(String prevVisitId, String terminalkey, String visitDate,
                                                    MstVisitMTemp visitMTemp,
                                                    Dao<MstCheckexerecordInfo, String> valueDao,
-                                                   Dao<MitValchecktypeMTemp, String> mitValchecktypeMTempDao, String vidterid)
+                                                   Dao<MitValchecktypeMTemp, String> mitValchecktypeMTempDao, String vidterid,
+
+                                                   Dao<MstCollectionexerecordInfo, String> collectionDao,
+                                                   Dao<MitValcheckitemMTemp, String> mitValcheckitemMTempDao,
+                                                   Dao<PadCheckaccomplishInfo, String> padCheckaccomplishInfoDao,
+                                                    XtTermSelectMStc termStc)
             throws SQLException {
         // 无关
         createZsMstCheckexerecordInfoTemp1(prevVisitId, valueDao, mitValchecktypeMTempDao, vidterid);
         // 复制与产品有关的指标值
-        createZsMstCheckexerecordInfoTemp2(prevVisitId, terminalkey, valueDao, mitValchecktypeMTempDao, vidterid);
+        createZsMstCheckexerecordInfoTemp2(prevVisitId, terminalkey, valueDao, mitValchecktypeMTempDao, vidterid,
+                collectionDao,mitValcheckitemMTempDao,padCheckaccomplishInfoDao,termStc);
     }
 
 
@@ -1636,7 +1645,11 @@ public class XtShopVisitService {
      */
     private void createZsMstCheckexerecordInfoTemp2(String prevVisitId,
                                                     String terminalkey, Dao<MstCheckexerecordInfo, String> valueDao,
-                                                    Dao<MitValchecktypeMTemp, String> mitValchecktypeMTempDao, String vidterid)
+                                                    Dao<MitValchecktypeMTemp, String> mitValchecktypeMTempDao, String vidterid,
+                                                    Dao<MstCollectionexerecordInfo, String> collectionDao,
+                                                    Dao<MitValcheckitemMTemp, String> mitValcheckitemMTempDao,
+                                                    Dao<PadCheckaccomplishInfo, String> padCheckaccomplishInfoDao,
+                                                     XtTermSelectMStc termStc)
             throws SQLException {
         // 复制指标结果表，MST_CHECKEXERECORD_INFO(拜访指标执行记录表)
         QueryBuilder<MstCheckexerecordInfo, String> valueQb = valueDao.queryBuilder();
@@ -1658,7 +1671,69 @@ public class XtShopVisitService {
         List<MstCheckexerecordInfo> valueLst = valueQb.query();
         Map<String, MstCheckexerecordInfo> map = new HashMap<String, MstCheckexerecordInfo>();
         if (!CheckUtil.IsEmpty(valueLst)) {
-            MitValchecktypeMTemp itemTemp;
+            MitValchecktypeMTemp itemTemp = null;
+            for (MstCheckexerecordInfo item : valueLst) {
+                String key = item.getTerminalkey() + "-" + item.getCheckkey() + "-" + item.getProductkey();
+                if (!map.containsKey(key)) {
+                    map.put(key, item);
+                    itemTemp = new MitValchecktypeMTemp();
+                    itemTemp.setId(FunUtil.getUUID());
+                    itemTemp.setValterid(vidterid);
+                    itemTemp.setVisitkey(prevVisitId);
+                    itemTemp.setValchecktypeid(item.getRecordkey());// 拉链表主键
+                    itemTemp.setProductkey(item.getProductkey());// 产品id
+                    itemTemp.setValchecktype(item.getCheckkey());// 指标id
+                    itemTemp.setAcresult(item.getAcresult());// 指标值
+                    itemTemp.setTerminalkey(item.getTerminalkey());
+                    mitValchecktypeMTempDao.create(itemTemp);
+                } else {
+                    /*item.setDeleteflag(ConstValues.delFlag);
+                    item.setSisconsistent(ConstValues.FLAG_0);
+                    item.setPadisconsistent(ConstValues.FLAG_0);
+                    item.setResultstatus(new BigDecimal(1));
+                    valueDao.update(item);*/
+                }
+                // 复制采集项表 -> 追溯 采集项表
+                createZsMstCollectionexerecordInfoTemp(collectionDao, mitValcheckitemMTempDao, padCheckaccomplishInfoDao, prevVisitId, termStc, vidterid,itemTemp.getId(),itemTemp.getProductkey(),itemTemp.getValchecktype());
+
+            }
+        }
+    }
+    /**
+     * 插入产品指标表 (错误)
+     *
+     * @param prevVisitId 上次拜访主键key
+     * @param valueDao
+     * @throws SQLException
+     */
+    private void createZsMstCheckexerecordInfoTemp3(String prevVisitId,
+                                                    String terminalkey, Dao<MstCheckexerecordInfo, String> valueDao,
+                                                    Dao<MitValchecktypeMTemp, String> mitValchecktypeMTempDao, String vidterid,
+                                                    Dao<MstCollectionexerecordInfo, String> collectionDao,
+                                                    Dao<MitValcheckitemMTemp, String> mitValcheckitemMTempDao,
+                                                    Dao<PadCheckaccomplishInfo, String> padCheckaccomplishInfoDao)
+            throws SQLException {
+        // 复制指标结果表，MST_CHECKEXERECORD_INFO(拜访指标执行记录表)
+        QueryBuilder<MstCheckexerecordInfo, String> valueQb = valueDao.queryBuilder();
+        Where<MstCheckexerecordInfo, String> valueWr = valueQb.where();
+        valueWr.eq("terminalkey", terminalkey);
+        valueWr.and();
+        valueWr.eq("enddate", "30001201");
+        valueWr.and();
+        valueWr.isNotNull("productkey");
+        valueWr.and();
+        valueWr.ne("deleteflag", ConstValues.delFlag);
+
+        valueQb.orderBy("terminalkey", true);
+        valueQb.orderBy("checkkey", true);
+        valueQb.orderBy("productkey", true);
+        valueQb.orderBy("updatetime", false);
+        valueQb.orderBy("siebelid", false);
+        valueQb.orderBy("acresult", false);
+        List<MstCheckexerecordInfo> valueLst = valueQb.query();
+        Map<String, MstCheckexerecordInfo> map = new HashMap<String, MstCheckexerecordInfo>();
+        if (!CheckUtil.IsEmpty(valueLst)) {
+            MitValchecktypeMTemp itemTemp = null;
             for (MstCheckexerecordInfo item : valueLst) {
                 String key = item.getTerminalkey() + "-" + item.getCheckkey() + "-" + item.getProductkey();
                 if (!map.containsKey(key)) {
@@ -1768,12 +1843,17 @@ public class XtShopVisitService {
     private void createZsMstCollectionexerecordInfoTemp(Dao<MstCollectionexerecordInfo, String> collectionDao,
                                                         Dao<MitValcheckitemMTemp, String> mitValcheckitemMTempDao,
                                                         Dao<PadCheckaccomplishInfo, String> padCheckaccomplishInfoDao,
-                                                        String prevVisitId, XtTermSelectMStc termStc, String vidterid) {
+                                                        String prevVisitId, XtTermSelectMStc termStc, String vidterid,
+                                                        String recordkey,String productkey,String checkkey) {
         try {
             // 复制指标结果表，MST_COLLECTIONEXERECORD_INFO(拜访指标执行采集项记录表)
             QueryBuilder<MstCollectionexerecordInfo, String> collectionQB = collectionDao.queryBuilder();
             Where<MstCollectionexerecordInfo, String> collectionWhere = collectionQB.where();
             collectionWhere.eq("visitkey", prevVisitId);
+            collectionWhere.and();
+            collectionWhere.eq("productkey", productkey);
+            collectionWhere.and();
+            collectionWhere.eq("checkkey", checkkey);
             collectionWhere.and();
             collectionWhere.ne("deleteflag", ConstValues.FLAG_1);
             collectionWhere.and();
@@ -1811,7 +1891,8 @@ public class XtShopVisitService {
                             list.add(key);
                             mstCollectionexerecordInfoTemp = new MitValcheckitemMTemp();
                             mstCollectionexerecordInfoTemp.setId(FunUtil.getUUID());
-                            mstCollectionexerecordInfoTemp.setValterid(vidterid);
+                            mstCollectionexerecordInfoTemp.setValterid(vidterid);// 追溯表主键
+                            mstCollectionexerecordInfoTemp.setValchecktypeid(recordkey);// 督导拉链表主键
                             mstCollectionexerecordInfoTemp.setVisitkey(prevVisitId);
                             mstCollectionexerecordInfoTemp.setValitemid(item.getColrecordkey());// 采集项表主键
                             mstCollectionexerecordInfoTemp.setColitemkey(item.getColitemkey());// 采集项名称
@@ -2322,6 +2403,7 @@ public class XtShopVisitService {
                 proItem = new XtProItem();
                 proItem.setColRecordKey(stc.getColRecordId());// 业代采集项表主键
                 proItem.setId(stc.getId());// 督导采集项表主键
+                proItem.setValchecktypeid(stc.getValchecktypeid());// 督导拉链项表主键
                 proItem.setCheckkey(stc.getCheckkey());
                 proItem.setItemId(stc.getColitemkey());
                 proItem.setItemName(stc.getColitemname());
@@ -2707,7 +2789,8 @@ public class XtShopVisitService {
 
                     itemInfo = new MitValcheckitemMTemp();
                     itemInfo.setId(proItem.getId());// 督导采集项表主键
-                    itemInfo.setValterid(valterid);// 终端追溯主表ID
+                    itemInfo.setValterid(valterid);// 追溯表ID
+                    itemInfo.setValchecktypeid(proItem.getValchecktypeid());// 终端追溯查指标表ID
                     itemInfo.setVisitkey(preVisitkey);
                     ;// 拜访主键
                     itemInfo.setValitemid(proItem.getColRecordKey());

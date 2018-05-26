@@ -24,6 +24,8 @@ public class MitValcheckitemMTemp implements java.io.Serializable {
     @DatabaseField
     private String valterid;// 终端追溯主表ID
     @DatabaseField
+    private String valchecktypeid;// 终端追溯查指标表ID
+    @DatabaseField
     private String visitkey ;// 拜访主键
     @DatabaseField
     private String valitemid ;//  采集项主键ID varchar2(36) null,
@@ -193,5 +195,13 @@ public class MitValcheckitemMTemp implements java.io.Serializable {
 
     public void setPadisconsistent(String padisconsistent) {
         this.padisconsistent = padisconsistent;
+    }
+
+    public String getValchecktypeid() {
+        return valchecktypeid;
+    }
+
+    public void setValchecktypeid(String valchecktypeid) {
+        this.valchecktypeid = valchecktypeid;
     }
 }

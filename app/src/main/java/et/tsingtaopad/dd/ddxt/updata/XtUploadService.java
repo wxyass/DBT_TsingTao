@@ -36,6 +36,7 @@ import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.core.util.file.FileTool;
 import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.db.dao.MitCameraInfoMDao;
+import et.tsingtaopad.db.dao.MitPlandayvalMDao;
 import et.tsingtaopad.db.dao.MitValterMDao;
 import et.tsingtaopad.db.dao.MstAgencyKFMDao;
 import et.tsingtaopad.db.dao.MstCameraiInfoMDao;
@@ -47,6 +48,10 @@ import et.tsingtaopad.db.table.MitCheckexerecordInfo;
 import et.tsingtaopad.db.table.MitCmpsupplyInfo;
 import et.tsingtaopad.db.table.MitCollectionexerecordInfo;
 import et.tsingtaopad.db.table.MitGroupproductM;
+import et.tsingtaopad.db.table.MitPlandayM;
+import et.tsingtaopad.db.table.MitPlandaydetailM;
+import et.tsingtaopad.db.table.MitPlandayvalM;
+import et.tsingtaopad.db.table.MitPlanweekM;
 import et.tsingtaopad.db.table.MitPromotermInfo;
 import et.tsingtaopad.db.table.MitTerminalM;
 import et.tsingtaopad.db.table.MitTerminalinfoM;
@@ -171,6 +176,11 @@ public class XtUploadService {
     private Dao<MitValaddaccountM, String> mitValaddaccountMDao = null;
     private Dao<MitValaddaccountproM, String> mitValaddaccountproMDao = null;
 
+    Dao<MitPlanweekM, String> mitPlanweekMDao = null;
+    Dao<MitPlandayM, String> mitPlandayMDao = null;
+    Dao<MitPlandaydetailM, String> mitPlandaydetailMDao = null;
+    MitPlandayvalMDao mitPlandayvalMDao = null;
+
     public XtUploadService(Context context, Handler handler) {
         this.handler = handler;
         this.context = context;
@@ -253,6 +263,11 @@ public class XtUploadService {
             //
             mitValaddaccountMDao = helper.getMitValaddaccountMDao();
             mitValaddaccountproMDao = helper.getMitValaddaccountproMDao();
+
+            mitPlanweekMDao = helper.getMitPlanweekMDao();
+            mitPlandayMDao = helper.getMitPlandayMDao();
+            mitPlandaydetailMDao = helper.getMitPlandaydetailMDao();
+            mitPlandayvalMDao = helper.getDao(MitPlandayvalM.class);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -1534,5 +1549,185 @@ public class XtUploadService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    // 上传 周计划
+    public void uploadWeekPlan(final boolean isNeedExit, final String valterid, final int whatId) {
+        List<MitPlanweekM> mitPlanweekMS = new ArrayList<MitPlanweekM>();
+        List<MitPlandayM> mitPlandayMS = new ArrayList<MitPlandayM>();
+        List<MitPlandaydetailM> plandaydetailMS = new ArrayList<MitPlandaydetailM>();
+        List<MitPlandayvalM> plandayvalMS = new ArrayList<MitPlandayvalM>();
+
+        try {
+            MitPlanweekM mitValterM = null;
+            if (valterid != null && !valterid.trim().equals("")) {
+                mitValterM = mitPlanweekMDao.queryForId(valterid);
+
+                if (mitValterM != null) {
+                    mitPlanweekMS.add(mitValterM);
+                    // mitPlanweekMS.add(mitValterM);
+
+                    Map<String, Object> valteridMap = new HashMap<String, Object>();
+                    valteridMap.put("planweekid", valterid);
+
+                    mitPlandayMS = mitPlandayMDao.queryForFieldValues(valteridMap);
+                    plandaydetailMS = mitPlandaydetailMDao.queryForFieldValues(valteridMap);
+                    plandayvalMS = mitPlandayvalMDao.queryForFieldValues(valteridMap);
+
+                }
+            } else {
+                // 只存放所有终端的最新一次拜访记录(分组)
+                /*QueryBuilder<MitPlanweekM, String> visitQB = mitPlanweekMDao.queryBuilder();
+                Where<MitPlanweekM, String> visitWhere = visitQB.where();
+                visitWhere.eq("padisconsistent", "0");
+                //productQb.groupBy(DBConst.PROD_PARENT_PRODVAR_ID);
+                // 离线拜访时,针对同一家终端多次拜访,只上传最后一次拜访数据
+                visitQB.groupBy("terminalkey");
+                visitQB.orderBy("terminalkey", true);
+                mitPlanweekMS = visitQB.query();
+
+
+                // 存放今天所有终端所有次数的拜访记录
+                QueryBuilder<MitValterM, String> visitQB1 = valterMDao.queryBuilder();
+                Where<MitValterM, String> visitWhere1 = visitQB1.where();
+                visitWhere1.eq("padisconsistent", "0");
+                //productQb.groupBy(DBConst.PROD_PARENT_PRODVAR_ID);
+                visitQB1.orderBy("terminalkey", true);
+                mitValterMsall = visitQB1.query();
+
+                if (mitValterMs != null && !mitValterMs.isEmpty()) {
+                    mitValchecktypeMs = mitValchecktypeMDao.queryForEq("padisconsistent", "0");
+                    mitValcheckitemMs = mitValcheckitemMDao.queryForEq("padisconsistent", "0");
+                    mitValpromotionsMs = mitValpromotionsMDao.queryForEq("padisconsistent", "0");
+                    mitValsupplyMs = mitValsupplyMDao.queryForEq("padisconsistent", "0");
+                    mitValcmpMs = mitValcmpMDao.queryForEq("padisconsistent", "0");
+                    mitValcmpotherMs = mitValcmpotherMDao.queryForEq("padisconsistent", "0");
+                    mitValpicMs = mitValpicMDao.queryForEq("padisconsistent", "0");
+                    mitValgroupproMs = mitValgroupproMDao.queryForEq("padisconsistent", "0");
+                    mitValaddaccountMs = mitValaddaccountMDao.queryForEq("padisconsistent", "0");
+                    mitValaddaccountproMs = mitValaddaccountproMDao.queryForEq("padisconsistent", "0");
+                }*/
+            }
+
+            if (mitPlanweekMS != null && !mitPlanweekMS.isEmpty()) {
+                List<Map<String, String>> mainDatas = new ArrayList<Map<String, String>>();
+                // 根据表结果组织数据关系
+                for (MitPlanweekM valterM : mitPlanweekMS) {
+                    Map<String, String> childDatas = new HashMap<String, String>();
+
+                    String valtermid = valterM.getId();
+
+                    // 1 追溯主表
+                    List<MitPlanweekM> mstVisitMs = new ArrayList<MitPlanweekM>();
+                    valterM.setPadisconsistent("1");
+                    mstVisitMs.add(valterM);
+                    childDatas.put("MIT_PLANWEEK_M", JsonUtil.toJson(mstVisitMs));
+
+                    // 2 追溯拉链表
+                    List<MitPlandayM> childValchecktypeMs = new ArrayList<MitPlandayM>();
+                    for (MitPlandayM mitValchecktypeM : mitPlandayMS) {
+                        if (valtermid.equals(mitValchecktypeM.getPlanweekid())) {
+                            mitValchecktypeM.setPadisconsistent("1");
+                            childValchecktypeMs.add(mitValchecktypeM);
+                        }
+                    }
+                    childDatas.put("MIT_PLANDAY_M", JsonUtil.toJson(childValchecktypeMs));
+
+                    // 3 追溯采集项表
+                    List<MitPlandaydetailM> childValcheckitems = new ArrayList<MitPlandaydetailM>();
+                    for (MitPlandaydetailM mitValcheckitemM : plandaydetailMS) {
+                        if (valtermid.equals(mitValcheckitemM.getPlanweekid())) {
+                            mitValcheckitemM.setPadisconsistent("1");
+                            childValcheckitems.add(mitValcheckitemM);
+                        }
+                    }
+                    childDatas.put("MIT_PLANDAYDETAIL_M", JsonUtil.toJson(childValcheckitems));
+
+                    // 4 追溯促销活动终端表
+                    List<MitPlandayvalM> childValpromotionsMs = new ArrayList<MitPlandayvalM>();
+                    for (MitPlandayvalM mitValpromotionsM : plandayvalMS) {
+                        if (valtermid.equals(mitValpromotionsM.getPlanweekid())) {
+                            mitValpromotionsM.setPadisconsistent("1");
+                            childValpromotionsMs.add(mitValpromotionsM);
+                        }
+                    }
+                    childDatas.put("MIT_PLANDAYVAL_M", JsonUtil.toJson(childValpromotionsMs));
+
+                    mainDatas.add(childDatas);
+                }
+
+                // 添加
+                String json = JsonUtil.toJson(mainDatas);
+                Log.i(TAG, "终端追溯send list size" + mainDatas.size() + json);
+
+                upWeekPlanService("opt_save_ddplanweek", "", json);
+
+            } else {
+                if (isNeedExit) {
+                    //上传所有的巡店拜访
+                    //handler.sendEmptyMessage(TitleLayout.UPLOAD_DATA);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void upWeekPlanService(String optcode, String s, String json) {
+        // 组建请求Json
+        RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(context);
+        requestHeadStc.setOptcode(PropertiesUtil.getProperties(optcode));
+        RequestStructBean reqObj = HttpParseJson.parseRequestStructBean(requestHeadStc, json);
+
+        // 压缩请求数据
+        String jsonZip = HttpParseJson.parseRequestJson(reqObj);
+
+        RestClient.builder()
+                .url(HttpUrl.IP_END)
+                .params("data", jsonZip)
+                //.loader(context)
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+                        String json = HttpParseJson.parseJsonResToString(response);
+                        if ("".equals(json) || json == null) {
+                            Toast.makeText(context, "后台成功接收,但返回的数据为null", Toast.LENGTH_SHORT).show();
+                        } else {
+                            ResponseStructBean resObj = new ResponseStructBean();
+                            resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
+                            // 保存登录信息
+                            if (ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())) {
+                                //
+                                // 处理上传后的数据,该删删,该处理
+                                String formjson = resObj.getResBody().getContent();
+                                /*parseZsUpData(formjson);
+                                ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_SUC);*/
+
+                            } else {
+                                Toast.makeText(context, resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+
+                    }
+                })
+                .error(new IError() {
+                    @Override
+                    public void onError(int code, String msg) {
+                        ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_FAIL);
+                        //Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .failure(new IFailure() {
+                    @Override
+                    public void onFailure() {
+                        //Toast.makeText(context, "请求失败", Toast.LENGTH_SHORT).show();
+                        ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_FAIL);
+                    }
+                })
+                .builde()
+                .post();
     }
 }

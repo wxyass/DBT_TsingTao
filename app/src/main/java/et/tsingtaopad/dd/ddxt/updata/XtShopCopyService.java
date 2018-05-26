@@ -2075,6 +2075,7 @@ public class XtShopCopyService {
                     MitValcheckitemM info = new MitValcheckitemM();
                     info.setId(item.getId());// 图片主键
                     info.setValterid(item.getValterid()); // 追溯主键
+                    info.setValchecktypeid(item.getValchecktypeid()); // 督导拉链表主键
                     info.setVisitkey(item.getVisitkey()); ;// 拜访主键
                     info.setValitemid(item.getValitemid()); ;//  采集项主键ID
                     info.setColitemkey(item.getColitemkey());  ;// 采集项key

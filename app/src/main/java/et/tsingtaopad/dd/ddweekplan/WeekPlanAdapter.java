@@ -86,7 +86,18 @@ public class WeekPlanAdapter extends BaseAdapter {
         holder.ll_all.setOnClickListener(listener);
 
         // 未制定
-        holder.statueTv.setText(item.getState());
+        if("0".equals(item.getState())){
+            holder.statueTv.setText("未制定");
+        }else if("1".equals(item.getState())){
+            holder.statueTv.setText("未提交");
+        }else if("2".equals(item.getState())){
+            holder.statueTv.setText("待审核");
+        }else if("3".equals(item.getState())){
+            holder.statueTv.setText("审核通过");
+        }else if("4".equals(item.getState())){
+            holder.statueTv.setText("未通过");
+        }
+
 
         // 周几
         holder.weekday.setText(item.getWeekday());

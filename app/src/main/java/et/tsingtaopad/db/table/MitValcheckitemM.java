@@ -23,7 +23,8 @@ public class MitValcheckitemM implements java.io.Serializable {
     private String padisconsistent;// 是否已上传  0:未上传 1:已上传
     @DatabaseField
     private String valterid;// 终端追溯主表ID
-
+    @DatabaseField
+    private String valchecktypeid;// 终端追溯查指标表ID
     @DatabaseField
     private String valitemid ;//  采集项表主键 varchar2(36) null,
     @DatabaseField
@@ -194,5 +195,13 @@ public class MitValcheckitemM implements java.io.Serializable {
 
     public void setPadisconsistent(String padisconsistent) {
         this.padisconsistent = padisconsistent;
+    }
+
+    public String getValchecktypeid() {
+        return valchecktypeid;
+    }
+
+    public void setValchecktypeid(String valchecktypeid) {
+        this.valchecktypeid = valchecktypeid;
     }
 }

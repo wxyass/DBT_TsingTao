@@ -34,6 +34,8 @@ public class CheckIndexQuicklyStc extends PadCheckaccomplishInfo {
 
     // 追溯采集项表主键
     private String id;
+    // 追溯拉链表主键
+    private String valchecktypeid;
     // 采集项原值结果量
     private String valitem;
     // 采集项正确值结果量
@@ -150,5 +152,13 @@ public class CheckIndexQuicklyStc extends PadCheckaccomplishInfo {
 
     public void setValitemremark(String valitemremark) {
         this.valitemremark = valitemremark;
+    }
+
+    public String getValchecktypeid() {
+        return valchecktypeid;
+    }
+
+    public void setValchecktypeid(String valchecktypeid) {
+        this.valchecktypeid = valchecktypeid;
     }
 }

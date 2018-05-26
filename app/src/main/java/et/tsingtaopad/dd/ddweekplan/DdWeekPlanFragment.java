@@ -41,6 +41,7 @@ import et.tsingtaopad.db.table.MitPlanweekM;
 import et.tsingtaopad.dd.ddweekplan.domain.DayDetailStc;
 import et.tsingtaopad.dd.ddweekplan.domain.DayDetailValStc;
 import et.tsingtaopad.dd.ddweekplan.domain.DayPlanStc;
+import et.tsingtaopad.dd.ddxt.updata.XtUploadService;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
 import et.tsingtaopad.listviewintf.IClick;
 
@@ -298,10 +299,20 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
                 break;
             case R.id.dd_weekplan_bt_submit:// 提交周计划
                 //
+                saveWeekPlan();
                 break;
             default:
                 break;
         }
+    }
+
+    private void saveWeekPlan() {
+        if(mitPlanweekM !=null && !"".equals(mitPlanweekM.getId())){
+            // 上传周计划
+            XtUploadService xtUploadService = new XtUploadService(getActivity(),null);
+            xtUploadService.uploadWeekPlan(false,mitPlanweekM.getId(),1);
+        }
+        supportFragmentManager.popBackStack();
     }
 
 

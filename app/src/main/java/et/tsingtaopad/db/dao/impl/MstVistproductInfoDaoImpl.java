@@ -703,7 +703,7 @@ public class MstVistproductInfoDaoImpl extends
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("select distinct ci.checkkey,ci.cstatuskey,ci.colitemkey, ");
 		buffer.append("ci.colitemname,ci.productkey,ci.addcount,ci.totalcount, ");
-		buffer.append("ci.minorchannel,vi.addcount changenum, ");
+		buffer.append("ci.minorchannel,vi.addcount changenum,vi.valchecktypeid, ");
 		buffer.append("vi.totalcount finalnum,vi.valitemid,vi.id,vi.valitem,vi.valitemval,vi.valitemremark, pm.proname ");// id,原值,正确值
 		buffer.append("from mst_vistproduct_info vp ");
 		buffer.append("inner join pad_checkaccomplish_info ci ");
@@ -741,6 +741,7 @@ public class MstVistproductInfoDaoImpl extends
 			item.setFinalNum(FunUtil.isBlankOrNullToDouble(fnum));
 			item.setColRecordId(cursor.getString(cursor.getColumnIndex("valitemid")));// 业代采集项表主键
 			item.setId(cursor.getString(cursor.getColumnIndex("id")));// 追溯采集项表主键
+			item.setValchecktypeid(cursor.getString(cursor.getColumnIndex("valchecktypeid")));// 追溯拉链表主键
 			item.setValitem(cursor.getString(cursor.getColumnIndex("valitem")));// 采集项原值结果量
 			item.setValitemval(cursor.getString(cursor.getColumnIndex("valitemval")));// 采集项正确值结果量
 			item.setValitemremark(cursor.getString(cursor.getColumnIndex("valitemremark")));// 采集项备注
