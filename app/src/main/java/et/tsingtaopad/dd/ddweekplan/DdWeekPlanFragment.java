@@ -315,7 +315,7 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
     public void onResume() {
         super.onResume();
         initData();
-        initUrlData();// 获取当前周计划
+        //initUrlData();// 获取当前周计划
     }
 
     private void initUrlData() {
@@ -539,7 +539,7 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
                                 handler.sendMessage(msg);*/
 
                                     //Toast.makeText(getActivity(), "区域定格路线同步成功", Toast.LENGTH_SHORT).show();
-                                    initData();
+                                    //initData();
                                 }
 
                             }else{
@@ -547,7 +547,7 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
                             /*Message msg = new Message();
                             msg.what = FirstFragment.SYNC_CLOSE;//
                             handler.sendMessage(msg);*/
-                                initData();
+                                //initData();
                             }
                         }
 
@@ -561,7 +561,7 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
                         /*Message msg1 = new Message();
                         msg1.what = FirstFragment.SYNC_CLOSE;//
                         handler.sendMessage(msg1);*/
-                        initData();
+                        //initData();
                     }
                 })
                 .failure(new IFailure() {
@@ -571,7 +571,7 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
                         /*Message msg2 = new Message();
                         msg2.what = FirstFragment.SYNC_CLOSE;//
                         handler.sendMessage(msg2);*/
-                        initData();
+                        //initData();
                     }
                 })
                 .builde()
