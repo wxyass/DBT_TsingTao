@@ -1552,13 +1552,13 @@ public class XtUploadService {
     }
 
 
+    List<MitPlanweekM> mitPlanweekMS = new ArrayList<MitPlanweekM>();
+    List<MitPlandayM> mitPlandayMS = new ArrayList<MitPlandayM>();
+    List<MitPlandaydetailM> plandaydetailMS = new ArrayList<MitPlandaydetailM>();
+    List<MitPlandayvalM> plandayvalMS = new ArrayList<MitPlandayvalM>();
+
     // 上传 周计划
     public void uploadWeekPlan(final boolean isNeedExit, final String valterid, final int whatId) {
-        List<MitPlanweekM> mitPlanweekMS = new ArrayList<MitPlanweekM>();
-        List<MitPlandayM> mitPlandayMS = new ArrayList<MitPlandayM>();
-        List<MitPlandaydetailM> plandaydetailMS = new ArrayList<MitPlandaydetailM>();
-        List<MitPlandayvalM> plandayvalMS = new ArrayList<MitPlandayvalM>();
-
         try {
             MitPlanweekM mitValterM = null;
             if (valterid != null && !valterid.trim().equals("")) {
@@ -1578,36 +1578,18 @@ public class XtUploadService {
                 }
             } else {
                 // 只存放所有终端的最新一次拜访记录(分组)
-                /*QueryBuilder<MitPlanweekM, String> visitQB = mitPlanweekMDao.queryBuilder();
+                QueryBuilder<MitPlanweekM, String> visitQB = mitPlanweekMDao.queryBuilder();
                 Where<MitPlanweekM, String> visitWhere = visitQB.where();
                 visitWhere.eq("padisconsistent", "0");
-                //productQb.groupBy(DBConst.PROD_PARENT_PRODVAR_ID);
-                // 离线拜访时,针对同一家终端多次拜访,只上传最后一次拜访数据
-                visitQB.groupBy("terminalkey");
-                visitQB.orderBy("terminalkey", true);
                 mitPlanweekMS = visitQB.query();
 
-
-                // 存放今天所有终端所有次数的拜访记录
-                QueryBuilder<MitValterM, String> visitQB1 = valterMDao.queryBuilder();
-                Where<MitValterM, String> visitWhere1 = visitQB1.where();
-                visitWhere1.eq("padisconsistent", "0");
-                //productQb.groupBy(DBConst.PROD_PARENT_PRODVAR_ID);
-                visitQB1.orderBy("terminalkey", true);
-                mitValterMsall = visitQB1.query();
-
-                if (mitValterMs != null && !mitValterMs.isEmpty()) {
-                    mitValchecktypeMs = mitValchecktypeMDao.queryForEq("padisconsistent", "0");
-                    mitValcheckitemMs = mitValcheckitemMDao.queryForEq("padisconsistent", "0");
-                    mitValpromotionsMs = mitValpromotionsMDao.queryForEq("padisconsistent", "0");
-                    mitValsupplyMs = mitValsupplyMDao.queryForEq("padisconsistent", "0");
-                    mitValcmpMs = mitValcmpMDao.queryForEq("padisconsistent", "0");
-                    mitValcmpotherMs = mitValcmpotherMDao.queryForEq("padisconsistent", "0");
-                    mitValpicMs = mitValpicMDao.queryForEq("padisconsistent", "0");
-                    mitValgroupproMs = mitValgroupproMDao.queryForEq("padisconsistent", "0");
-                    mitValaddaccountMs = mitValaddaccountMDao.queryForEq("padisconsistent", "0");
-                    mitValaddaccountproMs = mitValaddaccountproMDao.queryForEq("padisconsistent", "0");
-                }*/
+                if (mitPlanweekMS != null && !mitPlanweekMS.isEmpty()) {
+                    for (MitPlanweekM valterM : mitPlanweekMS) {
+                        mitPlandayMS.addAll(mitPlandayMDao.queryForEq("planweekid", "0"));
+                        plandaydetailMS.addAll(mitPlandaydetailMDao.queryForEq("planweekid", "0"));
+                        plandayvalMS.addAll(mitPlandayvalMDao.queryForEq("planweekid", "0"));
+                    }
+                }
             }
 
             if (mitPlanweekMS != null && !mitPlanweekMS.isEmpty()) {
@@ -1618,13 +1600,14 @@ public class XtUploadService {
 
                     String valtermid = valterM.getId();
 
-                    // 1 追溯主表
+                    // 1 周计划主表
                     List<MitPlanweekM> mstVisitMs = new ArrayList<MitPlanweekM>();
                     valterM.setPadisconsistent("1");
+                    valterM.setStatus("2");// 0未制定1未提交2待审核3审核通过4未通过
                     mstVisitMs.add(valterM);
                     childDatas.put("MIT_PLANWEEK_M", JsonUtil.toJson(mstVisitMs));
 
-                    // 2 追溯拉链表
+                    // 2 日计划主表
                     List<MitPlandayM> childValchecktypeMs = new ArrayList<MitPlandayM>();
                     for (MitPlandayM mitValchecktypeM : mitPlandayMS) {
                         if (valtermid.equals(mitValchecktypeM.getPlanweekid())) {
@@ -1634,7 +1617,7 @@ public class XtUploadService {
                     }
                     childDatas.put("MIT_PLANDAY_M", JsonUtil.toJson(childValchecktypeMs));
 
-                    // 3 追溯采集项表
+                    // 3 日计划详情表
                     List<MitPlandaydetailM> childValcheckitems = new ArrayList<MitPlandaydetailM>();
                     for (MitPlandaydetailM mitValcheckitemM : plandaydetailMS) {
                         if (valtermid.equals(mitValcheckitemM.getPlanweekid())) {
@@ -1644,7 +1627,7 @@ public class XtUploadService {
                     }
                     childDatas.put("MIT_PLANDAYDETAIL_M", JsonUtil.toJson(childValcheckitems));
 
-                    // 4 追溯促销活动终端表
+                    // 4 日计划详情表附表
                     List<MitPlandayvalM> childValpromotionsMs = new ArrayList<MitPlandayvalM>();
                     for (MitPlandayvalM mitValpromotionsM : plandayvalMS) {
                         if (valtermid.equals(mitValpromotionsM.getPlanweekid())) {
@@ -1675,6 +1658,7 @@ public class XtUploadService {
 
     }
 
+    // 上传周计划
     private void upWeekPlanService(String optcode, String s, String json) {
         // 组建请求Json
         RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(context);
@@ -1702,8 +1686,9 @@ public class XtUploadService {
                                 //
                                 // 处理上传后的数据,该删删,该处理
                                 String formjson = resObj.getResBody().getContent();
-                                /*parseZsUpData(formjson);
-                                ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_SUC);*/
+                                parseMitplanweekm(formjson);
+                                /*ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_SUC);*/
+                                ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_SUC);
 
                             } else {
                                 Toast.makeText(context, resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
@@ -1729,5 +1714,30 @@ public class XtUploadService {
                 })
                 .builde()
                 .post();
+    }
+
+    private void parseMitplanweekm(String formjson) {
+
+        // 删除这条记录
+        // 解析区域定格路线信息
+        AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
+        String MIT_PLANWEEK_M = emp.getMIT_PLANWEEK_M();
+        List<MitPlanweekM> mitPlanweekMS = (List<MitPlanweekM>) JsonUtil.parseList(MIT_PLANWEEK_M, MitPlanweekM.class);
+
+        try {
+            //DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            SQLiteDatabase db = helper.getWritableDatabase();
+
+            // 处理周计划表
+            for (MitPlanweekM mitPlanweekM : mitPlanweekMS) {
+                mitPlanweekM.setPadisconsistent("1");// 上传成功
+                mitPlanweekM.setUploadflag("1");// 确定上传
+                mitPlanweekM.setStatus("2");// 0未制定1未提交2待审核3审核通过4未通过
+                mitPlanweekMDao.createOrUpdate(mitPlanweekM);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

@@ -29,11 +29,16 @@ import et.tsingtaopad.core.util.dbtutil.ZipUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.db.DBManager;
 import et.tsingtaopad.db.DatabaseHelper;
+import et.tsingtaopad.db.dao.MitPlandayvalMDao;
 import et.tsingtaopad.db.dao.MstCameraiInfoMDao;
 import et.tsingtaopad.db.dao.MstPictypeMDao;
 import et.tsingtaopad.db.table.CmmAreaM;
 import et.tsingtaopad.db.table.CmmBoardM;
 import et.tsingtaopad.db.table.CmmDatadicM;
+import et.tsingtaopad.db.table.MitPlandayM;
+import et.tsingtaopad.db.table.MitPlandaydetailM;
+import et.tsingtaopad.db.table.MitPlandayvalM;
+import et.tsingtaopad.db.table.MitPlanweekM;
 import et.tsingtaopad.db.table.MitValcheckterM;
 import et.tsingtaopad.db.table.MstAgencyKFM;
 import et.tsingtaopad.db.table.MstAgencygridInfo;
@@ -165,6 +170,11 @@ public class MainService extends XtShopVisitService {
     public Dao<MstTermLedgerInfo, String> mstTermLedgerInfoDao = null;
     public Dao<MstGroupproductM, String> mstGroupproductMDao = null;
 
+    private Dao<MitPlanweekM, String> mitPlanweekMDao = null;
+    private Dao<MitPlandayM, String> mitPlandayMDao = null;
+    private Dao<MitPlandaydetailM, String> mitPlandaydetailMDao = null;
+    private Dao<MitPlandayvalM, String> mitPlandayvalMDao = null;
+
     public MainService(Context context, Handler handler) {
         super(context, handler);
         this.context = context;
@@ -237,6 +247,11 @@ public class MainService extends XtShopVisitService {
             mstTermLedgerInfoDao = helper.getTermLedgerInfoDao();
             mstGroupproductMDao = helper.getMstGroupproductMDao();
 
+            mitPlanweekMDao = helper.getMitPlanweekMDao();
+            mitPlandayMDao = helper.getMitPlandayMDao();
+            mitPlandaydetailMDao = helper.getMitPlandaydetailMDao();
+            mitPlandayvalMDao = helper.getMitPlandayvalMDao();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -278,6 +293,11 @@ public class MainService extends XtShopVisitService {
     List<MstVisitauthorizeInfo> mstVisitauthorizeInfos = null;
     List<MstTermLedgerInfo> mstTermLedgerInfos = null;
 
+    List<MitPlanweekM> mitPlanweekMs = null;
+    List<MitPlandayM> mitPlandayMs = null;
+    List<MitPlandaydetailM> mitPlandaydetailMs = null;
+    List<MitPlandayvalM> mitPlandayvalMs = null;
+
     /**
      * 同步表数据
      *
@@ -314,8 +334,6 @@ public class MainService extends XtShopVisitService {
                 buffer.append("DELETE FROM "+tablename);
                 database.execSQL(buffer.toString());
             }
-
-
 
             // 更新 插入
             String mClass = cls.getName();
@@ -439,6 +457,23 @@ public class MainService extends XtShopVisitService {
             else if(mClass.contains("MstTermLedgerInfo")){
                 mstTermLedgerInfos= (List<MstTermLedgerInfo>) JsonUtil.parseList(json, cls);
                 updateData(mstTermLedgerInfoDao, mstTermLedgerInfos);
+            }
+
+            else if(mClass.contains("MitPlanweekM")){
+                mitPlanweekMs= (List<MitPlanweekM>) JsonUtil.parseList(json, cls);
+                updateData(mitPlanweekMDao, mitPlanweekMs);
+            }
+            else if(mClass.contains("MitPlandayM")){
+                mitPlandayMs= (List<MitPlandayM>) JsonUtil.parseList(json, cls);
+                updateData(mitPlandayMDao, mitPlandayMs);
+            }
+            else if(mClass.contains("MitPlandaydetailM")){
+                mitPlandaydetailMs= (List<MitPlandaydetailM>) JsonUtil.parseList(json, cls);
+                updateData(mitPlandaydetailMDao, mitPlandaydetailMs);
+            }
+            else if(mClass.contains("MitPlandayvalM")){
+                mitPlandayvalMs= (List<MitPlandayvalM>) JsonUtil.parseList(json, cls);
+                updateData(mitPlandayvalMDao, mitPlandayvalMs);
             }
 
             connection.commit(null);

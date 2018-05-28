@@ -153,7 +153,7 @@
                 <!--标题-->
                 <TextView
                     style="@style/zdzs_sayhi_title"
-                    android:text="是否我品销售范围"/>
+                    android:text="是否竞品销售范围"/>
 
                 <!--内容1-->
                 <TextView
@@ -185,7 +185,7 @@
                 <!--标题-->
                 <TextView
                     style="@style/zdzs_sayhi_title"
-                    android:text="@string/sayhi_protocol"/>
+                    android:text="我品终端合作状态"/>
 
                 <!--内容1-->
                 <TextView
@@ -217,7 +217,7 @@
                 <!--标题-->
                 <TextView
                     style="@style/zdzs_sayhi_title"
-                    android:text="@string/sayhi_protocol"/>
+                    android:text="竞品终端合作状态"/>
 
                 <!--内容1-->
                 <TextView

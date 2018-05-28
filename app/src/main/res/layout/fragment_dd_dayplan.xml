@@ -3,6 +3,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@color/bg_app"
+              android:clickable="true"
               android:orientation="vertical">
 
     <include layout="@layout/top_navigation"/>
@@ -16,11 +17,31 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:orientation="vertical">
+
+
+            <!--计划事项-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    style="@style/point"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ico_point"/>
+
+                <TextView
+                    style="@style/page_label_big"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="计划事项"/>
+            </LinearLayout>
 
 
             <!-- 计划 -->
@@ -28,8 +49,8 @@
                 android:id="@+id/dd_dayplan_lv_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:divider="@color/listview_line"
-                android:dividerHeight="3dp" />
+                android:divider="@color/bg_app"
+                android:dividerHeight="10dp"/>
 
             <View
                 android:layout_width="match_parent"
@@ -45,8 +66,6 @@
                     style="@style/xtbf_btn_tv"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/xtbf_btn_h"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
                     android:background="@drawable/bg_select_green"
                     android:text="增加计划"
                     />
@@ -66,8 +85,6 @@
                     style="@style/xtbf_btn_tv"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/xtbf_btn_h"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
                     android:background="@drawable/bg_select_green"
                     android:text="确定"
                     />
@@ -78,7 +95,6 @@
                 android:layout_height="80dp"/>
         </LinearLayout>
     </ScrollView>
-
 
 
 </LinearLayout>

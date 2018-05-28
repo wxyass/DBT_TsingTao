@@ -64,7 +64,7 @@ public class RequestCallbacks implements Callback<String> {
     }
 
     // 关闭loading页
-    private void stopLoading() {
+    private void stopLoading() {//1
         if (LOADER_STYPE != null) {
             HANDLER.postDelayed(new Runnable() {
                 @Override

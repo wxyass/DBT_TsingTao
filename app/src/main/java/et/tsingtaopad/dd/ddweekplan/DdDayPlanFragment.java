@@ -164,7 +164,8 @@ public class DdDayPlanFragment extends BaseFragmentSupport implements View.OnCli
     private void saveDayDetailPlan() {
         if (checkdayDetailStcs(dayDetailStcs)) {
             service.saveTable(weekplan, dayplanstc, dayDetailStcs, weekDateStart, weekDateEnd);
-            handler.sendEmptyMessage(ConstValues.WAIT0);
+            //handler.sendEmptyMessage(ConstValues.WAIT0);
+            ConstValues.handler.sendEmptyMessage(ConstValues.WAIT0);
             supportFragmentManager.popBackStack();
         } else {
             Toast.makeText(getActivity(), "各项输入不完整", Toast.LENGTH_SHORT).show();
@@ -175,7 +176,8 @@ public class DdDayPlanFragment extends BaseFragmentSupport implements View.OnCli
     private boolean checkdayDetailStcs(List<DayDetailStc> dayDetailStcs) {
         boolean ischeck = true;
         for (DayDetailStc detailStc : dayDetailStcs) {
-            if (detailStc.getValchecknameLv().size()<=0||detailStc.getValchecknameLv()==null
+            //if (detailStc.getValchecknameLv().size()<=0||detailStc.getValchecknameLv()==null
+            if ("".equals(detailStc.getValcheckkey())|| detailStc.getValcheckkey() ==null
                     || "".equals(detailStc.getValareakey())|| detailStc.getValareakey() ==null
                     || "".equals(detailStc.getValgridkey())|| detailStc.getValgridkey() ==null
                     || "".equals(detailStc.getValroutekeys())|| detailStc.getValroutekeys() ==null) {

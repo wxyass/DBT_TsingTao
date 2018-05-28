@@ -2,6 +2,7 @@ package et.tsingtaopad.dd.ddweekplan;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.j256.ormlite.android.AndroidDatabaseConnection;
@@ -87,12 +88,13 @@ public class WeekPlanService {
 
             MitPlanweekM mitPlanweekM = null;
             // 周计划主表
-            if(weekplan == null){
+            //if(weekplan == null){
+            if(TextUtils.isEmpty(weekplan.getId())){
                 mitPlanweekM = new MitPlanweekM();
                 mitPlanweekM.setId(FunUtil.getUUID());
                 mitPlanweekM.setStarttime(weekDateStart);
                 mitPlanweekM.setEndtime(weekDateEnd);
-
+                //mitPlanweekM.setStatus("3");// 状态 // 0未审核1审核通过2未通过 3已提交
                 mitPlanweekM.setCredate(new Date());
                 mitPlanweekM.setUpdatedate(new Date());
                 mitPlanweekM.setCreuserareaid(PrefUtils.getString(context,"departmentid",""));
@@ -133,7 +135,20 @@ public class WeekPlanService {
 
                 // 日计划详情表附表
                 MitPlandayvalM mitPlandayvalM;
-                List<String> valchecknameLv = indexItem.getValchecknameLv();
+                /*List<String> valchecknameLv = indexItem.getValchecknameLv();
+                for (String s : valchecknameLv){
+                    mitPlandayvalM = new MitPlandayvalM();
+                    mitPlandayvalM.setId(FunUtil.getUUID());
+                    mitPlandayvalM.setPlanweekid(mitPlanweekM.getId());// // 周计划主键
+                    mitPlandayvalM.setPlandaydetailid(mitPlandaydetailM.getId());// 日计划详情主键
+                    mitPlandayvalM.setPlancomtype("0");// 0是追溯项1是路线
+                    mitPlandayvalM.setPlanareaid(indexItem.getValareakey());// 追溯区域
+                    mitPlandayvalM.setPlangridid(indexItem.getValgridkey());// 追溯定格
+                    mitPlandayvalM.setPlancomid(s);
+                    mitPlandayvalMDao.createOrUpdate(mitPlandayvalM);
+                }*/
+                String valcheckkeys = indexItem.getValcheckkey();
+                String[] valchecknameLv = valcheckkeys.split(",");
                 for (String s : valchecknameLv){
                     mitPlandayvalM = new MitPlandayvalM();
                     mitPlandayvalM.setId(FunUtil.getUUID());
@@ -145,6 +160,7 @@ public class WeekPlanService {
                     mitPlandayvalM.setPlancomid(s);
                     mitPlandayvalMDao.createOrUpdate(mitPlandayvalM);
                 }
+
                 String valroutekeys = indexItem.getValroutekeys();
                 String[] valroutes = valroutekeys.split(",");
                 for (String s : valroutes){

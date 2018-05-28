@@ -46,7 +46,7 @@ public final class RestCreator {
      * 构建OkHttpClient客户端
      */
     private static final class OKHttpHolder {
-        private static final int TIME_OUT = 60;
+        private static final int TIME_OUT = 600;
         private static final OkHttpClient.Builder BUILDER = new OkHttpClient.Builder();
         // 先获取配置的拦截器信息
         private static final ArrayList<Interceptor> INTERCEPTORS = Latte.getConfiguration(ConfigKeys.INTERCEPTOR);

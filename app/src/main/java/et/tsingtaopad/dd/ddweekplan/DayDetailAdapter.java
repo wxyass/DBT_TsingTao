@@ -111,7 +111,14 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
         holder.ll_all.setOnLongClickListener(listener);
 
         // 追溯项
-        holder.tv_checkname.setText(item.getValchecknameLv().toString().substring(1,item.getValchecknameLv().toString().length()-1));
+        //holder.tv_checkname.setText(item.getValchecknameLv().toString().substring(1,item.getValchecknameLv().toString().length()-1));
+        if(item.getValcheckname()!=null){
+            //holder.tv_routename.setText(item.getValroutenames().substring(0,item.getValroutenames().length()-1));
+            holder.tv_checkname.setText(item.getValcheckname());
+        }else{
+            holder.tv_checkname.setText("");
+        }
+
         // 追溯区域
         holder.tv_areaname.setText(item.getValareaname());
         // 追溯定格
@@ -141,7 +148,8 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
         int posi = (int) v.getTag();
         switch (v.getId()) {
             case R.id.item_daydetail_rl_check:// 追溯项
-                alertShow3(posi);
+                // alertShow3(posi);
+                alertShow7(posi);
                 break;
             case R.id.item_daydetail_rl_areaid:// 追溯区域
                 //Toast.makeText(context, "点击了第" + posi + "追溯区域", Toast.LENGTH_SHORT).show();
@@ -273,6 +281,12 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
                 item.setValareaname(valueLst.get(position).getAreaname());
                 item.setValareakey(valueLst.get(position).getAreaid());
                 mAlertViewExt.dismiss();
+
+                item.setValgridkey("");
+                item.setValgridname("");
+                item.setValroutekeys("");
+                item.setValroutenames("");
+
                 notifyDataSetChanged();
             }
         });
@@ -308,6 +322,8 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
                 item.setValgridkey(valueLst.get(position).getGridkey());
                 item.setValgridname(valueLst.get(position).getGridname());
                 mAlertViewExt.dismiss();
+                item.setValroutekeys("");
+                item.setValroutenames("");
                 notifyDataSetChanged();
             }
         });
@@ -381,6 +397,127 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
                 } else {
                     item.setValroutekeys(FunUtil.isBlankOrNullTo(item.getValroutekeys(),"") .replace(routekey, ""));
                     item.setValroutenames(FunUtil.isBlankOrNullTo(item.getValroutenames(),"").replace(routename, ""));
+                    ((KvStc)typeLst.get(arg2)).setIsDefault("0");
+                }
+                sadapter.notifyDataSetChanged();
+            }
+        });
+
+
+        // 确定
+        rl_confirm1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+
+                /*item.setValroutekeys(item.getValroutekeys().substring(0,item.getValroutekeys().length()-1));
+                item.setValroutenames(item.getValroutenames().substring(0,item.getValroutenames().length()-1));*/
+
+                mAlertViewExt.dismiss();
+                notifyDataSetChanged();
+            }
+        });
+
+        // 取消
+        rl_back1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+
+                mAlertViewExt.dismiss();
+            }
+        });
+
+
+
+        mAlertViewExt.addExtView(extView);
+        mAlertViewExt.setCancelable(true).setOnDismissListener(new OnDismissListener() {
+            @Override
+            public void onDismiss(Object o) {
+                DbtLog.logUtils(TAG, "取消选择结果");
+            }
+        });
+        mAlertViewExt.show();
+    }
+
+    // 新追溯项
+    public void alertShow7(final int position) {
+
+        final DayDetailStc item = dataLst.get(position);
+
+        final List<KvStc> typeLst = new ArrayList<KvStc>();
+        /*List<MstRouteM> valueLst = xtSelectService.getMstRouteMList(FunUtil.isBlankOrNullTo(item.getValgridkey(),""));
+        for (MstRouteM routeM : valueLst) {
+            KvStc kvStc =new KvStc();
+            kvStc.setKey(routeM.getRoutekey());
+            kvStc.setValue(routeM.getRoutename());
+            kvStc.setIsDefault("");
+            typeLst.add(kvStc);
+        }*/
+
+        KvStc kvStc1 =new KvStc();
+        kvStc1.setKey("check001");
+        kvStc1.setValue("check001");
+        kvStc1.setIsDefault("");
+        KvStc kvStc2 =new KvStc();
+        kvStc2.setKey("check002");
+        kvStc2.setValue("check002");
+        kvStc2.setIsDefault("");
+        KvStc kvStc3 =new KvStc();
+        kvStc3.setKey("check003");
+        kvStc3.setValue("check003");
+        kvStc3.setIsDefault("");
+        KvStc kvStc4 =new KvStc();
+        kvStc4.setKey("check004");
+        kvStc4.setValue("check004");
+        kvStc4.setIsDefault("");
+        typeLst.add(kvStc1);
+        typeLst.add(kvStc2);
+        typeLst.add(kvStc3);
+        typeLst.add(kvStc4);
+
+        mAlertViewExt = new AlertView(null, null, null, null,
+                null, context, AlertView.Style.ActionSheet, null);
+        ViewGroup extView = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.alert_dayroute_form, null);
+
+        final ListView dataLv = (ListView) extView.findViewById(R.id.alert_dayroute_lv);
+        RelativeLayout rl_back1 = (RelativeLayout) extView.findViewById(R.id.top_navigation_rl_back1);
+        android.support.v7.widget.AppCompatTextView bt_back1 = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_bt_back1);
+        RelativeLayout rl_confirm1 = (RelativeLayout) extView.findViewById(R.id.top_navigation_rl_confirm1);
+        android.support.v7.widget.AppCompatTextView bt_confirm1 = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_bt_confirm1);
+
+        // 获取已选中的集合
+        List<String>  selectedId = new ArrayList<String>();
+        if(!TextUtils.isEmpty(item.getValroutekeys())){
+            selectedId = Arrays.asList(item.getValroutekeys().split(","));
+        }
+
+        // 标记选中状态
+        for (KvStc kvstc : typeLst) {
+            for (String itemselect : selectedId) {
+                if (kvstc.getKey().equals(itemselect)) {
+                    kvstc.setIsDefault("1");// 0:没选中 1已选中
+                }
+            }
+        }
+
+        final DayDetailSelectKeyValueAdapter sadapter = new DayDetailSelectKeyValueAdapter(context,
+                typeLst, new String[]{"key","value"}, item.getValroutekeys());
+        dataLv.setAdapter(sadapter);
+        dataLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                CheckBox itemCB = (CheckBox) arg1.findViewById(R.id.common_multiple_cb_lvitem);
+                TextView itemTv = (TextView) arg1.findViewById(R.id.common_multiple_tv_lvitem);
+                itemCB.toggle();//点击整行可以显示效果
+
+                String checkkey = FunUtil.isBlankOrNullTo(itemTv.getHint(), " ") + ",";
+                String checkname = FunUtil.isBlankOrNullTo(itemTv.getText().toString(), " ") + ",";
+                if (itemCB.isChecked()) {
+                    item.setValcheckkey(FunUtil.isBlankOrNullTo(item.getValcheckkey(),"")  + checkkey);
+                    item.setValcheckname(FunUtil.isBlankOrNullTo(item.getValcheckname(),"") + checkname);
+                    ((KvStc)typeLst.get(arg2)).setIsDefault("1");
+                } else {
+                    item.setValcheckkey(FunUtil.isBlankOrNullTo(item.getValcheckkey(),"") .replace(checkkey, ""));
+                    item.setValcheckname(FunUtil.isBlankOrNullTo(item.getValcheckname(),"").replace(checkname, ""));
                     ((KvStc)typeLst.get(arg2)).setIsDefault("0");
                 }
                 sadapter.notifyDataSetChanged();

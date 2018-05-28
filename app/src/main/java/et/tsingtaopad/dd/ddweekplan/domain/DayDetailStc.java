@@ -29,6 +29,11 @@ public class DayDetailStc implements Serializable{
 	// 追溯项name 集合
 	private List<String> valchecknameLv;
 
+	// 追溯项key
+	private String valcheckkey;
+	// 追溯项name
+	private String valcheckname;
+
 	// 追溯区域
 	private String valareakey;
 	// 追溯区域
@@ -134,5 +139,21 @@ public class DayDetailStc implements Serializable{
 
 	public void setValroutekeys(String valroutekeys) {
 		this.valroutekeys = valroutekeys;
+	}
+
+	public String getValcheckkey() {
+		return valcheckkey;
+	}
+
+	public void setValcheckkey(String valcheckkey) {
+		this.valcheckkey = valcheckkey;
+	}
+
+	public String getValcheckname() {
+		return valcheckname;
+	}
+
+	public void setValcheckname(String valcheckname) {
+		this.valcheckname = valcheckname;
 	}
 }

@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatTextView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,21 +30,41 @@ import java.util.Map;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
+import et.tsingtaopad.business.first.FirstFragment;
+import et.tsingtaopad.business.first.bean.AreaGridRoute;
+import et.tsingtaopad.core.net.HttpUrl;
+import et.tsingtaopad.core.net.RestClient;
+import et.tsingtaopad.core.net.callback.IError;
+import et.tsingtaopad.core.net.callback.IFailure;
+import et.tsingtaopad.core.net.callback.ISuccess;
+import et.tsingtaopad.core.net.domain.RequestHeadStc;
+import et.tsingtaopad.core.net.domain.RequestStructBean;
+import et.tsingtaopad.core.net.domain.ResponseStructBean;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
+import et.tsingtaopad.core.util.dbtutil.JsonUtil;
+import et.tsingtaopad.core.util.dbtutil.PrefUtils;
+import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.db.dao.MitPlandayvalMDao;
 import et.tsingtaopad.db.table.MitPlandayM;
 import et.tsingtaopad.db.table.MitPlandaydetailM;
 import et.tsingtaopad.db.table.MitPlandayvalM;
 import et.tsingtaopad.db.table.MitPlanweekM;
+import et.tsingtaopad.db.table.MstGridM;
+import et.tsingtaopad.db.table.MstMarketareaM;
+import et.tsingtaopad.db.table.MstRouteM;
 import et.tsingtaopad.dd.ddweekplan.domain.DayDetailStc;
 import et.tsingtaopad.dd.ddweekplan.domain.DayDetailValStc;
 import et.tsingtaopad.dd.ddweekplan.domain.DayPlanStc;
 import et.tsingtaopad.dd.ddxt.updata.XtUploadService;
+import et.tsingtaopad.home.app.MainService;
+import et.tsingtaopad.home.initadapter.GlobalValues;
+import et.tsingtaopad.http.HttpParseJson;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
 import et.tsingtaopad.listviewintf.IClick;
+import et.tsingtaopad.util.requestHeadUtil;
 
 /**
  * Created by yangwenmin on 2018/3/12.
@@ -78,13 +99,13 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
 
     private String weekDateStart = "";
     private String weekDateEnd = "";
-    private String weekStart = "";
-    private String weekEnd = "";
+    /*private String weekStart = "";
+    private String weekEnd = "";*/
 
     List<DayPlanStc> dayPlanStcs = new ArrayList<DayPlanStc>();
 
     private DatabaseHelper helper;
-    private List<MitPlanweekM> weekplanLst;
+    private List<MitPlanweekM> weekplanLst = new ArrayList<MitPlanweekM>();
     private MitPlanweekM mitPlanweekM;
 
 
@@ -122,7 +143,7 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
 
         titleTv.setText("我的计划");
         handler = new MyHandler(this);
-        // ConstValues.handler = handler;
+        ConstValues.handler = handler;
         confirmTv.setText("日历");
 
         // 获取系统时间
@@ -136,6 +157,9 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
     private void initData() {
 
         dayPlanStcs.clear();
+        weekplanLst.clear();
+        mitPlanweekM = new MitPlanweekM();
+        mitPlanweekM.setStatus("0");
         helper = DatabaseHelper.getHelper(getActivity());
 
         try {
@@ -150,16 +174,16 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
             for (int i = 1; i <= 7; i++) {
                 calendar.add(Calendar.DAY_OF_WEEK, i - calendar.get(Calendar.DAY_OF_WEEK));
                 Date date = calendar.getTime();
-                String plandate = DateUtil.formatDate(date, "yyyyMMdd");
-                String plandate2 = DateUtil.formatDate(date, "yyyy-MM-dd");// 用于页面展示
+                //String plandate = DateUtil.formatDate(date, "yyyyMMdd");
+                String plandate = DateUtil.formatDate(date, "yyyy-MM-dd");// 用于页面展示
                 if (i == 1) {
                     // 获取本周的开始时间(定义为全局)
                     weekDateStart = plandate;
-                    weekStart = plandate2;// 用于页面展示
+                    //weekStart = plandate;// 用于页面展示
                 } else if (i == 7) {
                     // 获取本周的结束时间(定义为全局)
                     weekDateEnd = plandate;
-                    weekEnd = plandate2;// 用于页面展示
+                    //weekEnd = plandate;// 用于页面展示
                 }
 
                 Map<String, Object> map = new HashMap<String, Object>();
@@ -171,7 +195,7 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
                 dayPlanStc.setPlanKey(FunUtil.getUUID());
                 dayPlanStc.setState("0");// 0:未制定 1等待提交 2待审核 3 审核通过  4 未通过
                 dayPlanStc.setPlandate(plandate);
-                dayPlanStc.setVisitTime(plandate2);// // 用于页面展示
+                dayPlanStc.setVisitTime(plandate);// // 用于页面展示
                 dayPlanStc.setWeekday("周" + datePreview(i));// 周二
                 if (planList.size() > 0) {
                     dayPlanStc.setPlanKey(planList.get(0).getId());
@@ -186,8 +210,8 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
                 String area = "";
                 for (DayDetailStc dayDetailStc : detailStcs) {
 
-                    // 日计划详情附表  追溯项(不用管)
-                    List<DayDetailValStc> dayDetailValStcs = mitPlandayvalMDao.queryPlanMitPlandayvalM(helper, dayDetailStc.getDetailkey(), "0");
+                    // 日计划详情附表  追溯项
+                    /*List<DayDetailValStc> dayDetailValStcs = mitPlandayvalMDao.queryPlanMitPlandayvalM(helper, dayDetailStc.getDetailkey(), "0");
                     List<String> checks = new ArrayList<>();
                     for (DayDetailValStc valStc : dayDetailValStcs) {
                         checks.add(valStc.getValcheckname());
@@ -196,15 +220,28 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
                             check = valStc.getValcheckname() + "," + check;
                         }
                     }
-                    dayDetailStc.setValchecknameLv(checks);
+                    dayDetailStc.setValchecknameLv(checks);*/
+                    List<DayDetailValStc> dayDetailValStcs = mitPlandayvalMDao.queryPlanMitPlandayvalM(helper, dayDetailStc.getDetailkey(), "0");
+                    StringBuffer checkkeys = new StringBuffer();
+                    StringBuffer checknames = new StringBuffer();
+                    for (DayDetailValStc valStc : dayDetailValStcs) {
+                        checkkeys.append(valStc.getValcheckkey()).append(",");
+                        checknames.append(valStc.getValcheckname()).append(",");
+                        // 追溯项汇总
+                        if (!check.contains(valStc.getValcheckname())) {
+                            check = valStc.getValcheckname() + "," + check;
+                        }
+                    }
+                    dayDetailStc.setValcheckkey(checkkeys.toString());
+                    dayDetailStc.setValcheckname(checknames.toString());
 
                     // 日计划详情附表  路线
                     List<DayDetailValStc> valroutekeys = mitPlandayvalMDao.queryPlanMitPlandayvalMRoutes(helper, dayDetailStc.getDetailkey(), "1");
-                    StringBuffer stringBuffer = new StringBuffer();
-                    StringBuffer buffer = new StringBuffer();
+                    StringBuffer routekeys = new StringBuffer();
+                    StringBuffer routenames = new StringBuffer();
                     for (DayDetailValStc detailValStc : valroutekeys) {
-                        stringBuffer.append(detailValStc.getValroutekey()).append(",");
-                        buffer.append(detailValStc.getValroutename()).append(",");
+                        routekeys.append(detailValStc.getValroutekey()).append(",");
+                        routenames.append(detailValStc.getValroutename()).append(",");
                         // 路线汇总
                         if (!route.contains(detailValStc.getValgridname() + "-" + detailValStc.getValroutename())) {
                             route = detailValStc.getValgridname() + "-" + detailValStc.getValroutename() + "," + route;
@@ -214,14 +251,14 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
                             area = detailValStc.getValareaname() + "," + area;
                         }
                     }
-                    dayDetailStc.setValroutekeys(stringBuffer.toString());
-                    dayDetailStc.setValroutenames(buffer.toString());
+                    dayDetailStc.setValroutekeys(routekeys.toString());
+                    dayDetailStc.setValroutenames(routenames.toString());
                     // detailStcs.add(dayDetailStc);
                 }
 
-                dayPlanStc.setPlancheck(check);//追溯项
-                dayPlanStc.setPlanroute(route);//追溯路线
-                dayPlanStc.setPlanareaid(area);//追溯区域
+                dayPlanStc.setPlancheck(check);//追溯项汇总
+                dayPlanStc.setPlanroute(route);//追溯路线汇总
+                dayPlanStc.setPlanareaid(area);//追溯区域汇总
                 /*
                 dayPlanStc.setPlangridid();//追溯定格
                 */
@@ -239,6 +276,16 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
                 mitPlanweekM = weekplanLst.get(0);
             }
 
+            // 修改状态
+            for (DayPlanStc dayPlanStc : dayPlanStcs) {
+                if("2".equals(mitPlanweekM.getStatus())
+                        ||"3".equals(mitPlanweekM.getStatus())
+                        ||"4".equals(mitPlanweekM.getStatus())){// 0未制定1未提交2待审核3审核通过4未通过
+                    dayPlanStc.setState(mitPlanweekM.getStatus());
+                }
+
+            }
+
             adapter = new WeekPlanAdapter(getActivity(), dayPlanStcs, new IClick() {
                 @Override
                 public void listViewItemClick(int position, View v) {
@@ -247,9 +294,20 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
             });
             planLv.setAdapter(adapter);
 
-            weektimeTv.setText(weekStart+"  -  "+weekEnd);
+            weektimeTv.setText(weekDateStart + "  -  " + weekDateEnd);
         } catch (Exception e) {
 
+        }
+
+        // 提交按钮消失
+        if ("2".equals(mitPlanweekM.getStatus())) {//  0未制定1未提交2待审核3审核通过4未通过
+            submitTv.setText("等待审核");
+            submitTv.setClickable(false);
+            submitTv.setBackgroundColor(getResources().getColor(R.color.bg_content_color_gray));
+        } else {
+            submitTv.setText("提交");
+            submitTv.setClickable(true);
+            submitTv.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_select_green));
         }
     }
 
@@ -257,6 +315,18 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
     public void onResume() {
         super.onResume();
         initData();
+        initUrlData();// 获取当前周计划
+    }
+
+    private void initUrlData() {
+        String content  = "{"+
+                "areaid:'"+ PrefUtils.getString(getActivity(),"departmentid","")+"'," +
+                "starttime:'"+weekDateStart+"'," +
+                "endtime:'"+weekDateEnd+"'," +
+                "tablename:'"+"PLANWEEK"+"'," +
+                "creuser:'"+PrefUtils.getString(getActivity(),"userid","")+"'" +
+                "}";
+        ceshiHttp("opt_get_ddplanweek","PLANWEEK",content);
     }
 
     // 点击事件
@@ -289,6 +359,7 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
                         String tv_plantitle = (calendar.get(Calendar.YEAR) + getString(R.string.workplan_msg3) + (calendar.get(Calendar.MONTH) + 1) + getString(R.string.workplan_msg4) + calendar.get(Calendar.WEEK_OF_MONTH) + getString(R.string.workplan_msg5));
 
                         initData();
+                        initUrlData();
 
                     }
                 }, yearr, month, day);
@@ -307,12 +378,14 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
     }
 
     private void saveWeekPlan() {
-        if(mitPlanweekM !=null && !"".equals(mitPlanweekM.getId())){
+        if (mitPlanweekM != null && !"".equals(mitPlanweekM.getId())&& !TextUtils.isEmpty(mitPlanweekM.getId())) {
+            mitPlanweekM.setStatus("2");// 0未制定1未提交2待审核3审核通过4未通过
             // 上传周计划
-            XtUploadService xtUploadService = new XtUploadService(getActivity(),null);
-            xtUploadService.uploadWeekPlan(false,mitPlanweekM.getId(),1);
+            XtUploadService xtUploadService = new XtUploadService(getActivity(), null);
+            xtUploadService.uploadWeekPlan(false, mitPlanweekM.getId(), 1);
+        } else {
+            Toast.makeText(getActivity(), "请先至少制定一条日计划", Toast.LENGTH_SHORT).show();
         }
-        supportFragmentManager.popBackStack();
     }
 
 
@@ -337,7 +410,6 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
                 return;
             }
 
-
             // 处理UI 变化
             switch (msg.what) {
                 case WEEKPLAN_UP_SUC://
@@ -347,7 +419,13 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
                     //fragment.shuaxinXtTermSelect(2);
                     break;
                 case ConstValues.WAIT0://
-                    fragment.shuaxinXtTermSelect(2);
+                    fragment.refreshWeekFragment(1);// 日计划保存成功
+                    break;
+                case GlobalValues.SINGLE_UP_SUC://  周计划保存成功
+                    fragment.refreshWeekFragment(2);
+                    break;
+                case GlobalValues.SINGLE_UP_FAIL://  周计划保存失败
+                    fragment.refreshWeekFragment(3);
                     break;
 
             }
@@ -355,7 +433,14 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
     }
 
     // 结束上传  刷新页面  0:确定上传  1上传成功  2上传失败
-    private void shuaxinXtTermSelect(int upType) {
+    private void refreshWeekFragment(int upType) {
+        if (1 == upType) {
+            //Toast.makeText(getActivity(), "保存成功", Toast.LENGTH_SHORT).show();
+        } else if (2 == upType) {
+            Toast.makeText(getActivity(), "上传成功", Toast.LENGTH_SHORT).show();
+        } else if (3 == upType) {
+            Toast.makeText(getActivity(), "上传失败", Toast.LENGTH_SHORT).show();
+        }
         initData();
     }
 
@@ -405,6 +490,108 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
 
         }
         return temp;
+    }
+
+    /**
+     * 同步表数据
+     *
+     * @param optcode   请求码
+     * @param table     请求表名(请求不同的)
+     * @param content   请求json
+     */
+    void ceshiHttp(final String optcode, final String table,String content) {
+
+        // 组建请求Json
+        RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(getContext());
+        requestHeadStc.setOptcode(PropertiesUtil.getProperties(optcode));
+        RequestStructBean reqObj = HttpParseJson.parseRequestStructBean(requestHeadStc, content);
+
+        // 压缩请求数据
+        String jsonZip = HttpParseJson.parseRequestJson(reqObj);
+
+        RestClient.builder()
+                .url(HttpUrl.IP_END)
+                .params("data", jsonZip)
+                .loader(getContext())// 滚动条
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+                        String json = HttpParseJson.parseJsonResToString(response);
+
+                        if ("".equals(json) || json == null) {
+                            Toast.makeText(getActivity(), "后台成功接收,但返回的数据为null", Toast.LENGTH_SHORT).show();
+                        } else {
+                            ResponseStructBean resObj = new ResponseStructBean();
+                            resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
+                            // 保存登录信息
+                            if(ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())){
+                                // 保存信息
+                                if("opt_get_ddplanweek".equals(optcode)&&"PLANWEEK".equals(table)){
+
+                                    String formjson = resObj.getResBody().getContent();
+                                    parseTableJson(formjson);
+
+                                /*Bundle bundle = new Bundle();
+                                bundle.putString("msg","正在处理区域数据表");
+                                Message msg = new Message();
+                                msg.what = FirstFragment.SYNC_SUCCSE;//
+                                msg.setData(bundle);
+                                handler.sendMessage(msg);*/
+
+                                    //Toast.makeText(getActivity(), "区域定格路线同步成功", Toast.LENGTH_SHORT).show();
+                                    initData();
+                                }
+
+                            }else{
+                                Toast.makeText(getActivity(), resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
+                            /*Message msg = new Message();
+                            msg.what = FirstFragment.SYNC_CLOSE;//
+                            handler.sendMessage(msg);*/
+                                initData();
+                            }
+                        }
+
+
+                    }
+                })
+                .error(new IError() {
+                    @Override
+                    public void onError(int code, String msg) {
+                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                        /*Message msg1 = new Message();
+                        msg1.what = FirstFragment.SYNC_CLOSE;//
+                        handler.sendMessage(msg1);*/
+                        initData();
+                    }
+                })
+                .failure(new IFailure() {
+                    @Override
+                    public void onFailure() {
+                        Toast.makeText(getContext(), "请求失败", Toast.LENGTH_SHORT).show();
+                        /*Message msg2 = new Message();
+                        msg2.what = FirstFragment.SYNC_CLOSE;//
+                        handler.sendMessage(msg2);*/
+                        initData();
+                    }
+                })
+                .builde()
+                .post();
+    }
+
+    // 解析区域定格路线成功
+    private void parseTableJson(String json) {
+        // 解析区域定格路线信息
+        AreaGridRoute emp = JsonUtil.parseJson(json, AreaGridRoute.class);
+        String MIT_PLANWEEK_M = emp.getMIT_PLANWEEK_M();
+        String MIT_PLANDAY_M = emp.getMIT_PLANDAY_M();
+        String MIT_PLANDAYDETAIL_M = emp.getMIT_PLANDAYDETAIL_M();
+        String MIT_PLANDAYVAL_M = emp.getMIT_PLANDAYVAL_M();
+
+        MainService service = new MainService(getActivity(),null);
+        service.createOrUpdateTable(MIT_PLANWEEK_M,"MIT_PLANWEEK_M",MitPlanweekM.class);
+        service.createOrUpdateTable(MIT_PLANDAY_M,"MIT_PLANDAY_M",MitPlandayM.class);
+        service.createOrUpdateTable(MIT_PLANDAYDETAIL_M,"MIT_PLANDAYDETAIL_M",MitPlandaydetailM.class);
+        service.createOrUpdateTable(MIT_PLANDAYVAL_M,"MIT_PLANDAYVAL_M",MitPlandayvalM.class);
     }
 
 }

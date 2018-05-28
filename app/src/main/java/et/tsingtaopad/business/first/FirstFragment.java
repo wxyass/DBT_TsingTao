@@ -1,14 +1,12 @@
 package et.tsingtaopad.business.first;
 
 import android.app.AlertDialog;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.ref.SoftReference;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
@@ -33,9 +26,7 @@ import et.tsingtaopad.core.net.callback.ISuccess;
 import et.tsingtaopad.core.net.domain.RequestHeadStc;
 import et.tsingtaopad.core.net.domain.RequestStructBean;
 import et.tsingtaopad.core.net.domain.ResponseStructBean;
-import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
-import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.JsonUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
@@ -43,7 +34,6 @@ import et.tsingtaopad.db.table.CmmAreaM;
 import et.tsingtaopad.db.table.CmmDatadicM;
 import et.tsingtaopad.db.table.MitValcheckterM;
 import et.tsingtaopad.db.table.MstAgencyKFM;
-import et.tsingtaopad.db.table.MstAgencygridInfo;
 import et.tsingtaopad.db.table.MstAgencyinfoM;
 import et.tsingtaopad.db.table.MstAgencyvisitM;
 import et.tsingtaopad.db.table.MstCmpbrandsM;
@@ -54,22 +44,14 @@ import et.tsingtaopad.db.table.MstInvoicingInfo;
 import et.tsingtaopad.db.table.MstMarketareaM;
 import et.tsingtaopad.db.table.MstPictypeM;
 import et.tsingtaopad.db.table.MstProductM;
-import et.tsingtaopad.db.table.MstProductareaInfo;
 import et.tsingtaopad.db.table.MstPromoproductInfo;
 import et.tsingtaopad.db.table.MstPromotionsM;
 import et.tsingtaopad.db.table.MstRouteM;
 import et.tsingtaopad.db.table.MstVisitauthorizeInfo;
-import et.tsingtaopad.db.table.PadCheckaccomplishInfo;
-import et.tsingtaopad.db.table.PadCheckproInfo;
 import et.tsingtaopad.db.table.PadCheckstatusInfo;
-import et.tsingtaopad.db.table.PadChecktypeM;
-import et.tsingtaopad.dd.ddzs.zscheckindex.ZsCheckIndexFragment;
-import et.tsingtaopad.dd.ddzs.zsinvoicing.ZsInvoicingFragment;
-import et.tsingtaopad.dd.ddzs.zssayhi.ZsSayhiService;
 import et.tsingtaopad.home.app.MainService;
 import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.http.HttpParseJson;
-import et.tsingtaopad.initconstvalues.domain.KvStc;
 import et.tsingtaopad.login.domain.BsVisitEmpolyeeStc;
 import et.tsingtaopad.util.requestHeadUtil;
 
@@ -233,10 +215,10 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
 
         // 组建请求Json
         RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(getContext());
-        if("opt_get_login".equals(optcode)){
+        /*if("opt_get_login".equals(optcode)){
             requestHeadStc.setUsercode("50000");
             requestHeadStc.setPassword("a1234567");
-        }
+        }*/
         requestHeadStc.setOptcode(PropertiesUtil.getProperties(optcode));
         RequestStructBean reqObj = HttpParseJson.parseRequestStructBean(requestHeadStc, content);
 

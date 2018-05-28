@@ -190,6 +190,9 @@ public class ZsCaculateAdapter extends BaseAdapter {
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                mAlertViewExt.dismiss();
+
                 if(0==position){
                     // 修改对错
                     xtProIndexValue.setValchecktypeflag("Y");
@@ -212,7 +215,7 @@ public class ZsCaculateAdapter extends BaseAdapter {
                     xtVisitShopActivity.changeXtvisitFragment(xtCaculateFragment,"xtnuminputfragment");
                 }
 
-                mAlertViewExt.dismiss();
+
             }
         });
         mAlertViewExt.addExtView(extView);

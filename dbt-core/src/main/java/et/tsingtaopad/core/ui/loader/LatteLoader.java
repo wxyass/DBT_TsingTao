@@ -11,6 +11,7 @@ import com.wang.avi.AVLoadingIndicatorView;
 import java.util.ArrayList;
 
 import et.tsingtaopad.core.R;
+import et.tsingtaopad.core.util.dbtutil.FileUtil;
 import et.tsingtaopad.core.util.dimen.DimenUtil;
 
 /**

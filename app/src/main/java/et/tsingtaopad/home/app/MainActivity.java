@@ -36,7 +36,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         // 应用打开时,创建或更新数据库
-        new DatabaseHelper(this).getWritableDatabase();
+        // new DatabaseHelper(this).getWritableDatabase();
 
         // 测试SharedPreferences
         PrefUtils.putString(getApplicationContext(),"ceshi","ceshi");

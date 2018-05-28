@@ -53,6 +53,11 @@ public class AreaGridRoute {
     private String MIT_VALAGENCYKF_M;// 经销商开发核查表
     private String MIT_AGENCYNUM_M;// 经销商库存盘点主表
 
+    private String MIT_PLANWEEK_M;// 督导周计划主表
+    private String MIT_PLANDAY_M;// 督导周计划主表
+    private String MIT_PLANDAYDETAIL_M;// 督导周计划主表
+    private String MIT_PLANDAYVAL_M;// 督导周计划主表
+
 
 
 
@@ -343,5 +348,37 @@ public class AreaGridRoute {
 
     public void setMIT_AGENCYNUM_M(String MIT_AGENCYNUM_M) {
         this.MIT_AGENCYNUM_M = MIT_AGENCYNUM_M;
+    }
+
+    public String getMIT_PLANWEEK_M() {
+        return MIT_PLANWEEK_M;
+    }
+
+    public void setMIT_PLANWEEK_M(String MIT_PLANWEEK_M) {
+        this.MIT_PLANWEEK_M = MIT_PLANWEEK_M;
+    }
+
+    public String getMIT_PLANDAY_M() {
+        return MIT_PLANDAY_M;
+    }
+
+    public void setMIT_PLANDAY_M(String MIT_PLANDAY_M) {
+        this.MIT_PLANDAY_M = MIT_PLANDAY_M;
+    }
+
+    public String getMIT_PLANDAYDETAIL_M() {
+        return MIT_PLANDAYDETAIL_M;
+    }
+
+    public void setMIT_PLANDAYDETAIL_M(String MIT_PLANDAYDETAIL_M) {
+        this.MIT_PLANDAYDETAIL_M = MIT_PLANDAYDETAIL_M;
+    }
+
+    public String getMIT_PLANDAYVAL_M() {
+        return MIT_PLANDAYVAL_M;
+    }
+
+    public void setMIT_PLANDAYVAL_M(String MIT_PLANDAYVAL_M) {
+        this.MIT_PLANDAYVAL_M = MIT_PLANDAYVAL_M;
     }
 }

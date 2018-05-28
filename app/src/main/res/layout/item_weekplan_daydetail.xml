@@ -40,6 +40,10 @@
 
         </RelativeLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/textColor_actionsheet_title"/>
 
         <!--追溯区域:-->
         <RelativeLayout
@@ -71,6 +75,10 @@
 
         </RelativeLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/textColor_actionsheet_title"/>
 
         <!--追溯定格 -->
         <RelativeLayout
@@ -102,6 +110,10 @@
 
         </RelativeLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/textColor_actionsheet_title"/>
 
         <!--追溯路线 -->
         <RelativeLayout

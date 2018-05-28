@@ -43,6 +43,12 @@ public class MitPlandayvalMDaoImpl extends BaseDaoImpl<MitPlandayvalM, String> i
         StringBuffer buffer = new StringBuffer();
         buffer.append("select * from MIT_PLANDAYVAL_M where plandaydetailid = ? and plancomtype = ? ");
 
+        /*buffer.append("select mv.*,g.routename,h.areaname,i.gridname from MIT_PLANDAYVAL_M mv   ");
+        buffer.append("    left join MST_ROUTE_M g on g.routekey = mv.plancomid   ");
+        buffer.append("    left join MST_MARKETAREA_M h on h.areaid = mv.planareaid    ");
+        buffer.append("    left join MST_GRID_M i on i.gridkey = mv.plangridid   ");
+        buffer.append("    where mv.plandaydetailid = ? and mv.plancomtype = ?  ");*/
+
         SQLiteDatabase db = helper.getReadableDatabase();
         Cursor cursor = db.rawQuery(buffer.toString(), new String[]{plandaydetailid,plancomtype});
         DayDetailValStc dayDetailValStc;
@@ -53,7 +59,7 @@ public class MitPlandayvalMDaoImpl extends BaseDaoImpl<MitPlandayvalM, String> i
             // dayDetailValStc.setDaykey(cursor.getString(cursor.getColumnIndex("plancomid")));// 日计划主键
             dayDetailValStc.setDetailkey(cursor.getString(cursor.getColumnIndex("plandaydetailid")));// 日计划详情表主键
 
-            // dayDetailValStc.setValcheckkey(cursor.getString(cursor.getColumnIndex("plancomid")));// 追溯项key
+            dayDetailValStc.setValcheckkey(cursor.getString(cursor.getColumnIndex("plancomid")));// 追溯项key
             dayDetailValStc.setValcheckname(cursor.getString(cursor.getColumnIndex("plancomid")));// 追溯项name
             dayDetailValStc.setValareakey(cursor.getString(cursor.getColumnIndex("planareaid")));// 追溯区域
             // dayDetailValStc.setValareaname(cursor.getString(cursor.getColumnIndex("plancomid")));// 追溯区域

@@ -28,7 +28,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>-->
-        <activity android:name=".home.app.MainActivity"
+        <activity android:name=".home.login.LoginActivity"
                   android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -36,6 +36,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <!--协同终端 主Activity-->
+        <activity android:name="et.tsingtaopad.home.app.MainActivity"
+                  android:screenOrientation="portrait"/>
 
         <!--协同终端 主Activity-->
         <activity android:name=".dd.ddxt.shopvisit.XtVisitShopActivity"
