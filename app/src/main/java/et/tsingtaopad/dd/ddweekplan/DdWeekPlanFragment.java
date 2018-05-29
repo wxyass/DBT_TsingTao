@@ -348,8 +348,7 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
                 break;
 
             case R.id.top_navigation_rl_confirm:// 确定
-
-                Toast.makeText(getActivity(), "弹出日历", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "弹出日历", Toast.LENGTH_SHORT).show();
                 DatePickerDialog dateDialog = new DatePickerDialog(v.getContext(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {

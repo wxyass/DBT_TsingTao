@@ -82,5 +82,8 @@ dependencies {
     compile 'com.github.chrisbanes:PhotoView:2.0.0'
     // 用于压缩数据库
     compile files('libs/ant.jar')
+    // 适配 https://github.com/yatoooon/AndroidScreenAdaptation
+    compile 'me.yatoooon:screenadaptation:1.1.1'
+
 
 }

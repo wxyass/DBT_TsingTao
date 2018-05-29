@@ -61,6 +61,7 @@
                         android:background="@drawable/bg_select_green"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
+                        android:textSize="@dimen/font_size4"
                         android:text="新增供货关系"
                         />
                 </RelativeLayout>

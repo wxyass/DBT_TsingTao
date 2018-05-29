@@ -20,16 +20,17 @@
                 android:id="@+id/top_navigation_bt_back1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+                android:layout_centerInParent="true"
                 android:layout_marginLeft="30dp"
-                android:background="@drawable/icon_return"/>
+                android:background="@drawable/icon_return"
+                android:textSize="@dimen/font_size3"/>
         </RelativeLayout>
 
         <!-- 标题 -->
 
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="7"
             android:background="@color/white">
 
@@ -37,14 +38,16 @@
                 android:id="@+id/top_navigation_tv_title1"
                 style="@style/banner_child"
                 android:layout_width="wrap_content"
-                android:layout_height="65dp"
+                android:layout_height="match_parent"
                 android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
                 android:gravity="center"
                 android:maxLength="15"
                 android:paddingLeft="30dp"
                 android:paddingRight="30dp"
                 android:text="选择结果"
-                android:textColor="@color/bg_top_navigation_title"/>
+                android:textColor="@color/bg_top_navigation_title"
+                android:textSize="@dimen/font_size2"/>
         </RelativeLayout>
 
         <!-- 确定 -->
@@ -61,11 +64,12 @@
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/top_navigation_bt_confirm1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="30dp"
-                android:text="@string/sureabc"
+                android:text="确定"
+                android:textSize="@dimen/font_size3"
                 />
         </RelativeLayout>
     </LinearLayout>
@@ -84,7 +88,9 @@
             android:layout_height="50dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:textSize="@dimen/font_size3"
             android:text="正确"/>
+
     </RadioGroup>
 
     <View
@@ -102,6 +108,7 @@
         android:layout_height="50dp"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
+        android:textSize="@dimen/font_size3"
         android:text="品项有误"
         android:visibility="gone"/>
 
@@ -111,6 +118,7 @@
         android:layout_height="50dp"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
+        android:textSize="@dimen/font_size3"
         android:text="经销商有误"
         android:visibility="gone"/>
 
@@ -120,6 +128,7 @@
         android:layout_height="50dp"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
+        android:textSize="@dimen/font_size3"
         android:text="数据有误"
         android:visibility="gone"/>
 
@@ -129,6 +138,7 @@
         android:layout_height="50dp"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
+        android:textSize="@dimen/font_size3"
         android:text="窜货"
         android:visibility="gone"/>
 

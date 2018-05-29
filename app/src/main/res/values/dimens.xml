@@ -2,9 +2,6 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
     <dimen name="nav_header_height">160dp</dimen>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">24dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="bottombar_height">48dp</dimen>
@@ -14,16 +11,16 @@
     <!--下面是摘自Dbtplus旧版本 2017年12月25日10:11:39-->
 
     <!-- App字体列表 -->
-    <dimen name="font_size1">24sp</dimen>
-    <dimen name="font_size2">20sp</dimen>
-    <dimen name="font_size3">18sp</dimen>
-    <dimen name="font_size4">16sp</dimen>
+    <dimen name="font_size1">24dp</dimen>
+    <dimen name="font_size2">20dp</dimen>
+    <dimen name="font_size3">18dp</dimen>
+    <dimen name="font_size4">16dp</dimen>
 
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="home_weather_textsize">18sp</dimen>
-    <dimen name="show_product_textsize">16sp</dimen>
-    <dimen name="home_content_textsize">18sp</dimen>
-    <dimen name="home_content_textsize1">16sp</dimen>
+    <dimen name="home_weather_textsize">18dp</dimen>
+    <dimen name="show_product_textsize">16dp</dimen>
+    <dimen name="home_content_textsize">18dp</dimen>
+    <dimen name="home_content_textsize1">16dp</dimen>
 
     <!-- 拍照大小 -->
     <dimen name="thumbnail_imageview_size">41.0dip</dimen>
@@ -35,7 +32,7 @@
     <dimen name="title_view_left_back_padding_right">12.0dip</dimen>
     <dimen name="album_header_btn_width">48.0dip</dimen>
     <dimen name="album_rooter_bar_height">48.0dip</dimen>
-    <dimen name="album_rooter_bar_text_size">16.0sp</dimen>
+    <dimen name="album_rooter_bar_text_size">16.0dp</dimen>
     <dimen name="videodetails_textsize_time">13.0dip</dimen>
     <dimen name="video_bottom_bar_height">40.0dip</dimen>
 
@@ -47,5 +44,7 @@
 
     <!--督导各个条目高度-->
     <dimen name="xtbf_item_h">40dp</dimen>
+    <!--督导 查指标 条目高度-->
+    <dimen name="zs_item_h">50dp</dimen>
 
 </resources>

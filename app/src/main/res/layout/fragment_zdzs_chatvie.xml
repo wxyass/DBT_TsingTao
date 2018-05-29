@@ -59,6 +59,7 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:text="添加竞品"
+                        android:textSize="@dimen/font_size4"
                         android:visibility="gone"
                         />
                 </RelativeLayout>
@@ -176,6 +177,7 @@
                     android:background="@drawable/bg_visit_record"
                     android:hint="请输入拜访记录"
                     android:maxLength="150"
+                    android:textSize="@dimen/font_size3"
                     android:inputType="textMultiLine"/>
             </LinearLayout>
 

@@ -1,9 +1,11 @@
 package et.tsingtaopad.home.app;
 
 import android.app.Application;
+import android.content.res.Configuration;
 
 import com.blankj.utilcode.util.Utils;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
+import com.yatoooon.screenadaptation.ScreenAdapterTools;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.core.app.Latte;
@@ -62,5 +64,15 @@ public class MyApplication extends Application {
         CrashHandler.getInstance().init(this);
         Utils.init(this);
 
+        // 适配
+        ScreenAdapterTools.init(this);
+
+    }
+
+    //旋转适配,如果应用屏幕固定了某个方向不旋转的话(比如qq和微信),下面可不写.
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        ScreenAdapterTools.getInstance().reset(this);
     }
 }

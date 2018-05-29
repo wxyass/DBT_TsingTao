@@ -20,16 +20,17 @@
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="@dimen/xtbf_item_h"
-                android:layout_weight="2">
+                android:layout_weight="4">
 
                 <TextView
                     android:id="@+id/item_zs_checkindex_tv_promotionname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
                     android:paddingLeft="10dp"
                     android:text="秋季大练兵"
-                    android:textSize="18sp"/>
+                    android:textSize="@dimen/font_size3"/>
 
             </RelativeLayout>
 
@@ -42,10 +43,11 @@
                     android:id="@+id/item_zs_checkindex_tv_proname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:paddingRight="10dp"
+                    android:layout_alignParentLeft="true"
+                    android:paddingLeft="10dp"
                     android:text="产品详情"
-                    android:textSize="18sp"/>
+                    android:layout_centerVertical="true"
+                    android:textSize="@dimen/font_size3"/>
 
             </RelativeLayout>
 
@@ -72,7 +74,7 @@
                 style="@style/listview_tv_item_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"/>
+                android:textSize="@dimen/font_size4"/>
         </LinearLayout>
 
         <View
@@ -100,20 +102,29 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
+                    android:paddingLeft="10dp"
                     android:text="达成组数"
-                    android:textSize="18sp"/>
+                    android:textSize="@dimen/font_size3"/>
 
             </RelativeLayout>
 
-            <TextView
-                android:id="@+id/item_zs_checkindex_et_zushu"
+            <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="@dimen/xtbf_item_h"
-                android:layout_weight="4"
-                android:gravity="center_vertical"
-                android:background="@null"
-                android:hint="未达成"/>
+                android:layout_height="@dimen/xtbf_btn_h"
+                android:layout_weight="4">
+
+                <TextView
+                    android:id="@+id/item_zs_checkindex_et_zushu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:background="@null"
+                    android:textSize="@dimen/font_size4"
+                    android:hint="未达成"/>
+
+            </RelativeLayout>
+
 
 
             <!--未稽查-->
@@ -129,9 +140,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
+                    android:paddingLeft="10dp"
                     android:text="未稽查"
-                    android:textSize="15sp"/>
+                    android:textSize="@dimen/font_size3"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"
@@ -139,8 +150,6 @@
             </RelativeLayout>
 
         </LinearLayout>
-
-
     </LinearLayout>
 
 

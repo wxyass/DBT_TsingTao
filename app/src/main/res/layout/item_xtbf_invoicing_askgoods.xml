@@ -7,18 +7,18 @@
     <LinearLayout
         android:id="@+id/item_askgoods_ll"
         android:layout_width="match_parent"
-        android:layout_height="81dp"
+        android:layout_height="101dp"
         android:background="@color/white"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/xtbf_btn_h"
+            android:layout_height="@dimen/zs_item_h"
             android:orientation="horizontal">
 
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="@dimen/xtbf_btn_h"
+                android:layout_height="@dimen/zs_item_h"
                 android:layout_weight="1">
 
                 <TextView
@@ -28,21 +28,21 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
-                    android:textSize="18sp"
-                    android:text="崂山啤酒8度500*12罐啤"/>
+                    android:text="崂山啤酒8度500*12罐啤"
+                    android:textSize="@dimen/font_size3"/>
 
             </RelativeLayout>
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="30dp"
-                android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
                 android:background="@color/gray"/>
 
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="@dimen/xtbf_btn_h"
+                android:layout_height="@dimen/zs_item_h"
                 android:layout_weight="1">
 
                 <TextView
@@ -52,8 +52,8 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
-                    android:textSize="15sp"
-                    android:text="北京青岛啤酒北方销售有限公司"/>
+                    android:text="北京青岛啤酒北方销售有限公司"
+                    android:textSize="@dimen/font_size3"/>
             </RelativeLayout>
 
         </LinearLayout>
@@ -67,12 +67,12 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/xtbf_btn_h"
+            android:layout_height="@dimen/zs_item_h"
             android:orientation="horizontal">
 
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="@dimen/xtbf_btn_h"
+                android:layout_height="@dimen/zs_item_h"
                 android:layout_weight="1">
 
                 <TextView
@@ -82,31 +82,32 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
-                    android:textSize="18sp"
-                    android:text="渠道价:"/>
+                    android:text="渠道价:"
+                    android:textSize="@dimen/font_size3"/>
 
                 <EditText
                     android:id="@+id/item_askgoods_et_qudao"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:layout_margin="3dp"
+                    android:layout_toRightOf="@id/item_askgoods_tv_qudao"
+                    android:background="@drawable/bg_visit_record"
                     android:inputType="numberDecimal"
                     android:maxLength="10"
-                    android:layout_toRightOf="@id/item_askgoods_tv_qudao"
-                    android:background="@drawable/bg_visit_record"/>
+                    android:textSize="@dimen/font_size3"/>
 
             </RelativeLayout>
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
                 android:background="@color/gray"/>
 
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="@dimen/xtbf_btn_h"
+                android:layout_height="@dimen/zs_item_h"
                 android:layout_weight="1">
 
                 <TextView
@@ -116,18 +117,19 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
-                    android:textSize="15sp"
-                    android:text="零售价:"/>
+                    android:text="零售价:"
+                    android:textSize="@dimen/font_size3"/>
 
                 <EditText
                     android:id="@+id/item_askgoods_et_lingshou"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:inputType="numberDecimal"
                     android:layout_margin="3dp"
-                    android:maxLength="10"
                     android:layout_toRightOf="@id/item_askgoods_tv_lingshou"
-                    android:background="@drawable/bg_visit_record"/>
+                    android:background="@drawable/bg_visit_record"
+                    android:inputType="numberDecimal"
+                    android:maxLength="10"
+                    android:textSize="@dimen/font_size3"/>
             </RelativeLayout>
 
         </LinearLayout>

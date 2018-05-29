@@ -18,6 +18,6 @@
         android:layout_height="wrap_content"
         android:text="拍照类型"
         android:textColor="#000"
-        android:textSize="18sp"/>
+        android:textSize="@dimen/font_size3"/>
 
 </LinearLayout>

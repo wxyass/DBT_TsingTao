@@ -101,6 +101,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:visibility="invisible"
+                android:textSize="@dimen/font_size2"
                 android:text="该日未制定计划事项"/>
         </LinearLayout>
     </ScrollView>

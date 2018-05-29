@@ -54,6 +54,18 @@
         <!-- 启动应用的时候开启servic 主要负责监听网络变化 执行上传功能 -->
         <service android:name=".home.app.AutoUpService" />
 
+        <meta-data
+            android:name="designwidth"
+            android:value="750" />
+        <meta-data
+            android:name="designdpi"
+            android:value="320" />
+        <meta-data
+            android:name="fontsize"
+            android:value="1.0" />
+        <meta-data
+            android:name="unit"
+            android:value="dp" />
     </application>
 
 </manifest>

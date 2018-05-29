@@ -65,29 +65,29 @@
 
     <!-- App字体列表 -->
     <style name="font_size1">
-        <item name="android:textSize">24sp</item>
+        <item name="android:textSize">24dp</item>
     </style>
     <style name="font_size2">
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">20dp</item>
     </style>
     <style name="font_size3">
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">18dp</item>
     </style>
 
     <style name="font_size4">
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">15dp</item>
     </style>
     <style name="font_size5">
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">14dp</item>
     </style>
     <style name="font_size6">
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">16dp</item>
     </style>
     <style name="font_size7">
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">12dp</item>
     </style>
     <style name="font_size8">
-        <item name="android:textSize">10sp</item>
+        <item name="android:textSize">10dp</item>
     </style>
 
 
@@ -375,17 +375,17 @@
     </style>
     <!-- checkbox -->
     <style name="linecardsearch_check">
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">15dp</item>
     </style>
     <!-- checkbox -->
     <style name="termtzsearch_check">
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">15dp</item>
         <item name="android:textColor">#595757</item>
     </style>
 
     <!-- checkbox -->
     <style name="xtbf_btn_tv">
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">16dp</item>
         <item name="android:textColor">#FFFFFF</item>
     </style>
 
@@ -425,34 +425,40 @@
     </style>
 
     <!-- xtbf_sayhi_打招呼 标题一列 -->
-    <style name="xtbf_sayhi_one_tv" parent="@style/font_size4">
+    <style name="xtbf_sayhi_one_tv" parent="@style/font_size3">
         <item name="android:textColor">#333333</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">19sp</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_marginLeft">20dp</item>
     </style>
 
-    <!-- xtbf_sayhi_打招呼 数量 一列 -->
-    <style name="xtbf_sayhi_san_tv" parent="@style/font_size4">
+    <!-- 追溯 查指标 产品一列 -->
+    <style name="ddzs_checkindex_pro_tv" parent="@style/font_size3">
         <item name="android:textColor">#333333</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:textSize">15sp</item>
+        <item name="android:layout_marginLeft">15dp</item>
+    </style>
+
+    <!-- xtbf_sayhi_打招呼 数量 一列 -->
+    <style name="xtbf_sayhi_san_tv" parent="@style/font_size6">
+        <item name="android:textColor">#333333</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:layout_marginRight">155dp</item>
         <item name="android:gravity">center_vertical|left</item>
     </style>
 
-    <!-- xtbf_sayhi_打招呼 件/年 一列 -->
-    <style name="xtbf_sayhi_two_tv" parent="@style/font_size4">
+    <!-- 协同拜访_打招呼 地址输入框 件/年 一列 -->
+    <style name="xtbf_sayhi_two_tv" parent="@style/font_size6">
         <item name="android:textColor">#333333</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:textSize">15sp</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:layout_marginRight">100dp</item>
         <item name="android:gravity">center_vertical|left</item>
@@ -494,47 +500,43 @@
     </style>
 
     <!-- zdzs_sayhi_content1 打招呼 内容 我品一列 -->
-    <style name="zdzs_sayhi_content1" parent="@style/font_size4">
+    <style name="zdzs_sayhi_content1" parent="@style/font_size6">
         <item name="android:textColor">#333333</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:textSize">15sp</item>
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:layout_marginLeft">220dp</item>
         <item name="android:gravity">center_vertical|left</item>
     </style>
 
     <!-- zdzs_sayhi_content2 打招呼 内容 竞品二列 -->
-    <style name="zdzs_sayhi_content2" parent="@style/font_size4">
+    <style name="zdzs_sayhi_content2" parent="@style/font_size6">
         <item name="android:textColor">#333333</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:textSize">15sp</item>
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:layout_marginLeft">280dp</item>
         <item name="android:gravity">center_vertical|left</item>
     </style>
 
     <!-- zdzs_sayhi_content3 打招呼 内容 竞品三列 -->
-    <style name="zdzs_sayhi_content3" parent="@style/font_size4">
+    <style name="zdzs_sayhi_content3" parent="@style/font_size6">
         <item name="android:textColor">#333333</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:textSize">15sp</item>
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:layout_marginLeft">300dp</item>
         <item name="android:gravity">center_vertical|left</item>
     </style>
 
-    <!-- zdzs_sayhi_content2 打招呼 内容  -->
-    <style name="zdzs_sayhi_statue" parent="@style/font_size4">
+    <!-- zdzs_sayhi_content2 打招呼 未稽查  -->
+    <style name="zdzs_sayhi_statue" parent="@style/font_size6">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:textSize">15sp</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:layout_marginRight">35dp</item>
     </style>

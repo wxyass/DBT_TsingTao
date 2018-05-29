@@ -29,16 +29,10 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
                     android:text="崂山啤酒8度500*12罐啤"
-                    android:textSize="18sp"/>
+                    android:textSize="@dimen/font_size3"/>
 
             </RelativeLayout>
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
-                android:background="@color/gray"/>
             <!--未稽查-->
             <RelativeLayout
                 android:id="@+id/item_zs_chatvie_Rl_statue"
@@ -52,9 +46,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="10dp"
                     android:text="未稽查"
-                    android:textSize="15sp"/>
+                    android:textSize="@dimen/font_size4"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"
@@ -89,7 +83,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
                     android:text="经销商"
-                    android:textSize="18sp"/>
+                    android:textSize="@dimen/font_size3"/>
 
             </RelativeLayout>
 
@@ -115,7 +109,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
                     android:text="渠道价:"
-                    android:textSize="18sp"/>
+                    android:textSize="@dimen/font_size3"/>
 
                 <TextView
                     android:id="@+id/item_zs_chatvie_et_prevstore"
@@ -124,6 +118,7 @@
                     android:layout_centerVertical="true"
                     android:layout_margin="3dp"
                     android:layout_toRightOf="@id/item_zs_chatvie_tv_prevstore"
+                    android:textSize="@dimen/font_size3"
                     />
 
             </RelativeLayout>
@@ -148,7 +143,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
                     android:text="零售价:"
-                    android:textSize="15sp"/>
+                    android:textSize="@dimen/font_size3"/>
 
                 <TextView
                     android:id="@+id/item_zs_chatvie_et_daysellnum"
@@ -157,7 +152,8 @@
                     android:layout_centerVertical="true"
                     android:layout_margin="3dp"
                     android:layout_toRightOf="@id/item_zs_chatvie_tv_daysellnum"
-                    android:inputType="number"/>
+                    android:inputType="number"
+                    android:textSize="@dimen/font_size3"/>
             </RelativeLayout>
 
         </LinearLayout>
@@ -182,7 +178,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
                     android:text="销量:"
-                    android:textSize="18sp"/>
+                    android:textSize="@dimen/font_size3"/>
 
                 <TextView
                     android:id="@+id/item_zs_chatvie_et_prevnum"
@@ -191,7 +187,8 @@
                     android:layout_centerVertical="true"
                     android:layout_margin="3dp"
                     android:layout_toRightOf="@id/item_zs_chatvie_tv_prevnum"
-                    android:inputType="number"/>
+                    android:inputType="number"
+                    android:textSize="@dimen/font_size3"/>
 
             </RelativeLayout>
 
@@ -216,7 +213,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
                     android:text="当前库存:"
-                    android:textSize="15sp"/>
+                    android:textSize="@dimen/font_size3"/>
 
                 <TextView
                     android:id="@+id/item_zs_chatvie_et_addcard"
@@ -225,7 +222,8 @@
                     android:layout_centerVertical="true"
                     android:layout_margin="3dp"
                     android:layout_toRightOf="@id/item_zs_chatvie_tv_addcard"
-                    android:inputType="number"/>
+                    android:inputType="number"
+                    android:textSize="@dimen/font_size3"/>
             </RelativeLayout>
 
         </LinearLayout>

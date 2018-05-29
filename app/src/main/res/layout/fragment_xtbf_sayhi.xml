@@ -45,7 +45,7 @@
                     cuisw:offText=""
                     cuisw:onText=""
                     cuisw:textColor="#595757"
-                    cuisw:textSize="17sp"/>
+                    cuisw:textSize="@dimen/font_size3"/>
             </RelativeLayout>
 
             <View
@@ -78,7 +78,7 @@
                     cuisw:offText=""
                     cuisw:onText=""
                     cuisw:textColor="#595757"
-                    cuisw:textSize="17sp"/>
+                    cuisw:textSize="@dimen/font_size3"/>
             </RelativeLayout>
 
             <View
@@ -112,6 +112,7 @@
                     android:background="@drawable/transparent"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
+                    android:textSize="@dimen/font_size3"
                     android:text="@string/default_text"
                     android:visibility="gone"/>
 
@@ -126,6 +127,7 @@
                     android:background="@drawable/bg_search_button"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
+                    android:textSize="@dimen/font_size3"
                     android:text="@string/default_date"
                     android:visibility="gone"/>
 
@@ -141,7 +143,7 @@
                     cuisw:offText=""
                     cuisw:onText=""
                     cuisw:textColor="#595757"
-                    cuisw:textSize="17sp"/>
+                    cuisw:textSize="@dimen/font_size3"/>
             </RelativeLayout>
 
             <View
@@ -171,6 +173,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="70dp"
                     android:button="@drawable/bg_visit_select"
+                    android:textSize="@dimen/font_size4"
                     android:text="@string/sayhi_prostatus_vie"/>
 
                 <CheckBox
@@ -182,6 +185,7 @@
                     android:layout_marginRight="20dp"
                     android:layout_toLeftOf="@id/xt_sayhi_cb_vie"
                     android:button="@drawable/bg_visit_select"
+                    android:textSize="@dimen/font_size4"
                     android:text="@string/sayhi_prostatus_mine"/>
             </RelativeLayout>
 
@@ -212,6 +216,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="70dp"
                     android:button="@drawable/bg_visit_select"
+                    android:textSize="@dimen/font_size4"
                     android:text="@string/sayhi_prostatus_vie"/>
 
                 <CheckBox
@@ -223,6 +228,7 @@
                     android:layout_marginRight="20dp"
                     android:layout_toLeftOf="@id/xt_sayhi_cb_vieprotocol"
                     android:button="@drawable/bg_visit_select"
+                    android:textSize="@dimen/font_size4"
                     android:text="@string/sayhi_prostatus_mine"/>
             </RelativeLayout>
 

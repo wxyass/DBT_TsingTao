@@ -63,7 +63,8 @@
                         android:layout_marginRight="10dp"
                         android:background="@drawable/bg_visit_record"
                         android:hint="请输入经销商信息"
-                        android:inputType="textMultiLine"/>
+                        android:inputType="textMultiLine"
+                        android:textSize="@dimen/font_size3"/>
                 </LinearLayout>
 
             </LinearLayout>
@@ -117,7 +118,8 @@
                         android:background="@drawable/bg_visit_record"
                         android:inputType="number|numberDecimal"
                         android:maxLength="10"
-                        android:text=""/>
+                        android:text=""
+                        android:textSize="@dimen/font_size3"/>
 
 
                 </RelativeLayout>
@@ -138,7 +140,8 @@
                         android:background="@drawable/bg_visit_record"
                         android:inputType="number|numberDecimal"
                         android:maxLength="10"
-                        android:text=""/>
+                        android:text=""
+                        android:textSize="@dimen/font_size3"/>
 
 
                 </RelativeLayout>
@@ -159,7 +162,8 @@
                         android:background="@drawable/bg_visit_record"
                         android:inputType="number|numberDecimal"
                         android:maxLength="10"
-                        android:text=""/>
+                        android:text=""
+                        android:textSize="@dimen/font_size3"/>
 
 
                 </RelativeLayout>
@@ -180,7 +184,8 @@
                         android:background="@drawable/bg_visit_record"
                         android:inputType="number|numberDecimal"
                         android:maxLength="10"
-                        android:text=""/>
+                        android:text=""
+                        android:textSize="@dimen/font_size3"/>
 
 
                 </RelativeLayout>
@@ -227,14 +232,10 @@
                     android:layout_marginRight="10dp"
                     android:background="@drawable/bg_visit_record"
                     android:hint="请输入备注内容"
+                    android:inputType="textMultiLine"
                     android:maxLength="150"
-                    android:inputType="textMultiLine"/>
+                    android:textSize="@dimen/font_size3"/>
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
-
 
             <View
                 android:layout_width="match_parent"
@@ -255,6 +256,7 @@
                     android:layout_marginTop="20dp"
                     android:background="@drawable/bg_select_green"
                     android:text="保存"
+                    android:textSize="@dimen/font_size4"
                     />
             </RelativeLayout>
 

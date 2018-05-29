@@ -41,7 +41,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:text="2018-03-13  --  2018-03-14"
-                    android:textSize="18sp"/>
+                    android:textSize="@dimen/font_size2"/>
 
             </RelativeLayout>
 

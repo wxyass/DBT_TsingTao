@@ -30,7 +30,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
                     android:text="周日"
-                    android:textSize="18sp"/>
+                    android:textSize="@dimen/font_size3"/>
 
             </RelativeLayout>
 
@@ -49,11 +49,11 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
                     android:text="2018-03-13"
-                    android:textSize="18sp"/>
+                    android:textSize="@dimen/font_size3"/>
 
             </RelativeLayout>
 
-            <!--未稽查-->
+            <!--未制定-->
             <RelativeLayout
                 android:id="@+id/item_weekplan_rl_statue"
                 android:layout_width="0dp"
@@ -69,7 +69,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
                     android:text="未制定"
-                    android:textSize="15sp"/>
+                    android:textSize="@dimen/font_size4"/>
 
             </RelativeLayout>
         </LinearLayout>
@@ -101,7 +101,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
                     android:text="追溯区域:"
-                    android:textSize="18sp"/>
+                    android:textSize="@dimen/font_size3"/>
 
                 <TextView
                     android:id="@+id/item_weekplan_tv_area"
@@ -111,6 +111,7 @@
                     android:layout_margin="3dp"
                     android:layout_toRightOf="@id/item_weekplan_tv_area01"
                     android:ellipsize="end"
+                    android:textSize="@dimen/font_size4"
                     android:maxLines="1"
                     />
 
@@ -139,7 +140,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
                     android:text="追溯路线:"
-                    android:textSize="18sp"/>
+                    android:textSize="@dimen/font_size3"/>
 
                 <TextView
                     android:id="@+id/item_weekplan_tv_route"
@@ -149,6 +150,7 @@
                     android:layout_margin="3dp"
                     android:layout_toRightOf="@id/item_weekplan_tv_route01"
                     android:ellipsize="end"
+                    android:textSize="@dimen/font_size4"
                     android:maxLines="1"
                     />
 
@@ -177,7 +179,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
                     android:text="追溯项:"
-                    android:textSize="18sp"/>
+                    android:textSize="@dimen/font_size3"/>
 
                 <TextView
                     android:id="@+id/item_weekplan_tv_check"
@@ -187,6 +189,7 @@
                     android:layout_margin="3dp"
                     android:layout_toRightOf="@id/item_weekplan_tv_check01"
                     android:ellipsize="end"
+                    android:textSize="@dimen/font_size4"
                     android:maxLines="1"
                     />
 
