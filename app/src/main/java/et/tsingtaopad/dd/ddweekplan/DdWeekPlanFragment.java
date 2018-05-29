@@ -85,7 +85,6 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
     //
     public static final int WEEKPLAN_UP_FAIL = 3102;
 
-
     private String time;
     private String aday;
     private Calendar calendar;
@@ -151,6 +150,9 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
         yearr = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        initData();
+        initUrlData();// 获取当前周计划
 
     }
 
@@ -278,9 +280,9 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
 
             // 修改状态
             for (DayPlanStc dayPlanStc : dayPlanStcs) {
-                if("2".equals(mitPlanweekM.getStatus())
-                        ||"3".equals(mitPlanweekM.getStatus())
-                        ||"4".equals(mitPlanweekM.getStatus())){// 0未制定1未提交2待审核3审核通过4未通过
+                if ("2".equals(mitPlanweekM.getStatus())
+                        || "3".equals(mitPlanweekM.getStatus())
+                        || "4".equals(mitPlanweekM.getStatus())) {// 0未制定1未提交2待审核3审核通过4未通过
                     dayPlanStc.setState(mitPlanweekM.getStatus());
                 }
 
@@ -304,6 +306,14 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
             submitTv.setText("等待审核");
             submitTv.setClickable(false);
             submitTv.setBackgroundColor(getResources().getColor(R.color.bg_content_color_gray));
+        } else if ("3".equals(mitPlanweekM.getStatus())) {//  0未制定1未提交2待审核3审核通过4未通过
+            submitTv.setText("审核通过");
+            submitTv.setClickable(false);
+            submitTv.setBackgroundColor(getResources().getColor(R.color.bg_content_color_gray));
+        } else if ("4".equals(mitPlanweekM.getStatus())) {//  0未制定1未提交2待审核3审核通过4未通过
+            submitTv.setText("重新提交");
+            submitTv.setClickable(true);
+            submitTv.setBackgroundColor(getResources().getColor(R.color.bg_content_color_gray));
         } else {
             submitTv.setText("提交");
             submitTv.setClickable(true);
@@ -314,19 +324,18 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
     @Override
     public void onResume() {
         super.onResume();
-        initData();
-        //initUrlData();// 获取当前周计划
+
     }
 
     private void initUrlData() {
-        String content  = "{"+
-                "areaid:'"+ PrefUtils.getString(getActivity(),"departmentid","")+"'," +
-                "starttime:'"+weekDateStart+"'," +
-                "endtime:'"+weekDateEnd+"'," +
-                "tablename:'"+"PLANWEEK"+"'," +
-                "creuser:'"+PrefUtils.getString(getActivity(),"userid","")+"'" +
+        String content = "{" +
+                "areaid:'" + PrefUtils.getString(getActivity(), "departmentid", "") + "'," +
+                "starttime:'" + weekDateStart + "'," +
+                "endtime:'" + weekDateEnd + "'," +
+                "tablename:'" + "PLANWEEK" + "'," +
+                "creuser:'" + PrefUtils.getString(getActivity(), "userid", "") + "'" +
                 "}";
-        ceshiHttp("opt_get_ddplanweek","PLANWEEK",content);
+        ceshiHttp("opt_get_ddplanweek", "PLANWEEK", content);
     }
 
     // 点击事件
@@ -378,7 +387,7 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
     }
 
     private void saveWeekPlan() {
-        if (mitPlanweekM != null && !"".equals(mitPlanweekM.getId())&& !TextUtils.isEmpty(mitPlanweekM.getId())) {
+        if (mitPlanweekM != null && !"".equals(mitPlanweekM.getId()) && !TextUtils.isEmpty(mitPlanweekM.getId())) {
             mitPlanweekM.setStatus("2");// 0未制定1未提交2待审核3审核通过4未通过
             // 上传周计划
             XtUploadService xtUploadService = new XtUploadService(getActivity(), null);
@@ -495,11 +504,11 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
     /**
      * 同步表数据
      *
-     * @param optcode   请求码
-     * @param table     请求表名(请求不同的)
-     * @param content   请求json
+     * @param optcode 请求码
+     * @param table   请求表名(请求不同的)
+     * @param content 请求json
      */
-    void ceshiHttp(final String optcode, final String table,String content) {
+    void ceshiHttp(final String optcode, final String table, String content) {
 
         // 组建请求Json
         RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(getContext());
@@ -524,12 +533,13 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
                             ResponseStructBean resObj = new ResponseStructBean();
                             resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
                             // 保存登录信息
-                            if(ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())){
+                            if (ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())) {
                                 // 保存信息
-                                if("opt_get_ddplanweek".equals(optcode)&&"PLANWEEK".equals(table)){
+                                if ("opt_get_ddplanweek".equals(optcode) && "PLANWEEK".equals(table)) {
 
                                     String formjson = resObj.getResBody().getContent();
                                     parseTableJson(formjson);
+                                    initData();
 
                                 /*Bundle bundle = new Bundle();
                                 bundle.putString("msg","正在处理区域数据表");
@@ -542,7 +552,7 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
                                     //initData();
                                 }
 
-                            }else{
+                            } else {
                                 Toast.makeText(getActivity(), resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
                             /*Message msg = new Message();
                             msg.what = FirstFragment.SYNC_CLOSE;//
@@ -587,11 +597,11 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
         String MIT_PLANDAYDETAIL_M = emp.getMIT_PLANDAYDETAIL_M();
         String MIT_PLANDAYVAL_M = emp.getMIT_PLANDAYVAL_M();
 
-        MainService service = new MainService(getActivity(),null);
-        service.createOrUpdateTable(MIT_PLANWEEK_M,"MIT_PLANWEEK_M",MitPlanweekM.class);
-        service.createOrUpdateTable(MIT_PLANDAY_M,"MIT_PLANDAY_M",MitPlandayM.class);
-        service.createOrUpdateTable(MIT_PLANDAYDETAIL_M,"MIT_PLANDAYDETAIL_M",MitPlandaydetailM.class);
-        service.createOrUpdateTable(MIT_PLANDAYVAL_M,"MIT_PLANDAYVAL_M",MitPlandayvalM.class);
+        MainService service = new MainService(getActivity(), null);
+        service.createOrUpdateTable(MIT_PLANWEEK_M, "MIT_PLANWEEK_M", MitPlanweekM.class);
+        service.createOrUpdateTable(MIT_PLANDAY_M, "MIT_PLANDAY_M", MitPlandayM.class);
+        service.createOrUpdateTable(MIT_PLANDAYDETAIL_M, "MIT_PLANDAYDETAIL_M", MitPlandaydetailM.class);
+        service.createOrUpdateTable(MIT_PLANDAYVAL_M, "MIT_PLANDAYVAL_M", MitPlandayvalM.class);
     }
 
 }

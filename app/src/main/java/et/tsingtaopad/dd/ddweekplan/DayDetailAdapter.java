@@ -30,6 +30,7 @@ import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.core.view.alertview.OnDismissListener;
+import et.tsingtaopad.db.table.MitPlanweekM;
 import et.tsingtaopad.db.table.MstGridM;
 import et.tsingtaopad.db.table.MstMarketareaM;
 import et.tsingtaopad.db.table.MstRouteM;
@@ -52,12 +53,21 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
     private AlertView mAlertViewExt;//窗口拓展例子
     private DayDetailStc dayDetailStc;
     private XtTermSelectService xtSelectService;
+    private MitPlanweekM weekplan;
+    private boolean isChecking;// true:正在审核/审核通过   false:未制定,未提交,未通过
 
-    public DayDetailAdapter(Activity context, List<DayDetailStc> dataLst, ILongClick listener) {
+    public DayDetailAdapter(Activity context, List<DayDetailStc> dataLst, MitPlanweekM weekplan,ILongClick listener) {
         this.context = context;
         this.dataLst = dataLst;
         this.listener = listener;
+        this.weekplan = weekplan;
         xtSelectService = new XtTermSelectService(context);
+
+        if ("2".equals(weekplan.getStatus()) || "3".equals(weekplan.getStatus())) {// 0未制定1未提交2待审核3审核通过4未通过
+            isChecking = true;
+        } else {
+            isChecking = false;
+        }
     }
 
     @Override
@@ -149,19 +159,34 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
         switch (v.getId()) {
             case R.id.item_daydetail_rl_check:// 追溯项
                 // alertShow3(posi);
-                alertShow7(posi);
+                if(!isChecking){
+                    alertShow7(posi);
+                }else{
+                    Toast.makeText(context,"审核状态下不可修改",Toast.LENGTH_SHORT).show();
+                }
+
                 break;
             case R.id.item_daydetail_rl_areaid:// 追溯区域
-                //Toast.makeText(context, "点击了第" + posi + "追溯区域", Toast.LENGTH_SHORT).show();
-                alertShow4(posi);
+
+                if(!isChecking){
+                    alertShow4(posi);
+                }else{
+                    Toast.makeText(context,"审核状态下不可修改",Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.item_daydetail_tv_gridkey:// 追溯定格
-                //Toast.makeText(context, "点击了第" + posi + "追溯定格", Toast.LENGTH_SHORT).show();
-                alertShow5(posi);
+                if(!isChecking){
+                    alertShow5(posi);
+                }else{
+                    Toast.makeText(context,"审核状态下不可修改",Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.item_daydetail_rl_routekey:// 追溯路线
-                //Toast.makeText(context, "点击了第" + posi + "追溯路线", Toast.LENGTH_SHORT).show();
-                alertShow6(posi);
+                if(!isChecking){
+                    alertShow6(posi);
+                }else{
+                    Toast.makeText(context,"审核状态下不可修改",Toast.LENGTH_SHORT).show();
+                }
                 break;
             default:
                 break;
@@ -486,8 +511,8 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
 
         // 获取已选中的集合
         List<String>  selectedId = new ArrayList<String>();
-        if(!TextUtils.isEmpty(item.getValroutekeys())){
-            selectedId = Arrays.asList(item.getValroutekeys().split(","));
+        if(!TextUtils.isEmpty(item.getValcheckkey())){
+            selectedId = Arrays.asList(item.getValcheckkey().split(","));
         }
 
         // 标记选中状态

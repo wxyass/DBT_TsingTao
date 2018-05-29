@@ -93,6 +93,15 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="80dp"/>
+
+            <TextView
+                android:id="@+id/dd_dayplan_tv_des"
+                style="@style/page_label_big"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:visibility="invisible"
+                android:text="该日未制定计划事项"/>
         </LinearLayout>
     </ScrollView>
 

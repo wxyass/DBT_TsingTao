@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.ref.SoftReference;
@@ -43,6 +44,7 @@ public class DdDayPlanFragment extends BaseFragmentSupport implements View.OnCli
     private AppCompatTextView titleTv;
     private Button addTv;
     private Button submitTv;
+    private TextView desTv;
     private ListView planLv;
     private DayDetailAdapter detailAdapter;
     private MitPlanweekM weekplan;
@@ -90,6 +92,7 @@ public class DdDayPlanFragment extends BaseFragmentSupport implements View.OnCli
         addTv = (Button) view.findViewById(R.id.dd_dayplan_bt_add);
         submitTv = (Button) view.findViewById(R.id.dd_dayplan_bt_submit);
         planLv = (ListView) view.findViewById(R.id.dd_dayplan_lv_details);
+        desTv = (TextView) view.findViewById(R.id.dd_dayplan_tv_des);
         addTv.setOnClickListener(this);
         submitTv.setOnClickListener(this);
 
@@ -118,7 +121,7 @@ public class DdDayPlanFragment extends BaseFragmentSupport implements View.OnCli
         /*DayDetailStc detailStc = new DayDetailStc();*/
         // dayDetailStcs.add((DayDetailStc) dayplanstc.getDetailStcs());
         dayDetailStcs.addAll(dayplanstc.getDetailStcs());
-        detailAdapter = new DayDetailAdapter(getActivity(), dayDetailStcs, new ILongClick() {
+        detailAdapter = new DayDetailAdapter(getActivity(), dayDetailStcs,weekplan, new ILongClick() {
             @Override
             public void listViewItemLongClick(int position, View v) {
                 dayDetailStcs.remove(position);
@@ -127,6 +130,22 @@ public class DdDayPlanFragment extends BaseFragmentSupport implements View.OnCli
             }
         });
         planLv.setAdapter(detailAdapter);
+
+        if ("2".equals(dayplanstc.getState()) || "3".equals(dayplanstc.getState())) {// 0未制定1未提交2待审核3审核通过4未通过
+            addTv.setVisibility(View.INVISIBLE);
+            submitTv.setVisibility(View.INVISIBLE);
+
+            if (dayDetailStcs.size() > 0) {// 日计划详情个数 大于0
+                desTv.setVisibility(View.INVISIBLE);
+            } else {
+                desTv.setVisibility(View.VISIBLE);
+            }
+
+        } else {
+            addTv.setVisibility(View.VISIBLE);
+            submitTv.setVisibility(View.VISIBLE);
+            desTv.setVisibility(View.INVISIBLE);
+        }
 
     }
 
@@ -177,10 +196,10 @@ public class DdDayPlanFragment extends BaseFragmentSupport implements View.OnCli
         boolean ischeck = true;
         for (DayDetailStc detailStc : dayDetailStcs) {
             //if (detailStc.getValchecknameLv().size()<=0||detailStc.getValchecknameLv()==null
-            if ("".equals(detailStc.getValcheckkey())|| detailStc.getValcheckkey() ==null
-                    || "".equals(detailStc.getValareakey())|| detailStc.getValareakey() ==null
-                    || "".equals(detailStc.getValgridkey())|| detailStc.getValgridkey() ==null
-                    || "".equals(detailStc.getValroutekeys())|| detailStc.getValroutekeys() ==null) {
+            if ("".equals(detailStc.getValcheckkey()) || detailStc.getValcheckkey() == null
+                    || "".equals(detailStc.getValareakey()) || detailStc.getValareakey() == null
+                    || "".equals(detailStc.getValgridkey()) || detailStc.getValgridkey() == null
+                    || "".equals(detailStc.getValroutekeys()) || detailStc.getValroutekeys() == null) {
                 ischeck = false;
                 break;
             }

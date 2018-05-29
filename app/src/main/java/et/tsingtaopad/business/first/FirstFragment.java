@@ -10,10 +10,13 @@ import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.ref.SoftReference;
+import java.util.ArrayList;
+import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
@@ -63,20 +66,16 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
 
     private final String TAG = "FirstFragment";
 
-    AppCompatButton login;
-    AppCompatButton login2;
-    AppCompatButton syncgrid;
-    AppCompatButton syncindex;
-    AppCompatButton syncpro;
     AppCompatButton startSync;
 
     MyHandler handler;
 
-    public static final int SYNC_SUCCSE = 1101;// 同步成功返回
-    public static final int SYNC_START = 1102;// 发起同步请求
-    public static final int SYNC_CLOSE = 1103;// 关闭进度条
-    private int count = 0;
+    public static final int SYNC_SUCCSE = 1101;// 开始请求
+    public static final int SYNC_START = 1102;// 弹出进度弹窗
+    public static final int SYNC_CLOSE = 1103;// 请求结束 关闭进度条
+    private int count ;
 
+    private List<String> tablenames;
 
     @Nullable
     @Override
@@ -87,63 +86,20 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
     }
 
     private void initView(View view) {
-        login = view.findViewById(R.id.dd_btn_first_login);
-        login2 = view.findViewById(R.id.dd_btn_first_login2);
-        syncgrid = view.findViewById(R.id.dd_btn_first_sync_grid);
-        syncindex = view.findViewById(R.id.dd_btn_first_sync_index);
-        syncpro = view.findViewById(R.id.dd_btn_first_sync_pro);
         startSync = view.findViewById(R.id.dd_btn_first_sync_start);
-        login.setOnClickListener(this);
-        login2.setOnClickListener(this);
-        syncgrid.setOnClickListener(this);
-        syncindex.setOnClickListener(this);
-        syncpro.setOnClickListener(this);
         startSync.setOnClickListener(this);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         handler = new MyHandler(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.dd_btn_first_login:// 登录
-                String   loginjson = "{usercode:'50000', password:'a1234567',version:'2.5',padid:'dsfwerolkjqiwurywhl'}";
-                toLogin("opt_get_login","","",loginjson);
-                break;
-            case R.id.dd_btn_first_login2:// 登录
-                String   loginjson1 = "{usercode:'2029298', password:'a1234567',version:'2.5',padid:'gfdahtgnfdsddvdsGd'}";
-                toLogin("opt_get_login","","",loginjson1);
-                break;
-            case R.id.dd_btn_first_sync_grid:// 同步 定格,路线
-                String content  = "{"+
-                        "areaid:'"+PrefUtils.getString(getActivity(),"departmentid","")+"'," +
-                        "tablename:'"+"MST_MARKETAREA_GRID_ROUTE_M"+"'" +
-                        "}";
-                ceshiHttp("opt_get_dates2","MST_MARKETAREA_GRID_ROUTE_M",content);
-                break;
-            case R.id.dd_btn_first_sync_index:// 同步 指标模板
-
-
-                String content2  = "{"+
-                        "areaid:'"+PrefUtils.getString(getActivity(),"departmentid","")+"'," +
-                        "tablename:'"+"MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO"+"'" +
-                        "}";
-                ceshiHttp("opt_get_dates2","MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO",content2);
-                break;
-            case R.id.dd_btn_first_sync_pro:// 同步 基础数据表
-                String content1  = "{"+
-                        "areaid:'"+PrefUtils.getString(getActivity(),"departmentid","")+"'," +
-                        "tablename:'"+"MST_BASEDATA_M"+"'" +
-                        "}";
-                ceshiHttp("opt_get_dates2","MST_BASEDATA_M",content1);
-                break;
             case R.id.dd_btn_first_sync_start:// 同步所有信息
-
                 if (hasPermission(GlobalValues.WRITE_READ_EXTERNAL_PERMISSION)) {
                     // 拥有了此权限,那么直接执行业务逻辑
                     startSyncInfo();
@@ -151,7 +107,6 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                     // 还没有对一个权限(请求码,权限数组)这两个参数都事先定义好
                     requestPermission(GlobalValues.WRITE_READ_EXTERNAL_CODE, GlobalValues.WRITE_READ_EXTERNAL_PERMISSION);
                 }
-
                 break;
             default:
                 break;
@@ -164,17 +119,17 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
     }
 
     private void startSyncInfo() {
-        handler.sendEmptyMessage(FirstFragment.SYNC_START);
-        count = 0;
+        handler.sendEmptyMessage(FirstFragment.SYNC_START); // 弹出进度弹窗
+        count = 1;
         Thread thread = new Thread() {
 
             @Override
             public void run() {
-                try{
+                try {
                     Looper.prepare();
                     getInfo();
                     Looper.loop();
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -184,41 +139,42 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
     }
 
     // 测试登录网络框架
-    private void getInfo(){
-        String gridjson  = "{"+
-                "areaid:'"+PrefUtils.getString(getActivity(),"departmentid","")+"'," +
-                "tablename:'"+"MST_MARKETAREA_GRID_ROUTE_M"+"'" +
-                "}";
-        ceshiHttp("opt_get_dates2","MST_MARKETAREA_GRID_ROUTE_M",gridjson);
+    private void getInfo() {
 
-        String indexjson  = "{"+
-                "areaid:'"+PrefUtils.getString(getActivity(),"departmentid","")+"'," +
-                "tablename:'"+"MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO"+"'" +
-                "}";
-        ceshiHttp("opt_get_dates2","MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO",indexjson);
+        tablenames = new ArrayList<>();
+        tablenames.add("MST_MARKETAREA_GRID_ROUTE_M");
+        tablenames.add("MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO");
+        tablenames.add("MST_BASEDATA_M");
 
-        String basejson  = "{"+
-                "areaid:'"+PrefUtils.getString(getActivity(),"departmentid","")+"'," +
-                "tablename:'"+"MST_BASEDATA_M"+"'" +
+        //handler.sendEmptyMessage(FirstFragment.SYNC_SUCCSE);
+        Bundle bundle = new Bundle();
+        bundle.putString("msg", "开始同步数据");
+        Message msg = new Message();
+        msg.what = FirstFragment.SYNC_SUCCSE;//
+        msg.setData(bundle);
+        handler.sendMessage(msg);
+
+    }
+
+    private String getJson(String tablename){
+        String json = "{" +
+                "areaid:'" + PrefUtils.getString(getActivity(), "departmentid", "") + "'," +
+                "tablename:'" + tablename + "'" +
                 "}";
-        ceshiHttp("opt_get_dates2","MST_BASEDATA_M",basejson);
+        return json;
     }
 
     /**
      * 同步表数据
      *
-     * @param optcode   请求码
-     * @param table     请求表名(请求不同的)
-     * @param content   请求json
+     * @param optcode 请求码
+     * @param table   请求表名(请求不同的)
+     * @param content 请求json
      */
-    void ceshiHttp(final String optcode, final String table,String content) {
+    void ceshiHttp(final String optcode, final String table, String content) {
 
         // 组建请求Json
         RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(getContext());
-        /*if("opt_get_login".equals(optcode)){
-            requestHeadStc.setUsercode("50000");
-            requestHeadStc.setPassword("a1234567");
-        }*/
         requestHeadStc.setOptcode(PropertiesUtil.getProperties(optcode));
         RequestStructBean reqObj = HttpParseJson.parseRequestStructBean(requestHeadStc, content);
 
@@ -232,57 +188,52 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
+                        count++;
                         String json = HttpParseJson.parseJsonResToString(response);
                         ResponseStructBean resObj = new ResponseStructBean();
                         resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
-                        //Toast.makeText(getActivity(), resObj.getResBody().getContent()+""+resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
                         // 保存登录信息
-                        if(ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())){
+                        if (ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())) {
                             // 保存信息
-                            if("opt_get_dates2".equals(optcode)&&"MST_MARKETAREA_GRID_ROUTE_M".equals(table)){
+                            if ("MST_MARKETAREA_GRID_ROUTE_M".equals(table)) {
+
+                                Bundle bundle = new Bundle();
+                                bundle.putString("msg", "正在处理区域数据...");
+                                Message msg = new Message();
+                                msg.what = FirstFragment.SYNC_SUCCSE;//
+                                msg.setData(bundle);
+                                handler.sendMessage(msg);
 
                                 String formjson = resObj.getResBody().getContent();
                                 parseTableJson(formjson);
 
+                            }
+                            if ("MST_BASEDATA_M".equals(table)) {
+
                                 Bundle bundle = new Bundle();
-                                bundle.putString("msg","正在处理区域数据表");
+                                bundle.putString("msg", "正在处理基础数据...");
                                 Message msg = new Message();
                                 msg.what = FirstFragment.SYNC_SUCCSE;//
                                 msg.setData(bundle);
                                 handler.sendMessage(msg);
-
-                                //Toast.makeText(getActivity(), "区域定格路线同步成功", Toast.LENGTH_SHORT).show();
-                            }
-                            if("opt_get_dates2".equals(optcode)&&"MST_BASEDATA_M".equals(table)){
-
 
                                 String formjson = resObj.getResBody().getContent();
                                 parseDatadicTableJson(formjson);
 
+                            }
+                            if ("MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO".equals(table)) {
+
                                 Bundle bundle = new Bundle();
-                                bundle.putString("msg","正在处理基础数据表");
+                                bundle.putString("msg", "正在处理指标数据...");
                                 Message msg = new Message();
                                 msg.what = FirstFragment.SYNC_SUCCSE;//
                                 msg.setData(bundle);
                                 handler.sendMessage(msg);
-
-                                //Toast.makeText(getActivity(), "基础数据同步成功", Toast.LENGTH_SHORT).show();
-                            }
-                            if("opt_get_dates2".equals(optcode)&&"MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO".equals(table)){
 
                                 String formjson = resObj.getResBody().getContent();
                                 parseIndexTableJson(formjson);
-
-                                Bundle bundle = new Bundle();
-                                bundle.putString("msg","正在处理指标数据表");
-                                Message msg = new Message();
-                                msg.what = FirstFragment.SYNC_SUCCSE;//
-                                msg.setData(bundle);
-                                handler.sendMessage(msg);
-
-                                //Toast.makeText(getActivity(), "指标数据同步成功", Toast.LENGTH_SHORT).show();
                             }
-                        }else{
+                        } else {
                             Toast.makeText(getActivity(), resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
                             Message msg = new Message();
                             msg.what = FirstFragment.SYNC_CLOSE;//
@@ -312,130 +263,6 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                 .post();
     }
 
-
-    /**
-     * 登录接口
-     *
-     * @param optcode   请求码
-     * @param username
-     * @param pwd
-     * @param content   请求json
-     */
-    void toLogin(final String optcode, String username,String pwd,String content) {
-
-        // 组建请求Json
-        RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(getContext());
-        /*if("opt_get_login".equals(optcode)){
-            requestHeadStc.setUsercode("50000");
-            requestHeadStc.setPassword("a1234567");
-        }*/
-        requestHeadStc.setOptcode(PropertiesUtil.getProperties(optcode));
-        RequestStructBean reqObj = HttpParseJson.parseRequestStructBean(requestHeadStc, content);
-
-        // 压缩请求数据
-        String jsonZip = HttpParseJson.parseRequestJson(reqObj);
-
-        RestClient.builder()
-                .url(HttpUrl.IP_END)
-                .params("data", jsonZip)
-                .loader(getContext())
-                .success(new ISuccess() {
-                    @Override
-                    public void onSuccess(String response) {
-                        String json = HttpParseJson.parseJsonResToString(response);
-                        ResponseStructBean resObj = new ResponseStructBean();
-                        resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
-                        // 保存登录信息
-                        if(ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())){
-                            // 保存信息
-                            String formjson = resObj.getResBody().getContent();
-                            parseLoginJson(formjson);
-                            Toast.makeText(getActivity(), "登录成功", Toast.LENGTH_SHORT).show();
-
-                        }else{
-                            Toast.makeText(getActivity(), resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                })
-                .error(new IError() {
-                    @Override
-                    public void onError(int code, String msg) {
-                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .failure(new IFailure() {
-                    @Override
-                    public void onFailure() {
-                        Toast.makeText(getContext(), "请求失败", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .builde()
-                .post();
-    }
-
-    // 解析登录者信息
-    void parseLoginJson(String json){
-
-        // 保存登录者信息
-        BsVisitEmpolyeeStc emp = JsonUtil.parseJson(json, BsVisitEmpolyeeStc.class);
-
-        saveLoginSession(emp, "a1234567", "");
-
-        /*if (emp == null) {
-            sendMsg(R.string.login_msg_usererror);//服务器回应的内容为空时界面会收到   用户信息异常，不能正常登录
-
-        } else {
-            // 服务器时间与pad端时间差
-            long timeDiff = Math.abs(System.currentTimeMillis()- DateUtil.parse(emp.getLoginDate(), "yyyy-MM-dd HH:mm:ss").getTime());
-
-            // 校验用户的定格是否一致
-            if (!CheckUtil.isBlankOrNull(loginSession.getGridId())
-                    && !loginSession.getGridId().equals(emp.getGridId())) {
-                sendMsg(R.string.login_msg_invalgrid);//现在登录的定格与上次的不一样时界面收到      用户所属定格变更，请先清除上次登录账户的缓存数据
-
-            } else if (timeDiff > 5 * 60000) {
-                sendMsg(R.string.login_msg_invaldate);
-
-            } else {
-                saveLoginSession(emp, pwd, padId);
-                ConstValues.loginSession = getLoginSession(context);
-
-                // 保存用户权限到缓存
-                PrefUtils.putString(context, "bfgl", emp.getBfgl());
-                PrefUtils.putString(context, "yxgl", emp.getYxgl());
-                PrefUtils.putString(context, "xtgl", emp.getXtgl());
-
-                // 跳转到平台主界面
-                //sendMsg(R.string.login_msg_online, true);
-                sendMsg1(R.string.login_msg_online, true,emp.getIsrepassword());//Isrepassword:剩余多少天修改密码 2393版本返回null
-            }
-        }*/
-    }
-
-    /**
-     * 记录登录者信息
-     *
-     * @param emp 登录成功后，返回的当前用户信息
-     */
-    private void saveLoginSession(BsVisitEmpolyeeStc emp, String pwd, String padId) {
-        if (emp != null) {
-            PrefUtils.putString(getActivity(), "bigareaid", emp.getBigareaid());// 1-48L5
-            PrefUtils.putString(getActivity(), "departmentid", emp.getDepartmentid());//1-4ASL
-            PrefUtils.putString(getActivity(), "isDel", emp.getIsDel());// 0
-            PrefUtils.putString(getActivity(), "isrepassword", emp.getIsrepassword());//91
-            PrefUtils.putString(getActivity(), "loginDate", emp.getLoginDate());// 2018-04-08 14:22:23
-            PrefUtils.putString(getActivity(), "pDiscs", emp.getpDiscs());// 1-4ASL,1-48L5,1-47BW,1-39CR,0-R9NH
-            PrefUtils.putString(getActivity(), "positionid", emp.getPositionid());// 55ED98C5C2114282AD2A857AB05A73E2
-            PrefUtils.putString(getActivity(), "secareaid", emp.getSecareaid());// 1-4ASL
-            PrefUtils.putString(getActivity(), "status", emp.getStatus());// 1
-            PrefUtils.putString(getActivity(), "usercode", emp.getUsercode());// 50000
-            PrefUtils.putString(getActivity(), "userid", emp.getUserid());// 19b1ded5-f853-48ab-aa2b-b12e963c8f9b
-            PrefUtils.putString(getActivity(), "username", emp.getUsername());//督导菲菲
-            PrefUtils.putString(getActivity(), "userPwd", pwd);//a1234567
-        }
-    }
-
-
     // 解析区域定格路线成功
     private void parseTableJson(String json) {
         // 解析区域定格路线信息
@@ -444,10 +271,10 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
         String mst_marketarea_m = emp.getMST_MARKETAREA_M();
         String mst_route_m = emp.getMST_ROUTE_M();
 
-        MainService service = new MainService(getActivity(),null);
-        service.createOrUpdateTable(mst_grid_m,"MST_GRID_M",MstGridM.class);
-        service.createOrUpdateTable(mst_marketarea_m,"MST_MARKETAREA_M",MstMarketareaM.class);
-        service.createOrUpdateTable(mst_route_m,"MST_ROUTE_M",MstRouteM.class);
+        MainService service = new MainService(getActivity(), null);
+        service.createOrUpdateTable(mst_grid_m, "MST_GRID_M", MstGridM.class);
+        service.createOrUpdateTable(mst_marketarea_m, "MST_MARKETAREA_M", MstMarketareaM.class);
+        service.createOrUpdateTable(mst_route_m, "MST_ROUTE_M", MstRouteM.class);
     }
 
     // 解析基础信息成功
@@ -473,25 +300,22 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
         String MST_AGENCYINFO_M = emp.getMST_AGENCYINFO_M();
 
 
+        MainService service = new MainService(getActivity(), null);
+        service.createOrUpdateTable(CMM_DATADIC_M, "CMM_DATADIC_M", CmmDatadicM.class);
+        service.createOrUpdateTable(CMM_AREA_M, "CMM_AREA_M", CmmAreaM.class);
+        service.createOrUpdateTable(MST_PROMOTIONS_M, "MST_PROMOTIONS_M", MstPromotionsM.class);
+        service.createOrUpdateTable(MST_PROMOPRODUCT_INFO, "MST_PROMOPRODUCT_INFO", MstPromoproductInfo.class);
+        service.createOrUpdateTable(MST_PICTYPE_M, "MST_PICTYPE_M", MstPictypeM.class);
+        service.createOrUpdateTable(MST_PRODUCT_M, "MST_PRODUCT_M", MstProductM.class);
+        service.createOrUpdateTable(MST_CMPCOMPANY_M, "MST_CMPCOMPANY_M", MstCmpcompanyM.class);
+        service.createOrUpdateTable(MST_CMPBRANDS_M, "MST_CMPBRANDS_M", MstCmpbrandsM.class);
+        service.createOrUpdateTable(MST_CMPRODUCTINFO_M, "MST_CMPRODUCTINFO_M", MstCmproductinfoM.class);
+        service.createOrUpdateTable(MIT_VALCHECKTER_M, "MIT_VALCHECKTER_M", MitValcheckterM.class);
 
-
-
-        MainService service = new MainService(getActivity(),null);
-        service.createOrUpdateTable(CMM_DATADIC_M,"CMM_DATADIC_M",CmmDatadicM.class);
-        service.createOrUpdateTable(CMM_AREA_M,"CMM_AREA_M",CmmAreaM.class);
-        service.createOrUpdateTable(MST_PROMOTIONS_M,"MST_PROMOTIONS_M",MstPromotionsM.class);
-        service.createOrUpdateTable(MST_PROMOPRODUCT_INFO,"MST_PROMOPRODUCT_INFO",MstPromoproductInfo.class);
-        service.createOrUpdateTable(MST_PICTYPE_M,"MST_PICTYPE_M",MstPictypeM.class);
-        service.createOrUpdateTable(MST_PRODUCT_M,"MST_PRODUCT_M",MstProductM.class);
-        service.createOrUpdateTable(MST_CMPCOMPANY_M,"MST_CMPCOMPANY_M",MstCmpcompanyM.class);
-        service.createOrUpdateTable(MST_CMPBRANDS_M,"MST_CMPBRANDS_M",MstCmpbrandsM.class);
-        service.createOrUpdateTable(MST_CMPRODUCTINFO_M,"MST_CMPRODUCTINFO_M",MstCmproductinfoM.class);
-        service.createOrUpdateTable(MIT_VALCHECKTER_M,"MIT_VALCHECKTER_M",MitValcheckterM.class);
-
-        service.createOrUpdateTable(MST_AGENCYKF_M,"MST_AGENCYKF_M",MstAgencyKFM.class);
-        service.createOrUpdateTable(MST_AGENCYVISIT_M,"MST_AGENCYVISIT_M",MstAgencyvisitM.class);
-        service.createOrUpdateTable(MST_INVOICING_INFO,"MST_INVOICING_INFO",MstInvoicingInfo.class);
-        service.createOrUpdateTable(MST_VISITAUTHORIZE_INFO,"MST_VISITAUTHORIZE_INFO",MstVisitauthorizeInfo.class);
+        service.createOrUpdateTable(MST_AGENCYKF_M, "MST_AGENCYKF_M", MstAgencyKFM.class);
+        service.createOrUpdateTable(MST_AGENCYVISIT_M, "MST_AGENCYVISIT_M", MstAgencyvisitM.class);
+        service.createOrUpdateTable(MST_INVOICING_INFO, "MST_INVOICING_INFO", MstInvoicingInfo.class);
+        service.createOrUpdateTable(MST_VISITAUTHORIZE_INFO, "MST_VISITAUTHORIZE_INFO", MstVisitauthorizeInfo.class);
         service.createOrUpdateTable(MST_AGENCYINFO_M, "MST_AGENCYINFO_M", MstAgencyinfoM.class);
 
     }
@@ -504,12 +328,10 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
         String PAD_CHECKSTATUS_INFO = emp.getMST_CHECKSTATUS_INFO();
         String MST_COLLECTIONTEMPLATE_M = emp.getMST_COLLECTIONTEMPLATE_M();
 
-        MainService service = new MainService(getActivity(),null);
-        service.createOrUpdateTable(PAD_CHECKSTATUS_INFO,"PAD_CHECKSTATUS_INFO",PadCheckstatusInfo.class);
+        MainService service = new MainService(getActivity(), null);
+        service.createOrUpdateTable(PAD_CHECKSTATUS_INFO, "PAD_CHECKSTATUS_INFO", PadCheckstatusInfo.class);
         service.parsePadCheckType(MST_COLLECTIONTEMPLATE_M);
     }
-
-
 
     /**
      * 接收子线程消息的 Handler
@@ -532,46 +354,57 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
 
             // 处理UI 变化
             switch (msg.what) {
-                case SYNC_SUCCSE:// 同步成功返回
+                case SYNC_SUCCSE:// 开始请求
                     Bundle bundle = msg.getData();
                     String msgdate = (String) bundle.getSerializable("msg");
-                    fragment.closeProgress(msgdate);
+                    fragment.getJsonProgress(msgdate);
                     break;
-                case SYNC_START:// 发起同步请求
+                case SYNC_START:// 弹出进度弹窗
                     fragment.showFirstDialog("正在同步数据");
                     break;
-                case SYNC_CLOSE:// 发起同步请求
+                case SYNC_CLOSE:// 请求结束
                     fragment.closeFirstDialog();
                     break;
             }
         }
     }
 
-    private void  closeProgress(String msgdata){
-        count++;
-        showFirstDialog(msgdata);
-        if(count>=3){
-            closeFirstDialog();
+    // 请求表数据
+    private void getJsonProgress(String msgdata) {
+
+        if(count<tablenames.size()+1){
+            String tablename = tablenames.get(count-1);
+            ceshiHttp("opt_get_dates2", tablename, getJson(tablename));
+        }
+
+        showFirstDialog(msgdata);// 刷新进度条
+
+        if (count >= tablenames.size()+1) {
+            closeFirstDialog();// 关闭进度条
             Toast.makeText(getActivity(), "同步成功", Toast.LENGTH_SHORT).show();
         }
-        /*closeFirstDialog();
-        Toast.makeText(getActivity(), "同步成功", Toast.LENGTH_SHORT).show();*/
     }
 
     private AlertDialog dialog;
+
     /**
      * 展示滚动条
      */
     public void showFirstDialog(String msgdata) {
-        View view = getActivity().getLayoutInflater().inflate(R.layout.sync_progress, null);
-        TextView dialog_tv_sync = (TextView)view.findViewById(R.id.dialog_tv_sync);
-        dialog_tv_sync.setText(msgdata);
-        if(dialog != null){
-            dialog.setView(view, 0, 0, 0, 0);
+
+        if (dialog != null) {
+            ProgressBar progress1 = dialog.findViewById(R.id.progressbar_sync_1);
+            TextView text1 = dialog.findViewById(R.id.dialog_tv_sync);
+            progress1.setProgress(count * (int)Math.floor(100/tablenames.size()));//设置当前进度
+            text1.setText(msgdata);
             dialog.setCancelable(false); // 是否可以通过返回键 关闭
             dialog.show();
-        }else{
+        } else {
+            View view = LayoutInflater.from(getActivity()).inflate(R.layout.sync_progress, null);
+            TextView dialog_tv_sync = (TextView) view.findViewById(R.id.dialog_tv_sync);
+            // ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressbar_sync_1);
             dialog = new AlertDialog.Builder(getActivity()).setCancelable(false).create();
+            dialog_tv_sync.setText(msgdata);
             dialog.setView(view, 0, 0, 0, 0);
             dialog.setCancelable(false); // 是否可以通过返回键 关闭
             dialog.show();
