@@ -25,6 +25,7 @@ import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
+import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.util.pinyin.PinYin4jUtil;
 import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.db.dao.MitPlandayvalMDao;
@@ -39,9 +40,12 @@ import et.tsingtaopad.db.table.MitPlanweekM;
 import et.tsingtaopad.db.table.MitValcheckitemMTemp;
 import et.tsingtaopad.db.table.MitValchecktypeMTemp;
 import et.tsingtaopad.db.table.MstAgencyinfoM;
+import et.tsingtaopad.db.table.MstAgencysupplyInfo;
+import et.tsingtaopad.db.table.MstAgencysupplyInfoTemp;
 import et.tsingtaopad.db.table.MstAgencytransferInfo;
 import et.tsingtaopad.db.table.MstAgencyvisitM;
 import et.tsingtaopad.db.table.MstInvoicingInfo;
+import et.tsingtaopad.db.table.MstVistproductInfo;
 import et.tsingtaopad.dd.ddagencycheck.domain.InOutSaveStc;
 import et.tsingtaopad.dd.ddagencycheck.domain.ZsInOutSaveStc;
 import et.tsingtaopad.dd.ddweekplan.domain.DayDetailStc;
@@ -185,5 +189,55 @@ public class WeekPlanService {
                 Log.e(TAG, "回滚追溯查指标数据发生异常", e1);
             }
         }
+    }
+
+    /**
+     * 删除经销商与终端的产品供应关系
+     *
+     * @param dayDetailStc 拜访产品-竞品我品记录表主键
+     */
+    public boolean deleteDayDetail(DayDetailStc dayDetailStc) {
+        boolean isFlag=false;
+        String key = dayDetailStc.getDetailkey();
+        AndroidDatabaseConnection connection = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MitPlandaydetailM, String> mitPlandaydetailMDao = helper.getDao(MitPlandaydetailM.class);
+            Dao<MitPlandayvalM, String> mitPlandayvalMDao =  helper.getDao(MitPlandayvalM.class);
+
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+            // 删除拜访产品-竞品我品记录表，相关数据
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("delete from MIT_PLANDAYDETAIL_M ");
+            buffer.append("where id=? ");
+            mitPlandaydetailMDao.executeRaw(buffer.toString(), new String[] {key});
+
+            // 删除拜访产品-竞品我品记录表，相关数据
+            buffer = new StringBuffer();
+            buffer.append("delete from MIT_PLANDAYVAL_M ");
+            buffer.append("where plandaydetailid=? ");
+            mitPlandaydetailMDao.executeRaw(buffer.toString(), new String[] {key});
+
+
+
+
+            connection.commit(null);
+            isFlag=true;
+
+        } catch (Exception e) {
+            isFlag=false;
+            DbtLog.logUtils(TAG,"解除供货关系失败");
+            DbtLog.logUtils(TAG,e.getMessage());
+            e.printStackTrace();
+            Log.e(TAG, "保存进销存数据发生异常", e);
+            try {
+                connection.rollback(null);
+            } catch (SQLException e1) {
+                Log.e(TAG, "回滚进销存数据发生异常", e1);
+            }
+        }
+        return isFlag;
     }
 }

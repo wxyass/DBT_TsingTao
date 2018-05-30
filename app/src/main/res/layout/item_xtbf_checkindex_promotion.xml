@@ -19,16 +19,17 @@
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="@dimen/xtbf_item_h"
-                android:layout_weight="1">
+                android:layout_weight="4">
 
                 <TextView
                     android:id="@+id/item_xt_checkindex_tv_promotionname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
                     android:paddingLeft="10dp"
                     android:text="秋季大练兵"
-                    android:textSize="18sp"/>
+                    android:textSize="@dimen/font_size3"/>
 
             </RelativeLayout>
 
@@ -41,10 +42,11 @@
                     android:id="@+id/item_xt_checkindex_tv_proname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:paddingRight="10dp"
-                    android:text="产看产品详情"
-                    android:textSize="18sp"/>
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="10dp"
+                    android:text="产品详情"
+                    android:textSize="@dimen/font_size3"/>
 
             </RelativeLayout>
 
@@ -70,7 +72,7 @@
                 style="@style/listview_tv_item_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"/>
+                android:textSize="@dimen/font_size4"/>
         </LinearLayout>
 
         <View
@@ -86,21 +88,51 @@
             android:layout_height="@dimen/xtbf_item_h"
             android:orientation="horizontal">
 
+            <!--达成组数-->
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/xtbf_item_h"
-                android:background="@color/white"
-                android:gravity="center_vertical"
-                >
+                android:layout_width="0dp"
+                android:layout_height="@dimen/xtbf_btn_h"
+                android:layout_weight="2">
 
                 <TextView
-                    android:id="@+id/item_xt_checkindex_tv_issucces"
-                    style="@style/page_label_big"
+                    android:id="@+id/item_zs_checkindex_tv_issucces"
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/xtbf_item_h"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="10dp"
+                    android:text="达成组数"
+                    android:textSize="@dimen/font_size3"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="@dimen/xtbf_btn_h"
+                android:layout_weight="6">
+
+                <EditText
+                    android:id="@+id/item_xt_checkindex_et_zushu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/zs_item_promotion_h"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="20dp"
-                    android:text="是否达成"/>
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/bg_visit_record"
+                    android:hint="请输入达成组数"
+                    android:inputType="number"
+                    android:maxLength="10"
+                    android:textSize="@dimen/font_size4"/>
+
+            </RelativeLayout>
+
+
+            <!--未稽查-->
+            <RelativeLayout
+                android:id="@+id/item_zs_checkindex_rl_statue"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/xtbf_btn_h"
+                android:layout_weight="2">
 
                 <et.tsingtaopad.view.DdSlideSwitch
                     android:id="@+id/item_xt_checkindex_sw_isacomplish"
@@ -108,26 +140,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/xtbf_item_h"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:layout_marginRight="20dp"
                     cuisw:defStatus="on"
                     cuisw:offText=""
                     cuisw:onText=""
                     cuisw:textColor="#595757"
-                    cuisw:textSize="17sp"/>
+                    cuisw:textSize="@dimen/font_size3"/>
 
-                <EditText
-                    android:id="@+id/item_xt_checkindex_et_zushu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/xtbf_item_h"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:inputType="number"
-                    android:maxLength="10"
-                    android:layout_toLeftOf="@id/item_xt_checkindex_sw_isacomplish"
-                    android:layout_toRightOf="@id/item_xt_checkindex_tv_issucces"
-                    android:background="@drawable/bg_visit_record"
-                    android:hint="请输入达成组数"/>
             </RelativeLayout>
+
 
         </LinearLayout>
 

@@ -73,7 +73,7 @@ public class XtCaculateFragment extends BaseFragmentSupport implements View.OnCl
         backTv = (AppCompatTextView) view.findViewById(R.id.top_navigation_bt_back);
         titleTv = (AppCompatTextView) view.findViewById(R.id.top_navigation_tv_title);
         confirmBtn.setVisibility(View.INVISIBLE);
-        confirmBtn.setOnClickListener(this);
+        // confirmBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
 
         colitemLv = (ListView) view.findViewById(R.id.xtbf_caculate_lv_colitem);
@@ -107,7 +107,7 @@ public class XtCaculateFragment extends BaseFragmentSupport implements View.OnCl
                 supportFragmentManager.popBackStack();// 取消
                 break;
             case R.id.top_navigation_rl_confirm:// 确定
-
+                saveValue(v);
                 break;
             case R.id.xtbf_caculate_bt_next:// 保存
                 saveValue(v);

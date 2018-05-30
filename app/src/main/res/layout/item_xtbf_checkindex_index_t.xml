@@ -6,21 +6,49 @@
     >
 
     <!-- 2级条目 -->
-    <RelativeLayout
+    <LinearLayout
         style="@style/item_xtbf_checkindex_rl">
 
-        <TextView
-            android:id="@+id/item_xt_checkindex_proname"
-            style="@style/xtbf_sayhi_one_tv"
-            android:text="@string/termadd_minorchannel"/>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="@dimen/zs_item_h"
+            android:layout_weight="8">
 
-        <TextView
-            android:id="@+id/item_xt_checkindex_indexvalue"
-            style="@style/xtbf_sayhi_two_tv"
-            android:text="@string/termadd_termname"/>
 
-        <ImageView
-            style="@style/xtbf_sayhi_third_tv"/>
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/item_xt_checkindex_proname"
+                style="@style/xtbf_sayhi_one_tv"
+                android:text="产品名称"/>
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="@dimen/xtbf_btn_h"
+            android:layout_weight="2">
+
+            <TextView
+                android:id="@+id/item_xt_checkindex_indexvalue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="center_vertical|left"
+                android:text="有效铺货"
+                android:layout_marginLeft="8dp"
+                android:textSize="@dimen/font_size3"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="@dimen/xtbf_btn_h"
+            android:layout_weight="1">
+
+            <ImageView
+                style="@style/xtbf_sayhi_third_tv"
+                android:visibility="visible"/>
+        </RelativeLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:background="@drawable/bg_item_list"
                 android:layout_width="match_parent"
-                android:layout_height="50dp">
+                android:layout_height="50dp"
+                android:background="@drawable/bg_item_list">
 
     <LinearLayout
         android:id="@+id/item_termselect_ll"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/zs_item_h"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/zs_item_h"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -30,6 +30,7 @@
                 android:inputType="number"
                 android:maxLength="3"
                 android:singleLine="true"
+                android:textSize="@dimen/font_size2"
                 android:visibility="gone"/>
 
             <!-- 选中标识 -->
@@ -64,7 +65,8 @@
                     style="@style/listview_tv_item_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"/>
+                    android:layout_marginLeft="30dp"
+                    android:textSize="@dimen/font_size3"/>
 
                 <!-- 渠道 -->
 
@@ -73,7 +75,8 @@
                     style="@style/listview_tv_item_text_xiao"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"/>
+                    android:layout_marginLeft="30dp"
+                    android:textSize="@dimen/font_size4"/>
 
             </LinearLayout>
 
@@ -90,17 +93,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:visibility="gone"
-                    android:src="@drawable/ico_terminal_syncflag"/>
+                    android:src="@drawable/ico_terminal_syncflag"
+                    android:visibility="gone"/>
+
                 <ImageView
                     android:id="@+id/item_termselect_iv_update_fail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:visibility="gone"
-                    android:src="@drawable/icon_select_syncflagoff"/>
+                    android:src="@drawable/icon_select_syncflagoff"
+                    android:visibility="gone"/>
             </RelativeLayout>
-
 
 
             <!--2张图片 拜访时间 3-->
@@ -120,8 +123,8 @@
 
                     <ImageView
                         android:id="@+id/item_termselect_iv_mime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/xt_item_icon"
+                        android:layout_height="@dimen/xt_item_icon"
                         android:layout_centerVertical="true"
                         android:src="@drawable/ico_terminal_mine"
                         android:visibility="invisible"/>
@@ -130,8 +133,8 @@
 
                     <ImageView
                         android:id="@+id/item_termselect_iv_mineprotocol"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/xt_item_icon"
+                        android:layout_height="@dimen/xt_item_icon"
                         android:layout_centerVertical="true"
                         android:src="@drawable/ico_terminal_mineprotocol"/>
 
@@ -139,8 +142,8 @@
 
                     <ImageView
                         android:id="@+id/item_termselect_iv_vie"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/xt_item_icon"
+                        android:layout_height="@dimen/xt_item_icon"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="40dp"
                         android:src="@drawable/ico_terminal_vie"/>
@@ -149,8 +152,8 @@
 
                     <ImageView
                         android:id="@+id/item_termselect_iv_vieprotocol"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/xt_item_icon"
+                        android:layout_height="@dimen/xt_item_icon"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="40dp"
                         android:src="@drawable/ico_terminal_vieprotocol"
@@ -164,6 +167,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:singleLine="true"
+                    android:textSize="@dimen/font_size6"
                     android:text="2018-12-12 23:12:23"
                     />
 
@@ -184,9 +188,9 @@
                     android:id="@+id/item_termselect_iv_addterm"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="15dp"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
+                    android:padding="15dp"
                     android:src="@drawable/icon_visit_add"
                     />
 

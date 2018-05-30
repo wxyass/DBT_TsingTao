@@ -107,6 +107,7 @@
                     android:ems="14"
                     android:hint="@string/termlist_search_hit"
                     android:paddingLeft="5dp"
+                    android:textSize="@dimen/font_size3"
                     android:singleLine="true">
 
                     <requestFocus/>
@@ -143,6 +144,7 @@
                     android:layout_height="@dimen/xtbf_btn_h"
                     android:layout_marginLeft="10dp"
                     android:background="@drawable/bg_select_green"
+                    android:textSize="@dimen/font_size4"
                     android:text="编辑排序"
                     />
             </RelativeLayout>
@@ -161,6 +163,7 @@
                     android:layout_height="@dimen/xtbf_btn_h"
                     android:layout_marginLeft="10dp"
                     android:background="@drawable/bg_select_green"
+                    android:textSize="@dimen/font_size4"
                     android:text="全部同步"
                     />
             </RelativeLayout>

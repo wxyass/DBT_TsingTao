@@ -86,8 +86,6 @@ public class XtChatvieFragment extends XtBaseVisitFragment implements View.OnCli
         handler = new MyHandler(this);
 
         initProData();
-
-
     }
 
     List<XtChatVieStc> dataLst;

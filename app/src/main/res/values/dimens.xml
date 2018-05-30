@@ -15,6 +15,9 @@
     <dimen name="font_size2">20dp</dimen>
     <dimen name="font_size3">18dp</dimen>
     <dimen name="font_size4">16dp</dimen>
+    <dimen name="font_size5">14dp</dimen>
+    <dimen name="font_size6">12dp</dimen>
+    <dimen name="font_size7">10dp</dimen>
 
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="home_weather_textsize">18dp</dimen>
@@ -44,7 +47,18 @@
 
     <!--督导各个条目高度-->
     <dimen name="xtbf_item_h">40dp</dimen>
+
     <!--督导 查指标 条目高度-->
     <dimen name="zs_item_h">50dp</dimen>
+
+    <!--督导协同  促销活动输入框高度 条目高度-->
+    <dimen name="zs_item_promotion_h">35dp</dimen>
+
+    <!--督导协同  终端选择 图标 大小-->
+    <dimen name="xt_item_icon">35dp</dimen>
+
+    <!--督导协同  终端选择 图标 大小-->
+    <dimen name="xt_item_cart_icon">40dp</dimen>
+
 
 </resources>

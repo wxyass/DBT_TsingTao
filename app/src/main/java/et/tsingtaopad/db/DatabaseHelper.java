@@ -156,6 +156,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<MitPlandaydetailM, String> mitPlandaydetailMDao = null;
     private Dao<MitPlandayvalM, String> mitPlandayvalMDao = null;
 
+    private Dao<MitRepairM, String> mitRepairMDao = null;
+    private Dao<MitRepairterM, String> mitRepairterMDao = null;
+    private Dao<MitRepaircheckM, String> mitRepaircheckMDao = null;
+
     public DatabaseHelper(Context context) {
 
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -328,6 +332,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, MitPlandayM.class);// 日计划主表
             TableUtils.createTable(connectionSource, MitPlandaydetailM.class);// 详细日计划
             TableUtils.createTable(connectionSource, MitPlandayvalM.class);// 日计划追溯项主表
+
+            TableUtils.createTable(connectionSource, MitRepairM.class);// 整改计划主表
+            TableUtils.createTable(connectionSource, MitRepairterM.class);// 整改计划终端表
+            TableUtils.createTable(connectionSource, MitRepaircheckM.class);// 整改计划审核表
 
 
             this.initView(db);
@@ -1162,6 +1170,17 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 // 日计划追溯项主表
                 String MIT_PLANDAYVAL_M = "create table MIT_PLANDAYVAL_M   ( id varchar(36) not null, planweekid varchar(36) null, plandaydetailid  varchar(36) null,planareaid varchar(36) null, plangridid varchar(36) null, plancomtype  char(1)    null, plancomid  varchar(36) null, uploadflag varchar2(1) null, padisconsistent varchar2(1) null )";
                 db.execSQL(MIT_PLANDAYVAL_M);
+
+
+                // 整改计划主表
+                String MIT_REPAIR_M = "create table MIT_REPAIR_M ( id varchar2(36) not null, gridkey  varchar2(36) null, userid varchar2(36) null, content  varchar2(500) null, repairremark varchar2(500) null, checkcontent varchar2(500) null, creuser  varchar2(128) null, creuserareaid varchar(36)  null, credate  date null, updateuser varchar2(128) null, updatedate date null, uploadflag  varchar2(1) null, padisconsistent  varchar2(1) null )";
+                db.execSQL(MIT_REPAIR_M);
+                // 整改计划终端表
+                String MIT_REPAIRTER_M = "create table MIT_REPAIRTER_M ( id varchar2(36) not null, repairid varchar2(36) null, gridkey  varchar2(36) null, routekey varchar2(36) null, terminalkey  varchar2(36) null, uploadflag  varchar2(1) null, padisconsistent  varchar2(1) null )";
+                db.execSQL(MIT_REPAIRTER_M);
+                // 整改计划审核表
+                String MIT_REPAIRCHECK_M = "create table MIT_REPAIRCHECK_M ( id varchar2(36) not null, repairid varchar2(36) null, status char(1) null, repairtime date null, uploadflag  varchar2(1) null, padisconsistent  varchar2(1) null )";
+                db.execSQL(MIT_REPAIRCHECK_M);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -2233,6 +2252,28 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             mitPlandayvalMDao = getDao(MitPlandayvalM.class);
         }
         return mitPlandayvalMDao;
+    }
+
+    public Dao<MitRepairM, String> getMitRepairMDao() throws SQLException {
+
+        if (mitRepairMDao == null) {
+            mitRepairMDao = getDao(MitRepairM.class);
+        }
+        return mitRepairMDao;
+    }
+    public Dao<MitRepairterM, String> getMitRepairterMDao() throws SQLException {
+
+        if (mitRepairterMDao == null) {
+            mitRepairterMDao = getDao(MitRepairterM.class);
+        }
+        return mitRepairterMDao;
+    }
+    public Dao<MitRepaircheckM, String> getMitRepaircheckMDao() throws SQLException {
+
+        if (mitRepaircheckMDao == null) {
+            mitRepaircheckMDao = getDao(MitRepaircheckM.class);
+        }
+        return mitRepaircheckMDao;
     }
 
     /**

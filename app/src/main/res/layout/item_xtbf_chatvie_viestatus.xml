@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
-              android:layout_height="122dp"
+              android:layout_height="152dp"
               android:background="@color/white"
               android:orientation="vertical">
 
     <!--竞品名称-->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/xtbf_btn_h"
+        android:layout_height="@dimen/zs_item_h"
         android:orientation="horizontal">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/xtbf_btn_h"
+            android:layout_height="@dimen/zs_item_h"
             >
 
             <TextView
@@ -23,10 +23,10 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
-                android:singleLine="true"
                 android:ellipsize="end"
-                android:textSize="18sp"
-                android:text="崂山啤酒8度500*12罐啤"/>
+                android:singleLine="true"
+                android:text="崂山啤酒8度500*12罐啤"
+                android:textSize="@dimen/font_size3"/>
 
         </RelativeLayout>
 
@@ -42,12 +42,12 @@
     <!--月销量  库存-->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/xtbf_btn_h"
+        android:layout_height="@dimen/zs_item_h"
         android:orientation="horizontal">
 
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="@dimen/xtbf_btn_h"
+            android:layout_height="@dimen/zs_item_h"
             android:layout_weight="1">
 
             <TextView
@@ -57,31 +57,32 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
-                android:textSize="18sp"
-                android:text="月销量:"/>
+                android:text="月销量:"
+                android:textSize="@dimen/font_size3"/>
 
             <EditText
                 android:id="@+id/item_viestatus_et_monthsell"
                 android:layout_width="150dp"
                 android:layout_height="match_parent"
                 android:layout_margin="3dp"
+                android:layout_toRightOf="@id/item_viestatus_tv_monthsell"
+                android:background="@drawable/bg_visit_record"
                 android:inputType="number"
                 android:maxLength="10"
-                android:layout_toRightOf="@id/item_viestatus_tv_monthsell"
-                android:background="@drawable/bg_visit_record"/>
+                android:textSize="@dimen/font_size4"/>
 
         </RelativeLayout>
 
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
             android:background="@color/gray"/>
 
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="@dimen/xtbf_btn_h"
+            android:layout_height="@dimen/zs_item_h"
             android:layout_weight="1">
 
             <TextView
@@ -91,18 +92,19 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
-                android:textSize="15sp"
-                android:text="库存:"/>
+                android:text="库存:"
+                android:textSize="@dimen/font_size3"/>
 
             <EditText
                 android:id="@+id/item_viestatus_et_currstore"
                 android:layout_width="150dp"
                 android:layout_height="match_parent"
                 android:layout_margin="3dp"
+                android:layout_toRightOf="@id/item_viestatus_tv_currstore"
+                android:background="@drawable/bg_visit_record"
                 android:inputType="number"
                 android:maxLength="10"
-                android:layout_toRightOf="@id/item_viestatus_tv_currstore"
-                android:background="@drawable/bg_visit_record"/>
+                android:textSize="@dimen/font_size4"/>
         </RelativeLayout>
 
     </LinearLayout>
@@ -117,12 +119,12 @@
     <!--竞品描述-->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/xtbf_btn_h"
+        android:layout_height="@dimen/zs_item_h"
         android:orientation="horizontal">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/xtbf_btn_h"
+            android:layout_height="@dimen/zs_item_h"
             android:layout_weight="1"
             >
 
@@ -130,19 +132,17 @@
                 android:id="@+id/item_viestatus_et_describe"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="3dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="3dp"
-                android:layout_marginBottom="3dp"
+                android:background="@drawable/bg_visit_record"
                 android:hint="请输入竞品描述"
                 android:maxLength="50"
-                android:background="@drawable/bg_visit_record"/>
+                android:textSize="@dimen/font_size3"/>
 
         </RelativeLayout>
 
-
-
     </LinearLayout>
-
 
 </LinearLayout>

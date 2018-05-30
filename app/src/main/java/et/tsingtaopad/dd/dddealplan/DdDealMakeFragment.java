@@ -21,7 +21,7 @@ import et.tsingtaopad.core.util.dbtutil.ConstValues;
  * Created by yangwenmin on 2018/3/12.
  */
 
-public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnClickListener {
+public class DdDealMakeFragment extends BaseFragmentSupport implements View.OnClickListener {
 
     private final String TAG = "DdDealPlanFragment";
 
@@ -32,16 +32,16 @@ public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnCl
     private AppCompatTextView titleTv;
 
     //
-    public static final int DEALPLAN_UP_SUC = 3301;
+    public static final int MAKEPLAN_UP_SUC = 330001;
     //
-    public static final int DEALPLAN_UP_FAIL = 3302;
+    public static final int MAKEPLAN_UP_FAIL = 330002;
 
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_dd_dealplan, container, false);
+        View view = inflater.inflate(R.layout.fragment_dd_dealmake, container, false);
         initView(view);
         return view;
     }
@@ -53,8 +53,8 @@ public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnCl
         confirmTv = (AppCompatTextView) view.findViewById(R.id.top_navigation_bt_confirm);
         backTv = (AppCompatTextView) view.findViewById(R.id.top_navigation_bt_back);
         titleTv = (AppCompatTextView) view.findViewById(R.id.top_navigation_tv_title);
-        confirmBtn.setVisibility(View.VISIBLE);
-        confirmBtn.setOnClickListener(this);
+        //confirmBtn.setVisibility(View.VISIBLE);
+        //confirmBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
     }
 
@@ -62,10 +62,9 @@ public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnCl
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        titleTv.setText("整改计划");
+        titleTv.setText("新增整改计划");
         handler = new MyHandler(this);
         ConstValues.handler = handler;
-        confirmTv.setText("日历");
 
     }
 
@@ -84,8 +83,6 @@ public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnCl
                 Toast.makeText(getActivity(),"弹出日历",Toast.LENGTH_SHORT).show();
 
                 break;
-
-
             default:
                 break;
         }
@@ -101,15 +98,15 @@ public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnCl
     public static class MyHandler extends Handler {
 
         // 软引用
-        SoftReference<DdDealPlanFragment> fragmentRef;
+        SoftReference<DdDealMakeFragment> fragmentRef;
 
-        public MyHandler(DdDealPlanFragment fragment) {
-            fragmentRef = new SoftReference<DdDealPlanFragment>(fragment);
+        public MyHandler(DdDealMakeFragment fragment) {
+            fragmentRef = new SoftReference<DdDealMakeFragment>(fragment);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            DdDealPlanFragment fragment = fragmentRef.get();
+            DdDealMakeFragment fragment = fragmentRef.get();
             if (fragment == null) {
                 return;
             }
@@ -117,10 +114,10 @@ public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnCl
 
             // 处理UI 变化
             switch (msg.what) {
-                case DEALPLAN_UP_SUC://
+                case MAKEPLAN_UP_SUC://
                     fragment.shuaxinXtTermSelect(1);
                     break;
-                case DEALPLAN_UP_FAIL://
+                case MAKEPLAN_UP_FAIL://
                     fragment.shuaxinXtTermSelect(2);
                     break;
 

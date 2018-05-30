@@ -2,145 +2,150 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:cuisw="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
+              android:layout_height="101dp"
               android:background="@color/white"
               android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/item_viesource_ll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="101dp"
         android:background="@color/white"
         android:orientation="vertical">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/xtbf_btn_h"
-        android:orientation="horizontal">
 
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="@dimen/xtbf_btn_h"
-            android:layout_weight="1">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/zs_item_h"
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/item_viesource_tv_proname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="@dimen/zs_item_h"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/item_viesource_tv_proname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:text="崂山啤酒8度500*12罐啤"
+                    android:textSize="@dimen/font_size3"/>
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="40dp"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:textSize="18sp"
-                android:text="崂山啤酒8度500*12罐啤"/>
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/gray"/>
 
-        </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="@dimen/zs_item_h"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/item_viesource_tv_agencyname"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:text="供应商:"
+                    android:textSize="@dimen/font_size3"/>
+
+                <EditText
+                    android:id="@+id/item_viesource_et_agencyname"
+                    android:layout_width="150dp"
+                    android:layout_height="@dimen/zs_item_h"
+                    android:layout_margin="3dp"
+                    android:layout_toRightOf="@id/item_viesource_tv_agencyname"
+                    android:background="@drawable/bg_visit_record"
+                    android:maxLength="20"
+                    android:textSize="@dimen/font_size4"/>
+            </RelativeLayout>
+
+        </LinearLayout>
 
         <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:background="@color/gray"/>
 
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="@dimen/xtbf_btn_h"
-            android:layout_weight="1">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/zs_item_h"
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/item_viesource_tv_agencyname"
-                android:layout_width="90dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:textSize="15sp"
-                android:text="供应商:"/>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="@dimen/zs_item_h"
+                android:layout_weight="1">
 
-            <EditText
-                android:id="@+id/item_viesource_et_agencyname"
-                android:layout_width="150dp"
+                <TextView
+                    android:id="@+id/item_viesource_tv_qudao"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:text="渠道价:"
+                    android:textSize="@dimen/font_size3"/>
+
+                <EditText
+                    android:id="@+id/item_viesource_et_qudao"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="3dp"
+                    android:layout_toRightOf="@id/item_viesource_tv_qudao"
+                    android:background="@drawable/bg_visit_record"
+                    android:inputType="numberDecimal"
+                    android:maxLength="10"
+                    android:textSize="@dimen/font_size4"/>
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:layout_margin="3dp"
-                android:maxLength="20"
-                android:layout_toRightOf="@id/item_viesource_tv_agencyname"
-                android:background="@drawable/bg_visit_record"/>
-        </RelativeLayout>
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/gray"/>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="@dimen/zs_item_h"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/item_viesource_tv_lingshou"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:text="零售价:"
+                    android:textSize="@dimen/font_size3"/>
+
+                <EditText
+                    android:id="@+id/item_viesource_et_lingshou"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="3dp"
+                    android:layout_toRightOf="@id/item_viesource_tv_lingshou"
+                    android:background="@drawable/bg_visit_record"
+                    android:inputType="numberDecimal"
+                    android:maxLength="10"
+                    android:textSize="@dimen/font_size4"/>
+            </RelativeLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@color/gray"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/xtbf_btn_h"
-        android:orientation="horizontal">
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="@dimen/xtbf_btn_h"
-            android:layout_weight="1">
-
-            <TextView
-                android:id="@+id/item_viesource_tv_qudao"
-                android:layout_width="90dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:textSize="18sp"
-                android:text="渠道价:"/>
-
-            <EditText
-                android:id="@+id/item_viesource_et_qudao"
-                android:layout_width="150dp"
-                android:layout_height="match_parent"
-                android:layout_margin="3dp"
-                android:inputType="numberDecimal"
-                android:maxLength="10"
-                android:layout_toRightOf="@id/item_viesource_tv_qudao"
-                android:background="@drawable/bg_visit_record"/>
-
-        </RelativeLayout>
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:background="@color/gray"/>
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="@dimen/xtbf_btn_h"
-            android:layout_weight="1">
-
-            <TextView
-                android:id="@+id/item_viesource_tv_lingshou"
-                android:layout_width="90dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:textSize="15sp"
-                android:text="零售价:"/>
-
-            <EditText
-                android:id="@+id/item_viesource_et_lingshou"
-                android:layout_width="150dp"
-                android:layout_height="match_parent"
-                android:layout_margin="3dp"
-                android:inputType="numberDecimal"
-                android:maxLength="10"
-                android:layout_toRightOf="@id/item_viesource_tv_lingshou"
-                android:background="@drawable/bg_visit_record"/>
-        </RelativeLayout>
-
-    </LinearLayout>
-
-</LinearLayout>
 </LinearLayout>

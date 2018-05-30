@@ -15,6 +15,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -27,14 +31,21 @@ import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
+import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
+import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.core.view.alertview.OnDismissListener;
+import et.tsingtaopad.core.view.alertview.OnItemClickListener;
+import et.tsingtaopad.db.DatabaseHelper;
+import et.tsingtaopad.db.table.CmmDatadicM;
 import et.tsingtaopad.db.table.MitPlanweekM;
 import et.tsingtaopad.db.table.MstGridM;
 import et.tsingtaopad.db.table.MstMarketareaM;
 import et.tsingtaopad.db.table.MstRouteM;
 import et.tsingtaopad.dd.ddweekplan.domain.DayDetailStc;
+import et.tsingtaopad.dd.ddxt.invoicing.XtInvoicingService;
+import et.tsingtaopad.dd.ddxt.invoicing.domain.XtInvoicingStc;
 import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectService;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
 import et.tsingtaopad.listviewintf.ILongClick;
@@ -43,7 +54,7 @@ import et.tsingtaopad.listviewintf.ILongClick;
  * 项目名称：营销移动智能工作平台 </br>
  * 日期      原因  BUG号    修改人 修改版本</br>
  */
-public class DayDetailAdapter extends BaseAdapter implements View.OnClickListener {
+public class DayDetailAdapter extends BaseAdapter implements View.OnClickListener, View.OnLongClickListener {
 
     private final String TAG = "DayDetailAdapter";
 
@@ -150,6 +161,11 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
         holder.tv_gridkey.setOnClickListener(this);
         holder.rl_routekey.setOnClickListener(this);
 
+        holder.rl_check.setOnLongClickListener(this);
+        holder.rl_areaid.setOnLongClickListener(this);
+        holder.tv_gridkey.setOnLongClickListener(this);
+        holder.rl_routekey.setOnLongClickListener(this);
+
         return convertView;
     }
 
@@ -193,6 +209,23 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
         }
     }
 
+    @Override
+    public boolean onLongClick(View v) {
+        int posi = (int) v.getTag();
+        switch (v.getId()) {
+            case R.id.item_daydetail_rl_check:// 追溯项
+            case R.id.item_daydetail_rl_areaid:// 追溯区域
+            case R.id.item_daydetail_tv_gridkey:// 追溯定格
+            case R.id.item_daydetail_rl_routekey:// 追溯路线
+                // 删除该条日计划详情
+                deletesupply(posi,dataLst.get(posi));
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
+
     private class ViewHolder {
         private LinearLayout ll_all;
         private RelativeLayout rl_check;
@@ -203,6 +236,59 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
         private TextView tv_valgridname;
         private RelativeLayout rl_routekey;
         private TextView tv_routename;
+    }
+
+    // 长按删除我品供货关系弹窗
+    private void deletesupply(final int posi ,final DayDetailStc dayDetailStc) {
+        //String proName = xtInvoicingStc.getProName();
+        // 普通窗口
+        mAlertViewExt = new AlertView("删除该条计划", null, "取消", new String[]{"确定"}, null, context, AlertView.Style.Alert,
+                new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Object o, int position) {
+                        //Toast.makeText(getApplicationContext(), "点击了第" + position + "个", Toast.LENGTH_SHORT).show();
+                        if (0 == position) {// 确定按钮:0   取消按钮:-1
+                            //if (ViewUtil.isDoubleClick(v.getId(), 2500)) return;
+                            DbtLog.logUtils(TAG, "删除供货关系：是");
+                            // 删除对应的数据
+                            if (!CheckUtil.isBlankOrNull(dayDetailStc.getDaykey())) {
+                                DbtLog.logUtils(TAG,"解除供货关系");
+                                WeekPlanService service = new WeekPlanService(context);
+                                boolean isFlag = service.deleteDayDetail(dayDetailStc);
+                                if(isFlag){
+                                    // 删除界面listView相应行
+                                    dataLst.remove(posi);
+                                    notifyDataSetChanged();
+                                    /*askAdapter.setDelPosition(posi);
+                                    checkGoodsAdapter.notifyDataSetChanged();
+
+                                    ViewUtil.setListViewHeight(askGoodsLv);
+                                    ViewUtil.setListViewHeight(checkGoodsLv);*/
+                                }else{
+                                    Toast.makeText(context, "删除产品失败!", Toast.LENGTH_SHORT).show();
+                                }
+                            }else{
+                                // 删除界面listView相应行
+                                dataLst.remove(posi);
+                                notifyDataSetChanged();
+                                /*askAdapter.setDelPosition(posi);
+                                checkGoodsAdapter.notifyDataSetChanged();
+
+                                ViewUtil.setListViewHeight(askGoodsLv);
+                                ViewUtil.setListViewHeight(checkGoodsLv);*/
+                            }
+                        }
+
+                    }
+                })
+                .setCancelable(true)
+                .setOnDismissListener(new OnDismissListener() {
+                    @Override
+                    public void onDismiss(Object o) {
+                        DbtLog.logUtils(TAG, "删除供货关系：否");
+                    }
+                });
+        mAlertViewExt.show();
     }
 
     // 追溯项
@@ -468,36 +554,7 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
 
         final DayDetailStc item = dataLst.get(position);
 
-        final List<KvStc> typeLst = new ArrayList<KvStc>();
-        /*List<MstRouteM> valueLst = xtSelectService.getMstRouteMList(FunUtil.isBlankOrNullTo(item.getValgridkey(),""));
-        for (MstRouteM routeM : valueLst) {
-            KvStc kvStc =new KvStc();
-            kvStc.setKey(routeM.getRoutekey());
-            kvStc.setValue(routeM.getRoutename());
-            kvStc.setIsDefault("");
-            typeLst.add(kvStc);
-        }*/
-
-        KvStc kvStc1 =new KvStc();
-        kvStc1.setKey("check001");
-        kvStc1.setValue("check001");
-        kvStc1.setIsDefault("");
-        KvStc kvStc2 =new KvStc();
-        kvStc2.setKey("check002");
-        kvStc2.setValue("check002");
-        kvStc2.setIsDefault("");
-        KvStc kvStc3 =new KvStc();
-        kvStc3.setKey("check003");
-        kvStc3.setValue("check003");
-        kvStc3.setIsDefault("");
-        KvStc kvStc4 =new KvStc();
-        kvStc4.setKey("check004");
-        kvStc4.setValue("check004");
-        kvStc4.setIsDefault("");
-        typeLst.add(kvStc1);
-        typeLst.add(kvStc2);
-        typeLst.add(kvStc3);
-        typeLst.add(kvStc4);
+        final List<KvStc> typeLst  = initRetrospect();
 
         mAlertViewExt = new AlertView(null, null, null, null,
                 null, context, AlertView.Style.ActionSheet, null);
@@ -583,5 +640,40 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
         });
         mAlertViewExt.show();
     }
+
+    /**
+     * 初始化拜访对象职位(老板老板娘)
+     */
+    private List<KvStc> initRetrospect() {
+
+        List<CmmDatadicM> dataDicLst = new ArrayList<CmmDatadicM>();
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            QueryBuilder<CmmDatadicM, String> qBuilder =
+                    helper.getCmmDatadicMDao().queryBuilder();
+            Where<CmmDatadicM, String> where = qBuilder.where();
+            where.or(where.isNull("deleteflag"),
+                    where.eq("deleteflag", "0"),
+                    where.eq("parentcode", "39DD41A399348C68E05010ACE0016FCA"));
+            qBuilder.orderBy("parentcode", true).orderBy("orderbyno", true);
+            dataDicLst = qBuilder.query();
+        } catch (SQLException e) {
+            Log.e(TAG, "初始化数据字典失败", e);
+        }
+
+        // 获取数据字典表中区域字典对应的父ID
+        String areaType=PropertiesUtil.getProperties("retrospect_item");
+
+        List<KvStc> kvLst = new ArrayList<KvStc>();
+        for (CmmDatadicM item : dataDicLst) {
+            if (areaType.equals(item.getParentcode())) {
+                kvLst.add(new KvStc(item.getDiccode(), item.getDicname(), item.getParentcode()));
+            } /*else if (kvLst.size() > 0) {
+                break;
+            }*/
+        }
+        return kvLst;
+    }
+
 
 }
