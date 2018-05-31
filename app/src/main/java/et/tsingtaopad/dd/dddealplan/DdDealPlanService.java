@@ -1,0 +1,78 @@
+package et.tsingtaopad.dd.dddealplan;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
+import com.j256.ormlite.android.AndroidDatabaseConnection;
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import et.tsingtaopad.R;
+import et.tsingtaopad.core.util.dbtutil.FunUtil;
+import et.tsingtaopad.core.util.dbtutil.ViewUtil;
+import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
+import et.tsingtaopad.db.DatabaseHelper;
+import et.tsingtaopad.db.dao.MitRepairterMDao;
+import et.tsingtaopad.db.dao.MitValterMDao;
+import et.tsingtaopad.db.dao.MitVisitMDao;
+import et.tsingtaopad.db.dao.MstTerminalinfoMDao;
+import et.tsingtaopad.db.table.MitRepairM;
+import et.tsingtaopad.db.table.MitRepaircheckM;
+import et.tsingtaopad.db.table.MitRepairterM;
+import et.tsingtaopad.db.table.MitValcheckterM;
+import et.tsingtaopad.db.table.MitValterM;
+import et.tsingtaopad.db.table.MitVisitM;
+import et.tsingtaopad.db.table.MstGridM;
+import et.tsingtaopad.db.table.MstMarketareaM;
+import et.tsingtaopad.db.table.MstRouteM;
+import et.tsingtaopad.db.table.MstTerminalinfoM;
+import et.tsingtaopad.db.table.MstTerminalinfoMCart;
+import et.tsingtaopad.db.table.MstTerminalinfoMTemp;
+import et.tsingtaopad.dd.dddealplan.domain.DealStc;
+import et.tsingtaopad.dd.dddealplan.make.domain.DealPlanMakeStc;
+import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
+
+
+/**
+ * 项目名称：营销移动智能工作平台 </br>
+ */
+@SuppressLint("DefaultLocale")
+public class DdDealPlanService {
+
+    private final String TAG = "DdDealPlanService";
+
+    private Context context;
+
+    public DdDealPlanService(Context context) {
+        this.context = context;
+    }
+
+    public List<DealStc> getDealPlanTerminal() {
+        AndroidDatabaseConnection connection = null;
+        List<DealStc> valueLst = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            MitRepairterMDao valueDao = helper.getDao(MitRepairterM.class);
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+            valueLst = valueDao.queryDealPan(helper);
+            connection.commit(null);
+        } catch (Exception e) {
+            Log.e(TAG, "获取整顿计划选择终端出错3", e);
+            try {
+                connection.rollback(null);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
+        return valueLst;
+    }
+
+}

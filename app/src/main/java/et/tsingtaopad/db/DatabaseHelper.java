@@ -1182,6 +1182,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 String MIT_REPAIRCHECK_M = "create table MIT_REPAIRCHECK_M ( id varchar2(36) not null, repairid varchar2(36) null, status char(1) null, repairtime date null, uploadflag  varchar2(1) null, padisconsistent  varchar2(1) null )";
                 db.execSQL(MIT_REPAIRCHECK_M);
 
+                // 在定格表新加字段 业代名称 username  整顿计划显示要用到
+                db.execSQL("alter table MST_GRID_M add username varchar(100)");
+                db.execSQL("alter table MST_GRID_M add userid varchar(100)");
+
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

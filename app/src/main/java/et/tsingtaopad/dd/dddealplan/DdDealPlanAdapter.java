@@ -16,6 +16,7 @@ import java.util.List;
 import et.tsingtaopad.R;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
+import et.tsingtaopad.dd.dddealplan.domain.DealStc;
 import et.tsingtaopad.dd.ddweekplan.domain.DayPlanStc;
 import et.tsingtaopad.listviewintf.IClick;
 
@@ -26,10 +27,10 @@ import et.tsingtaopad.listviewintf.IClick;
 public class DdDealPlanAdapter extends BaseAdapter {
 
     private Activity context;
-    private List<DayPlanStc> dataLst;
+    private List<DealStc> dataLst;
     private IClick listener;
 
-    public DdDealPlanAdapter(Activity context, List<DayPlanStc> dataLst, IClick listener) {
+    public DdDealPlanAdapter(Activity context, List<DealStc> dataLst, IClick listener) {
         this.context = context;
         this.dataLst = dataLst;
         this.listener = listener;
@@ -65,64 +66,41 @@ public class DdDealPlanAdapter extends BaseAdapter {
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.item_dealplan, null);
-            holder.ll_all = (LinearLayout) convertView.findViewById(R.id.item_dealplan_ll_all);
-            holder.weekday = (TextView) convertView.findViewById(R.id.item_dealplan_tv_weekday);
-            holder.time = (TextView) convertView.findViewById(R.id.item_dealplan_tv_time);
-            holder.statueRl = (RelativeLayout) convertView.findViewById(R.id.item_dealplan_rl_statue);
-            holder.statueTv = (TextView) convertView.findViewById(R.id.item_dealplan_tv_statue);
-            holder.tv_area = (TextView) convertView.findViewById(R.id.item_dealplan_tv_area);
-            holder.tv_route = (TextView) convertView.findViewById(R.id.item_dealplan_tv_route);
-            holder.tv_check = (TextView) convertView.findViewById(R.id.item_dealplan_tv_check);
+            holder.termname = (TextView) convertView.findViewById(R.id.item_dealplan_termname);
+            holder.grid = (TextView) convertView.findViewById(R.id.item_dealplan_grid);
+            holder.ydname = (TextView) convertView.findViewById(R.id.item_dealplan_ydname);
+            holder.question = (TextView) convertView.findViewById(R.id.item_dealplan_question);
+            holder.amendplan = (TextView) convertView.findViewById(R.id.item_dealplan_amendplan);
+            holder.measure = (TextView) convertView.findViewById(R.id.item_dealplan_measure);
+            holder.checktime = (TextView) convertView.findViewById(R.id.item_dealplan_checktime);
 
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        final DayPlanStc item = dataLst.get(position);
+        final DealStc item = dataLst.get(position);
 
-        holder.ll_all.setTag(position);
-        holder.ll_all.setOnClickListener(listener);
-
-        // 未制定
-        if("0".equals(item.getState())){
-            holder.statueTv.setText("未制定");
-        }else if("1".equals(item.getState())){
-            holder.statueTv.setText("未提交");
-        }else if("2".equals(item.getState())){
-            holder.statueTv.setText("待审核");
-        }else if("3".equals(item.getState())){
-            holder.statueTv.setText("审核通过");
-        }else if("4".equals(item.getState())){
-            holder.statueTv.setText("未通过");
-        }
-
-
-        // 周几
-        holder.weekday.setText(item.getWeekday());
-
-        // 时间
-        holder.time.setText(item.getVisitTime());
-
-        // 区域
-        holder.tv_area.setText(item.getPlanareaid());
-        // 路线
-        holder.tv_route .setText(item.getPlanroute());
-        // 追溯项
-        holder.tv_check .setText(item.getPlancheck());
+        holder.termname.setText(item.getTerminalname());
+        holder.grid .setText(item.getGridname());
+        holder.ydname .setText(item.getUsername());
+        holder.question.setText(item.getContent());
+        holder.amendplan .setText(item.getRepairremark());
+        holder.measure .setText(item.getCheckcontent());
+        holder.checktime.setText(item.getRepairtime());
 
         return convertView;
     }
 
     private class ViewHolder {
-        private LinearLayout ll_all;
-        private TextView weekday;
-        private TextView time;
-        private RelativeLayout statueRl;
-        private TextView statueTv;
-        private TextView tv_area;
-        private TextView tv_route;
-        private TextView tv_check;
+        private TextView termname;
+        private TextView grid;
+        private TextView ydname;
+        private TextView question;
+        private TextView amendplan;
+        private TextView measure;
+        private TextView checktime;
+
     }
 
 }

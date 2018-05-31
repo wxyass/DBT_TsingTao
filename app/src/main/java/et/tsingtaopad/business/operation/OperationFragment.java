@@ -11,18 +11,9 @@ import android.widget.RelativeLayout;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
-import et.tsingtaopad.dd.ddaddterm.DdAddTermFragment;
-import et.tsingtaopad.dd.ddagencycheck.DdAgencyCheckSelectFragment;
-import et.tsingtaopad.dd.ddagencyres.DdAgencySelectFragment;
 import et.tsingtaopad.dd.dddaysummary.DdDaySummaryFragment;
-import et.tsingtaopad.dd.dddealplan.DdDealMakeFragment;
 import et.tsingtaopad.dd.dddealplan.DdDealPlanFragment;
-import et.tsingtaopad.dd.dddealplan.DdDealSelectFragment;
 import et.tsingtaopad.dd.ddweekplan.DdWeekPlanFragment;
-import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartFragment;
-import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectFragment;
-import et.tsingtaopad.dd.ddzs.zsterm.zscart.ZsTermCartFragment;
-import et.tsingtaopad.dd.ddzs.zsterm.zsselect.ZsTermSelectFragment;
 
 /**
  * Created by yangwenmin on 2018/3/12.
@@ -87,9 +78,9 @@ public class OperationFragment extends BaseFragmentSupport implements View.OnCli
                 changeHomeFragment(new DdDaySummaryFragment(), "dddaysummaryfragment");
                 break;
             case R.id.dd_operation_btn_zhenggai:// 整改计划
-                //changeHomeFragment(new DdDealPlanFragment(), "dddealplanfragment");
+                changeHomeFragment(new DdDealPlanFragment(), "dddealplanfragment");
                 //changeHomeFragment(new DdDealMakeFragment(), "dddealmakefragment");
-                changeHomeFragment(new DdDealSelectFragment(), "dddealselectfragment");
+                //changeHomeFragment(new DdDealSelectFragment(), "dddealselectfragment");
                 break;
         }
 

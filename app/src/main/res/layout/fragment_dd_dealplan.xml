@@ -71,7 +71,7 @@
                     android:layout_toRightOf="@id/zgjh_add_point1"
                     android:text="具体问题整改计划"/>
 
-                <!-- 新增供货关系 -->
+                <!-- 新增整改计划 -->
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -82,7 +82,7 @@
                     >
 
                     <Button
-                        android:id="@+id/zgjh__bt_addplan"
+                        android:id="@+id/zgjh_bt_addplan"
                         style="@style/xtbf_btn_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/zs_item_promotion_h"

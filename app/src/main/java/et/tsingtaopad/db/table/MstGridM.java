@@ -51,6 +51,11 @@ public class MstGridM implements java.io.Serializable {
 	@DatabaseField(defaultValue = "0")
 	private String deleteflag;
 
+	@DatabaseField
+	private String username;
+	@DatabaseField
+	private String userid;
+
 	// Constructors
 
 	/** default constructor */
@@ -232,4 +237,19 @@ public class MstGridM implements java.io.Serializable {
 		this.updateuser = updateuser;
 	}
 
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getUserid() {
+		return userid;
+	}
+
+	public void setUserid(String userid) {
+		this.userid = userid;
+	}
 }

@@ -25,6 +25,7 @@
 
             <!-- 整改终端： -->
             <RelativeLayout
+                android:id="@+id/zgjh_make_rl_termname"
                 style="@style/xtbf_sayhi_rl">
 
                 <TextView
@@ -51,6 +52,7 @@
 
             <!-- 所属定格： -->
             <RelativeLayout
+                android:id="@+id/zgjh_make_rl_grid"
                 style="@style/xtbf_sayhi_rl">
 
                 <TextView
@@ -76,6 +78,7 @@
 
             <!-- 业代名称： -->
             <RelativeLayout
+                android:id="@+id/zgjh_make_rl_ydname"
                 style="@style/xtbf_sayhi_rl">
 
                 <TextView
@@ -101,6 +104,7 @@
 
             <!-- 问题描述： -->
             <RelativeLayout
+                android:id="@+id/zgjh_make_rl_question"
                 style="@style/xtbf_sayhi_rl">
 
                 <TextView
@@ -133,6 +137,7 @@
 
             <!-- 改进计划： -->
             <RelativeLayout
+                android:id="@+id/zgjh_make_rl_amendplan"
                 style="@style/xtbf_sayhi_rl">
 
                 <TextView
@@ -165,6 +170,7 @@
 
             <!-- 考核措施： -->
             <RelativeLayout
+                android:id="@+id/zgjh_make_rl_measure"
                 style="@style/xtbf_sayhi_rl">
 
                 <TextView
@@ -197,6 +203,7 @@
 
             <!-- 复查时间： -->
             <RelativeLayout
+                android:id="@+id/zgjh_make_rl_checktime"
                 style="@style/xtbf_sayhi_rl">
 
                 <TextView

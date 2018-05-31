@@ -3,6 +3,8 @@ package et.tsingtaopad.db.table;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.util.Date;
+
 import et.tsingtaopad.db.dao.impl.MitPlandayMDaoImpl;
 import et.tsingtaopad.db.dao.impl.MitRepairMDaoImpl;
 
@@ -33,11 +35,11 @@ public class MitRepairM implements java.io.Serializable {
     @DatabaseField
     private String creuserareaid;//追溯人所属区域
     @DatabaseField
-    private String credate;//创建日期
+    private Date credate;//创建日期
     @DatabaseField
     private String updateuser;//更新人
     @DatabaseField
-    private String updatedate;//更新时间
+    private Date updatedate;//更新时间
     @DatabaseField
     private String uploadflag;//
     @DatabaseField
@@ -115,13 +117,7 @@ public class MitRepairM implements java.io.Serializable {
         this.creuserareaid = creuserareaid;
     }
 
-    public String getCredate() {
-        return credate;
-    }
 
-    public void setCredate(String credate) {
-        this.credate = credate;
-    }
 
     public String getUpdateuser() {
         return updateuser;
@@ -131,11 +127,19 @@ public class MitRepairM implements java.io.Serializable {
         this.updateuser = updateuser;
     }
 
-    public String getUpdatedate() {
+    public Date getCredate() {
+        return credate;
+    }
+
+    public void setCredate(Date credate) {
+        this.credate = credate;
+    }
+
+    public Date getUpdatedate() {
         return updatedate;
     }
 
-    public void setUpdatedate(String updatedate) {
+    public void setUpdatedate(Date updatedate) {
         this.updatedate = updatedate;
     }
 

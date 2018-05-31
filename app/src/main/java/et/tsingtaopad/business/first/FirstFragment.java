@@ -142,8 +142,8 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
     private void getInfo() {
 
         tablenames = new ArrayList<>();
-        tablenames.add("MST_MARKETAREA_GRID_ROUTE_M");
         tablenames.add("MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO");
+        tablenames.add("MST_MARKETAREA_GRID_ROUTE_M");
         tablenames.add("MST_BASEDATA_M");
 
         //handler.sendEmptyMessage(FirstFragment.SYNC_SUCCSE);
@@ -197,6 +197,11 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                             // 保存信息
                             if ("MST_MARKETAREA_GRID_ROUTE_M".equals(table)) {
 
+
+
+                                String formjson = resObj.getResBody().getContent();
+                                parseTableJson(formjson);
+
                                 Bundle bundle = new Bundle();
                                 bundle.putString("msg", "正在处理区域数据...");
                                 Message msg = new Message();
@@ -204,11 +209,13 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                                 msg.setData(bundle);
                                 handler.sendMessage(msg);
 
-                                String formjson = resObj.getResBody().getContent();
-                                parseTableJson(formjson);
-
                             }
                             if ("MST_BASEDATA_M".equals(table)) {
+
+
+
+                                String formjson = resObj.getResBody().getContent();
+                                parseDatadicTableJson(formjson);
 
                                 Bundle bundle = new Bundle();
                                 bundle.putString("msg", "正在处理基础数据...");
@@ -217,11 +224,11 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                                 msg.setData(bundle);
                                 handler.sendMessage(msg);
 
-                                String formjson = resObj.getResBody().getContent();
-                                parseDatadicTableJson(formjson);
-
                             }
                             if ("MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO".equals(table)) {
+
+                                String formjson = resObj.getResBody().getContent();
+                                parseIndexTableJson(formjson);
 
                                 Bundle bundle = new Bundle();
                                 bundle.putString("msg", "正在处理指标数据...");
@@ -229,9 +236,6 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                                 msg.what = FirstFragment.SYNC_SUCCSE;//
                                 msg.setData(bundle);
                                 handler.sendMessage(msg);
-
-                                String formjson = resObj.getResBody().getContent();
-                                parseIndexTableJson(formjson);
                             }
                         } else {
                             Toast.makeText(getActivity(), resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();

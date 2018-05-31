@@ -17,14 +17,21 @@ import com.j256.ormlite.stmt.Where;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.DateUtil;
+import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
+import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.db.DatabaseHelper;
+import et.tsingtaopad.db.dao.MitRepairterMDao;
 import et.tsingtaopad.db.dao.MitValterMDao;
 import et.tsingtaopad.db.dao.MitVisitMDao;
 import et.tsingtaopad.db.dao.MstAgencysupplyInfoDao;
 import et.tsingtaopad.db.dao.MstTerminalinfoMDao;
 import et.tsingtaopad.db.dao.MstVisitMDao;
 import et.tsingtaopad.db.dao.MstVisitMTempDao;
+import et.tsingtaopad.db.table.MitRepairM;
+import et.tsingtaopad.db.table.MitRepaircheckM;
+import et.tsingtaopad.db.table.MitRepairterM;
 import et.tsingtaopad.db.table.MitValcheckterM;
 import et.tsingtaopad.db.table.MitValterM;
 import et.tsingtaopad.db.table.MitVisitM;
@@ -49,7 +56,9 @@ import et.tsingtaopad.db.table.MstVisitMTemp;
 import et.tsingtaopad.db.table.MstVistproductInfo;
 import et.tsingtaopad.db.table.MstVistproductInfoTemp;
 import et.tsingtaopad.db.table.PadCheckaccomplishInfo;
+import et.tsingtaopad.dd.dddealplan.make.domain.DealPlanMakeStc;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
+import et.tsingtaopad.initconstvalues.domain.KvStc;
 import et.tsingtaopad.main.visit.shopvisit.term.domain.MstTermListMStc;
 
 
@@ -486,4 +495,123 @@ public class XtTermSelectService {
         return list;
     }
 
+
+    public List<MitRepairterM> queryDealSelectTerminal(String id) {
+        AndroidDatabaseConnection connection = null;
+        List<MitRepairterM> valueLst = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MitRepairterM, String> valueDao = helper.getMitRepairterMDao();
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+
+            QueryBuilder<MitRepairterM, String> valueQb = valueDao.queryBuilder();
+            Where<MitRepairterM, String> valueWr = valueQb.where();
+            valueWr.eq("repairid", id);
+            valueLst = valueQb.query();
+            connection.commit(null);
+        } catch (Exception e) {
+            Log.e(TAG, "获取整顿计划选择终端出错1", e);
+            try {
+                connection.rollback(null);
+                // ViewUtil.sendMsg(context, R.string.agencyvisit_msg_failsave);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+        return valueLst;
+    }
+
+    public void saveMitRepairterM(MitRepairM repairM,String gridkey, List<XtTermSelectMStc> selectedList) {
+        String id = repairM.getId();// 整顿计划主表主键
+        MitRepairterM mitRepairterM;
+
+        AndroidDatabaseConnection connection = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MitRepairterM, String> proDao = helper.getDao(MitRepairterM.class);
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+            // 先根据主键 删除数据,  整改计划终端表
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("delete from MIT_REPAIRTER_M ");
+            buffer.append("where repairid = ? ");
+            proDao.executeRaw(buffer.toString(), new String[] {id});
+
+            // 再重新插入
+            for (XtTermSelectMStc term : selectedList) {
+                mitRepairterM = new MitRepairterM();
+                mitRepairterM.setId(FunUtil.getUUID());
+                mitRepairterM.setRepairid(id);
+                mitRepairterM.setGridkey(gridkey);//
+                mitRepairterM.setRoutekey(term.getRoutekey());//
+                mitRepairterM.setTerminalkey(term.getTerminalkey());//
+                mitRepairterM.setUploadflag("1");//
+                mitRepairterM.setPadisconsistent("0");//
+                proDao.createOrUpdate(mitRepairterM);
+            }
+
+            connection.commit(null);
+        } catch (Exception e) {
+            DbtLog.logUtils(TAG,"解除整顿计划选择终端失败");
+            DbtLog.logUtils(TAG,e.getMessage());
+            e.printStackTrace();
+            Log.e(TAG, "保存整顿计划选择终端数据发生异常", e);
+            try {
+                connection.rollback(null);
+            } catch (SQLException e1) {
+                Log.e(TAG, "回滚整顿计划选择终端数据发生异常", e1);
+            }
+        }
+    }
+
+    public List<DealPlanMakeStc> getSelectTerminal(String repairMId) {
+        AndroidDatabaseConnection connection = null;
+        List<DealPlanMakeStc> valueLst = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            MitRepairterMDao valueDao = helper.getDao(MitRepairterM.class);
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+            valueLst = valueDao.querySelectTerminal(helper,repairMId);
+            connection.commit(null);
+        } catch (Exception e) {
+            Log.e(TAG, "获取整顿计划选择终端出错2", e);
+            try {
+                connection.rollback(null);
+                // ViewUtil.sendMsg(context, R.string.agencyvisit_msg_failsave);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
+        return valueLst;
+    }
+
+    public void saveMitRepairM(MitRepairM repairM, MitRepaircheckM mitRepaircheckM) {
+        AndroidDatabaseConnection connection = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MitRepairM, String> mitRepairMDao = helper.getDao(MitRepairM.class);
+            Dao<MitRepaircheckM, String> mitRepaircheckMDao = helper.getDao(MitRepaircheckM.class);
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+            mitRepairMDao.createOrUpdate(repairM);
+            mitRepaircheckMDao.createOrUpdate(mitRepaircheckM);
+
+            connection.commit(null);
+        } catch (Exception e) {
+            DbtLog.logUtils(TAG,e.getMessage());
+            e.printStackTrace();
+            Log.e(TAG, "保存整顿计划主表发生异常", e);
+            try {
+                connection.rollback(null);
+            } catch (SQLException e1) {
+                Log.e(TAG, "回滚整顿计划主表发生异常", e1);
+            }
+        }
+    }
 }

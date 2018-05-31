@@ -398,6 +398,26 @@ public class FunUtil {
     }
 
     /**
+     * 将字符串集合 转成字符串以逗号隔开
+     * @param list
+     * @return
+     */
+    public static String  listToString(List<String> list){
+        String listToString="";
+        if (!list.isEmpty()){
+            /* 输出list值 */
+            for (int i=0;i<list.size();i++) {
+                //listToString+="'"+list.get(i)+"'";
+                listToString+=list.get(i);
+                if(i!=list.size()-1){
+                    listToString+=",";
+                }
+            }
+        }
+        return listToString;
+    }
+
+    /**
      * 将字符串转为数字
      *
      * @param strValue 原值
