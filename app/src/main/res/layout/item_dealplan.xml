@@ -29,7 +29,7 @@
 
             <ImageView
                 style="@style/xtbf_sayhi_third_tv"
-                android:visibility="visible"/>
+                />
         </RelativeLayout>
 
         <View
@@ -204,7 +204,44 @@
 
             <ImageView
                 style="@style/xtbf_sayhi_third_tv"
-                android:visibility="visible"/>
+                />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray"/>
+        <!-- 复查结果： -->
+        <RelativeLayout
+            android:id="@+id/item_dealplan_rl_checkstatus"
+            style="@style/xtbf_sayhi_rl">
+
+            <TextView
+                android:id="@+id/tv09"
+                style="@style/xtbf_sayhi_one_tv"
+                android:text="复查结果"/>
+
+            <TextView
+                android:id="@+id/item_dealplan_checkstatus"
+                style="@style/zgjh_dealmake_con"
+                android:layout_toRightOf="@id/tv09"
+                android:hint="复查结果"
+                />
+
+            <TextView
+                android:id="@+id/item_dealplan_operation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="35dp"
+                android:text="复查"
+                android:textColor="@color/green"
+                android:textSize="@dimen/font_size4"/>
+
+            <ImageView
+                style="@style/xtbf_sayhi_third_tv"
+                />
         </RelativeLayout>
 
     </LinearLayout>

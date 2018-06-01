@@ -10,7 +10,8 @@ import java.io.Serializable;
  */
 public class DealStc implements Serializable{
 
-	private String id;//
+	private String repairid;// 整顿计划主表主键
+	private String repaircheckid;//  整改计划审核表  主键
 	private String content;//
 	private String repairremark;//
 	private String checkcontent;//
@@ -27,12 +28,20 @@ public class DealStc implements Serializable{
 	public DealStc() {
 	}
 
-	public String getId() {
-		return id;
+	public String getRepairid() {
+		return repairid;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setRepairid(String repairid) {
+		this.repairid = repairid;
+	}
+
+	public String getRepaircheckid() {
+		return repaircheckid;
+	}
+
+	public void setRepaircheckid(String repaircheckid) {
+		this.repaircheckid = repaircheckid;
 	}
 
 	public String getContent() {

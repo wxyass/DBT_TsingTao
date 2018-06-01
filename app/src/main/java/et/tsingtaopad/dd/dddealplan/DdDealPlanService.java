@@ -29,6 +29,7 @@ import et.tsingtaopad.db.table.MitRepairterM;
 import et.tsingtaopad.db.table.MitValcheckterM;
 import et.tsingtaopad.db.table.MitValterM;
 import et.tsingtaopad.db.table.MitVisitM;
+import et.tsingtaopad.db.table.MstCheckexerecordInfoTemp;
 import et.tsingtaopad.db.table.MstGridM;
 import et.tsingtaopad.db.table.MstMarketareaM;
 import et.tsingtaopad.db.table.MstRouteM;
@@ -75,4 +76,29 @@ public class DdDealPlanService {
         return valueLst;
     }
 
+    // 设置整改计划审核表
+    public void setStatus(String repaircheckid, String status) {
+
+        AndroidDatabaseConnection connection = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MitRepaircheckM, String> indexValueDao = helper.getMitRepaircheckMDao();
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("update MIT_REPAIRCHECK_M set status = "+status+" where id = '"+repaircheckid+"'   ");
+
+            indexValueDao.executeRaw(buffer.toString());
+
+            connection.commit(null);
+        } catch (Exception e) {
+            Log.e(TAG, "设置整改计划审核表", e);
+            try {
+                connection.rollback(null);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
 }

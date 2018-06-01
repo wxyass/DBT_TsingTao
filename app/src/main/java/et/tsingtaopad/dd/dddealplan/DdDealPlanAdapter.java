@@ -74,6 +74,10 @@ public class DdDealPlanAdapter extends BaseAdapter {
             holder.measure = (TextView) convertView.findViewById(R.id.item_dealplan_measure);
             holder.checktime = (TextView) convertView.findViewById(R.id.item_dealplan_checktime);
 
+            holder.checkstatusRl = (RelativeLayout) convertView.findViewById(R.id.item_dealplan_rl_checkstatus);
+            holder.checkstatus = (TextView) convertView.findViewById(R.id.item_dealplan_checkstatus);
+            holder.operation = (TextView) convertView.findViewById(R.id.item_dealplan_operation);
+
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -82,12 +86,26 @@ public class DdDealPlanAdapter extends BaseAdapter {
         final DealStc item = dataLst.get(position);
 
         holder.termname.setText(item.getTerminalname());
-        holder.grid .setText(item.getGridname());
-        holder.ydname .setText(item.getUsername());
+        holder.grid.setText(item.getGridname());
+        holder.ydname.setText(item.getUsername());
         holder.question.setText(item.getContent());
-        holder.amendplan .setText(item.getRepairremark());
-        holder.measure .setText(item.getCheckcontent());
+        holder.amendplan.setText(item.getRepairremark());
+        holder.measure.setText(item.getCheckcontent());
         holder.checktime.setText(item.getRepairtime());
+
+        if ("1".equals(item.getStatus())) {
+            holder.checkstatus.setText("未通过");
+            holder.operation.setText("修改计划");
+        } else if ("2".equals(item.getStatus())) {
+            holder.checkstatus.setText("已通过");
+            holder.operation.setText("已通过");
+        } else {
+            holder.checkstatus.setText("未复查");
+            holder.operation.setText("复查");
+        }
+
+        holder.checkstatusRl.setTag(position);
+        holder.checkstatusRl.setOnClickListener(listener);
 
         return convertView;
     }
@@ -100,6 +118,9 @@ public class DdDealPlanAdapter extends BaseAdapter {
         private TextView amendplan;
         private TextView measure;
         private TextView checktime;
+        private RelativeLayout checkstatusRl;
+        private TextView checkstatus;
+        private TextView operation;
 
     }
 

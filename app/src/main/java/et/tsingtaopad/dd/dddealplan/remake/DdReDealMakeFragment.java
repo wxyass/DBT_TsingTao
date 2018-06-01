@@ -1,4 +1,4 @@
-package et.tsingtaopad.dd.dddealplan.make;
+package et.tsingtaopad.dd.dddealplan.remake;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,21 +25,21 @@ import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
-import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.db.table.MitRepairM;
 import et.tsingtaopad.db.table.MitRepaircheckM;
 import et.tsingtaopad.db.table.MitRepairterM;
+import et.tsingtaopad.dd.dddealplan.domain.DealStc;
+import et.tsingtaopad.dd.dddealplan.make.DdDealSelectFragment;
 import et.tsingtaopad.dd.dddealplan.make.domain.DealPlanMakeStc;
 import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectService;
-import et.tsingtaopad.initconstvalues.domain.KvStc;
 
 /**
  * Created by yangwenmin on 2018/3/12.
  */
 
-public class DdDealMakeFragment extends BaseFragmentSupport implements View.OnClickListener {
+public class DdReDealMakeFragment extends BaseFragmentSupport implements View.OnClickListener {
 
     private final String TAG = "DdDealPlanFragment";
 
@@ -71,20 +72,23 @@ public class DdDealMakeFragment extends BaseFragmentSupport implements View.OnCl
     private EditText amendplan;
     private RelativeLayout rl_measure;
     private EditText measure;
+    private ListView lv_altime;
     private RelativeLayout rl_checktime;
     private TextView checktime;
     private Button submit;
 
-    private MitRepairM repairM;
+    private DealStc dealStc;
 
     private XtTermSelectService xtSelectService;
 
     private List<MitRepairterM> mitRepairterMSelects;
 
+    private DdCheckTimeAdapter checkTimeAdapter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_dd_dealmake, container, false);
+        View view = inflater.inflate(R.layout.fragment_dd_redealmake, container, false);
         initView(view);
         return view;
     }
@@ -100,30 +104,32 @@ public class DdDealMakeFragment extends BaseFragmentSupport implements View.OnCl
         //confirmBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
 
-        rl_termname = (RelativeLayout) view.findViewById(R.id.zgjh_make_rl_termname);
-        termname = (TextView) view.findViewById(R.id.zgjh_make_termname);
+        rl_termname = (RelativeLayout) view.findViewById(R.id.zgjh_remake_rl_termname);
+        termname = (TextView) view.findViewById(R.id.zgjh_remake_termname);
 
-        rl_grid = (RelativeLayout) view.findViewById(R.id.zgjh_make_rl_grid);
-        grid = (TextView) view.findViewById(R.id.zgjh_make_grid);
+        rl_grid = (RelativeLayout) view.findViewById(R.id.zgjh_remake_rl_grid);
+        grid = (TextView) view.findViewById(R.id.zgjh_remake_grid);
 
-        rl_ydname = (RelativeLayout) view.findViewById(R.id.zgjh_make_rl_ydname);
-        ydname = (TextView) view.findViewById(R.id.zgjh_make_ydname);
+        rl_ydname = (RelativeLayout) view.findViewById(R.id.zgjh_remake_rl_ydname);
+        ydname = (TextView) view.findViewById(R.id.zgjh_remake_ydname);
 
-        rl_question = (RelativeLayout) view.findViewById(R.id.zgjh_make_rl_question);
-        question = (EditText) view.findViewById(R.id.zgjh_make_question);
+        rl_question = (RelativeLayout) view.findViewById(R.id.zgjh_remake_rl_question);
+        question = (EditText) view.findViewById(R.id.zgjh_remake_question);
 
-        rl_amendplan = (RelativeLayout) view.findViewById(R.id.zgjh_make_rl_amendplan);
-        amendplan = (EditText) view.findViewById(R.id.zgjh_make_amendplan);
+        rl_amendplan = (RelativeLayout) view.findViewById(R.id.zgjh_remake_rl_amendplan);
+        amendplan = (EditText) view.findViewById(R.id.zgjh_remake_amendplan);
 
-        rl_measure = (RelativeLayout) view.findViewById(R.id.zgjh_make_rl_measure);
-        measure = (EditText) view.findViewById(R.id.zgjh_make_measure);
+        rl_measure = (RelativeLayout) view.findViewById(R.id.zgjh_remake_rl_measure);
+        measure = (EditText) view.findViewById(R.id.zgjh_remake_measure);
 
-        rl_checktime = (RelativeLayout) view.findViewById(R.id.zgjh_make_rl_checktime);
-        checktime = (TextView) view.findViewById(R.id.zgjh_make_checktime);
+        lv_altime = (ListView) view.findViewById(R.id.zgjh_remake_lv_altime);
 
-        submit = (Button) view.findViewById(R.id.zgjh_make_submit);
+        rl_checktime = (RelativeLayout) view.findViewById(R.id.zgjh_remake_rl_checktime);
+        checktime = (TextView) view.findViewById(R.id.zgjh_remake_checktime);
 
-        rl_termname.setOnClickListener(this);
+        submit = (Button) view.findViewById(R.id.zgjh_remake_submit);
+
+        // rl_termname.setOnClickListener(this);
         rl_checktime.setOnClickListener(this);
         submit.setOnClickListener(this);
 
@@ -146,10 +152,28 @@ public class DdDealMakeFragment extends BaseFragmentSupport implements View.OnCl
 
         xtSelectService = new XtTermSelectService(getActivity());
 
-        // 整顿计划 主表
-        repairM = new MitRepairM();
-        repairM.setId(FunUtil.getUUID());
+        // 获取传递过来的数据
+        Bundle bundle = getArguments();
+        dealStc = (DealStc) bundle.getSerializable("repairM");// 整顿计划主表
 
+        initData();
+
+    }
+
+    private void initData() {
+
+        termname.setText(dealStc.getTerminalname());// = (TextView) view.findViewById(R.id.zgjh_remake_termname);
+        grid .setText(dealStc.getGridname());// = (TextView) view.findViewById(R.id.zgjh_remake_termname);
+        ydname .setText(dealStc.getUsername());// = (TextView) view.findViewById(R.id.zgjh_remake_termname);
+        question .setText(dealStc.getContent());// = (TextView) view.findViewById(R.id.zgjh_remake_termname);
+        amendplan .setText(dealStc.getRepairremark());// = (TextView) view.findViewById(R.id.zgjh_remake_termname);
+        measure.setText(dealStc.getCheckcontent());// = (TextView) view.findViewById(R.id.zgjh_remake_termname);
+
+        //checktime .setText();// = (TextView) view.findViewById(R.id.zgjh_remake_termname);
+
+
+        checkTimeAdapter = new DdCheckTimeAdapter(getActivity(), null, null);
+        lv_altime.setAdapter(checkTimeAdapter);
     }
 
     private String selectDate;
@@ -167,12 +191,12 @@ public class DdDealMakeFragment extends BaseFragmentSupport implements View.OnCl
                 Toast.makeText(getActivity(), "弹出日历", Toast.LENGTH_SHORT).show();
 
                 break;
-            case R.id.zgjh_make_rl_termname:// 选择终端
+            case R.id.zgjh_remake_rl_termname:// 选择终端
 
-                toDdDealSelectFragment();
+                // toDdDealSelectFragment();
 
                 break;
-            case R.id.zgjh_make_rl_checktime:// 选择核查时间
+            case R.id.zgjh_remake_rl_checktime:// 选择核查时间
 
                 Toast.makeText(getActivity(), "选择核查时间", Toast.LENGTH_SHORT).show();
                 DatePickerDialog dateDialog = new DatePickerDialog(v.getContext(), new DatePickerDialog.OnDateSetListener() {
@@ -200,7 +224,7 @@ public class DdDealMakeFragment extends BaseFragmentSupport implements View.OnCl
                 }
 
                 break;
-            case R.id.zgjh_make_submit:// 保存数据
+            case R.id.zgjh_remake_submit:// 保存数据
 
                 saveValue();
 
@@ -213,26 +237,26 @@ public class DdDealMakeFragment extends BaseFragmentSupport implements View.OnCl
 
     // 跳转到  选择终端
     private void toDdDealSelectFragment() {
-        Bundle bundle = new Bundle();
+        /*Bundle bundle = new Bundle();
         bundle.putSerializable("repairM", repairM);
-        /*bundle.putSerializable("weekplan", mitPlanweekM);
+        *//*bundle.putSerializable("weekplan", mitPlanweekM);
         bundle.putSerializable("weekDateStart", weekDateStart);
-        bundle.putSerializable("weekDateEnd", weekDateEnd);*/
+        bundle.putSerializable("weekDateEnd", weekDateEnd);*//*
         DdDealSelectFragment ddDealSelectFragment = new DdDealSelectFragment(handler);
         ddDealSelectFragment.setArguments(bundle);
         // 跳转 新增整改计划
-        addHomeFragment(ddDealSelectFragment, "dddealselectfragment");
+        addHomeFragment(ddDealSelectFragment, "dddealselectfragment");*/
     }
 
     // 保存数据
     private void saveValue() {
 
-        if(!checkTermName()){
+        if (!checkTermName()) {
 
             return;
         }
 
-        String grid_tag = grid.getTag().toString();
+        /*String grid_tag = grid.getTag().toString();
 
         String ydname_tag = ydname.getTag().toString();
 
@@ -255,18 +279,20 @@ public class DdDealMakeFragment extends BaseFragmentSupport implements View.OnCl
         repairM.setUpdateuser(PrefUtils.getString(getActivity(), "userid", ""));//更新人
         repairM.setUpdatedate(new Date());//更新时间
         repairM.setUploadflag("1");
-        repairM.setPadisconsistent("0");
+        repairM.setPadisconsistent("0");*/
+
+        String checktime_string = checktime.getText().toString();
 
         MitRepaircheckM mitRepaircheckM = new MitRepaircheckM();
         mitRepaircheckM.setId(FunUtil.getUUID());//
-        mitRepaircheckM.setRepairid(repairM.getId());//整改计划主表ID
+        mitRepaircheckM.setRepairid(dealStc.getRepairid());//整改计划主表ID
         mitRepaircheckM.setStatus("0");//整改状态
         mitRepaircheckM.setRepairtime(checktime_string);//整改日期
         mitRepaircheckM.setUploadflag("1");
         mitRepaircheckM.setPadisconsistent("0");
 
         // 保存到库中
-        xtSelectService.saveMitRepairM(repairM, mitRepaircheckM);
+        // xtSelectService.saveMitRepairM(repairM, mitRepaircheckM);
 
         // 上传
 
@@ -277,12 +303,12 @@ public class DdDealMakeFragment extends BaseFragmentSupport implements View.OnCl
 
     private boolean checkTermName() {
         boolean ishaveName = true;
-        if(TextUtils.isEmpty(termname.getText().toString())){
+        if (TextUtils.isEmpty(termname.getText().toString())) {
             ishaveName = false;
-            Toast.makeText(getActivity(),"请选择整改终端",Toast.LENGTH_SHORT).show();
-        }else if(TextUtils.isEmpty(checktime.getText().toString())){
+            Toast.makeText(getActivity(), "请选择整改终端", Toast.LENGTH_SHORT).show();
+        } else if (TextUtils.isEmpty(checktime.getText().toString())) {
             ishaveName = false;
-            Toast.makeText(getActivity(),"请选择复查时间",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "请选择复查时间", Toast.LENGTH_SHORT).show();
         }
         return ishaveName;
     }
@@ -296,15 +322,15 @@ public class DdDealMakeFragment extends BaseFragmentSupport implements View.OnCl
     public static class MyHandler extends Handler {
 
         // 软引用
-        SoftReference<DdDealMakeFragment> fragmentRef;
+        SoftReference<DdReDealMakeFragment> fragmentRef;
 
-        public MyHandler(DdDealMakeFragment fragment) {
-            fragmentRef = new SoftReference<DdDealMakeFragment>(fragment);
+        public MyHandler(DdReDealMakeFragment fragment) {
+            fragmentRef = new SoftReference<DdReDealMakeFragment>(fragment);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            DdDealMakeFragment fragment = fragmentRef.get();
+            DdReDealMakeFragment fragment = fragmentRef.get();
             if (fragment == null) {
                 return;
             }
@@ -333,14 +359,14 @@ public class DdDealMakeFragment extends BaseFragmentSupport implements View.OnCl
     // 刷新终端名称
     private void refreshTermname() {
         // 查询已选择的终端
-        List<DealPlanMakeStc> valueLst = xtSelectService.getSelectTerminal(repairM.getId());
+        List<DealPlanMakeStc> valueLst = xtSelectService.getSelectTerminal(dealStc.getRepairid());
         if (valueLst.size() > 0) {
             String terminalName = listToString(valueLst);
             termname.setText(terminalName);
-            grid.setText(FunUtil.isBlankOrNullTo(valueLst.get(0).getGridname(),""));
-            grid.setTag(FunUtil.isBlankOrNullTo(valueLst.get(0).getGridkey(),""));
-            ydname.setText(FunUtil.isBlankOrNullTo(valueLst.get(0).getUsername(),""));
-            ydname.setTag(FunUtil.isBlankOrNullTo(valueLst.get(0).getUserkey(),""));
+            grid.setText(FunUtil.isBlankOrNullTo(valueLst.get(0).getGridname(), ""));
+            grid.setTag(FunUtil.isBlankOrNullTo(valueLst.get(0).getGridkey(), ""));
+            ydname.setText(FunUtil.isBlankOrNullTo(valueLst.get(0).getUsername(), ""));
+            ydname.setTag(FunUtil.isBlankOrNullTo(valueLst.get(0).getUserkey(), ""));
         }
     }
 
