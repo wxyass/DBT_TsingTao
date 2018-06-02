@@ -1,5 +1,6 @@
 package et.tsingtaopad.dd.dddealplan.make;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,8 +31,10 @@ import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.db.table.MitRepairM;
 import et.tsingtaopad.db.table.MitRepaircheckM;
 import et.tsingtaopad.db.table.MitRepairterM;
+import et.tsingtaopad.dd.dddealplan.DdDealPlanFragment;
 import et.tsingtaopad.dd.dddealplan.make.domain.DealPlanMakeStc;
 import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectService;
+import et.tsingtaopad.dd.ddxt.updata.XtUploadService;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
 
 /**
@@ -80,6 +83,15 @@ public class DdDealMakeFragment extends BaseFragmentSupport implements View.OnCl
     private XtTermSelectService xtSelectService;
 
     private List<MitRepairterM> mitRepairterMSelects;
+    private DdDealPlanFragment.MyHandler dealplanhandler;
+
+    public DdDealMakeFragment() {
+    }
+
+    @SuppressLint("ValidFragment")
+    public DdDealMakeFragment(DdDealPlanFragment.MyHandler DealPlanhandler) {
+        this.dealplanhandler =DealPlanhandler;
+    }
 
     @Nullable
     @Override
@@ -268,11 +280,16 @@ public class DdDealMakeFragment extends BaseFragmentSupport implements View.OnCl
         // 保存到库中
         xtSelectService.saveMitRepairM(repairM, mitRepaircheckM);
 
-        // 上传
+
+        // 上传整顿计划
+        XtUploadService xtUploadService = new XtUploadService(getActivity(),null);
+        xtUploadService.upload_repair(false,repairM,mitRepaircheckM,1);
 
 
         Toast.makeText(getActivity(), "整顿计划保存成功", Toast.LENGTH_SHORT).show();
         supportFragmentManager.popBackStack();
+        // 发送新增成功的信息
+        dealplanhandler.sendEmptyMessage(DdDealPlanFragment.DEALPLAN_UP_SUC);
     }
 
     private boolean checkTermName() {
@@ -313,9 +330,9 @@ public class DdDealMakeFragment extends BaseFragmentSupport implements View.OnCl
                 case MAKEPLAN_UP_SUC://
                     fragment.shuaxinDdDealMakeFragment(1);
                     break;
-                case MAKEPLAN_UP_FAIL://
+                /*case MAKEPLAN_UP_FAIL://
                     fragment.shuaxinDdDealMakeFragment(2);
-                    break;
+                    break;*/
 
             }
         }

@@ -77,7 +77,14 @@ public class DdCheckTimeAdapter extends BaseAdapter {
 
 
         holder.checktime.setText(item.getRepairtime());
-        holder.measure .setText(item.getStatus());
+
+        if ("1".equals(item.getStatus())) {
+            holder.measure.setText("未通过");
+        } else if ("2".equals(item.getStatus())) {
+            holder.measure.setText("已通过");
+        } else {
+            holder.measure.setText("未复查");
+        }
 
         return convertView;
     }

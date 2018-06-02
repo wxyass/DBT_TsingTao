@@ -20,7 +20,7 @@ import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
 
 public class ZhenshiFragment extends XtBaseVisitFragment implements View.OnClickListener {
 
-    private final String TAG = "ZsFeesFragment";
+    private final String TAG = "ZsAgreeFragment";
 
     MyHandler handler;
 

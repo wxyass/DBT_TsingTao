@@ -12,6 +12,7 @@ public class DealStc implements Serializable{
 
 	private String repairid;// 整顿计划主表主键
 	private String repaircheckid;//  整改计划审核表  主键
+	private String repairterid;//  整改计划终端表  主键
 	private String content;//
 	private String repairremark;//
 	private String checkcontent;//
@@ -130,5 +131,13 @@ public class DealStc implements Serializable{
 
 	public void setTerminalname(String terminalname) {
 		this.terminalname = terminalname;
+	}
+
+	public String getRepairterid() {
+		return repairterid;
+	}
+
+	public void setRepairterid(String repairterid) {
+		this.repairterid = repairterid;
 	}
 }

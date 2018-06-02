@@ -1888,6 +1888,8 @@ public class XtShopCopyService {
                 mitValterM.setId(valterMTemp.getId());// 追溯主键
                 mitValterM.setTerminalkey(valterMTemp.getTerminalkey());// 终端KEY
                 mitValterM.setVisitdate(valterMTemp.getVisitdate());
+                mitValterM.setVidstartdate(valterMTemp.getVidstartdate());////拜访开始时间
+                mitValterM.setVidenddate(DateUtil.formatDate(new Date(), "yyyyMMddHHmmss"));// //拜访结束时间
                 mitValterM.setVidter(valterMTemp.getVidter());// 是否有效终端原值
                 mitValterM.setVidterflag(valterMTemp.getVidterflag());// 是否有效终端正确与否
                 mitValterM.setVidterremaek(valterMTemp.getVidterremaek());// 是否有效终端错误备注内容

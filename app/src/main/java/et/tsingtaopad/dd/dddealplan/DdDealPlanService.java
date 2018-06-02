@@ -58,12 +58,19 @@ public class DdDealPlanService {
     public List<DealStc> getDealPlanTerminal() {
         AndroidDatabaseConnection connection = null;
         List<DealStc> valueLst = null;
+        List<DealStc> termNameLst = null;
         try {
             DatabaseHelper helper = DatabaseHelper.getHelper(context);
             MitRepairterMDao valueDao = helper.getDao(MitRepairterM.class);
             connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
             connection.setAutoCommit(false);
-            valueLst = valueDao.queryDealPan(helper);
+            valueLst = valueDao.queryDealPan(helper);//
+
+            for (DealStc dealStc : valueLst){
+                termNameLst = valueDao.queryDealPlanTermName(helper,dealStc.getRepairid());//
+                dealStc.setTerminalname(listToString(termNameLst));
+            }
+
             connection.commit(null);
         } catch (Exception e) {
             Log.e(TAG, "获取整顿计划选择终端出错3", e);
@@ -73,7 +80,32 @@ public class DdDealPlanService {
                 e1.printStackTrace();
             }
         }
+
+
+
+
         return valueLst;
+    }
+
+    /**
+     * 将集合 转成字符串以逗号隔开
+     *
+     * @param list
+     * @return
+     */
+    public static String listToString(List<DealStc> list) {
+        String listToString = "";
+        if (!list.isEmpty()) {
+            /* 输出list值 */
+            for (int i = 0; i < list.size(); i++) {
+                //listToString+="'"+list.get(i)+"'";
+                listToString += list.get(i).getTerminalname();
+                if (i != list.size() - 1) {
+                    listToString += ",";
+                }
+            }
+        }
+        return listToString;
     }
 
     // 设置整改计划审核表
@@ -87,7 +119,7 @@ public class DdDealPlanService {
             connection.setAutoCommit(false);
 
             StringBuffer buffer = new StringBuffer();
-            buffer.append("update MIT_REPAIRCHECK_M set status = "+status+" where id = '"+repaircheckid+"'   ");
+            buffer.append("update MIT_REPAIRCHECK_M set status = "+status+" ,uploadflag = 1  , padisconsistent = 0 where id = '"+repaircheckid+"'   ");
 
             indexValueDao.executeRaw(buffer.toString());
 

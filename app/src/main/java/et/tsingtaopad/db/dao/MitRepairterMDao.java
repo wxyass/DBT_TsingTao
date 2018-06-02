@@ -11,6 +11,7 @@ import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.db.table.MitRepairterM;
 import et.tsingtaopad.dd.dddealplan.domain.DealStc;
 import et.tsingtaopad.dd.dddealplan.make.domain.DealPlanMakeStc;
+import et.tsingtaopad.dd.dddealplan.remake.domain.ReCheckTimeStc;
 
 /**
  * Created by yangwenmin on 2017/12/12.
@@ -27,4 +28,8 @@ public interface MitRepairterMDao extends Dao<MitRepairterM, String> {
     public List<DealPlanMakeStc> querySelectTerminal(DatabaseHelper helper, String repairid);
 
     public List<DealStc> queryDealPan(DatabaseHelper helper);
+
+    public List<ReCheckTimeStc> queryDealPlanStatus(DatabaseHelper helper, String repairid);
+
+    public List<DealStc> queryDealPlanTermName(DatabaseHelper helper,String repairid);
 }

@@ -230,6 +230,13 @@ public class MitValterM implements java.io.Serializable {
     @DatabaseField
     private String vidcmptreatyremark;//终端合作状态竞品备注内容
 
+    @DatabaseField
+    private String vidstartdate ;//拜访开始时间
+    @DatabaseField
+    private String videnddate;//拜访结束时间
+    @DatabaseField
+    private String uploaddate;//服务器上传时间
+
     // Constructors
 
     /**
@@ -1155,5 +1162,29 @@ public class MitValterM implements java.io.Serializable {
 
     public void setVidselftreatyremark(String vidselftreatyremark) {
         this.vidselftreatyremark = vidselftreatyremark;
+    }
+
+    public String getVidstartdate() {
+        return vidstartdate;
+    }
+
+    public void setVidstartdate(String vidstartdate) {
+        this.vidstartdate = vidstartdate;
+    }
+
+    public String getVidenddate() {
+        return videnddate;
+    }
+
+    public void setVidenddate(String videnddate) {
+        this.videnddate = videnddate;
+    }
+
+    public String getUploaddate() {
+        return uploaddate;
+    }
+
+    public void setUploaddate(String uploaddate) {
+        this.uploaddate = uploaddate;
     }
 }

@@ -33,7 +33,9 @@ import et.tsingtaopad.db.table.MitRepairterM;
 import et.tsingtaopad.dd.dddealplan.domain.DealStc;
 import et.tsingtaopad.dd.dddealplan.make.DdDealSelectFragment;
 import et.tsingtaopad.dd.dddealplan.make.domain.DealPlanMakeStc;
+import et.tsingtaopad.dd.dddealplan.remake.domain.ReCheckTimeStc;
 import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectService;
+import et.tsingtaopad.dd.ddxt.updata.XtUploadService;
 
 /**
  * Created by yangwenmin on 2018/3/12.
@@ -154,7 +156,7 @@ public class DdReDealMakeFragment extends BaseFragmentSupport implements View.On
 
         // 获取传递过来的数据
         Bundle bundle = getArguments();
-        dealStc = (DealStc) bundle.getSerializable("repairM");// 整顿计划主表
+        dealStc = (DealStc) bundle.getSerializable("DealStc");// 整顿计划主表
 
         initData();
 
@@ -163,16 +165,18 @@ public class DdReDealMakeFragment extends BaseFragmentSupport implements View.On
     private void initData() {
 
         termname.setText(dealStc.getTerminalname());// = (TextView) view.findViewById(R.id.zgjh_remake_termname);
-        grid .setText(dealStc.getGridname());// = (TextView) view.findViewById(R.id.zgjh_remake_termname);
-        ydname .setText(dealStc.getUsername());// = (TextView) view.findViewById(R.id.zgjh_remake_termname);
-        question .setText(dealStc.getContent());// = (TextView) view.findViewById(R.id.zgjh_remake_termname);
-        amendplan .setText(dealStc.getRepairremark());// = (TextView) view.findViewById(R.id.zgjh_remake_termname);
+        grid.setText(dealStc.getGridname());// = (TextView) view.findViewById(R.id.zgjh_remake_termname);
+        grid.setTag(dealStc.getGridkey());// = (TextView) view.findViewById(R.id.zgjh_remake_termname);
+        ydname.setText(dealStc.getUsername());// = (TextView) view.findViewById(R.id.zgjh_remake_termname);
+        ydname.setTag(dealStc.getUserid());// = (TextView) view.findViewById(R.id.zgjh_remake_termname);
+        question.setText(dealStc.getContent());// = (TextView) view.findViewById(R.id.zgjh_remake_termname);
+        amendplan.setText(dealStc.getRepairremark());// = (TextView) view.findViewById(R.id.zgjh_remake_termname);
         measure.setText(dealStc.getCheckcontent());// = (TextView) view.findViewById(R.id.zgjh_remake_termname);
 
-        //checktime .setText();// = (TextView) view.findViewById(R.id.zgjh_remake_termname);
+        // 根据整顿计划主键 查询整改计划审核表  MIT_REPAIRCHECK_M
+        List<ReCheckTimeStc> reCheckTimeStcs = xtSelectService.getDealPlanStatus(dealStc.getRepairid());
 
-
-        checkTimeAdapter = new DdCheckTimeAdapter(getActivity(), null, null);
+        checkTimeAdapter = new DdCheckTimeAdapter(getActivity(), reCheckTimeStcs, null);
         lv_altime.setAdapter(checkTimeAdapter);
     }
 
@@ -256,7 +260,7 @@ public class DdReDealMakeFragment extends BaseFragmentSupport implements View.On
             return;
         }
 
-        /*String grid_tag = grid.getTag().toString();
+        String grid_tag = grid.getTag().toString();
 
         String ydname_tag = ydname.getTag().toString();
 
@@ -268,6 +272,8 @@ public class DdReDealMakeFragment extends BaseFragmentSupport implements View.On
 
         String checktime_string = checktime.getText().toString();
 
+        MitRepairM repairM = new MitRepairM();
+        repairM.setId(dealStc.getRepairid());
         repairM.setGridkey(grid_tag);//定格
         repairM.setUserid(ydname_tag);// 业代ID
         repairM.setContent(question_string);//问题描述
@@ -275,13 +281,11 @@ public class DdReDealMakeFragment extends BaseFragmentSupport implements View.On
         repairM.setCheckcontent(measure_string);//考核措施
         repairM.setCreuser(PrefUtils.getString(getActivity(), "userid", ""));//追溯人
         repairM.setCreuserareaid(PrefUtils.getString(getActivity(), "departmentid", ""));//追溯人所属区域
-        repairM.setCredate(new Date());//创建日期
+        //repairM.setCredate(new Date());//创建日期
         repairM.setUpdateuser(PrefUtils.getString(getActivity(), "userid", ""));//更新人
         repairM.setUpdatedate(new Date());//更新时间
         repairM.setUploadflag("1");
-        repairM.setPadisconsistent("0");*/
-
-        String checktime_string = checktime.getText().toString();
+        repairM.setPadisconsistent("0");
 
         MitRepaircheckM mitRepaircheckM = new MitRepaircheckM();
         mitRepaircheckM.setId(FunUtil.getUUID());//
@@ -292,9 +296,12 @@ public class DdReDealMakeFragment extends BaseFragmentSupport implements View.On
         mitRepaircheckM.setPadisconsistent("0");
 
         // 保存到库中
-        // xtSelectService.saveMitRepairM(repairM, mitRepaircheckM);
+        xtSelectService.saveMitRepairM(repairM, mitRepaircheckM);
 
         // 上传
+        // 上传整顿计划
+        XtUploadService xtUploadService = new XtUploadService(getActivity(), null);
+        xtUploadService.upload_repair(false, repairM, mitRepaircheckM, 1);
 
 
         Toast.makeText(getActivity(), "整顿计划保存成功", Toast.LENGTH_SHORT).show();

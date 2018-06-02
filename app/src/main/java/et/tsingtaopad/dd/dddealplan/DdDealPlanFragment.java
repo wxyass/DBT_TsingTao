@@ -16,16 +16,21 @@ import android.widget.Toast;
 
 import java.io.Serializable;
 import java.lang.ref.SoftReference;
+import java.util.Date;
 import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.PrefUtils;
+import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.core.view.alertview.OnItemClickListener;
+import et.tsingtaopad.db.table.MitRepairM;
 import et.tsingtaopad.dd.dddealplan.domain.DealStc;
 import et.tsingtaopad.dd.dddealplan.make.DdDealMakeFragment;
 import et.tsingtaopad.dd.dddealplan.remake.DdReDealMakeFragment;
+import et.tsingtaopad.dd.ddxt.updata.XtUploadService;
 import et.tsingtaopad.dd.ddzs.zscheckindex.ZsCheckIndexFragment;
 import et.tsingtaopad.dd.ddzs.zscheckindex.ZsCheckPromoAmendFragment;
 import et.tsingtaopad.dd.ddzs.zsshopvisit.ZsVisitShopActivity;
@@ -49,8 +54,11 @@ public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnCl
 
     //
     public static final int DEALPLAN_UP_SUC = 3301;
+
     //
     public static final int DEALPLAN_UP_FAIL = 3302;
+
+    public static final int DEALPLAN_NEED_UP = 3303;
 
     private TextView tv_month;
     private Button bt_addplan;
@@ -91,7 +99,7 @@ public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnCl
         titleTv.setText("整改计划");
         handler = new MyHandler(this);
         ConstValues.handler = handler;
-        confirmTv.setText("日历");
+        confirmTv.setText("");
 
         ddDealPlanService = new DdDealPlanService(getActivity());
         initData();
@@ -108,7 +116,6 @@ public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnCl
                 DealStc stc = dataLst.get(position);
                 String status = stc.getStatus();
                 if ("1".equals(status)) {// 未通过
-
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("DealStc", stc);
                     /*bundle.putSerializable("weekplan", mitPlanweekM);
@@ -121,12 +128,13 @@ public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnCl
                 } else if ("2".equals(status)) {// 已通过
 
                 } else {
-                    alertShow6(position);// 弹窗
+                    alertShow6(position);// 弹窗: 未通过,已通过
                 }
 
             }
         });
         monthplan_lv.setAdapter(dealPlanAdapter);
+        ViewUtil.setListViewHeight(monthplan_lv);
 
     }
 
@@ -141,6 +149,7 @@ public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnCl
      * 参数7: 弹窗类型 (只有取消按钮)   √
      * 参数8: 条目点击监听  √
      */
+    DealStc stc ;
     public void alertShow6(final int posi) {
         new AlertView("请选择复查结果", null, "取消", new String[]{"未通过"},
                 new String[]{"已通过"},
@@ -149,13 +158,15 @@ public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnCl
                     @Override
                     public void onItemClick(Object o, int position) {
                         // Toast.makeText(getActivity(), "点击了第" + position + "个", Toast.LENGTH_SHORT).show();
-                        DealStc stc = dataLst.get(posi);
+                        stc = dataLst.get(posi);
                         String repaircheckid = stc.getRepaircheckid();
                         String status = stc.getStatus();
                         if (0 == position) {// 未通过
-                            ddDealPlanService.setStatus(repaircheckid, "1");
-                        } else {// 已通过
-                            ddDealPlanService.setStatus(repaircheckid, "2");
+                            ddDealPlanService.setStatus(repaircheckid, "1");// 并修改未未上传
+                            handler.sendEmptyMessage(DEALPLAN_NEED_UP);
+                        } else if(1 == position) {// 已通过
+                            ddDealPlanService.setStatus(repaircheckid, "2");// 并修改未未上传
+                            handler.sendEmptyMessage(DEALPLAN_NEED_UP);
                         }
 
                     }
@@ -172,16 +183,12 @@ public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnCl
                 supportFragmentManager.popBackStack();
                 break;
             case R.id.top_navigation_rl_confirm:// 确定
-
                 Toast.makeText(getActivity(), "弹出日历", Toast.LENGTH_SHORT).show();
-
                 break;
-            case R.id.zgjh_bt_addplan:// 确定
-
+            case R.id.zgjh_bt_addplan:// 新增整顿计划
+                // 跳转到  新增整改计划
                 toDdDealMakeFragment();
-
                 break;
-
 
             default:
                 break;
@@ -195,7 +202,7 @@ public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnCl
         bundle.putSerializable("weekplan", mitPlanweekM);
         bundle.putSerializable("weekDateStart", weekDateStart);
         bundle.putSerializable("weekDateEnd", weekDateEnd);*/
-        DdDealMakeFragment ddDealMakeFragment = new DdDealMakeFragment();
+        DdDealMakeFragment ddDealMakeFragment = new DdDealMakeFragment(handler);
         ddDealMakeFragment.setArguments(bundle);
         // 跳转 新增整改计划
         addHomeFragment(ddDealMakeFragment, "dddealmakefragment");
@@ -227,19 +234,46 @@ public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnCl
             // 处理UI 变化
             switch (msg.what) {
                 case DEALPLAN_UP_SUC://
-                    fragment.shuaxinXtTermSelect(1);
+                    fragment.shuaxinFragment(1);
                     break;
-                case DEALPLAN_UP_FAIL://
-                    fragment.shuaxinXtTermSelect(2);
+                case DEALPLAN_NEED_UP://
+                    fragment.upRepair(1);
                     break;
+                /*case DEALPLAN_UP_FAIL://
+                    fragment.shuaxinFragment(2);
+                    break;*/
 
             }
         }
     }
 
-    // 结束上传  刷新页面  0:确定上传  1上传成功  2上传失败
-    private void shuaxinXtTermSelect(int upType) {
+    // 上传未通过 或已通过
+    private void upRepair(int i) {
 
+        initData();
+        // 上传整顿计划
+        MitRepairM repairM = new MitRepairM();
+        repairM.setId(stc.getRepairid());
+        repairM.setGridkey(stc.getGridkey());//定格
+        repairM.setUserid(stc.getUserid());// 业代ID
+        repairM.setContent(stc.getContent());//问题描述
+        repairM.setRepairremark(stc.getRepairremark());//改进计划
+        repairM.setCheckcontent(stc.getCheckcontent());//考核措施
+        repairM.setCreuser(PrefUtils.getString(getActivity(), "userid", ""));//追溯人
+        repairM.setCreuserareaid(PrefUtils.getString(getActivity(), "departmentid", ""));//追溯人所属区域
+        //repairM.setCredate(new Date());//创建日期
+        repairM.setUpdateuser(PrefUtils.getString(getActivity(), "userid", ""));//更新人
+        repairM.setUpdatedate(new Date());//更新时间
+        repairM.setUploadflag("1");
+        repairM.setPadisconsistent("0");
+
+        XtUploadService xtUploadService = new XtUploadService(getActivity(), null);
+        xtUploadService.upload_repair(false, repairM, null, 1);
+    }
+
+    // 结束上传  刷新页面
+    private void shuaxinFragment(int upType) {
+        initData();
     }
 
 }

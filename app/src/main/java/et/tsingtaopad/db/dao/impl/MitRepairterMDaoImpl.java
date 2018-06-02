@@ -15,6 +15,7 @@ import et.tsingtaopad.db.dao.MitRepairterMDao;
 import et.tsingtaopad.db.table.MitRepairterM;
 import et.tsingtaopad.dd.dddealplan.domain.DealStc;
 import et.tsingtaopad.dd.dddealplan.make.domain.DealPlanMakeStc;
+import et.tsingtaopad.dd.dddealplan.remake.domain.ReCheckTimeStc;
 import et.tsingtaopad.dd.ddweekplan.domain.DayDetailStc;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
 
@@ -81,6 +82,52 @@ public class MitRepairterMDaoImpl extends BaseDaoImpl<MitRepairterM, String> imp
             kvStc.setGridname(cursor.getString(cursor.getColumnIndex("gridname")));
             kvStc.setUserid(cursor.getString(cursor.getColumnIndex("userid")));
             kvStc.setUsername(cursor.getString(cursor.getColumnIndex("username")));
+            kvStc.setStatus(cursor.getString(cursor.getColumnIndex("status")));
+            kvStc.setRepairtime(cursor.getString(cursor.getColumnIndex("repairtime")));
+            detailStcs.add(kvStc);
+        }
+        return detailStcs;
+    }
+
+    @Override
+    public List<DealStc> queryDealPlanTermName(DatabaseHelper helper,String repairid) {
+        List<DealStc> detailStcs = new ArrayList<>();
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append("select mv.id, i.terminalkey,i.terminalname   ");
+        buffer.append("        from MIT_REPAIR_M mv   ");
+        buffer.append("   left join MIT_REPAIRTER_M h on h.repairid = mv.id    ");
+        buffer.append("   left join MST_TERMINALINFO_M i on i.terminalkey = h.terminalkey    ");
+        buffer.append("    where h.repairid = ? ");
+
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor cursor = db.rawQuery(buffer.toString(), new String[]{repairid});
+        DealStc kvStc ;
+        while (cursor.moveToNext()) {
+            kvStc = new DealStc();
+            kvStc.setRepairid(cursor.getString(cursor.getColumnIndex("id")));
+            kvStc.setTerminalkey(cursor.getString(cursor.getColumnIndex("terminalkey")));
+            kvStc.setTerminalname(cursor.getString(cursor.getColumnIndex("terminalname")));
+            detailStcs.add(kvStc);
+        }
+        return detailStcs;
+    }
+
+
+    @Override
+    public List<ReCheckTimeStc> queryDealPlanStatus(DatabaseHelper helper, String repairid) {
+        List<ReCheckTimeStc> detailStcs = new ArrayList<>();
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("select * from MIT_REPAIRCHECK_M   ");
+        buffer.append("    where repairid = ? ");
+
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor cursor = db.rawQuery(buffer.toString(), new String[]{repairid});
+        ReCheckTimeStc kvStc ;
+        while (cursor.moveToNext()) {
+            kvStc = new ReCheckTimeStc();
+            kvStc.setId(cursor.getString(cursor.getColumnIndex("id")));
+            kvStc.setRepairid(cursor.getString(cursor.getColumnIndex("repairid")));
             kvStc.setStatus(cursor.getString(cursor.getColumnIndex("status")));
             kvStc.setRepairtime(cursor.getString(cursor.getColumnIndex("repairtime")));
             detailStcs.add(kvStc);

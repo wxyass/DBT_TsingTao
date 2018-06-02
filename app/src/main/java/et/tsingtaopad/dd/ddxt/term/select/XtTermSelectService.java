@@ -57,6 +57,7 @@ import et.tsingtaopad.db.table.MstVistproductInfo;
 import et.tsingtaopad.db.table.MstVistproductInfoTemp;
 import et.tsingtaopad.db.table.PadCheckaccomplishInfo;
 import et.tsingtaopad.dd.dddealplan.make.domain.DealPlanMakeStc;
+import et.tsingtaopad.dd.dddealplan.remake.domain.ReCheckTimeStc;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
 import et.tsingtaopad.main.visit.shopvisit.term.domain.MstTermListMStc;
@@ -589,6 +590,29 @@ public class XtTermSelectService {
         }
         return valueLst;
     }
+
+    public List<ReCheckTimeStc> getDealPlanStatus(String repairMId) {
+        AndroidDatabaseConnection connection = null;
+        List<ReCheckTimeStc> valueLst = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            MitRepairterMDao valueDao = helper.getDao(MitRepairterM.class);
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+            valueLst = valueDao.queryDealPlanStatus(helper,repairMId);
+            connection.commit(null);
+        } catch (Exception e) {
+            Log.e(TAG, "获取整顿计划选择终端出错2", e);
+            try {
+                connection.rollback(null);
+                // ViewUtil.sendMsg(context, R.string.agencyvisit_msg_failsave);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
+        return valueLst;
+    }
+
 
     public void saveMitRepairM(MitRepairM repairM, MitRepaircheckM mitRepaircheckM) {
         AndroidDatabaseConnection connection = null;

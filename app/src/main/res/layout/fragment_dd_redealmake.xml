@@ -199,7 +199,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/gray"/>
+                android:background="@color/gray"
+                android:visibility="gone"/>
 
             <et.tsingtaopad.view.NoScrollListView
                 android:id="@+id/zgjh_remake_lv_altime"
@@ -226,7 +227,7 @@
                     android:id="@+id/zgjh_remake_checktime"
                     style="@style/zgjh_dealmake_con"
                     android:layout_toRightOf="@id/tv08"
-                    android:hint="请选择完成时间"
+                    android:hint="请选择复查时间"
                     />
 
                 <ImageView

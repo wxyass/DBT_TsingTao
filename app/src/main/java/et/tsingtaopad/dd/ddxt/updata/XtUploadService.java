@@ -53,6 +53,9 @@ import et.tsingtaopad.db.table.MitPlandaydetailM;
 import et.tsingtaopad.db.table.MitPlandayvalM;
 import et.tsingtaopad.db.table.MitPlanweekM;
 import et.tsingtaopad.db.table.MitPromotermInfo;
+import et.tsingtaopad.db.table.MitRepairM;
+import et.tsingtaopad.db.table.MitRepaircheckM;
+import et.tsingtaopad.db.table.MitRepairterM;
 import et.tsingtaopad.db.table.MitTerminalM;
 import et.tsingtaopad.db.table.MitTerminalinfoM;
 import et.tsingtaopad.db.table.MitValaddaccountM;
@@ -181,6 +184,10 @@ public class XtUploadService {
     Dao<MitPlandaydetailM, String> mitPlandaydetailMDao = null;
     MitPlandayvalMDao mitPlandayvalMDao = null;
 
+    private Dao<MitRepairM, String> mitRepairMDao = null;
+    private Dao<MitRepairterM, String> mitRepairterMDao = null;
+    private Dao<MitRepaircheckM, String> mitRepaircheckMDao = null;
+
     public XtUploadService(Context context, Handler handler) {
         this.handler = handler;
         this.context = context;
@@ -268,6 +275,10 @@ public class XtUploadService {
             mitPlandayMDao = helper.getMitPlandayMDao();
             mitPlandaydetailMDao = helper.getMitPlandaydetailMDao();
             mitPlandayvalMDao = helper.getDao(MitPlandayvalM.class);
+
+            mitRepairMDao = helper.getDao(MitRepairM.class);
+            mitRepairterMDao = helper.getDao(MitRepairterM.class);
+            mitRepaircheckMDao = helper.getDao(MitRepaircheckM.class);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -1739,5 +1750,138 @@ public class XtUploadService {
             e.printStackTrace();
         }
 
+    }
+
+    List<MitRepairM> mitRepairMs = new ArrayList<MitRepairM>();
+    List<MitRepaircheckM> mitRepaircheckMs = new ArrayList<MitRepaircheckM>();
+    List<MitRepairterM> mitRepairterMs = new ArrayList<MitRepairterM>();
+    // 上传整顿计划
+    public void upload_repair(boolean b, MitRepairM repairM, MitRepaircheckM mitRepaircheckM, int i) {
+        try {
+            //
+            if(repairM!=null){
+                mitRepairMs.add(repairM);
+
+                Map<String, Object> terminalKeyMap = new HashMap<String, Object>();
+                terminalKeyMap.put("repairid", repairM.getId());
+                mitRepairterMs = mitRepairterMDao.queryForFieldValues(terminalKeyMap);
+                mitRepaircheckMs= mitRepaircheckMDao.queryForFieldValues(terminalKeyMap);
+
+            }else{
+                Map<String, Object> terminalKeyMap = new HashMap<String, Object>();
+                terminalKeyMap.put("uploadflag", "1");
+                terminalKeyMap.put("padisconsistent", "0");
+                mitRepairMs = mitRepairMDao.queryForFieldValues(terminalKeyMap);
+                mitRepairterMs = mitRepairterMDao.queryForFieldValues(terminalKeyMap);
+                mitRepaircheckMs = mitRepaircheckMDao.queryForFieldValues(terminalKeyMap);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (mitRepairMs != null && !mitRepairMs.isEmpty()) {
+            List<Map<String, String>> mainDatas = new ArrayList<Map<String, String>>();
+            // 根据表结果组织数据关系
+            for (MitRepairM mitRepairM : mitRepairMs) {
+                Map<String, String> childDatas = new HashMap<String, String>();
+                String valtermid = mitRepairM.getId();
+
+                // 1 整改计划主表
+                List<MitRepairM> mitRepairMS = new ArrayList<MitRepairM>();
+                mitRepairM.setPadisconsistent("1");
+                mitRepairMS.add(mitRepairM);
+                childDatas.put("MIT_REPAIR_M", JsonUtil.toJson(mitRepairMS));
+
+                // 2 整改计划核查表
+                List<MitRepaircheckM> mitRepaircheckMS = new ArrayList<MitRepaircheckM>();
+                for (MitRepaircheckM repaircheckM : mitRepaircheckMs) {
+                    if (valtermid.equals(repaircheckM.getRepairid())) {
+                        repaircheckM.setPadisconsistent("1");
+                        mitRepaircheckMS.add(repaircheckM);
+                    }
+                }
+                childDatas.put("MIT_REPAIRCHECK_M", JsonUtil.toJson(mitRepaircheckMS));
+
+                // 3 整改计划 终端表
+                List<MitRepairterM> mitRepairterMS = new ArrayList<MitRepairterM>();
+                for (MitRepairterM mitRepairterM : mitRepairterMs) {
+                    if (valtermid.equals(mitRepairterM.getRepairid())) {
+                        mitRepairterM.setPadisconsistent("1");
+                        mitRepairterMS.add(mitRepairterM);
+                    }
+                }
+                childDatas.put("MIT_REPAIRTER_M", JsonUtil.toJson(mitRepairterMS));
+                mainDatas.add(childDatas);
+            }
+
+            // 添加
+            String json = JsonUtil.toJson(mainDatas);
+            //FileUtil.writeTxt(json,FileUtil.getSDPath()+"/shopvisit1016.txt");//上传巡店拜访的json
+            // System.out.println("巡店拜访"+json);
+            Log.i(TAG, "整改计划send list size" + mainDatas.size() + json);
+
+            upRepairService("opt_save_mitrepairm", "", json);
+
+        } else {
+            /*if (isNeedExit) {
+                //上传所有的巡店拜访
+                //handler.sendEmptyMessage(TitleLayout.UPLOAD_DATA);
+            }*/
+        }
+    }
+
+    private void upRepairService(String optcode, String s, String json) {
+        // 组建请求Json
+        RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(context);
+        requestHeadStc.setOptcode(PropertiesUtil.getProperties(optcode));
+        RequestStructBean reqObj = HttpParseJson.parseRequestStructBean(requestHeadStc, json);
+
+        // 压缩请求数据
+        String jsonZip = HttpParseJson.parseRequestJson(reqObj);
+
+        RestClient.builder()
+                .url(HttpUrl.IP_END)
+                .params("data", jsonZip)
+                //.loader(context)
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+                        String json = HttpParseJson.parseJsonResToString(response);
+                        ResponseStructBean resObj = new ResponseStructBean();
+                        resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
+
+                        if(TextUtils.isEmpty(json)){
+                            Toast.makeText(context, "后台成功接收,但返回的数据为null", Toast.LENGTH_SHORT).show();
+                        }else{
+                            // 处理成功上传
+                            if (ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())) {
+                                //
+                                // 处理上传后的数据,该删删,该处理
+                                String formjson = resObj.getResBody().getContent();
+                                parseMitAgencynumM(formjson);
+                                // ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_SUC);
+                                Toast.makeText(context, "上传成功!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(context, resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                })
+                .error(new IError() {
+                    @Override
+                    public void onError(int code, String msg) {
+                        // ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_FAIL);
+                        Toast.makeText(context, "上传失败!", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .failure(new IFailure() {
+                    @Override
+                    public void onFailure() {
+                        Toast.makeText(context, "上传失败", Toast.LENGTH_SHORT).show();
+                        // ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_FAIL);
+                    }
+                })
+                .builde()
+                .post();
     }
 }

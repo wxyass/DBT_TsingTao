@@ -7,53 +7,20 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.Serializable;
 import java.lang.ref.SoftReference;
-import java.util.ArrayList;
-import java.util.List;
 
 import et.tsingtaopad.R;
-import et.tsingtaopad.adapter.AlertKeyValueAdapter;
-import et.tsingtaopad.core.util.dbtutil.CheckUtil;
-import et.tsingtaopad.core.util.dbtutil.FunUtil;
-import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
-import et.tsingtaopad.core.view.alertview.AlertView;
-import et.tsingtaopad.core.view.alertview.OnDismissListener;
-import et.tsingtaopad.core.view.alertview.OnItemClickListener;
-import et.tsingtaopad.db.table.MitValsupplyMTemp;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
-import et.tsingtaopad.dd.ddxt.invoicing.XtInvoicingService;
-import et.tsingtaopad.dd.ddxt.invoicing.domain.XtInvoicingStc;
-import et.tsingtaopad.dd.ddzs.zsinvoicing.ZsInvocingAmendFragment;
-import et.tsingtaopad.dd.ddzs.zsinvoicing.ZsInvoicingAdapter;
-import et.tsingtaopad.dd.ddzs.zsinvoicing.ZsInvoicingService;
-import et.tsingtaopad.dd.ddzs.zsinvoicing.zsaddinvoicing.ZsAddInvoicingFragment;
-import et.tsingtaopad.dd.ddzs.zsinvoicing.zsaddinvoicing.ZsInvocingAddDataFragment;
-import et.tsingtaopad.dd.ddzs.zsshopvisit.ZsVisitShopActivity;
-import et.tsingtaopad.initconstvalues.domain.KvStc;
-import et.tsingtaopad.listviewintf.IClick;
 
 /**
  * Created by yangwenmin on 2018/3/12.
  */
 
-public class ZsFeesFragment extends XtBaseVisitFragment implements View.OnClickListener {
+public class ZsAgreeFragment extends XtBaseVisitFragment implements View.OnClickListener {
 
-    private final String TAG = "ZsFeesFragment";
+    private final String TAG = "ZsAgreeFragment";
 
     MyHandler handler;
 
@@ -65,7 +32,7 @@ public class ZsFeesFragment extends XtBaseVisitFragment implements View.OnClickL
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_zdzs_fees, container, false);
+        View view = inflater.inflate(R.layout.fragment_zdzs_agree, container, false);
         initView(view);
         return view;
     }
@@ -105,15 +72,15 @@ public class ZsFeesFragment extends XtBaseVisitFragment implements View.OnClickL
     public static class MyHandler extends Handler {
 
         // 软引用
-        SoftReference<ZsFeesFragment> fragmentRef;
+        SoftReference<ZsAgreeFragment> fragmentRef;
 
-        public MyHandler(ZsFeesFragment fragment) {
-            fragmentRef = new SoftReference<ZsFeesFragment>(fragment);
+        public MyHandler(ZsAgreeFragment fragment) {
+            fragmentRef = new SoftReference<ZsAgreeFragment>(fragment);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            ZsFeesFragment fragment = fragmentRef.get();
+            ZsAgreeFragment fragment = fragmentRef.get();
             if (fragment == null) {
                 return;
             }

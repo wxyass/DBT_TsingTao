@@ -6,45 +6,32 @@ import android.support.v4.app.FragmentTabHost;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseActivity;
 import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
-import et.tsingtaopad.core.util.dbtutil.DateUtil;
-import et.tsingtaopad.core.util.dbtutil.FunUtil;
-import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.core.view.alertview.OnDismissListener;
 import et.tsingtaopad.core.view.alertview.OnItemClickListener;
 import et.tsingtaopad.db.table.MitValcheckterM;
 import et.tsingtaopad.db.table.MstVisitM;
-import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
-import et.tsingtaopad.dd.ddxt.camera.XtCameraFragment;
-import et.tsingtaopad.dd.ddxt.chatvie.XtChatvieFragment;
-import et.tsingtaopad.dd.ddxt.checking.XtCheckIndexFragment;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtCheckIndexCalculateStc;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProIndex;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProItem;
-import et.tsingtaopad.dd.ddxt.invoicing.XtInvoicingFragment;
-import et.tsingtaopad.dd.ddxt.sayhi.XtSayhiFragment;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtShopVisitService;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 import et.tsingtaopad.dd.ddxt.updata.XtShopCopyService;
@@ -52,11 +39,10 @@ import et.tsingtaopad.dd.ddxt.updata.XtUploadService;
 import et.tsingtaopad.dd.ddzs.zscamera.ZsCameraFragment;
 import et.tsingtaopad.dd.ddzs.zschatvie.ZsChatvieFragment;
 import et.tsingtaopad.dd.ddzs.zscheckindex.ZsCheckIndexFragment;
-import et.tsingtaopad.dd.ddzs.zsfees.ZsFeesFragment;
+import et.tsingtaopad.dd.ddzs.zsfees.ZsAgreeFragment;
 import et.tsingtaopad.dd.ddzs.zsinvoicing.ZsInvoicingFragment;
 import et.tsingtaopad.dd.ddzs.zssayhi.ZsSayhiFragment;
 import et.tsingtaopad.fragmentback.HandleBackUtil;
-import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.sayhi.domain.MstTerminalInfoMStc;
 
@@ -110,7 +96,7 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
 
     private FragmentTabHost tabHost;
     private Class fragmentArray[] = { ZsSayhiFragment.class,
-            ZsInvoicingFragment.class, ZsFeesFragment.class,ZsCheckIndexFragment.class,
+            ZsInvoicingFragment.class, ZsAgreeFragment.class,ZsCheckIndexFragment.class,
             ZsChatvieFragment.class ,ZsCameraFragment.class};
 
     private int imageViewArray[] = { R.drawable.bt_shopvisit_sayhi,

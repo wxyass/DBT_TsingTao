@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:cuisw="http://schemas.android.com/apk/res-auto"
+              style="@style/content_margin"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@color/bg_page_color"
@@ -19,9 +20,35 @@
             android:focusableInTouchMode="true"
             android:orientation="vertical">
 
+            <!--核查终端拜访-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                >
+
+                <ImageView
+                    android:id="@+id/zdzs_invoicing_point1"
+                    style="@style/point"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ico_point"/>
+
+                <TextView
+                    android:id="@+id/zdzs_invocing_textview01"
+                    style="@style/page_label_big"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/zdzs_invoicing_point1"
+                    android:text="核查终端拜访"/>
+
+            </RelativeLayout>
+
             <!-- 是否有效终端： -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_termstatus"
+                android:layout_marginTop="14dp"
                 style="@style/xtbf_sayhi_rl_all">
 
                 <!--标题-->
@@ -253,7 +280,6 @@
                     style="@style/point"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
                     android:src="@drawable/ico_point"/>
 
                 <TextView

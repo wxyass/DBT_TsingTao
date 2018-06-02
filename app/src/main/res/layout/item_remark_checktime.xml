@@ -23,12 +23,14 @@
             <TextView
                 android:id="@+id/tv08"
                 style="@style/xtbf_sayhi_one_tv"
+                android:textColor="@color/gray"
                 android:text="复查时间"/>
 
             <TextView
                 android:id="@+id/item_re_checktime_show"
                 style="@style/zgjh_dealmake_con"
                 android:layout_toRightOf="@id/tv08"
+                android:textColor="@color/gray"
                 android:hint="请选择完成时间"
                 />
 
@@ -49,6 +51,7 @@
             <TextView
                 android:id="@+id/tv06"
                 style="@style/xtbf_sayhi_one_tv"
+                android:textColor="@color/gray"
                 android:text="复查结果"/>
 
             <TextView
@@ -60,6 +63,7 @@
                 android:layout_marginRight="100dp"
                 android:layout_marginTop="5dp"
                 android:layout_toRightOf="@id/tv06"
+                android:textColor="@color/gray"
                 android:hint=""
                 android:maxLength="30"
                 />
