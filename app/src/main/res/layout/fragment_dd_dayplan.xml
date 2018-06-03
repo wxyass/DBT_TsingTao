@@ -65,7 +65,7 @@
                     android:id="@+id/dd_dayplan_bt_add"
                     style="@style/xtbf_btn_tv"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/xtbf_btn_h"
+                    android:layout_height="@dimen/width_height_size08"
                     android:background="@drawable/bg_select_green"
                     android:text="增加计划"
                     />
@@ -84,7 +84,7 @@
                     android:id="@+id/dd_dayplan_bt_submit"
                     style="@style/xtbf_btn_tv"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/xtbf_btn_h"
+                    android:layout_height="@dimen/width_height_size08"
                     android:background="@drawable/bg_select_green"
                     android:text="确定"
                     />

@@ -51,7 +51,7 @@
                         style="@style/xtbf_btn_tv"
                         android:id="@+id/zdzs_checkindex_bt_quickcollect"
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/xtbf_btn_h"
+                        android:layout_height="@dimen/width_height_size08"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:background="@drawable/bg_select_green"

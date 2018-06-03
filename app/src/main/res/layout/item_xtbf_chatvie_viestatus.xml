@@ -8,12 +8,12 @@
     <!--竞品名称-->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/zs_item_h"
+        android:layout_height="@dimen/width_height_size10"
         android:orientation="horizontal">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/zs_item_h"
+            android:layout_height="@dimen/width_height_size10"
             >
 
             <TextView
@@ -42,12 +42,12 @@
     <!--月销量  库存-->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/zs_item_h"
+        android:layout_height="@dimen/width_height_size10"
         android:orientation="horizontal">
 
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="@dimen/zs_item_h"
+            android:layout_height="@dimen/width_height_size10"
             android:layout_weight="1">
 
             <TextView
@@ -82,7 +82,7 @@
 
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="@dimen/zs_item_h"
+            android:layout_height="@dimen/width_height_size10"
             android:layout_weight="1">
 
             <TextView
@@ -119,12 +119,12 @@
     <!--竞品描述-->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/zs_item_h"
+        android:layout_height="@dimen/width_height_size10"
         android:orientation="horizontal">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/zs_item_h"
+            android:layout_height="@dimen/width_height_size10"
             android:layout_weight="1"
             >
 

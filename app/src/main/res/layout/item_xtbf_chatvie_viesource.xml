@@ -15,12 +15,12 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/zs_item_h"
+            android:layout_height="@dimen/width_height_size10"
             android:orientation="horizontal">
 
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="@dimen/zs_item_h"
+                android:layout_height="@dimen/width_height_size10"
                 android:layout_weight="1">
 
                 <TextView
@@ -45,7 +45,7 @@
 
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="@dimen/zs_item_h"
+                android:layout_height="@dimen/width_height_size10"
                 android:layout_weight="1">
 
                 <TextView
@@ -61,7 +61,7 @@
                 <EditText
                     android:id="@+id/item_viesource_et_agencyname"
                     android:layout_width="150dp"
-                    android:layout_height="@dimen/zs_item_h"
+                    android:layout_height="@dimen/width_height_size10"
                     android:layout_margin="3dp"
                     android:layout_toRightOf="@id/item_viesource_tv_agencyname"
                     android:background="@drawable/bg_visit_record"
@@ -80,12 +80,12 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/zs_item_h"
+            android:layout_height="@dimen/width_height_size10"
             android:orientation="horizontal">
 
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="@dimen/zs_item_h"
+                android:layout_height="@dimen/width_height_size10"
                 android:layout_weight="1">
 
                 <TextView
@@ -120,7 +120,7 @@
 
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="@dimen/zs_item_h"
+                android:layout_height="@dimen/width_height_size10"
                 android:layout_weight="1">
 
                 <TextView

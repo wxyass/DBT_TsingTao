@@ -451,6 +451,8 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
                     valsupplyMTemp.setValagencyerror("N");// 经销商有误
                     valsupplyMTemp.setValdataerror("N");// 数据有误
                     valsupplyMTemp.setValiffleeing("N");// 窜货
+                    valsupplyMTemp.setValagencyqdflag("Y");// 供货关系正确渠道价状态
+                    valsupplyMTemp.setValagencylsflag("Y");// 供货关系正确零售价状态
                     mAlertViewExt.dismiss();
                     handler.sendEmptyMessage(ZsInvoicingFragment.INIT_AMEND);
                 } else {

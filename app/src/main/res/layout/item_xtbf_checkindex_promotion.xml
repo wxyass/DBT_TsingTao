@@ -13,12 +13,12 @@
         <!--活动名称,活动产品-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/xtbf_item_h"
+            android:layout_height="@dimen/width_height_size08"
             android:orientation="horizontal">
 
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="@dimen/xtbf_item_h"
+                android:layout_height="@dimen/width_height_size08"
                 android:layout_weight="4">
 
                 <TextView
@@ -35,7 +35,7 @@
 
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="@dimen/xtbf_item_h"
+                android:layout_height="@dimen/width_height_size08"
                 android:layout_weight="1">
 
                 <TextView
@@ -85,13 +85,13 @@
         <!--是否达成  -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/xtbf_item_h"
+            android:layout_height="@dimen/width_height_size08"
             android:orientation="horizontal">
 
             <!--达成组数-->
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="@dimen/xtbf_btn_h"
+                android:layout_height="@dimen/width_height_size08"
                 android:layout_weight="2">
 
                 <TextView
@@ -108,13 +108,13 @@
 
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="@dimen/xtbf_btn_h"
+                android:layout_height="@dimen/width_height_size08"
                 android:layout_weight="6">
 
                 <EditText
                     android:id="@+id/item_xt_checkindex_et_zushu"
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/zs_item_promotion_h"
+                    android:layout_height="@dimen/width_height_size07"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
@@ -131,14 +131,14 @@
             <RelativeLayout
                 android:id="@+id/item_zs_checkindex_rl_statue"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/xtbf_btn_h"
+                android:layout_height="@dimen/width_height_size08"
                 android:layout_weight="2">
 
                 <et.tsingtaopad.view.DdSlideSwitch
                     android:id="@+id/item_xt_checkindex_sw_isacomplish"
                     style="@style/page_label_small"
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/xtbf_item_h"
+                    android:layout_height="@dimen/width_height_size08"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="20dp"

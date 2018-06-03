@@ -12,13 +12,13 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/xtbf_btn_h"
+            android:layout_height="@dimen/width_height_size08"
             android:orientation="horizontal">
 
             <!--产品名称-->
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="@dimen/xtbf_btn_h"
+                android:layout_height="@dimen/width_height_size08"
                 android:layout_weight="8">
 
                 <TextView
@@ -37,7 +37,7 @@
             <RelativeLayout
                 android:id="@+id/item_zs_chatvie_Rl_statue"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/xtbf_btn_h"
+                android:layout_height="@dimen/width_height_size08"
                 android:layout_weight="2">
 
                 <TextView
@@ -66,13 +66,13 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/xtbf_btn_h"
+            android:layout_height="@dimen/width_height_size08"
             android:orientation="horizontal">
 
             <!--经销商-->
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/xtbf_btn_h"
+                android:layout_height="@dimen/width_height_size08"
                 >
 
                 <TextView
@@ -98,7 +98,7 @@
             <!--渠道价:-->
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="@dimen/xtbf_btn_h"
+                android:layout_height="@dimen/width_height_size08"
                 android:layout_weight="1">
 
                 <TextView
@@ -132,7 +132,7 @@
             <!--零售价:-->
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="@dimen/xtbf_btn_h"
+                android:layout_height="@dimen/width_height_size08"
                 android:layout_weight="1">
 
                 <TextView
@@ -167,7 +167,7 @@
             <!--销量-->
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="@dimen/xtbf_btn_h"
+                android:layout_height="@dimen/width_height_size08"
                 android:layout_weight="1">
 
                 <TextView
@@ -202,7 +202,7 @@
             <!--当前库存-->
             <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="@dimen/xtbf_btn_h"
+                android:layout_height="@dimen/width_height_size08"
                 android:layout_weight="1">
 
                 <TextView

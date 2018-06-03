@@ -16,5 +16,4 @@ public class HttpUrl {
 
     public static final String IP_END = "method";
 
-
 }

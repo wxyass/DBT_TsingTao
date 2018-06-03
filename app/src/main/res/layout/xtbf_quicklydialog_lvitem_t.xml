@@ -21,7 +21,7 @@
         <!--现有量-->
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="@dimen/xtbf_btn_h"
+            android:layout_height="@dimen/width_height_size08"
             android:layout_weight="1">
 
             <TextView
@@ -57,7 +57,7 @@
         <!--变化-->
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="@dimen/xtbf_btn_h"
+            android:layout_height="@dimen/width_height_size08"
             android:layout_weight="1">
 
             <TextView

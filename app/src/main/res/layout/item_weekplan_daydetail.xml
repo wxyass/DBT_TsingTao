@@ -14,7 +14,7 @@
         <RelativeLayout
             android:id="@+id/item_daydetail_rl_check"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/xtbf_btn_h"
+            android:layout_height="@dimen/width_height_size08"
             >
 
             <TextView
@@ -50,7 +50,7 @@
         <RelativeLayout
             android:id="@+id/item_daydetail_rl_areaid"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/xtbf_btn_h"
+            android:layout_height="@dimen/width_height_size08"
             >
 
             <TextView
@@ -86,7 +86,7 @@
         <RelativeLayout
             android:id="@+id/item_daydetail_tv_gridkey"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/xtbf_btn_h"
+            android:layout_height="@dimen/width_height_size08"
             >
 
             <TextView
@@ -122,7 +122,7 @@
         <RelativeLayout
             android:id="@+id/item_daydetail_rl_routekey"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/xtbf_btn_h"
+            android:layout_height="@dimen/width_height_size08"
             >
 
             <TextView

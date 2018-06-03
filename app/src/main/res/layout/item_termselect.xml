@@ -7,12 +7,12 @@
     <LinearLayout
         android:id="@+id/item_termselect_ll"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/zs_item_h"
+        android:layout_height="@dimen/width_height_size10"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/zs_item_h"
+            android:layout_height="@dimen/width_height_size10"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -123,8 +123,8 @@
 
                     <ImageView
                         android:id="@+id/item_termselect_iv_mime"
-                        android:layout_width="@dimen/xt_item_icon"
-                        android:layout_height="@dimen/xt_item_icon"
+                        android:layout_width="@dimen/width_height_size07"
+                        android:layout_height="@dimen/width_height_size07"
                         android:layout_centerVertical="true"
                         android:src="@drawable/ico_terminal_mine"
                         android:visibility="invisible"/>
@@ -133,8 +133,8 @@
 
                     <ImageView
                         android:id="@+id/item_termselect_iv_mineprotocol"
-                        android:layout_width="@dimen/xt_item_icon"
-                        android:layout_height="@dimen/xt_item_icon"
+                        android:layout_width="@dimen/width_height_size07"
+                        android:layout_height="@dimen/width_height_size07"
                         android:layout_centerVertical="true"
                         android:src="@drawable/ico_terminal_mineprotocol"/>
 
@@ -142,8 +142,8 @@
 
                     <ImageView
                         android:id="@+id/item_termselect_iv_vie"
-                        android:layout_width="@dimen/xt_item_icon"
-                        android:layout_height="@dimen/xt_item_icon"
+                        android:layout_width="@dimen/width_height_size07"
+                        android:layout_height="@dimen/width_height_size07"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="40dp"
                         android:src="@drawable/ico_terminal_vie"/>
@@ -152,8 +152,8 @@
 
                     <ImageView
                         android:id="@+id/item_termselect_iv_vieprotocol"
-                        android:layout_width="@dimen/xt_item_icon"
-                        android:layout_height="@dimen/xt_item_icon"
+                        android:layout_width="@dimen/width_height_size07"
+                        android:layout_height="@dimen/width_height_size07"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="40dp"
                         android:src="@drawable/ico_terminal_vieprotocol"

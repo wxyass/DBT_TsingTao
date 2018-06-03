@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,7 +67,7 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
 
     private final String TAG = "FirstFragment";
 
-    AppCompatButton startSync;
+    RelativeLayout startSync;
 
     MyHandler handler;
 
@@ -86,7 +87,7 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
     }
 
     private void initView(View view) {
-        startSync = view.findViewById(R.id.dd_btn_first_sync_start);
+        startSync = (RelativeLayout)view.findViewById(R.id.dd_btn_first_sync_start);
         startSync.setOnClickListener(this);
     }
 

@@ -151,8 +151,8 @@ public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnCl
      */
     DealStc stc ;
     public void alertShow6(final int posi) {
-        new AlertView("请选择复查结果", null, "取消", new String[]{"未通过"},
-                new String[]{"已通过"},
+        new AlertView("请选择复查结果", null, "取消", null,
+                new String[]{"未通过","已通过"},
                 getActivity(), AlertView.Style.ActionSheet,
                 new OnItemClickListener() {
                     @Override

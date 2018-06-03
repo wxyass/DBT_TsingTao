@@ -41,24 +41,16 @@
 
     <dimen name="banner_button_h">35dp</dimen>
 
-
-    <!--督导绿底按钮高度-->
-    <dimen name="xtbf_btn_h">40dp</dimen>
-
-    <!--督导各个条目高度-->
-    <dimen name="xtbf_item_h">40dp</dimen>
-
-    <!--督导 查指标 条目高度-->
-    <dimen name="zs_item_h">50dp</dimen>
-
-    <!--督导协同  促销活动输入框高度 条目高度-->
-    <dimen name="zs_item_promotion_h">35dp</dimen>
-
-    <!--督导协同  终端选择 图标 大小-->
-    <dimen name="xt_item_icon">35dp</dimen>
-
-    <!--督导协同  终端选择 图标 大小-->
-    <dimen name="xt_item_cart_icon">40dp</dimen>
-
+    <!--定义 宽高-->
+    <dimen name="width_height_size01">6dp</dimen>
+    <dimen name="width_height_size02">10dp</dimen>
+    <dimen name="width_height_size03">16dp</dimen>
+    <dimen name="width_height_size04">20dp</dimen>
+    <dimen name="width_height_size05">26dp</dimen>
+    <dimen name="width_height_size06">30dp</dimen>
+    <dimen name="width_height_size07">36dp</dimen>
+    <dimen name="width_height_size08">40dp</dimen>
+    <dimen name="width_height_size09">46dp</dimen>
+    <dimen name="width_height_size10">50dp</dimen>
 
 </resources>
