@@ -55,18 +55,23 @@ public class MitRepairterMDaoImpl extends BaseDaoImpl<MitRepairterM, String> imp
         return detailStcs;
     }
 
+    /**
+     * 获取最后一条记录
+     * @param helper
+     * @return
+     */
     @Override
     public List<DealStc> queryDealPan(DatabaseHelper helper) {
         List<DealStc> detailStcs = new ArrayList<>();
         StringBuffer buffer = new StringBuffer();
 
-        buffer.append("select mv.id repairid,g.id repaircheckid, mv.content, mv.repairremark, mv.checkcontent,  ");
+        buffer.append("select mv.id repairid,g.id repaircheckid, mv.content,mv.status repairstatus, mv.repairremark, mv.checkcontent,  ");
         buffer.append("    f.gridkey, f.gridname, f.userid, f.username, g.status, g.repairtime   ");
         buffer.append("    from MIT_REPAIR_M mv   ");
         buffer.append("    left join MIT_REPAIRCHECK_M g     on g.repairid = mv.id ");
         buffer.append("    left join MST_GRID_M f     on f.gridkey = mv.gridkey ");
         buffer.append("    group by mv.id ");
-        buffer.append("    order by g.repairtime desc ");
+        buffer.append("    order by g.credate desc ");
 
         SQLiteDatabase db = helper.getReadableDatabase();
         Cursor cursor = db.rawQuery(buffer.toString(), null);
@@ -76,6 +81,7 @@ public class MitRepairterMDaoImpl extends BaseDaoImpl<MitRepairterM, String> imp
             kvStc.setRepairid(cursor.getString(cursor.getColumnIndex("repairid")));
             kvStc.setRepaircheckid(cursor.getString(cursor.getColumnIndex("repaircheckid")));
             kvStc.setContent(cursor.getString(cursor.getColumnIndex("content")));
+            kvStc.setRepairstatus(cursor.getString(cursor.getColumnIndex("repairstatus")));
             kvStc.setRepairremark(cursor.getString(cursor.getColumnIndex("repairremark")));
             kvStc.setCheckcontent(cursor.getString(cursor.getColumnIndex("checkcontent")));
             kvStc.setGridkey(cursor.getString(cursor.getColumnIndex("gridkey")));

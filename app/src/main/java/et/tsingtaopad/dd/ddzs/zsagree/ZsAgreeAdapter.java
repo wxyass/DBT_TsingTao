@@ -1,18 +1,11 @@
-package et.tsingtaopad.dd.ddzs.zsfees;
+package et.tsingtaopad.dd.ddzs.zsagree;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,8 +16,8 @@ import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
-import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
+import et.tsingtaopad.db.table.MitValagreedetailMTemp;
 import et.tsingtaopad.db.table.MitValsupplyMTemp;
 import et.tsingtaopad.listviewintf.IClick;
 
@@ -39,7 +32,7 @@ import et.tsingtaopad.listviewintf.IClick;
 public class ZsAgreeAdapter extends BaseAdapter {
 
     private Activity context;
-    private List<MitValsupplyMTemp> dataLst;
+    private List<MitValagreedetailMTemp> dataLst;
     private int delPosition = -1;
 
     // 时间控件
@@ -55,7 +48,7 @@ public class ZsAgreeAdapter extends BaseAdapter {
     private IClick listener;
 
 
-    public ZsAgreeAdapter(Activity context, List<MitValsupplyMTemp> dataLst, IClick listener) {
+    public ZsAgreeAdapter(Activity context, List<MitValagreedetailMTemp> dataLst, IClick listener) {
         this.context = context;
         this.dataLst = dataLst;
         this.listener = listener;
@@ -113,8 +106,29 @@ public class ZsAgreeAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        final MitValsupplyMTemp item = dataLst.get(position);
+        final MitValagreedetailMTemp item = dataLst.get(position);
 
+        holder.tv_proname.setText(item.getProname());// 产品名称
+        holder.tv_cashtype.setText(item.getCashtype());// 兑付形式
+        holder.tv_commoney.setText("¥ "+item.getCommoney());// 兑付金额
+        holder.tv_trunnum.setText(item.getTrunnum()); // 实际数量
+        holder.tv_price.setText("¥ "+item.getPrice()); // 单价
+        holder.tv_cashdate.setText(item.getCashdate());// 兑付日期
+
+        // 未稽查
+        if("N".equals(item.getAgreedetailflag())){
+            holder.tv_statue.setText("错误");
+            holder.tv_statue.setTextColor(context.getResources().getColor(R.color.zdzs_dd_error));
+        }else if("Y".equals(item.getAgreedetailflag())){
+            holder.tv_statue.setText("正确");
+            holder.tv_statue.setTextColor(context.getResources().getColor(R.color.zdzs_dd_yes));
+        }else{
+            holder.tv_statue.setText("未稽查");
+            holder.tv_statue.setTextColor(context.getResources().getColor(R.color.zdzs_dd_notcheck));
+        }
+
+        holder.ll_all.setTag(position);
+        holder.ll_all.setOnClickListener(listener);
 
         return convertView;
     }

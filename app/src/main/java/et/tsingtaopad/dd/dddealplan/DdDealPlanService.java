@@ -109,7 +109,7 @@ public class DdDealPlanService {
     }
 
     // 设置整改计划审核表
-    public void setStatus(String repaircheckid, String status) {
+    public void setStatus(String repairid,String repaircheckid, String status) {
 
         AndroidDatabaseConnection connection = null;
         try {
@@ -120,7 +120,10 @@ public class DdDealPlanService {
 
             StringBuffer buffer = new StringBuffer();
             buffer.append("update MIT_REPAIRCHECK_M set status = "+status+" ,uploadflag = 1  , padisconsistent = 0 where id = '"+repaircheckid+"'   ");
+            indexValueDao.executeRaw(buffer.toString());
 
+            buffer = new StringBuffer();
+            buffer.append("update MIT_REPAIR_M set status = "+status+" ,uploadflag = 1  , padisconsistent = 0 where id = '"+repairid+"'   ");
             indexValueDao.executeRaw(buffer.toString());
 
             connection.commit(null);

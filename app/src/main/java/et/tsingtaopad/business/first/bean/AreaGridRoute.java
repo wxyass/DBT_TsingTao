@@ -58,6 +58,13 @@ public class AreaGridRoute {
     private String MIT_PLANDAYDETAIL_M;// 督导周计划主表
     private String MIT_PLANDAYVAL_M;// 督导周计划主表
 
+    private String MST_AGREE_TMP;// 终端追溯协议主表
+    private String MST_AGREE_DETAIL_TMP;// 终端追溯协议对付信息表
+
+    private String MIT_REPAIR_M;// 整改计划主表
+    private String MIT_REPAIRTER_M;// 整改计划终端表
+    private String MIT_REPAIRCHECK_M;// 整改计划审核表
+
 
 
 
@@ -380,5 +387,45 @@ public class AreaGridRoute {
 
     public void setMIT_PLANDAYVAL_M(String MIT_PLANDAYVAL_M) {
         this.MIT_PLANDAYVAL_M = MIT_PLANDAYVAL_M;
+    }
+
+    public String getMST_AGREE_TMP() {
+        return MST_AGREE_TMP;
+    }
+
+    public void setMST_AGREE_TMP(String MST_AGREE_TMP) {
+        this.MST_AGREE_TMP = MST_AGREE_TMP;
+    }
+
+    public String getMST_AGREE_DETAIL_TMP() {
+        return MST_AGREE_DETAIL_TMP;
+    }
+
+    public void setMST_AGREE_DETAIL_TMP(String MST_AGREE_DETAIL_TMP) {
+        this.MST_AGREE_DETAIL_TMP = MST_AGREE_DETAIL_TMP;
+    }
+
+    public String getMIT_REPAIR_M() {
+        return MIT_REPAIR_M;
+    }
+
+    public void setMIT_REPAIR_M(String MIT_REPAIR_M) {
+        this.MIT_REPAIR_M = MIT_REPAIR_M;
+    }
+
+    public String getMIT_REPAIRTER_M() {
+        return MIT_REPAIRTER_M;
+    }
+
+    public void setMIT_REPAIRTER_M(String MIT_REPAIRTER_M) {
+        this.MIT_REPAIRTER_M = MIT_REPAIRTER_M;
+    }
+
+    public String getMIT_REPAIRCHECK_M() {
+        return MIT_REPAIRCHECK_M;
+    }
+
+    public void setMIT_REPAIRCHECK_M(String MIT_REPAIRCHECK_M) {
+        this.MIT_REPAIRCHECK_M = MIT_REPAIRCHECK_M;
     }
 }

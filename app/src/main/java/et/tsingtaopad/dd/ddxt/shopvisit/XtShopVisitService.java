@@ -43,6 +43,8 @@ import et.tsingtaopad.db.dao.MstVistproductInfoDao;
 import et.tsingtaopad.db.table.MitValaddaccountM;
 import et.tsingtaopad.db.table.MitValaddaccountMTemp;
 import et.tsingtaopad.db.table.MitValaddaccountproMTemp;
+import et.tsingtaopad.db.table.MitValagreeMTemp;
+import et.tsingtaopad.db.table.MitValagreedetailMTemp;
 import et.tsingtaopad.db.table.MitValcheckitemMTemp;
 import et.tsingtaopad.db.table.MitValchecktypeMTemp;
 import et.tsingtaopad.db.table.MitValcmpMTemp;
@@ -53,6 +55,8 @@ import et.tsingtaopad.db.table.MitValsupplyMTemp;
 import et.tsingtaopad.db.table.MitValterMTemp;
 import et.tsingtaopad.db.table.MstAgencysupplyInfo;
 import et.tsingtaopad.db.table.MstAgencysupplyInfoTemp;
+import et.tsingtaopad.db.table.MstAgreeDetailTmp;
+import et.tsingtaopad.db.table.MstAgreeTmp;
 import et.tsingtaopad.db.table.MstCameraInfoM;
 import et.tsingtaopad.db.table.MstCameraInfoMTemp;
 import et.tsingtaopad.db.table.MstCheckexerecordInfo;
@@ -677,6 +681,12 @@ public class XtShopVisitService {
             Dao<MitValaddaccountMTemp, String> mitValaddaccountMTempDao = helper.getMitValaddaccountMTempDao();
             Dao<MitValaddaccountproMTemp, String> mitValaddaccountproMTempDao = helper.getMitValaddaccountproMTempDao();
 
+            Dao<MstAgreeTmp, String> mstAgreeTmpDao = helper.getMstAgreeTmpDao();
+            Dao<MstAgreeDetailTmp, String> mstAgreeDetailTmpDao = helper.getMstAgreeDetailTmpDao();
+
+            Dao<MitValagreeMTemp, String> mitValagreeMTempDao = helper.getMitValagreeMTempDao();
+            Dao<MitValagreedetailMTemp, String> mitValagreedetailMTempDao = helper.getMitValagreedetailMTempDao();
+
             connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
             connection.setAutoCommit(false);
 
@@ -1028,7 +1038,7 @@ public class XtShopVisitService {
             createZsMstCheckexerecordInfoTemp(prevVisitId, term.getTerminalkey(), visitDate,
                     visitMTemp, valueDao, mitValchecktypeMTempDao, mitValterMTemp.getId(),
 
-                    collectionDao, mitValcheckitemMTempDao, padCheckaccomplishInfoDao,  termStc
+                    collectionDao, mitValcheckitemMTempDao, padCheckaccomplishInfoDao, termStc
             );
 
 
@@ -1042,7 +1052,12 @@ public class XtShopVisitService {
             createMitGroupproMTemp(mitValgroupproMTempDao, term, mitValterMTemp.getId());
 
             // 复制追溯台账主表 临时表
-            createMitValaddaccountMTemp(mitValaddaccountMTempDao,mitValaddaccountproMTempDao, term, mitValterMTemp.getId());
+            createMitValaddaccountMTemp(mitValaddaccountMTempDao, mitValaddaccountproMTempDao, term, mitValterMTemp.getId());
+
+            // 终端追溯协议主表 临时表
+            createMitValagreeMTemp(mstAgreeTmpDao, mitValagreeMTempDao, term, mitValterMTemp.getId());
+            // 终端追溯协议对付信息表 临时表
+            createMitValagreedetailMTemp(mstAgreeDetailTmpDao, mitValagreedetailMTempDao, term, mitValterMTemp.getId());
 
 
             connection.commit(null);
@@ -1062,6 +1077,99 @@ public class XtShopVisitService {
         keys.add(mitValterMTemp.getId());
         keys.add(prevVisitId);
         return keys;
+    }
+
+    // 终端追溯协议对付信息表 临时表
+    private void createMitValagreedetailMTemp(Dao<MstAgreeDetailTmp, String> mstAgreeDetailTmpDao,
+                                              Dao<MitValagreedetailMTemp, String> mitValagreedetailMTempDao,
+                                              MstTerminalinfoMCart term,
+                                              String valterid) {
+
+        List<MstAgreeDetailTmp> list = new ArrayList<MstAgreeDetailTmp>();
+        try {
+            QueryBuilder<MstAgreeDetailTmp, String> qb = mstAgreeDetailTmpDao.queryBuilder();
+            Where<MstAgreeDetailTmp, String> where = qb.where();
+            where.eq("terminalkey", term.getTerminalkey());
+            list = qb.query();
+
+            MitValagreedetailMTemp mitValagreedetailMTemp;
+            for (MstAgreeDetailTmp mstAgreeDetailTmp : list) {
+                mitValagreedetailMTemp = new MitValagreedetailMTemp();
+                mitValagreedetailMTemp.setId(FunUtil.getUUID());
+                mitValagreedetailMTemp.setValterid(valterid);// 追溯主表id
+                mitValagreedetailMTemp.setValagreeid(mstAgreeDetailTmp.getAgreeid());//终端追溯协议主表ID
+                //mitValagreedetailMTemp.setProkey(mstAgreeDetailTmp.get);//产品KEY
+                mitValagreedetailMTemp.setProname(mstAgreeDetailTmp.getProname());//产品名称
+                mitValagreedetailMTemp.setCashtype(mstAgreeDetailTmp.getCashtype());//对付形式
+                mitValagreedetailMTemp.setCommoney(mstAgreeDetailTmp.getAmount());//实际公司承担金额
+                mitValagreedetailMTemp.setTrunnum(mstAgreeDetailTmp.getQty());//实际数量
+                mitValagreedetailMTemp.setPrice(mstAgreeDetailTmp.getPrice());//单价
+                mitValagreedetailMTemp.setCashdate(mstAgreeDetailTmp.getCashdate());//兑付日期
+                //mitValagreedetailMTemp.setAgreedetailflag(mstAgreeDetailTmp.get);//正确与否
+                //mitValagreedetailMTemp.setErroritem(mstAgreeDetailTmp.get);//错误项
+                //mitValagreedetailMTemp.setRemarks(mstAgreeDetailTmp.get);//备注
+
+                /*mitValagreedetailMTemp.setUploadflag(mstAgreeDetailTmp.get);//
+                mitValagreedetailMTemp.setPadisconsistent(mstAgreeDetailTmp.get);//*/
+
+                mitValagreedetailMTempDao.create(mitValagreedetailMTemp);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 终端追溯协议主表 临时表
+    private void createMitValagreeMTemp(Dao<MstAgreeTmp, String> mstAgreeTmpDao,
+                                        Dao<MitValagreeMTemp, String> mitValagreeMTempDao,
+                                        MstTerminalinfoMCart term,
+                                        String valterid) {
+
+        List<MstAgreeTmp> list = new ArrayList<MstAgreeTmp>();
+        try {
+            QueryBuilder<MstAgreeTmp, String> qb = mstAgreeTmpDao.queryBuilder();
+            Where<MstAgreeTmp, String> where = qb.where();
+            where.eq("terminalkey", term.getTerminalkey());
+            list = qb.query();
+
+            MitValagreeMTemp mitValagreeMTemp;
+            for (MstAgreeTmp mstAgreeTmp : list) {
+                mitValagreeMTemp = new MitValagreeMTemp();
+                mitValagreeMTemp.setId(FunUtil.getUUID());
+                mitValagreeMTemp.setValterid(valterid);// 追溯主表id
+                mitValagreeMTemp.setAgreecode(mstAgreeTmp.getAgreecd());//协议编码
+                mitValagreeMTemp.setAgencyname(mstAgreeTmp.getAgencyname());//供货商名称
+                // mitValagreeMTemp.setAgencykey(mstAgreeTmp.get) ;//供货商ID
+                mitValagreeMTemp.setMoneyagency(mstAgreeTmp.getPaymentagencyname());//垫付费用经销商
+                // mitValagreeMTemp.setMoneyagencykey(mstAgreeTmp.get);//垫付费用经销商ID
+                mitValagreeMTemp.setStartdate(mstAgreeTmp.getStartdate());//开始时间
+                //mitValagreeMTemp.setStartdateflag(mstAgreeTmp.get) ;//开始时间是否正确
+                //mitValagreeMTemp.setStartdateremark(mstAgreeTmp.get);//开始时间备注
+                mitValagreeMTemp.setEnddate(mstAgreeTmp.getEnddate());//结束时间
+                //mitValagreeMTemp.setEnddateflag(mstAgreeTmp.get) ;//结束时间是否正确
+                //mitValagreeMTemp.setEnddateremark(mstAgreeTmp.get) ;//结束时间备注
+                mitValagreeMTemp.setPaytype(mstAgreeTmp.getPaytype());//支付周期类型
+                mitValagreeMTemp.setContact(mstAgreeTmp.getSigner());//联系人
+                mitValagreeMTemp.setMobile(mstAgreeTmp.getMobile());//联系电话
+                mitValagreeMTemp.setNotes(mstAgreeTmp.getNotes());//主要条款
+                //mitValagreeMTemp.setNotesflag(mstAgreeTmp.get) ;//主要条款是否正确
+                //mitValagreeMTemp.setNotesremark(mstAgreeTmp.get) ;//主要条款备注
+
+                /*mitValagreeMTemp.setCreuser(mstAgreeTmp.get)  ;//
+                mitValagreeMTemp.setCredate(mstAgreeTmp.get)  ;//
+                mitValagreeMTemp.setUpdateuser(mstAgreeTmp.get) ;//
+                mitValagreeMTemp.setUpdatedate(mstAgreeTmp.get) ;//
+
+                mitValagreeMTemp.setUploadflag(mstAgreeTmp.get) ;//
+                mitValagreeMTemp.setPadisconsistent(mstAgreeTmp.get);//*/
+
+                mitValagreeMTempDao.create(mitValagreeMTemp);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     // 复制追溯台账主表 临时表   复制追溯台账附表 临时表
@@ -1121,8 +1229,8 @@ public class XtShopVisitService {
             zsTzItemIndex.getIndexValueLst().add(indexValueItem);
         }
         try {
-            MitValaddaccountMTemp valaddaccountMTemp ;
-            for (ZsTzItemIndex tzItemIndex : proIndexLst){
+            MitValaddaccountMTemp valaddaccountMTemp;
+            for (ZsTzItemIndex tzItemIndex : proIndexLst) {
                 valaddaccountMTemp = new MitValaddaccountMTemp();
                 valaddaccountMTemp.setId(tzItemIndex.getId());
                 valaddaccountMTemp.setValsupplyid(tzItemIndex.getValsupplyid());// 终端追溯终端表ID
@@ -1135,7 +1243,7 @@ public class XtShopVisitService {
                 valaddaccountMTemp.setUploadflag("0");//
                 valaddaccountMTemp.setPadisconsistent("0");//
                 mitValaddaccountMTempDao.create(valaddaccountMTemp);
-                for(MitValaddaccountproMTemp valaddaccountproMTemp : tzItemIndex.getIndexValueLst()){
+                for (MitValaddaccountproMTemp valaddaccountproMTemp : tzItemIndex.getIndexValueLst()) {
                     mitValaddaccountproMTempDao.create(valaddaccountproMTemp);
                 }
             }
@@ -1390,13 +1498,13 @@ public class XtShopVisitService {
                                                    Dao<MstCollectionexerecordInfo, String> collectionDao,
                                                    Dao<MitValcheckitemMTemp, String> mitValcheckitemMTempDao,
                                                    Dao<PadCheckaccomplishInfo, String> padCheckaccomplishInfoDao,
-                                                    XtTermSelectMStc termStc)
+                                                   XtTermSelectMStc termStc)
             throws SQLException {
         // 无关
         createZsMstCheckexerecordInfoTemp1(prevVisitId, valueDao, mitValchecktypeMTempDao, vidterid);
         // 复制与产品有关的指标值
         createZsMstCheckexerecordInfoTemp2(prevVisitId, terminalkey, valueDao, mitValchecktypeMTempDao, vidterid,
-                collectionDao,mitValcheckitemMTempDao,padCheckaccomplishInfoDao,termStc);
+                collectionDao, mitValcheckitemMTempDao, padCheckaccomplishInfoDao, termStc);
     }
 
 
@@ -1650,7 +1758,7 @@ public class XtShopVisitService {
                                                     Dao<MstCollectionexerecordInfo, String> collectionDao,
                                                     Dao<MitValcheckitemMTemp, String> mitValcheckitemMTempDao,
                                                     Dao<PadCheckaccomplishInfo, String> padCheckaccomplishInfoDao,
-                                                     XtTermSelectMStc termStc)
+                                                    XtTermSelectMStc termStc)
             throws SQLException {
         // 复制指标结果表，MST_CHECKEXERECORD_INFO(拜访指标执行记录表)
         QueryBuilder<MstCheckexerecordInfo, String> valueQb = valueDao.queryBuilder();
@@ -1695,11 +1803,12 @@ public class XtShopVisitService {
                     valueDao.update(item);*/
                 }
                 // 复制采集项表 -> 追溯 采集项表
-                createZsMstCollectionexerecordInfoTemp(collectionDao, mitValcheckitemMTempDao, padCheckaccomplishInfoDao, prevVisitId, termStc, vidterid,itemTemp.getId(),itemTemp.getProductkey(),itemTemp.getValchecktype());
+                createZsMstCollectionexerecordInfoTemp(collectionDao, mitValcheckitemMTempDao, padCheckaccomplishInfoDao, prevVisitId, termStc, vidterid, itemTemp.getId(), itemTemp.getProductkey(), itemTemp.getValchecktype());
 
             }
         }
     }
+
     /**
      * 插入产品指标表 (错误)
      *
@@ -1845,7 +1954,7 @@ public class XtShopVisitService {
                                                         Dao<MitValcheckitemMTemp, String> mitValcheckitemMTempDao,
                                                         Dao<PadCheckaccomplishInfo, String> padCheckaccomplishInfoDao,
                                                         String prevVisitId, XtTermSelectMStc termStc, String vidterid,
-                                                        String recordkey,String productkey,String checkkey) {
+                                                        String recordkey, String productkey, String checkkey) {
         try {
             // 复制指标结果表，MST_COLLECTIONEXERECORD_INFO(拜访指标执行采集项记录表)
             QueryBuilder<MstCollectionexerecordInfo, String> collectionQB = collectionDao.queryBuilder();
@@ -2181,6 +2290,9 @@ public class XtShopVisitService {
 
             deleteTable(helper, "MIT_VALADDACCOUNT_M_TEMP");// 终端进货台账主表 临时表
             deleteTable(helper, "MIT_VALADDACCOUNTPRO_M_TEMP");// 终端追溯台账产品详情表 临时表
+
+            deleteTable(helper, "MIT_VALAGREE_M_TEMP");// 终端追溯协议主表 临时表
+            deleteTable(helper, "MIT_VALAGREEDETAIL_M_TEMP");// 终端追溯协议对付信息表 临时表
 
             //deleteTable(helper, "MST_CHECKGROUP_INFO");
             //deleteTable(helper, "MST_CHECKGROUP_INFO_TEMP");

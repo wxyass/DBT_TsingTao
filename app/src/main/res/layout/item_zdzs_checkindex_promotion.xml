@@ -44,7 +44,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:paddingLeft="10dp"
+                    android:paddingLeft="2dp"
                     android:text="产品详情"
                     android:layout_centerVertical="true"
                     android:textSize="@dimen/font_size3"/>
@@ -140,7 +140,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:paddingLeft="10dp"
+                    android:paddingLeft="2dp"
                     android:text="未稽查"
                     android:textSize="@dimen/font_size3"/>
 

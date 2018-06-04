@@ -3,6 +3,8 @@ package et.tsingtaopad.db.table;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.util.Date;
+
 import et.tsingtaopad.db.dao.impl.MitRepaircheckMDaoImpl;
 
 
@@ -26,6 +28,8 @@ public class MitRepaircheckM implements java.io.Serializable {
     private String uploadflag;//varchar2(1) null,
     @DatabaseField
     private String padisconsistent;//varchar2(1) null
+    @DatabaseField
+    private Date credate;//varchar2(1) null
 
     // Constructors
 
@@ -81,5 +85,13 @@ public class MitRepaircheckM implements java.io.Serializable {
 
     public void setPadisconsistent(String padisconsistent) {
         this.padisconsistent = padisconsistent;
+    }
+
+    public Date getCredate() {
+        return credate;
+    }
+
+    public void setCredate(Date credate) {
+        this.credate = credate;
     }
 }

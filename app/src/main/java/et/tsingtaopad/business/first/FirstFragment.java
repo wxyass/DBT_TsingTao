@@ -143,9 +143,10 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
     private void getInfo() {
 
         tablenames = new ArrayList<>();
-        tablenames.add("MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO");
+
         tablenames.add("MST_MARKETAREA_GRID_ROUTE_M");
         tablenames.add("MST_BASEDATA_M");
+        tablenames.add("MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO");
 
         //handler.sendEmptyMessage(FirstFragment.SYNC_SUCCSE);
         Bundle bundle = new Bundle();

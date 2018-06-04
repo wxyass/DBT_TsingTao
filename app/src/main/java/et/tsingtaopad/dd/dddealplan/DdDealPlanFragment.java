@@ -21,12 +21,29 @@ import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
+import et.tsingtaopad.business.first.bean.AreaGridRoute;
+import et.tsingtaopad.core.net.HttpUrl;
+import et.tsingtaopad.core.net.RestClient;
+import et.tsingtaopad.core.net.callback.IError;
+import et.tsingtaopad.core.net.callback.IFailure;
+import et.tsingtaopad.core.net.callback.ISuccess;
+import et.tsingtaopad.core.net.domain.RequestHeadStc;
+import et.tsingtaopad.core.net.domain.RequestStructBean;
+import et.tsingtaopad.core.net.domain.ResponseStructBean;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.JsonUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
+import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.core.view.alertview.OnItemClickListener;
+import et.tsingtaopad.db.table.MitPlandayM;
+import et.tsingtaopad.db.table.MitPlandaydetailM;
+import et.tsingtaopad.db.table.MitPlandayvalM;
+import et.tsingtaopad.db.table.MitPlanweekM;
 import et.tsingtaopad.db.table.MitRepairM;
+import et.tsingtaopad.db.table.MitRepaircheckM;
+import et.tsingtaopad.db.table.MitRepairterM;
 import et.tsingtaopad.dd.dddealplan.domain.DealStc;
 import et.tsingtaopad.dd.dddealplan.make.DdDealMakeFragment;
 import et.tsingtaopad.dd.dddealplan.remake.DdReDealMakeFragment;
@@ -34,8 +51,11 @@ import et.tsingtaopad.dd.ddxt.updata.XtUploadService;
 import et.tsingtaopad.dd.ddzs.zscheckindex.ZsCheckIndexFragment;
 import et.tsingtaopad.dd.ddzs.zscheckindex.ZsCheckPromoAmendFragment;
 import et.tsingtaopad.dd.ddzs.zsshopvisit.ZsVisitShopActivity;
+import et.tsingtaopad.home.app.MainService;
+import et.tsingtaopad.http.HttpParseJson;
 import et.tsingtaopad.listviewintf.IClick;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.CheckIndexPromotionStc;
+import et.tsingtaopad.util.requestHeadUtil;
 
 /**
  * Created by yangwenmin on 2018/3/12.
@@ -103,6 +123,7 @@ public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnCl
 
         ddDealPlanService = new DdDealPlanService(getActivity());
         initData();
+        initUrlData();
     }
 
     // 初始化数据
@@ -114,14 +135,14 @@ public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnCl
             @Override
             public void listViewItemClick(int position, View v) {
                 DealStc stc = dataLst.get(position);
-                String status = stc.getStatus();
+                String status = stc.getRepairstatus();
                 if ("1".equals(status)) {// 未通过
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("DealStc", stc);
                     /*bundle.putSerializable("weekplan", mitPlanweekM);
                     bundle.putSerializable("weekDateStart", weekDateStart);
                     bundle.putSerializable("weekDateEnd", weekDateEnd);*/
-                    DdReDealMakeFragment ddReDealMakeFragment = new DdReDealMakeFragment();
+                    DdReDealMakeFragment ddReDealMakeFragment = new DdReDealMakeFragment(handler);
                     ddReDealMakeFragment.setArguments(bundle);
                     // 跳转 新增整改计划
                     addHomeFragment(ddReDealMakeFragment, "ddredealmakefragment");
@@ -136,6 +157,103 @@ public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnCl
         monthplan_lv.setAdapter(dealPlanAdapter);
         ViewUtil.setListViewHeight(monthplan_lv);
 
+    }
+
+    private void initUrlData() {
+        String content = "{" +
+                "areaid:'" + PrefUtils.getString(getActivity(), "departmentid", "") + "'," +
+                "tablename:'" + "MIT_REPAIR_REPAIRTER_REPAIRCHECK_M" + "'," +
+                "creuser:'" + PrefUtils.getString(getActivity(), "userid", "") + "'" +
+                "}";
+        ceshiHttp("opt_get_repair_ter_check", "MIT_REPAIR_REPAIRTER_REPAIRCHECK_M", content);
+    }
+
+    /**
+     * 同步表数据
+     *
+     * @param optcode 请求码
+     * @param table   请求表名(请求不同的)
+     * @param content 请求json
+     */
+    void ceshiHttp(final String optcode, final String table, String content) {
+
+        // 组建请求Json
+        RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(getContext());
+        requestHeadStc.setOptcode(PropertiesUtil.getProperties(optcode));
+        RequestStructBean reqObj = HttpParseJson.parseRequestStructBean(requestHeadStc, content);
+
+        // 压缩请求数据
+        String jsonZip = HttpParseJson.parseRequestJson(reqObj);
+
+        RestClient.builder()
+                .url(HttpUrl.IP_END)
+                .params("data", jsonZip)
+                .loader(getContext())// 滚动条
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+                        String json = HttpParseJson.parseJsonResToString(response);
+
+                        if ("".equals(json) || json == null) {
+                            Toast.makeText(getActivity(), "后台成功接收,但返回的数据为null", Toast.LENGTH_SHORT).show();
+                        } else {
+                            ResponseStructBean resObj = new ResponseStructBean();
+                            resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
+                            // 保存登录信息
+                            if (ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())) {
+                                // 保存信息
+                                String formjson = resObj.getResBody().getContent();
+                                parseTableJson(formjson);
+                                initData();
+
+                            } else {
+                                Toast.makeText(getActivity(), resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
+                            /*Message msg = new Message();
+                            msg.what = FirstFragment.SYNC_CLOSE;//
+                            handler.sendMessage(msg);*/
+                                //initData();
+                            }
+                        }
+
+
+                    }
+                })
+                .error(new IError() {
+                    @Override
+                    public void onError(int code, String msg) {
+                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                        /*Message msg1 = new Message();
+                        msg1.what = FirstFragment.SYNC_CLOSE;//
+                        handler.sendMessage(msg1);*/
+                        //initData();
+                    }
+                })
+                .failure(new IFailure() {
+                    @Override
+                    public void onFailure() {
+                        Toast.makeText(getContext(), "请求失败", Toast.LENGTH_SHORT).show();
+                        /*Message msg2 = new Message();
+                        msg2.what = FirstFragment.SYNC_CLOSE;//
+                        handler.sendMessage(msg2);*/
+                        //initData();
+                    }
+                })
+                .builde()
+                .post();
+    }
+
+    // 解析区域定格路线成功
+    private void parseTableJson(String json) {
+        // 解析区域定格路线信息
+        AreaGridRoute emp = JsonUtil.parseJson(json, AreaGridRoute.class);
+        String MIT_REPAIR_M = emp.getMIT_REPAIR_M();
+        String MIT_REPAIRTER_M = emp.getMIT_REPAIRTER_M();
+        String MIT_REPAIRCHECK_M = emp.getMIT_REPAIRCHECK_M();
+
+        MainService service = new MainService(getActivity(), null);
+        service.createOrUpdateTable(MIT_REPAIR_M, "MIT_REPAIR_M", MitRepairM.class);
+        service.createOrUpdateTable(MIT_REPAIRTER_M, "MIT_REPAIRTER_M", MitRepairterM.class);
+        service.createOrUpdateTable(MIT_REPAIRCHECK_M, "MIT_REPAIRCHECK_M", MitRepaircheckM.class);
     }
 
     /**
@@ -160,12 +278,12 @@ public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnCl
                         // Toast.makeText(getActivity(), "点击了第" + position + "个", Toast.LENGTH_SHORT).show();
                         stc = dataLst.get(posi);
                         String repaircheckid = stc.getRepaircheckid();
-                        String status = stc.getStatus();
+                        String repairid = stc.getRepairid();
                         if (0 == position) {// 未通过
-                            ddDealPlanService.setStatus(repaircheckid, "1");// 并修改未未上传
+                            ddDealPlanService.setStatus(repairid,repaircheckid, "1");// 并修改未未上传
                             handler.sendEmptyMessage(DEALPLAN_NEED_UP);
                         } else if(1 == position) {// 已通过
-                            ddDealPlanService.setStatus(repaircheckid, "2");// 并修改未未上传
+                            ddDealPlanService.setStatus(repairid,repaircheckid, "2");// 并修改未未上传
                             handler.sendEmptyMessage(DEALPLAN_NEED_UP);
                         }
 
@@ -266,6 +384,7 @@ public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnCl
         repairM.setUpdatedate(new Date());//更新时间
         repairM.setUploadflag("1");
         repairM.setPadisconsistent("0");
+        repairM.setStatus(stc.getRepairstatus());
 
         XtUploadService xtUploadService = new XtUploadService(getActivity(), null);
         xtUploadService.upload_repair(false, repairM, null, 1);

@@ -39,7 +39,7 @@ import et.tsingtaopad.dd.ddxt.updata.XtUploadService;
 import et.tsingtaopad.dd.ddzs.zscamera.ZsCameraFragment;
 import et.tsingtaopad.dd.ddzs.zschatvie.ZsChatvieFragment;
 import et.tsingtaopad.dd.ddzs.zscheckindex.ZsCheckIndexFragment;
-import et.tsingtaopad.dd.ddzs.zsfees.ZsAgreeFragment;
+import et.tsingtaopad.dd.ddzs.zsagree.ZsAgreeFragment;
 import et.tsingtaopad.dd.ddzs.zsinvoicing.ZsInvoicingFragment;
 import et.tsingtaopad.dd.ddzs.zssayhi.ZsSayhiFragment;
 import et.tsingtaopad.fragmentback.HandleBackUtil;

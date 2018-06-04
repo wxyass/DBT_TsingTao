@@ -268,6 +268,7 @@ public class DdDealMakeFragment extends BaseFragmentSupport implements View.OnCl
         repairM.setUpdatedate(new Date());//更新时间
         repairM.setUploadflag("1");
         repairM.setPadisconsistent("0");
+        repairM.setStatus("0");// 刚制定 状态为  0未复查1未通过2已通过
 
         MitRepaircheckM mitRepaircheckM = new MitRepaircheckM();
         mitRepaircheckM.setId(FunUtil.getUUID());//
@@ -276,6 +277,7 @@ public class DdDealMakeFragment extends BaseFragmentSupport implements View.OnCl
         mitRepaircheckM.setRepairtime(checktime_string);//整改日期
         mitRepaircheckM.setUploadflag("1");
         mitRepaircheckM.setPadisconsistent("0");
+        mitRepaircheckM.setCredate(new Date());
 
         // 保存到库中
         xtSelectService.saveMitRepairM(repairM, mitRepaircheckM);
@@ -286,7 +288,7 @@ public class DdDealMakeFragment extends BaseFragmentSupport implements View.OnCl
         xtUploadService.upload_repair(false,repairM,mitRepaircheckM,1);
 
 
-        Toast.makeText(getActivity(), "整顿计划保存成功", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(getActivity(), "整顿计划保存成功", Toast.LENGTH_SHORT).show();
         supportFragmentManager.popBackStack();
         // 发送新增成功的信息
         dealplanhandler.sendEmptyMessage(DdDealPlanFragment.DEALPLAN_UP_SUC);

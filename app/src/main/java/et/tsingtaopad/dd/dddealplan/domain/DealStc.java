@@ -20,6 +20,8 @@ public class DealStc implements Serializable{
 	private String gridname;//
 	private String userid;//
 	private String username;//
+	private String repairstatus;//
+
 	private String status;//
 	private String repairtime;//
 	private String terminalkey;//
@@ -139,5 +141,13 @@ public class DealStc implements Serializable{
 
 	public void setRepairterid(String repairterid) {
 		this.repairterid = repairterid;
+	}
+
+	public String getRepairstatus() {
+		return repairstatus;
+	}
+
+	public void setRepairstatus(String repairstatus) {
+		this.repairstatus = repairstatus;
 	}
 }

@@ -160,6 +160,14 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<MitRepairterM, String> mitRepairterMDao = null;
     private Dao<MitRepaircheckM, String> mitRepaircheckMDao = null;
 
+
+    private Dao<MstAgreeTmp, String> mstAgreeTmpDao = null;
+    private Dao<MstAgreeDetailTmp, String> mstAgreeDetailTmpDao = null;
+    private Dao<MitValagreeM, String> mitValagreeMDao = null;
+    private Dao<MitValagreeMTemp, String> mitValagreeMTempDao = null;
+    private Dao<MitValagreedetailM, String> mitValagreedetailMDao = null;
+    private Dao<MitValagreedetailMTemp, String> mitValagreedetailMTempDao = null;
+
     public DatabaseHelper(Context context) {
 
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -260,7 +268,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, MstGroupproductM.class);// 产品组合是否达标表
 
 
-
             TableUtils.createTable(connectionSource, MstTerminalinfoMTemp.class);// 终端表 临时表
 
             TableUtils.createTable(connectionSource, MstAgencysupplyInfoTemp.class);// 我品供货关系表 临时表
@@ -336,6 +343,14 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, MitRepairM.class);// 整改计划主表
             TableUtils.createTable(connectionSource, MitRepairterM.class);// 整改计划终端表
             TableUtils.createTable(connectionSource, MitRepaircheckM.class);// 整改计划审核表
+
+            TableUtils.createTable(connectionSource, MstAgreeTmp.class);// 协议主表
+            TableUtils.createTable(connectionSource, MstAgreeDetailTmp.class);// 协议产品表
+
+            TableUtils.createTable(connectionSource, MitValagreeM.class);// 终端追溯协议主表
+            TableUtils.createTable(connectionSource, MitValagreeMTemp.class);// 终端追溯协议主表 临时表
+            TableUtils.createTable(connectionSource, MitValagreedetailM.class);// 终端追溯协议对付信息表
+            TableUtils.createTable(connectionSource, MitValagreedetailMTemp.class);// 终端追溯协议对付信息表 临时表
 
 
             this.initView(db);
@@ -1173,18 +1188,42 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 
                 // 整改计划主表
-                String MIT_REPAIR_M = "create table MIT_REPAIR_M ( id varchar2(36) not null, gridkey  varchar2(36) null, userid varchar2(36) null, content  varchar2(500) null, repairremark varchar2(500) null, checkcontent varchar2(500) null, creuser  varchar2(128) null, creuserareaid varchar(36)  null, credate  date null, updateuser varchar2(128) null, updatedate date null, uploadflag  varchar2(1) null, padisconsistent  varchar2(1) null )";
+                String MIT_REPAIR_M = "create table MIT_REPAIR_M ( id varchar2(36) not null, status char(1) null,gridkey  varchar2(36) null, userid varchar2(36) null, content  varchar2(500) null, repairremark varchar2(500) null, checkcontent varchar2(500) null, creuser  varchar2(128) null, creuserareaid varchar(36)  null, credate  date null, updateuser varchar2(128) null, updatedate date null, uploadflag  varchar2(1) null, padisconsistent  varchar2(1) null )";
                 db.execSQL(MIT_REPAIR_M);
                 // 整改计划终端表
                 String MIT_REPAIRTER_M = "create table MIT_REPAIRTER_M ( id varchar2(36) not null, repairid varchar2(36) null, gridkey  varchar2(36) null, routekey varchar2(36) null, terminalkey  varchar2(36) null, uploadflag  varchar2(1) null, padisconsistent  varchar2(1) null )";
                 db.execSQL(MIT_REPAIRTER_M);
                 // 整改计划审核表
-                String MIT_REPAIRCHECK_M = "create table MIT_REPAIRCHECK_M ( id varchar2(36) not null, repairid varchar2(36) null, status char(1) null, repairtime date null, uploadflag  varchar2(1) null, padisconsistent  varchar2(1) null )";
+                String MIT_REPAIRCHECK_M = "create table MIT_REPAIRCHECK_M ( id varchar2(36) not null, repairid varchar2(36) null, status char(1) null, repairtime date null, uploadflag  varchar2(1) null,credate date null, padisconsistent  varchar2(1) null )";
                 db.execSQL(MIT_REPAIRCHECK_M);
 
                 // 在定格表新加字段 业代名称 username  整顿计划显示要用到
                 db.execSQL("alter table MST_GRID_M add username varchar(100)");
                 db.execSQL("alter table MST_GRID_M add userid varchar(100)");
+
+
+                // 协议产品详情
+                String MST_AGREE_DETAIL_TMP = "create table MST_AGREE_DETAIL_TMP ( id varchar2(36) not null, amount varchar2(36) null, terminalkey varchar2(36) null,agreeid varchar2(36) null,cashdate varchar2(36) null, cashtype  varchar2(36) null, price  varchar2(36) null, proname varchar2(300) null, qty  varchar2(36) null )";
+                db.execSQL(MST_AGREE_DETAIL_TMP);
+                // 协议表
+                String MST_AGREE_TMP = "create table MST_AGREE_TMP ( id varchar2(36) not null, agencyname varchar2(128) null, agreecd varchar2(128) null, dealid  varchar2(36) null, enddate  varchar2(36) null, mobile varchar2(36) null, notes varchar2(2000) null,terminalkey varchar2(36) null, paymentagencyname  varchar2(128) null, paytype  varchar2(36) null, signer varchar2(36) null, startdate varchar2(36) null, suppierid  varchar2(36) null )";
+                db.execSQL(MST_AGREE_TMP);
+
+
+                // 终端追溯协议主表
+                String MIT_VALAGREE_M = "create table MIT_VALAGREE_M ( id varchar2(36) not null, valterid varchar2(36) null, agreecode  varchar2(128) null, agencyname varchar2(128) null, agencykey  varchar2(36) null, moneyagency  varchar2(128) null, moneyagencykey  varchar2(36) null, startdate  date null, startdateflag char(1) null, startdateremark varchar2(500) null, enddate  date null, enddateflag  char(1) null, enddateremark varchar2(500) null, paytype  varchar2(36) null, contact  varchar2(50) null, mobile varchar2(50) null, notes varchar2(2000)  null, notesflag  char(1) null, notesremark  varchar2(500) null, creuser  varchar2(128) null, credate  date null, updateuser varchar2(128) null, updatedate date null, uploadflag char(1) null, padisconsistent char(1) null )";
+                db.execSQL(MIT_VALAGREE_M);
+                // 终端追溯协议主表 临时表
+                String MIT_VALAGREE_M_TEMP = "create table MIT_VALAGREE_M_TEMP ( id varchar2(36) not null, valterid varchar2(36) null, agreecode  varchar2(128) null, agencyname varchar2(128) null, agencykey  varchar2(36) null, moneyagency  varchar2(128) null, moneyagencykey  varchar2(36) null, startdate  date null, startdateflag char(1) null, startdateremark varchar2(500) null, enddate  date null, enddateflag  char(1) null, enddateremark varchar2(500) null, paytype  varchar2(36) null, contact  varchar2(50) null, mobile varchar2(50) null, notes varchar2(2000)  null, notesflag  char(1) null, notesremark  varchar2(500) null, creuser  varchar2(128) null, credate  date null, updateuser varchar2(128) null, updatedate date null, uploadflag char(1) null, padisconsistent char(1) null )";
+                db.execSQL(MIT_VALAGREE_M_TEMP);
+
+
+                // 终端追溯协议对付信息表
+                String MIT_VALAGREEDETAIL_M = "create table MIT_VALAGREEDETAIL_M ( id varchar2(36) not null, valterid varchar2(36) null, valagreeid varchar2(36) null, prokey varchar2(36) null, proname  varchar2(200) null, cashtype varchar2(36) null, commoney number(22,7) null, trunnum  number(22,7) null, price number(22,7) null, cashdate date null, agreedetailflag char(1) null, erroritem  char(1) null, remarks  varchar2(500) null, uploadflag char(1) null, padisconsistent char(1) null )";
+                db.execSQL(MIT_VALAGREEDETAIL_M);
+                // 终端追溯协议对付信息表 临时表
+                String MIT_VALAGREEDETAIL_M_TEMP = "create table MIT_VALAGREEDETAIL_M_TEMP ( id varchar2(36) not null, valterid varchar2(36) null, valagreeid varchar2(36) null, prokey varchar2(36) null, proname  varchar2(200) null, cashtype varchar2(36) null, commoney number(22,7) null, trunnum  number(22,7) null, price number(22,7) null, cashdate date null, agreedetailflag char(1) null, erroritem  char(1) null, remarks  varchar2(500) null, uploadflag char(1) null, padisconsistent char(1) null )";
+                db.execSQL(MIT_VALAGREEDETAIL_M_TEMP);
 
 
             } catch (Exception e) {
@@ -1324,6 +1363,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mstAgencysupplyInfoTempDao;
     }
+
     public Dao<MitAgencysupplyInfo, String> getMitAgencysupplyInfoDao() throws SQLException {
 
         if (mitAgencysupplyInfoDao == null) {
@@ -1355,7 +1395,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mitValcheckterMDao;
     }
-
 
 
     public Dao<MitValgroupproM, String> getMitValgroupproMDao() throws SQLException {
@@ -1390,7 +1429,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mitValpicMTempDao;
     }
-
 
 
     public Dao<MitValcmpotherM, String> getMitValcmpotherMDao() throws SQLException {
@@ -1448,6 +1486,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mitValpromotionsMDao;
     }
+
     public Dao<MitValpromotionsMTemp, String> getMitValpromotionsMTempDao() throws SQLException {
 
         if (mitValpromotionsMTempDao == null) {
@@ -1688,6 +1727,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mstPromotermInfoDao;
     }
+
     public Dao<MstPromotermInfoTemp, String> getMstPromotermInfoTempDao() throws SQLException {
 
         if (mstPromotermInfoTempDao == null) {
@@ -1695,6 +1735,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mstPromotermInfoTempDao;
     }
+
     public Dao<MitPromotermInfo, String> getMitPromotermInfoDao() throws SQLException {
 
         if (mitPromotermInfoDao == null) {
@@ -1750,6 +1791,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mstTerminalinfoMTempDao;
     }
+
     public Dao<MitTerminalinfoM, String> getMitTerminalinfoMDao() throws SQLException {
 
         if (mitTerminalinfoMDao == null) {
@@ -1757,6 +1799,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mitTerminalinfoMDao;
     }
+
     public Dao<MstTerminalinfoMCart, String> getMstTerminalinfoMCartDao() throws SQLException {
 
         if (mstTerminalinfoMCartDao == null) {
@@ -1780,6 +1823,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mitValterMTempDao;
     }
+
     public Dao<MitValterM, String> getMitValterMDao() throws SQLException {
 
         if (mitValterMDao == null) {
@@ -1795,6 +1839,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mitValsupplyMDao;
     }
+
     public Dao<MitValsupplyMTemp, String> getMitValsupplyMTempDao() throws SQLException {
 
         if (mitValsupplyMTempDao == null) {
@@ -1811,6 +1856,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mstVisitMDao;
     }
+
     public Dao<MitVisitM, String> getMitVisitMDao() throws SQLException {
 
         if (mitVisitMDao == null) {
@@ -1850,6 +1896,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mstVistproductInfoTempDao;
     }
+
     public Dao<MitVistproductInfo, String> getMitVistproductInfoDao() throws SQLException {
 
         if (mitVistproductInfoDao == null) {
@@ -1889,6 +1936,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mstCollectionexerecordInfoDao;
     }
+
     public Dao<MstCollectionexerecordInfoTemp, String> getMstCollectionexerecordInfoTempDao() throws SQLException {
 
         if (mstCollectionexerecordInfoTempDao == null) {
@@ -2044,6 +2092,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mstCmpsupplyInfoTempDao;
     }
+
     public Dao<MitCmpsupplyInfo, String> getMitCmpsupplyInfoDao() throws SQLException {
         if (mitCmpsupplyInfoDao == null) {
             mitCmpsupplyInfoDao = getDao(MitCmpsupplyInfo.class);
@@ -2106,6 +2155,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mstCameraiInfoMTempDao;
     }
+
     public Dao<MitCameraInfoM, String> getMitCameraInfoMDao() throws SQLException {
         if (mitCameraInfoMDao == null) {
             mitCameraInfoMDao = getDao(MitCameraInfoM.class);
@@ -2175,6 +2225,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mitAgencynumMDao;
     }
+
     public Dao<MitAgencyproM, String> getMitAgencyproMDao() throws SQLException {
 
         if (mitAgencyproMDao == null) {
@@ -2182,6 +2233,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mitAgencyproMDao;
     }
+
     public Dao<MitTerminalM, String> getMitTerminalMDao() throws SQLException {
 
         if (mitTerminalMDao == null) {
@@ -2189,6 +2241,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mitTerminalMDao;
     }
+
     public Dao<MitValagencykfM, String> getMitValagencykfMDao() throws SQLException {
 
         if (mitValagencykfMDao == null) {
@@ -2205,6 +2258,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mitValaddaccountMTempDao;
     }
+
     public Dao<MitValaddaccountM, String> getMitValaddaccountMDao() throws SQLException {
 
         if (mitValaddaccountMDao == null) {
@@ -2220,6 +2274,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mitValaddaccountproMTempDao;
     }
+
     public Dao<MitValaddaccountproM, String> getMitValaddaccountproMDao() throws SQLException {
 
         if (mitValaddaccountproMDao == null) {
@@ -2229,7 +2284,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     }
 
 
-
     public Dao<MitPlanweekM, String> getMitPlanweekMDao() throws SQLException {
 
         if (mitPlanweekMDao == null) {
@@ -2237,6 +2291,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mitPlanweekMDao;
     }
+
     public Dao<MitPlandayM, String> getMitPlandayMDao() throws SQLException {
 
         if (mitPlandayMDao == null) {
@@ -2244,6 +2299,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mitPlandayMDao;
     }
+
     public Dao<MitPlandaydetailM, String> getMitPlandaydetailMDao() throws SQLException {
 
         if (mitPlandaydetailMDao == null) {
@@ -2251,6 +2307,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mitPlandaydetailMDao;
     }
+
     public Dao<MitPlandayvalM, String> getMitPlandayvalMDao() throws SQLException {
 
         if (mitPlandayvalMDao == null) {
@@ -2266,6 +2323,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mitRepairMDao;
     }
+
     public Dao<MitRepairterM, String> getMitRepairterMDao() throws SQLException {
 
         if (mitRepairterMDao == null) {
@@ -2273,12 +2331,61 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return mitRepairterMDao;
     }
+
     public Dao<MitRepaircheckM, String> getMitRepaircheckMDao() throws SQLException {
 
         if (mitRepaircheckMDao == null) {
             mitRepaircheckMDao = getDao(MitRepaircheckM.class);
         }
         return mitRepaircheckMDao;
+    }
+
+    public Dao<MstAgreeTmp, String> getMstAgreeTmpDao() throws SQLException {
+
+        if (mstAgreeTmpDao == null) {
+            mstAgreeTmpDao = getDao(MstAgreeTmp.class);
+        }
+        return mstAgreeTmpDao;
+    }
+
+    public Dao<MstAgreeDetailTmp, String> getMstAgreeDetailTmpDao() throws SQLException {
+
+        if (mstAgreeDetailTmpDao == null) {
+            mstAgreeDetailTmpDao = getDao(MstAgreeDetailTmp.class);
+        }
+        return mstAgreeDetailTmpDao;
+    }
+
+    public Dao<MitValagreeM, String> getMitValagreeMDao() throws SQLException {
+
+        if (mitValagreeMDao == null) {
+            mitValagreeMDao = getDao(MitValagreeM.class);
+        }
+        return mitValagreeMDao;
+    }
+
+    public Dao<MitValagreeMTemp, String> getMitValagreeMTempDao() throws SQLException {
+
+        if (mitValagreeMTempDao == null) {
+            mitValagreeMTempDao = getDao(MitValagreeMTemp.class);
+        }
+        return mitValagreeMTempDao;
+    }
+
+    public Dao<MitValagreedetailM, String> getMitValagreedetailMDao() throws SQLException {
+
+        if (mitValagreedetailMDao == null) {
+            mitValagreedetailMDao = getDao(MitValagreedetailM.class);
+        }
+        return mitValagreedetailMDao;
+    }
+
+    public Dao<MitValagreedetailMTemp, String> getMitValagreedetailMTempDao() throws SQLException {
+
+        if (mitValagreedetailMTempDao == null) {
+            mitValagreedetailMTempDao = getDao(MitValagreedetailMTemp.class);
+        }
+        return mitValagreedetailMTempDao;
     }
 
     /**

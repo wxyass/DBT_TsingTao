@@ -39,6 +39,9 @@ import et.tsingtaopad.db.table.MitPlandayM;
 import et.tsingtaopad.db.table.MitPlandaydetailM;
 import et.tsingtaopad.db.table.MitPlandayvalM;
 import et.tsingtaopad.db.table.MitPlanweekM;
+import et.tsingtaopad.db.table.MitRepairM;
+import et.tsingtaopad.db.table.MitRepaircheckM;
+import et.tsingtaopad.db.table.MitRepairterM;
 import et.tsingtaopad.db.table.MitValcheckterM;
 import et.tsingtaopad.db.table.MstAgencyKFM;
 import et.tsingtaopad.db.table.MstAgencygridInfo;
@@ -46,6 +49,8 @@ import et.tsingtaopad.db.table.MstAgencyinfoM;
 import et.tsingtaopad.db.table.MstAgencysupplyInfo;
 import et.tsingtaopad.db.table.MstAgencytransferInfo;
 import et.tsingtaopad.db.table.MstAgencyvisitM;
+import et.tsingtaopad.db.table.MstAgreeDetailTmp;
+import et.tsingtaopad.db.table.MstAgreeTmp;
 import et.tsingtaopad.db.table.MstCameraInfoMTemp;
 import et.tsingtaopad.db.table.MstCheckexerecordInfo;
 import et.tsingtaopad.db.table.MstCheckmiddleInfo;
@@ -175,6 +180,13 @@ public class MainService extends XtShopVisitService {
     private Dao<MitPlandaydetailM, String> mitPlandaydetailMDao = null;
     private Dao<MitPlandayvalM, String> mitPlandayvalMDao = null;
 
+    private Dao<MstAgreeTmp, String> mstAgreeTmpDao = null;
+    private Dao<MstAgreeDetailTmp, String> mstAgreeDetailTmpDao = null;
+
+    private Dao<MitRepairM, String> mitRepairMDao = null;
+    private Dao<MitRepairterM, String> mitRepairterMDao = null;
+    private Dao<MitRepaircheckM, String> mitRepaircheckMDao = null;
+
     public MainService(Context context, Handler handler) {
         super(context, handler);
         this.context = context;
@@ -252,6 +264,13 @@ public class MainService extends XtShopVisitService {
             mitPlandaydetailMDao = helper.getMitPlandaydetailMDao();
             mitPlandayvalMDao = helper.getMitPlandayvalMDao();
 
+            mstAgreeTmpDao = helper.getMstAgreeTmpDao();
+            mstAgreeDetailTmpDao = helper.getMstAgreeDetailTmpDao();
+
+            mitRepairMDao = helper.getMitRepairMDao();
+            mitRepairterMDao = helper.getMitRepairterMDao();
+            mitRepaircheckMDao = helper.getMitRepaircheckMDao();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -297,6 +316,13 @@ public class MainService extends XtShopVisitService {
     List<MitPlandayM> mitPlandayMs = null;
     List<MitPlandaydetailM> mitPlandaydetailMs = null;
     List<MitPlandayvalM> mitPlandayvalMs = null;
+
+    List<MstAgreeTmp> mstAgreeTmps = null;
+    List<MstAgreeDetailTmp> mstAgreeDetailTmps = null;
+
+    List<MitRepairM> mitRepairMs = null;
+    List<MitRepairterM> mitRepairterMs = null;
+    List<MitRepaircheckM> mitRepaircheckMs = null;
 
     /**
      * 同步表数据
@@ -474,6 +500,27 @@ public class MainService extends XtShopVisitService {
             else if(mClass.contains("MitPlandayvalM")){
                 mitPlandayvalMs= (List<MitPlandayvalM>) JsonUtil.parseList(json, cls);
                 updateData(mitPlandayvalMDao, mitPlandayvalMs);
+            }
+            else if(mClass.contains("MstAgreeTmp")){
+                mstAgreeTmps= (List<MstAgreeTmp>) JsonUtil.parseList(json, cls);
+                updateData(mstAgreeTmpDao, mstAgreeTmps);
+            }
+            else if(mClass.contains("MstAgreeDetailTmp")){
+                mstAgreeDetailTmps= (List<MstAgreeDetailTmp>) JsonUtil.parseList(json, cls);
+                updateData(mstAgreeDetailTmpDao, mstAgreeDetailTmps);
+            }
+
+            else if(mClass.contains("MitRepairM")){
+                mitRepairMs= (List<MitRepairM>) JsonUtil.parseList(json, cls);
+                updateData(mitRepairMDao, mitRepairMs);
+            }
+            else if(mClass.contains("MitRepairterM")){
+                mitRepairterMs= (List<MitRepairterM>) JsonUtil.parseList(json, cls);
+                updateData(mitRepairterMDao, mitRepairterMs);
+            }
+            else if(mClass.contains("MitRepaircheckM")){
+                mitRepaircheckMs= (List<MitRepaircheckM>) JsonUtil.parseList(json, cls);
+                updateData(mitRepaircheckMDao, mitRepaircheckMs);
             }
 
             connection.commit(null);
@@ -666,6 +713,8 @@ public class MainService extends XtShopVisitService {
         String MST_VISIT_M = emp.getMST_VISIT_M();
         String MST_VISTPRODUCT_INFO = emp.getMST_VISTPRODUCT_INFO();
         String MST_AGENCYACCOUNT_M = emp.getMST_AGENCYACCOUNT_M();
+        String MST_AGREE_TMP = emp.getMST_AGREE_TMP();
+        String MST_AGREE_DETAIL_TMP = emp.getMST_AGREE_DETAIL_TMP();
 
         createOrUpdateTable(MST_AGENCYGRID_INFO, "MST_AGENCYGRID_INFO", MstAgencygridInfo.class);
         // createOrUpdateTable(MST_AGENCYINFO_M, "MST_AGENCYINFO_M", MstAgencyinfoM.class);
@@ -678,6 +727,9 @@ public class MainService extends XtShopVisitService {
         createOrUpdateTable(MST_VISIT_M, "MST_VISIT_M", MstVisitM.class);
         createOrUpdateTable(MST_VISTPRODUCT_INFO, "MST_VISTPRODUCT_INFO", MstVistproductInfo.class);
         createOrUpdateTable(MST_AGENCYACCOUNT_M, "MST_TERMLEDGER_INFO", MstTermLedgerInfo.class);
+
+        createOrUpdateTable(MST_AGREE_TMP, "MST_AGREE_TMP", MstAgreeTmp.class);
+        createOrUpdateTable(MST_AGREE_DETAIL_TMP, "MST_AGREE_DETAIL_TMP", MstAgreeDetailTmp.class);
     }
 
 }

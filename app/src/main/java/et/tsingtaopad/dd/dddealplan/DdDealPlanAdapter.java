@@ -93,10 +93,10 @@ public class DdDealPlanAdapter extends BaseAdapter {
         holder.measure.setText(item.getCheckcontent());
         holder.checktime.setText(item.getRepairtime());
 
-        if ("1".equals(item.getStatus())) {
+        if ("1".equals(item.getRepairstatus())) {
             holder.checkstatus.setText("未通过");
             holder.operation.setText("修改计划");
-        } else if ("2".equals(item.getStatus())) {
+        } else if ("2".equals(item.getRepairstatus())) {
             holder.checkstatus.setText("已通过");
             holder.operation.setText("已通过");
         } else {

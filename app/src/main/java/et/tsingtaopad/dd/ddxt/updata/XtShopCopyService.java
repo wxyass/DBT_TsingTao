@@ -54,6 +54,10 @@ import et.tsingtaopad.db.table.MitValaddaccountM;
 import et.tsingtaopad.db.table.MitValaddaccountMTemp;
 import et.tsingtaopad.db.table.MitValaddaccountproM;
 import et.tsingtaopad.db.table.MitValaddaccountproMTemp;
+import et.tsingtaopad.db.table.MitValagreeM;
+import et.tsingtaopad.db.table.MitValagreeMTemp;
+import et.tsingtaopad.db.table.MitValagreedetailM;
+import et.tsingtaopad.db.table.MitValagreedetailMTemp;
 import et.tsingtaopad.db.table.MitValcheckitemM;
 import et.tsingtaopad.db.table.MitValcheckitemMTemp;
 import et.tsingtaopad.db.table.MitValchecktypeM;
@@ -1759,6 +1763,12 @@ public class XtShopCopyService {
             Dao<MitValaddaccountproM, String> mitValaddaccountproMDao = helper.getMitValaddaccountproMDao();
             Dao<MitValaddaccountproMTemp, String> mitValaddaccountproMTempDao = helper.getMitValaddaccountproMTempDao();
 
+
+            Dao<MitValagreeM, String> valagreeMDao = helper.getMitValagreeMDao();
+            Dao<MitValagreeMTemp, String> valagreeMTempDao = helper.getMitValagreeMTempDao();
+            Dao<MitValagreedetailM, String> mitValagreedetailMDao = helper.getMitValagreedetailMDao();
+            Dao<MitValagreedetailMTemp, String> mitValagreedetailMTempDao = helper.getMitValagreedetailMTempDao();
+
             connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
             connection.setAutoCommit(false);
 
@@ -1795,6 +1805,10 @@ public class XtShopCopyService {
             createMitValaddaccountMByTemp(mitValaddaccountMDao,mitValaddaccountMTempDao,valterid);
             createMitValaddaccountproMTempByTemp(mitValaddaccountproMDao,mitValaddaccountproMTempDao,valterid);
 
+            // 复制 协议主表
+            createMitValagreeMByTemp(valagreeMDao,valagreeMTempDao,valterid);
+            createMitValagreedetailMTempByTemp(mitValagreedetailMDao,mitValagreedetailMTempDao,valterid);
+
             connection.commit(null);
         } catch (Exception e) {
             Log.e(TAG, "更新拜访离店时间及是否要上传标志失败", e);
@@ -1806,6 +1820,94 @@ public class XtShopCopyService {
             }
         }
     }
+
+    // 复制督导协议主表
+    private void createMitValagreeMByTemp(Dao<MitValagreeM, String> valagreeMDao,
+                                          Dao<MitValagreeMTemp, String> valagreeMTempDao,
+                                          String valterid) {
+        try {
+            QueryBuilder<MitValagreeMTemp, String> collectionQB = valagreeMTempDao.queryBuilder();
+            Where<MitValagreeMTemp, String> collectionWhere = collectionQB.where();
+            collectionWhere.eq("valsupplyid", valterid);
+            List<MitValagreeMTemp> cameraInfoMTemps = collectionQB.query();
+            if(cameraInfoMTemps.size()>0){
+                for (MitValagreeMTemp item:cameraInfoMTemps) {
+                    MitValagreeM info = new MitValagreeM();
+                    info.setId(item.getId());// 主键
+                    info.setValterid(item.getValterid());// 终端ID
+                    info.setAgreecode(item.getAgreecode());//协议编码
+                    info.setAgencyname(item.getAgencyname());//供货商名称
+                    // mitValagreeMTemp.setAgencykey(mstAgreeTmp.get) ;//供货商ID
+                    info.setMoneyagency(item.getMoneyagency());//垫付费用经销商
+                    // mitValagreeMTemp.setMoneyagencykey(mstAgreeTmp.get);//垫付费用经销商ID
+                    info.setStartdate(item.getStartdate());//开始时间
+                    info.setStartdateflag(item.getStartdateflag()) ;//开始时间是否正确
+                    info.setStartdateremark(item.getStartdateremark());//开始时间备注
+                    info.setEnddate(item.getEnddate());//结束时间
+                    info.setEnddateflag(item.getEnddateflag()) ;//结束时间是否正确
+                    info.setEnddateremark(item.getEnddateremark()) ;//结束时间备注
+                    info.setPaytype(item.getPaytype());//支付周期类型
+                    info.setContact(item.getContact());//联系人
+                    info.setMobile(item.getMobile());//联系电话
+                    info.setNotes(item.getNotes());//主要条款
+                    info.setNotesflag(item.getNotesflag()) ;//主要条款是否正确
+                    info.setNotesremark(item.getNotesremark()) ;//主要条款备注
+
+                    info.setUploadflag("1");
+                    info.setPadisconsistent("0");// 是否已上传 0:未上传 1:已上传
+
+                    info.setCredate(new Date());
+                    info.setUpdatedate(new Date());
+                    info.setCreuser(PrefUtils.getString(context,"userid",""));
+                    info.setUpdateuser(PrefUtils.getString(context,"userid",""));
+
+                    valagreeMDao.create(info);
+                }
+            }
+        }catch (Exception e){
+            Log.e(TAG, "复制督导协议主表", e);
+        }
+
+    }
+
+    // 复制 终端追溯协议对付信息表
+    private void createMitValagreedetailMTempByTemp(Dao<MitValagreedetailM, String> mitValagreedetailMDao,
+                                                    Dao<MitValagreedetailMTemp, String> mitValagreedetailMTempDao,
+                                                    String valterid) {
+
+        try {
+            QueryBuilder<MitValagreedetailMTemp, String> collectionQB = mitValagreedetailMTempDao.queryBuilder();
+            Where<MitValagreedetailMTemp, String> collectionWhere = collectionQB.where();
+            collectionWhere.eq("valsupplyid", valterid);
+            List<MitValagreedetailMTemp> cameraInfoMTemps = collectionQB.query();
+            if(cameraInfoMTemps.size()>0){
+                for (MitValagreedetailMTemp item:cameraInfoMTemps) {
+                    MitValagreedetailM info = new MitValagreedetailM();
+                    info.setId(item.getId());// 主键
+                    info.setValterid(item.getValterid());// 终端ID
+                    info.setValagreeid(item.getValagreeid());//终端追溯协议主表ID
+                    //mitValagreedetailMTemp.setProkey(mstAgreeDetailTmp.get);//产品KEY
+                    info.setProname(item.getProname());//产品名称
+                    info.setCashtype(item.getCashtype());//对付形式
+                    info.setCommoney(item.getCommoney());//实际公司承担金额
+                    info.setTrunnum(item.getTrunnum());//实际数量
+                    info.setPrice(item.getPrice());//单价
+                    info.setCashdate(item.getCashdate());//兑付日期
+                    info.setAgreedetailflag(item.getAgreedetailflag());//正确与否
+                    info.setErroritem(item.getErroritem());//错误项
+                    info.setRemarks(item.getRemarks());//备注
+
+                    info.setUploadflag("1");
+                    info.setPadisconsistent("0");// 是否已上传 0:未上传 1:已上传
+
+                    mitValagreedetailMDao.create(info);
+                }
+            }
+        }catch (Exception e){
+            Log.e(TAG, "复制督导终端追溯协议对付信息表", e);
+        }
+    }
+
 
     private void createMitValaddaccountproMTempByTemp(Dao<MitValaddaccountproM, String> mitValaddaccountproMDao,
                                                       Dao<MitValaddaccountproMTemp, String> mitValaddaccountproMTempDao,

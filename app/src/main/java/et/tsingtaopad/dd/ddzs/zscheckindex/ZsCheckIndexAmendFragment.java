@@ -179,7 +179,7 @@ public class ZsCheckIndexAmendFragment extends BaseFragmentSupport implements Vi
 
     private void saveValue() {
 
-        checkIndexCalculateStc.setValchecktypeflag("N");// 达成组数正确与否
+        checkIndexCalculateStc.setValchecktypeflag("N");//
 
         // 我品占有率
         if ("59802090-02ac-4146-9cc3-f09570c36a26".equals(checkIndexCalculateStc.getIndexId())) {// 我品占有率

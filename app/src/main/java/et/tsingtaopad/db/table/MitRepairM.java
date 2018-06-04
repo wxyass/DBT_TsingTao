@@ -44,6 +44,8 @@ public class MitRepairM implements java.io.Serializable {
     private String uploadflag;//
     @DatabaseField
     private String padisconsistent;//
+    @DatabaseField
+    private String status;//0未复查1未通过2已通过
 
     // Constructors
 
@@ -157,5 +159,13 @@ public class MitRepairM implements java.io.Serializable {
 
     public void setPadisconsistent(String padisconsistent) {
         this.padisconsistent = padisconsistent;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

@@ -1,5 +1,6 @@
 package et.tsingtaopad.dd.dddealplan.remake;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,6 +31,7 @@ import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.db.table.MitRepairM;
 import et.tsingtaopad.db.table.MitRepaircheckM;
 import et.tsingtaopad.db.table.MitRepairterM;
+import et.tsingtaopad.dd.dddealplan.DdDealPlanFragment;
 import et.tsingtaopad.dd.dddealplan.domain.DealStc;
 import et.tsingtaopad.dd.dddealplan.make.DdDealSelectFragment;
 import et.tsingtaopad.dd.dddealplan.make.domain.DealPlanMakeStc;
@@ -86,6 +88,16 @@ public class DdReDealMakeFragment extends BaseFragmentSupport implements View.On
     private List<MitRepairterM> mitRepairterMSelects;
 
     private DdCheckTimeAdapter checkTimeAdapter;
+
+    private DdDealPlanFragment.MyHandler dealplanhandler;
+
+    public DdReDealMakeFragment() {
+    }
+
+    @SuppressLint("ValidFragment")
+    public DdReDealMakeFragment(DdDealPlanFragment.MyHandler DealPlanhandler) {
+        this.dealplanhandler =DealPlanhandler;
+    }
 
     @Nullable
     @Override
@@ -286,6 +298,7 @@ public class DdReDealMakeFragment extends BaseFragmentSupport implements View.On
         repairM.setUpdatedate(new Date());//更新时间
         repairM.setUploadflag("1");
         repairM.setPadisconsistent("0");
+        repairM.setStatus("0");//
 
         MitRepaircheckM mitRepaircheckM = new MitRepaircheckM();
         mitRepaircheckM.setId(FunUtil.getUUID());//
@@ -294,18 +307,21 @@ public class DdReDealMakeFragment extends BaseFragmentSupport implements View.On
         mitRepaircheckM.setRepairtime(checktime_string);//整改日期
         mitRepaircheckM.setUploadflag("1");
         mitRepaircheckM.setPadisconsistent("0");
+        mitRepaircheckM.setCredate(new Date());
 
         // 保存到库中
         xtSelectService.saveMitRepairM(repairM, mitRepaircheckM);
 
-        // 上传
         // 上传整顿计划
         XtUploadService xtUploadService = new XtUploadService(getActivity(), null);
         xtUploadService.upload_repair(false, repairM, mitRepaircheckM, 1);
 
 
-        Toast.makeText(getActivity(), "整顿计划保存成功", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(getActivity(), "整顿计划保存成功", Toast.LENGTH_SHORT).show();
         supportFragmentManager.popBackStack();
+
+        // 发送新增成功的信息
+        dealplanhandler.sendEmptyMessage(DdDealPlanFragment.DEALPLAN_UP_SUC);
     }
 
     private boolean checkTermName() {
