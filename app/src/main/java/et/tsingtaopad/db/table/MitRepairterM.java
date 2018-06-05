@@ -30,6 +30,9 @@ public class MitRepairterM implements java.io.Serializable {
     @DatabaseField
     private String padisconsistent;//
 
+    @DatabaseField
+    private String terminalname;//
+
     // Constructors
 
     /**
@@ -92,5 +95,14 @@ public class MitRepairterM implements java.io.Serializable {
 
     public void setPadisconsistent(String padisconsistent) {
         this.padisconsistent = padisconsistent;
+    }
+
+
+    public String getTerminalname() {
+        return terminalname;
+    }
+
+    public void setTerminalname(String terminalname) {
+        this.terminalname = terminalname;
     }
 }

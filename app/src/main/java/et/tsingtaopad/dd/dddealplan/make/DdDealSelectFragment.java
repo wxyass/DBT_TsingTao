@@ -174,6 +174,7 @@ public class DdDealSelectFragment extends BaseFragmentSupport implements View.On
                 XtTermSelectMStc xtTermSelectMStc = new XtTermSelectMStc();
                 xtTermSelectMStc.setRoutekey(mitRepairterM.getRoutekey());// 路线key
                 xtTermSelectMStc.setTerminalkey(mitRepairterM.getTerminalkey());// 终端key
+                xtTermSelectMStc.setTerminalname(mitRepairterM.getTerminalname());// 终端name
                 selectedList.add(xtTermSelectMStc);
             }
         }
@@ -366,7 +367,7 @@ public class DdDealSelectFragment extends BaseFragmentSupport implements View.On
                             if ("MST_TERMINALINFO_M".equals(tableName)) {
                                 String formjson = resObj.getResBody().getContent();
                                 parseTermListJson(formjson);
-                                Toast.makeText(getActivity(), "路线下终端列表请求成功", Toast.LENGTH_SHORT).show();
+                                // Toast.makeText(getActivity(), "路线下终端列表请求成功", Toast.LENGTH_SHORT).show();
                             }
 
                         } else {

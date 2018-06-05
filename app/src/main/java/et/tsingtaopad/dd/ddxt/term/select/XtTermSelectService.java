@@ -550,6 +550,7 @@ public class XtTermSelectService {
                 mitRepairterM.setGridkey(gridkey);//
                 mitRepairterM.setRoutekey(term.getRoutekey());//
                 mitRepairterM.setTerminalkey(term.getTerminalkey());//
+                mitRepairterM.setTerminalname(term.getTerminalname());//
                 mitRepairterM.setUploadflag("1");//
                 mitRepairterM.setPadisconsistent("0");//
                 proDao.createOrUpdate(mitRepairterM);

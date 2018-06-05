@@ -12,10 +12,16 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.lang.ref.SoftReference;
+import java.util.ArrayList;
+import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.dd.ddxt.chatvie.XtChatvieFragment;
+import et.tsingtaopad.dd.ddxt.checking.XtCheckIndexFragment;
+import et.tsingtaopad.dd.ddxt.invoicing.XtInvoicingFragment;
+import et.tsingtaopad.dd.ddxt.sayhi.XtSayhiFragment;
 
 /**
  * Created by yangwenmin on 2018/3/12.
@@ -37,7 +43,6 @@ public class DdDaySummaryFragment extends BaseFragmentSupport implements View.On
     public static final int DAYSUMMARY_UP_FAIL = 3202;
 
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -57,6 +62,9 @@ public class DdDaySummaryFragment extends BaseFragmentSupport implements View.On
         confirmBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
 
+
+
+
     }
 
     @Override
@@ -67,6 +75,11 @@ public class DdDaySummaryFragment extends BaseFragmentSupport implements View.On
         handler = new MyHandler(this);
         ConstValues.handler = handler;
         confirmTv.setText("日历");
+
+        XtSayhiFragment homeFragment = new XtSayhiFragment();
+        XtInvoicingFragment visitFragment = new XtInvoicingFragment();
+        XtCheckIndexFragment operationFragment = new XtCheckIndexFragment();
+        XtChatvieFragment systemFragment = new XtChatvieFragment();
 
 
     }

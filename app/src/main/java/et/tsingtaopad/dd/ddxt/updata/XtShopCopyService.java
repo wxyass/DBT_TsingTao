@@ -1766,6 +1766,7 @@ public class XtShopCopyService {
 
             Dao<MitValagreeM, String> valagreeMDao = helper.getMitValagreeMDao();
             Dao<MitValagreeMTemp, String> valagreeMTempDao = helper.getMitValagreeMTempDao();
+
             Dao<MitValagreedetailM, String> mitValagreedetailMDao = helper.getMitValagreedetailMDao();
             Dao<MitValagreedetailMTemp, String> mitValagreedetailMTempDao = helper.getMitValagreedetailMTempDao();
 
@@ -1807,6 +1808,7 @@ public class XtShopCopyService {
 
             // 复制 协议主表
             createMitValagreeMByTemp(valagreeMDao,valagreeMTempDao,valterid);
+            // 复制 协议产品详情主表
             createMitValagreedetailMTempByTemp(mitValagreedetailMDao,mitValagreedetailMTempDao,valterid);
 
             connection.commit(null);
@@ -1828,7 +1830,7 @@ public class XtShopCopyService {
         try {
             QueryBuilder<MitValagreeMTemp, String> collectionQB = valagreeMTempDao.queryBuilder();
             Where<MitValagreeMTemp, String> collectionWhere = collectionQB.where();
-            collectionWhere.eq("valsupplyid", valterid);
+            collectionWhere.eq("valterid", valterid);
             List<MitValagreeMTemp> cameraInfoMTemps = collectionQB.query();
             if(cameraInfoMTemps.size()>0){
                 for (MitValagreeMTemp item:cameraInfoMTemps) {
@@ -1837,9 +1839,9 @@ public class XtShopCopyService {
                     info.setValterid(item.getValterid());// 终端ID
                     info.setAgreecode(item.getAgreecode());//协议编码
                     info.setAgencyname(item.getAgencyname());//供货商名称
-                    // mitValagreeMTemp.setAgencykey(mstAgreeTmp.get) ;//供货商ID
+                    info.setAgencykey(item.getAgencykey()) ;//供货商ID
                     info.setMoneyagency(item.getMoneyagency());//垫付费用经销商
-                    // mitValagreeMTemp.setMoneyagencykey(mstAgreeTmp.get);//垫付费用经销商ID
+                    info.setMoneyagencykey(item.getMoneyagencykey());//垫付费用经销商ID
                     info.setStartdate(item.getStartdate());//开始时间
                     info.setStartdateflag(item.getStartdateflag()) ;//开始时间是否正确
                     info.setStartdateremark(item.getStartdateremark());//开始时间备注
@@ -1878,7 +1880,7 @@ public class XtShopCopyService {
         try {
             QueryBuilder<MitValagreedetailMTemp, String> collectionQB = mitValagreedetailMTempDao.queryBuilder();
             Where<MitValagreedetailMTemp, String> collectionWhere = collectionQB.where();
-            collectionWhere.eq("valsupplyid", valterid);
+            collectionWhere.eq("valterid", valterid);
             List<MitValagreedetailMTemp> cameraInfoMTemps = collectionQB.query();
             if(cameraInfoMTemps.size()>0){
                 for (MitValagreedetailMTemp item:cameraInfoMTemps) {
@@ -1886,7 +1888,7 @@ public class XtShopCopyService {
                     info.setId(item.getId());// 主键
                     info.setValterid(item.getValterid());// 终端ID
                     info.setValagreeid(item.getValagreeid());//终端追溯协议主表ID
-                    //mitValagreedetailMTemp.setProkey(mstAgreeDetailTmp.get);//产品KEY
+                    info.setProkey(item.getProkey());//产品KEY
                     info.setProname(item.getProname());//产品名称
                     info.setCashtype(item.getCashtype());//对付形式
                     info.setCommoney(item.getCommoney());//实际公司承担金额

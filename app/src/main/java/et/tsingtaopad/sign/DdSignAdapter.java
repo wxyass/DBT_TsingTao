@@ -1,4 +1,4 @@
-package et.tsingtaopad.dd.dddealplan.remake;
+package et.tsingtaopad.sign;
 
 import android.app.Activity;
 import android.util.Log;
@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.Date;
@@ -15,21 +16,19 @@ import et.tsingtaopad.R;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.dd.dddealplan.domain.DealStc;
-import et.tsingtaopad.dd.dddealplan.remake.domain.ReCheckTimeStc;
-import et.tsingtaopad.initconstvalues.domain.KvStc;
 import et.tsingtaopad.listviewintf.IClick;
 
 /**
  * 项目名称：营销移动智能工作平台 </br>
  * 日期      原因  BUG号    修改人 修改版本</br>
  */
-public class DdCheckTimeAdapter extends BaseAdapter {
+public class DdSignAdapter extends BaseAdapter {
 
     private Activity context;
-    private List<ReCheckTimeStc> dataLst;
+    private List<DealStc> dataLst;
     private IClick listener;
 
-    public DdCheckTimeAdapter(Activity context, List<ReCheckTimeStc> dataLst, IClick listener) {
+    public DdSignAdapter(Activity context, List<DealStc> dataLst, IClick listener) {
         this.context = context;
         this.dataLst = dataLst;
         this.listener = listener;
@@ -64,34 +63,29 @@ public class DdCheckTimeAdapter extends BaseAdapter {
         ViewHolder holder = null;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_remark_checktime, null);
-            holder.measure = (TextView) convertView.findViewById(R.id.item_re_status_show);
-            holder.checktime = (TextView) convertView.findViewById(R.id.item_re_checktime_show);
-
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_dd_sign, null);
+            holder.termname = (TextView) convertView.findViewById(R.id.item_sign_termname);
+            holder.grid = (TextView) convertView.findViewById(R.id.item_sign_grid);
+            holder.ydname = (TextView) convertView.findViewById(R.id.item_sign_ydname);
             convertView.setTag(holder);
+
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        final ReCheckTimeStc item = dataLst.get(position);
+        final DealStc item = dataLst.get(position);
 
-        // 核查时间
-        holder.checktime.setText(item.getRepairtime().substring(0,10));
-
-        if ("1".equals(item.getStatus())) {
-            holder.measure.setText("未通过");
-        } else if ("2".equals(item.getStatus())) {
-            holder.measure.setText("已通过");
-        } else {
-            holder.measure.setText("未复查");
-        }
+        holder.termname.setText(item.getTerminalname());
+        holder.grid.setText(item.getGridname());
+        holder.ydname.setText(item.getUsername());
 
         return convertView;
     }
 
     private class ViewHolder {
-        private TextView measure;
-        private TextView checktime;
+        private TextView termname;
+        private TextView grid;
+        private TextView ydname;
 
     }
 

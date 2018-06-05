@@ -1191,10 +1191,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 String MIT_REPAIR_M = "create table MIT_REPAIR_M ( id varchar2(36) not null, status char(1) null,gridkey  varchar2(36) null, userid varchar2(36) null, content  varchar2(500) null, repairremark varchar2(500) null, checkcontent varchar2(500) null, creuser  varchar2(128) null, creuserareaid varchar(36)  null, credate  date null, updateuser varchar2(128) null, updatedate date null, uploadflag  varchar2(1) null, padisconsistent  varchar2(1) null )";
                 db.execSQL(MIT_REPAIR_M);
                 // 整改计划终端表
-                String MIT_REPAIRTER_M = "create table MIT_REPAIRTER_M ( id varchar2(36) not null, repairid varchar2(36) null, gridkey  varchar2(36) null, routekey varchar2(36) null, terminalkey  varchar2(36) null, uploadflag  varchar2(1) null, padisconsistent  varchar2(1) null )";
+                String MIT_REPAIRTER_M = "create table MIT_REPAIRTER_M ( id varchar2(36) not null, repairid varchar2(36) null, gridkey  varchar2(36) null, routekey varchar2(36) null, terminalkey  varchar2(36) null,terminalname varchar2(100) null, uploadflag  varchar2(1) null, padisconsistent  varchar2(1) null )";
                 db.execSQL(MIT_REPAIRTER_M);
                 // 整改计划审核表
-                String MIT_REPAIRCHECK_M = "create table MIT_REPAIRCHECK_M ( id varchar2(36) not null, repairid varchar2(36) null, status char(1) null, repairtime date null, uploadflag  varchar2(1) null,credate date null, padisconsistent  varchar2(1) null )";
+                String MIT_REPAIRCHECK_M = "create table MIT_REPAIRCHECK_M ( id varchar2(36) not null, repairid varchar2(36) null, status char(1) null, repairtime date null, uploadflag  varchar2(1) null,credate varchar2(36) null, padisconsistent  varchar2(1) null )";
                 db.execSQL(MIT_REPAIRCHECK_M);
 
                 // 在定格表新加字段 业代名称 username  整顿计划显示要用到
@@ -1203,7 +1203,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 
                 // 协议产品详情
-                String MST_AGREE_DETAIL_TMP = "create table MST_AGREE_DETAIL_TMP ( id varchar2(36) not null, amount varchar2(36) null, terminalkey varchar2(36) null,agreeid varchar2(36) null,cashdate varchar2(36) null, cashtype  varchar2(36) null, price  varchar2(36) null, proname varchar2(300) null, qty  varchar2(36) null )";
+                String MST_AGREE_DETAIL_TMP = "create table MST_AGREE_DETAIL_TMP ( id varchar2(36) not null, amount varchar2(36) null, terminalkey varchar2(36) null,agreeid varchar2(36) null,cashdate varchar2(36) null, cashtype  varchar2(36) null, price  varchar2(36) null, proname varchar2(300) null, productkey  varchar2(36) null,qty  varchar2(36) null )";
                 db.execSQL(MST_AGREE_DETAIL_TMP);
                 // 协议表
                 String MST_AGREE_TMP = "create table MST_AGREE_TMP ( id varchar2(36) not null, agencyname varchar2(128) null, agreecd varchar2(128) null, dealid  varchar2(36) null, enddate  varchar2(36) null, mobile varchar2(36) null, notes varchar2(2000) null,terminalkey varchar2(36) null, paymentagencyname  varchar2(128) null, paytype  varchar2(36) null, signer varchar2(36) null, startdate varchar2(36) null, suppierid  varchar2(36) null )";

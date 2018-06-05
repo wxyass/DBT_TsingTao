@@ -33,6 +33,8 @@ public class MstAgreeDetailTmp implements java.io.Serializable {
     private String agreeid;//
     @DatabaseField
     private String terminalkey;//
+    @DatabaseField
+    private String productkey	;//
 
     // Constructors
 
@@ -112,5 +114,13 @@ public class MstAgreeDetailTmp implements java.io.Serializable {
 
     public void setTerminalkey(String terminalkey) {
         this.terminalkey = terminalkey;
+    }
+
+    public String getProductkey() {
+        return productkey;
+    }
+
+    public void setProductkey(String productkey) {
+        this.productkey = productkey;
     }
 }

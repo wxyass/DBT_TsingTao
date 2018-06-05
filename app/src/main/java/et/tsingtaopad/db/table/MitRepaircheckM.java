@@ -29,7 +29,7 @@ public class MitRepaircheckM implements java.io.Serializable {
     @DatabaseField
     private String padisconsistent;//varchar2(1) null
     @DatabaseField
-    private Date credate;//varchar2(1) null
+    private String credate;//varchar2(1) null
 
     // Constructors
 
@@ -87,11 +87,11 @@ public class MitRepaircheckM implements java.io.Serializable {
         this.padisconsistent = padisconsistent;
     }
 
-    public Date getCredate() {
+    public String getCredate() {
         return credate;
     }
 
-    public void setCredate(Date credate) {
+    public void setCredate(String credate) {
         this.credate = credate;
     }
 }

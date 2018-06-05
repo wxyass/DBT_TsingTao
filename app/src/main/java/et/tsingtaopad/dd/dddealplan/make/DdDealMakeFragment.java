@@ -26,6 +26,8 @@ import java.util.List;
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.DateUtil;
+import et.tsingtaopad.core.util.dbtutil.FileUtil;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.db.table.MitRepairM;
@@ -186,7 +188,7 @@ public class DdDealMakeFragment extends BaseFragmentSupport implements View.OnCl
                 break;
             case R.id.zgjh_make_rl_checktime:// 选择核查时间
 
-                Toast.makeText(getActivity(), "选择核查时间", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getActivity(), "选择核查时间", Toast.LENGTH_SHORT).show();
                 DatePickerDialog dateDialog = new DatePickerDialog(v.getContext(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -277,7 +279,7 @@ public class DdDealMakeFragment extends BaseFragmentSupport implements View.OnCl
         mitRepaircheckM.setRepairtime(checktime_string);//整改日期
         mitRepaircheckM.setUploadflag("1");
         mitRepaircheckM.setPadisconsistent("0");
-        mitRepaircheckM.setCredate(new Date());
+        mitRepaircheckM.setCredate(DateUtil.getDateTimeStr(8));
 
         // 保存到库中
         xtSelectService.saveMitRepairM(repairM, mitRepaircheckM);
@@ -342,7 +344,7 @@ public class DdDealMakeFragment extends BaseFragmentSupport implements View.OnCl
 
     // 结束上传  刷新页面  0:确定上传  1上传成功  2上传失败
     private void shuaxinDdDealMakeFragment(int upType) {
-        Toast.makeText(getActivity(), "成功返回保存数据", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(getActivity(), "成功返回保存数据", Toast.LENGTH_SHORT).show();
 
         // 刷新终端名称
         refreshTermname();

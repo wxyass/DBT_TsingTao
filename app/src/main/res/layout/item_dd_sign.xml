@@ -1,0 +1,89 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/white"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/item_sign_ll_all"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- 时间： -->
+        <RelativeLayout
+            android:id="@+id/item_sign_rl_termname"
+            style="@style/xtbf_sayhi_rl">
+
+            <TextView
+                android:id="@+id/tv01"
+                style="@style/xtbf_sayhi_one_tv"
+                android:text="时间"/>
+
+            <TextView
+                android:id="@+id/item_sign_termname"
+                style="@style/zgjh_dealmake_con"
+                android:layout_toRightOf="@id/tv01"
+                android:text=""
+                />
+
+            <ImageView
+                style="@style/xtbf_sayhi_third_tv"
+                />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray"/>
+
+        <!-- 地点： -->
+        <RelativeLayout
+            android:id="@+id/item_sign_rl_grid"
+            style="@style/xtbf_sayhi_rl">
+
+            <TextView
+                android:id="@+id/tv02"
+                style="@style/xtbf_sayhi_one_tv"
+                android:text="地点"/>
+
+            <TextView
+                android:id="@+id/item_sign_grid"
+                style="@style/zgjh_dealmake_con"
+                android:layout_toRightOf="@id/tv02"
+                android:text=""
+                />
+
+            <ImageView
+                style="@style/xtbf_sayhi_third_tv"/>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray"/>
+
+        <!-- 原因： -->
+        <RelativeLayout
+            android:id="@+id/item_sign_rl_ydname"
+            style="@style/xtbf_sayhi_rl">
+
+            <TextView
+                android:id="@+id/tv03"
+                style="@style/xtbf_sayhi_one_tv"
+                android:text="原因"/>
+
+            <TextView
+                android:id="@+id/item_sign_ydname"
+                style="@style/zgjh_dealmake_con"
+                android:layout_toRightOf="@id/tv03"
+                android:text=""
+                />
+
+            <ImageView
+                style="@style/xtbf_sayhi_third_tv"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

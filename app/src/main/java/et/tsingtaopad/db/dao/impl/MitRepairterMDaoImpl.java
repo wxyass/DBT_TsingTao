@@ -100,10 +100,10 @@ public class MitRepairterMDaoImpl extends BaseDaoImpl<MitRepairterM, String> imp
         List<DealStc> detailStcs = new ArrayList<>();
         StringBuffer buffer = new StringBuffer();
 
-        buffer.append("select mv.id, i.terminalkey,i.terminalname   ");
+        buffer.append("select mv.id, h.terminalkey,h.terminalname   ");
         buffer.append("        from MIT_REPAIR_M mv   ");
         buffer.append("   left join MIT_REPAIRTER_M h on h.repairid = mv.id    ");
-        buffer.append("   left join MST_TERMINALINFO_M i on i.terminalkey = h.terminalkey    ");
+        // buffer.append("   left join MST_TERMINALINFO_M i on i.terminalkey = h.terminalkey    ");
         buffer.append("    where h.repairid = ? ");
 
         SQLiteDatabase db = helper.getReadableDatabase();
@@ -125,7 +125,7 @@ public class MitRepairterMDaoImpl extends BaseDaoImpl<MitRepairterM, String> imp
         List<ReCheckTimeStc> detailStcs = new ArrayList<>();
         StringBuffer buffer = new StringBuffer();
         buffer.append("select * from MIT_REPAIRCHECK_M   ");
-        buffer.append("    where repairid = ? ");
+        buffer.append("    where repairid = ? order by credate");
 
         SQLiteDatabase db = helper.getReadableDatabase();
         Cursor cursor = db.rawQuery(buffer.toString(), new String[]{repairid});

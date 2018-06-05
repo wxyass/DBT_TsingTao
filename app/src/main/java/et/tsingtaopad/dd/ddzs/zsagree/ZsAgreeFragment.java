@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -43,6 +44,8 @@ public class ZsAgreeFragment extends XtBaseVisitFragment implements View.OnClick
     public static final int AGREE_CONTENT = 75;//
 
 
+    private LinearLayout agree_ll_all;
+    private LinearLayout agree_ll_tv;
     private TextView tv_agreecode_con1;
     private TextView tv_agencyname_con1;
     private TextView rl_moneyagency_con1;
@@ -78,6 +81,8 @@ public class ZsAgreeFragment extends XtBaseVisitFragment implements View.OnClick
     // 初始化控件
     private void initView(View view) {
 
+         agree_ll_all = (LinearLayout) view.findViewById(R.id.zs_agree_ll_all);
+         agree_ll_tv = (LinearLayout) view.findViewById(R.id.zs_agree_ll_tv);
         tv_agreecode_con1 = (TextView) view.findViewById(R.id.zdzs_agree_tv_agreecode_con1);
 
         tv_agencyname_con1 = (TextView) view.findViewById(R.id.zdzs_agree_tv_agencyname_con1);
@@ -128,13 +133,21 @@ public class ZsAgreeFragment extends XtBaseVisitFragment implements View.OnClick
         valagreeMTemps = zsAgreeService.queryMitValagreeMTemp(mitValterMTempKey);
         valagreedetailMTemps = zsAgreeService.queryMitValagreedetailMTemp(mitValterMTempKey);
 
-        mitValagreeMTemp = valagreeMTemps.get(0);// 协议,每个终端只有一条
-        //
-        initViewData();
-        //
-        initViewStatus();
-        //
-        initLvData();
+        if(valagreeMTemps.size()>0){// 该终端有协议
+            agree_ll_tv.setVisibility(View.GONE);
+            agree_ll_all.setVisibility(View.VISIBLE);
+            mitValagreeMTemp = valagreeMTemps.get(0);// 协议,每个终端只有一条
+            //
+            initViewData();
+            //
+            initViewStatus();
+            //
+            initLvData();
+
+        }else{
+            agree_ll_all.setVisibility(View.GONE);
+            agree_ll_tv.setVisibility(View.VISIBLE);
+        }
     }
 
     // 显示ListView的数据

@@ -60,6 +60,8 @@
 
     <!-- 进销存台账和调货台账ViewPager的title字体颜色 -->
     <color name="agency_viewpager_title">#2a7406</color>
+    <!--首页标题栏-->
+    <color name="first_title">#4AC777</color>
 
     <!-- 巡店拜访-终端列表-已上传过状态 -->
     <color name="termlst_sync_font_color">#fe0000</color>

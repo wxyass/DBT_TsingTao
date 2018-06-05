@@ -50,6 +50,9 @@
         <!--拍照图片预览-->
         <activity android:name=".dd.ddxt.camera.XtShowPicActivity"
                   android:screenOrientation="portrait"/>
+        <!--签到-->
+        <activity android:name=".sign.DdSignActivity"
+                  android:screenOrientation="portrait"/>
 
         <!-- 启动应用的时候开启servic 主要负责监听网络变化 执行上传功能 -->
         <service android:name=".home.app.AutoUpService" />

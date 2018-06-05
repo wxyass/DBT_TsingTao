@@ -1098,7 +1098,7 @@ public class XtShopVisitService {
                 mitValagreedetailMTemp.setId(FunUtil.getUUID());
                 mitValagreedetailMTemp.setValterid(valterid);// 追溯主表id
                 mitValagreedetailMTemp.setValagreeid(mstAgreeDetailTmp.getAgreeid());//终端追溯协议主表ID
-                //mitValagreedetailMTemp.setProkey(mstAgreeDetailTmp.get);//产品KEY
+                mitValagreedetailMTemp.setProkey(mstAgreeDetailTmp.getProductkey());//产品KEY
                 mitValagreedetailMTemp.setProname(mstAgreeDetailTmp.getProname());//产品名称
                 mitValagreedetailMTemp.setCashtype(mstAgreeDetailTmp.getCashtype());//对付形式
                 mitValagreedetailMTemp.setCommoney(mstAgreeDetailTmp.getAmount());//实际公司承担金额
@@ -1140,9 +1140,9 @@ public class XtShopVisitService {
                 mitValagreeMTemp.setValterid(valterid);// 追溯主表id
                 mitValagreeMTemp.setAgreecode(mstAgreeTmp.getAgreecd());//协议编码
                 mitValagreeMTemp.setAgencyname(mstAgreeTmp.getAgencyname());//供货商名称
-                // mitValagreeMTemp.setAgencykey(mstAgreeTmp.get) ;//供货商ID
+                mitValagreeMTemp.setAgencykey(mstAgreeTmp.getSuppierid()) ;//供货商ID
                 mitValagreeMTemp.setMoneyagency(mstAgreeTmp.getPaymentagencyname());//垫付费用经销商
-                // mitValagreeMTemp.setMoneyagencykey(mstAgreeTmp.get);//垫付费用经销商ID
+                mitValagreeMTemp.setMoneyagencykey(mstAgreeTmp.getDealid());//垫付费用经销商ID
                 mitValagreeMTemp.setStartdate(mstAgreeTmp.getStartdate());//开始时间
                 //mitValagreeMTemp.setStartdateflag(mstAgreeTmp.get) ;//开始时间是否正确
                 //mitValagreeMTemp.setStartdateremark(mstAgreeTmp.get);//开始时间备注

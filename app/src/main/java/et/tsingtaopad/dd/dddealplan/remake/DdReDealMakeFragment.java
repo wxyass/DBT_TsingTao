@@ -26,8 +26,10 @@ import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
+import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
+import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.db.table.MitRepairM;
 import et.tsingtaopad.db.table.MitRepaircheckM;
 import et.tsingtaopad.db.table.MitRepairterM;
@@ -190,6 +192,7 @@ public class DdReDealMakeFragment extends BaseFragmentSupport implements View.On
 
         checkTimeAdapter = new DdCheckTimeAdapter(getActivity(), reCheckTimeStcs, null);
         lv_altime.setAdapter(checkTimeAdapter);
+        ViewUtil.setListViewHeight(lv_altime);
     }
 
     private String selectDate;
@@ -214,7 +217,7 @@ public class DdReDealMakeFragment extends BaseFragmentSupport implements View.On
                 break;
             case R.id.zgjh_remake_rl_checktime:// 选择核查时间
 
-                Toast.makeText(getActivity(), "选择核查时间", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getActivity(), "选择核查时间", Toast.LENGTH_SHORT).show();
                 DatePickerDialog dateDialog = new DatePickerDialog(v.getContext(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -307,7 +310,8 @@ public class DdReDealMakeFragment extends BaseFragmentSupport implements View.On
         mitRepaircheckM.setRepairtime(checktime_string);//整改日期
         mitRepaircheckM.setUploadflag("1");
         mitRepaircheckM.setPadisconsistent("0");
-        mitRepaircheckM.setCredate(new Date());
+        //mitRepaircheckM.setCredate(new Date());
+        mitRepaircheckM.setCredate(DateUtil.getDateTimeStr(8));
 
         // 保存到库中
         xtSelectService.saveMitRepairM(repairM, mitRepaircheckM);

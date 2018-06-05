@@ -61,6 +61,10 @@ import et.tsingtaopad.db.table.MitTerminalinfoM;
 import et.tsingtaopad.db.table.MitValaddaccountM;
 import et.tsingtaopad.db.table.MitValaddaccountproM;
 import et.tsingtaopad.db.table.MitValagencykfM;
+import et.tsingtaopad.db.table.MitValagreeM;
+import et.tsingtaopad.db.table.MitValagreeMTemp;
+import et.tsingtaopad.db.table.MitValagreedetailM;
+import et.tsingtaopad.db.table.MitValagreedetailMTemp;
 import et.tsingtaopad.db.table.MitValcheckitemM;
 import et.tsingtaopad.db.table.MitValcheckitemMTemp;
 import et.tsingtaopad.db.table.MitValchecktypeM;
@@ -188,6 +192,9 @@ public class XtUploadService {
     private Dao<MitRepairterM, String> mitRepairterMDao = null;
     private Dao<MitRepaircheckM, String> mitRepaircheckMDao = null;
 
+    Dao<MitValagreeM, String> valagreeMDao = null;
+    Dao<MitValagreedetailM, String> mitValagreedetailMDao = null;
+
     public XtUploadService(Context context, Handler handler) {
         this.handler = handler;
         this.context = context;
@@ -279,6 +286,9 @@ public class XtUploadService {
             mitRepairMDao = helper.getDao(MitRepairM.class);
             mitRepairterMDao = helper.getDao(MitRepairterM.class);
             mitRepaircheckMDao = helper.getDao(MitRepaircheckM.class);
+
+            valagreeMDao = helper.getMitValagreeMDao();
+            mitValagreedetailMDao = helper.getMitValagreedetailMDao();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -648,6 +658,9 @@ public class XtUploadService {
     List<MitValaddaccountM> mitValaddaccountMs = new ArrayList<MitValaddaccountM>();
     List<MitValaddaccountproM> mitValaddaccountproMs = new ArrayList<MitValaddaccountproM>();
 
+    List<MitValagreeM> mitValagreeMs = new ArrayList<MitValagreeM>();
+    List<MitValagreedetailM> mitValagreedetailMs = new ArrayList<MitValagreedetailM>();
+
     // 上传追溯数据
     public void upload_zs_visit(final boolean isNeedExit, final String valterid, final int whatId) {
         try {
@@ -668,6 +681,9 @@ public class XtUploadService {
                     mitValcmpotherMs = mitValcmpotherMDao.queryForFieldValues(valteridMap);
                     mitValpicMs = mitValpicMDao.queryForFieldValues(valteridMap);
                     mitValgroupproMs = mitValgroupproMDao.queryForFieldValues(valteridMap);
+
+                    mitValagreeMs = valagreeMDao.queryForFieldValues(valteridMap);
+                    mitValagreedetailMs = mitValagreedetailMDao.queryForFieldValues(valteridMap);
 
                     Map<String, Object> idMap = new HashMap<String, Object>();
                     idMap.put("valsupplyid", valterid);
@@ -708,6 +724,9 @@ public class XtUploadService {
                     mitValgroupproMs = mitValgroupproMDao.queryForEq("padisconsistent", "0");
                     mitValaddaccountMs = mitValaddaccountMDao.queryForEq("padisconsistent", "0");
                     mitValaddaccountproMs = mitValaddaccountproMDao.queryForEq("padisconsistent", "0");
+
+                    mitValagreeMs = valagreeMDao.queryForEq("padisconsistent", "0");
+                    mitValagreedetailMs = mitValagreedetailMDao.queryForEq("padisconsistent", "0");
                 }
             }
 
@@ -825,6 +844,26 @@ public class XtUploadService {
                         }
                     }
                     childDatas.put("MIT_VALADDACCOUNTPRO_M", JsonUtil.toJson(childValaddaccountproMs));
+
+                    // 12  终端追溯协议主表  MIT_VALAGREE_M
+                    List<MitValagreeM> mitValagreeMS = new ArrayList<MitValagreeM>();
+                    for (MitValagreeM mitValagreeM : mitValagreeMs) {
+                        if (valtermid.equals(mitValagreeM.getValterid())) {
+                            mitValagreeM.setPadisconsistent("1");
+                            mitValagreeMS.add(mitValagreeM);
+                        }
+                    }
+                    childDatas.put("MIT_VALAGREE_M", JsonUtil.toJson(mitValagreeMS));
+
+                    // 13  终端追溯协议对付信息表  MIT_VALAGREEDETAIL_M
+                    List<MitValagreedetailM> valagreedetailMS = new ArrayList<MitValagreedetailM>();
+                    for (MitValagreedetailM valagreedetailM : mitValagreedetailMs) {
+                        if (valtermid.equals(valagreedetailM.getValterid())) {
+                            valagreedetailM.setPadisconsistent("1");
+                            valagreedetailMS.add(valagreedetailM);
+                        }
+                    }
+                    childDatas.put("MIT_VALAGREEDETAIL_M", JsonUtil.toJson(valagreedetailMS));
 
                     mainDatas.add(childDatas);
                 }
@@ -961,7 +1000,6 @@ public class XtUploadService {
                         } else {
                             ResponseStructBean resObj = new ResponseStructBean();
                             resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
-                            // 保存登录信息
                             if (ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())) {
                                 //
                                 // 处理上传后的数据,该删删,该处理
@@ -1172,6 +1210,8 @@ public class XtUploadService {
         deleteZsTable(db, "MIT_VALCMP_M", valterId);
         deleteZsTable(db, "MIT_VALCMPOTHER_M", valterId);
         deleteZsTable(db, "MIT_VALPIC_M", valterId);
+        deleteZsTable(db, "MIT_VALAGREE_M", valterId);
+        deleteZsTable(db, "MIT_VALAGREEDETAIL_M", valterId);
     }
 
 
@@ -1858,7 +1898,7 @@ public class XtUploadService {
                                 //
                                 // 处理上传后的数据,该删删,该处理
                                 String formjson = resObj.getResBody().getContent();
-                                parseMitAgencynumM(formjson);
+                                parseRepair(formjson);
                                 // ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_SUC);
                                 Toast.makeText(context, "上传成功!", Toast.LENGTH_SHORT).show();
                             } else {
@@ -1883,5 +1923,32 @@ public class XtUploadService {
                 })
                 .builde()
                 .post();
+    }
+
+    private void parseRepair(String formjson) {
+        try {
+            SQLiteDatabase db = helper.getWritableDatabase();
+
+            // 处理整改计划主表
+            for (MitRepairM mitRepairM : mitRepairMs) {
+                mitRepairM.setPadisconsistent("1");// 上传成功
+                mitRepairM.setUploadflag("1");// 确定上传
+                mitRepairMDao.createOrUpdate(mitRepairM);
+            }
+            // 处理 整改计划终端表
+            for (MitRepairterM mitRepairterM : mitRepairterMs) {
+                mitRepairterM.setPadisconsistent("1");// 上传成功
+                mitRepairterM.setUploadflag("1");// 确定上传
+                mitRepairterMDao.createOrUpdate(mitRepairterM);
+            }
+            // 处理 整改计划审核表
+            for (MitRepaircheckM mitRepaircheckM : mitRepaircheckMs) {
+                mitRepaircheckM.setPadisconsistent("1");// 上传成功
+                mitRepaircheckM.setUploadflag("1");// 确定上传
+                mitRepaircheckMDao.createOrUpdate(mitRepaircheckM);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
