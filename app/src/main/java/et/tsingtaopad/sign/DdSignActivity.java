@@ -1,5 +1,6 @@
 package et.tsingtaopad.sign;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Criteria;
@@ -20,6 +21,7 @@ import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -32,12 +34,15 @@ import android.widget.Toast;
 
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseActivity;
 import et.tsingtaopad.base.BaseFragmentSupport;
+import et.tsingtaopad.business.first.bean.FirstDataStc;
+import et.tsingtaopad.business.first.bean.XtZsNumStc;
 import et.tsingtaopad.core.net.HttpUrl;
 import et.tsingtaopad.core.net.RestClient;
 import et.tsingtaopad.core.net.callback.IError;
@@ -52,6 +57,7 @@ import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.JsonUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
+import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.core.view.alertview.OnDismissListener;
@@ -74,6 +80,7 @@ import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.http.HttpParseJson;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
 import et.tsingtaopad.main.visit.shopvisit.termvisit.sayhi.domain.MstTerminalInfoMStc;
+import et.tsingtaopad.sign.bean.SignStc;
 import et.tsingtaopad.util.requestHeadUtil;
 
 /**
@@ -100,12 +107,26 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
 
     MyHandler handler;
 
+    private DdSignAdapter signAdapter;
+
+    private String attencetype = "0";// 0:上班打卡  , 1:下班打卡
+
+    private String currenttime;// 2011-04-11
+
+    private String aday;
+    private Calendar calendar;
+    private int yearr;
+    private int month;
+    private int day;
+
+    List<SignStc> signStcs ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_dd_sign);
         initView();
-        initData();
+
         if (hasPermission(GlobalValues.LOCAL_PERMISSION)) {
             // 拥有了此权限,那么直接执行业务逻辑
             registerGPS();
@@ -113,6 +134,10 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
             // 还没有对一个权限(请求码,权限数组)这两个参数都事先定义好
             requestPermission(GlobalValues.LOCAL_CODE, GlobalValues.LOCAL_PERMISSION);
         }
+
+        initData();
+        // 刚进入 获取打卡信息
+        getSignData();
     }
 
     // 初始化控件
@@ -131,7 +156,6 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
         first_img_down_sign = (ImageView) findViewById(R.id.first_img_down_sign);
         first_img_click_sign = (ImageView) findViewById(R.id.first_img_click_sign);
         first_lv_sign = (et.tsingtaopad.view.NoScrollListView) findViewById(R.id.first_lv_sign);
-
         first_img_click_sign.setOnClickListener(this);
 
     }
@@ -140,13 +164,30 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
     private void initData() {
 
         titleTv.setText("考勤管理");
-
+        confirmTv.setText("日历");
         handler = new MyHandler(this);
-        DdSignAdapter signAdapter = new DdSignAdapter(this,null,null);
+
+        // 获取系统时间
+        calendar = Calendar.getInstance();
+        yearr = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        currenttime = DateUtil.getDateTimeStr(7);
+
+
+        signStcs = new ArrayList<>();
+        /*signStcs.add(new SignStc("2018-06-06 09:52:08","0","1号地址","哈哈哈"));
+        signStcs.add(new SignStc("2018-06-06 10:12:11","1","2号地址",""));
+        signStcs.add(new SignStc("2018-06-06 14:52:51","1","3号地址",""));
+        signStcs.add(new SignStc("2018-06-06 18:32:42","1","4号地址",""));
+        signStcs.add(new SignStc("2018-06-06 19:32:42","1","5号地址",""));*/
+
+        signAdapter = new DdSignAdapter(this, signStcs, null);
+        first_lv_sign.setAdapter(signAdapter);
+        ViewUtil.setListViewHeight(first_lv_sign);
 
     }
-
-
 
 
     // 按钮点击 监听
@@ -158,13 +199,37 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
                 DdSignActivity.this.finish();
                 break;
             case R.id.top_navigation_rl_confirm://
-                //大区所有的
-                //confirmUplad();
-                // confirmXtUplad();
+                if (ViewUtil.isDoubleClick(v.getId(), 2000)) return;
+                // 日历
+                //Toast.makeText(getActivity(), "弹出日历", Toast.LENGTH_SHORT).show();
+                DatePickerDialog dateDialog = new DatePickerDialog(v.getContext(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        calendar.set(year, monthOfYear, dayOfMonth);
+                        yearr = year;
+                        month = monthOfYear;
+                        day = dayOfMonth;
+                        if (dayOfMonth < 10) {
+                            aday = "0" + dayOfMonth;
+                        } else {
+                            aday = Integer.toString(dayOfMonth);
+                        }
+                        currenttime = (Integer.toString(year) + "-" + String.format("%02d", monthOfYear + 1) + "-" + aday);
+
+                        // 刚进入 获取打卡信息
+                        getSignData();
+
+                    }
+                }, yearr, month, day);
+                if (!dateDialog.isShowing()) {
+                    dateDialog.show();
+                }
+
                 break;
             case R.id.first_img_click_sign://
+                if (ViewUtil.isDoubleClick(v.getId(), 2000)) return;
                 //发送签到请求
-                sendSignHttp();
+                saveSignData();
 
                 break;
 
@@ -173,20 +238,34 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
-    private void sendSignHttp() {
+    // 刚进入 获取打卡信息
+    private void getSignData() {
 
         String content = "{" +
                 "areaid:'" + PrefUtils.getString(this, "departmentid", "") + "'," +
-                "longitude:'" + latitude + "'," +
-                "latitude:'" + latitude + "'," +
-                "signtime:'" + DateUtil.getDateTimeStr(8) + "'," +
+                "attencetime:'" + currenttime + "'," +
                 "creuser:'" + PrefUtils.getString(this, "userid", "") + "'" +
                 "}";
-        ceshiHttp("opt_get_repair_ter_check",  content);
+        ceshiHttp("opt_get_sign_data", content);
+    }
+
+    // 发送打卡信息
+    private void saveSignData() {
+
+        // String s = "[{'MIT_ATTENCEDETAIL_M':["+"]}]";
+        String content = "{" +
+                "areaid:'" + PrefUtils.getString(this, "departmentid", "") + "'," +
+                "lon:'" + longitude + "'," +  //"117.090734350000005000"
+                "lat:'" + latitude + "'," +  // "24.050067309999999300"
+                "attencetype:'" + attencetype + "'," +
+                "attencetime:'" + DateUtil.getDateTimeStr(8) + "'," +
+                "creuser:'" + PrefUtils.getString(this, "userid", "") + "'" +
+                "}";
+        ceshiHttp("opt_save_sign_data", content);
     }
 
     /**
-     * 发送签到请求
+     * 打卡
      *
      * @param optcode 请求码
      * @param content 请求json
@@ -216,10 +295,20 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
                             resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
                             // 保存登录信息
                             if (ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())) {
-                                // 保存信息
-                                String formjson = resObj.getResBody().getContent();
-                                // parseTableJson(formjson);
-                                initData();
+
+                                if(optcode.equals("opt_get_sign_data")){
+                                    // 保存信息
+                                    String formjson = resObj.getResBody().getContent();
+                                    parseAttenceJson(formjson);
+                                    // initData();
+                                }else if(optcode.equals("opt_save_sign_data")){
+                                    // 保存信息
+                                    String formjson = resObj.getResBody().getContent();
+                                    parseAttenceJson(formjson);
+                                    // parseTableJson(formjson);
+                                    // initData();
+                                }
+
 
                             } else {
                                 Toast.makeText(DdSignActivity.this, resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
@@ -253,6 +342,24 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
                 .post();
     }
 
+    private void parseAttenceJson(String formjson) {
+        List<SignStc>  signs = JsonUtil.parseList(formjson, SignStc.class);
+        if(signs.size()>0){
+            attencetype = "1";
+        }else{
+            attencetype = "0";
+        }
+
+        signStcs.clear();
+        signStcs.addAll(signs);
+
+        initJsonData();
+    }
+
+    private void initJsonData() {
+        signAdapter.notifyDataSetChanged();
+    }
+
     /**
      * 接收子线程消息的 Handler
      */
@@ -283,11 +390,6 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
             }
         }
     }
-
-
-
-
-
 
 
     // 原生经纬度 处理 --------------------------------------------------------
@@ -333,7 +435,7 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
 
         // 1秒更新一次，或最小位移变化超过1米更新一次；
         //注意：此处更新准确度非常低，推荐在service里面启动一个Thread，在run中sleep(10000);然后执行handler.sendMessage(),更新位置
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener);
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         //        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, locationListener);
     }
 

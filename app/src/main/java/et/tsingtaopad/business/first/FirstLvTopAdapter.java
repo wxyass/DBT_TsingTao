@@ -1,4 +1,4 @@
-package et.tsingtaopad.sign;
+package et.tsingtaopad.business.first;
 
 import android.app.Activity;
 import android.util.Log;
@@ -6,30 +6,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.RelativeLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.Date;
 import java.util.List;
 
 import et.tsingtaopad.R;
+import et.tsingtaopad.business.first.bean.LvTop;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.dd.dddealplan.domain.DealStc;
 import et.tsingtaopad.listviewintf.IClick;
-import et.tsingtaopad.sign.bean.SignStc;
 
 /**
  * 项目名称：营销移动智能工作平台 </br>
  * 日期      原因  BUG号    修改人 修改版本</br>
  */
-public class DdSignAdapter extends BaseAdapter {
+public class FirstLvTopAdapter extends BaseAdapter {
 
     private Activity context;
-    private List<SignStc> dataLst;
+    private List<LvTop> dataLst;
     private IClick listener;
 
-    public DdSignAdapter(Activity context, List<SignStc> dataLst, IClick listener) {
+    public FirstLvTopAdapter(Activity context, List<LvTop> dataLst, IClick listener) {
         this.context = context;
         this.dataLst = dataLst;
         this.listener = listener;
@@ -64,36 +64,38 @@ public class DdSignAdapter extends BaseAdapter {
         ViewHolder holder = null;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_dd_sign, null);
-            holder.attencetime = (TextView) convertView.findViewById(R.id.item_sign_time);// 时间
-            holder.attencetype = (TextView) convertView.findViewById(R.id.item_sign_type);// 打卡类型
-            holder.address = (TextView) convertView.findViewById(R.id.item_sign_address);// 地址
-            holder.remark = (TextView) convertView.findViewById(R.id.item_sign_reason);// 元音
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_first_lv, null);
+            holder.tv_ranking = (TextView) convertView.findViewById(R.id.item_first_tv_ranking);
+            holder.tv_rankingname = (TextView) convertView.findViewById(R.id.item_first_tv_rankingname);
+            holder.tv_rankingnum = (TextView) convertView.findViewById(R.id.item_first_tv_rankingnum);
+            holder.tv_rankingall = (TextView) convertView.findViewById(R.id.item_first_tv_rankingall);
+            holder.tv_unit = (TextView) convertView.findViewById(R.id.item_first_tv_unit);
+            holder.probar_rankingbar = (ProgressBar) convertView.findViewById(R.id.item_first_probar_rankingbar);
             convertView.setTag(holder);
-
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        final SignStc item = dataLst.get(position);
+        final LvTop item = dataLst.get(position);
 
-        holder.attencetime.setText(item.getAttencetime());
-        holder.address.setText(item.getAddress());
-        holder.remark.setText(item.getRemark());
-        if ("0".equals(item.getAttencetype())) {
-            holder.attencetype.setText("上班打卡");
-        } else {
-            holder.attencetype.setText("下班打卡");
-        }
+        holder.tv_ranking.setText(item.getRanking());
+        holder.tv_rankingname.setText(item.getRankingname());
+        holder.tv_rankingnum.setText(item.getRankingnum());
+        holder.tv_rankingall.setText(item.getRankingall());
+        holder.tv_unit.setText(" "+item.getUnit());
 
         return convertView;
     }
 
     private class ViewHolder {
-        private TextView attencetime;
-        private TextView attencetype;
-        private TextView address;
-        private TextView remark;
+
+        private TextView tv_ranking;
+        private TextView tv_rankingname;
+        private TextView tv_rankingnum;
+        private TextView tv_rankingall;
+        private TextView tv_unit;
+        private ProgressBar probar_rankingbar;
+
     }
 
 }

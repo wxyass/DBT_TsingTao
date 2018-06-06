@@ -16,7 +16,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
@@ -30,13 +29,43 @@
                     android:layout_weight="1"
                     >
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
+                    <ImageView
+                        android:id="@+id/first_img_icon"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
-                        android:text="胡歌"/>
+                        android:layout_marginLeft="20dp"
+                        android:background="@drawable/bg_camera"
+                        />
 
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_toRightOf="@id/first_img_icon"
+                        android:gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:orientation="vertical"
+                        >
+
+                        <TextView
+                            android:id="@+id/first_tv_username"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="胡歌"/>
+
+                        <TextView
+                            android:id="@+id/first_tv_zhuisu"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="追溯家数: 0"/>
+
+                        <TextView
+                            android:id="@+id/first_tv_xietong"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="协同家数: 0"/>
+                    </LinearLayout>
                 </RelativeLayout>
                 <!--签到-->
                 <RelativeLayout
@@ -49,8 +78,9 @@
                         android:id="@+id/first_img_sign"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:layout_centerHorizontal="true"
+                        android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
+                        android:layout_marginRight="20dp"
                         android:background="@drawable/bg_camera"
                         />
 
@@ -64,6 +94,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@color/white"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <RelativeLayout
@@ -76,6 +107,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
+                        android:layout_marginLeft="30dp"
                         android:text="通知:这是一条紧急通知"/>
 
                 </RelativeLayout>
@@ -88,13 +120,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginLeft="4dp"
                 android:orientation="horizontal">
 
                 <!--协同拜访-->
                 <RelativeLayout
+                    android:id="@+id/first_rl_xtbf"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_marginLeft="6dp"
                     android:layout_weight="2"
                     android:background="@color/white">
 
@@ -103,6 +139,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
+                        android:layout_marginLeft="34dp"
                         android:text="协同拜访"/>
 
                     <ImageView
@@ -110,15 +147,18 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
+                        android:layout_marginRight="36dp"
                         android:background="@drawable/icon_visit_dealerdatabase"/>
 
                 </RelativeLayout>
 
                 <!--终端追溯-->
                 <RelativeLayout
+                    android:id="@+id/first_rl_zdzs"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_marginLeft="6dp"
                     android:layout_weight="2"
                     android:background="@color/white">
 
@@ -127,6 +167,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
+                        android:layout_marginLeft="34dp"
                         android:text="终端追溯"/>
 
                     <ImageView
@@ -134,6 +175,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
+                        android:layout_marginRight="36dp"
                         android:background="@drawable/icon_visit_dealerdatabase"/>
 
                 </RelativeLayout>
@@ -144,13 +186,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginLeft="4dp"
                 android:orientation="horizontal">
 
                 <!--库存盘点-->
                 <RelativeLayout
+                    android:id="@+id/first_rl_kcpd"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_marginLeft="6dp"
                     android:layout_weight="2"
                     android:background="@color/white">
 
@@ -159,6 +205,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
+                        android:layout_marginLeft="34dp"
                         android:text="库存盘点"/>
 
                     <ImageView
@@ -166,15 +213,18 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
+                        android:layout_marginRight="36dp"
                         android:background="@drawable/icon_visit_dealerdatabase"/>
 
                 </RelativeLayout>
 
                 <!--整改计划-->
                 <RelativeLayout
+                    android:id="@+id/first_rl_zgjh"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_marginLeft="6dp"
                     android:layout_weight="2"
                     android:background="@color/white">
 
@@ -183,6 +233,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
+                        android:layout_marginLeft="34dp"
                         android:text="整改计划"/>
 
                     <ImageView
@@ -190,6 +241,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
+                        android:layout_marginRight="36dp"
                         android:background="@drawable/icon_visit_dealerdatabase"/>
 
                 </RelativeLayout>
@@ -200,13 +252,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginLeft="4dp"
                 android:orientation="horizontal">
 
                 <!--计划制定-->
                 <RelativeLayout
+                    android:id="@+id/first_rl_jhzd"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_marginLeft="6dp"
                     android:layout_weight="2"
                     android:background="@color/white">
 
@@ -215,6 +271,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
+                        android:layout_marginLeft="34dp"
                         android:text="计划制定"/>
 
                     <ImageView
@@ -222,15 +279,18 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
+                        android:layout_marginRight="36dp"
                         android:background="@drawable/icon_visit_dealerdatabase"/>
 
                 </RelativeLayout>
 
                 <!--工作总结-->
                 <RelativeLayout
+                    android:id="@+id/first_rl_gzzj"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_marginLeft="6dp"
                     android:layout_weight="2"
                     android:background="@color/white">
 
@@ -238,6 +298,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="34dp"
                         android:layout_centerVertical="true"
                         android:text="工作总结"/>
 
@@ -246,11 +307,13 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
+                        android:layout_marginRight="36dp"
                         android:background="@drawable/icon_visit_dealerdatabase"/>
 
                 </RelativeLayout>
 
             </LinearLayout>
+
             <!--大区追溯冠军榜-->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -273,106 +336,24 @@
             <!--冠军榜-->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="wrap_content"
                 android:background="@color/white"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
                 android:orientation="horizontal">
 
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    >
+                <et.tsingtaopad.view.MyGridView
+                    android:id="@+id/first_gv_top"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:numColumns="3"
+                    android:scrollbars="none"
+                    android:verticalSpacing="2dp">
+                </et.tsingtaopad.view.MyGridView>
 
-                    <TextView
-                        android:id="@+id/first_tv_jichaname"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:text="张三"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_above="@id/first_tv_jichaname"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:text="588(个)"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/first_tv_jichaname"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:text="稽查冠军"/>
-
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    >
-
-                    <TextView
-                        android:id="@+id/first_tv_movename"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:text="李雷"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_above="@id/first_tv_movename"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:text="588(个)"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/first_tv_movename"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:text="走访冠军"/>
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    >
-
-                    <TextView
-                        android:id="@+id/first_tv_kcpdname"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:text="鱼眼"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_above="@id/first_tv_kcpdname"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:text="27(个)"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/first_tv_kcpdname"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:text="库存盘点冠军"/>
-
-                </RelativeLayout>
 
             </LinearLayout>
 
@@ -395,304 +376,20 @@
                     android:layout_height="wrap_content"
                     android:text="七日追溯指标排行榜"/>
             </LinearLayout>
-            <!-- 考勤: -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="center_vertical"
-                android:orientation="horizontal"
-                >
 
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1">
-
-                    <TextView
-                        style="@style/banner_main2"
-                        android:layout_width="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_height="wrap_content"
-                        android:text="1"
-                        android:textColor="@color/holo_orange_dark"/>
-                </RelativeLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:orientation="vertical"
-                    android:layout_weight="8">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:gravity="center_vertical"
-                        android:layout_height="40dp">
-
-                        <TextView
-                            style="@style/banner_main2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="考勤"
-                            android:textColor="@color/listview_item_font_color"/>
-
-                        <TextView
-                            style="@style/banner_main2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/holo_orange_dark"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text=" / "
-                            android:textColor="@color/listview_item_font_color"/>
-
-                        <TextView
-                            style="@style/banner_main2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/holo_blue_dark"/>
-                    </LinearLayout>
-
-                    <ProgressBar
-                        style="?android:attr/progressBarStyleHorizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="10dp"
-                        android:progress="89"/>
-                </LinearLayout>
-
-
-            </LinearLayout>
-            <!-- 稽查终端量: -->
-            <LinearLayout
+            <!--排行列表-->
+            <et.tsingtaopad.view.NoScrollListView
+                android:id="@+id/first_sclv_top"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical"
-                >
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        style="@style/banner_main2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="稽查终端量"
-                        android:textColor="@color/listview_item_font_color"/>
-
-                    <TextView
-                        style="@style/banner_main2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/holo_orange_dark"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" / "
-                        android:textColor="@color/listview_item_font_color"/>
-
-                    <TextView
-                        style="@style/banner_main2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/holo_blue_dark"/>
-                </LinearLayout>
-
-                <ProgressBar
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp"
-                    android:progress="71"/>
-            </LinearLayout>
-            <!-- 稽查时长: -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical"
-                >
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        style="@style/banner_main2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="稽查时长"
-                        android:textColor="@color/listview_item_font_color"/>
-
-                    <TextView
-                        style="@style/banner_main2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/holo_orange_dark"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" / "
-                        android:textColor="@color/listview_item_font_color"/>
-
-                    <TextView
-                        style="@style/banner_main2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/holo_blue_dark"/>
-                </LinearLayout>
-
-                <ProgressBar
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp"
-                    android:progress="57"/>
-            </LinearLayout>
-            <!-- 追溯数据群: -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical"
-                >
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        style="@style/banner_main2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="追溯数据群"
-                        android:textColor="@color/listview_item_font_color"/>
-
-                    <TextView
-                        style="@style/banner_main2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/holo_orange_dark"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" / "
-                        android:textColor="@color/listview_item_font_color"/>
-
-                    <TextView
-                        style="@style/banner_main2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/holo_blue_dark"/>
-                </LinearLayout>
-
-                <ProgressBar
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp"
-                    android:progress="20"/>
-            </LinearLayout>
-            <!-- 整改计划: -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical"
-                >
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        style="@style/banner_main2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="整改计划"
-                        android:textColor="@color/listview_item_font_color"/>
-
-                    <TextView
-                        style="@style/banner_main2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/holo_orange_dark"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" / "
-                        android:textColor="@color/listview_item_font_color"/>
-
-                    <TextView
-                        style="@style/banner_main2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/holo_blue_dark"/>
-                </LinearLayout>
-
-                <ProgressBar
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp"
-                    android:progress="70"/>
-            </LinearLayout>
-            <!-- 经销商库存盘点: -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical"
-                >
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        style="@style/banner_main2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="经销商库存盘点"
-                        android:textColor="@color/listview_item_font_color"/>
-
-                    <TextView
-                        style="@style/banner_main2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/holo_orange_dark"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" / "
-                        android:textColor="@color/listview_item_font_color"/>
-
-                    <TextView
-                        style="@style/banner_main2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/holo_blue_dark"/>
-                </LinearLayout>
-
-                <ProgressBar
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp"
-                    android:progress="45"/>
-            </LinearLayout>
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:divider="@color/bg_page_color"
+                android:dividerHeight="0dp"/>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="30dp"/>
+                android:layout_height="10dp"/>
 
         </LinearLayout>
     </ScrollView>

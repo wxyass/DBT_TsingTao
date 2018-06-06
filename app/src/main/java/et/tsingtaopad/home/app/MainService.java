@@ -1,7 +1,6 @@
 package et.tsingtaopad.home.app;
 
 import android.content.Context;
-import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.util.Log;
@@ -11,27 +10,20 @@ import com.j256.ormlite.dao.Dao;
 
 import java.lang.reflect.Method;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import cn.com.benyoyo.manage.bs.IntStc.DataSynStc;
-import et.tsingtaopad.business.first.bean.AreaGridRoute;
+import et.tsingtaopad.business.visit.bean.AreaGridRoute;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
-import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.JsonUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
-import et.tsingtaopad.core.util.dbtutil.ZipUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.db.DBManager;
 import et.tsingtaopad.db.DatabaseHelper;
-import et.tsingtaopad.db.dao.MitPlandayvalMDao;
-import et.tsingtaopad.db.dao.MstCameraiInfoMDao;
-import et.tsingtaopad.db.dao.MstPictypeMDao;
 import et.tsingtaopad.db.table.CmmAreaM;
 import et.tsingtaopad.db.table.CmmBoardM;
 import et.tsingtaopad.db.table.CmmDatadicM;
@@ -51,7 +43,6 @@ import et.tsingtaopad.db.table.MstAgencytransferInfo;
 import et.tsingtaopad.db.table.MstAgencyvisitM;
 import et.tsingtaopad.db.table.MstAgreeDetailTmp;
 import et.tsingtaopad.db.table.MstAgreeTmp;
-import et.tsingtaopad.db.table.MstCameraInfoMTemp;
 import et.tsingtaopad.db.table.MstCheckexerecordInfo;
 import et.tsingtaopad.db.table.MstCheckmiddleInfo;
 import et.tsingtaopad.db.table.MstCmpagencyInfo;
@@ -101,9 +92,7 @@ import et.tsingtaopad.db.table.PadChecktypeM;
 import et.tsingtaopad.db.table.PadPlantempcheckM;
 import et.tsingtaopad.db.table.PadPlantempcollectionInfo;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtShopVisitService;
-import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
 import et.tsingtaopad.home.initadapter.GlobalValues;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.camera.domain.CameraInfoStc;
 
 /**
  * 文件名：XtShopVisitService.java</br>

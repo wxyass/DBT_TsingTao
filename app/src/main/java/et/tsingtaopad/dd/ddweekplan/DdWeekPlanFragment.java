@@ -18,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.field.DatabaseField;
 
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
@@ -30,8 +29,7 @@ import java.util.Map;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
-import et.tsingtaopad.business.first.FirstFragment;
-import et.tsingtaopad.business.first.bean.AreaGridRoute;
+import et.tsingtaopad.business.visit.bean.AreaGridRoute;
 import et.tsingtaopad.core.net.HttpUrl;
 import et.tsingtaopad.core.net.RestClient;
 import et.tsingtaopad.core.net.callback.IError;
@@ -52,9 +50,6 @@ import et.tsingtaopad.db.table.MitPlandayM;
 import et.tsingtaopad.db.table.MitPlandaydetailM;
 import et.tsingtaopad.db.table.MitPlandayvalM;
 import et.tsingtaopad.db.table.MitPlanweekM;
-import et.tsingtaopad.db.table.MstGridM;
-import et.tsingtaopad.db.table.MstMarketareaM;
-import et.tsingtaopad.db.table.MstRouteM;
 import et.tsingtaopad.dd.ddweekplan.domain.DayDetailStc;
 import et.tsingtaopad.dd.ddweekplan.domain.DayDetailValStc;
 import et.tsingtaopad.dd.ddweekplan.domain.DayPlanStc;
@@ -62,7 +57,6 @@ import et.tsingtaopad.dd.ddxt.updata.XtUploadService;
 import et.tsingtaopad.home.app.MainService;
 import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.http.HttpParseJson;
-import et.tsingtaopad.initconstvalues.domain.KvStc;
 import et.tsingtaopad.listviewintf.IClick;
 import et.tsingtaopad.util.requestHeadUtil;
 

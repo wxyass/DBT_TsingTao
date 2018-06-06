@@ -376,8 +376,8 @@ public class XtTermCartFragment extends BaseFragmentSupport implements View.OnCl
         // 组建请求Json
         // 组建请求Json
         RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(getContext());
-        requestHeadStc.setUsercode("50000");
-        requestHeadStc.setPassword("a1234567");
+        //requestHeadStc.setUsercode("50000");
+        //requestHeadStc.setPassword("a1234567");
         requestHeadStc.setOptcode(PropertiesUtil.getProperties(optcode));
         RequestStructBean reqObj = HttpParseJson.parseRequestStructBean(requestHeadStc, content);
 

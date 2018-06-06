@@ -2,8 +2,6 @@ package et.tsingtaopad.dd.dddealplan.make;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
@@ -18,15 +16,12 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.j256.ormlite.field.DatabaseField;
-
-import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
-import et.tsingtaopad.business.first.bean.AreaGridRoute;
+import et.tsingtaopad.business.visit.bean.AreaGridRoute;
 import et.tsingtaopad.core.net.HttpUrl;
 import et.tsingtaopad.core.net.RestClient;
 import et.tsingtaopad.core.net.callback.IError;
@@ -37,7 +32,6 @@ import et.tsingtaopad.core.net.domain.RequestStructBean;
 import et.tsingtaopad.core.net.domain.ResponseStructBean;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
-import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.JsonUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;

@@ -9,7 +9,6 @@ import java.util.Map;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Environment;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
@@ -20,7 +19,7 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 
 
-import et.tsingtaopad.business.first.bean.AreaGridRoute;
+import et.tsingtaopad.business.visit.bean.AreaGridRoute;
 import et.tsingtaopad.core.net.HttpUrl;
 import et.tsingtaopad.core.net.RestClient;
 import et.tsingtaopad.core.net.callback.IError;
@@ -62,31 +61,21 @@ import et.tsingtaopad.db.table.MitValaddaccountM;
 import et.tsingtaopad.db.table.MitValaddaccountproM;
 import et.tsingtaopad.db.table.MitValagencykfM;
 import et.tsingtaopad.db.table.MitValagreeM;
-import et.tsingtaopad.db.table.MitValagreeMTemp;
 import et.tsingtaopad.db.table.MitValagreedetailM;
-import et.tsingtaopad.db.table.MitValagreedetailMTemp;
 import et.tsingtaopad.db.table.MitValcheckitemM;
-import et.tsingtaopad.db.table.MitValcheckitemMTemp;
 import et.tsingtaopad.db.table.MitValchecktypeM;
-import et.tsingtaopad.db.table.MitValchecktypeMTemp;
 import et.tsingtaopad.db.table.MitValcmpM;
-import et.tsingtaopad.db.table.MitValcmpMTemp;
 import et.tsingtaopad.db.table.MitValcmpotherM;
-import et.tsingtaopad.db.table.MitValcmpotherMTemp;
 import et.tsingtaopad.db.table.MitValgroupproM;
 import et.tsingtaopad.db.table.MitValpicM;
-import et.tsingtaopad.db.table.MitValpicMTemp;
 import et.tsingtaopad.db.table.MitValpromotionsM;
-import et.tsingtaopad.db.table.MitValpromotionsMTemp;
 import et.tsingtaopad.db.table.MitValsupplyM;
-import et.tsingtaopad.db.table.MitValsupplyMTemp;
 import et.tsingtaopad.db.table.MitValterM;
 import et.tsingtaopad.db.table.MitVisitM;
 import et.tsingtaopad.db.table.MitVistproductInfo;
 import et.tsingtaopad.db.table.MstAgencysupplyInfo;
 import et.tsingtaopad.db.table.MstAgencytransferInfo;
 import et.tsingtaopad.db.table.MstAgencyvisitM;
-import et.tsingtaopad.db.table.MstCameraInfoM;
 import et.tsingtaopad.db.table.MstCameraInfoMTemp;
 import et.tsingtaopad.db.table.MstCheckexerecordInfo;
 import et.tsingtaopad.db.table.MstCmpsupplyInfo;
@@ -111,7 +100,6 @@ import et.tsingtaopad.db.table.MstWorksummaryInfo;
 import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.http.HttpParseJson;
 import et.tsingtaopad.util.requestHeadUtil;
-import et.tsingtaopad.view.TitleLayout;
 
 /**
  * 项目名称：营销移动智能工作平台 </br>

@@ -12,9 +12,15 @@ android {
         versionName "2.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    dexOptions {
+        jumboMode true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
+            aaptOptions.setProperty("cruncherEnabled",false)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

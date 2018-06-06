@@ -23,7 +23,7 @@ import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
-import et.tsingtaopad.business.first.bean.AreaGridRoute;
+import et.tsingtaopad.business.visit.bean.AreaGridRoute;
 import et.tsingtaopad.core.net.HttpUrl;
 import et.tsingtaopad.core.net.RestClient;
 import et.tsingtaopad.core.net.callback.IError;
@@ -49,8 +49,6 @@ import et.tsingtaopad.db.table.MstGridM;
 import et.tsingtaopad.db.table.MstMarketareaM;
 import et.tsingtaopad.db.table.MstRouteM;
 import et.tsingtaopad.db.table.MstTerminalinfoM;
-import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
-import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartFragment;
 import et.tsingtaopad.dd.ddxt.term.select.IXtTermSelectClick;
 import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectService;
 import et.tsingtaopad.dd.ddxt.term.select.adapter.XtTermSelectAdapter;

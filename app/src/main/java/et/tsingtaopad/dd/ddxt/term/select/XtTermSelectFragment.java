@@ -1,7 +1,6 @@
 package et.tsingtaopad.dd.ddxt.term.select;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,12 +19,11 @@ import android.widget.Toast;
 
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
-import et.tsingtaopad.business.first.bean.AreaGridRoute;
+import et.tsingtaopad.business.visit.bean.AreaGridRoute;
 import et.tsingtaopad.core.net.HttpUrl;
 import et.tsingtaopad.core.net.RestClient;
 import et.tsingtaopad.core.net.callback.IError;
@@ -45,23 +43,11 @@ import et.tsingtaopad.core.view.alertview.OnDismissListener;
 import et.tsingtaopad.core.view.alertview.OnItemClickListener;
 import et.tsingtaopad.core.view.dropdownmenu.DropBean;
 import et.tsingtaopad.core.view.dropdownmenu.DropdownButton;
-import et.tsingtaopad.db.table.MitValterM;
 import et.tsingtaopad.db.table.MitVisitM;
-import et.tsingtaopad.db.table.MstAgencygridInfo;
-import et.tsingtaopad.db.table.MstAgencyinfoM;
-import et.tsingtaopad.db.table.MstAgencysupplyInfo;
-import et.tsingtaopad.db.table.MstCheckexerecordInfo;
-import et.tsingtaopad.db.table.MstCmpsupplyInfo;
-import et.tsingtaopad.db.table.MstCollectionexerecordInfo;
 import et.tsingtaopad.db.table.MstGridM;
-import et.tsingtaopad.db.table.MstGroupproductM;
 import et.tsingtaopad.db.table.MstMarketareaM;
-import et.tsingtaopad.db.table.MstPromotermInfo;
 import et.tsingtaopad.db.table.MstRouteM;
 import et.tsingtaopad.db.table.MstTerminalinfoM;
-import et.tsingtaopad.db.table.MstVisitM;
-import et.tsingtaopad.db.table.MstVistproductInfo;
-import et.tsingtaopad.dd.ddxt.sayhi.XtSayhiFragment;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
 import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartFragment;
 import et.tsingtaopad.dd.ddxt.term.select.adapter.XtTermSelectAdapter;

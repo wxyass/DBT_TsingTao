@@ -1,4 +1,4 @@
-package et.tsingtaopad.business.first.bean;
+package et.tsingtaopad.business.visit.bean;
 
 import java.util.List;
 
