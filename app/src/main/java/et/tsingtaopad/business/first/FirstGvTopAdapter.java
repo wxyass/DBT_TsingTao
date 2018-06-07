@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -12,7 +11,6 @@ import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.business.first.bean.GvTop;
-import et.tsingtaopad.db.table.MitValpicMTemp;
 
 
 /**
@@ -55,9 +53,9 @@ public class FirstGvTopAdapter extends BaseAdapter {
 
 		GvTop camerainfostc = (GvTop)dataLst.get(position);
 
-		tv_ydname.setText(camerainfostc.getYdname());
-		tv_num.setText(camerainfostc.getCount());
-		tv_topname.setText(camerainfostc.getTopname());
+		tv_ydname.setText(camerainfostc.getUsername());
+		tv_num.setText(camerainfostc.getTermcount());
+		tv_topname.setText(camerainfostc.getRankname());
 
 		return view;
 	}

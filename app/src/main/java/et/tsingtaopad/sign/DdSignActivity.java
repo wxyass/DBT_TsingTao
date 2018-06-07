@@ -124,7 +124,7 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
     private int month;
     private int day;
 
-    List<SignStc> signStcs ;
+    List<SignStc> signStcs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,7 +147,7 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
 
     // 初始化控件
     private void initView() {
-         ll_title = (LinearLayout) findViewById(R.id.top_ll_title);
+        ll_title = (LinearLayout) findViewById(R.id.top_ll_title);
         backBtn = (RelativeLayout) findViewById(R.id.top_navigation_rl_back);
         confirmBtn = (RelativeLayout) findViewById(R.id.top_navigation_rl_confirm);
         confirmTv = (AppCompatTextView) findViewById(R.id.top_navigation_bt_confirm);
@@ -184,7 +184,7 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
         day = calendar.get(Calendar.DAY_OF_MONTH);
 
         currenttime = DateUtil.getDateTimeStr(7);
-        todaytime= DateUtil.getDateTimeStr(7);
+        todaytime = DateUtil.getDateTimeStr(7);
 
         //实时更新时间（1秒更新一次）
         TimeThread timeThread = new TimeThread(tv_time);//tvDate 是显示时间的控件TextView
@@ -192,15 +192,17 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
 
 
         signStcs = new ArrayList<>();
-        signStcs.add(new SignStc("2018-06-06 09:52:08","0","1号地址","哈哈哈"));
-        signStcs.add(new SignStc("2018-06-06 10:12:11","1","2号地址",""));
-        signStcs.add(new SignStc("2018-06-06 14:52:51","1","3号地址",""));
-        signStcs.add(new SignStc("2018-06-06 18:32:42","1","4号地址",""));
-        signStcs.add(new SignStc("2018-06-06 19:32:42","1","5号地址",""));
+        signStcs.add(new SignStc("2018-06-06 09:52:08", "0", "1号地址", "哈哈哈"));
+        signStcs.add(new SignStc("2018-06-06 10:12:11", "1", "2号地址", ""));
+        signStcs.add(new SignStc("2018-06-06 14:52:51", "1", "3号地址", ""));
+        signStcs.add(new SignStc("2018-06-06 18:32:42", "1", "4号地址", ""));
+        signStcs.add(new SignStc("2018-06-06 19:32:42", "1", "5号地址", ""));
 
         signAdapter = new DdSignAdapter(this, signStcs, null);
         first_lv_sign.setAdapter(signAdapter);
         ViewUtil.setListViewHeight(first_lv_sign);
+
+
     }
 
 
@@ -213,7 +215,8 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
                 DdSignActivity.this.finish();
                 break;
             case R.id.top_navigation_rl_confirm://
-                if (ViewUtil.isDoubleClick(v.getId(), 2000)) return;
+                if (ViewUtil.isDoubleClick(v.getId(), 2000))
+                    return;
                 // 日历
                 //Toast.makeText(getActivity(), "弹出日历", Toast.LENGTH_SHORT).show();
                 DatePickerDialog dateDialog = new DatePickerDialog(v.getContext(), new DatePickerDialog.OnDateSetListener() {
@@ -241,7 +244,8 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
 
                 break;
             case R.id.first_img_click_sign://
-                if (ViewUtil.isDoubleClick(v.getId(), 2000)) return;
+                if (ViewUtil.isDoubleClick(v.getId(), 2000))
+                    return;
                 //发送签到请求
                 saveSignData();
 
@@ -310,12 +314,12 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
                             // 保存登录信息
                             if (ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())) {
 
-                                if(optcode.equals("opt_get_sign_data")){
+                                if (optcode.equals("opt_get_sign_data")) {
                                     // 保存信息
                                     String formjson = resObj.getResBody().getContent();
                                     parseAttenceJson(formjson);
                                     // initData();
-                                }else if(optcode.equals("opt_save_sign_data")){
+                                } else if (optcode.equals("opt_save_sign_data")) {
                                     // 保存信息
                                     String formjson = resObj.getResBody().getContent();
                                     parseAttenceJson(formjson);
@@ -357,20 +361,22 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void parseAttenceJson(String formjson) {
-        List<SignStc>  signs = JsonUtil.parseList(formjson, SignStc.class);
-        if(signs.size()>0){
+        List<SignStc> signs = JsonUtil.parseList(formjson, SignStc.class);
+        if (signs.size() > 0) {
             attencetype = "1";
             tv_type.setText("下班打卡");
-        }else{
+        } else {
             attencetype = "0";
             tv_type.setText("上班打卡");
         }
 
         // 当前时间 == 今天
-        if(currenttime.equals(todaytime)){
+        if (currenttime.equals(todaytime)) {// 可点击
             first_img_click_sign.setEnabled(true);
-        }else {
+            // first_img_click_sign.setClickable(true);
+        } else {// 不可点击
             first_img_click_sign.setEnabled(false);
+            // first_img_click_sign.setClickable(false);
         }
 
         signStcs.clear();

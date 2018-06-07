@@ -65,7 +65,7 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
     private FirstGvTopAdapter gvTopAdapter;
     private FirstLvTopAdapter lvTopAdapter;
 
-    List<GvTop> gvTops = new ArrayList<>();
+    List<GvTop> gvTops ;
     List<LvTop> lvTops = new ArrayList<>();
     List<XtZsNumStc> xtZsNumStcs = new ArrayList<>();
 
@@ -122,10 +122,12 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
 
         tv_username.setText(PrefUtils.getString(getActivity(),"username",""));
 
-        gvTops.clear();
-        gvTops.add(new GvTop("张三","33/63(个)","走访冠军"));
+        gvTops = new ArrayList<>();
+
+        // gvTops.clear();
+        /*gvTops.add(new GvTop("张三","33/63(个)","走访冠军"));
         gvTops.add(new GvTop("李四","13/53(个)","稽查冠军"));
-        gvTops.add(new GvTop("王五","53/126(个)","库存盘点冠军"));
+        gvTops.add(new GvTop("王五","53/126(个)","库存盘点冠军"));*/
         gvTopAdapter = new FirstGvTopAdapter(getActivity(), gvTops);
         gv_top.setAdapter(gvTopAdapter);
 
@@ -141,7 +143,7 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
 
         String json = PrefUtils.getString(getActivity(),"firstjson","");
         if(!TextUtils.isEmpty(json)){
-            parseFirstJson(json);
+            //parseFirstJson(json);
         }
     }
 
@@ -226,12 +228,19 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
     private void parseFirstJson(String formjson) {
         FirstDataStc emp = JsonUtil.parseJson(formjson, FirstDataStc.class);
         xtZsNumStcs = JsonUtil.parseList(emp.getHomesynergyandcheck(), XtZsNumStc.class);
+        List<GvTop> gvgvTops = JsonUtil.parseList(emp.getHomesevendayrank(), GvTop.class);
+        gvTops.clear();
+        gvTops.addAll(gvgvTops);
         initJsonData();
     }
 
     private void initJsonData() {
         tv_zhuisu.setText("追溯数量:"+" "+xtZsNumStcs.get(0).getCountnum());
         tv_xietong.setText("协同数量:"+" "+xtZsNumStcs.get(1).getCountnum());
+
+        // gvTopAdapter.notifyDataSetChanged();
+        gvTopAdapter = new FirstGvTopAdapter(getActivity(), gvTops);
+        gv_top.setAdapter(gvTopAdapter);
     }
 
     @Override

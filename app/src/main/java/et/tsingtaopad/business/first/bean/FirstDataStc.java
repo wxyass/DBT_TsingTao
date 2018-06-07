@@ -7,6 +7,7 @@ package et.tsingtaopad.business.first.bean;
 public class FirstDataStc {
 
     private String homesynergyandcheck;//
+    private String homesevendayrank;//
 
 
     public FirstDataStc() {
@@ -18,5 +19,13 @@ public class FirstDataStc {
 
     public void setHomesynergyandcheck(String homesynergyandcheck) {
         this.homesynergyandcheck = homesynergyandcheck;
+    }
+
+    public String getHomesevendayrank() {
+        return homesevendayrank;
+    }
+
+    public void setHomesevendayrank(String homesevendayrank) {
+        this.homesevendayrank = homesevendayrank;
     }
 }

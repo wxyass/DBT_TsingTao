@@ -6,40 +6,40 @@ package et.tsingtaopad.business.first.bean;
 
 public class GvTop {
 
-    private String ydname;// 业代名称
-    private String count;// 数量
-    private String topname;// 冠军名称
+    private String username;// 业代名称
+    private String termcount;// 数量
+    private String rankname;// 冠军名称
 
     public GvTop() {
     }
 
-    public GvTop(String ydname, String count, String topname) {
-        this.ydname = ydname;
-        this.count = count;
-        this.topname = topname;
+    public GvTop(String username, String termcount, String rankname) {
+        this.username = username;
+        this.termcount = termcount;
+        this.rankname = rankname;
     }
 
-    public String getYdname() {
-        return ydname;
+    public String getUsername() {
+        return username;
     }
 
-    public void setYdname(String ydname) {
-        this.ydname = ydname;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getCount() {
-        return count;
+    public String getTermcount() {
+        return termcount;
     }
 
-    public void setCount(String count) {
-        this.count = count;
+    public void setTermcount(String termcount) {
+        this.termcount = termcount;
     }
 
-    public String getTopname() {
-        return topname;
+    public String getRankname() {
+        return rankname;
     }
 
-    public void setTopname(String topname) {
-        this.topname = topname;
+    public void setRankname(String rankname) {
+        this.rankname = rankname;
     }
 }

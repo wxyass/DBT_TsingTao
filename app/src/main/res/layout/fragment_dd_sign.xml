@@ -66,7 +66,6 @@
             android:layout_height="140dp"
             android:background="@drawable/bg_attend_button"
             android:gravity="center"
-
             android:orientation="vertical"
             >
             <ImageView

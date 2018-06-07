@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
+import et.tsingtaopad.business.first.FirstFragment;
 import et.tsingtaopad.core.net.HttpUrl;
 import et.tsingtaopad.core.net.RestClient;
 import et.tsingtaopad.core.net.callback.IError;
@@ -101,7 +102,7 @@ public class SystemFragment extends BaseFragmentSupport implements View.OnClickL
                 Toast.makeText(getActivity(), "检查更新", Toast.LENGTH_SHORT).show();
                 //changeHomeFragment(new DdDealPlanFragment(), "dddealplanfragment");
 
-                // checkUpload();
+                checkUpload();
                 break;
             case R.id.dd_system_rl_about:// 关于系统
                 Toast.makeText(getActivity(), "关于系统", Toast.LENGTH_SHORT).show();
@@ -112,23 +113,16 @@ public class SystemFragment extends BaseFragmentSupport implements View.OnClickL
     }
 
     // 下载apk
-    /*private void checkUpload() {
-
-        // 组建请求Json
-        RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(getActivity());
-        requestHeadStc.setOptcode(PropertiesUtil.getProperties(optcode));
-        RequestStructBean reqObj = HttpParseJson.parseRequestStructBean(requestHeadStc, content);
-        // 压缩请求数据
-        String jsonZip = HttpParseJson.parseRequestJson(reqObj);
+    private void checkUpload() {
 
         RestClient.builder()
-                .url(HttpUrl.IP_END)
-                .params("data", jsonZip)
+                .url("http://oss.wxyass.com/private/images/001/Pic_000009.jpg")
+                // .params("data", jsonZip)
                 // .loader(getContext())// 滚动条
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
-                        String json = HttpParseJson.parseJsonResToString(response);
+                        /*String json = HttpParseJson.parseJsonResToString(response);
 
                         if ("".equals(json) || json == null) {
                             Toast.makeText(getActivity(), "后台成功接收,但返回的数据为null", Toast.LENGTH_SHORT).show();
@@ -139,14 +133,11 @@ public class SystemFragment extends BaseFragmentSupport implements View.OnClickL
                             if (ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())) {
                                 // 保存信息
                                 String formjson = resObj.getResBody().getContent();
-                                    *//*PrefUtils.putString(getActivity(),"firstjson",formjson);
-                                    parseFirstJson(formjson);
-                                    initData();*//*
 
                             } else {
                                 Toast.makeText(getActivity(), resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
                             }
-                        }
+                        }*/
 
 
                     }
@@ -155,24 +146,18 @@ public class SystemFragment extends BaseFragmentSupport implements View.OnClickL
                     @Override
                     public void onError(int code, String msg) {
                         Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
-                        *//*Message msg1 = new Message();
-                        msg1.what = FirstFragment.SYNC_CLOSE;//
-                        handler.sendMessage(msg1);*//*
-                        //initData();
                     }
                 })
                 .failure(new IFailure() {
                     @Override
                     public void onFailure() {
                         Toast.makeText(getActivity(), "请求失败", Toast.LENGTH_SHORT).show();
-                        *//*Message msg2 = new Message();
-                        msg2.what = FirstFragment.SYNC_CLOSE;//
-                        handler.sendMessage(msg2);*//*
-                        //initData();
                     }
                 })
+                .name("wxyass.jpg")
+                .dir("wxyass")
                 .builde()
                 .download();
-    }*/
+    }
 
 }
