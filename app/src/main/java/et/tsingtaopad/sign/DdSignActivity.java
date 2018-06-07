@@ -25,6 +25,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
@@ -91,6 +92,7 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
 
     private final String TAG = "XtVisitShopActivity";
 
+    private LinearLayout ll_title;
     private RelativeLayout backBtn;
     private RelativeLayout confirmBtn;
     private AppCompatTextView confirmTv;
@@ -102,7 +104,9 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
 
     private ImageView first_img_on_sign;
     private ImageView first_img_down_sign;
-    private ImageView first_img_click_sign;
+    private LinearLayout first_img_click_sign;
+    private TextView tv_type;
+    private TextView tv_time;
     private et.tsingtaopad.view.NoScrollListView first_lv_sign;
 
     MyHandler handler;
@@ -112,6 +116,7 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
     private String attencetype = "0";// 0:上班打卡  , 1:下班打卡
 
     private String currenttime;// 2011-04-11
+    private String todaytime;// 2011-04-11
 
     private String aday;
     private Calendar calendar;
@@ -142,6 +147,7 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
 
     // 初始化控件
     private void initView() {
+         ll_title = (LinearLayout) findViewById(R.id.top_ll_title);
         backBtn = (RelativeLayout) findViewById(R.id.top_navigation_rl_back);
         confirmBtn = (RelativeLayout) findViewById(R.id.top_navigation_rl_confirm);
         confirmTv = (AppCompatTextView) findViewById(R.id.top_navigation_bt_confirm);
@@ -154,7 +160,9 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
 
         first_img_on_sign = (ImageView) findViewById(R.id.first_img_on_sign);
         first_img_down_sign = (ImageView) findViewById(R.id.first_img_down_sign);
-        first_img_click_sign = (ImageView) findViewById(R.id.first_img_click_sign);
+        first_img_click_sign = (LinearLayout) findViewById(R.id.first_img_click_sign);
+        tv_type = (TextView) findViewById(R.id.first_tv_type);
+        tv_time = (TextView) findViewById(R.id.first_tv_time);
         first_lv_sign = (et.tsingtaopad.view.NoScrollListView) findViewById(R.id.first_lv_sign);
         first_img_click_sign.setOnClickListener(this);
 
@@ -165,6 +173,8 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
 
         titleTv.setText("考勤管理");
         confirmTv.setText("日历");
+        // ll_title.setBackgroundResource(R.color.tab_select);
+        confirmTv.setBackgroundResource(R.drawable.icon_work_time);
         handler = new MyHandler(this);
 
         // 获取系统时间
@@ -174,19 +184,23 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
         day = calendar.get(Calendar.DAY_OF_MONTH);
 
         currenttime = DateUtil.getDateTimeStr(7);
+        todaytime= DateUtil.getDateTimeStr(7);
+
+        //实时更新时间（1秒更新一次）
+        TimeThread timeThread = new TimeThread(tv_time);//tvDate 是显示时间的控件TextView
+        timeThread.start();//启动线程
 
 
         signStcs = new ArrayList<>();
-        /*signStcs.add(new SignStc("2018-06-06 09:52:08","0","1号地址","哈哈哈"));
+        signStcs.add(new SignStc("2018-06-06 09:52:08","0","1号地址","哈哈哈"));
         signStcs.add(new SignStc("2018-06-06 10:12:11","1","2号地址",""));
         signStcs.add(new SignStc("2018-06-06 14:52:51","1","3号地址",""));
         signStcs.add(new SignStc("2018-06-06 18:32:42","1","4号地址",""));
-        signStcs.add(new SignStc("2018-06-06 19:32:42","1","5号地址",""));*/
+        signStcs.add(new SignStc("2018-06-06 19:32:42","1","5号地址",""));
 
         signAdapter = new DdSignAdapter(this, signStcs, null);
         first_lv_sign.setAdapter(signAdapter);
         ViewUtil.setListViewHeight(first_lv_sign);
-
     }
 
 
@@ -346,8 +360,17 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
         List<SignStc>  signs = JsonUtil.parseList(formjson, SignStc.class);
         if(signs.size()>0){
             attencetype = "1";
+            tv_type.setText("下班打卡");
         }else{
             attencetype = "0";
+            tv_type.setText("上班打卡");
+        }
+
+        // 当前时间 == 今天
+        if(currenttime.equals(todaytime)){
+            first_img_click_sign.setEnabled(true);
+        }else {
+            first_img_click_sign.setEnabled(false);
         }
 
         signStcs.clear();

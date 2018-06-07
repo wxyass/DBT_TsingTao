@@ -36,7 +36,7 @@
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="20dp"
-                        android:background="@drawable/bg_camera"
+                        android:background="@drawable/icon_home_top_pho"
                         />
 
                     <LinearLayout
@@ -81,7 +81,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="20dp"
-                        android:background="@drawable/bg_camera"
+                        android:background="@drawable/attend"
                         />
 
                 </RelativeLayout>
@@ -148,7 +148,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="36dp"
-                        android:background="@drawable/icon_visit_dealerdatabase"/>
+                        android:background="@drawable/icon_home_ent_xietong"/>
 
                 </RelativeLayout>
 
@@ -176,7 +176,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="36dp"
-                        android:background="@drawable/icon_visit_dealerdatabase"/>
+                        android:background="@drawable/icon_home_ent_back"/>
 
                 </RelativeLayout>
 
@@ -214,7 +214,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="36dp"
-                        android:background="@drawable/icon_visit_dealerdatabase"/>
+                        android:background="@drawable/icon_home_ent_sto"/>
 
                 </RelativeLayout>
 
@@ -242,7 +242,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="36dp"
-                        android:background="@drawable/icon_visit_dealerdatabase"/>
+                        android:background="@drawable/icon_home_ent_coo"/>
 
                 </RelativeLayout>
 
@@ -280,7 +280,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="36dp"
-                        android:background="@drawable/icon_visit_dealerdatabase"/>
+                        android:background="@drawable/icon_home_ent_rec"/>
 
                 </RelativeLayout>
 
@@ -308,7 +308,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="36dp"
-                        android:background="@drawable/icon_visit_dealerdatabase"/>
+                        android:background="@drawable/icon_home_ent_sum"/>
 
                 </RelativeLayout>
 

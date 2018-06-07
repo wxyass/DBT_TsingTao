@@ -29,6 +29,7 @@ import et.tsingtaopad.core.net.domain.RequestHeadStc;
 import et.tsingtaopad.core.net.domain.RequestStructBean;
 import et.tsingtaopad.core.net.domain.ResponseStructBean;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.JsonUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
@@ -369,9 +370,10 @@ public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnCl
         repairM.setCheckcontent(stc.getCheckcontent());//考核措施
         repairM.setCreuser(PrefUtils.getString(getActivity(), "userid", ""));//追溯人
         repairM.setCreuserareaid(PrefUtils.getString(getActivity(), "departmentid", ""));//追溯人所属区域
-        //repairM.setCredate(new Date());//创建日期
+        ////repairM.setCredate(new Date());//创建日期
+        repairM.setCredate(stc.getCredate());//创建日期
         repairM.setUpdateuser(PrefUtils.getString(getActivity(), "userid", ""));//更新人
-        repairM.setUpdatedate(new Date());//更新时间
+        repairM.setUpdatedate(DateUtil.getDateTimeStr(8));//更新时间
         repairM.setUploadflag("1");
         repairM.setPadisconsistent("0");
         repairM.setStatus(stc.getRepairstatus());

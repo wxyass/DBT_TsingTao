@@ -12,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.ref.SoftReference;
+import java.util.ArrayList;
+import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
@@ -31,8 +33,10 @@ import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.db.table.MitRepairM;
 import et.tsingtaopad.db.table.MitRepaircheckM;
 import et.tsingtaopad.db.table.MitRepairterM;
+import et.tsingtaopad.dd.dddaysummary.adapter.WorkSumAdapter;
 import et.tsingtaopad.home.app.MainService;
 import et.tsingtaopad.http.HttpParseJson;
+import et.tsingtaopad.initconstvalues.domain.KvStc;
 import et.tsingtaopad.util.requestHeadUtil;
 
 /**
@@ -51,8 +55,10 @@ public class WorkSumFragment extends BaseFragmentSupport implements View.OnClick
 
     public static final int DEALPLAN_NEED_UP = 3303;
 
-    private TextView bt_addplan;
-    private et.tsingtaopad.view.NoScrollListView monthplan_lv;
+    private TextView tv_time;
+    private et.tsingtaopad.view.NoScrollListView termnum_lv;
+    private et.tsingtaopad.view.NoScrollListView agree_lv;
+    private et.tsingtaopad.view.NoScrollListView sdlv_lv;
 
     @Nullable
     @Override
@@ -65,9 +71,10 @@ public class WorkSumFragment extends BaseFragmentSupport implements View.OnClick
     // 初始化控件
     private void initView(View view) {
 
-        bt_addplan = (TextView) view.findViewById(R.id.operation_worksum_bt_addplan);
-        monthplan_lv = (et.tsingtaopad.view.NoScrollListView) view.findViewById(R.id.operation_worksum_monthplan_lv);
-        bt_addplan.setOnClickListener(this);
+        tv_time = (TextView) view.findViewById(R.id.operation_worksum_tv_time);
+        termnum_lv = (et.tsingtaopad.view.NoScrollListView) view.findViewById(R.id.operation_worksum_termnum_lv);
+        agree_lv = (et.tsingtaopad.view.NoScrollListView) view.findViewById(R.id.operation_worksum_agree_lv);
+        sdlv_lv = (et.tsingtaopad.view.NoScrollListView) view.findViewById(R.id.operation_worksum_sdlv_lv);
     }
 
     @Override
@@ -76,11 +83,27 @@ public class WorkSumFragment extends BaseFragmentSupport implements View.OnClick
         handler = new MyHandler(this);
 
         initData();
-        initUrlData();
+        //initUrlData();
     }
 
     // 初始化数据
     private void initData() {
+
+        ArrayList<KvStc> kvStcs =new ArrayList<>();
+        kvStcs.add(new KvStc("A","123"));
+        kvStcs.add(new KvStc("B","456"));
+        kvStcs.add(new KvStc("C","789"));
+        kvStcs.add(new KvStc("D","300"));
+        kvStcs.add(new KvStc("B","456"));
+        kvStcs.add(new KvStc("C","789"));
+        kvStcs.add(new KvStc("D","300"));
+
+
+        WorkSumAdapter workSumAdapter = new WorkSumAdapter(getActivity(),kvStcs);
+        termnum_lv.setAdapter(workSumAdapter);
+
+        agree_lv.setAdapter(workSumAdapter);
+        sdlv_lv.setAdapter(workSumAdapter);
 
     }
 

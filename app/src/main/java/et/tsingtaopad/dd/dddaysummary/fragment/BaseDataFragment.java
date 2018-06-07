@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.ref.SoftReference;
+import java.util.ArrayList;
 import java.util.List;
 
 import et.tsingtaopad.R;
@@ -32,10 +33,13 @@ import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.db.table.MitRepairM;
 import et.tsingtaopad.db.table.MitRepaircheckM;
 import et.tsingtaopad.db.table.MitRepairterM;
+import et.tsingtaopad.dd.dddaysummary.adapter.BaseDataAdapter;
+import et.tsingtaopad.dd.dddaysummary.adapter.WorkSumAdapter;
 import et.tsingtaopad.dd.dddealplan.DdDealPlanAdapter;
 import et.tsingtaopad.dd.dddealplan.domain.DealStc;
 import et.tsingtaopad.home.app.MainService;
 import et.tsingtaopad.http.HttpParseJson;
+import et.tsingtaopad.initconstvalues.domain.KvStc;
 import et.tsingtaopad.util.requestHeadUtil;
 
 /**
@@ -55,10 +59,8 @@ public class BaseDataFragment extends BaseFragmentSupport implements View.OnClic
 
     public static final int DEALPLAN_NEED_UP = 3303;
 
-    private TextView bt_addplan;
+    private TextView tv_time;
     private et.tsingtaopad.view.NoScrollListView monthplan_lv;
-    private DdDealPlanAdapter dealPlanAdapter;
-    private List<DealStc> dataLst;
 
     @Nullable
     @Override
@@ -71,10 +73,9 @@ public class BaseDataFragment extends BaseFragmentSupport implements View.OnClic
     // 初始化控件
     private void initView(View view) {
 
-        bt_addplan = (TextView) view.findViewById(R.id.operation_basedata_bt_addplan);
+        tv_time = (TextView) view.findViewById(R.id.operation_basedata_tv_time);
         monthplan_lv = (et.tsingtaopad.view.NoScrollListView) view.findViewById(R.id.operation_basedata_monthplan_lv);
 
-        bt_addplan.setOnClickListener(this);
     }
 
     @Override
@@ -90,8 +91,14 @@ public class BaseDataFragment extends BaseFragmentSupport implements View.OnClic
     // 初始化数据
     private void initData() {
 
+        ArrayList<KvStc> kvStcs =new ArrayList<>();
+        kvStcs.add(new KvStc("基础数据群","222/333","66.6%"));
+        kvStcs.add(new KvStc("网络数据群","222/333","66.6%"));
+        kvStcs.add(new KvStc("价格数据群","222/333","66.6%"));
+        kvStcs.add(new KvStc("竞品数据群","222/333","66.6%"));
 
-
+        BaseDataAdapter workSumAdapter = new BaseDataAdapter(getActivity(),kvStcs,null);
+        monthplan_lv.setAdapter(workSumAdapter);
 
     }
 
@@ -197,7 +204,7 @@ public class BaseDataFragment extends BaseFragmentSupport implements View.OnClic
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            // 返回
+            /*// 返回
             case R.id.top_navigation_rl_back:
                 supportFragmentManager.popBackStack();
                 break;
@@ -207,7 +214,7 @@ public class BaseDataFragment extends BaseFragmentSupport implements View.OnClic
             case R.id.zgjh_bt_addplan:// 新增整顿计划
                 // 跳转到  新增整改计划
                 toDdDealMakeFragment();
-                break;
+                break;*/
 
             default:
                 break;
@@ -263,7 +270,6 @@ public class BaseDataFragment extends BaseFragmentSupport implements View.OnClic
 
     // 结束上传  刷新页面
     private void shuaxinFragment(int upType) {
-        initData();
     }
 
 }

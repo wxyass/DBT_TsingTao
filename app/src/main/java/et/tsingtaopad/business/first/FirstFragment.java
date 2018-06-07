@@ -120,6 +120,8 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
 
     private void initData() {
 
+        tv_username.setText(PrefUtils.getString(getActivity(),"username",""));
+
         gvTops.clear();
         gvTops.add(new GvTop("张三","33/63(个)","走访冠军"));
         gvTops.add(new GvTop("李四","13/53(个)","稽查冠军"));

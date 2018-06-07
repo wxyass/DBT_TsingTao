@@ -317,7 +317,12 @@
                 <!-- 主要条款 -->
                 <RelativeLayout
                     android:id="@+id/zdzs_agree_rl_notes"
-                    style="@style/xtbf_sayhi_rl_all"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:background="@drawable/bg_select_white_gray"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
                     android:visibility="visible">
 
                     <!--标题-->
@@ -328,7 +333,13 @@
                     <!--内容1-->
                     <TextView
                         android:id="@+id/zdzs_agree_rl_notes_con1"
-                        style="@style/zdzs_sayhi_content1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="220dp"
+                        android:layout_marginRight="80dp"
+                        android:gravity="center_vertical|left"
                         android:text=""/>
 
                     <!--内容2-->
@@ -384,6 +395,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+
                 <TextView
                     style="@style/page_label_big"
                     android:layout_width="wrap_content"

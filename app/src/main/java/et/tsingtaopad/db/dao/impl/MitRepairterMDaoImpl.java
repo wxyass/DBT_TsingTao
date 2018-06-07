@@ -65,7 +65,7 @@ public class MitRepairterMDaoImpl extends BaseDaoImpl<MitRepairterM, String> imp
         List<DealStc> detailStcs = new ArrayList<>();
         StringBuffer buffer = new StringBuffer();
 
-        buffer.append("select mv.id repairid,g.id repaircheckid, mv.content,mv.status repairstatus, mv.repairremark, mv.checkcontent,  ");
+        buffer.append("select mv.id repairid,g.id repaircheckid,mv.credate, mv.content,mv.status repairstatus, mv.repairremark, mv.checkcontent,  ");
         buffer.append("    f.gridkey, f.gridname, f.userid, f.username, g.status, g.repairtime   ");
         buffer.append("    from MIT_REPAIR_M mv   ");
         buffer.append("    left join MIT_REPAIRCHECK_M g     on g.repairid = mv.id ");
@@ -90,6 +90,7 @@ public class MitRepairterMDaoImpl extends BaseDaoImpl<MitRepairterM, String> imp
             kvStc.setUsername(cursor.getString(cursor.getColumnIndex("username")));
             kvStc.setStatus(cursor.getString(cursor.getColumnIndex("status")));
             kvStc.setRepairtime(cursor.getString(cursor.getColumnIndex("repairtime")));
+            kvStc.setCredate(cursor.getString(cursor.getColumnIndex("credate")));
             detailStcs.add(kvStc);
         }
         return detailStcs;

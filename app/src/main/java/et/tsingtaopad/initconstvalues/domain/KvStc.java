@@ -24,7 +24,12 @@ public class KvStc implements Serializable {
     public KvStc() {
         
     }
-    
+
+    public KvStc(String key, String value) {
+        this.key = key;
+        this.value = value;
+    }
+
     public KvStc(String key, String value, String parentKey) {
         this.key = key;
         this.value = value;

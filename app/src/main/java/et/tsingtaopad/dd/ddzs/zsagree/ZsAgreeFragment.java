@@ -16,6 +16,7 @@ import java.lang.ref.SoftReference;
 import java.util.List;
 
 import et.tsingtaopad.R;
+import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.core.view.alertview.OnItemClickListener;
@@ -160,6 +161,7 @@ public class ZsAgreeFragment extends XtBaseVisitFragment implements View.OnClick
             }
         });
         lv_cash.setAdapter(zsAgreeAdapter);
+        ViewUtil.setListViewHeight(lv_cash);
     }
 
     // 显示页面数据
@@ -167,8 +169,8 @@ public class ZsAgreeFragment extends XtBaseVisitFragment implements View.OnClick
         tv_agreecode_con1.setText(mitValagreeMTemp.getAgreecode());
         tv_agencyname_con1.setText(mitValagreeMTemp.getAgencyname());
         rl_moneyagency_con1.setText(mitValagreeMTemp.getMoneyagency());
-        rl_startdate_con1.setText(mitValagreeMTemp.getStartdate());
-        rl_enddate_con1.setText(mitValagreeMTemp.getEnddate());
+        rl_startdate_con1.setText(mitValagreeMTemp.getStartdate().substring(0,10));
+        rl_enddate_con1.setText(mitValagreeMTemp.getEnddate().substring(0,10));
         rl_paytype_con1.setText(mitValagreeMTemp.getPaytype());
         rl_contact_con1.setText(mitValagreeMTemp.getContact());
         rl_mobile_con1.setText(mitValagreeMTemp.getMobile());
@@ -225,7 +227,8 @@ public class ZsAgreeFragment extends XtBaseVisitFragment implements View.OnClick
                     @Override
                     public void onItemClick(Object o, int position) {
                         if (0 == position) {// 正确
-
+                            valagreedetailMTemps.get(posi).setAgreedetailflag("Y");
+                            handler.sendEmptyMessage(ZsAgreeFragment.AGREE_AMEND_DETAIL);
                         } else {
                             Bundle bundle = new Bundle();
                             bundle.putSerializable("type", position);// 1 品种有误  2 承担金额有误  3 实际数量有误
@@ -316,10 +319,14 @@ public class ZsAgreeFragment extends XtBaseVisitFragment implements View.OnClick
                     fragment.initViewStatus();
                     break;
                 case AGREE_AMEND_DETAIL: // 督导输入数据后
-                    fragment.initLvData();
+                    fragment.refreshLvData();
                     break;
             }
         }
+    }
+
+    private void refreshLvData() {
+        zsAgreeAdapter.notifyDataSetChanged();
     }
 
     @Override

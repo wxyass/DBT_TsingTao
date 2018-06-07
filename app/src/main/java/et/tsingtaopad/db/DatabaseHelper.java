@@ -1188,7 +1188,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 
                 // 整改计划主表
-                String MIT_REPAIR_M = "create table MIT_REPAIR_M ( id varchar2(36) not null, status char(1) null,gridkey  varchar2(36) null, userid varchar2(36) null, content  varchar2(500) null, repairremark varchar2(500) null, checkcontent varchar2(500) null, creuser  varchar2(128) null, creuserareaid varchar(36)  null, credate  date null, updateuser varchar2(128) null, updatedate date null, uploadflag  varchar2(1) null, padisconsistent  varchar2(1) null )";
+                String MIT_REPAIR_M = "create table MIT_REPAIR_M ( id varchar2(36) not null, status char(1) null,gridkey  varchar2(36) null, userid varchar2(36) null, content  varchar2(500) null, repairremark varchar2(500) null, checkcontent varchar2(500) null, creuser  varchar2(128) null, creuserareaid varchar(36)  null, credate  varchar2(36) null, updateuser varchar2(128) null, updatedate varchar2(36) null, uploadflag  varchar2(1) null, padisconsistent  varchar2(1) null )";
                 db.execSQL(MIT_REPAIR_M);
                 // 整改计划终端表
                 String MIT_REPAIRTER_M = "create table MIT_REPAIRTER_M ( id varchar2(36) not null, repairid varchar2(36) null, gridkey  varchar2(36) null, routekey varchar2(36) null, terminalkey  varchar2(36) null,terminalname varchar2(100) null, uploadflag  varchar2(1) null, padisconsistent  varchar2(1) null )";

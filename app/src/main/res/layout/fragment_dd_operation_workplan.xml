@@ -58,7 +58,7 @@
                     >
 
                     <TextView
-                        android:id="@+id/operation_workplan_bt_addplan"
+                        android:id="@+id/operation_workplan_tv_time"
                         style="@style/xtbf_btn_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

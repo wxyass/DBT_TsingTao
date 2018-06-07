@@ -2,10 +2,152 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@color/orange"
+              android:background="@color/bg_app"
               android:orientation="vertical">
 
+    <include layout="@layout/top_navigation"/>
 
+    <ScrollView
+        android:id="@+id/sayhi_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:orientation="vertical">
+
+            <!-- 修改密码 -->
+            <RelativeLayout
+                android:id="@+id/dd_system_rl_repwd"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_select_white_gray"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:visibility="visible">
+
+                <TextView
+                    style="@style/zdzs_sayhi_title"
+                    android:background="@drawable/icon_work_locat"/>
+
+                <!--修改密码-->
+                <TextView
+                    android:id="@+id/dd_system_tv_repwd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="60dp"
+                    android:gravity="center_vertical|left"
+                    android:text="修改密码"/>
+
+                <ImageView
+                    style="@style/xtbf_sayhi_third_tv"
+                    android:visibility="visible"/>
+            </RelativeLayout>
+
+            <!-- 问题反馈 -->
+            <RelativeLayout
+                android:id="@+id/dd_system_rl_question"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_select_white_gray"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:visibility="visible">
+
+                <TextView
+                    style="@style/zdzs_sayhi_title"
+                    android:background="@drawable/icon_work_locat"/>
+
+                <!--问题反馈-->
+                <TextView
+                    android:id="@+id/dd_system_tv_question"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="60dp"
+                    android:gravity="center_vertical|left"
+                    android:text="问题反馈"/>
+
+                <ImageView
+                    style="@style/xtbf_sayhi_third_tv"
+                    android:visibility="visible"/>
+            </RelativeLayout>
+
+            <!-- 检查更新 -->
+            <RelativeLayout
+                android:id="@+id/dd_system_rl_upload"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_select_white_gray"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:visibility="visible">
+
+                <TextView
+                    style="@style/zdzs_sayhi_title"
+                    android:background="@drawable/icon_work_locat"/>
+
+                <!--检查更新-->
+                <TextView
+                    android:id="@+id/dd_system_tv_upload"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="60dp"
+                    android:gravity="center_vertical|left"
+                    android:text="检查更新"/>
+
+                <ImageView
+                    style="@style/xtbf_sayhi_third_tv"
+                    android:visibility="visible"/>
+            </RelativeLayout>
+
+
+            <!-- 关于系统 -->
+            <RelativeLayout
+                android:id="@+id/dd_system_rl_about"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_select_white_gray"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:visibility="visible">
+
+                <TextView
+                    style="@style/zdzs_sayhi_title"
+                    android:background="@drawable/icon_work_locat"/>
+
+                <!--关于系统-->
+                <TextView
+                    android:id="@+id/dd_system_tv_about"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="60dp"
+                    android:gravity="center_vertical|left"
+                    android:text="关于系统"/>
+
+                <ImageView
+                    style="@style/xtbf_sayhi_third_tv"
+                    android:visibility="visible"/>
+            </RelativeLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
 
 
 </LinearLayout>

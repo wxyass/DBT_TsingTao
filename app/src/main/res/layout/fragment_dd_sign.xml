@@ -2,7 +2,7 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@color/bg_app"
+              android:background="@color/white"
               android:orientation="vertical">
 
     <include layout="@layout/top_navigation"/>
@@ -18,7 +18,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-
             >
 
             <ImageView
@@ -47,32 +46,52 @@
                 android:background="@drawable/bg_camera"
                 />
 
+
+
         </RelativeLayout>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="wrap_content"
         android:background="@color/white"
+        android:gravity="center"
+        android:layout_marginTop="30dp"
         android:orientation="horizontal">
 
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+        <LinearLayout
+            android:id="@+id/first_img_click_sign"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:background="@drawable/bg_attend_button"
+            android:gravity="center"
+
+            android:orientation="vertical"
             >
-
             <ImageView
-                android:id="@+id/first_img_click_sign"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:background="@drawable/bg_camera"
-                />
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/icon_work_clock_finger"/>
 
-        </RelativeLayout>
+            <TextView
+                android:id="@+id/first_tv_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textSize="@dimen/font_size3"
+                android:textColor="@color/darkgreen"
+                android:text="上班打卡"/>
+            <TextView
+                android:id="@+id/first_tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textColor="@color/darkgreen"
+                android:textSize="@dimen/font_size4"
+                android:text="08:12:32"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -84,6 +103,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
+            android:layout_marginTop="20dp"
             android:orientation="horizontal">
 
             <et.tsingtaopad.view.NoScrollListView

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.ref.SoftReference;
+import java.util.ArrayList;
 import java.util.List;
 
 import et.tsingtaopad.R;
@@ -32,9 +33,12 @@ import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.db.table.MitRepairM;
 import et.tsingtaopad.db.table.MitRepaircheckM;
 import et.tsingtaopad.db.table.MitRepairterM;
+import et.tsingtaopad.dd.dddaysummary.adapter.BaseDataAdapter;
+import et.tsingtaopad.dd.dddaysummary.adapter.DdPromotionAdapter;
 import et.tsingtaopad.dd.dddealplan.domain.DealStc;
 import et.tsingtaopad.home.app.MainService;
 import et.tsingtaopad.http.HttpParseJson;
+import et.tsingtaopad.initconstvalues.domain.KvStc;
 import et.tsingtaopad.util.requestHeadUtil;
 
 /**
@@ -84,6 +88,15 @@ public class PromotionFragment extends BaseFragmentSupport implements View.OnCli
 
     // 初始化数据
     private void initData() {
+
+        ArrayList<KvStc> kvStcs =new ArrayList<>();
+        kvStcs.add(new KvStc("秋季大练兵","222/333","66.6%"));
+        kvStcs.add(new KvStc("春季小战役","222/333","66.6%"));
+        kvStcs.add(new KvStc("明日之星活动","222/333","66.6%"));
+        kvStcs.add(new KvStc("想聚青岛","222/333","66.6%"));
+
+        DdPromotionAdapter workSumAdapter = new DdPromotionAdapter(getActivity(),kvStcs,null);
+        monthplan_lv.setAdapter(workSumAdapter);
 
     }
 

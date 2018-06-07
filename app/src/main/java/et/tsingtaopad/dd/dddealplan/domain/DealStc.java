@@ -26,6 +26,7 @@ public class DealStc implements Serializable{
 	private String repairtime;//
 	private String terminalkey;//
 	private String terminalname;//
+	private String credate;// 整改计划的创建时间
 
 
 	public DealStc() {
@@ -149,5 +150,13 @@ public class DealStc implements Serializable{
 
 	public void setRepairstatus(String repairstatus) {
 		this.repairstatus = repairstatus;
+	}
+
+	public String getCredate() {
+		return credate;
+	}
+
+	public void setCredate(String credate) {
+		this.credate = credate;
 	}
 }

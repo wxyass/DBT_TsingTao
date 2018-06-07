@@ -35,11 +35,11 @@ public class MitRepairM implements java.io.Serializable {
     @DatabaseField
     private String creuserareaid;//追溯人所属区域
     @DatabaseField
-    private Date credate;//创建日期
+    private String credate;//创建日期
     @DatabaseField
     private String updateuser;//更新人
     @DatabaseField
-    private Date updatedate;//更新时间
+    private String updatedate;//更新时间
     @DatabaseField
     private String uploadflag;//
     @DatabaseField
@@ -129,19 +129,19 @@ public class MitRepairM implements java.io.Serializable {
         this.updateuser = updateuser;
     }
 
-    public Date getCredate() {
+    public String getCredate() {
         return credate;
     }
 
-    public void setCredate(Date credate) {
+    public void setCredate(String credate) {
         this.credate = credate;
     }
 
-    public Date getUpdatedate() {
+    public String getUpdatedate() {
         return updatedate;
     }
 
-    public void setUpdatedate(Date updatedate) {
+    public void setUpdatedate(String updatedate) {
         this.updatedate = updatedate;
     }
 

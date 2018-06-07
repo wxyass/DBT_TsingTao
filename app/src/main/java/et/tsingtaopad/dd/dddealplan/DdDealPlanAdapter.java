@@ -91,7 +91,7 @@ public class DdDealPlanAdapter extends BaseAdapter {
         holder.question.setText(item.getContent());
         holder.amendplan.setText(item.getRepairremark());
         holder.measure.setText(item.getCheckcontent());
-        holder.checktime.setText(item.getRepairtime());
+        holder.checktime.setText(item.getRepairtime().substring(0,10));
 
         if ("1".equals(item.getRepairstatus())) {
             holder.checkstatus.setText("未通过");

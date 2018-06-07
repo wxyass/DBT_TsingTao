@@ -29,6 +29,13 @@ public class SignStc {
         this.systime = systime;
     }
 
+    public SignStc( String attencetime, String attencetype,  String address, String remark) {
+        this.attencetime = attencetime;
+        this.attencetype = attencetype;
+        this.address = address;
+        this.remark = remark;
+    }
+
     public String getAttenceid() {
         return attenceid;
     }

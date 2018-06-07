@@ -528,7 +528,7 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
             zdzs_sayhi_rl_areatype.setVisibility(View.VISIBLE);
         }
         // 销售次渠道
-        if("Y".equals(mitValcheckterM.getMinorchannel())){
+        if("Y".equals(mitValcheckterM.getSellchannel())){
             zdzs_sayhi_rl_sellchannel.setVisibility(View.VISIBLE);
             zdzs_sayhi_rl_mainchannel.setVisibility(View.VISIBLE);
             zdzs_sayhi_rl_minorchannel.setVisibility(View.VISIBLE);

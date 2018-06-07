@@ -7,16 +7,15 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.ref.SoftReference;
+import java.util.ArrayList;
 import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
-import et.tsingtaopad.business.visit.bean.AreaGridRoute;
 import et.tsingtaopad.core.net.HttpUrl;
 import et.tsingtaopad.core.net.RestClient;
 import et.tsingtaopad.core.net.callback.IError;
@@ -29,13 +28,10 @@ import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.JsonUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
-import et.tsingtaopad.db.table.MitRepairM;
-import et.tsingtaopad.db.table.MitRepaircheckM;
-import et.tsingtaopad.db.table.MitRepairterM;
-import et.tsingtaopad.dd.dddealplan.DdDealPlanAdapter;
-import et.tsingtaopad.dd.dddealplan.domain.DealStc;
-import et.tsingtaopad.home.app.MainService;
+import et.tsingtaopad.dd.dddaysummary.adapter.WorkPlanAdapter;
+import et.tsingtaopad.dd.ddweekplan.domain.DayDetailStc;
 import et.tsingtaopad.http.HttpParseJson;
+import et.tsingtaopad.initconstvalues.domain.KvStc;
 import et.tsingtaopad.util.requestHeadUtil;
 
 /**
@@ -55,10 +51,10 @@ public class WorkPlanFragment extends BaseFragmentSupport implements View.OnClic
 
     public static final int DEALPLAN_NEED_UP = 3303;
 
-    private TextView bt_addplan;
+    private TextView tv_time;
     private et.tsingtaopad.view.NoScrollListView monthplan_lv;
-    private DdDealPlanAdapter dealPlanAdapter;
-    private List<DealStc> dataLst;
+    private WorkPlanAdapter workPlanAdapter;
+    List<KvStc> dataLst;
 
     @Nullable
     @Override
@@ -71,10 +67,9 @@ public class WorkPlanFragment extends BaseFragmentSupport implements View.OnClic
     // 初始化控件
     private void initView(View view) {
 
-        bt_addplan = (TextView) view.findViewById(R.id.operation_workplan_bt_addplan);
+        tv_time = (TextView) view.findViewById(R.id.operation_workplan_tv_time);
         monthplan_lv = (et.tsingtaopad.view.NoScrollListView) view.findViewById(R.id.operation_workplan_monthplan_lv);
 
-        bt_addplan.setOnClickListener(this);
     }
 
     @Override
@@ -84,12 +79,20 @@ public class WorkPlanFragment extends BaseFragmentSupport implements View.OnClic
         handler = new MyHandler(this);
 
         initData();
-        initUrlData();
+        // initUrlData();
     }
 
     // 初始化数据
     private void initData() {
 
+        dataLst = new ArrayList<>();
+        dataLst.add(new KvStc("基础数据追溯,价格数据追溯","德州","6号定格","3号路线"));
+        dataLst.add(new KvStc("基础数据追溯","平县","5号定格","6号路线"));
+        dataLst.add(new KvStc("价格数据追溯","胶南","2号定格","1号路线"));
+        dataLst.add(new KvStc("网络数据追溯,价格数据追溯","北京","1号定格","7号路线"));
+        dataLst.add(new KvStc("竞品数据追溯","通州","4号定格","9号路线"));
+        workPlanAdapter = new WorkPlanAdapter(getActivity(), dataLst,null);
+        monthplan_lv.setAdapter(workPlanAdapter);
 
     }
 
@@ -138,7 +141,7 @@ public class WorkPlanFragment extends BaseFragmentSupport implements View.OnClic
                                 // 保存信息
                                 String formjson = resObj.getResBody().getContent();
                                 parseTableJson(formjson);
-                                initData();
+                                // initData();
 
                             } else {
                                 Toast.makeText(getActivity(), resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
@@ -176,18 +179,16 @@ public class WorkPlanFragment extends BaseFragmentSupport implements View.OnClic
                 .post();
     }
 
-    // 解析区域定格路线成功
-    private void parseTableJson(String json) {
-        // 解析区域定格路线信息
-        AreaGridRoute emp = JsonUtil.parseJson(json, AreaGridRoute.class);
-        String MIT_REPAIR_M = emp.getMIT_REPAIR_M();
-        String MIT_REPAIRTER_M = emp.getMIT_REPAIRTER_M();
-        String MIT_REPAIRCHECK_M = emp.getMIT_REPAIRCHECK_M();
+    // 解析数据
+    private void parseTableJson(String formjson) {
+        List<KvStc>  signs = JsonUtil.parseList(formjson, KvStc.class);
+        dataLst.clear();
+        dataLst.addAll(signs);
+        initJsonData();
+    }
 
-        MainService service = new MainService(getActivity(), null);
-        service.createOrUpdateTable(MIT_REPAIR_M, "MIT_REPAIR_M", MitRepairM.class);
-        service.createOrUpdateTable(MIT_REPAIRTER_M, "MIT_REPAIRTER_M", MitRepairterM.class);
-        service.createOrUpdateTable(MIT_REPAIRCHECK_M, "MIT_REPAIRCHECK_M", MitRepaircheckM.class);
+    private void initJsonData() {
+        workPlanAdapter.notifyDataSetChanged();
     }
 
 

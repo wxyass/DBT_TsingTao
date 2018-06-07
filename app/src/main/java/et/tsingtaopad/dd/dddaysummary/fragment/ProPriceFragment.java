@@ -53,9 +53,8 @@ public class ProPriceFragment extends BaseFragmentSupport implements View.OnClic
 
     public static final int DEALPLAN_NEED_UP = 3303;
 
-    private TextView bt_addplan;
+    private TextView tv_time;
     private et.tsingtaopad.view.NoScrollListView monthplan_lv;
-    private List<DealStc> dataLst;
 
     @Nullable
     @Override
@@ -67,10 +66,9 @@ public class ProPriceFragment extends BaseFragmentSupport implements View.OnClic
 
     // 初始化控件
     private void initView(View view) {
-        bt_addplan = (TextView) view.findViewById(R.id.operation_proprice_bt_addplan);
+        tv_time = (TextView) view.findViewById(R.id.operation_proprice_tv_time);
         monthplan_lv = (et.tsingtaopad.view.NoScrollListView) view.findViewById(R.id.operation_proprice_monthplan_lv);
 
-        bt_addplan.setOnClickListener(this);
     }
 
     @Override

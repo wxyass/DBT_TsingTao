@@ -296,9 +296,9 @@ public class DdReDealMakeFragment extends BaseFragmentSupport implements View.On
         repairM.setCheckcontent(measure_string);//考核措施
         repairM.setCreuser(PrefUtils.getString(getActivity(), "userid", ""));//追溯人
         repairM.setCreuserareaid(PrefUtils.getString(getActivity(), "departmentid", ""));//追溯人所属区域
-        //repairM.setCredate(new Date());//创建日期
+        repairM.setCredate(dealStc.getCredate());//创建日期
         repairM.setUpdateuser(PrefUtils.getString(getActivity(), "userid", ""));//更新人
-        repairM.setUpdatedate(new Date());//更新时间
+        repairM.setUpdatedate(DateUtil.getDateTimeStr(8));//更新时间
         repairM.setUploadflag("1");
         repairM.setPadisconsistent("0");
         repairM.setStatus("0");//
@@ -310,7 +310,6 @@ public class DdReDealMakeFragment extends BaseFragmentSupport implements View.On
         mitRepaircheckM.setRepairtime(checktime_string);//整改日期
         mitRepaircheckM.setUploadflag("1");
         mitRepaircheckM.setPadisconsistent("0");
-        //mitRepaircheckM.setCredate(new Date());
         mitRepaircheckM.setCredate(DateUtil.getDateTimeStr(8));
 
         // 保存到库中
@@ -329,6 +328,7 @@ public class DdReDealMakeFragment extends BaseFragmentSupport implements View.On
     }
 
     private boolean checkTermName() {
+        long b = DateUtil.parse(DateUtil.getDateTimeStr(7), "yyyy-MM-dd").getTime();// 当前时间
         boolean ishaveName = true;
         if (TextUtils.isEmpty(termname.getText().toString())) {
             ishaveName = false;
@@ -336,6 +336,10 @@ public class DdReDealMakeFragment extends BaseFragmentSupport implements View.On
         } else if (TextUtils.isEmpty(checktime.getText().toString())) {
             ishaveName = false;
             Toast.makeText(getActivity(), "请选择复查时间", Toast.LENGTH_SHORT).show();
+        }else if(b > DateUtil.parse(checktime.getText().toString(), "yyyy-MM-dd").getTime()){
+            // 校验复查时间不能小于当前时间
+            ishaveName = false;
+            Toast.makeText(getActivity(),"复查时间不能小于当前时间",Toast.LENGTH_SHORT).show();
         }
         return ishaveName;
     }

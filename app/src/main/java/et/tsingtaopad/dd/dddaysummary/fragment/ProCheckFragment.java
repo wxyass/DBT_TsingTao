@@ -56,9 +56,7 @@ public class ProCheckFragment extends BaseFragmentSupport implements View.OnClic
     public static final int DEALPLAN_NEED_UP = 3303;
 
     private TextView bt_addplan;
-    private et.tsingtaopad.view.NoScrollListView monthplan_lv;
-    private DdDealPlanAdapter dealPlanAdapter;
-    private List<DealStc> dataLst;
+    private et.tsingtaopad.view.NoScrollListView procheck_lv;
 
     @Nullable
     @Override
@@ -71,8 +69,8 @@ public class ProCheckFragment extends BaseFragmentSupport implements View.OnClic
     // 初始化控件
     private void initView(View view) {
 
-        bt_addplan = (TextView) view.findViewById(R.id.operation_procheck_bt_addplan);
-        monthplan_lv = (et.tsingtaopad.view.NoScrollListView) view.findViewById(R.id.operation_procheck_monthplan_lv);
+        bt_addplan = (TextView) view.findViewById(R.id.operation_procheck_tv_time);
+        procheck_lv = (et.tsingtaopad.view.NoScrollListView) view.findViewById(R.id.operation_procheck_procheck_lv);
 
         bt_addplan.setOnClickListener(this);
     }

@@ -125,6 +125,7 @@ public class ZsAgreeDetailAmendFragment extends BaseFragmentSupport implements V
             mitValagreedetailMTemp.setErroritem("2");
             mitValagreedetailMTemp.setAgreedetailflag("N");
         }
+        mitValagreedetailMTemp.setRemarks(report);
 
         handler.sendEmptyMessage(ZsAgreeFragment.AGREE_AMEND_DETAIL);
 

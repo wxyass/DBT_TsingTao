@@ -56,10 +56,8 @@ public class AgencyStoreFragment extends BaseFragmentSupport implements View.OnC
 
     public static final int DEALPLAN_NEED_UP = 3303;
 
-    private TextView bt_addplan;
+    private TextView tv_time;
     private et.tsingtaopad.view.NoScrollListView monthplan_lv;
-    private DdDealPlanAdapter dealPlanAdapter;
-    private List<DealStc> dataLst;
 
     @Nullable
     @Override
@@ -72,10 +70,9 @@ public class AgencyStoreFragment extends BaseFragmentSupport implements View.OnC
     // 初始化控件
     private void initView(View view) {
 
-        bt_addplan = (TextView) view.findViewById(R.id.operation_agencystore_bt_addplan);
+        tv_time = (TextView) view.findViewById(R.id.operation_agencystore_tv_time);
         monthplan_lv = (et.tsingtaopad.view.NoScrollListView) view.findViewById(R.id.operation_agencystore_monthplan_lv);
 
-        bt_addplan.setOnClickListener(this);
     }
 
     @Override
