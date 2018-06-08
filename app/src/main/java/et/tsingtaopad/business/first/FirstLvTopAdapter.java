@@ -16,7 +16,7 @@ import et.tsingtaopad.R;
 import et.tsingtaopad.business.first.bean.LvTop;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
-import et.tsingtaopad.dd.dddealplan.domain.DealStc;
+import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.listviewintf.IClick;
 
 /**
@@ -70,7 +70,7 @@ public class FirstLvTopAdapter extends BaseAdapter {
             holder.tv_rankingnum = (TextView) convertView.findViewById(R.id.item_first_tv_rankingnum);
             holder.tv_rankingall = (TextView) convertView.findViewById(R.id.item_first_tv_rankingall);
             holder.tv_unit = (TextView) convertView.findViewById(R.id.item_first_tv_unit);
-            holder.probar_rankingbar = (ProgressBar) convertView.findViewById(R.id.item_first_probar_rankingbar);
+            holder.rankingbar = (ProgressBar) convertView.findViewById(R.id.item_first_probar_rankingbar);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -78,11 +78,22 @@ public class FirstLvTopAdapter extends BaseAdapter {
 
         final LvTop item = dataLst.get(position);
 
-        holder.tv_ranking.setText(item.getRanking());
-        holder.tv_rankingname.setText(item.getRankingname());
-        holder.tv_rankingnum.setText(item.getRankingnum());
-        holder.tv_rankingall.setText(item.getRankingall());
-        holder.tv_unit.setText(" "+item.getUnit());
+        int ranknum = 0;
+        int totalnum = 0;
+        try {
+            ranknum = Integer.parseInt(FunUtil.isBlankOrNullTo(item.getRanknum(), "0"));
+            totalnum = Integer.parseInt(FunUtil.isBlankOrNullTo(item.getTotalnum(), "0"));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+        holder.tv_ranking.setText(FunUtil.isBlankOrNullTo(item.getRank(), "0"));
+        holder.tv_rankingname.setText(item.getRankname());
+        holder.tv_rankingnum.setText(FunUtil.isBlankOrNullTo(item.getRanknum(), "0"));
+        holder.tv_rankingall.setText(FunUtil.isBlankOrNullTo(item.getTotalnum(), "0"));
+        holder.tv_unit.setText(" " + item.getContent());
+        holder.rankingbar.setMax(totalnum);
+        holder.rankingbar.setProgress(ranknum);
 
         return convertView;
     }
@@ -94,7 +105,7 @@ public class FirstLvTopAdapter extends BaseAdapter {
         private TextView tv_rankingnum;
         private TextView tv_rankingall;
         private TextView tv_unit;
-        private ProgressBar probar_rankingbar;
+        private ProgressBar rankingbar;
 
     }
 

@@ -318,13 +318,10 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
                                     // 保存信息
                                     String formjson = resObj.getResBody().getContent();
                                     parseAttenceJson(formjson);
-                                    // initData();
                                 } else if (optcode.equals("opt_save_sign_data")) {
                                     // 保存信息
                                     String formjson = resObj.getResBody().getContent();
                                     parseAttenceJson(formjson);
-                                    // parseTableJson(formjson);
-                                    // initData();
                                 }
 
 

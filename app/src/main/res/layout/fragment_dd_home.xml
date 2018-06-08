@@ -378,14 +378,26 @@
             </LinearLayout>
 
             <!--排行列表-->
-            <et.tsingtaopad.view.NoScrollListView
-                android:id="@+id/first_sclv_top"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:divider="@color/bg_page_color"
-                android:dividerHeight="0dp"/>
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <et.tsingtaopad.view.NoScrollListView
+                    android:id="@+id/first_sclv_top"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:paddingBottom="10dp"
+                    android:divider="@color/bg_page_color"
+                    android:dividerHeight="0dp"/>
+            </LinearLayout>
+
 
             <View
                 android:layout_width="match_parent"

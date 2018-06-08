@@ -85,7 +85,7 @@ public class BaseDataFragment extends BaseFragmentSupport implements View.OnClic
         handler = new MyHandler(this);
 
         initData();
-        initUrlData();
+        // initUrlData();
     }
 
     // 初始化数据

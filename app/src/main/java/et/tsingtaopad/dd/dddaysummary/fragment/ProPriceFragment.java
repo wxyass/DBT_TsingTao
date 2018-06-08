@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.ref.SoftReference;
+import java.util.ArrayList;
 import java.util.List;
 
 import et.tsingtaopad.R;
@@ -26,12 +27,19 @@ import et.tsingtaopad.core.net.domain.RequestHeadStc;
 import et.tsingtaopad.core.net.domain.RequestStructBean;
 import et.tsingtaopad.core.net.domain.ResponseStructBean;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.JsonUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.db.table.MitRepairM;
 import et.tsingtaopad.db.table.MitRepaircheckM;
 import et.tsingtaopad.db.table.MitRepairterM;
+import et.tsingtaopad.dd.dddaysummary.DdDaySummaryFragment;
+import et.tsingtaopad.dd.dddaysummary.adapter.ProCheckAdapter;
+import et.tsingtaopad.dd.dddaysummary.domain.DaySummaryStc;
+import et.tsingtaopad.dd.dddaysummary.domain.DdProCheckItemStc;
+import et.tsingtaopad.dd.dddaysummary.domain.DdProCheckShowStc;
+import et.tsingtaopad.dd.dddaysummary.domain.DdProCheckStc;
 import et.tsingtaopad.dd.dddealplan.domain.DealStc;
 import et.tsingtaopad.home.app.MainService;
 import et.tsingtaopad.http.HttpParseJson;
@@ -54,7 +62,10 @@ public class ProPriceFragment extends BaseFragmentSupport implements View.OnClic
     public static final int DEALPLAN_NEED_UP = 3303;
 
     private TextView tv_time;
-    private et.tsingtaopad.view.NoScrollListView monthplan_lv;
+    private et.tsingtaopad.view.NoScrollListView proprice_lv;
+
+    List<DdProCheckShowStc> dataLst;
+    ProCheckAdapter workPlanAdapter;
 
     @Nullable
     @Override
@@ -67,7 +78,7 @@ public class ProPriceFragment extends BaseFragmentSupport implements View.OnClic
     // 初始化控件
     private void initView(View view) {
         tv_time = (TextView) view.findViewById(R.id.operation_proprice_tv_time);
-        monthplan_lv = (et.tsingtaopad.view.NoScrollListView) view.findViewById(R.id.operation_proprice_monthplan_lv);
+        proprice_lv = (et.tsingtaopad.view.NoScrollListView) view.findViewById(R.id.operation_proprice_monthplan_lv);
 
     }
 
@@ -83,16 +94,27 @@ public class ProPriceFragment extends BaseFragmentSupport implements View.OnClic
     // 初始化数据
     private void initData() {
 
+        dataLst = new ArrayList<>();
+        /*dataLst.add(new KvStc("基础数据追溯,价格数据追溯","德州","6号定格","3号路线"));
+        dataLst.add(new KvStc("基础数据追溯","平县","5号定格","6号路线"));
+        dataLst.add(new KvStc("价格数据追溯","胶南","2号定格","1号路线"));
+        dataLst.add(new KvStc("网络数据追溯,价格数据追溯","北京","1号定格","7号路线"));
+        dataLst.add(new KvStc("竞品数据追溯","通州","4号定格","9号路线"));*/
+        workPlanAdapter = new ProCheckAdapter(getActivity(), dataLst,null);
+        proprice_lv.setAdapter(workPlanAdapter);
 
     }
 
     private void initUrlData() {
+        String currenttime = PrefUtils.getString(getActivity(), DdDaySummaryFragment.DDDAYSUMMARYFRAGMENT_CURRENTTIME, DateUtil.getDateTimeStr(7));
+
         String content = "{" +
                 "areaid:'" + PrefUtils.getString(getActivity(), "departmentid", "") + "'," +
-                "tablename:'" + "MIT_REPAIR_REPAIRTER_REPAIRCHECK_M" + "'," +
+                "tablename:'" + "themainproductprice" + "'," +
+                "credate:'" + currenttime + "'," + // currenttime
                 "creuser:'" + PrefUtils.getString(getActivity(), "userid", "") + "'" +
                 "}";
-        ceshiHttp("opt_get_repair_ter_check", "MIT_REPAIR_REPAIRTER_REPAIRCHECK_M", content);
+        ceshiHttp("opt_get_dailyrecord", "themainproductprice", content);
     }
 
     /**
@@ -131,14 +153,9 @@ public class ProPriceFragment extends BaseFragmentSupport implements View.OnClic
                                 // 保存信息
                                 String formjson = resObj.getResBody().getContent();
                                 parseTableJson(formjson);
-                                initData();
 
                             } else {
                                 Toast.makeText(getActivity(), resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
-                            /*Message msg = new Message();
-                            msg.what = FirstFragment.SYNC_CLOSE;//
-                            handler.sendMessage(msg);*/
-                                //initData();
                             }
                         }
 
@@ -149,38 +166,56 @@ public class ProPriceFragment extends BaseFragmentSupport implements View.OnClic
                     @Override
                     public void onError(int code, String msg) {
                         Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-                        /*Message msg1 = new Message();
-                        msg1.what = FirstFragment.SYNC_CLOSE;//
-                        handler.sendMessage(msg1);*/
-                        //initData();
                     }
                 })
                 .failure(new IFailure() {
                     @Override
                     public void onFailure() {
                         Toast.makeText(getContext(), "请求失败", Toast.LENGTH_SHORT).show();
-                        /*Message msg2 = new Message();
-                        msg2.what = FirstFragment.SYNC_CLOSE;//
-                        handler.sendMessage(msg2);*/
-                        //initData();
                     }
                 })
                 .builde()
                 .post();
     }
 
-    // 解析区域定格路线成功
+    // 解析数据
     private void parseTableJson(String json) {
-        // 解析区域定格路线信息
-        AreaGridRoute emp = JsonUtil.parseJson(json, AreaGridRoute.class);
-        String MIT_REPAIR_M = emp.getMIT_REPAIR_M();
-        String MIT_REPAIRTER_M = emp.getMIT_REPAIRTER_M();
-        String MIT_REPAIRCHECK_M = emp.getMIT_REPAIRCHECK_M();
+        DaySummaryStc daySummaryStc = JsonUtil.parseJson(json, DaySummaryStc.class);
+        List<DdProCheckStc> ddProCheckStcs = JsonUtil.parseList(daySummaryStc.getThemainproductprice(), DdProCheckStc.class);
+        jiexiData(ddProCheckStcs);
+    }
 
-        MainService service = new MainService(getActivity(), null);
-        service.createOrUpdateTable(MIT_REPAIR_M, "MIT_REPAIR_M", MitRepairM.class);
-        service.createOrUpdateTable(MIT_REPAIRTER_M, "MIT_REPAIRTER_M", MitRepairterM.class);
-        service.createOrUpdateTable(MIT_REPAIRCHECK_M, "MIT_REPAIRCHECK_M", MitRepaircheckM.class);
+    private void jiexiData(List<DdProCheckStc> ddProCheckStcs) {
+        // 组建成界面显示所需要的数据结构
+        List<DdProCheckShowStc> proIndexLst = new ArrayList<DdProCheckShowStc>();
+        String indexId = "";
+        DdProCheckShowStc indexItem = new DdProCheckShowStc();// 大的  DdProCheckShowStc
+        DdProCheckItemStc indexValueItem;// 小的
+        for (DdProCheckStc item : ddProCheckStcs) {
+            //
+            if (!indexId.equals(item.getProname())) {
+                indexItem = new DdProCheckShowStc();
+                indexItem.setProname(item.getProname());
+                indexItem.setDdProCheckItemStcs(new ArrayList<DdProCheckItemStc>());
+                proIndexLst.add(indexItem);
+                indexId = item.getProname();
+            }
+            indexValueItem = new DdProCheckItemStc();
+            indexValueItem.setDicname(item.getDicname());
+            indexValueItem.setTermratio(item.getTermratio());
+            indexValueItem.setTotalterm(item.getTotalterm());
+            indexValueItem.setTrueterm(item.getTrueterm());
+            indexItem.getDdProCheckItemStcs().add(indexValueItem);
+        }
+
+        dataLst.clear();
+        dataLst.addAll(proIndexLst);
+        initJsonData();
+    }
+
+
+    private void initJsonData() {
+        workPlanAdapter.notifyDataSetChanged();
     }
 
 

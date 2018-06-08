@@ -551,4 +551,9 @@
         <item name="android:layout_marginRight">35dp</item>
     </style>
 
+    <!-- 下载更新版本的进度条的样式-->
+    <style name="MyProgressBarH" parent="@android:style/Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/prog_download</item>
+    </style>
+
 </resources>

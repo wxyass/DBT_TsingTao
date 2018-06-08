@@ -42,6 +42,7 @@ import et.tsingtaopad.db.table.MitPlanweekM;
 import et.tsingtaopad.db.table.MstGridM;
 import et.tsingtaopad.db.table.MstMarketareaM;
 import et.tsingtaopad.db.table.MstRouteM;
+import et.tsingtaopad.dd.dddaysummary.domain.DdDayPlanStc;
 import et.tsingtaopad.dd.ddweekplan.WeekPlanService;
 import et.tsingtaopad.dd.ddweekplan.domain.DayDetailStc;
 import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectService;
@@ -58,10 +59,10 @@ public class WorkPlanAdapter extends BaseAdapter implements View.OnClickListener
     private final String TAG = "DayDetailAdapter";
 
     private Activity context;
-    private List<KvStc> dataLst;
+    private List<DdDayPlanStc> dataLst;
     private IClick listener;
 
-    public WorkPlanAdapter(Activity context, List<KvStc> dataLst, IClick listener) {
+    public WorkPlanAdapter(Activity context, List<DdDayPlanStc> dataLst, IClick listener) {
         this.context = context;
         this.dataLst = dataLst;
         this.listener = listener;
@@ -112,16 +113,16 @@ public class WorkPlanAdapter extends BaseAdapter implements View.OnClickListener
             holder = (ViewHolder) convertView.getTag();
         }
 
-        final KvStc item = dataLst.get(position);
+        final DdDayPlanStc item = dataLst.get(position);
 
         // 追溯项
-        holder.tv_checkname.setText(item.getKey());
+        holder.tv_checkname.setText(item.getDicname());
         // 追溯区域
-        holder.tv_areaname.setText(item.getValue());
+        holder.tv_areaname.setText(item.getAreaname());
         // 追溯定格
-        holder.tv_valgridname.setText(item.getParentKey());
+        holder.tv_valgridname.setText(item.getGridname());
         // 追溯路线
-        holder.tv_routename.setText(item.getIsDefault());
+        holder.tv_routename.setText(item.getRoutename());
 
         return convertView;
     }

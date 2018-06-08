@@ -16,6 +16,8 @@ import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
+import et.tsingtaopad.business.first.bean.GvTop;
+import et.tsingtaopad.business.visit.bean.AreaGridRoute;
 import et.tsingtaopad.core.net.HttpUrl;
 import et.tsingtaopad.core.net.RestClient;
 import et.tsingtaopad.core.net.callback.IError;
@@ -25,11 +27,16 @@ import et.tsingtaopad.core.net.domain.RequestHeadStc;
 import et.tsingtaopad.core.net.domain.RequestStructBean;
 import et.tsingtaopad.core.net.domain.ResponseStructBean;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.JsonUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
+import et.tsingtaopad.dd.dddaysummary.DdDaySummaryFragment;
 import et.tsingtaopad.dd.dddaysummary.adapter.WorkPlanAdapter;
+import et.tsingtaopad.dd.dddaysummary.domain.DaySummaryStc;
+import et.tsingtaopad.dd.dddaysummary.domain.DdDayPlanStc;
 import et.tsingtaopad.dd.ddweekplan.domain.DayDetailStc;
+import et.tsingtaopad.dd.ddweekplan.domain.DayPlanStc;
 import et.tsingtaopad.http.HttpParseJson;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
 import et.tsingtaopad.util.requestHeadUtil;
@@ -54,7 +61,7 @@ public class WorkPlanFragment extends BaseFragmentSupport implements View.OnClic
     private TextView tv_time;
     private et.tsingtaopad.view.NoScrollListView monthplan_lv;
     private WorkPlanAdapter workPlanAdapter;
-    List<KvStc> dataLst;
+    List<DdDayPlanStc> dataLst;
 
     @Nullable
     @Override
@@ -79,30 +86,34 @@ public class WorkPlanFragment extends BaseFragmentSupport implements View.OnClic
         handler = new MyHandler(this);
 
         initData();
-        // initUrlData();
+        initUrlData();
     }
 
     // 初始化数据
     private void initData() {
 
         dataLst = new ArrayList<>();
-        dataLst.add(new KvStc("基础数据追溯,价格数据追溯","德州","6号定格","3号路线"));
+        /*dataLst.add(new KvStc("基础数据追溯,价格数据追溯","德州","6号定格","3号路线"));
         dataLst.add(new KvStc("基础数据追溯","平县","5号定格","6号路线"));
         dataLst.add(new KvStc("价格数据追溯","胶南","2号定格","1号路线"));
         dataLst.add(new KvStc("网络数据追溯,价格数据追溯","北京","1号定格","7号路线"));
-        dataLst.add(new KvStc("竞品数据追溯","通州","4号定格","9号路线"));
+        dataLst.add(new KvStc("竞品数据追溯","通州","4号定格","9号路线"));*/
         workPlanAdapter = new WorkPlanAdapter(getActivity(), dataLst,null);
         monthplan_lv.setAdapter(workPlanAdapter);
 
     }
 
     private void initUrlData() {
+
+        String currenttime = PrefUtils.getString(getActivity(), DdDaySummaryFragment.DDDAYSUMMARYFRAGMENT_CURRENTTIME, DateUtil.getDateTimeStr(7));
+
         String content = "{" +
                 "areaid:'" + PrefUtils.getString(getActivity(), "departmentid", "") + "'," +
-                "tablename:'" + "MIT_REPAIR_REPAIRTER_REPAIRCHECK_M" + "'," +
+                "tablename:'" + "workplan" + "'," +
+                "credate:'" + currenttime + "'," + // currenttime
                 "creuser:'" + PrefUtils.getString(getActivity(), "userid", "") + "'" +
                 "}";
-        ceshiHttp("opt_get_repair_ter_check", "MIT_REPAIR_REPAIRTER_REPAIRCHECK_M", content);
+        ceshiHttp("opt_get_dailyrecord", "workplan", content);
     }
 
     /**
@@ -141,14 +152,9 @@ public class WorkPlanFragment extends BaseFragmentSupport implements View.OnClic
                                 // 保存信息
                                 String formjson = resObj.getResBody().getContent();
                                 parseTableJson(formjson);
-                                // initData();
 
                             } else {
                                 Toast.makeText(getActivity(), resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
-                            /*Message msg = new Message();
-                            msg.what = FirstFragment.SYNC_CLOSE;//
-                            handler.sendMessage(msg);*/
-                                //initData();
                             }
                         }
 
@@ -159,20 +165,12 @@ public class WorkPlanFragment extends BaseFragmentSupport implements View.OnClic
                     @Override
                     public void onError(int code, String msg) {
                         Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-                        /*Message msg1 = new Message();
-                        msg1.what = FirstFragment.SYNC_CLOSE;//
-                        handler.sendMessage(msg1);*/
-                        //initData();
                     }
                 })
                 .failure(new IFailure() {
                     @Override
                     public void onFailure() {
                         Toast.makeText(getContext(), "请求失败", Toast.LENGTH_SHORT).show();
-                        /*Message msg2 = new Message();
-                        msg2.what = FirstFragment.SYNC_CLOSE;//
-                        handler.sendMessage(msg2);*/
-                        //initData();
                     }
                 })
                 .builde()
@@ -181,9 +179,10 @@ public class WorkPlanFragment extends BaseFragmentSupport implements View.OnClic
 
     // 解析数据
     private void parseTableJson(String formjson) {
-        List<KvStc>  signs = JsonUtil.parseList(formjson, KvStc.class);
+        DaySummaryStc daySummaryStc = JsonUtil.parseJson(formjson, DaySummaryStc.class);
+        List<DdDayPlanStc> ddDayPlanStcs = JsonUtil.parseList(daySummaryStc.getWorkplan(), DdDayPlanStc.class);
         dataLst.clear();
-        dataLst.addAll(signs);
+        dataLst.addAll(ddDayPlanStcs);
         initJsonData();
     }
 

@@ -14,7 +14,7 @@ import java.util.List;
 import et.tsingtaopad.R;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
-import et.tsingtaopad.initconstvalues.domain.KvStc;
+import et.tsingtaopad.dd.dddaysummary.domain.DdProCheckItemStc;
 import et.tsingtaopad.listviewintf.IClick;
 
 /**
@@ -26,10 +26,10 @@ public class ProCheckItemAdapter extends BaseAdapter implements View.OnClickList
     private final String TAG = "DayDetailAdapter";
 
     private Activity context;
-    private List<KvStc> dataLst;
+    private List<DdProCheckItemStc> dataLst;
     private IClick listener;
 
-    public ProCheckItemAdapter(Activity context, List<KvStc> dataLst, IClick listener) {
+    public ProCheckItemAdapter(Activity context, List<DdProCheckItemStc> dataLst, IClick listener) {
         this.context = context;
         this.dataLst = dataLst;
         this.listener = listener;
@@ -74,12 +74,12 @@ public class ProCheckItemAdapter extends BaseAdapter implements View.OnClickList
             holder = (ViewHolder) convertView.getTag();
         }
 
-        final KvStc item = dataLst.get(position);
+        final DdProCheckItemStc item = dataLst.get(position);
 
         // 产品名称
-        holder.tv_type.setText(item.getKey());
-        holder.tv_num.setText(item.getKey());
-        holder.tv_numlv.setText(item.getKey());
+        holder.tv_type.setText(item.getDicname());
+        holder.tv_num.setText(item.getTrueterm()+"/"+item.getTotalterm());
+        holder.tv_numlv.setText(item.getTermratio());
 
 
         return convertView;

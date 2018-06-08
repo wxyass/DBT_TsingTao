@@ -8,6 +8,7 @@ public class FirstDataStc {
 
     private String homesynergyandcheck;//
     private String homesevendayrank;//
+    private String sevendayindexrank;//
 
 
     public FirstDataStc() {
@@ -27,5 +28,13 @@ public class FirstDataStc {
 
     public void setHomesevendayrank(String homesevendayrank) {
         this.homesevendayrank = homesevendayrank;
+    }
+
+    public String getSevendayindexrank() {
+        return sevendayindexrank;
+    }
+
+    public void setSevendayindexrank(String sevendayindexrank) {
+        this.sevendayindexrank = sevendayindexrank;
     }
 }

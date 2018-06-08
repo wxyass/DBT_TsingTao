@@ -14,6 +14,7 @@ import java.util.List;
 import et.tsingtaopad.R;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
+import et.tsingtaopad.dd.dddaysummary.domain.AgencyStoreShowStc;
 import et.tsingtaopad.dd.dddaysummary.domain.DdProCheckShowStc;
 import et.tsingtaopad.listviewintf.IClick;
 
@@ -21,15 +22,15 @@ import et.tsingtaopad.listviewintf.IClick;
  * 项目名称：营销移动智能工作平台 </br>
  * 日期      原因  BUG号    修改人 修改版本</br>
  */
-public class ProCheckAdapter extends BaseAdapter implements View.OnClickListener{
+public class AgencyStoreAdapter extends BaseAdapter implements View.OnClickListener{
 
     private final String TAG = "DayDetailAdapter";
 
     private Activity context;
-    private List<DdProCheckShowStc> dataLst;
+    private List<AgencyStoreShowStc> dataLst;
     private IClick listener;
 
-    public ProCheckAdapter(Activity context, List<DdProCheckShowStc> dataLst, IClick listener) {
+    public AgencyStoreAdapter(Activity context, List<AgencyStoreShowStc> dataLst, IClick listener) {
         this.context = context;
         this.dataLst = dataLst;
         this.listener = listener;
@@ -73,11 +74,11 @@ public class ProCheckAdapter extends BaseAdapter implements View.OnClickListener
             holder = (ViewHolder) convertView.getTag();
         }
 
-        final DdProCheckShowStc item = dataLst.get(position);
+        final AgencyStoreShowStc item = dataLst.get(position);
 
         // 产品名称
-        holder.tv_proname.setText(item.getProname());
-        holder.procheck_lv.setAdapter(new ProCheckItemAdapter(context,item.getDdProCheckItemStcs(),null));
+        holder.tv_proname.setText(item.getAgencyname());
+        holder.procheck_lv.setAdapter(new AgencyStoreItemAdapter(context,item.getAgencyStoreItemStcs(),null));
 
 
         return convertView;

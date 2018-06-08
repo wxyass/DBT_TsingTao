@@ -20,6 +20,7 @@ import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
+import et.tsingtaopad.core.ui.loader.LatteLoader;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.dd.ddxt.checking.XtCheckIndexFragment;
@@ -118,6 +119,10 @@ public class ZsCaculateAmendFragment extends BaseFragmentSupport implements View
 
         if (ViewUtil.isDoubleClick(v.getId(), 2500))
             return;
+
+        LatteLoader.showLoading(getActivity());// 处理数据中,在ZsCheckIndexFragment的autoZsCalculateSuc中关闭
+
+
         XtProItem item = null;
         EditText itemEt = null;
         for (int i = 0; i < tempLst.size(); i++) {

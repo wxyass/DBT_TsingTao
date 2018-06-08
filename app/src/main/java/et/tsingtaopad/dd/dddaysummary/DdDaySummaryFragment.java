@@ -1,5 +1,6 @@
 package et.tsingtaopad.dd.dddaysummary;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,16 +14,21 @@ import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.DateUtil;
+import et.tsingtaopad.core.util.dbtutil.PrefUtils;
+import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.dd.dddaysummary.fragment.AgencyStoreFragment;
 import et.tsingtaopad.dd.dddaysummary.fragment.BaseDataFragment;
 import et.tsingtaopad.dd.dddaysummary.fragment.CmpProFragment;
@@ -50,11 +56,22 @@ public class DdDaySummaryFragment extends BaseFragmentSupport implements View.On
     public static final int DAYSUMMARY_UP_SUC = 3201;
     //
     public static final int DAYSUMMARY_UP_FAIL = 3202;
+    public static final String DDDAYSUMMARYFRAGMENT_TODAYTIME = "dddaysummaryfragmenttodaytime";
+    public static final String DDDAYSUMMARYFRAGMENT_CURRENTTIME = "dddaysummaryfragmentcurrenttime";
 
     private TabLayout tablayout;
     private ViewPager viewpager;
     private List<String> tabList=new ArrayList<>();
     private List<Fragment> alFragment=new ArrayList<>();
+
+    private String currenttime;// 2011-04-11
+    private String todaytime;// 2011-04-11
+
+    private String aday;
+    private Calendar calendar;
+    private int yearr;
+    private int month;
+    private int day;
 
 
     @Nullable
@@ -76,11 +93,8 @@ public class DdDaySummaryFragment extends BaseFragmentSupport implements View.On
         confirmBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
 
-
         tablayout   = (TabLayout) view.findViewById(R.id.tablayout);
         viewpager= (ViewPager) view.findViewById(R.id.viewpager);
-
-
     }
 
     @Override
@@ -91,6 +105,18 @@ public class DdDaySummaryFragment extends BaseFragmentSupport implements View.On
         handler = new MyHandler(this);
         ConstValues.handler = handler;
         confirmTv.setText("日历");
+
+        // 获取系统时间
+        calendar = Calendar.getInstance();
+        yearr = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        currenttime = DateUtil.getDateTimeStr(7);
+        todaytime = DateUtil.getDateTimeStr(7);
+
+        PrefUtils.putString(getActivity(),DDDAYSUMMARYFRAGMENT_CURRENTTIME,currenttime);
+        PrefUtils.putString(getActivity(),DDDAYSUMMARYFRAGMENT_TODAYTIME,todaytime);
 
         WorkPlanFragment workPlanFragment = new WorkPlanFragment();
         WorkSumFragment workSumFragment = new WorkSumFragment();
@@ -110,7 +136,6 @@ public class DdDaySummaryFragment extends BaseFragmentSupport implements View.On
         alFragment.add(agencyStoreFragment);
 
         addData();
-
 
         TabAdapter tabAdapter = new TabAdapter(getFragmentManager());
         //1.TabLayout和Viewpager关联
@@ -151,14 +176,41 @@ public class DdDaySummaryFragment extends BaseFragmentSupport implements View.On
                 break;
             case R.id.top_navigation_rl_confirm:// 确定
 
-                Toast.makeText(getActivity(),"弹出日历",Toast.LENGTH_SHORT).show();
+                if (ViewUtil.isDoubleClick(v.getId(), 2000))
+                    return;
+                // 日历
+                //Toast.makeText(getActivity(), "弹出日历", Toast.LENGTH_SHORT).show();
+                DatePickerDialog dateDialog = new DatePickerDialog(v.getContext(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        calendar.set(year, monthOfYear, dayOfMonth);
+                        yearr = year;
+                        month = monthOfYear;
+                        day = dayOfMonth;
+                        if (dayOfMonth < 10) {
+                            aday = "0" + dayOfMonth;
+                        } else {
+                            aday = Integer.toString(dayOfMonth);
+                        }
+                        currenttime = (Integer.toString(year) + "-" + String.format("%02d", monthOfYear + 1) + "-" + aday);
+
+                        PrefUtils.putString(getActivity(),DDDAYSUMMARYFRAGMENT_CURRENTTIME,currenttime);
+                        //PrefUtils.putString(getActivity(),DDDAYSUMMARYFRAGMENT_TODAYTIME,todaytime);
+                        // 刚进入 获取打卡信息
+                        // getSignData();
+                        // viewpager.notifyAll();
+
+                    }
+                }, yearr, month, day);
+                if (!dateDialog.isShowing()) {
+                    dateDialog.show();
+                }
 
                 break;
             default:
                 break;
         }
     }
-
 
 
     MyHandler handler;

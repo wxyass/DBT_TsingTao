@@ -23,6 +23,7 @@ import et.tsingtaopad.core.net.callback.ISuccess;
 import et.tsingtaopad.core.net.domain.RequestHeadStc;
 import et.tsingtaopad.core.net.domain.RequestStructBean;
 import et.tsingtaopad.core.net.domain.ResponseStructBean;
+import et.tsingtaopad.core.ui.loader.LatteLoader;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.JsonUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
@@ -86,6 +87,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         int i = v.getId();
         // 登录
         if (i == R.id.login_dd_bt_submit) {
+            LatteLoader.showLoading(LoginActivity.this);// 处理数据中  ,在LoginActivity的handleMessage中关闭
             try {
                 this.loginIn();
             } catch (Exception e) {
@@ -158,12 +160,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                     @Override
                     public void onError(int code, String msg) {
                         Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        LatteLoader.stopLoading();
                     }
                 })
                 .failure(new IFailure() {
                     @Override
                     public void onFailure() {
                         Toast.makeText(LoginActivity.this, "请求失败", Toast.LENGTH_SHORT).show();
+                        LatteLoader.stopLoading();
                     }
                 })
                 .builde()
@@ -285,6 +289,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 case ConstValues.WAIT0://  结束上传  刷新本页面
                     //fragment.shuaxinXtTermSelect(0);
                     fragment.startDbtAty();
+                    LatteLoader.stopLoading();
                     break;
                 case GlobalValues.SINGLE_UP_SUC://  协同拜访上传成功
                     //fragment.shuaxinXtTermSelect(1);

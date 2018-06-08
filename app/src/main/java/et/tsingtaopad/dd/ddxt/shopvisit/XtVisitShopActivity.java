@@ -46,6 +46,7 @@ import java.util.List;
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseActivity;
 import et.tsingtaopad.base.BaseFragmentSupport;
+import et.tsingtaopad.core.ui.loader.LatteLoader;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.FileUtil;
@@ -184,6 +185,8 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
         xtvisit_rb_chatvie.setOnClickListener(this);
         xtvisit_rb_camera.setOnClickListener(this);
         xtvisit_rb_other.setOnClickListener(this);
+
+        LatteLoader.stopLoading();// 若有进度条,关闭
     }
 
     // 初始化数据

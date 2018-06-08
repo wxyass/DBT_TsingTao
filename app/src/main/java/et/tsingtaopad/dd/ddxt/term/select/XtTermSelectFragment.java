@@ -359,13 +359,16 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
             // 销毁当前Fragment
             supportFragmentManager.popBackStack();
 
-            Bundle bundle = new Bundle();
+            /*Bundle bundle = new Bundle();
             bundle.putSerializable("fromFragment", "XtTermSelectFragment");
             XtTermCartFragment xtTermCartFragment = new XtTermCartFragment();
             xtTermCartFragment.setArguments(bundle);
 
             // 跳转终端购物车
-            changeHomeFragment(xtTermCartFragment, "xttermcartfragment");
+            changeHomeFragment(xtTermCartFragment, "xttermcartfragment");*/
+            changeHomeFragment(new XtTermCartFragment(), "xttermcartfragment");
+            // 购物车是否已经同步数据  false:没有  true:已同步
+            PrefUtils.putBoolean(getActivity(),GlobalValues.XT_CART_SYNC,false);// 设置需要同步
         }
     }
 
@@ -538,6 +541,8 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
         intent.putExtra("termStc", xtTermSelectMStc);
         intent.putExtra("seeFlag", "0"); // 0拜访 1查看标识
         startActivity(intent);
+        // 购物车是否已经同步数据  false:没有  true:已同步
+        PrefUtils.putBoolean(getActivity(),GlobalValues.XT_CART_SYNC,false);// 设置需要同步
     }
 
     MyHandler handler;

@@ -31,6 +31,7 @@ import et.tsingtaopad.core.net.callback.ISuccess;
 import et.tsingtaopad.core.net.domain.RequestHeadStc;
 import et.tsingtaopad.core.net.domain.RequestStructBean;
 import et.tsingtaopad.core.net.domain.ResponseStructBean;
+import et.tsingtaopad.core.ui.loader.LatteLoader;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
@@ -137,12 +138,12 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
         cartService = new XtTermCartService(getActivity());
 
         // 获取从上个界面传递过来的数据
-        Bundle bundle = getArguments();
+        /*Bundle bundle = getArguments();
         String fromFragment = (String) bundle.getString("fromFragment");
         if("ZsTermSelectFragment".equals(fromFragment)){// 如果从选择终端过来,设置需要同步
             // 购物车是否已经同步数据  false:没有  true:已同步
             PrefUtils.putBoolean(getActivity(),GlobalValues.ZS_CART_SYNC,false);
-        }
+        }*/
         //mitValcheckterM = (MitValcheckterM) bundle.getSerializable("mitValcheckterM");
 
         // 初始化页面数据
@@ -200,6 +201,7 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
                         deleteOrXtUpladCart(terminalList.get(0));
                     }else{// 已上传
                         if(mitValcheckterMs.size()>0){// 配置了督导模板
+                            LatteLoader.showLoading(getActivity());// 处理数据中 ,在ZsVisitShopActivity的initVIew中关闭
                             Intent intent = new Intent(getActivity(), ZsVisitShopActivity.class);
                             intent.putExtra("isFirstVisit", "1");// 非第一次拜访1
                             intent.putExtra("termStc", termStc);

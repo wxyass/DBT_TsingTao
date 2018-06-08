@@ -19,6 +19,7 @@ import java.util.List;
 import et.tsingtaopad.R;
 import et.tsingtaopad.adapter.AlertKeyValueAdapter;
 import et.tsingtaopad.adapter.GridKeyValueAdapter;
+import et.tsingtaopad.core.ui.loader.LatteLoader;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
@@ -194,18 +195,12 @@ public class ZsCaculateAdapter extends BaseAdapter {
                 mAlertViewExt.dismiss();
 
                 if(0==position){
+                    LatteLoader.showLoading(context);// 处理数据中,在ZsCheckIndexFragment的showIndexAdapter中关闭
                     // 修改对错
                     xtProIndexValue.setValchecktypeflag("Y");
                     handler.sendEmptyMessage(ZsCheckIndexFragment.INIT_INDEX_AMEND);
                 }
                 else if(1==position){
-                    /*Bundle bundle = new Bundle();
-                    bundle.putString("proName", "");
-                    ZsSayhiAmendFragment zsAmendFragment = new ZsSayhiAmendFragment(handler);
-                    zsAmendFragment.setArguments(bundle);
-                    ZsVisitShopActivity zsVisitShopActivity = (ZsVisitShopActivity)getActivity();
-                    zsVisitShopActivity.changeXtvisitFragment(zsAmendFragment,"zsamendfragment");*/
-
                     ZsVisitShopActivity xtVisitShopActivity = (ZsVisitShopActivity)context;
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("tempLst", (Serializable) tempLst);

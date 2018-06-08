@@ -81,7 +81,7 @@ public class CmpProFragment extends BaseFragmentSupport implements View.OnClickL
 
         handler = new MyHandler(this);
         initData();
-        initUrlData();
+        // initUrlData();
     }
 
     // 初始化数据

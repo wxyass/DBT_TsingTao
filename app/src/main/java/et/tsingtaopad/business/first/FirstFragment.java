@@ -65,7 +65,8 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
     private FirstLvTopAdapter lvTopAdapter;
 
     List<GvTop> gvTopList;
-    List<LvTop> lvTops = new ArrayList<>();
+    List<LvTop> lvTopList;
+
     List<XtZsNumStc> xtZsNumStcs = new ArrayList<>();
 
     private RelativeLayout rl_xtbf;
@@ -91,12 +92,12 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
         tv_xietong = (TextView) view.findViewById(R.id.first_tv_xietong);
         signImg = (ImageView) view.findViewById(R.id.first_img_sign);
 
-         rl_xtbf = (RelativeLayout) view.findViewById(R.id.first_rl_xtbf);
-         rl_zdzs = (RelativeLayout) view.findViewById(R.id.first_rl_zdzs);
-         rl_kcpd = (RelativeLayout) view.findViewById(R.id.first_rl_kcpd);
-         rl_zgjh = (RelativeLayout) view.findViewById(R.id.first_rl_zgjh);
-         rl_jhzd = (RelativeLayout) view.findViewById(R.id.first_rl_jhzd);
-         rl_gzzj = (RelativeLayout) view.findViewById(R.id.first_rl_gzzj);
+        rl_xtbf = (RelativeLayout) view.findViewById(R.id.first_rl_xtbf);
+        rl_zdzs = (RelativeLayout) view.findViewById(R.id.first_rl_zdzs);
+        rl_kcpd = (RelativeLayout) view.findViewById(R.id.first_rl_kcpd);
+        rl_zgjh = (RelativeLayout) view.findViewById(R.id.first_rl_zgjh);
+        rl_jhzd = (RelativeLayout) view.findViewById(R.id.first_rl_jhzd);
+        rl_gzzj = (RelativeLayout) view.findViewById(R.id.first_rl_gzzj);
 
         gv_top = (et.tsingtaopad.view.MyGridView) view.findViewById(R.id.first_gv_top);
         sclv_top = (et.tsingtaopad.view.NoScrollListView) view.findViewById(R.id.first_sclv_top);
@@ -114,54 +115,44 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initData();
-        //initUrlData();
     }
 
     private void initData() {
 
-        tv_username.setText(PrefUtils.getString(getActivity(),"username",""));
+        tv_username.setText(PrefUtils.getString(getActivity(), "username", ""));
 
         gvTopList = new ArrayList<>();
 
-        // gvTopList.clear();
-        /*gvTopList.add(new GvTop("张三","33/63(个)","走访冠军"));
-        gvTopList.add(new GvTop("李四","13/53(个)","稽查冠军"));
-        gvTopList.add(new GvTop("王五","53/126(个)","库存盘点冠军"));*/
         gvTopAdapter = new FirstGvTopAdapter(getActivity(), gvTopList);
         gv_top.setAdapter(gvTopAdapter);
 
-
-        lvTops.clear();
-        lvTops.add(new LvTop("1","稽查终端数量","78","99","个"));
-        lvTops.add(new LvTop("1","稽查时长","18","23","时"));
-        lvTops.add(new LvTop("2","追溯数据群","555","999","天"));
-        lvTops.add(new LvTop("3","整改计划","16","23","个"));
-        lvTops.add(new LvTop("4","经销商库存盘点","18","23","个"));
-        lvTopAdapter = new FirstLvTopAdapter(getActivity(), lvTops, null);
+        lvTopList = new ArrayList<>();
+        lvTopAdapter = new FirstLvTopAdapter(getActivity(), lvTopList, null);
         sclv_top.setAdapter(lvTopAdapter);
 
-        String json = PrefUtils.getString(getActivity(),"firstjson","");
-        if(!TextUtils.isEmpty(json)){
-            //parseFirstJson(json);
+        String json = PrefUtils.getString(getActivity(), "firstjson", "");
+        if (!TextUtils.isEmpty(json)) {// 读取预存数据展示
+            parseFirstJson(json);
         }
     }
 
+    // 创建json 发起请求
     private void initUrlData() {
         String content = "{" +
                 "areaid:'" + PrefUtils.getString(getActivity(), "departmentid", "") + "'," +
                 "time:'" + DateUtil.getDateTimeStr(8) + "'," +
                 "creuser:'" + PrefUtils.getString(getActivity(), "userid", "") + "'" +
                 "}";
-        ceshiHttp("opt_get_first_data", content);
+        getFirstData("opt_get_first_data", content);
     }
 
     /**
-     * 发送签到请求
+     * 请求首页数据
      *
      * @param optcode 请求码
      * @param content 请求json
      */
-    void ceshiHttp(final String optcode, String content) {
+    void getFirstData(final String optcode, String content) {
 
         // 组建请求Json
         RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(getActivity());
@@ -184,13 +175,12 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                         } else {
                             ResponseStructBean resObj = new ResponseStructBean();
                             resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
-                            // 保存登录信息
+                            // 处理信息
                             if (ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())) {
-                                // 保存信息
+                                // 处理信息
                                 String formjson = resObj.getResBody().getContent();
-                                PrefUtils.putString(getActivity(),"firstjson",formjson);
+                                PrefUtils.putString(getActivity(), "firstjson", formjson);
                                 parseFirstJson(formjson);
-                                // initData();
 
                             } else {
                                 Toast.makeText(getActivity(), resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
@@ -204,42 +194,45 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                     @Override
                     public void onError(int code, String msg) {
                         Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
-                        /*Message msg1 = new Message();
-                        msg1.what = FirstFragment.SYNC_CLOSE;//
-                        handler.sendMessage(msg1);*/
-                        //initData();
                     }
                 })
                 .failure(new IFailure() {
                     @Override
                     public void onFailure() {
                         Toast.makeText(getActivity(), "请求失败", Toast.LENGTH_SHORT).show();
-                        /*Message msg2 = new Message();
-                        msg2.what = FirstFragment.SYNC_CLOSE;//
-                        handler.sendMessage(msg2);*/
-                        //initData();
                     }
                 })
                 .builde()
                 .post();
     }
 
+    // 解析返回的数据
     private void parseFirstJson(String formjson) {
         FirstDataStc emp = JsonUtil.parseJson(formjson, FirstDataStc.class);
         xtZsNumStcs = JsonUtil.parseList(emp.getHomesynergyandcheck(), XtZsNumStc.class);
-        List<GvTop> gvgvTops = JsonUtil.parseList(emp.getHomesevendayrank(), GvTop.class);
-        gvTopList.clear();
-        gvTopList.addAll(gvgvTops);
+        List<GvTop> gvTops = JsonUtil.parseList(emp.getHomesevendayrank(), GvTop.class);
+        List<LvTop> lvTops = JsonUtil.parseList(emp.getSevendayindexrank(), LvTop.class);
+
+        if(gvTops!=null&&gvTops.size()>0){
+            gvTopList.clear();
+            gvTopList.addAll(gvTops);
+        }
+
+        if(lvTops!=null&&gvTops.size()>0){
+            lvTopList.clear();
+            lvTopList.addAll(lvTops);
+        }
+
         initJsonData();
     }
 
+    // 刷新界面数据
     private void initJsonData() {
-        tv_zhuisu.setText("追溯数量:"+" "+xtZsNumStcs.get(0).getCountnum());
-        tv_xietong.setText("协同数量:"+" "+xtZsNumStcs.get(1).getCountnum());
+        tv_zhuisu.setText("追溯数量: " + xtZsNumStcs.get(0).getCountnum());
+        tv_xietong.setText("协同数量: " + xtZsNumStcs.get(1).getCountnum());
 
         gvTopAdapter.notifyDataSetChanged();
-        /*gvTopAdapter = new FirstGvTopAdapter(getActivity(), gvTopList);
-        gv_top.setAdapter(gvTopAdapter);*/
+        lvTopAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -255,28 +248,22 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                 }
                 break;
 
-            case R.id.first_rl_xtbf://
-                //Toast.makeText(getActivity(),"协同拜访",Toast.LENGTH_SHORT).show();
+            case R.id.first_rl_xtbf:// 协同拜访
                 changeHomeFragment(new XtTermSelectFragment(), "xttermlistfragment");
                 break;
-            case R.id.first_rl_zdzs://
-                //Toast.makeText(getActivity(),"终端追溯",Toast.LENGTH_SHORT).show();
+            case R.id.first_rl_zdzs:// 终端追溯
                 changeHomeFragment(new ZsTermSelectFragment(), "zstermselectfragment");
                 break;
-            case R.id.first_rl_kcpd://
-                //Toast.makeText(getActivity(),"库存盘点",Toast.LENGTH_SHORT).show();
+            case R.id.first_rl_kcpd:// 库存盘点
                 changeHomeFragment(new DdAgencyCheckSelectFragment(), "ddagencycheckselectfragment");
                 break;
-            case R.id.first_rl_zgjh://
-                //Toast.makeText(getActivity(),"整改计划",Toast.LENGTH_SHORT).show();
+            case R.id.first_rl_zgjh:// 整改计划
                 changeHomeFragment(new DdDealPlanFragment(), "dddealplanfragment");
                 break;
-            case R.id.first_rl_jhzd://
-                //Toast.makeText(getActivity(),"计划制定",Toast.LENGTH_SHORT).show();
+            case R.id.first_rl_jhzd:// 计划制定
                 changeHomeFragment(new DdWeekPlanFragment(), "ddweekplanfragment");
                 break;
-            case R.id.first_rl_gzzj://
-                //Toast.makeText(getActivity(),"工作总结",Toast.LENGTH_SHORT).show();
+            case R.id.first_rl_gzzj:// 工作总结
                 changeHomeFragment(new DdDaySummaryFragment(), "dddaysummaryfragment");
                 break;
             default:
@@ -304,7 +291,7 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            initUrlData(); // 在此请求数据
+            initUrlData(); // 在此请求数据 首页数据
         }
     }
 }

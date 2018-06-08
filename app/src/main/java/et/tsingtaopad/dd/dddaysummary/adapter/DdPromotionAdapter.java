@@ -14,6 +14,7 @@ import java.util.List;
 import et.tsingtaopad.R;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
+import et.tsingtaopad.dd.dddaysummary.domain.DdPromotionStc;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
 import et.tsingtaopad.listviewintf.IClick;
 
@@ -26,10 +27,10 @@ public class DdPromotionAdapter extends BaseAdapter implements View.OnClickListe
     private final String TAG = "DayDetailAdapter";
 
     private Activity context;
-    private List<KvStc> dataLst;
+    private List<DdPromotionStc> dataLst;
     private IClick listener;
 
-    public DdPromotionAdapter(Activity context, List<KvStc> dataLst, IClick listener) {
+    public DdPromotionAdapter(Activity context, List<DdPromotionStc> dataLst, IClick listener) {
         this.context = context;
         this.dataLst = dataLst;
         this.listener = listener;
@@ -74,12 +75,12 @@ public class DdPromotionAdapter extends BaseAdapter implements View.OnClickListe
             holder = (ViewHolder) convertView.getTag();
         }
 
-        final KvStc item = dataLst.get(position);
+        final DdPromotionStc item = dataLst.get(position);
 
         // 产品名称
-        holder.promotionname.setText(item.getKey());
-        holder.promotion_num.setText(item.getValue());
-        holder.percent.setText(item.getParentKey());
+        holder.promotionname.setText(item.getPromotname());
+        holder.promotion_num.setText(item.getTrueterm()+"/"+item.getTotalterm());
+        holder.percent.setText(item.getTermratio());
 
 
         return convertView;

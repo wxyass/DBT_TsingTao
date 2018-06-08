@@ -29,6 +29,7 @@ import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.adapter.AlertKeyValueAdapter;
+import et.tsingtaopad.core.ui.loader.LatteLoader;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
@@ -493,7 +494,9 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
 
     // 分项采集修改完成
     private void showIndexAdapter() {
+
         xtCaculateAdapter.notifyDataSetChanged();
+        LatteLoader.stopLoading();
     }
 
     /**
@@ -510,6 +513,8 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
         service.zsCalculateIndex(channelId, proItemLst, calculateLst, proId, indexId);
         xtCaculateAdapter.notifyDataSetChanged();
         ViewUtil.setListViewHeight(calculateLv);
+
+        LatteLoader.stopLoading();
     }
 
     /**
@@ -687,8 +692,6 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
      * 参数7: 弹窗类型 (只有取消按钮)   √
      * 参数8: 条目点击监听  √
      */
-    DealStc stc;
-
     public void alertShow6(final int posi) {
         new AlertView("请选择复查结果", null, "取消", null,
                 new String[]{"正确", "错误"},

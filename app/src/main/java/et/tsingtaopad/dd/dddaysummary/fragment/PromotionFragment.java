@@ -27,14 +27,20 @@ import et.tsingtaopad.core.net.domain.RequestHeadStc;
 import et.tsingtaopad.core.net.domain.RequestStructBean;
 import et.tsingtaopad.core.net.domain.ResponseStructBean;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.JsonUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.db.table.MitRepairM;
 import et.tsingtaopad.db.table.MitRepaircheckM;
 import et.tsingtaopad.db.table.MitRepairterM;
+import et.tsingtaopad.dd.dddaysummary.DdDaySummaryFragment;
 import et.tsingtaopad.dd.dddaysummary.adapter.BaseDataAdapter;
 import et.tsingtaopad.dd.dddaysummary.adapter.DdPromotionAdapter;
+import et.tsingtaopad.dd.dddaysummary.adapter.WorkPlanAdapter;
+import et.tsingtaopad.dd.dddaysummary.domain.DaySummaryStc;
+import et.tsingtaopad.dd.dddaysummary.domain.DdDayPlanStc;
+import et.tsingtaopad.dd.dddaysummary.domain.DdPromotionStc;
 import et.tsingtaopad.dd.dddealplan.domain.DealStc;
 import et.tsingtaopad.home.app.MainService;
 import et.tsingtaopad.http.HttpParseJson;
@@ -59,7 +65,8 @@ public class PromotionFragment extends BaseFragmentSupport implements View.OnCli
 
     private TextView bt_addplan;
     private et.tsingtaopad.view.NoScrollListView monthplan_lv;
-    private List<DealStc> dataLst;
+    private DdPromotionAdapter workPlanAdapter;
+    List<DdPromotionStc> dataLst;
 
     @Nullable
     @Override
@@ -89,24 +96,27 @@ public class PromotionFragment extends BaseFragmentSupport implements View.OnCli
     // 初始化数据
     private void initData() {
 
-        ArrayList<KvStc> kvStcs =new ArrayList<>();
-        kvStcs.add(new KvStc("秋季大练兵","222/333","66.6%"));
-        kvStcs.add(new KvStc("春季小战役","222/333","66.6%"));
-        kvStcs.add(new KvStc("明日之星活动","222/333","66.6%"));
-        kvStcs.add(new KvStc("想聚青岛","222/333","66.6%"));
-
-        DdPromotionAdapter workSumAdapter = new DdPromotionAdapter(getActivity(),kvStcs,null);
-        monthplan_lv.setAdapter(workSumAdapter);
+        dataLst = new ArrayList<>();
+        /*dataLst.add(new KvStc("基础数据追溯,价格数据追溯","德州","6号定格","3号路线"));
+        dataLst.add(new KvStc("基础数据追溯","平县","5号定格","6号路线"));
+        dataLst.add(new KvStc("价格数据追溯","胶南","2号定格","1号路线"));
+        dataLst.add(new KvStc("网络数据追溯,价格数据追溯","北京","1号定格","7号路线"));
+        dataLst.add(new KvStc("竞品数据追溯","通州","4号定格","9号路线"));*/
+        workPlanAdapter = new DdPromotionAdapter(getActivity(), dataLst,null);
+        monthplan_lv.setAdapter(workPlanAdapter);
 
     }
 
     private void initUrlData() {
+        String currenttime = PrefUtils.getString(getActivity(), DdDaySummaryFragment.DDDAYSUMMARYFRAGMENT_CURRENTTIME, DateUtil.getDateTimeStr(7));
+
         String content = "{" +
                 "areaid:'" + PrefUtils.getString(getActivity(), "departmentid", "") + "'," +
-                "tablename:'" + "MIT_REPAIR_REPAIRTER_REPAIRCHECK_M" + "'," +
+                "tablename:'" + "promotionactivity" + "'," +
+                "credate:'" + currenttime + "'," + // currenttime
                 "creuser:'" + PrefUtils.getString(getActivity(), "userid", "") + "'" +
                 "}";
-        ceshiHttp("opt_get_repair_ter_check", "MIT_REPAIR_REPAIRTER_REPAIRCHECK_M", content);
+        ceshiHttp("opt_get_dailyrecord", "promotionactivity", content);
     }
 
     /**
@@ -145,14 +155,9 @@ public class PromotionFragment extends BaseFragmentSupport implements View.OnCli
                                 // 保存信息
                                 String formjson = resObj.getResBody().getContent();
                                 parseTableJson(formjson);
-                                initData();
 
                             } else {
                                 Toast.makeText(getActivity(), resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
-                            /*Message msg = new Message();
-                            msg.what = FirstFragment.SYNC_CLOSE;//
-                            handler.sendMessage(msg);*/
-                                //initData();
                             }
                         }
 
@@ -163,38 +168,29 @@ public class PromotionFragment extends BaseFragmentSupport implements View.OnCli
                     @Override
                     public void onError(int code, String msg) {
                         Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-                        /*Message msg1 = new Message();
-                        msg1.what = FirstFragment.SYNC_CLOSE;//
-                        handler.sendMessage(msg1);*/
-                        //initData();
                     }
                 })
                 .failure(new IFailure() {
                     @Override
                     public void onFailure() {
                         Toast.makeText(getContext(), "请求失败", Toast.LENGTH_SHORT).show();
-                        /*Message msg2 = new Message();
-                        msg2.what = FirstFragment.SYNC_CLOSE;//
-                        handler.sendMessage(msg2);*/
-                        //initData();
                     }
                 })
                 .builde()
                 .post();
     }
 
-    // 解析区域定格路线成功
-    private void parseTableJson(String json) {
-        // 解析区域定格路线信息
-        AreaGridRoute emp = JsonUtil.parseJson(json, AreaGridRoute.class);
-        String MIT_REPAIR_M = emp.getMIT_REPAIR_M();
-        String MIT_REPAIRTER_M = emp.getMIT_REPAIRTER_M();
-        String MIT_REPAIRCHECK_M = emp.getMIT_REPAIRCHECK_M();
+    // 解析数据
+    private void parseTableJson(String formjson) {
+        DaySummaryStc daySummaryStc = JsonUtil.parseJson(formjson, DaySummaryStc.class);
+        List<DdPromotionStc> ddPromotionStcs = JsonUtil.parseList(daySummaryStc.getPromotionactivity(), DdPromotionStc.class);
+        dataLst.clear();
+        dataLst.addAll(ddPromotionStcs);
+        initJsonData();
+    }
 
-        MainService service = new MainService(getActivity(), null);
-        service.createOrUpdateTable(MIT_REPAIR_M, "MIT_REPAIR_M", MitRepairM.class);
-        service.createOrUpdateTable(MIT_REPAIRTER_M, "MIT_REPAIRTER_M", MitRepairterM.class);
-        service.createOrUpdateTable(MIT_REPAIRCHECK_M, "MIT_REPAIRCHECK_M", MitRepaircheckM.class);
+    private void initJsonData() {
+        workPlanAdapter.notifyDataSetChanged();
     }
 
 

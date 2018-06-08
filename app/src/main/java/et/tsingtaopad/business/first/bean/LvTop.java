@@ -6,60 +6,60 @@ package et.tsingtaopad.business.first.bean;
 
 public class LvTop {
 
-    private String ranking;// 排名
-    private String rankingname;// 排行name
-    private String rankingnum;// 当前个数
-    private String rankingall;// 总数
-    private String unit;// 单位
+    private String rank;// 排名
+    private String rankname;// 排行name
+    private String ranknum;// 当前个数
+    private String totalnum;// 总数
+    private String content;// 单位
 
     public LvTop() {
     }
 
-    public LvTop(String ranking, String rankingname, String rankingnum, String rankingall, String unit) {
-        this.ranking = ranking;
-        this.rankingname = rankingname;
-        this.rankingnum = rankingnum;
-        this.rankingall = rankingall;
-        this.unit = unit;
+    public LvTop(String rank, String rankname, String ranknum, String totalnum, String content) {
+        this.rank = rank;
+        this.rankname = rankname;
+        this.ranknum = ranknum;
+        this.totalnum = totalnum;
+        this.content = content;
     }
 
-    public String getRanking() {
-        return ranking;
+    public String getRank() {
+        return rank;
     }
 
-    public void setRanking(String ranking) {
-        this.ranking = ranking;
+    public void setRank(String rank) {
+        this.rank = rank;
     }
 
-    public String getRankingname() {
-        return rankingname;
+    public String getRankname() {
+        return rankname;
     }
 
-    public void setRankingname(String rankingname) {
-        this.rankingname = rankingname;
+    public void setRankname(String rankname) {
+        this.rankname = rankname;
     }
 
-    public String getRankingnum() {
-        return rankingnum;
+    public String getRanknum() {
+        return ranknum;
     }
 
-    public void setRankingnum(String rankingnum) {
-        this.rankingnum = rankingnum;
+    public void setRanknum(String ranknum) {
+        this.ranknum = ranknum;
     }
 
-    public String getRankingall() {
-        return rankingall;
+    public String getTotalnum() {
+        return totalnum;
     }
 
-    public void setRankingall(String rankingall) {
-        this.rankingall = rankingall;
+    public void setTotalnum(String totalnum) {
+        this.totalnum = totalnum;
     }
 
-    public String getUnit() {
-        return unit;
+    public String getContent() {
+        return content;
     }
 
-    public void setUnit(String unit) {
-        this.unit = unit;
+    public void setContent(String content) {
+        this.content = content;
     }
 }

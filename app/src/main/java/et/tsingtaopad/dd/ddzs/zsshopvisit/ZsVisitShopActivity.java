@@ -22,6 +22,7 @@ import java.util.List;
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseActivity;
 import et.tsingtaopad.base.BaseFragmentSupport;
+import et.tsingtaopad.core.ui.loader.LatteLoader;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.view.alertview.AlertView;
@@ -134,6 +135,7 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
         mContentFl = (FrameLayout) findViewById(R.id.zs_fl_content);
         mMemoImg = (AppCompatImageView) findViewById(R.id.zs_bt_memo);
 
+        LatteLoader.stopLoading(); // 若有进度条,关闭
     }
 
     // 初始化数据

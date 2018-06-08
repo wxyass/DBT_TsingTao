@@ -67,7 +67,7 @@
             android:name="fontsize"
             android:value="1.0" />
         <meta-data
-            android:name="unit"
+            android:name="content"
             android:value="dp" />
     </application>
 

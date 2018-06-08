@@ -377,14 +377,16 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
             // 销毁当前Fragment
             supportFragmentManager.popBackStack();
 
-            Bundle bundle = new Bundle();
+            /*Bundle bundle = new Bundle();
             bundle.putSerializable("fromFragment", "ZsTermSelectFragment");
             //bundle.putSerializable("mitValcheckterM", mitValcheckterMs.get(0));
             ZsTermCartFragment zsTermCartFragment = new ZsTermCartFragment();
             zsTermCartFragment.setArguments(bundle);
 
             // 跳转终端购物车
-            changeHomeFragment(zsTermCartFragment, "xttermcartfragment");
+            changeHomeFragment(zsTermCartFragment, "xttermcartfragment");*/
+            changeHomeFragment(new ZsTermCartFragment(), "xttermcartfragment");
+            PrefUtils.putBoolean(getActivity(),GlobalValues.ZS_CART_SYNC,false);// false 追溯购物车 需要同步
         }
     }
 
@@ -557,6 +559,7 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
         intent.putExtra("mitValcheckterM", mitValcheckterMs.get(0));
         intent.putExtra("seeFlag", "0"); // 0拜访 1查看标识
         startActivity(intent);
+        PrefUtils.putBoolean(getActivity(),GlobalValues.ZS_CART_SYNC,false);// false 追溯购物车 需要同步
     }
 
     MyHandler handler;
