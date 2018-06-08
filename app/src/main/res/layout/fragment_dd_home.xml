@@ -118,7 +118,7 @@
             <!--快捷入口-->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="4dp"
                 android:layout_marginLeft="4dp"
@@ -184,7 +184,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="4dp"
                 android:layout_marginLeft="4dp"
@@ -250,7 +250,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="4dp"
                 android:layout_marginLeft="4dp"

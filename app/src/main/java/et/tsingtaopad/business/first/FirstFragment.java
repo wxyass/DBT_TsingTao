@@ -21,7 +21,6 @@ import et.tsingtaopad.business.first.bean.FirstDataStc;
 import et.tsingtaopad.business.first.bean.GvTop;
 import et.tsingtaopad.business.first.bean.LvTop;
 import et.tsingtaopad.business.first.bean.XtZsNumStc;
-import et.tsingtaopad.business.visit.bean.AreaGridRoute;
 import et.tsingtaopad.core.net.HttpUrl;
 import et.tsingtaopad.core.net.RestClient;
 import et.tsingtaopad.core.net.callback.IError;
@@ -65,7 +64,7 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
     private FirstGvTopAdapter gvTopAdapter;
     private FirstLvTopAdapter lvTopAdapter;
 
-    List<GvTop> gvTops ;
+    List<GvTop> gvTopList;
     List<LvTop> lvTops = new ArrayList<>();
     List<XtZsNumStc> xtZsNumStcs = new ArrayList<>();
 
@@ -122,13 +121,13 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
 
         tv_username.setText(PrefUtils.getString(getActivity(),"username",""));
 
-        gvTops = new ArrayList<>();
+        gvTopList = new ArrayList<>();
 
-        // gvTops.clear();
-        /*gvTops.add(new GvTop("张三","33/63(个)","走访冠军"));
-        gvTops.add(new GvTop("李四","13/53(个)","稽查冠军"));
-        gvTops.add(new GvTop("王五","53/126(个)","库存盘点冠军"));*/
-        gvTopAdapter = new FirstGvTopAdapter(getActivity(), gvTops);
+        // gvTopList.clear();
+        /*gvTopList.add(new GvTop("张三","33/63(个)","走访冠军"));
+        gvTopList.add(new GvTop("李四","13/53(个)","稽查冠军"));
+        gvTopList.add(new GvTop("王五","53/126(个)","库存盘点冠军"));*/
+        gvTopAdapter = new FirstGvTopAdapter(getActivity(), gvTopList);
         gv_top.setAdapter(gvTopAdapter);
 
 
@@ -191,7 +190,7 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                                 String formjson = resObj.getResBody().getContent();
                                 PrefUtils.putString(getActivity(),"firstjson",formjson);
                                 parseFirstJson(formjson);
-                                initData();
+                                // initData();
 
                             } else {
                                 Toast.makeText(getActivity(), resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
@@ -229,8 +228,8 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
         FirstDataStc emp = JsonUtil.parseJson(formjson, FirstDataStc.class);
         xtZsNumStcs = JsonUtil.parseList(emp.getHomesynergyandcheck(), XtZsNumStc.class);
         List<GvTop> gvgvTops = JsonUtil.parseList(emp.getHomesevendayrank(), GvTop.class);
-        gvTops.clear();
-        gvTops.addAll(gvgvTops);
+        gvTopList.clear();
+        gvTopList.addAll(gvgvTops);
         initJsonData();
     }
 
@@ -238,9 +237,9 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
         tv_zhuisu.setText("追溯数量:"+" "+xtZsNumStcs.get(0).getCountnum());
         tv_xietong.setText("协同数量:"+" "+xtZsNumStcs.get(1).getCountnum());
 
-        // gvTopAdapter.notifyDataSetChanged();
-        gvTopAdapter = new FirstGvTopAdapter(getActivity(), gvTops);
-        gv_top.setAdapter(gvTopAdapter);
+        gvTopAdapter.notifyDataSetChanged();
+        /*gvTopAdapter = new FirstGvTopAdapter(getActivity(), gvTopList);
+        gv_top.setAdapter(gvTopAdapter);*/
     }
 
     @Override
