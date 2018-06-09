@@ -3,13 +3,13 @@ package et.tsingtaopad.business.system;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -20,26 +20,13 @@ import java.text.DecimalFormat;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
-import et.tsingtaopad.business.first.FirstFragment;
-import et.tsingtaopad.core.net.HttpUrl;
+import et.tsingtaopad.business.visit.VisitFragment;
 import et.tsingtaopad.core.net.RestClient;
 import et.tsingtaopad.core.net.callback.IError;
 import et.tsingtaopad.core.net.callback.IFailure;
 import et.tsingtaopad.core.net.callback.ISuccess;
 import et.tsingtaopad.core.net.callback.OnDownLoadProgress;
-import et.tsingtaopad.core.net.domain.RequestHeadStc;
-import et.tsingtaopad.core.net.domain.RequestStructBean;
-import et.tsingtaopad.core.net.domain.ResponseStructBean;
-import et.tsingtaopad.core.util.dbtutil.ConstValues;
-import et.tsingtaopad.core.util.dbtutil.JsonUtil;
-import et.tsingtaopad.core.util.dbtutil.PrefUtils;
-import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
-import et.tsingtaopad.dd.ddagencyres.DdAgencyContentFragment;
-import et.tsingtaopad.dd.dddaysummary.DdDaySummaryFragment;
-import et.tsingtaopad.dd.dddealplan.DdDealPlanFragment;
-import et.tsingtaopad.dd.ddweekplan.DdWeekPlanFragment;
-import et.tsingtaopad.http.HttpParseJson;
-import et.tsingtaopad.util.requestHeadUtil;
+import et.tsingtaopad.home.initadapter.GlobalValues;
 
 /**
  * Created by yangwenmin on 2018/3/12.
@@ -58,9 +45,9 @@ public class SystemFragment extends BaseFragmentSupport implements View.OnClickL
     RelativeLayout upload;
     RelativeLayout about;
 
-    public static  final int SHOWDOWNLOADDIALOG = 88; // 弹出进度条,设置最大值100 //显示正在下载的对话框
-    public static  final int UPDATEDOWNLOADDIALOG = 99;// 设置进度条  //刷新正在下载对话框的内容
-    public static  final int DOWNLOADFINISHED = 66;// 下载完成开始安装 //下载完成后进行的操作
+    public static final int SHOWDOWNLOADDIALOG = 88; // 弹出进度条,设置最大值100 //显示正在下载的对话框
+    public static final int UPDATEDOWNLOADDIALOG = 99;// 设置进度条  //刷新正在下载对话框的内容
+    public static final int DOWNLOADFINISHED = 66;// 下载完成开始安装 //下载完成后进行的操作
 
     MyHandler handler;
 
@@ -150,10 +137,17 @@ public class SystemFragment extends BaseFragmentSupport implements View.OnClickL
                 //changeHomeFragment(new DdDaySummaryFragment(), "dddaysummaryfragment");
                 break;
             case R.id.dd_system_rl_upload:// 检查更新
-                Toast.makeText(getActivity(), "检查更新", Toast.LENGTH_SHORT).show();
-                //changeHomeFragment(new DdDealPlanFragment(), "dddealplanfragment");
+                // Toast.makeText(getActivity(), "检查更新", Toast.LENGTH_SHORT).show();
+                // changeHomeFragment(new DdDealPlanFragment(), "dddealplanfragment");
 
-                checkUpload();
+                if (hasPermission(GlobalValues.WRITE_READ_EXTERNAL_PERMISSION)) {
+                    // 拥有了此权限,那么直接执行业务逻辑
+                    downLoadApk();
+                } else {
+                    // 还没有对一个权限(请求码,权限数组)这两个参数都事先定义好
+                    requestPermission(GlobalValues.WRITE_READ_EXTERNAL_CODE, GlobalValues.WRITE_READ_EXTERNAL_PERMISSION);
+                }
+
                 break;
             case R.id.dd_system_rl_about:// 关于系统
                 Toast.makeText(getActivity(), "关于系统", Toast.LENGTH_SHORT).show();
@@ -163,8 +157,14 @@ public class SystemFragment extends BaseFragmentSupport implements View.OnClickL
 
     }
 
+    // 权限 下载apk
+    @Override
+    public void doWriteSDCard() {
+        downLoadApk();
+    }
+
     // 下载apk
-    private void checkUpload() {
+    private void downLoadApk() {
 
         Message msg = Message.obtain();
         msg.what = SHOWDOWNLOADDIALOG;
@@ -178,22 +178,6 @@ public class SystemFragment extends BaseFragmentSupport implements View.OnClickL
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
-                        /*String json = HttpParseJson.parseJsonResToString(response);
-
-                        if ("".equals(json) || json == null) {
-                            Toast.makeText(getActivity(), "后台成功接收,但返回的数据为null", Toast.LENGTH_SHORT).show();
-                        } else {
-                            ResponseStructBean resObj = new ResponseStructBean();
-                            resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
-                            // 保存登录信息
-                            if (ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())) {
-                                // 保存信息
-                                String formjson = resObj.getResBody().getContent();
-
-                            } else {
-                                Toast.makeText(getActivity(), resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
-                            }
-                        }*/
 
                         //用handle通知主线程 下载完成 -> 开始安装
                         Message finishedMsg = Message.obtain();
@@ -207,14 +191,12 @@ public class SystemFragment extends BaseFragmentSupport implements View.OnClickL
                 .onDownLoadProgress(new OnDownLoadProgress() {
                     @Override
                     public void onProgressUpdate(long fileLength, int downLoadedLength) {
-                        float value = (float) ((downLoadedLength / fileLength) * 100);
-                        if(value % 5 ==0){
-                            // 用handle通知主线程刷新进度, progress: 是1-100的正整数
-                            Message updateMsg = Message.obtain();
-                            updateMsg.what = UPDATEDOWNLOADDIALOG;
-                            updateMsg.obj = value;
-                            handler.sendMessage(updateMsg);
-                        }
+                        // 用handle通知主线程刷新进度, progress: 是1-100的正整数
+                        Message updateMsg = Message.obtain();
+                        updateMsg.what = UPDATEDOWNLOADDIALOG;
+                        updateMsg.obj = fileLength;
+                        updateMsg.arg1= downLoadedLength;
+                        handler.sendMessage(updateMsg);
                     }
                 })
                 .error(new IError() {
@@ -229,19 +211,18 @@ public class SystemFragment extends BaseFragmentSupport implements View.OnClickL
                         Toast.makeText(getActivity(), "请求失败", Toast.LENGTH_SHORT).show();
                     }
                 })
-                .name("apkName")
-                .dir("wxyass")
+                .name(apkName)
+                .dir(downPath)
                 .builde()
                 .download();
     }
 
     /**
      * 显示正在下载的对话框
-     *
      */
     String apkUrl = "http://oss.wxyass.com/tscs2.4.3.1.0.apk";
     String apkName = "tscs2.4.3.1.0.apk";
-    String downPath = "";// apk的存放位置
+    String downPath = "dbt";// apk的存放位置
 
     //private HttpHandler httpHandler;
     private AlertDialog downloadDialog;//正在下载的对话框
@@ -253,7 +234,8 @@ public class SystemFragment extends BaseFragmentSupport implements View.OnClickL
     private boolean isDownloading = false;//是否正在下载
     private boolean isCancel = false;//是否取消升级
     private DecimalFormat df = new DecimalFormat("###.00");//设置结果保留两位小数
-    private void showDownloadDialog(){
+
+    private void showDownloadDialog() {
         AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
         downloadDialog = adb.create();
         View view = View.inflate(getActivity(), R.layout.download_dialog_layout, null);
@@ -262,20 +244,29 @@ public class SystemFragment extends BaseFragmentSupport implements View.OnClickL
         tvCanCel = (TextView) view.findViewById(R.id.tv_cancel);
         tvHidden = (TextView) view.findViewById(R.id.tv_hidden);
         pb = (ProgressBar) view.findViewById(R.id.download_pb);
-        pb.setMax(100);
+
         downloadDialog.show();
     }
+
     private void showDownloading(android.os.Message msg) {
-        int curSize = (int)msg.obj;// 获取当前进度
+        /*int curSize = (int) msg.obj;// 获取当前进度
         pb.setProgress(curSize);
         //tvCur.setText(df.format((float)curSize / (float)contentLength * 100) + "%");
-        tvCur.setText( curSize + "%");
+        tvCur.setText(curSize + "%");*/
+
+
+        long totalSize = (long) msg.obj;// 总进度
+        int curSize = (int) msg.arg1;// 获取当前进度
+        pb.setMax((int)totalSize);
+        pb.setProgress(curSize);
+        //tvCur.setText(df.format((float)curSize / (float)contentLength * 100) + "%");
+        // tvCur.setText(curSize + "%");
     }
 
     private void stopDownloadDialog() {
         Toast.makeText(getActivity(), "下载成功", Toast.LENGTH_SHORT).show();
         isDownloading = false;
-        if(downloadDialog.isShowing()){
+        if (downloadDialog.isShowing()) {
             downloadDialog.dismiss();
         }
     }

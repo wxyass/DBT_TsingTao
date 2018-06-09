@@ -192,11 +192,11 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
 
 
         signStcs = new ArrayList<>();
-        signStcs.add(new SignStc("2018-06-06 09:52:08", "0", "1号地址", "哈哈哈"));
+        /*signStcs.add(new SignStc("2018-06-06 09:52:08", "0", "1号地址", "哈哈哈"));
         signStcs.add(new SignStc("2018-06-06 10:12:11", "1", "2号地址", ""));
         signStcs.add(new SignStc("2018-06-06 14:52:51", "1", "3号地址", ""));
         signStcs.add(new SignStc("2018-06-06 18:32:42", "1", "4号地址", ""));
-        signStcs.add(new SignStc("2018-06-06 19:32:42", "1", "5号地址", ""));
+        signStcs.add(new SignStc("2018-06-06 19:32:42", "1", "5号地址", ""));*/
 
         signAdapter = new DdSignAdapter(this, signStcs, null);
         first_lv_sign.setAdapter(signAdapter);
@@ -273,8 +273,8 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
         // String s = "[{'MIT_ATTENCEDETAIL_M':["+"]}]";
         String content = "{" +
                 "areaid:'" + PrefUtils.getString(this, "departmentid", "") + "'," +
-                "lon:'" + longitude + "'," +  //"117.090734350000005000"
-                "lat:'" + latitude + "'," +  // "24.050067309999999300"
+                "sourcelon:'" + "117.090734350000005000" + "'," +  //"117.090734350000005000"  longitude
+                "sourcelat:'" + "24.050067309999999300" + "'," +  // "24.050067309999999300"   latitude
                 "attencetype:'" + attencetype + "'," +
                 "attencetime:'" + DateUtil.getDateTimeStr(8) + "'," +
                 "creuser:'" + PrefUtils.getString(this, "userid", "") + "'" +

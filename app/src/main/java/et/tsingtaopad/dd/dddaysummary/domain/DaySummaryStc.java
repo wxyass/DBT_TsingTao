@@ -16,6 +16,9 @@ public class DaySummaryStc implements Serializable{
     private String themainproductprice;
     private String promotionactivity;
     private String agencyrepertory;
+    private String tracethecompetinggoods;
+    private String basicdata;
+    private String jobsummary;
 
     public String getWorkplan() {
         return workplan;
@@ -55,5 +58,29 @@ public class DaySummaryStc implements Serializable{
 
     public void setAgencyrepertory(String agencyrepertory) {
         this.agencyrepertory = agencyrepertory;
+    }
+
+    public String getTracethecompetinggoods() {
+        return tracethecompetinggoods;
+    }
+
+    public void setTracethecompetinggoods(String tracethecompetinggoods) {
+        this.tracethecompetinggoods = tracethecompetinggoods;
+    }
+
+    public String getBasicdata() {
+        return basicdata;
+    }
+
+    public void setBasicdata(String basicdata) {
+        this.basicdata = basicdata;
+    }
+
+    public String getJobsummary() {
+        return jobsummary;
+    }
+
+    public void setJobsummary(String jobsummary) {
+        this.jobsummary = jobsummary;
     }
 }

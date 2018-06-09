@@ -80,7 +80,7 @@ public class AgencyStoreItemAdapter extends BaseAdapter implements View.OnClickL
         // 产品名称
         holder.tv_type.setText(item.getProname());
         holder.tv_num.setText(item.getStocktotal()+"/"+item.getStockfact());
-        // holder.tv_numlv.setText(item.getTermratio());
+        holder.tv_numlv.setText(item.getDifferentvalue());
 
 
         return convertView;

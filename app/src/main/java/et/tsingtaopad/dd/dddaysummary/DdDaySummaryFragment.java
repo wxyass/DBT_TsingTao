@@ -61,8 +61,8 @@ public class DdDaySummaryFragment extends BaseFragmentSupport implements View.On
 
     private TabLayout tablayout;
     private ViewPager viewpager;
-    private List<String> tabList=new ArrayList<>();
-    private List<Fragment> alFragment=new ArrayList<>();
+    private List<String> tabList = new ArrayList<>();
+    private List<Fragment> alFragment = new ArrayList<>();
 
     private String currenttime;// 2011-04-11
     private String todaytime;// 2011-04-11
@@ -72,6 +72,7 @@ public class DdDaySummaryFragment extends BaseFragmentSupport implements View.On
     private int yearr;
     private int month;
     private int day;
+    TabAdapter tabAdapter;
 
 
     @Nullable
@@ -93,8 +94,8 @@ public class DdDaySummaryFragment extends BaseFragmentSupport implements View.On
         confirmBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
 
-        tablayout   = (TabLayout) view.findViewById(R.id.tablayout);
-        viewpager= (ViewPager) view.findViewById(R.id.viewpager);
+        tablayout = (TabLayout) view.findViewById(R.id.tablayout);
+        viewpager = (ViewPager) view.findViewById(R.id.viewpager);
     }
 
     @Override
@@ -115,9 +116,14 @@ public class DdDaySummaryFragment extends BaseFragmentSupport implements View.On
         currenttime = DateUtil.getDateTimeStr(7);
         todaytime = DateUtil.getDateTimeStr(7);
 
-        PrefUtils.putString(getActivity(),DDDAYSUMMARYFRAGMENT_CURRENTTIME,currenttime);
-        PrefUtils.putString(getActivity(),DDDAYSUMMARYFRAGMENT_TODAYTIME,todaytime);
+        PrefUtils.putString(getActivity(), DDDAYSUMMARYFRAGMENT_CURRENTTIME, currenttime);
+        PrefUtils.putString(getActivity(), DDDAYSUMMARYFRAGMENT_TODAYTIME, todaytime);
 
+
+        initData();
+    }
+
+    private void initData() {
         WorkPlanFragment workPlanFragment = new WorkPlanFragment();
         WorkSumFragment workSumFragment = new WorkSumFragment();
         BaseDataFragment baseDataFragment = new BaseDataFragment();
@@ -126,6 +132,7 @@ public class DdDaySummaryFragment extends BaseFragmentSupport implements View.On
         PromotionFragment promotionFragment = new PromotionFragment();
         CmpProFragment cmpProFragment = new CmpProFragment();
         AgencyStoreFragment agencyStoreFragment = new AgencyStoreFragment();
+        alFragment.clear();
         alFragment.add(workPlanFragment);
         alFragment.add(workSumFragment);
         alFragment.add(baseDataFragment);
@@ -137,13 +144,14 @@ public class DdDaySummaryFragment extends BaseFragmentSupport implements View.On
 
         addData();
 
-        TabAdapter tabAdapter = new TabAdapter(getFragmentManager());
+        // tabAdapter = new TabAdapter(getFragmentManager());
+        tabAdapter = new TabAdapter(getChildFragmentManager());
         //1.TabLayout和Viewpager关联
         tablayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 //tab被选的时候回调
-                viewpager.setCurrentItem(tab.getPosition(),true);
+                viewpager.setCurrentItem(tab.getPosition(), true);
             }
 
             @Override
@@ -162,9 +170,8 @@ public class DdDaySummaryFragment extends BaseFragmentSupport implements View.On
         tablayout.setTabsFromPagerAdapter(tabAdapter);
         //viewpager设置适配器
         viewpager.setAdapter(tabAdapter);
-
-
     }
+
 
     // 点击事件
     @Override
@@ -194,11 +201,12 @@ public class DdDaySummaryFragment extends BaseFragmentSupport implements View.On
                         }
                         currenttime = (Integer.toString(year) + "-" + String.format("%02d", monthOfYear + 1) + "-" + aday);
 
-                        PrefUtils.putString(getActivity(),DDDAYSUMMARYFRAGMENT_CURRENTTIME,currenttime);
+                        PrefUtils.putString(getActivity(), DDDAYSUMMARYFRAGMENT_CURRENTTIME, currenttime);
                         //PrefUtils.putString(getActivity(),DDDAYSUMMARYFRAGMENT_TODAYTIME,todaytime);
                         // 刚进入 获取打卡信息
                         // getSignData();
                         // viewpager.notifyAll();
+                        initData();
 
                     }
                 }, yearr, month, day);
@@ -261,7 +269,7 @@ public class DdDaySummaryFragment extends BaseFragmentSupport implements View.On
 
         @Override
         public Fragment getItem(int position) {
-            Fragment fragment= alFragment.get(position);
+            Fragment fragment = alFragment.get(position);
             /*Bundle bundle=new Bundle();
             bundle.putString("text",tabList.get(position));
             fragment.setArguments(bundle);*/
@@ -278,7 +286,9 @@ public class DdDaySummaryFragment extends BaseFragmentSupport implements View.On
             return tabList.get(position);
         }
     }
-    private void addData(){
+
+    private void addData() {
+        tabList.clear();
         tabList.add("工作计划");
         tabList.add("工作汇总");
         tabList.add("基础数据群");

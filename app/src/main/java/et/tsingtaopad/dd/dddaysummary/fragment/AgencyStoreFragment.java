@@ -97,22 +97,17 @@ public class AgencyStoreFragment extends BaseFragmentSupport implements View.OnC
         handler = new MyHandler(this);
 
         initData();
-        initUrlData();
+        // initUrlData();
     }
 
     // 初始化数据
     private void initData() {
 
         dataLst = new ArrayList<>();
-        /*dataLst.add(new KvStc("基础数据追溯,价格数据追溯","德州","6号定格","3号路线"));
-        dataLst.add(new KvStc("基础数据追溯","平县","5号定格","6号路线"));
-        dataLst.add(new KvStc("价格数据追溯","胶南","2号定格","1号路线"));
-        dataLst.add(new KvStc("网络数据追溯,价格数据追溯","北京","1号定格","7号路线"));
-        dataLst.add(new KvStc("竞品数据追溯","通州","4号定格","9号路线"));*/
         workPlanAdapter = new AgencyStoreAdapter(getActivity(), dataLst,null);
         monthplan_lv.setAdapter(workPlanAdapter);
 
-
+        tv_time.setText(PrefUtils.getString(getActivity(), DdDaySummaryFragment.DDDAYSUMMARYFRAGMENT_CURRENTTIME, DateUtil.getDateTimeStr(7)));
     }
 
     private void initUrlData() {
@@ -121,7 +116,7 @@ public class AgencyStoreFragment extends BaseFragmentSupport implements View.OnC
         String content = "{" +
                 "areaid:'" + PrefUtils.getString(getActivity(), "departmentid", "") + "'," +
                 "tablename:'" + "agencyrepertory" + "'," +
-                "credate:'" + currenttime + "'," + // currenttime
+                "credate:'" + currenttime + "'," + // "2018-06-08"
                 "creuser:'" + PrefUtils.getString(getActivity(), "userid", "") + "'" +
                 "}";
         ceshiHttp("opt_get_dailyrecord", "agencyrepertory", content);
@@ -147,7 +142,7 @@ public class AgencyStoreFragment extends BaseFragmentSupport implements View.OnC
         RestClient.builder()
                 .url(HttpUrl.IP_END)
                 .params("data", jsonZip)
-                .loader(getContext())// 滚动条
+                //.loader(getContext())// 滚动条
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
@@ -203,17 +198,18 @@ public class AgencyStoreFragment extends BaseFragmentSupport implements View.OnC
         AgencyStoreItemStc indexValueItem;// 小的
         for (AgencyStoreStc item : agencyStoreStcs) {
             //
-            if (!indexId.equals(item.getProname())) {
+            if (!indexId.equals(item.getAgencyname())) {
                 indexItem = new AgencyStoreShowStc();
                 indexItem.setAgencyname(item.getAgencyname());
                 indexItem.setAgencyStoreItemStcs(new ArrayList<AgencyStoreItemStc>());
                 proIndexLst.add(indexItem);
-                indexId = item.getProname();
+                indexId = item.getAgencyname();
             }
             indexValueItem = new AgencyStoreItemStc();
             indexValueItem.setProname(item.getProname());
             indexValueItem.setStockfact(item.getStockfact());
             indexValueItem.setStocktotal(item.getStocktotal());
+            indexValueItem.setDifferentvalue(item.getDifferentvalue());
             indexItem.getAgencyStoreItemStcs().add(indexValueItem);
         }
 
@@ -299,6 +295,14 @@ public class AgencyStoreFragment extends BaseFragmentSupport implements View.OnC
     // 结束上传  刷新页面
     private void shuaxinFragment(int upType) {
         initData();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            initUrlData(); // 在此请求数据 首页数据
+        }
     }
 
 }

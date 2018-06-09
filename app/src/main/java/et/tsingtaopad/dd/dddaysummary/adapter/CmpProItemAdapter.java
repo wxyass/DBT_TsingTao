@@ -14,23 +14,23 @@ import java.util.List;
 import et.tsingtaopad.R;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
-import et.tsingtaopad.dd.dddaysummary.domain.AgencyStoreShowStc;
-import et.tsingtaopad.dd.dddaysummary.domain.DdProCheckShowStc;
+import et.tsingtaopad.dd.dddaysummary.domain.AgencyStoreItemStc;
+import et.tsingtaopad.dd.dddaysummary.domain.CmpProItemStc;
 import et.tsingtaopad.listviewintf.IClick;
 
 /**
  * 项目名称：营销移动智能工作平台 </br>
  * 日期      原因  BUG号    修改人 修改版本</br>
  */
-public class AgencyStoreAdapter extends BaseAdapter implements View.OnClickListener{
+public class CmpProItemAdapter extends BaseAdapter implements View.OnClickListener{
 
     private final String TAG = "DayDetailAdapter";
 
     private Activity context;
-    private List<AgencyStoreShowStc> dataLst;
+    private List<CmpProItemStc> dataLst;
     private IClick listener;
 
-    public AgencyStoreAdapter(Activity context, List<AgencyStoreShowStc> dataLst, IClick listener) {
+    public CmpProItemAdapter(Activity context, List<CmpProItemStc> dataLst, IClick listener) {
         this.context = context;
         this.dataLst = dataLst;
         this.listener = listener;
@@ -65,27 +65,22 @@ public class AgencyStoreAdapter extends BaseAdapter implements View.OnClickListe
         ViewHolder holder = null;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_operation_procheck, null);
-            holder.tv_proname = (TextView) convertView.findViewById(R.id.item_operation_procheck_proname);
-            holder.procheck_01 = (TextView) convertView.findViewById(R.id.item_operation_procheck_tv01);
-            holder.procheck_02 = (TextView) convertView.findViewById(R.id.item_operation_procheck_tv02);
-            holder.procheck_03 = (TextView) convertView.findViewById(R.id.item_operation_procheck_tv03);
-            holder.procheck_lv = (et.tsingtaopad.view.NoScrollListView) convertView.findViewById(R.id.item_operation_procheck_lv);
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_operation_procheckitem, null);
+            holder.tv_type = (TextView) convertView.findViewById(R.id.item_operation_procheckitem_tv_type);
+            holder.tv_num = (TextView) convertView.findViewById(R.id.item_operation_procheckitem_tv_num);
+            holder.tv_numlv = (TextView) convertView.findViewById(R.id.item_operation_procheckitem_tv_numlv);
 
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        final AgencyStoreShowStc item = dataLst.get(position);
-
-        holder.procheck_01.setText("产品");
-        holder.procheck_02.setText("账面库存/实际库存");
-        holder.procheck_03.setText("偏差");
+        final CmpProItemStc item = dataLst.get(position);
 
         // 产品名称
-        holder.tv_proname.setText(item.getAgencyname());
-        holder.procheck_lv.setAdapter(new AgencyStoreItemAdapter(context,item.getAgencyStoreItemStcs(),null));
+        holder.tv_type.setText(item.getDicname());
+        holder.tv_num.setText(item.getTrueterm()+"/"+item.getTotalterm());
+        holder.tv_numlv.setText(item.getTermratio());
 
 
         return convertView;
@@ -102,10 +97,8 @@ public class AgencyStoreAdapter extends BaseAdapter implements View.OnClickListe
     }
 
     private class ViewHolder {
-        private TextView tv_proname;
-        private TextView procheck_01;
-        private TextView procheck_02;
-        private TextView procheck_03;
-        private et.tsingtaopad.view.NoScrollListView procheck_lv;
+        private TextView tv_type;
+        private TextView tv_num;
+        private TextView tv_numlv;
     }
 }

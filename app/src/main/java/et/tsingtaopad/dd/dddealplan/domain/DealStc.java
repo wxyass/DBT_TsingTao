@@ -20,9 +20,9 @@ public class DealStc implements Serializable{
 	private String gridname;//
 	private String userid;//
 	private String username;//
-	private String repairstatus;//
+	private String repairstatus;// 主表的状态
 
-	private String status;//
+	private String status;// 附表的状态
 	private String repairtime;//
 	private String terminalkey;//
 	private String terminalname;//

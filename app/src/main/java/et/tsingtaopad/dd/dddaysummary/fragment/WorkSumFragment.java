@@ -27,13 +27,21 @@ import et.tsingtaopad.core.net.domain.RequestHeadStc;
 import et.tsingtaopad.core.net.domain.RequestStructBean;
 import et.tsingtaopad.core.net.domain.ResponseStructBean;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.JsonUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.db.table.MitRepairM;
 import et.tsingtaopad.db.table.MitRepaircheckM;
 import et.tsingtaopad.db.table.MitRepairterM;
+import et.tsingtaopad.dd.dddaysummary.DdDaySummaryFragment;
 import et.tsingtaopad.dd.dddaysummary.adapter.WorkSumAdapter;
+import et.tsingtaopad.dd.dddaysummary.adapter.WorkSumAgreeTermAdapter;
+import et.tsingtaopad.dd.dddaysummary.domain.DaySummaryStc;
+import et.tsingtaopad.dd.dddaysummary.domain.DdProCheckItemStc;
+import et.tsingtaopad.dd.dddaysummary.domain.DdProCheckShowStc;
+import et.tsingtaopad.dd.dddaysummary.domain.DdProCheckStc;
+import et.tsingtaopad.dd.dddaysummary.domain.WorkSumStc;
 import et.tsingtaopad.home.app.MainService;
 import et.tsingtaopad.http.HttpParseJson;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
@@ -60,6 +68,10 @@ public class WorkSumFragment extends BaseFragmentSupport implements View.OnClick
     private et.tsingtaopad.view.NoScrollListView agree_lv;
     private et.tsingtaopad.view.NoScrollListView sdlv_lv;
 
+    ArrayList<WorkSumStc> dataLst;
+    WorkSumAdapter workTermAdapter;
+    WorkSumAgreeTermAdapter workXieyiAdapter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -83,37 +95,47 @@ public class WorkSumFragment extends BaseFragmentSupport implements View.OnClick
         handler = new MyHandler(this);
 
         initData();
-        //initUrlData();
+        // initUrlData();
     }
 
     // 初始化数据
     private void initData() {
 
+
+        dataLst = new ArrayList<>();
+
         ArrayList<KvStc> kvStcs =new ArrayList<>();
-        kvStcs.add(new KvStc("A","123"));
+        /*kvStcs.add(new KvStc("A","123"));
         kvStcs.add(new KvStc("B","456"));
         kvStcs.add(new KvStc("C","789"));
         kvStcs.add(new KvStc("D","300"));
         kvStcs.add(new KvStc("B","456"));
         kvStcs.add(new KvStc("C","789"));
-        kvStcs.add(new KvStc("D","300"));
+        kvStcs.add(new KvStc("D","300"));*/
 
 
-        WorkSumAdapter workSumAdapter = new WorkSumAdapter(getActivity(),kvStcs);
-        termnum_lv.setAdapter(workSumAdapter);
+        workTermAdapter = new WorkSumAdapter(getActivity(),dataLst);
+        termnum_lv.setAdapter(workTermAdapter);
 
-        agree_lv.setAdapter(workSumAdapter);
-        sdlv_lv.setAdapter(workSumAdapter);
+        workXieyiAdapter = new WorkSumAgreeTermAdapter(getActivity(),dataLst);
+        agree_lv.setAdapter(workXieyiAdapter);
+        // sdlv_lv.setAdapter(workSumAdapter);
+
+        tv_time.setText(PrefUtils.getString(getActivity(), DdDaySummaryFragment.DDDAYSUMMARYFRAGMENT_CURRENTTIME, DateUtil.getDateTimeStr(7)));
+
 
     }
 
     private void initUrlData() {
+        String currenttime = PrefUtils.getString(getActivity(), DdDaySummaryFragment.DDDAYSUMMARYFRAGMENT_CURRENTTIME, DateUtil.getDateTimeStr(7));
+
         String content = "{" +
                 "areaid:'" + PrefUtils.getString(getActivity(), "departmentid", "") + "'," +
-                "tablename:'" + "MIT_REPAIR_REPAIRTER_REPAIRCHECK_M" + "'," +
+                "tablename:'" + "jobsummary" + "'," +
+                "credate:'" + currenttime + "'," + // currenttime
                 "creuser:'" + PrefUtils.getString(getActivity(), "userid", "") + "'" +
                 "}";
-        ceshiHttp("opt_get_repair_ter_check", "MIT_REPAIR_REPAIRTER_REPAIRCHECK_M", content);
+        ceshiHttp("opt_get_dailyrecord", "jobsummary", content);
     }
 
     /**
@@ -136,7 +158,7 @@ public class WorkSumFragment extends BaseFragmentSupport implements View.OnClick
         RestClient.builder()
                 .url(HttpUrl.IP_END)
                 .params("data", jsonZip)
-                .loader(getContext())// 滚动条
+                //.loader(getContext())// 滚动条
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
@@ -152,14 +174,9 @@ public class WorkSumFragment extends BaseFragmentSupport implements View.OnClick
                                 // 保存信息
                                 String formjson = resObj.getResBody().getContent();
                                 parseTableJson(formjson);
-                                initData();
 
                             } else {
                                 Toast.makeText(getActivity(), resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
-                            /*Message msg = new Message();
-                            msg.what = FirstFragment.SYNC_CLOSE;//
-                            handler.sendMessage(msg);*/
-                                //initData();
                             }
                         }
 
@@ -170,38 +187,30 @@ public class WorkSumFragment extends BaseFragmentSupport implements View.OnClick
                     @Override
                     public void onError(int code, String msg) {
                         Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-                        /*Message msg1 = new Message();
-                        msg1.what = FirstFragment.SYNC_CLOSE;//
-                        handler.sendMessage(msg1);*/
-                        //initData();
                     }
                 })
                 .failure(new IFailure() {
                     @Override
                     public void onFailure() {
                         Toast.makeText(getContext(), "请求失败", Toast.LENGTH_SHORT).show();
-                        /*Message msg2 = new Message();
-                        msg2.what = FirstFragment.SYNC_CLOSE;//
-                        handler.sendMessage(msg2);*/
-                        //initData();
                     }
                 })
                 .builde()
                 .post();
     }
 
-    // 解析区域定格路线成功
+    // 解析数据
     private void parseTableJson(String json) {
-        // 解析区域定格路线信息
-        AreaGridRoute emp = JsonUtil.parseJson(json, AreaGridRoute.class);
-        String MIT_REPAIR_M = emp.getMIT_REPAIR_M();
-        String MIT_REPAIRTER_M = emp.getMIT_REPAIRTER_M();
-        String MIT_REPAIRCHECK_M = emp.getMIT_REPAIRCHECK_M();
+        DaySummaryStc daySummaryStc = JsonUtil.parseJson(json, DaySummaryStc.class);
+        List<WorkSumStc> workSumStcs = JsonUtil.parseList(daySummaryStc.getJobsummary(), WorkSumStc.class);
+        dataLst.clear();
+        dataLst.addAll(workSumStcs);
+        initJsonData();
+    }
 
-        MainService service = new MainService(getActivity(), null);
-        service.createOrUpdateTable(MIT_REPAIR_M, "MIT_REPAIR_M", MitRepairM.class);
-        service.createOrUpdateTable(MIT_REPAIRTER_M, "MIT_REPAIRTER_M", MitRepairterM.class);
-        service.createOrUpdateTable(MIT_REPAIRCHECK_M, "MIT_REPAIRCHECK_M", MitRepaircheckM.class);
+    private void initJsonData() {
+        workTermAdapter.notifyDataSetChanged();
+        workXieyiAdapter.notifyDataSetChanged();
     }
 
 
@@ -265,6 +274,14 @@ public class WorkSumFragment extends BaseFragmentSupport implements View.OnClick
     // 结束上传  刷新页面
     private void shuaxinFragment(int upType) {
         initData();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            initUrlData(); // 在此请求数据 首页数据
+        }
     }
 
 }

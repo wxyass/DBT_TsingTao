@@ -272,9 +272,11 @@ public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnCl
                         String repairid = stc.getRepairid();
                         if (0 == position) {// 未通过
                             ddDealPlanService.setStatus(repairid,repaircheckid, "1");// 并修改未未上传
+                            stc.setRepairstatus("1");
                             handler.sendEmptyMessage(DEALPLAN_NEED_UP);
                         } else if(1 == position) {// 已通过
                             ddDealPlanService.setStatus(repairid,repaircheckid, "2");// 并修改未未上传
+                            stc.setRepairstatus("2");
                             handler.sendEmptyMessage(DEALPLAN_NEED_UP);
                         }
 

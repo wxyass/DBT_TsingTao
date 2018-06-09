@@ -6,8 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.Date;
@@ -16,24 +14,23 @@ import java.util.List;
 import et.tsingtaopad.R;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
-import et.tsingtaopad.dd.ddweekplan.domain.DayDetailStc;
-import et.tsingtaopad.initconstvalues.domain.KvStc;
+import et.tsingtaopad.dd.dddaysummary.domain.AgencyStoreShowStc;
+import et.tsingtaopad.dd.dddaysummary.domain.CmpProShowStc;
 import et.tsingtaopad.listviewintf.IClick;
-import et.tsingtaopad.listviewintf.ILongClick;
 
 /**
  * 项目名称：营销移动智能工作平台 </br>
  * 日期      原因  BUG号    修改人 修改版本</br>
  */
-public class BaseDataAdapter extends BaseAdapter implements View.OnClickListener{
+public class CmpProAdapter extends BaseAdapter implements View.OnClickListener{
 
     private final String TAG = "DayDetailAdapter";
 
     private Activity context;
-    private List<KvStc> dataLst;
+    private List<CmpProShowStc> dataLst;
     private IClick listener;
 
-    public BaseDataAdapter(Activity context, List<KvStc> dataLst, IClick listener) {
+    public CmpProAdapter(Activity context, List<CmpProShowStc> dataLst, IClick listener) {
         this.context = context;
         this.dataLst = dataLst;
         this.listener = listener;
@@ -68,24 +65,28 @@ public class BaseDataAdapter extends BaseAdapter implements View.OnClickListener
         ViewHolder holder = null;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_operation_basedata, null);
-            holder.tv_title = (TextView) convertView.findViewById(R.id.operation_basedata_title);
-            holder.tv_num = (TextView) convertView.findViewById(R.id.operation_basedata_num);
-            holder.tv_percent = (TextView) convertView.findViewById(R.id.operation_basedata_percent);
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_operation_procheck, null);
+            holder.tv_proname = (TextView) convertView.findViewById(R.id.item_operation_procheck_proname);
+            holder.procheck_01 = (TextView) convertView.findViewById(R.id.item_operation_procheck_tv01);
+            holder.procheck_02 = (TextView) convertView.findViewById(R.id.item_operation_procheck_tv02);
+            holder.procheck_03 = (TextView) convertView.findViewById(R.id.item_operation_procheck_tv03);
+            holder.procheck_lv = (et.tsingtaopad.view.NoScrollListView) convertView.findViewById(R.id.item_operation_procheck_lv);
 
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        final KvStc item = dataLst.get(position);
+        final CmpProShowStc item = dataLst.get(position);
 
-        // 标题
-        holder.tv_title.setText(item.getKey());
-        // 真实/追溯
-        holder.tv_num.setText(item.getValue());
-        // 真实率
-        holder.tv_percent.setText(item.getParentKey());
+        holder.procheck_01.setText("品种");
+        holder.procheck_02.setText("真实/追溯");
+        holder.procheck_03.setText("真实率");
+
+        // 产品名称
+        holder.tv_proname.setText(item.getCmpproname());
+        holder.procheck_lv.setAdapter(new CmpProItemAdapter(context,item.getCmpProItemStcs(),null));
+
 
         return convertView;
     }
@@ -101,8 +102,10 @@ public class BaseDataAdapter extends BaseAdapter implements View.OnClickListener
     }
 
     private class ViewHolder {
-        private TextView tv_title;
-        private TextView tv_num;
-        private TextView tv_percent;
+        private TextView tv_proname;
+        private TextView procheck_01;
+        private TextView procheck_02;
+        private TextView procheck_03;
+        private et.tsingtaopad.view.NoScrollListView procheck_lv;
     }
 }

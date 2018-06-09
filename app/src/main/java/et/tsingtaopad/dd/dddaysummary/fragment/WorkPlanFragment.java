@@ -86,20 +86,17 @@ public class WorkPlanFragment extends BaseFragmentSupport implements View.OnClic
         handler = new MyHandler(this);
 
         initData();
-        initUrlData();
+        // initUrlData();
     }
 
     // 初始化数据
     private void initData() {
 
         dataLst = new ArrayList<>();
-        /*dataLst.add(new KvStc("基础数据追溯,价格数据追溯","德州","6号定格","3号路线"));
-        dataLst.add(new KvStc("基础数据追溯","平县","5号定格","6号路线"));
-        dataLst.add(new KvStc("价格数据追溯","胶南","2号定格","1号路线"));
-        dataLst.add(new KvStc("网络数据追溯,价格数据追溯","北京","1号定格","7号路线"));
-        dataLst.add(new KvStc("竞品数据追溯","通州","4号定格","9号路线"));*/
         workPlanAdapter = new WorkPlanAdapter(getActivity(), dataLst,null);
         monthplan_lv.setAdapter(workPlanAdapter);
+
+        tv_time.setText(PrefUtils.getString(getActivity(), DdDaySummaryFragment.DDDAYSUMMARYFRAGMENT_CURRENTTIME, DateUtil.getDateTimeStr(7)));
 
     }
 
@@ -136,7 +133,7 @@ public class WorkPlanFragment extends BaseFragmentSupport implements View.OnClic
         RestClient.builder()
                 .url(HttpUrl.IP_END)
                 .params("data", jsonZip)
-                .loader(getContext())// 滚动条
+                //.loader(getContext())// 滚动条
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
@@ -263,6 +260,14 @@ public class WorkPlanFragment extends BaseFragmentSupport implements View.OnClic
     // 结束上传  刷新页面
     private void shuaxinFragment(int upType) {
         initData();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            initUrlData(); // 在此请求数据 首页数据
+        }
     }
 
 }

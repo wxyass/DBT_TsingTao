@@ -427,6 +427,7 @@ public class XtTermSelectService {
             QueryBuilder<MstGridM, String> valueQb = valueDao.queryBuilder();
             Where<MstGridM, String> valueWr = valueQb.where();
             valueWr.eq("areaid", areaid);
+            valueQb.orderBy("gridname", true);
             valueLst = valueQb.query();
             connection.commit(null);
         } catch (Exception e) {
@@ -462,6 +463,7 @@ public class XtTermSelectService {
             QueryBuilder<MstRouteM, String> valueQb = valueDao.queryBuilder();
             Where<MstRouteM, String> valueWr = valueQb.where();
             valueWr.eq("gridkey", gridkey);
+            valueQb.orderBy("routename", true);
             valueLst = valueQb.query();
             connection.commit(null);
         } catch (Exception e) {

@@ -55,7 +55,7 @@ public class ProCheckFragment extends BaseFragmentSupport implements View.OnClic
 
     public static final int DEALPLAN_NEED_UP = 3303;
 
-    private TextView bt_addplan;
+    private TextView tv_time;
     private et.tsingtaopad.view.NoScrollListView procheck_lv;
 
     List<DdProCheckShowStc> dataLst;
@@ -72,10 +72,9 @@ public class ProCheckFragment extends BaseFragmentSupport implements View.OnClic
     // 初始化控件
     private void initView(View view) {
 
-        bt_addplan = (TextView) view.findViewById(R.id.operation_procheck_tv_time);
+        tv_time = (TextView) view.findViewById(R.id.operation_procheck_tv_time);
         procheck_lv = (et.tsingtaopad.view.NoScrollListView) view.findViewById(R.id.operation_procheck_procheck_lv);
 
-        bt_addplan.setOnClickListener(this);
     }
 
     @Override
@@ -85,20 +84,18 @@ public class ProCheckFragment extends BaseFragmentSupport implements View.OnClic
         handler = new MyHandler(this);
 
         initData();
-        initUrlData();
+        // initUrlData();
     }
 
     // 初始化数据
     private void initData() {
 
         dataLst = new ArrayList<>();
-        /*dataLst.add(new KvStc("基础数据追溯,价格数据追溯","德州","6号定格","3号路线"));
-        dataLst.add(new KvStc("基础数据追溯","平县","5号定格","6号路线"));
-        dataLst.add(new KvStc("价格数据追溯","胶南","2号定格","1号路线"));
-        dataLst.add(new KvStc("网络数据追溯,价格数据追溯","北京","1号定格","7号路线"));
-        dataLst.add(new KvStc("竞品数据追溯","通州","4号定格","9号路线"));*/
         workPlanAdapter = new ProCheckAdapter(getActivity(), dataLst,null);
         procheck_lv.setAdapter(workPlanAdapter);
+
+        tv_time.setText(PrefUtils.getString(getActivity(), DdDaySummaryFragment.DDDAYSUMMARYFRAGMENT_CURRENTTIME, DateUtil.getDateTimeStr(7)));
+
 
     }
 
@@ -135,7 +132,7 @@ public class ProCheckFragment extends BaseFragmentSupport implements View.OnClic
         RestClient.builder()
                 .url(HttpUrl.IP_END)
                 .params("data", jsonZip)
-                .loader(getContext())// 滚动条
+                // .loader(getContext())// 滚动条
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
@@ -290,4 +287,11 @@ public class ProCheckFragment extends BaseFragmentSupport implements View.OnClic
         initData();
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            initUrlData(); // 在此请求数据 首页数据
+        }
+    }
 }

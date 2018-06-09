@@ -7,17 +7,14 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.ref.SoftReference;
-import java.util.ArrayList;
 import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
-import et.tsingtaopad.business.visit.bean.AreaGridRoute;
 import et.tsingtaopad.core.net.HttpUrl;
 import et.tsingtaopad.core.net.RestClient;
 import et.tsingtaopad.core.net.callback.IError;
@@ -27,19 +24,15 @@ import et.tsingtaopad.core.net.domain.RequestHeadStc;
 import et.tsingtaopad.core.net.domain.RequestStructBean;
 import et.tsingtaopad.core.net.domain.ResponseStructBean;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.DateUtil;
+import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.JsonUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
-import et.tsingtaopad.db.table.MitRepairM;
-import et.tsingtaopad.db.table.MitRepaircheckM;
-import et.tsingtaopad.db.table.MitRepairterM;
-import et.tsingtaopad.dd.dddaysummary.adapter.BaseDataAdapter;
-import et.tsingtaopad.dd.dddaysummary.adapter.WorkSumAdapter;
-import et.tsingtaopad.dd.dddealplan.DdDealPlanAdapter;
-import et.tsingtaopad.dd.dddealplan.domain.DealStc;
-import et.tsingtaopad.home.app.MainService;
+import et.tsingtaopad.dd.dddaysummary.DdDaySummaryFragment;
+import et.tsingtaopad.dd.dddaysummary.domain.BaseDataStc;
+import et.tsingtaopad.dd.dddaysummary.domain.DaySummaryStc;
 import et.tsingtaopad.http.HttpParseJson;
-import et.tsingtaopad.initconstvalues.domain.KvStc;
 import et.tsingtaopad.util.requestHeadUtil;
 
 /**
@@ -60,7 +53,22 @@ public class BaseDataFragment extends BaseFragmentSupport implements View.OnClic
     public static final int DEALPLAN_NEED_UP = 3303;
 
     private TextView tv_time;
-    private et.tsingtaopad.view.NoScrollListView monthplan_lv;
+    private TextView operation_basedata_num;
+    private TextView operation_basedata_percent;
+    private TextView operation_basedata_netnum;
+    private TextView operation_basedata_netpercent;
+    private TextView operation_basedata_pricenum;
+    private TextView operation_basedata_pricepercent;
+    private TextView operation_basedata_cmpnum;
+    private TextView operation_basedata_cmppercent;
+    private TextView operation_basedata_promotionnum;
+    private TextView operation_basedata_promotionpercent;
+    private TextView operation_basedata_basenum;
+    private TextView operation_basedata_basepercent;
+    private TextView operation_basedata_sumnum;
+    private TextView operation_basedata_sumpercent;
+
+
 
     @Nullable
     @Override
@@ -74,7 +82,20 @@ public class BaseDataFragment extends BaseFragmentSupport implements View.OnClic
     private void initView(View view) {
 
         tv_time = (TextView) view.findViewById(R.id.operation_basedata_tv_time);
-        monthplan_lv = (et.tsingtaopad.view.NoScrollListView) view.findViewById(R.id.operation_basedata_monthplan_lv);
+        operation_basedata_num = (TextView) view.findViewById(R.id.operation_basedata_basenum);
+        operation_basedata_percent = (TextView) view.findViewById(R.id.operation_basedata_basepercent);
+        operation_basedata_netnum = (TextView) view.findViewById(R.id.operation_basedata_netnum);
+        operation_basedata_netpercent = (TextView) view.findViewById(R.id.operation_basedata_netpercent);
+        operation_basedata_pricenum = (TextView) view.findViewById(R.id.operation_basedata_pricenum);
+        operation_basedata_pricepercent = (TextView) view.findViewById(R.id.operation_basedata_pricepercent);
+        operation_basedata_cmpnum = (TextView) view.findViewById(R.id.operation_basedata_cmpnum);
+        operation_basedata_cmppercent = (TextView) view.findViewById(R.id.operation_basedata_cmppercent);
+        operation_basedata_promotionnum = (TextView) view.findViewById(R.id.operation_basedata_promotionnum);
+        operation_basedata_promotionpercent = (TextView)view. findViewById(R.id.operation_basedata_promotionpercent);
+        operation_basedata_basenum = (TextView) view.findViewById(R.id.operation_basedata_xieyinum);
+        operation_basedata_basepercent = (TextView) view.findViewById(R.id.operation_basedata_xieyipercent);
+        operation_basedata_sumnum = (TextView)view. findViewById(R.id.operation_basedata_sumnum);
+        operation_basedata_sumpercent = (TextView)view.findViewById(R.id.operation_basedata_sumpercent);
 
     }
 
@@ -91,24 +112,19 @@ public class BaseDataFragment extends BaseFragmentSupport implements View.OnClic
     // 初始化数据
     private void initData() {
 
-        ArrayList<KvStc> kvStcs =new ArrayList<>();
-        kvStcs.add(new KvStc("基础数据群","222/333","66.6%"));
-        kvStcs.add(new KvStc("网络数据群","222/333","66.6%"));
-        kvStcs.add(new KvStc("价格数据群","222/333","66.6%"));
-        kvStcs.add(new KvStc("竞品数据群","222/333","66.6%"));
-
-        BaseDataAdapter workSumAdapter = new BaseDataAdapter(getActivity(),kvStcs,null);
-        monthplan_lv.setAdapter(workSumAdapter);
-
+        tv_time.setText(PrefUtils.getString(getActivity(), DdDaySummaryFragment.DDDAYSUMMARYFRAGMENT_CURRENTTIME, DateUtil.getDateTimeStr(7)));
     }
 
     private void initUrlData() {
+        String currenttime = PrefUtils.getString(getActivity(), DdDaySummaryFragment.DDDAYSUMMARYFRAGMENT_CURRENTTIME, DateUtil.getDateTimeStr(7));
+
         String content = "{" +
                 "areaid:'" + PrefUtils.getString(getActivity(), "departmentid", "") + "'," +
-                "tablename:'" + "MIT_REPAIR_REPAIRTER_REPAIRCHECK_M" + "'," +
+                "tablename:'" + "basicdata" + "'," +
+                "credate:'" + currenttime + "'," + // currenttime
                 "creuser:'" + PrefUtils.getString(getActivity(), "userid", "") + "'" +
                 "}";
-        ceshiHttp("opt_get_repair_ter_check", "MIT_REPAIR_REPAIRTER_REPAIRCHECK_M", content);
+        ceshiHttp("opt_get_dailyrecord", "basicdata", content);
     }
 
     /**
@@ -131,7 +147,7 @@ public class BaseDataFragment extends BaseFragmentSupport implements View.OnClic
         RestClient.builder()
                 .url(HttpUrl.IP_END)
                 .params("data", jsonZip)
-                .loader(getContext())// 滚动条
+                //.loader(getContext())// 滚动条
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
@@ -147,14 +163,9 @@ public class BaseDataFragment extends BaseFragmentSupport implements View.OnClic
                                 // 保存信息
                                 String formjson = resObj.getResBody().getContent();
                                 parseTableJson(formjson);
-                                initData();
 
                             } else {
                                 Toast.makeText(getActivity(), resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
-                            /*Message msg = new Message();
-                            msg.what = FirstFragment.SYNC_CLOSE;//
-                            handler.sendMessage(msg);*/
-                                //initData();
                             }
                         }
 
@@ -165,39 +176,62 @@ public class BaseDataFragment extends BaseFragmentSupport implements View.OnClic
                     @Override
                     public void onError(int code, String msg) {
                         Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-                        /*Message msg1 = new Message();
-                        msg1.what = FirstFragment.SYNC_CLOSE;//
-                        handler.sendMessage(msg1);*/
-                        //initData();
                     }
                 })
                 .failure(new IFailure() {
                     @Override
                     public void onFailure() {
                         Toast.makeText(getContext(), "请求失败", Toast.LENGTH_SHORT).show();
-                        /*Message msg2 = new Message();
-                        msg2.what = FirstFragment.SYNC_CLOSE;//
-                        handler.sendMessage(msg2);*/
-                        //initData();
                     }
                 })
                 .builde()
                 .post();
     }
 
-    // 解析区域定格路线成功
+    // 解析数据
     private void parseTableJson(String json) {
-        // 解析区域定格路线信息
-        AreaGridRoute emp = JsonUtil.parseJson(json, AreaGridRoute.class);
-        String MIT_REPAIR_M = emp.getMIT_REPAIR_M();
-        String MIT_REPAIRTER_M = emp.getMIT_REPAIRTER_M();
-        String MIT_REPAIRCHECK_M = emp.getMIT_REPAIRCHECK_M();
-
-        MainService service = new MainService(getActivity(), null);
-        service.createOrUpdateTable(MIT_REPAIR_M, "MIT_REPAIR_M", MitRepairM.class);
-        service.createOrUpdateTable(MIT_REPAIRTER_M, "MIT_REPAIRTER_M", MitRepairterM.class);
-        service.createOrUpdateTable(MIT_REPAIRCHECK_M, "MIT_REPAIRCHECK_M", MitRepaircheckM.class);
+        DaySummaryStc daySummaryStc = JsonUtil.parseJson(json, DaySummaryStc.class);
+        List<BaseDataStc>  baseDataStcs= JsonUtil.parseList(daySummaryStc.getBasicdata(), BaseDataStc.class);
+        jiexiData(baseDataStcs);
     }
+
+    private void jiexiData(List<BaseDataStc>  baseDataStcs) {
+        if(baseDataStcs.size()>0){
+            BaseDataStc baseDataStc = baseDataStcs.get(0);
+            operation_basedata_num.setText(FunUtil.isBlankOrNullTo(baseDataStc.getBasicstrueterm(),"0")
+                    +"/"+FunUtil.isBlankOrNullTo(baseDataStc.getBasicstotalterm(),"0"));
+            operation_basedata_percent.setText(FunUtil.isBlankOrNullTo(baseDataStc.getBasicstermratio(),"0")) ;//
+
+            operation_basedata_netnum.setText(FunUtil.isBlankOrNullTo(baseDataStc.getTruenet(),"0")
+                    +"/"+FunUtil.isBlankOrNullTo(baseDataStc.getTotalnet(),"0")) ;//
+            operation_basedata_netpercent.setText(FunUtil.isBlankOrNullTo(baseDataStc.getNetratio(),"0")) ;//
+
+            operation_basedata_pricenum .setText(FunUtil.isBlankOrNullTo(baseDataStc.getTruesupply(),"0")
+                    +"/"+FunUtil.isBlankOrNullTo(baseDataStc.getTotalsupply(),"0")) ;//
+            operation_basedata_pricepercent.setText(FunUtil.isBlankOrNullTo(baseDataStc.getSupplyratio(),"0")) ;//
+
+            operation_basedata_cmpnum .setText(FunUtil.isBlankOrNullTo(baseDataStc.getTruecmpsupply(),"0")
+                    +"/"+FunUtil.isBlankOrNullTo(baseDataStc.getTotalcmpsupply(),"0")) ;//
+            operation_basedata_cmppercent .setText(FunUtil.isBlankOrNullTo(baseDataStc.getCmpsupplyratio(),"0")) ;//
+
+            operation_basedata_promotionnum.setText(FunUtil.isBlankOrNullTo(baseDataStc.getTrueactivity(),"0")
+                    +"/"+FunUtil.isBlankOrNullTo(baseDataStc.getTotalactivity(),"0")) ;//
+            operation_basedata_promotionpercent .setText(FunUtil.isBlankOrNullTo(baseDataStc.getActivityratio(),"0")) ;//
+
+            operation_basedata_basenum .setText(FunUtil.isBlankOrNullTo(baseDataStc.getTrueaccnt(),"0")
+                    +"/"+FunUtil.isBlankOrNullTo(baseDataStc.getTotalaccnt(),"0")) ;//
+            operation_basedata_basepercent .setText(FunUtil.isBlankOrNullTo(baseDataStc.getAccntratio(),"0")) ;//getAccnratio
+
+            operation_basedata_sumnum .setText(FunUtil.isBlankOrNullTo(baseDataStc.getTruedatagroup(),"0")
+                    +"/"+FunUtil.isBlankOrNullTo(baseDataStc.getTotaldatagroup(),"0")) ;//
+            operation_basedata_sumpercent.setText(FunUtil.isBlankOrNullTo(baseDataStc.getDatagroupratio(),"0")) ;//
+
+        }
+
+
+    }
+
+
 
 
     // 点击事件
@@ -270,6 +304,14 @@ public class BaseDataFragment extends BaseFragmentSupport implements View.OnClic
 
     // 结束上传  刷新页面
     private void shuaxinFragment(int upType) {
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            initUrlData(); // 在此请求数据 首页数据
+        }
     }
 
 }

@@ -17,7 +17,6 @@ import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
-import et.tsingtaopad.business.visit.bean.AreaGridRoute;
 import et.tsingtaopad.core.net.HttpUrl;
 import et.tsingtaopad.core.net.RestClient;
 import et.tsingtaopad.core.net.callback.IError;
@@ -31,20 +30,11 @@ import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.JsonUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
-import et.tsingtaopad.db.table.MitRepairM;
-import et.tsingtaopad.db.table.MitRepaircheckM;
-import et.tsingtaopad.db.table.MitRepairterM;
 import et.tsingtaopad.dd.dddaysummary.DdDaySummaryFragment;
-import et.tsingtaopad.dd.dddaysummary.adapter.BaseDataAdapter;
 import et.tsingtaopad.dd.dddaysummary.adapter.DdPromotionAdapter;
-import et.tsingtaopad.dd.dddaysummary.adapter.WorkPlanAdapter;
 import et.tsingtaopad.dd.dddaysummary.domain.DaySummaryStc;
-import et.tsingtaopad.dd.dddaysummary.domain.DdDayPlanStc;
 import et.tsingtaopad.dd.dddaysummary.domain.DdPromotionStc;
-import et.tsingtaopad.dd.dddealplan.domain.DealStc;
-import et.tsingtaopad.home.app.MainService;
 import et.tsingtaopad.http.HttpParseJson;
-import et.tsingtaopad.initconstvalues.domain.KvStc;
 import et.tsingtaopad.util.requestHeadUtil;
 
 /**
@@ -63,7 +53,7 @@ public class PromotionFragment extends BaseFragmentSupport implements View.OnCli
 
     public static final int DEALPLAN_NEED_UP = 3303;
 
-    private TextView bt_addplan;
+    private TextView tv_time;
     private et.tsingtaopad.view.NoScrollListView monthplan_lv;
     private DdPromotionAdapter workPlanAdapter;
     List<DdPromotionStc> dataLst;
@@ -78,10 +68,9 @@ public class PromotionFragment extends BaseFragmentSupport implements View.OnCli
 
     // 初始化控件
     private void initView(View view) {
-        bt_addplan = (TextView) view.findViewById(R.id.operation_promotion_bt_addplan);
+        tv_time = (TextView) view.findViewById(R.id.operation_promotion_bt_addplan);
         monthplan_lv = (et.tsingtaopad.view.NoScrollListView) view.findViewById(R.id.operation_promotion_monthplan_lv);
 
-        bt_addplan.setOnClickListener(this);
     }
 
     @Override
@@ -90,20 +79,18 @@ public class PromotionFragment extends BaseFragmentSupport implements View.OnCli
 
         handler = new MyHandler(this);
         initData();
-        initUrlData();
+        // initUrlData();
     }
 
     // 初始化数据
     private void initData() {
 
         dataLst = new ArrayList<>();
-        /*dataLst.add(new KvStc("基础数据追溯,价格数据追溯","德州","6号定格","3号路线"));
-        dataLst.add(new KvStc("基础数据追溯","平县","5号定格","6号路线"));
-        dataLst.add(new KvStc("价格数据追溯","胶南","2号定格","1号路线"));
-        dataLst.add(new KvStc("网络数据追溯,价格数据追溯","北京","1号定格","7号路线"));
-        dataLst.add(new KvStc("竞品数据追溯","通州","4号定格","9号路线"));*/
         workPlanAdapter = new DdPromotionAdapter(getActivity(), dataLst,null);
         monthplan_lv.setAdapter(workPlanAdapter);
+
+        tv_time.setText(PrefUtils.getString(getActivity(), DdDaySummaryFragment.DDDAYSUMMARYFRAGMENT_CURRENTTIME, DateUtil.getDateTimeStr(7)));
+
 
     }
 
@@ -139,7 +126,7 @@ public class PromotionFragment extends BaseFragmentSupport implements View.OnCli
         RestClient.builder()
                 .url(HttpUrl.IP_END)
                 .params("data", jsonZip)
-                .loader(getContext())// 滚动条
+                //.loader(getContext())// 滚动条
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
@@ -265,6 +252,14 @@ public class PromotionFragment extends BaseFragmentSupport implements View.OnCli
     // 结束上传  刷新页面
     private void shuaxinFragment(int upType) {
         initData();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            initUrlData(); // 在此请求数据 首页数据
+        }
     }
 
 }

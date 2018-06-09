@@ -1034,9 +1034,45 @@ public class XtShopVisitService {
             createMitValaddaccountMTemp(mitValaddaccountMTempDao, mitValaddaccountproMTempDao, term, mitValterMTemp.getId());
 
             // 终端追溯协议主表 临时表
-            createMitValagreeMTemp(mstAgreeTmpDao, mitValagreeMTempDao, term, mitValterMTemp.getId());
+            // createMitValagreeMTemp(mstAgreeTmpDao, mitValagreeMTempDao, term, mitValterMTemp.getId());
+
+            List<MstAgreeTmp> list = new ArrayList<MstAgreeTmp>();
+            QueryBuilder<MstAgreeTmp, String> qb = mstAgreeTmpDao.queryBuilder();
+            Where<MstAgreeTmp, String> where = qb.where();
+            where.eq("terminalkey", term.getTerminalkey());
+            list = qb.query();
+
+            MitValagreeMTemp mitValagreeMTemp = null;
+            if(list.size()>0){
+                MstAgreeTmp mstAgreeTmp=list.get(0);
+                mitValagreeMTemp = new MitValagreeMTemp();
+                mitValagreeMTemp.setId(FunUtil.getUUID());
+                mitValagreeMTemp.setValterid(mitValterMTemp.getId());// 追溯主表id
+                mitValagreeMTemp.setAgreecode(mstAgreeTmp.getAgreecd());//协议编码
+                mitValagreeMTemp.setAgencyname(mstAgreeTmp.getAgencyname());//供货商名称
+                mitValagreeMTemp.setAgencykey(mstAgreeTmp.getSuppierid());//供货商ID
+                mitValagreeMTemp.setMoneyagency(mstAgreeTmp.getPaymentagencyname());//垫付费用经销商
+                mitValagreeMTemp.setMoneyagencykey(mstAgreeTmp.getDealid());//垫付费用经销商ID
+                mitValagreeMTemp.setStartdate(mstAgreeTmp.getStartdate());//开始时间
+                //mitValagreeMTemp.setStartdateflag(mstAgreeTmp.get) ;//开始时间是否正确
+                //mitValagreeMTemp.setStartdateremark(mstAgreeTmp.get);//开始时间备注
+                mitValagreeMTemp.setEnddate(mstAgreeTmp.getEnddate());//结束时间
+                //mitValagreeMTemp.setEnddateflag(mstAgreeTmp.get) ;//结束时间是否正确
+                //mitValagreeMTemp.setEnddateremark(mstAgreeTmp.get) ;//结束时间备注
+                mitValagreeMTemp.setPaytype(mstAgreeTmp.getPaytype());//支付周期类型
+                mitValagreeMTemp.setContact(mstAgreeTmp.getSigner());//联系人
+                mitValagreeMTemp.setMobile(mstAgreeTmp.getMobile());//联系电话
+                mitValagreeMTemp.setNotes(mstAgreeTmp.getNotes());//主要条款
+                //mitValagreeMTemp.setNotesflag(mstAgreeTmp.get) ;//主要条款是否正确
+                //mitValagreeMTemp.setNotesremark(mstAgreeTmp.get) ;//主要条款备注
+                mitValagreeMTempDao.create(mitValagreeMTemp);
+            }
+
+
             // 终端追溯协议对付信息表 临时表
-            createMitValagreedetailMTemp(mstAgreeDetailTmpDao, mitValagreedetailMTempDao, term, mitValterMTemp.getId());
+            if(mitValagreeMTemp!=null){
+                createMitValagreedetailMTemp(mstAgreeDetailTmpDao, mitValagreedetailMTempDao, term, mitValterMTemp.getId(),mitValagreeMTemp.getId());
+            }
 
 
             connection.commit(null);
@@ -1062,7 +1098,8 @@ public class XtShopVisitService {
     private void createMitValagreedetailMTemp(Dao<MstAgreeDetailTmp, String> mstAgreeDetailTmpDao,
                                               Dao<MitValagreedetailMTemp, String> mitValagreedetailMTempDao,
                                               MstTerminalinfoMCart term,
-                                              String valterid) {
+                                              String valterid,
+                                              String mitValagreeMId) {
 
         List<MstAgreeDetailTmp> list = new ArrayList<MstAgreeDetailTmp>();
         try {
@@ -1076,7 +1113,8 @@ public class XtShopVisitService {
                 mitValagreedetailMTemp = new MitValagreedetailMTemp();
                 mitValagreedetailMTemp.setId(FunUtil.getUUID());
                 mitValagreedetailMTemp.setValterid(valterid);// 追溯主表id
-                mitValagreedetailMTemp.setValagreeid(mstAgreeDetailTmp.getAgreeid());//终端追溯协议主表ID
+                //mitValagreedetailMTemp.setValagreeid(mstAgreeDetailTmp.getAgreeid());//终端追溯协议主表ID
+                mitValagreedetailMTemp.setValagreeid(mitValagreeMId);//终端追溯协议主表ID
                 mitValagreedetailMTemp.setProkey(mstAgreeDetailTmp.getProductkey());//产品KEY
                 mitValagreedetailMTemp.setProname(mstAgreeDetailTmp.getProname());//产品名称
                 mitValagreedetailMTemp.setCashtype(mstAgreeDetailTmp.getCashtype());//对付形式
@@ -1105,15 +1143,17 @@ public class XtShopVisitService {
                                         MstTerminalinfoMCart term,
                                         String valterid) {
 
-        List<MstAgreeTmp> list = new ArrayList<MstAgreeTmp>();
+
         try {
+            List<MstAgreeTmp> list = new ArrayList<MstAgreeTmp>();
             QueryBuilder<MstAgreeTmp, String> qb = mstAgreeTmpDao.queryBuilder();
             Where<MstAgreeTmp, String> where = qb.where();
             where.eq("terminalkey", term.getTerminalkey());
             list = qb.query();
 
             MitValagreeMTemp mitValagreeMTemp;
-            for (MstAgreeTmp mstAgreeTmp : list) {
+            if(list.size()>0){
+                MstAgreeTmp mstAgreeTmp=list.get(0);
                 mitValagreeMTemp = new MitValagreeMTemp();
                 mitValagreeMTemp.setId(FunUtil.getUUID());
                 mitValagreeMTemp.setValterid(valterid);// 追溯主表id

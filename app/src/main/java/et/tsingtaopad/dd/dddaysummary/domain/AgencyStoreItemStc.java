@@ -13,6 +13,7 @@ public class AgencyStoreItemStc implements Serializable{
     private String proname;
     private String stockfact;
     private String stocktotal;
+    private String differentvalue;
 
     public String getProname() {
         return proname;
@@ -36,5 +37,13 @@ public class AgencyStoreItemStc implements Serializable{
 
     public void setStocktotal(String stocktotal) {
         this.stocktotal = stocktotal;
+    }
+
+    public String getDifferentvalue() {
+        return differentvalue;
+    }
+
+    public void setDifferentvalue(String differentvalue) {
+        this.differentvalue = differentvalue;
     }
 }

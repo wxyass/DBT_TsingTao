@@ -9,8 +9,8 @@ public class SignStc {
     private String attenceid;
     private String attencetime;// 打卡时间
     private String attencetype;// 打卡类型
-    private String lat;// 经纬度
-    private String lon;// 经纬度
+    private String sourcelat;// 经纬度
+    private String sourcelon;// 经纬度
     private String address;// 地址
     private String remark;// 原因
     private String systime;// 系统时间
@@ -22,8 +22,8 @@ public class SignStc {
         this.attenceid = attenceid;
         this.attencetime = attencetime;
         this.attencetype = attencetype;
-        this.lat = lat;
-        this.lon = lon;
+        this.sourcelat = lat;
+        this.sourcelon = lon;
         this.address = address;
         this.remark = remark;
         this.systime = systime;
@@ -60,20 +60,20 @@ public class SignStc {
         this.attencetype = attencetype;
     }
 
-    public String getLat() {
-        return lat;
+    public String getSourcelat() {
+        return sourcelat;
     }
 
-    public void setLat(String lat) {
-        this.lat = lat;
+    public void setSourcelat(String sourcelat) {
+        this.sourcelat = sourcelat;
     }
 
-    public String getLon() {
-        return lon;
+    public String getSourcelon() {
+        return sourcelon;
     }
 
-    public void setLon(String lon) {
-        this.lon = lon;
+    public void setSourcelon(String sourcelon) {
+        this.sourcelon = sourcelon;
     }
 
     public String getAddress() {

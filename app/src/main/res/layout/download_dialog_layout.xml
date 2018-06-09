@@ -28,7 +28,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="10dp"
-            android:text="正在为您下载，已下载"
+            android:text="正在为您下载安装包，请稍后..."
             android:textColor="#98989d"
             android:textSize="16sp" />
 
@@ -37,6 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="27dp"
             android:layout_marginRight="20dp"
+            android:visibility="gone"
             android:gravity="center_vertical"
             android:orientation="horizontal" >
 

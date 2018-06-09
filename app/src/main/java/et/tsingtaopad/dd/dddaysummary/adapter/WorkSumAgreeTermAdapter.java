@@ -1,31 +1,28 @@
 package et.tsingtaopad.dd.dddaysummary.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.dd.dddaysummary.domain.WorkSumStc;
-import et.tsingtaopad.initconstvalues.domain.KvStc;
 
 /**
  * 2列ListView的适配器
  *
  * @author tongleer.com
  */
-public class WorkSumAdapter extends BaseAdapter {
+public class WorkSumAgreeTermAdapter extends BaseAdapter {
     protected Context context;
     protected ArrayList<WorkSumStc> list;
 
-    public WorkSumAdapter(Context context, ArrayList<WorkSumStc> list) {
+    public WorkSumAgreeTermAdapter(Context context, ArrayList<WorkSumStc> list) {
         this.context = context;
         if (list == null) {
             this.list = new ArrayList<>();
@@ -72,7 +69,7 @@ public class WorkSumAdapter extends BaseAdapter {
         final List<WorkSumStc> itemList = list.subList(position * 2, position * 2 + cellCount);// 0 2
         if (itemList.size() > 0) {
             vh.tv1.setText(itemList.get(0).getDicname());
-            vh.tv2.setText(itemList.get(0).getTotalterm());// 追溯终端数量
+            vh.tv2.setText(itemList.get(0).getIfaccntcount());// 追溯协议店数量
             /*vh.tv1.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -83,7 +80,7 @@ public class WorkSumAdapter extends BaseAdapter {
                 vh.tv3.setVisibility(View.VISIBLE);
                 vh.tv4.setVisibility(View.VISIBLE);
                 vh.tv3.setText(itemList.get(1).getDicname());
-                vh.tv4.setText(itemList.get(1).getTotalterm());// 追溯终端数量
+                vh.tv4.setText(itemList.get(1).getIfaccntcount());// 追溯协议店数量
                 /*vh.tv2.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
