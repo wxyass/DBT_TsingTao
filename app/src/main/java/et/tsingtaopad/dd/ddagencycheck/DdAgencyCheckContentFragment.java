@@ -68,6 +68,7 @@ public class DdAgencyCheckContentFragment extends BaseFragmentSupport implements
     private MstAgencyvisitM visitM;
     private String visitDate;
     private CheckService service;
+    private LinearLayout ll_check;
     //记录上传拜访的主键
     private String prevVisitKey;
     // private List<InOutSaveStc> iosStcLst;
@@ -100,6 +101,7 @@ public class DdAgencyCheckContentFragment extends BaseFragmentSupport implements
         agencycodeTv = (TextView) view.findViewById(R.id.agency_check_tv_agencycode);
         contactTv = (TextView) view.findViewById(R.id.agency_check_tv_contact);
         phoneTv = (TextView) view.findViewById(R.id.agency_check_tv_phone);
+        ll_check = (LinearLayout) view.findViewById(R.id.agency_check_ll_check);
         proList = (ListView) view.findViewById(R.id.agency_check_lv_list);
         saveBtn = (Button) view.findViewById(R.id.dd_agencychenck_bt_next);
         saveBtn.setOnClickListener(this);
@@ -149,8 +151,18 @@ public class DdAgencyCheckContentFragment extends BaseFragmentSupport implements
 
         //获取进销存台账数据
         zsInOutSaveStcs = service.getZsInOutSave(asStc.getAgencyKey());
-        DdAgencyCheckContentAdapter adapter = new DdAgencyCheckContentAdapter(getActivity(), zsInOutSaveStcs);
-        proList.setAdapter(adapter);
+        if(zsInOutSaveStcs!=null&&zsInOutSaveStcs.size()>0){
+            ll_check.setVisibility(View.VISIBLE);
+            proList.setVisibility(View.VISIBLE);
+            saveBtn.setVisibility(View.VISIBLE);
+            DdAgencyCheckContentAdapter adapter = new DdAgencyCheckContentAdapter(getActivity(), zsInOutSaveStcs);
+            proList.setAdapter(adapter);
+        }else{
+            ll_check.setVisibility(View.GONE);
+            proList.setVisibility(View.GONE);
+            saveBtn.setVisibility(View.GONE);
+        }
+
     }
 
 

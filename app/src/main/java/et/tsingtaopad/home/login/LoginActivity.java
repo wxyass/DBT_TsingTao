@@ -24,11 +24,14 @@ import et.tsingtaopad.core.net.domain.RequestHeadStc;
 import et.tsingtaopad.core.net.domain.RequestStructBean;
 import et.tsingtaopad.core.net.domain.ResponseStructBean;
 import et.tsingtaopad.core.ui.loader.LatteLoader;
+import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.JsonUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
+import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.fragmentback.HandleBackUtil;
 import et.tsingtaopad.home.app.MainActivity;
@@ -37,7 +40,7 @@ import et.tsingtaopad.http.HttpParseJson;
 import et.tsingtaopad.login.domain.BsVisitEmpolyeeStc;
 import et.tsingtaopad.util.requestHeadUtil;
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener{
+public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
     private EditText uidEt;
     private EditText pwdEt;
@@ -54,14 +57,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         new DatabaseHelper(LoginActivity.this).getWritableDatabase();
 
         // 测试SharedPreferences
-        PrefUtils.putString(getApplicationContext(),"ceshi","ceshi");
+        PrefUtils.putString(getApplicationContext(), "ceshi", "ceshi");
         this.initView();
         this.initData();
     }
 
     private void initData() {
 
-         handler = new MyHandler(this);
+        handler = new MyHandler(this);
     }
 
     private void initView() {
@@ -107,23 +110,27 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
         String name = uidEt.getText().toString();
         String pwd = pwdEt.getText().toString();
-        String   loginjson = "{usercode:'"+name+"', password:'"+pwd+"',version:'2.5',padid:'dsfwerolkjqiwurywhl'}";
-        toLogin("opt_get_login",name,pwd,loginjson);
+        String loginjson = "{usercode:'" + name + "', " +
+                "password:'" + pwd + "'," +
+                "version:'" + DbtLog.getVersion() + "'," +
+                "logindate:'" + DateUtil.getDateTimeStr(8) + "'," +
+                "padid:'" + android.os.Build.SERIAL + "'}";
+        toLogin("opt_get_login", name, pwd, loginjson);
     }
 
     /**
      * 登录接口
      *
-     * @param optcode   请求码
+     * @param optcode  请求码
      * @param username
      * @param pwd
-     * @param content   请求json
+     * @param content  请求json
      */
-    void toLogin(final String optcode, String username,String pwd,String content) {
+    void toLogin(final String optcode, String username, String pwd, String content) {
 
         // 组建请求Json
         RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(LoginActivity.this);
-        if("opt_get_login".equals(optcode)){
+        if ("opt_get_login".equals(optcode)) {
             requestHeadStc.setUsercode(username);
             requestHeadStc.setPassword(pwd);
         }
@@ -144,15 +151,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                         ResponseStructBean resObj = new ResponseStructBean();
                         resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
                         // 保存登录信息
-                        if(ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())){
+                        if (ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())) {
                             // 保存信息
                             String formjson = resObj.getResBody().getContent();
                             parseLoginJson(formjson);
                             Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
                             handler.sendEmptyMessage(ConstValues.WAIT0);
 
-                        }else{
+                        } else {
                             Toast.makeText(LoginActivity.this, resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
+                            LatteLoader.stopLoading();
                         }
                     }
                 })
@@ -175,42 +183,26 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     }
 
     // 解析登录者信息
-    void parseLoginJson(String json){
+    void parseLoginJson(String json) {
 
         // 保存登录者信息
         BsVisitEmpolyeeStc emp = JsonUtil.parseJson(json, BsVisitEmpolyeeStc.class);
 
-        saveLoginSession(emp, "a1234567", "");
-
-        /*if (emp == null) {
-            sendMsg(R.string.login_msg_usererror);//服务器回应的内容为空时界面会收到   用户信息异常，不能正常登录
-
+        if (emp == null) {
+            Toast.makeText(LoginActivity.this, getString(R.string.login_msg_usererror), Toast.LENGTH_SHORT).show();
         } else {
             // 服务器时间与pad端时间差
-            long timeDiff = Math.abs(System.currentTimeMillis()- DateUtil.parse(emp.getLoginDate(), "yyyy-MM-dd HH:mm:ss").getTime());
-
+            long timeDiff = Math.abs(System.currentTimeMillis() - DateUtil.parse(emp.getLoginDate(), "yyyy-MM-dd HH:mm:ss").getTime());
+            String usercode = PrefUtils.getString(LoginActivity.this, "usercode", "");
             // 校验用户的定格是否一致
-            if (!CheckUtil.isBlankOrNull(loginSession.getGridId())
-                    && !loginSession.getGridId().equals(emp.getGridId())) {
-                sendMsg(R.string.login_msg_invalgrid);//现在登录的定格与上次的不一样时界面收到      用户所属定格变更，请先清除上次登录账户的缓存数据
-
+            if (!CheckUtil.isBlankOrNull(usercode) && !usercode.equals(emp.getUsercode())) {
+                Toast.makeText(LoginActivity.this, getString(R.string.login_msg_invalusercode), Toast.LENGTH_SHORT).show();
             } else if (timeDiff > 5 * 60000) {
-                sendMsg(R.string.login_msg_invaldate);
-
+                Toast.makeText(LoginActivity.this, getString(R.string.login_msg_invaldate), Toast.LENGTH_SHORT).show();
             } else {
-                saveLoginSession(emp, pwd, padId);
-                ConstValues.loginSession = getLoginSession(context);
-
-                // 保存用户权限到缓存
-                PrefUtils.putString(context, "bfgl", emp.getBfgl());
-                PrefUtils.putString(context, "yxgl", emp.getYxgl());
-                PrefUtils.putString(context, "xtgl", emp.getXtgl());
-
-                // 跳转到平台主界面
-                //sendMsg(R.string.login_msg_online, true);
-                sendMsg1(R.string.login_msg_online, true,emp.getIsrepassword());//Isrepassword:剩余多少天修改密码 2393版本返回null
+                saveLoginSession(emp, "a1234567", "");
             }
-        }*/
+        }
     }
 
     /**
@@ -286,16 +278,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
             // 处理UI 变化
             switch (msg.what) {
-                case ConstValues.WAIT0://  结束上传  刷新本页面
-                    //fragment.shuaxinXtTermSelect(0);
+                case ConstValues.WAIT0://  登录成功
                     fragment.startDbtAty();
                     LatteLoader.stopLoading();
                     break;
-                case GlobalValues.SINGLE_UP_SUC://  协同拜访上传成功
-                    //fragment.shuaxinXtTermSelect(1);
+                case GlobalValues.SINGLE_UP_SUC://
                     break;
-                case GlobalValues.SINGLE_UP_FAIL://  协同拜访上传失败
-                    //fragment.shuaxinXtTermSelect(2);
+                case GlobalValues.SINGLE_UP_FAIL://
                     break;
 
             }

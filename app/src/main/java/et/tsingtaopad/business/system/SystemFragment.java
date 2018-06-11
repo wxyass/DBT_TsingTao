@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatTextView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +18,36 @@ import android.widget.Toast;
 
 import java.lang.ref.SoftReference;
 import java.text.DecimalFormat;
+import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
+import et.tsingtaopad.business.system.repwd.ApkStc;
+import et.tsingtaopad.business.system.repwd.UserStc;
 import et.tsingtaopad.business.visit.VisitFragment;
+import et.tsingtaopad.core.net.HttpUrl;
 import et.tsingtaopad.core.net.RestClient;
 import et.tsingtaopad.core.net.callback.IError;
 import et.tsingtaopad.core.net.callback.IFailure;
 import et.tsingtaopad.core.net.callback.ISuccess;
 import et.tsingtaopad.core.net.callback.OnDownLoadProgress;
+import et.tsingtaopad.core.net.domain.RequestHeadStc;
+import et.tsingtaopad.core.net.domain.RequestStructBean;
+import et.tsingtaopad.core.net.domain.ResponseStructBean;
+import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.DbtUtils;
+import et.tsingtaopad.core.util.dbtutil.JsonUtil;
+import et.tsingtaopad.core.util.dbtutil.PrefUtils;
+import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
+import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
+import et.tsingtaopad.core.util.dbtutil.logutil.LogUtils;
+import et.tsingtaopad.dd.dddaysummary.DdDaySummaryFragment;
+import et.tsingtaopad.dd.dddaysummary.domain.DaySummaryStc;
+import et.tsingtaopad.dd.dddaysummary.domain.DdDayPlanStc;
+import et.tsingtaopad.dd.ddweekplan.DdWeekPlanFragment;
 import et.tsingtaopad.home.initadapter.GlobalValues;
+import et.tsingtaopad.http.HttpParseJson;
+import et.tsingtaopad.util.requestHeadUtil;
 
 /**
  * Created by yangwenmin on 2018/3/12.
@@ -129,38 +150,108 @@ public class SystemFragment extends BaseFragmentSupport implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.dd_system_rl_repwd:// 修改密码
-                Toast.makeText(getActivity(), "修改密码", Toast.LENGTH_SHORT).show();
-                //changeHomeFragment(new DdWeekPlanFragment(), "ddweekplanfragment");
+                changeHomeFragment(new RePwdFragment(), "ddweekplanfragment");
                 break;
             case R.id.dd_system_rl_question:// 问题反馈
-                Toast.makeText(getActivity(), "问题反馈", Toast.LENGTH_SHORT).show();
-                //changeHomeFragment(new DdDaySummaryFragment(), "dddaysummaryfragment");
+                changeHomeFragment(new QueryBackFragment(), "dddaysummaryfragment");
                 break;
             case R.id.dd_system_rl_upload:// 检查更新
-                // Toast.makeText(getActivity(), "检查更新", Toast.LENGTH_SHORT).show();
-                // changeHomeFragment(new DdDealPlanFragment(), "dddealplanfragment");
-
                 if (hasPermission(GlobalValues.WRITE_READ_EXTERNAL_PERMISSION)) {
                     // 拥有了此权限,那么直接执行业务逻辑
-                    downLoadApk();
+                    initUrlData();
                 } else {
                     // 还没有对一个权限(请求码,权限数组)这两个参数都事先定义好
                     requestPermission(GlobalValues.WRITE_READ_EXTERNAL_CODE, GlobalValues.WRITE_READ_EXTERNAL_PERMISSION);
                 }
-
                 break;
             case R.id.dd_system_rl_about:// 关于系统
-                Toast.makeText(getActivity(), "关于系统", Toast.LENGTH_SHORT).show();
-                //changeHomeFragment(new DdDealPlanFragment(), "dddealplanfragment");
+                changeHomeFragment(new DdAboutFragment(), "dddealplanfragment");
                 break;
         }
-
     }
 
     // 权限 下载apk
     @Override
     public void doWriteSDCard() {
-        downLoadApk();
+        initUrlData();
+    }
+
+    private void initUrlData() {
+
+        String content = "{" +
+                "areaid:'" + PrefUtils.getString(getActivity(), "departmentid", "") + "'," +
+                "softversion:'" + DbtLog.getVersion() + "'," +
+                "creuser:'" + PrefUtils.getString(getActivity(), "userid", "") + "'" +
+                "}";
+        ceshiHttp("opt_update_version", "workplan", content);
+    }
+
+    void ceshiHttp(final String optcode, final String table, String content) {
+
+        // 组建请求Json
+        RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(getContext());
+        requestHeadStc.setOptcode(PropertiesUtil.getProperties(optcode));
+        RequestStructBean reqObj = HttpParseJson.parseRequestStructBean(requestHeadStc, content);
+
+        // 压缩请求数据
+        String jsonZip = HttpParseJson.parseRequestJson(reqObj);
+
+        RestClient.builder()
+                .url(HttpUrl.IP_END)
+                .params("data", jsonZip)
+                //.loader(getContext())// 滚动条
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+                        String json = HttpParseJson.parseJsonResToString(response);
+
+                        if ("".equals(json) || json == null) {
+                            Toast.makeText(getActivity(), "后台成功接收,但返回的数据为null", Toast.LENGTH_SHORT).show();
+                        } else {
+                            ResponseStructBean resObj = new ResponseStructBean();
+                            resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
+                            // 保存信息
+                            if (ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())) {
+                                // 保存信息
+                                String formjson = resObj.getResBody().getContent();
+                                parseTableJson(formjson);
+
+                            } else {
+                                Toast.makeText(getActivity(), resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                })
+                .error(new IError() {
+                    @Override
+                    public void onError(int code, String msg) {
+                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .failure(new IFailure() {
+                    @Override
+                    public void onFailure() {
+                        Toast.makeText(getContext(), "请求失败", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .builde()
+                .post();
+    }
+
+    // 解析数据
+    private void parseTableJson(String formjson) {
+        if(TextUtils.isEmpty(formjson)){
+            Toast.makeText(getContext(), "已是最新版本,无需更新", Toast.LENGTH_SHORT).show();
+        }else{
+            ApkStc info = JsonUtil.parseJson(formjson, ApkStc.class);
+
+            // apkUrl = PropertiesUtil.getProperties("platform_web") + info.getSoftpath();
+            apkUrl = info.getSoftpath();
+            apkName = info.getSoftversion()+".apk";
+
+            // 下载apk
+            downLoadApk();
+        }
     }
 
     // 下载apk
@@ -170,7 +261,6 @@ public class SystemFragment extends BaseFragmentSupport implements View.OnClickL
         msg.what = SHOWDOWNLOADDIALOG;
         handler.sendMessage(msg);
 
-
         RestClient.builder()
                 .url(apkUrl)
                 // .params("data", jsonZip)
@@ -178,14 +268,11 @@ public class SystemFragment extends BaseFragmentSupport implements View.OnClickL
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
-
                         //用handle通知主线程 下载完成 -> 开始安装
                         Message finishedMsg = Message.obtain();
                         finishedMsg.what = DOWNLOADFINISHED;
                         // finishedMsg.obj = downPath+apkName;// 文件路径
                         handler.sendMessage(finishedMsg);
-
-
                     }
                 })
                 .onDownLoadProgress(new OnDownLoadProgress() {
@@ -237,6 +324,7 @@ public class SystemFragment extends BaseFragmentSupport implements View.OnClickL
 
     private void showDownloadDialog() {
         AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
+        adb.setCancelable(false);// 不可消失
         downloadDialog = adb.create();
         View view = View.inflate(getActivity(), R.layout.download_dialog_layout, null);
         downloadDialog.setView(view, 0, 0, 0, 0);
@@ -270,5 +358,4 @@ public class SystemFragment extends BaseFragmentSupport implements View.OnClickL
             downloadDialog.dismiss();
         }
     }
-
 }

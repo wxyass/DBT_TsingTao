@@ -1,6 +1,7 @@
 package et.tsingtaopad.home.app;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.res.Configuration;
 
 import com.blankj.utilcode.util.Utils;

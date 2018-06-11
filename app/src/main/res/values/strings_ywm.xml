@@ -263,6 +263,7 @@
     <string name="login_msg_invalpwd">密码不能为空</string>
     <string name="login_msg_invaluser">请先清除上次登录账户的缓存数据</string>
     <string name="login_msg_invalgrid">用户所属定格变更，请先清除上次登录账户的缓存数据</string>
+    <string name="login_msg_invalusercode">用户变更，请先清除上次登录账户的缓存数据</string>
     <string name="login_msg_invaldate">系统时间误差较大，请调整系统时间</string>
     <string name="login_msg_usererror">用户信息异常，不能正常登录</string>
     <string name="login_msg_progress">登录中...</string>
@@ -300,6 +301,7 @@
     <string name="sys_msg_net_fail">网络状态不可用，请确保网络状态及网络设置是否正确</string>
     <string name="sys_msg_succes">修改密码成功</string>
     <string name="sys_msg_fail">修改密码失败</string>
+    <string name="sys_queryback_fail">问题内容不能为空</string>
     <string name="sys_digits_pwd">0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM</string>
 
     <!-- 系统设置 -->

@@ -30,7 +30,6 @@ import et.tsingtaopad.home.app.MyApplication;
 import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.login.LockScreenActivity;
 
-
  /**
   * 
   * 项目名称：营销移动智能工作平台 </br>
@@ -71,7 +70,6 @@ public class BaseActivity extends AppCompatActivity {
 			case LOCKMESSAGEID:
 				isTimeToLock = true;
 				break;
-
 			default:
 				break;
 			}
@@ -79,13 +77,11 @@ public class BaseActivity extends AppCompatActivity {
 
 	};
 
-	//private HomeWatcher mHomeWatcher;
 	@Override
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
 		ExitAppUtils.getInstance().createActivity(this);
 		lockTask = new LockTask();
-	
 	}
 
 	@Override
@@ -93,21 +89,6 @@ public class BaseActivity extends AppCompatActivity {
 		super.onResume();
 		unLockScreen();
 		
-		// 按home键监听
-		/*mHomeWatcher = new HomeWatcher(this);  
-        mHomeWatcher.setOnHomePressedListener(new OnHomePressedListener() {  
-            @Override  
-            public void onHomePressed() {  
-                Log.e(TAG, "onHomePressed"); 
-                handler.sendEmptyMessage(LOCKMESSAGEID);
-            }  
-  
-            @Override  
-            public void onHomeLongPressed() {  
-                Log.e(TAG, "onHomeLongPressed");  
-            }  
-        });  
-        mHomeWatcher.startWatch();*/
 	}
 
 	@Override
@@ -125,9 +106,6 @@ public class BaseActivity extends AppCompatActivity {
 			e.printStackTrace();
 		}
 
-		/*if(mHomeWatcher!=null){
-			mHomeWatcher.stopWatch();// 销毁当前页面的home监听 在onPause中停止监听，不然会报错的。
-		}*/
 	}
 
 	@Override
@@ -140,9 +118,9 @@ public class BaseActivity extends AppCompatActivity {
 
 	public void unLockScreen() {
 		if (isTimeToLock) {
-			//isTimeToLock = false;
-			Intent intent = new Intent(this, LockScreenActivity.class);
-			startActivity(intent);
+			isTimeToLock = false;
+			/*Intent intent = new Intent(this, LockScreenActivity.class);
+			startActivity(intent);*/
 		}
 		lockTask.cancel();
 		lockTimer.cancel();

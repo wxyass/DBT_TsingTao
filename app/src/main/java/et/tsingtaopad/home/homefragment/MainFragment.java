@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ import et.tsingtaopad.business.operation.OperationFragment;
 import et.tsingtaopad.business.system.SystemFragment;
 import et.tsingtaopad.business.visit.VisitFragment;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
+import et.tsingtaopad.home.app.MainActivity;
 import et.tsingtaopad.home.initadapter.MyFragmentPagerAdapter;
 
 /**
@@ -128,5 +130,20 @@ public class MainFragment extends BaseFragmentSupport {
         });
     }
 
-
+    //记录用户首次点击返回键的时间
+    private long firstTime=0;
+    // 监听返回键  返回true: 消耗事件,不在传递
+    @Override
+    public boolean onBackPressed() {
+        boolean isexit = false;
+        long secondTime=System.currentTimeMillis();
+        if(secondTime-firstTime>2000){
+            Toast.makeText(getActivity(),"再按一次退出程序",Toast.LENGTH_SHORT).show();
+            firstTime=secondTime;
+            isexit =  true;
+        }else{
+            System.exit(0);
+        }
+        return isexit;
+    }
 }
