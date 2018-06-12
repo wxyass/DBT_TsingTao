@@ -104,7 +104,7 @@ public class XtInvoicingFragment extends XtBaseVisitFragment implements View.OnC
 
         //问货源Adapter
         askAdapter = new XtInvoicingAskGoodsAdapter(getActivity(), "", dataLst,
-                "", "", null, askGoodsLv, checkGoodsLv,
+                "", "",  askGoodsLv, checkGoodsLv,
                 new ILongClick() {
                     @Override
                     public void listViewItemLongClick(int position, View v) {

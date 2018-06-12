@@ -27,10 +27,12 @@ import me.yokeyword.fragmentation.helper.ExceptionHandler;
 public class MyApplication extends Application {
 
     public static final String TAG = "MyApplication";
+    private static Context context;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        MyApplication.context = getApplicationContext();
 
         // 通过全局配置器,配置参数
         Latte.init(this)// 配置ApplicationContext,全局handler
@@ -75,5 +77,9 @@ public class MyApplication extends Application {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         ScreenAdapterTools.getInstance().reset(this);
+    }
+
+    public static Context getAppContext() {
+        return MyApplication.context;
     }
 }

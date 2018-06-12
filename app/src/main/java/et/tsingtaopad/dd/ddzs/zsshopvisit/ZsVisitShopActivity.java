@@ -148,7 +148,7 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
         termStc = (XtTermSelectMStc) bundle.getSerializable("termStc");
         mitValcheckterM = (MitValcheckterM) bundle.getSerializable("mitValcheckterM");
 
-        titleTv.setText("追溯: "+termStc.getTerminalname());
+        titleTv.setText(termStc.getTerminalname());
 
         xtShopVisitService = new XtShopVisitService(getApplicationContext(), null);
         // 从拜访主表中获取最后一次拜访数据

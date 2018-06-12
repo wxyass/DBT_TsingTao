@@ -28,9 +28,6 @@ import et.tsingtaopad.dd.ddxt.checking.XtCheckIndexFragment;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProIndexValue;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProItem;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtQuicklyProItem;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.adapter.QuicklyDialogItemAdapter;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.ProItem;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.domain.QuicklyProItem;
 
 /**
  * Created by yangwenmin on 2018/3/12.

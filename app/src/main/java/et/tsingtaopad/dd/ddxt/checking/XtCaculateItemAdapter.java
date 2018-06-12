@@ -31,9 +31,6 @@ import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProIndexValue;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProItem;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.adapter.CalculateIndexItemAdapter;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.checkindex.adapter.CalculateIndexItemPuhuoAdapter;
-import et.tsingtaopad.util.DialogUtil;
 
 
 /**

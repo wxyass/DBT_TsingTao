@@ -12,17 +12,6 @@ import et.tsingtaopad.R;
 import et.tsingtaopad.core.base.BaseCoreFragment;
 import et.tsingtaopad.core.util.dbtutil.NetStatusUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
-import et.tsingtaopad.home.delete.MainCoreFragment;
-import et.tsingtaopad.main.operation.agencystorage.AgencyStorageCoreFragment;
-import et.tsingtaopad.main.operation.orders.OrdersSearchCoreFragment;
-import et.tsingtaopad.main.system.about.AboutInfoCoreFragment;
-import et.tsingtaopad.main.system.modifypwd.ModifyPwdCoreFragment;
-import et.tsingtaopad.main.system.notice.NoticeCoreFragment;
-import et.tsingtaopad.main.system.question.QueryFeedbackCoreFragment;
-import et.tsingtaopad.main.system.version.UpdateCoreFragment;
-import et.tsingtaopad.main.visit.shopvisit.line.LineListCoreFragment;
-import et.tsingtaopad.main.visit.syncdata.DownLoadCoreFragment;
-
 
 /**
  * Created by yangwenmin on 2017/11/25.
@@ -44,7 +33,7 @@ public class ItemClickListener implements AdapterView.OnItemClickListener {
         Integer i = images.get(position);
         // 巡店拜访
         if (i.equals(R.drawable.bt_visit_shopvist)) {
-            ((MainCoreFragment) DELEGATE.getParentFragment()).startBrotherFragment(LineListCoreFragment.newInstance());
+            //((MainCoreFragment) DELEGATE.getParentFragment()).startBrotherFragment(LineListCoreFragment.newInstance());
             // 新增终端
         } else if (i.equals(R.drawable.bt_visit_addterm)) {
 
@@ -56,7 +45,7 @@ public class ItemClickListener implements AdapterView.OnItemClickListener {
 
             // 经销商库存
         } else if (i.equals(R.drawable.bt_visit_store)) {
-            ((MainCoreFragment) DELEGATE.getParentFragment()).startBrotherFragment(AgencyStorageCoreFragment.newInstance());
+            // ((MainCoreFragment) DELEGATE.getParentFragment()).startBrotherFragment(AgencyStorageCoreFragment.newInstance());
             // 经销商开发
         } else if (i.equals(R.drawable.bt_visit_agencykf)) {
 
@@ -79,7 +68,7 @@ public class ItemClickListener implements AdapterView.OnItemClickListener {
 
             // 订单详细
         } else if (i.equals(R.drawable.bt_operation_dingdan)) {
-            ((MainCoreFragment) DELEGATE.getParentFragment()).startBrotherFragment(OrdersSearchCoreFragment.newInstance());
+            //((MainCoreFragment) DELEGATE.getParentFragment()).startBrotherFragment(OrdersSearchCoreFragment.newInstance());
 
             // 日工作推进(标准)
         } else if (i.equals(R.drawable.bt_operation_workdetail)) {
@@ -105,20 +94,20 @@ public class ItemClickListener implements AdapterView.OnItemClickListener {
 
             // 通知公告
         } else if (i.equals(R.drawable.bt_business_notice)) {
-            ((MainCoreFragment) DELEGATE.getParentFragment()).startBrotherFragment(NoticeCoreFragment.newInstance());
+            //((MainCoreFragment) DELEGATE.getParentFragment()).startBrotherFragment(NoticeCoreFragment.newInstance());
 
             // 问题反馈
         } else if (i.equals(R.drawable.bt_business_question)) {
-            ((MainCoreFragment) DELEGATE.getParentFragment()).startBrotherFragment(QueryFeedbackCoreFragment.newInstance());
+            //((MainCoreFragment) DELEGATE.getParentFragment()).startBrotherFragment(QueryFeedbackCoreFragment.newInstance());
             // 检查更新
         } else if (i.equals(R.drawable.bt_syssetting_update)) {
-            ((MainCoreFragment) DELEGATE.getParentFragment()).startBrotherFragment(UpdateCoreFragment.newInstance());
+            //((MainCoreFragment) DELEGATE.getParentFragment()).startBrotherFragment(UpdateCoreFragment.newInstance());
             // 修改密码
         } else if (i.equals(R.drawable.bt_syssetting_modify_pwd)) {
-            ((MainCoreFragment) DELEGATE.getParentFragment()).startBrotherFragment(ModifyPwdCoreFragment.newInstance());
+            //((MainCoreFragment) DELEGATE.getParentFragment()).startBrotherFragment(ModifyPwdCoreFragment.newInstance());
             // 关于系统
         } else if (i.equals(R.drawable.bt_syssetting_info)) {
-            ((MainCoreFragment) DELEGATE.getParentFragment()).startBrotherFragment(AboutInfoCoreFragment.newInstance());
+            //((MainCoreFragment) DELEGATE.getParentFragment()).startBrotherFragment(AboutInfoCoreFragment.newInstance());
 
             // 扫描二维码
         } else {
@@ -137,7 +126,7 @@ public class ItemClickListener implements AdapterView.OnItemClickListener {
                 //弹窗是否删除之前所有数据
                 showNotifyDialog();
             } else {
-                ((MainCoreFragment) DELEGATE.getParentFragment()).startBrotherFragmentDontHideSelf(DownLoadCoreFragment.newInstance());
+                //((MainCoreFragment) DELEGATE.getParentFragment()).startBrotherFragmentDontHideSelf(DownLoadCoreFragment.newInstance());
             }
         } else {
             // 提示修改网络

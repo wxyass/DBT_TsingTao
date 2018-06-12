@@ -25,8 +25,6 @@ import et.tsingtaopad.dd.ddzs.zssayhi.ZsSayhiFragment;
 import et.tsingtaopad.fragmentback.HandleBackUtil;
 import et.tsingtaopad.home.homefragment.MainFragment;
 import et.tsingtaopad.home.initadapter.GlobalValues;
-import et.tsingtaopad.initconstvalues.InitConstValues;
-import et.tsingtaopad.main.system.version.VersionService;
 
 public class MainActivity extends BaseActivity {
 

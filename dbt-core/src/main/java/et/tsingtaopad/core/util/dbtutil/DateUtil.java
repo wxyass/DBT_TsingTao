@@ -343,7 +343,19 @@ public class DateUtil {
         }
         return strDate;
     }
-    
+
+    /**
+     * 20181223 -> 2018-12-23
+     * @param str
+     * @return
+     */
+    public static String divide(String str){
+        if(str==null || "".equals(str)){
+            return "";
+        }
+        return str.substring(0, 4)+"-"+str.substring(4, 6)+"-"+str.substring(6,8);
+    }
+
     /**
      * 当前系统日期加天数
      * 

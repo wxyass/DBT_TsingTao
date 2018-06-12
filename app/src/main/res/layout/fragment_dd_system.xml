@@ -145,6 +145,37 @@
                     android:visibility="visible"/>
             </RelativeLayout>
 
+            <!-- 退出系统 -->
+            <RelativeLayout
+                android:id="@+id/dd_system_rl_exit"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_select_white_gray"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:visibility="visible">
+
+                <TextView
+                    style="@style/zdzs_sayhi_title"
+                    android:background="@drawable/icon_work_locat"/>
+
+                <!--退出系统-->
+                <TextView
+                    android:id="@+id/dd_system_tv_exit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="60dp"
+                    android:gravity="center_vertical|left"
+                    android:text="退出系统"/>
+
+                <ImageView
+                    style="@style/xtbf_sayhi_third_tv"
+                    android:visibility="visible"/>
+            </RelativeLayout>
+
 
         </LinearLayout>
     </ScrollView>

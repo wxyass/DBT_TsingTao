@@ -51,6 +51,7 @@ import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 import et.tsingtaopad.dd.ddxt.updata.XtUploadService;
 import et.tsingtaopad.dd.ddzs.zsshopvisit.ZsVisitShopActivity;
 import et.tsingtaopad.home.app.MainService;
+import et.tsingtaopad.home.app.MyApplication;
 import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.http.HttpParseJson;
 import et.tsingtaopad.main.visit.shopvisit.term.domain.TermSequence;
@@ -478,9 +479,9 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
     // 结束上传  刷新页面  0:确定上传  1上传成功  2上传失败
     private void shuaxinXtTermCart(int upType) {
         if(1==upType){
-            Toast.makeText(getActivity(),"上传成功",Toast.LENGTH_SHORT).show();
+            Toast.makeText(MyApplication.getAppContext(),"上传成功",Toast.LENGTH_SHORT).show();
         }else if(2==upType){
-            Toast.makeText(getActivity(),"上传失败",Toast.LENGTH_SHORT).show();
+            Toast.makeText(MyApplication.getAppContext(),"上传失败",Toast.LENGTH_SHORT).show();
         }
         initData();
     }

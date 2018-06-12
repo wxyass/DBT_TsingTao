@@ -233,7 +233,6 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
 
         tablenames.add("MST_MARKETAREA_GRID_ROUTE_M");
 
-        // tablenames.add("MST_BASEDATA_M");
         tablenames.add("CMM_AREA_M");
         tablenames.add("MST_PROMOTIONS_M");
         tablenames.add("MST_PROMOPRODUCT_INFO");
@@ -249,7 +248,6 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
         tablenames.add("MST_VISITAUTHORIZE_INFO");
         tablenames.add("MST_INVOICING_INFO");
         tablenames.add("MST_AGENCYVISIT_M");
-
 
         tablenames.add("MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO");
 
@@ -339,9 +337,6 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
         // 保存信息
         if ("MST_MARKETAREA_GRID_ROUTE_M".equals(table)) {
 
-            String formjson = resObj.getResBody().getContent();
-            parseTableJson(formjson);
-
             Bundle bundle = new Bundle();
             bundle.putString("msg", "正在处理区域数据...");
             Message msg = new Message();
@@ -349,12 +344,12 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
             msg.setData(bundle);
             handler.sendMessage(msg);
 
+            String formjson = resObj.getResBody().getContent();
+            parseTableJson(formjson);
+
         }
 
         else if ("MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO".equals(table)) {
-
-            String formjson = resObj.getResBody().getContent();
-            parseIndexTableJson(formjson);
 
             Bundle bundle = new Bundle();
             bundle.putString("msg", "正在处理指标数据...");
@@ -362,14 +357,14 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
             handler.sendMessage(msg);
+
+            String formjson = resObj.getResBody().getContent();
+            parseIndexTableJson(formjson);
+
         }
 
         // --------------------------------------------------------------
         else if ("CMM_AREA_M".equals(table)) {
-            String formjson = resObj.getResBody().getContent();
-            AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
-            String CMM_AREA_M = emp.getCMM_AREA_M();
-            service.createOrUpdateTable(CMM_AREA_M, "CMM_AREA_M", CmmAreaM.class);
 
             Bundle bundle = new Bundle();
             bundle.putString("msg", "正在处理区域数据...");
@@ -377,12 +372,15 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
             handler.sendMessage(msg);
-        }
-        else if ("CMM_DATADIC_M".equals(table)) {
+
             String formjson = resObj.getResBody().getContent();
             AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
-            String CMM_DATADIC_M = emp.getCMM_DATADIC_M();
-            service.createOrUpdateTable(CMM_DATADIC_M, "CMM_DATADIC_M", CmmDatadicM.class);
+            String CMM_AREA_M = emp.getCMM_AREA_M();
+            service.createOrUpdateTable(CMM_AREA_M, "CMM_AREA_M", CmmAreaM.class);
+
+
+        }
+        else if ("CMM_DATADIC_M".equals(table)) {
 
             Bundle bundle = new Bundle();
             bundle.putString("msg", "正在处理字典数据...");
@@ -390,12 +388,15 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
             handler.sendMessage(msg);
-        }
-        else if ("MST_PROMOTIONS_M".equals(table)) {
+
+
             String formjson = resObj.getResBody().getContent();
             AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
-            String MST_PROMOTIONS_M = emp.getMST_PROMOTIONS_M();
-            service.createOrUpdateTable(MST_PROMOTIONS_M, "MST_PROMOTIONS_M", MstPromotionsM.class);
+            String CMM_DATADIC_M = emp.getCMM_DATADIC_M();
+            service.createOrUpdateTable(CMM_DATADIC_M, "CMM_DATADIC_M", CmmDatadicM.class);
+
+        }
+        else if ("MST_PROMOTIONS_M".equals(table)) {
 
             Bundle bundle = new Bundle();
             bundle.putString("msg", "正在处理促销活动数据...");
@@ -403,12 +404,14 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
             handler.sendMessage(msg);
-        }
-        else if ("MST_PROMOPRODUCT_INFO".equals(table)) {
+
             String formjson = resObj.getResBody().getContent();
             AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
-            String MST_PROMOPRODUCT_INFO = emp.getMST_PROMOPRODUCT_INFO();
-            service.createOrUpdateTable(MST_PROMOPRODUCT_INFO, "MST_PROMOPRODUCT_INFO", MstPromoproductInfo.class);
+            String MST_PROMOTIONS_M = emp.getMST_PROMOTIONS_M();
+            service.createOrUpdateTable(MST_PROMOTIONS_M, "MST_PROMOTIONS_M", MstPromotionsM.class);
+
+        }
+        else if ("MST_PROMOPRODUCT_INFO".equals(table)) {
 
             Bundle bundle = new Bundle();
             bundle.putString("msg", "正在处理活动产品数据...");
@@ -416,12 +419,14 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
             handler.sendMessage(msg);
-        }
-        else if ("MST_PICTYPE_M".equals(table)) {
+
             String formjson = resObj.getResBody().getContent();
             AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
-            String MST_PICTYPE_M = emp.getMST_PICTYPE_M();
-            service.createOrUpdateTable(MST_PICTYPE_M, "MST_PICTYPE_M", MstPictypeM.class);
+            String MST_PROMOPRODUCT_INFO = emp.getMST_PROMOPRODUCT_INFO();
+            service.createOrUpdateTable(MST_PROMOPRODUCT_INFO, "MST_PROMOPRODUCT_INFO", MstPromoproductInfo.class);
+
+        }
+        else if ("MST_PICTYPE_M".equals(table)) {
 
             Bundle bundle = new Bundle();
             bundle.putString("msg", "正在处理图片类型数据...");
@@ -429,12 +434,14 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
             handler.sendMessage(msg);
-        }
-        else if ("MST_PRODUCT_M".equals(table)) {
+
             String formjson = resObj.getResBody().getContent();
             AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
-            String MST_PRODUCT_M = emp.getMST_PRODUCT_M();
-            service.createOrUpdateTable(MST_PRODUCT_M, "MST_PRODUCT_M", MstProductM.class);
+            String MST_PICTYPE_M = emp.getMST_PICTYPE_M();
+            service.createOrUpdateTable(MST_PICTYPE_M, "MST_PICTYPE_M", MstPictypeM.class);
+
+        }
+        else if ("MST_PRODUCT_M".equals(table)) {
 
             Bundle bundle = new Bundle();
             bundle.putString("msg", "正在处理产品数据...");
@@ -442,12 +449,14 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
             handler.sendMessage(msg);
-        }
-        else if ("MST_CMPCOMPANY_M".equals(table)) {
+
             String formjson = resObj.getResBody().getContent();
             AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
-            String MST_CMPCOMPANY_M = emp.getMST_CMPCOMPANY_M();
-            service.createOrUpdateTable(MST_CMPCOMPANY_M, "MST_CMPCOMPANY_M", MstCmpcompanyM.class);
+            String MST_PRODUCT_M = emp.getMST_PRODUCT_M();
+            service.createOrUpdateTable(MST_PRODUCT_M, "MST_PRODUCT_M", MstProductM.class);
+
+        }
+        else if ("MST_CMPCOMPANY_M".equals(table)) {
 
             Bundle bundle = new Bundle();
             bundle.putString("msg", "正在处理竞品公司数据...");
@@ -455,12 +464,14 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
             handler.sendMessage(msg);
-        }
-        else if ("MST_CMPBRANDS_M".equals(table)) {
+
             String formjson = resObj.getResBody().getContent();
             AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
-            String MST_CMPBRANDS_M = emp.getMST_CMPBRANDS_M();
-            service.createOrUpdateTable(MST_CMPBRANDS_M, "MST_CMPBRANDS_M", MstCmpbrandsM.class);
+            String MST_CMPCOMPANY_M = emp.getMST_CMPCOMPANY_M();
+            service.createOrUpdateTable(MST_CMPCOMPANY_M, "MST_CMPCOMPANY_M", MstCmpcompanyM.class);
+
+        }
+        else if ("MST_CMPBRANDS_M".equals(table)) {
 
             Bundle bundle = new Bundle();
             bundle.putString("msg", "正在处理竞品品牌数据...");
@@ -468,12 +479,14 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
             handler.sendMessage(msg);
-        }
-        else if ("MST_CMPRODUCTINFO_M".equals(table)) {
+
+
             String formjson = resObj.getResBody().getContent();
             AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
-            String MST_CMPRODUCTINFO_M = emp.getMST_CMPRODUCTINFO_M();
-            service.createOrUpdateTable(MST_CMPRODUCTINFO_M, "MST_CMPRODUCTINFO_M", MstCmproductinfoM.class);
+            String MST_CMPBRANDS_M = emp.getMST_CMPBRANDS_M();
+            service.createOrUpdateTable(MST_CMPBRANDS_M, "MST_CMPBRANDS_M", MstCmpbrandsM.class);
+        }
+        else if ("MST_CMPRODUCTINFO_M".equals(table)) {
 
             Bundle bundle = new Bundle();
             bundle.putString("msg", "正在处理竞品产品数据...");
@@ -481,25 +494,28 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
             handler.sendMessage(msg);
-        }
-        else if ("MIT_VALCHECKTER_M".equals(table)) {
+
             String formjson = resObj.getResBody().getContent();
             AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
-            String MIT_VALCHECKTER_M = emp.getMIT_VALCHECKTER_M();
-            service.createOrUpdateTable(MIT_VALCHECKTER_M, "MIT_VALCHECKTER_M", MitValcheckterM.class);
+            String MST_CMPRODUCTINFO_M = emp.getMST_CMPRODUCTINFO_M();
+            service.createOrUpdateTable(MST_CMPRODUCTINFO_M, "MST_CMPRODUCTINFO_M", MstCmproductinfoM.class);
 
+        }
+        else if ("MIT_VALCHECKTER_M".equals(table)) {
             Bundle bundle = new Bundle();
             bundle.putString("msg", "正在处理督导指标数据...");
             Message msg = new Message();
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
             handler.sendMessage(msg);
-        }
-        else if ("MST_AGENCYKF_M".equals(table)) {
+
             String formjson = resObj.getResBody().getContent();
             AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
-            String MST_AGENCYKF_M = emp.getMST_AGENCYKF_M();
-            service.createOrUpdateTable(MST_AGENCYKF_M, "MST_AGENCYKF_M", MstAgencyKFM.class);
+            String MIT_VALCHECKTER_M = emp.getMIT_VALCHECKTER_M();
+            service.createOrUpdateTable(MIT_VALCHECKTER_M, "MIT_VALCHECKTER_M", MitValcheckterM.class);
+
+        }
+        else if ("MST_AGENCYKF_M".equals(table)) {
 
             Bundle bundle = new Bundle();
             bundle.putString("msg", "正在处理经销商开发数据...");
@@ -507,12 +523,14 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
             handler.sendMessage(msg);
-        }
-        else if ("MST_AGENCYVISIT_M".equals(table)) {
+
             String formjson = resObj.getResBody().getContent();
             AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
-            String MST_AGENCYVISIT_M = emp.getMST_AGENCYVISIT_M();
-            service.createOrUpdateTable(MST_AGENCYVISIT_M, "MST_AGENCYVISIT_M", MstAgencyvisitM.class);
+            String MST_AGENCYKF_M = emp.getMST_AGENCYKF_M();
+            service.createOrUpdateTable(MST_AGENCYKF_M, "MST_AGENCYKF_M", MstAgencyKFM.class);
+
+        }
+        else if ("MST_AGENCYVISIT_M".equals(table)) {
 
             Bundle bundle = new Bundle();
             bundle.putString("msg", "正在处理经销商拜访数据...");
@@ -520,12 +538,14 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
             handler.sendMessage(msg);
-        }
-        else if ("MST_INVOICING_INFO".equals(table)) {
+
             String formjson = resObj.getResBody().getContent();
             AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
-            String MST_INVOICING_INFO = emp.getMST_INVOICING_INFO();
-            service.createOrUpdateTable(MST_INVOICING_INFO, "MST_INVOICING_INFO", MstInvoicingInfo.class);
+            String MST_AGENCYVISIT_M = emp.getMST_AGENCYVISIT_M();
+            service.createOrUpdateTable(MST_AGENCYVISIT_M, "MST_AGENCYVISIT_M", MstAgencyvisitM.class);
+
+        }
+        else if ("MST_INVOICING_INFO".equals(table)) {
 
             Bundle bundle = new Bundle();
             bundle.putString("msg", "正在处理经销商库存盘点数据...");
@@ -533,12 +553,14 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
             handler.sendMessage(msg);
-        }
-        else if ("MST_VISITAUTHORIZE_INFO".equals(table)) {
+
             String formjson = resObj.getResBody().getContent();
             AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
-            String MST_VISITAUTHORIZE_INFO = emp.getMST_VISITAUTHORIZE_INFO();
-            service.createOrUpdateTable(MST_VISITAUTHORIZE_INFO, "MST_VISITAUTHORIZE_INFO", MstVisitauthorizeInfo.class);
+            String MST_INVOICING_INFO = emp.getMST_INVOICING_INFO();
+            service.createOrUpdateTable(MST_INVOICING_INFO, "MST_INVOICING_INFO", MstInvoicingInfo.class);
+
+        }
+        else if ("MST_VISITAUTHORIZE_INFO".equals(table)) {
 
             Bundle bundle = new Bundle();
             bundle.putString("msg", "正在处理定格可拜访经销商数据...");
@@ -546,12 +568,14 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
             handler.sendMessage(msg);
-        }
-        else if ("MST_AGENCYINFO_M".equals(table)) {
+
             String formjson = resObj.getResBody().getContent();
             AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
-            String MST_AGENCYINFO_M = emp.getMST_AGENCYINFO_M();
-            service.createOrUpdateTable(MST_AGENCYINFO_M, "MST_AGENCYINFO_M", MstAgencyinfoM.class);
+            String MST_VISITAUTHORIZE_INFO = emp.getMST_VISITAUTHORIZE_INFO();
+            service.createOrUpdateTable(MST_VISITAUTHORIZE_INFO, "MST_VISITAUTHORIZE_INFO", MstVisitauthorizeInfo.class);
+
+        }
+        else if ("MST_AGENCYINFO_M".equals(table)) {
 
             Bundle bundle = new Bundle();
             bundle.putString("msg", "正在处理经销商数据...");
@@ -559,8 +583,12 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
             handler.sendMessage(msg);
-        }
 
+            String formjson = resObj.getResBody().getContent();
+            AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
+            String MST_AGENCYINFO_M = emp.getMST_AGENCYINFO_M();
+            service.createOrUpdateTable(MST_AGENCYINFO_M, "MST_AGENCYINFO_M", MstAgencyinfoM.class);
+        }
     }
 
     // 解析区域定格路线成功

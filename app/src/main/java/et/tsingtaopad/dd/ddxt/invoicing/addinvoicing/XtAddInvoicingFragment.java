@@ -22,14 +22,10 @@ import et.tsingtaopad.adapter.ListViewKeyValueAdapter;
 import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
-import et.tsingtaopad.core.util.dbtutil.ViewUtil;
-import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProItem;
-import et.tsingtaopad.dd.ddxt.checking.num.XtCalculateIndexItemPuhuoAdapter;
 import et.tsingtaopad.dd.ddxt.invoicing.XtInvoicingFragment;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.invoicing.adapter.InvoicingProductAdapter;
 
 /**
  * Created by yangwenmin on 2018/3/12.

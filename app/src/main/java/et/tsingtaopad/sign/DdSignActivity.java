@@ -273,8 +273,8 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
         // String s = "[{'MIT_ATTENCEDETAIL_M':["+"]}]";
         String content = "{" +
                 "areaid:'" + PrefUtils.getString(this, "departmentid", "") + "'," +
-                "sourcelon:'" + "117.090734350000005000" + "'," +  //"117.090734350000005000"  longitude
-                "sourcelat:'" + "24.050067309999999300" + "'," +  // "24.050067309999999300"   latitude
+                "sourcelon:'" + longitude + "'," +  //"117.090734350000005000"  longitude
+                "sourcelat:'" + latitude + "'," +  // "24.050067309999999300"   latitude
                 "attencetype:'" + attencetype + "'," +
                 "attencetime:'" + DateUtil.getDateTimeStr(8) + "'," +
                 "creuser:'" + PrefUtils.getString(this, "userid", "") + "'" +

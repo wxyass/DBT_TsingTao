@@ -27,7 +27,6 @@ import et.tsingtaopad.dd.ddxt.invoicing.XtInvoicingFragment;
 import et.tsingtaopad.dd.ddxt.invoicing.addinvoicing.XtProKeyValueAdapter;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.chatvie.adapter.ChatVieProductAdapter;
 
 /**
  * Created by yangwenmin on 2018/3/12.

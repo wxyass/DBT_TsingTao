@@ -199,7 +199,7 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                 .failure(new IFailure() {
                     @Override
                     public void onFailure() {
-                        Toast.makeText(getActivity(), "请求失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "首页数据请求失败", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .builde()

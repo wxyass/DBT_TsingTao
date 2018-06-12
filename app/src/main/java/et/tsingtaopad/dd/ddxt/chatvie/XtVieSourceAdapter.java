@@ -25,7 +25,6 @@ import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.db.table.MstCmpagencyInfo;
 import et.tsingtaopad.dd.ddxt.chatvie.domain.XtChatVieStc;
 import et.tsingtaopad.listviewintf.ILongClick;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.chatvie.adapter.VieStatusAdapter;
 
 
 /**
@@ -43,7 +42,6 @@ public class XtVieSourceAdapter extends BaseAdapter
     private Activity context;
     private List<XtChatVieStc> dataLst;
     private String termId;
-    private VieStatusAdapter statusAdapter;
     private List<MstCmpagencyInfo> agencyLst;
     private int delPosition = -1;
     private AlertDialog dialog;
@@ -53,7 +51,7 @@ public class XtVieSourceAdapter extends BaseAdapter
     private ILongClick listener;
     
     public XtVieSourceAdapter(Activity context,String seeFlag, List<XtChatVieStc> dataLst,
-            String termId, VieStatusAdapter statusAdapter, List<MstCmpagencyInfo> agencyLst,ListView vieStatusLv,ListView viewSourceLv, ILongClick listener) {
+            String termId,  List<MstCmpagencyInfo> agencyLst,ListView vieStatusLv,ListView viewSourceLv, ILongClick listener) {
         this.context = context;
         this.seeFlag = seeFlag;
         this.dataLst = dataLst;
@@ -61,7 +59,6 @@ public class XtVieSourceAdapter extends BaseAdapter
         this.vieStatusLv = vieStatusLv;
         this.vieSourceLv = viewSourceLv;
         
-        this.statusAdapter = statusAdapter;
         this.agencyLst = agencyLst;
         this.listener=listener;
     }

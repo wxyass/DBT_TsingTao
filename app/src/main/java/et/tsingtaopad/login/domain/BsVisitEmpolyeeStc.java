@@ -6,6 +6,7 @@ import java.util.Date;
 public class BsVisitEmpolyeeStc implements Serializable {
 	private String userid;
 	private String username;
+	private String password;
 	private String gender;
 	private String idcode;
 	private String tel;
@@ -446,5 +447,13 @@ public class BsVisitEmpolyeeStc implements Serializable {
 
 	public void setSecareaid(String secareaid) {
 		this.secareaid = secareaid;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

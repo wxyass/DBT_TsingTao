@@ -255,18 +255,24 @@ public class BaseActivity extends AppCompatActivity {
 				 if (grantResults.length > 0
 						 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 					 doOpenCamera();
+				 }else{
+					 Toast.makeText(getApplicationContext(),"请先开启相机权限",Toast.LENGTH_SHORT).show();
 				 }
 				 break;
 			 case GlobalValues.WRITE_READ_EXTERNAL_CODE:
 				 if (grantResults.length > 0
 						 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 					 doWriteSDCard();
+				 }else{
+					 Toast.makeText(getApplicationContext(),"请先开启读写存储权限",Toast.LENGTH_SHORT).show();
 				 }
 				 break;
 			 case GlobalValues.LOCAL_CODE:
 				 if (grantResults.length > 0
 						 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 					 doLocation();
+				 }else{
+					 Toast.makeText(getApplicationContext(),"请先开启定位权限",Toast.LENGTH_SHORT).show();
 				 }
 				 break;
 			 case GlobalValues.WRITE_LOCAL_CODE:
@@ -274,7 +280,7 @@ public class BaseActivity extends AppCompatActivity {
 						 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 					 doCameraWriteSD();
 				 }else{
-					 Toast.makeText(getApplicationContext(),"请先开启读取sd卡权限",Toast.LENGTH_SHORT).show();
+					 Toast.makeText(getApplicationContext(),"请先开启读写存储权限",Toast.LENGTH_SHORT).show();
 				 }
 				 break;
 		 }

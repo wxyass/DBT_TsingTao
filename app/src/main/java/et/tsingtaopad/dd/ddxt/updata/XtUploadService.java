@@ -19,6 +19,7 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 
 
+import et.tsingtaopad.business.system.SystemFragment;
 import et.tsingtaopad.business.visit.bean.AreaGridRoute;
 import et.tsingtaopad.core.net.HttpUrl;
 import et.tsingtaopad.core.net.RestClient;
@@ -73,6 +74,7 @@ import et.tsingtaopad.db.table.MitValsupplyM;
 import et.tsingtaopad.db.table.MitValterM;
 import et.tsingtaopad.db.table.MitVisitM;
 import et.tsingtaopad.db.table.MitVistproductInfo;
+import et.tsingtaopad.db.table.MstAgencyKFM;
 import et.tsingtaopad.db.table.MstAgencysupplyInfo;
 import et.tsingtaopad.db.table.MstAgencytransferInfo;
 import et.tsingtaopad.db.table.MstAgencyvisitM;
@@ -99,7 +101,9 @@ import et.tsingtaopad.db.table.MstWorksummaryInfo;
 
 import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.http.HttpParseJson;
+import et.tsingtaopad.main.visit.shopvisit.termvisit.camera.domain.MstCameraListMStc;
 import et.tsingtaopad.util.requestHeadUtil;
+import et.tsingtaopad.view.TitleLayout;
 
 /**
  * 项目名称：营销移动智能工作平台 </br>
@@ -289,12 +293,75 @@ public class XtUploadService {
      * @param isNeedExit true 的时候 上传数据后退出程序 ，不需要退出程序 请用false
      */
     public void uploadTables(boolean isNeedExit) {
-
-        upload_xt_visit(isNeedExit, null, 1);//
-        upload_zs_visit(isNeedExit, null, 1);//
-
-
+        upload_xt_visit(isNeedExit, null, 1);// 上传协同
+        upload_zs_visit(isNeedExit, null, 1);// 上传追溯
+        uploadMitTerminalM(isNeedExit, null, 1);// 上传督导新增终端  //
+        uploadMitValagencykfM(isNeedExit, null, 1);// 上传经销商资料库  //
+        uploadMitAgencynumM(isNeedExit, null, null, 1);// 上传经销商库存盘点 //
+        uploadWeekPlan(isNeedExit, null, 1);// 上传周计划
+        upload_repair(isNeedExit, null, null, 1);// 上传整顿计划
     }
+
+    /**
+     * @return true 表示都上全完了，false 表示还有未上传数据
+     * @throws SQLException
+     */
+    public boolean isAllEmpty() {
+        try {
+            //巡店拜访检查
+            List<MstVisitM> visits = mstVisitMDao.queryForEq("padisconsistent", "0");
+            if (!visits.isEmpty()) {
+                return false;
+            }
+
+            // 追溯检查
+            List<MitValterM> mitValterMS = valterMDao.queryForEq("padisconsistent", "0");
+            if (!mitValterMS.isEmpty()) {
+                return false;
+            }
+
+            // 督导新增终端
+            Map<String, Object> terminalKeyMap = new HashMap<String, Object>();
+            terminalKeyMap.put("uploadflag", "1");
+            terminalKeyMap.put("padisconsistent", "0");
+            List<MitTerminalM> terminalMS = mitTerminalMDao.queryForFieldValues(terminalKeyMap);
+            if (!terminalMS.isEmpty()) {
+                return false;
+            }
+
+            // 经销商资料库
+            List<MitValagencykfM> valagencykfMS = mitValagencykfMDao.queryForFieldValues(terminalKeyMap);
+            if (!valagencykfMS.isEmpty()) {
+                return false;
+            }
+
+            // 经销商库存盘点
+            List<MitAgencynumM> agencynumMS = mitAgencynumMDao.queryForFieldValues(terminalKeyMap);
+            List<MitAgencyproM> agencyproMS = mitAgencyproMDao.queryForFieldValues(terminalKeyMap);
+            if (!agencynumMS.isEmpty()) {
+                return false;
+            }
+            if (!agencyproMS.isEmpty()) {
+                return false;
+            }
+
+            // 周计划
+            List<MitPlanweekM> planweekMS = mitPlanweekMDao.queryForEq("padisconsistent", "0");
+            if (!planweekMS.isEmpty()) {
+                return false;
+            }
+
+            // 整顿计划
+            List<MitRepairM> repairMS = mitRepairMDao.queryForFieldValues(terminalKeyMap);
+            if (!repairMS.isEmpty()) {
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
 
     List<MitVisitM> visits = new ArrayList<MitVisitM>();
     List<MitVisitM> visitsall = new ArrayList<MitVisitM>();
@@ -624,7 +691,7 @@ public class XtUploadService {
             } else {
                 if (isNeedExit) {
                     //上传所有的巡店拜访
-                    //handler.sendEmptyMessage(TitleLayout.UPLOAD_DATA);
+                    // handler.sendEmptyMessage(SystemFragment.CLOSEPROGRESS);
                 }
             }
         } catch (SQLException e) {
@@ -1166,7 +1233,7 @@ public class XtUploadService {
                 String terminalkey = valterM.getTerminalkey();
 
                 // 删除追溯时的数据 包含追溯主表
-                deleteZs(valterId,terminalkey,0);
+                deleteZs(valterId, terminalkey, 0);
 
             }
         } catch (Exception e) {
@@ -1178,17 +1245,19 @@ public class XtUploadService {
 
     /**
      * 删除追溯时的数据 包含追溯主表
+     *
      * @param valterId
      * @param terminalkey
-     * @param type  0:上传成功后,通知删除(除本次外)  1:这条记录不上传了,通知全部删除
+     * @param type        0:上传成功后,通知删除(除本次外)  1:这条记录不上传了,通知全部删除
      */
-    public void deleteZs(String valterId, String terminalkey,int type) {
+    public void deleteZs(String valterId, String terminalkey, int type) {
         SQLiteDatabase db = helper.getWritableDatabase();
-        if(0==type){
+        if (0 == type) {
             // 删除追溯该终端(除本次外)其余的拜访记录
             deleteZsMitVisitM(db, "MIT_VALTER_M", terminalkey, valterId);
-        }else if(1== type){
-            deleteZsTable(db, "MIT_VALTER_M", valterId);
+        } else if (1 == type) {
+            String sql = "delete from MIT_VALTER_M  where id = '" + valterId + "'";
+            db.execSQL(sql);
         }
         deleteZsTable(db, "MIT_VALCHECKTYPE_M", valterId);
         deleteZsTable(db, "MIT_VALCHECKITEM_M", valterId);
@@ -1271,16 +1340,16 @@ public class XtUploadService {
     }
 
     // 上传督导新增终端
-    public void uploadMitTerminalM(boolean b, MitTerminalM mitTerminalM, int i) {
+    public void uploadMitTerminalM(boolean isNeedExit, MitTerminalM mitTerminalM, int i) {
 
-        List<MitTerminalM>  mitTerminalMS = new ArrayList<MitTerminalM>();
+        List<MitTerminalM> mitTerminalMS = new ArrayList<MitTerminalM>();
         Map<String, String> childDatas = new HashMap<String, String>();
 
         try {
             //
-            if(mitTerminalM!=null){
+            if (mitTerminalM != null) {
                 mitTerminalMS.add(mitTerminalM);
-            }else{
+            } else {
                 Map<String, Object> terminalKeyMap = new HashMap<String, Object>();
                 terminalKeyMap.put("uploadflag", "1");
                 terminalKeyMap.put("padisconsistent", "0");
@@ -1290,65 +1359,74 @@ public class XtUploadService {
             e.printStackTrace();
         }
 
-        childDatas.put("MIT_TERMINAL_M",JsonUtil.toJson(mitTerminalMS));
-        List<Map<String, String>> mainDatas = new ArrayList<Map<String, String>>();
-        mainDatas.add(childDatas);
-        String json = JsonUtil.toJson(mainDatas);
-        String optcode = "opt_save_mitterminalm";// 督导新增终端
+        if (mitTerminalMS != null && !mitTerminalMS.isEmpty() && mitTerminalMS.size()>0) {
 
-        // 组建请求Json
-        RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(context);
-        requestHeadStc.setOptcode(PropertiesUtil.getProperties(optcode));
-        RequestStructBean reqObj = HttpParseJson.parseRequestStructBean(requestHeadStc, json);
+            childDatas.put("MIT_TERMINAL_M", JsonUtil.toJson(mitTerminalMS));
+            List<Map<String, String>> mainDatas = new ArrayList<Map<String, String>>();
+            mainDatas.add(childDatas);
+            String json = JsonUtil.toJson(mainDatas);
+            String optcode = "opt_save_mitterminalm";// 督导新增终端
 
-        // 压缩请求数据
-        String jsonZip = HttpParseJson.parseRequestJson(reqObj);
+            // 组建请求Json
+            RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(context);
+            requestHeadStc.setOptcode(PropertiesUtil.getProperties(optcode));
+            RequestStructBean reqObj = HttpParseJson.parseRequestStructBean(requestHeadStc, json);
 
-        RestClient.builder()
-                .url(HttpUrl.IP_END)
-                .params("data", jsonZip)
-                //.loader(context)
-                .success(new ISuccess() {
-                    @Override
-                    public void onSuccess(String response) {
-                        String json = HttpParseJson.parseJsonResToString(response);
-                        ResponseStructBean resObj = new ResponseStructBean();
-                        resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
-                        if(TextUtils.isEmpty(json)){
-                            Toast.makeText(context, "返回数据为null", Toast.LENGTH_SHORT).show();
-                        }else{
-                            // 处理成功上传
-                            if (ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())) {
-                                //
-                                // 处理上传后的数据,该删删,该处理
-                                String formjson = resObj.getResBody().getContent();
-                                parseMitTerminalM(formjson);
-                                // ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_SUC);
-                                Toast.makeText(context, "上传成功!", Toast.LENGTH_SHORT).show();
+            // 压缩请求数据
+            String jsonZip = HttpParseJson.parseRequestJson(reqObj);
 
+            RestClient.builder()
+                    .url(HttpUrl.IP_END)
+                    .params("data", jsonZip)
+                    //.loader(context)
+                    .success(new ISuccess() {
+                        @Override
+                        public void onSuccess(String response) {
+                            String json = HttpParseJson.parseJsonResToString(response);
+                            ResponseStructBean resObj = new ResponseStructBean();
+                            resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
+                            if (TextUtils.isEmpty(json)) {
+                                Toast.makeText(context, "返回数据为null", Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(context, resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
+                                // 处理成功上传
+                                if (ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())) {
+                                    //
+                                    // 处理上传后的数据,该删删,该处理
+                                    String formjson = resObj.getResBody().getContent();
+                                    parseMitTerminalM(formjson);
+                                    // ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_SUC);
+                                    Toast.makeText(context, "上传成功!", Toast.LENGTH_SHORT).show();
 
-                    }
-                })
-                .error(new IError() {
-                    @Override
-                    public void onError(int code, String msg) {
-                        // ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_FAIL);
-                        Toast.makeText(context, "上传失败!", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .failure(new IFailure() {
-                    @Override
-                    public void onFailure() {
-                        Toast.makeText(context, "上传失败", Toast.LENGTH_SHORT).show();
-                        // ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_FAIL);
-                    }
-                })
-                .builde()
-                .post();
+                                } else {
+                                    Toast.makeText(context, resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                        }
+                    })
+                    .error(new IError() {
+                        @Override
+                        public void onError(int code, String msg) {
+                            // ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_FAIL);
+                            Toast.makeText(context, "上传失败!", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .failure(new IFailure() {
+                        @Override
+                        public void onFailure() {
+                            Toast.makeText(context, "上传失败", Toast.LENGTH_SHORT).show();
+                            // ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_FAIL);
+                        }
+                    })
+                    .builde()
+                    .post();
+
+        } else {
+            if (isNeedExit) {
+                //上传所有的巡店拜访
+                //handler.sendEmptyMessage(TitleLayout.UPLOAD_DATA);
+            }
+        }
     }
 
     // 处理督导删除新增终端
@@ -1376,14 +1454,14 @@ public class XtUploadService {
     }
 
     // 上传 经销商开发核查表
-    public void uploadMitValagencykfM(boolean b, MitValagencykfM valagencykf, int i) {
-        List<MitValagencykfM>  valagencykfMS = new ArrayList<MitValagencykfM>();
+    public void uploadMitValagencykfM(boolean isNeedExit, MitValagencykfM valagencykf, int i) {
+        List<MitValagencykfM> valagencykfMS = new ArrayList<MitValagencykfM>();
 
         try {
             //
-            if(valagencykf!=null){
+            if (valagencykf != null) {
                 valagencykfMS.add(valagencykf);
-            }else{
+            } else {
                 Map<String, Object> terminalKeyMap = new HashMap<String, Object>();
                 terminalKeyMap.put("uploadflag", "1");
                 terminalKeyMap.put("padisconsistent", "0");
@@ -1393,66 +1471,74 @@ public class XtUploadService {
             e.printStackTrace();
         }
 
-        Map<String, String> childDatas = new HashMap<String, String>();
-        childDatas.put("MIT_VALAGENCYKF_M",JsonUtil.toJson(valagencykfMS));
-        List<Map<String, String>> mainDatas = new ArrayList<Map<String, String>>();
-        mainDatas.add(childDatas);
-        String json = JsonUtil.toJson(mainDatas);
-        String optcode = "opt_save_mitvalagencykfm";// 经销商开发核查表
+        if (valagencykfMS != null && !valagencykfMS.isEmpty() && valagencykfMS.size()>0) {
 
-        // 组建请求Json
-        RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(context);
-        requestHeadStc.setOptcode(PropertiesUtil.getProperties(optcode));
-        RequestStructBean reqObj = HttpParseJson.parseRequestStructBean(requestHeadStc, json);
+            Map<String, String> childDatas = new HashMap<String, String>();
+            childDatas.put("MIT_VALAGENCYKF_M", JsonUtil.toJson(valagencykfMS));
+            List<Map<String, String>> mainDatas = new ArrayList<Map<String, String>>();
+            mainDatas.add(childDatas);
+            String json = JsonUtil.toJson(mainDatas);
+            String optcode = "opt_save_mitvalagencykfm";// 经销商开发核查表
 
-        // 压缩请求数据
-        String jsonZip = HttpParseJson.parseRequestJson(reqObj);
+            // 组建请求Json
+            RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(context);
+            requestHeadStc.setOptcode(PropertiesUtil.getProperties(optcode));
+            RequestStructBean reqObj = HttpParseJson.parseRequestStructBean(requestHeadStc, json);
+
+            // 压缩请求数据
+            String jsonZip = HttpParseJson.parseRequestJson(reqObj);
 
 
-        RestClient.builder()
-                .url(HttpUrl.IP_END)
-                .params("data", jsonZip)
-                //.loader(context)
-                .success(new ISuccess() {
-                    @Override
-                    public void onSuccess(String response) {
-                        String json = HttpParseJson.parseJsonResToString(response);
-                        ResponseStructBean resObj = new ResponseStructBean();
-                        resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
-                        if(TextUtils.isEmpty(json)){
-                            Toast.makeText(context, "返回数据为null", Toast.LENGTH_SHORT).show();
-                        }else{
-                            // 处理成功上传
-                            if (ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())) {
-                                //
-                                // 处理上传后的数据,该删删,该处理
-                                String formjson = resObj.getResBody().getContent();
-                                parseMitValagencykfM(formjson);
-                                // ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_SUC);
-                                Toast.makeText(context, "上传成功!", Toast.LENGTH_SHORT).show();
+            RestClient.builder()
+                    .url(HttpUrl.IP_END)
+                    .params("data", jsonZip)
+                    //.loader(context)
+                    .success(new ISuccess() {
+                        @Override
+                        public void onSuccess(String response) {
+                            String json = HttpParseJson.parseJsonResToString(response);
+                            ResponseStructBean resObj = new ResponseStructBean();
+                            resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
+                            if (TextUtils.isEmpty(json)) {
+                                Toast.makeText(context, "返回数据为null", Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(context, resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
+                                // 处理成功上传
+                                if (ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())) {
+                                    //
+                                    // 处理上传后的数据,该删删,该处理
+                                    String formjson = resObj.getResBody().getContent();
+                                    parseMitValagencykfM(formjson);
+                                    // ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_SUC);
+                                    Toast.makeText(context, "上传成功!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(context, resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
 
-                    }
-                })
-                .error(new IError() {
-                    @Override
-                    public void onError(int code, String msg) {
-                        // ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_FAIL);
-                        Toast.makeText(context, "上传失败!", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .failure(new IFailure() {
-                    @Override
-                    public void onFailure() {
-                        Toast.makeText(context, "上传失败", Toast.LENGTH_SHORT).show();
-                        // ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_FAIL);
-                    }
-                })
-                .builde()
-                .post();
+                        }
+                    })
+                    .error(new IError() {
+                        @Override
+                        public void onError(int code, String msg) {
+                            // ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_FAIL);
+                            Toast.makeText(context, "上传失败!", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .failure(new IFailure() {
+                        @Override
+                        public void onFailure() {
+                            Toast.makeText(context, "上传失败", Toast.LENGTH_SHORT).show();
+                            // ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_FAIL);
+                        }
+                    })
+                    .builde()
+                    .post();
+        } else {
+            if (isNeedExit) {
+                //上传所有的巡店拜访
+                //handler.sendEmptyMessage(TitleLayout.UPLOAD_DATA);
+            }
+        }
     }
 
     // 处理 经销商开发核查表
@@ -1479,17 +1565,17 @@ public class XtUploadService {
     }
 
     // 上传 督导 经销商库存盘点
-    public void uploadMitAgencynumM(boolean b, MitAgencynumM mitAgencynumM, List<MitAgencyproM> mitAgencyproMS, int i) {
-        List<MitAgencynumM>  agencynumMS = new ArrayList<MitAgencynumM>();
-        List<MitAgencyproM>  agencyproMS = new ArrayList<MitAgencyproM>();
+    public void uploadMitAgencynumM(boolean isNeedExit, MitAgencynumM mitAgencynumM, List<MitAgencyproM> mitAgencyproMS, int i) {
+        List<MitAgencynumM> agencynumMS = new ArrayList<MitAgencynumM>();
+        List<MitAgencyproM> agencyproMS = new ArrayList<MitAgencyproM>();
         Map<String, String> childDatas = new HashMap<String, String>();
 
         try {
             //
-            if(mitAgencynumM!=null){
+            if (mitAgencynumM != null) {
                 agencynumMS.add(mitAgencynumM);
                 agencyproMS = mitAgencyproMS;
-            }else{
+            } else {
                 Map<String, Object> terminalKeyMap = new HashMap<String, Object>();
                 terminalKeyMap.put("uploadflag", "1");
                 terminalKeyMap.put("padisconsistent", "0");
@@ -1500,66 +1586,74 @@ public class XtUploadService {
             e.printStackTrace();
         }
 
-        childDatas.put("MIT_AGENCYNUM_M",JsonUtil.toJson(agencynumMS));
-        childDatas.put("MIT_AGENCYPRO_M",JsonUtil.toJson(agencyproMS));
-        List<Map<String, String>> mainDatas = new ArrayList<Map<String, String>>();
-        mainDatas.add(childDatas);
-        String json = JsonUtil.toJson(mainDatas);
+        if (agencynumMS != null && !agencynumMS.isEmpty() && agencynumMS.size()>0) {
 
-        String optcode = "opt_save_mitagencynumm";// 督导 经销商库存盘点
+            childDatas.put("MIT_AGENCYNUM_M", JsonUtil.toJson(agencynumMS));
+            childDatas.put("MIT_AGENCYPRO_M", JsonUtil.toJson(agencyproMS));
+            List<Map<String, String>> mainDatas = new ArrayList<Map<String, String>>();
+            mainDatas.add(childDatas);
+            String json = JsonUtil.toJson(mainDatas);
 
-        // 组建请求Json
-        RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(context);
-        requestHeadStc.setOptcode(PropertiesUtil.getProperties(optcode));
-        RequestStructBean reqObj = HttpParseJson.parseRequestStructBean(requestHeadStc, json);
+            String optcode = "opt_save_mitagencynumm";// 督导 经销商库存盘点
 
-        // 压缩请求数据
-        String jsonZip = HttpParseJson.parseRequestJson(reqObj);
+            // 组建请求Json
+            RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(context);
+            requestHeadStc.setOptcode(PropertiesUtil.getProperties(optcode));
+            RequestStructBean reqObj = HttpParseJson.parseRequestStructBean(requestHeadStc, json);
 
-        RestClient.builder()
-                .url(HttpUrl.IP_END)
-                .params("data", jsonZip)
-                //.loader(context)
-                .success(new ISuccess() {
-                    @Override
-                    public void onSuccess(String response) {
-                        String json = HttpParseJson.parseJsonResToString(response);
-                        ResponseStructBean resObj = new ResponseStructBean();
-                        resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
+            // 压缩请求数据
+            String jsonZip = HttpParseJson.parseRequestJson(reqObj);
 
-                        if(TextUtils.isEmpty(json)){
-                            Toast.makeText(context, "返回数据为null", Toast.LENGTH_SHORT).show();
-                        }else{
-                            // 处理成功上传
-                            if (ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())) {
-                                //
-                                // 处理上传后的数据,该删删,该处理
-                                String formjson = resObj.getResBody().getContent();
-                                parseMitAgencynumM(formjson);
-                                // ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_SUC);
-                                Toast.makeText(context, "上传成功!", Toast.LENGTH_SHORT).show();
+            RestClient.builder()
+                    .url(HttpUrl.IP_END)
+                    .params("data", jsonZip)
+                    //.loader(context)
+                    .success(new ISuccess() {
+                        @Override
+                        public void onSuccess(String response) {
+                            String json = HttpParseJson.parseJsonResToString(response);
+                            ResponseStructBean resObj = new ResponseStructBean();
+                            resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
+
+                            if (TextUtils.isEmpty(json)) {
+                                Toast.makeText(context, "返回数据为null", Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(context, resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
+                                // 处理成功上传
+                                if (ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())) {
+                                    //
+                                    // 处理上传后的数据,该删删,该处理
+                                    String formjson = resObj.getResBody().getContent();
+                                    parseMitAgencynumM(formjson);
+                                    // ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_SUC);
+                                    Toast.makeText(context, "上传成功!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(context, resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
+                                }
                             }
                         }
-                    }
-                })
-                .error(new IError() {
-                    @Override
-                    public void onError(int code, String msg) {
-                        // ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_FAIL);
-                        Toast.makeText(context, "上传失败!", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .failure(new IFailure() {
-                    @Override
-                    public void onFailure() {
-                        Toast.makeText(context, "上传失败", Toast.LENGTH_SHORT).show();
-                        // ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_FAIL);
-                    }
-                })
-                .builde()
-                .post();
+                    })
+                    .error(new IError() {
+                        @Override
+                        public void onError(int code, String msg) {
+                            // ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_FAIL);
+                            Toast.makeText(context, "上传失败!", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .failure(new IFailure() {
+                        @Override
+                        public void onFailure() {
+                            Toast.makeText(context, "上传失败", Toast.LENGTH_SHORT).show();
+                            // ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_FAIL);
+                        }
+                    })
+                    .builde()
+                    .post();
+        } else {
+            if (isNeedExit) {
+                //上传所有的巡店拜访
+                //handler.sendEmptyMessage(TitleLayout.UPLOAD_DATA);
+            }
+        }
     }
 
     // 处理 督导经销商库存盘点
@@ -1783,19 +1877,20 @@ public class XtUploadService {
     List<MitRepairM> mitRepairMs = new ArrayList<MitRepairM>();
     List<MitRepaircheckM> mitRepaircheckMs = new ArrayList<MitRepaircheckM>();
     List<MitRepairterM> mitRepairterMs = new ArrayList<MitRepairterM>();
+
     // 上传整顿计划
-    public void upload_repair(boolean b, MitRepairM repairM, MitRepaircheckM mitRepaircheckM, int i) {
+    public void upload_repair(boolean isNeedExit, MitRepairM repairM, MitRepaircheckM mitRepaircheckM, int i) {
         try {
             //
-            if(repairM!=null){
+            if (repairM != null) {
                 mitRepairMs.add(repairM);
 
                 Map<String, Object> terminalKeyMap = new HashMap<String, Object>();
                 terminalKeyMap.put("repairid", repairM.getId());
                 mitRepairterMs = mitRepairterMDao.queryForFieldValues(terminalKeyMap);
-                mitRepaircheckMs= mitRepaircheckMDao.queryForFieldValues(terminalKeyMap);
+                mitRepaircheckMs = mitRepaircheckMDao.queryForFieldValues(terminalKeyMap);
 
-            }else{
+            } else {
                 Map<String, Object> terminalKeyMap = new HashMap<String, Object>();
                 terminalKeyMap.put("uploadflag", "1");
                 terminalKeyMap.put("padisconsistent", "0");
@@ -1851,10 +1946,10 @@ public class XtUploadService {
             upRepairService("opt_save_mitrepairm", "", json);
 
         } else {
-            /*if (isNeedExit) {
+            if (isNeedExit) {
                 //上传所有的巡店拜访
                 //handler.sendEmptyMessage(TitleLayout.UPLOAD_DATA);
-            }*/
+            }
         }
     }
 
@@ -1878,9 +1973,9 @@ public class XtUploadService {
                         ResponseStructBean resObj = new ResponseStructBean();
                         resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
 
-                        if(TextUtils.isEmpty(json)){
+                        if (TextUtils.isEmpty(json)) {
                             Toast.makeText(context, "后台成功接收,但返回的数据为null", Toast.LENGTH_SHORT).show();
-                        }else{
+                        } else {
                             // 处理成功上传
                             if (ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())) {
                                 //

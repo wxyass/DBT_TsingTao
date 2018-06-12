@@ -57,6 +57,7 @@ import et.tsingtaopad.dd.ddxt.updata.XtUploadService;
 import et.tsingtaopad.dd.ddzs.zsshopvisit.ZsVisitShopActivity;
 import et.tsingtaopad.dd.ddzs.zsterm.zscart.ZsTermCartFragment;
 import et.tsingtaopad.home.app.MainService;
+import et.tsingtaopad.home.app.MyApplication;
 import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.http.HttpParseJson;
 import et.tsingtaopad.util.requestHeadUtil;
@@ -454,6 +455,9 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
                             //if (ViewUtil.isDoubleClick(v.getId(), 2500)) return;
                             DbtLog.logUtils(TAG, "前往拜访：删除");
                             xtUploadService.deleteZs(mitValterM.getId(),mitValterM.getTerminalkey(),1);
+                            initTermListData(routeKey);
+                            setSelectTerm();// 设置已添加购物车的符号
+                            setItemAdapterListener();
                         }else if(1 == position){
                             DbtLog.logUtils(TAG, "前往拜访：上传");
                             xtUploadService.upload_zs_visit(false,mitValterM.getId(),1);
@@ -603,9 +607,9 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
     // 结束上传  刷新页面  0:确定上传  1上传成功  2上传失败
     private void shuaxinXtTermSelect(int upType) {
         if(1==upType){
-            Toast.makeText(getActivity(),"上传成功",Toast.LENGTH_SHORT).show();
+            Toast.makeText(MyApplication.getAppContext(),"上传成功",Toast.LENGTH_SHORT).show();
         }else if(2==upType){
-            Toast.makeText(getActivity(),"上传失败",Toast.LENGTH_SHORT).show();
+            Toast.makeText(MyApplication.getAppContext(),"上传失败",Toast.LENGTH_SHORT).show();
         }
         initTermListData(routeKey);// 重新读取终端列表
         setSelectTerm();// 设置已添加购物车的符号

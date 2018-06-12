@@ -108,7 +108,7 @@ public class XtChatvieFragment extends XtBaseVisitFragment implements View.OnCli
 
         // 竞品来源
         xtVieSourceAdapter = new XtVieSourceAdapter(
-                getActivity(), "", dataLst, "", null, null,null, null,
+                getActivity(), "", dataLst, "",  null,null, null,
                 new ILongClick(){
                     @Override
                     public void listViewItemLongClick(int position, View v) {

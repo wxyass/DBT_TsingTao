@@ -34,10 +34,16 @@ public class LatteLoader {
 
 
     // 根据传入不同的type,展示不同缓存页面
-    public static void showLoading(Context context, String type) {
+    public static void showLoading(Context context, String type,boolean protype) {
         final AppCompatDialog dialog = new AppCompatDialog(context, R.style.dialog);
         final AVLoadingIndicatorView avLoadingIndicatorView = LoaderCreator.create(type, context);
         dialog.setContentView(avLoadingIndicatorView);
+        if(protype){
+            dialog.setCancelable(protype);// 点击不可消失
+        }else{
+            dialog.setCancelable(false);// 点击不可消失
+        }
+
 
         int deviceWidth = DimenUtil.getScreenWidth();
         int deviceHeight = DimenUtil.getScreenHeight();
@@ -55,14 +61,19 @@ public class LatteLoader {
         dialog.show();
     }
 
-    // 默认展示的 Loading页面
+    // 默认展示的 Loading页面 // 点击不可取消
     public static void showLoading(Context context) {
-        showLoading(context, DEFAULT_LOADER);
+        showLoading(context, DEFAULT_LOADER,false);
+    }
+
+    // 默认展示的 Loading页面 // false: 点击不可隐藏滚动条  true:点击可隐藏滚动
+    public static void showLoading(Context context,boolean protype) {
+        showLoading(context, DEFAULT_LOADER,protype);
     }
 
     // 根据传入的不同type展示 Loading页面
     public static void showLoading(Context context, Enum<LoaderStyle> type){
-        showLoading(context,type.name());
+        showLoading(context,type.name(),false);
     }
 
     // 关闭Loading页面

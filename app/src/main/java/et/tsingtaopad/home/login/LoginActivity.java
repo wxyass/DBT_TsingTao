@@ -90,23 +90,31 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         int i = v.getId();
         // 登录
         if (i == R.id.login_dd_bt_submit) {
-            LatteLoader.showLoading(LoginActivity.this);// 处理数据中  ,在LoginActivity的handleMessage中关闭
-            try {
-                this.loginIn();
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (hasPermission(GlobalValues.WRITE_READ_EXTERNAL_PERMISSION)) {
+                // 拥有了此权限,那么直接执行业务逻辑
+                loginIn();
+            } else {
+                // 还没有对一个权限(请求码,权限数组)这两个参数都事先定义好
+                requestPermission(GlobalValues.WRITE_READ_EXTERNAL_CODE, GlobalValues.WRITE_READ_EXTERNAL_PERMISSION);
             }
-            // 取消
-        } else if (i == R.id.login_dd_bt_cancel) {
+
+        } else if (i == R.id.login_dd_bt_cancel) {// 取消
             System.exit(0);
         } else {
         }
+    }
+
+    @Override
+    public void doWriteSDCard() {
+        loginIn();
     }
 
     /**
      * 登录
      */
     private void loginIn() {
+
+        LatteLoader.showLoading(LoginActivity.this);// 处理数据中  ,在请求数据返回时关闭
 
         String name = uidEt.getText().toString();
         String pwd = pwdEt.getText().toString();
@@ -155,9 +163,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             // 保存信息
                             String formjson = resObj.getResBody().getContent();
                             parseLoginJson(formjson);
-                            Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                            handler.sendEmptyMessage(ConstValues.WAIT0);
-
+                            LatteLoader.stopLoading();
                         } else {
                             Toast.makeText(LoginActivity.this, resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
                             LatteLoader.stopLoading();
@@ -200,7 +206,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             } else if (timeDiff > 5 * 60000) {
                 Toast.makeText(LoginActivity.this, getString(R.string.login_msg_invaldate), Toast.LENGTH_SHORT).show();
             } else {
-                saveLoginSession(emp, "a1234567", "");
+                saveLoginSession(emp, "", "");
             }
         }
     }
@@ -224,8 +230,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             PrefUtils.putString(LoginActivity.this, "usercode", emp.getUsercode());// 50000
             PrefUtils.putString(LoginActivity.this, "userid", emp.getUserid());// 19b1ded5-f853-48ab-aa2b-b12e963c8f9b
             PrefUtils.putString(LoginActivity.this, "username", emp.getUsername());//督导菲菲
-            PrefUtils.putString(LoginActivity.this, "userPwd", pwd);//a1234567
+            PrefUtils.putString(LoginActivity.this, "userPwd", emp.getPassword());//a1234567
         }
+
+        Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+        handler.sendEmptyMessage(ConstValues.WAIT0);
     }
 
     // 跳转到主界面,,并关闭本界面
@@ -280,7 +289,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             switch (msg.what) {
                 case ConstValues.WAIT0://  登录成功
                     fragment.startDbtAty();
-                    LatteLoader.stopLoading();
                     break;
                 case GlobalValues.SINGLE_UP_SUC://
                     break;

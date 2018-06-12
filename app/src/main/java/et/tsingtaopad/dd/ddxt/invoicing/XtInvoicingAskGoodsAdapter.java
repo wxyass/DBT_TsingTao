@@ -22,7 +22,6 @@ import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.dd.ddxt.invoicing.domain.XtInvoicingStc;
 import et.tsingtaopad.listviewintf.ILongClick;
-import et.tsingtaopad.main.visit.shopvisit.termvisit.invoicing.adapter.InvoicingCheckGoodsAdapter;
 
 /**
  * Created by yangwenmin on 2018/3/19.
@@ -39,21 +38,19 @@ public class XtInvoicingAskGoodsAdapter extends BaseAdapter {//implements  View.
 
     private String termId;
     private String visitId;
-    private InvoicingCheckGoodsAdapter checkAdapter;
     private int delPosition = -1;
     private AlertDialog dialog;
     private String seeFlag;
     private ILongClick listener;
 
     public XtInvoicingAskGoodsAdapter(Activity context, String seeFlag, List<XtInvoicingStc> dataLst,
-                                      String termId, String visitId, InvoicingCheckGoodsAdapter checkAdapter,
+                                      String termId, String visitId,
                                       ListView askGoodsLv, ListView checkGoodsLv, ILongClick listener) {
         this.context = context;
         this.seeFlag = seeFlag;
         this.dataLst = dataLst;
         this.termId = termId;
         this.visitId = visitId;
-        this.checkAdapter = checkAdapter;
         this.askGoodsLv=askGoodsLv;
         this.checkGoodsLv=checkGoodsLv;
         this.listener=listener;

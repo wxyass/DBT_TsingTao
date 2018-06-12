@@ -1,9 +1,10 @@
 package et.tsingtaopad.business.system;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatTextView;
@@ -18,13 +19,10 @@ import android.widget.Toast;
 
 import java.lang.ref.SoftReference;
 import java.text.DecimalFormat;
-import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.business.system.repwd.ApkStc;
-import et.tsingtaopad.business.system.repwd.UserStc;
-import et.tsingtaopad.business.visit.VisitFragment;
 import et.tsingtaopad.core.net.HttpUrl;
 import et.tsingtaopad.core.net.RestClient;
 import et.tsingtaopad.core.net.callback.IError;
@@ -34,17 +32,14 @@ import et.tsingtaopad.core.net.callback.OnDownLoadProgress;
 import et.tsingtaopad.core.net.domain.RequestHeadStc;
 import et.tsingtaopad.core.net.domain.RequestStructBean;
 import et.tsingtaopad.core.net.domain.ResponseStructBean;
+import et.tsingtaopad.core.ui.loader.LatteLoader;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
-import et.tsingtaopad.core.util.dbtutil.DbtUtils;
 import et.tsingtaopad.core.util.dbtutil.JsonUtil;
+import et.tsingtaopad.core.util.dbtutil.NetStatusUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
-import et.tsingtaopad.core.util.dbtutil.logutil.LogUtils;
-import et.tsingtaopad.dd.dddaysummary.DdDaySummaryFragment;
-import et.tsingtaopad.dd.dddaysummary.domain.DaySummaryStc;
-import et.tsingtaopad.dd.dddaysummary.domain.DdDayPlanStc;
-import et.tsingtaopad.dd.ddweekplan.DdWeekPlanFragment;
+import et.tsingtaopad.dd.ddxt.updata.XtUploadService;
 import et.tsingtaopad.home.initadapter.GlobalValues;
 import et.tsingtaopad.http.HttpParseJson;
 import et.tsingtaopad.util.requestHeadUtil;
@@ -63,14 +58,18 @@ public class SystemFragment extends BaseFragmentSupport implements View.OnClickL
 
     RelativeLayout repwd;
     RelativeLayout question;
-    RelativeLayout upload;
+    RelativeLayout uploadApk;
     RelativeLayout about;
+    RelativeLayout exit;
 
     public static final int SHOWDOWNLOADDIALOG = 88; // 弹出进度条,设置最大值100 //显示正在下载的对话框
     public static final int UPDATEDOWNLOADDIALOG = 99;// 设置进度条  //刷新正在下载对话框的内容
     public static final int DOWNLOADFINISHED = 66;// 下载完成开始安装 //下载完成后进行的操作
 
     MyHandler handler;
+    int count = 0;
+
+    private XtUploadService uploadService;
 
     /**
      * 接收子线程消息的 Handler
@@ -106,6 +105,13 @@ public class SystemFragment extends BaseFragmentSupport implements View.OnClickL
         }
     }
 
+    private void closeProgress() {
+        count ++;
+        if(count>=7){
+            LatteLoader.stopLoading();
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -128,13 +134,15 @@ public class SystemFragment extends BaseFragmentSupport implements View.OnClickL
 
         repwd = (RelativeLayout) view.findViewById(R.id.dd_system_rl_repwd);
         question = (RelativeLayout) view.findViewById(R.id.dd_system_rl_question);
-        upload = (RelativeLayout) view.findViewById(R.id.dd_system_rl_upload);
+        uploadApk = (RelativeLayout) view.findViewById(R.id.dd_system_rl_upload);
         about = (RelativeLayout) view.findViewById(R.id.dd_system_rl_about);
+        exit = (RelativeLayout) view.findViewById(R.id.dd_system_rl_exit);
 
         repwd.setOnClickListener(this);
         question.setOnClickListener(this);
-        upload.setOnClickListener(this);
+        uploadApk.setOnClickListener(this);
         about.setOnClickListener(this);
+        exit.setOnClickListener(this);
 
     }
 
@@ -144,6 +152,7 @@ public class SystemFragment extends BaseFragmentSupport implements View.OnClickL
 
         titleTv.setText("系统管理");
         handler = new MyHandler(this);
+        uploadService = new XtUploadService(getActivity(), null);
     }
 
     @Override
@@ -167,7 +176,51 @@ public class SystemFragment extends BaseFragmentSupport implements View.OnClickL
             case R.id.dd_system_rl_about:// 关于系统
                 changeHomeFragment(new DdAboutFragment(), "dddealplanfragment");
                 break;
+            case R.id.dd_system_rl_exit:// 关于系统
+                exitSystem();
+                break;
         }
+    }
+
+    private void exitSystem(){
+        boolean allEmpty = uploadService.isAllEmpty();
+        if(allEmpty){// 直接退出
+            System.exit(0);
+        }else {// 需要上传
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("退出");
+            builder.setMessage("检测到还有未上传数据？");
+            builder.setPositiveButton("上传", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    // 检查网络
+                    if (NetStatusUtil.isNetValid(getContext())) {
+                        // 检查是否有未上传完的数据
+                        count = 0;
+                        LatteLoader.showLoading(getActivity(),true);// 处理数据中 true:点击隐藏进度条  (没有自动关闭滚动页)
+                        uploadService.uploadTables(true);
+                    } else {
+                        // 提示修改网络
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setTitle("网络错误");
+                        builder.setMessage("还有未上传数据，请连接好网络上传数据再退出");
+                        builder.setNegativeButton("确定", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                getContext().startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
+                            }
+                        }).create().show();
+                    }
+                }
+            });
+            builder.setNegativeButton("取消", null).create().show();
+        }
+
+
+
     }
 
     // 权限 下载apk
