@@ -18,6 +18,8 @@
     <dimen name="font_size5">14dp</dimen>
     <dimen name="font_size6">12dp</dimen>
     <dimen name="font_size7">10dp</dimen>
+    <dimen name="font_size8">8dp</dimen>
+    <dimen name="font_size9">6dp</dimen>
 
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="home_weather_textsize">18dp</dimen>

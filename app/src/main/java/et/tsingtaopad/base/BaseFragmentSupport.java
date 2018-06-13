@@ -2,6 +2,8 @@ package et.tsingtaopad.base;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -14,6 +16,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import et.tsingtaopad.R;
+import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.fragmentback.HandleBackInterface;
 import et.tsingtaopad.fragmentback.HandleBackUtil;
 import et.tsingtaopad.home.initadapter.GlobalValues;
@@ -171,8 +174,22 @@ public class BaseFragmentSupport extends Fragment implements HandleBackInterface
 
 	// 权限相关 ↑--------------------------------------------------------------------------
 
+	// 监听返回键
 	@Override
 	public boolean onBackPressed() {
 		return HandleBackUtil.handleBackPress(this);
+	}
+
+	// 检测是否同步数据了
+	// 查询终端表数量
+	public long getCmmAreaMCount(){
+
+		DatabaseHelper helper = DatabaseHelper.getHelper(getActivity());
+		SQLiteDatabase db = helper.getReadableDatabase();
+
+		String querySql = "SELECT COUNT(*)  FROM CMM_AREA_M";
+		Cursor cursor = db.rawQuery(querySql, null);
+		cursor.moveToFirst();
+		return cursor.getLong(0);
 	}
 }

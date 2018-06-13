@@ -10,6 +10,9 @@
 
     <!--灰色-->
     <color name="gray">#999999</color>
+    <!--浅灰色-->
+    <color name="lightgray">#cccccc</color>
+    <color name="lightgray2">#e5e5e5</color>
     <!--橘黄色-->
     <color name="orange">#F9C829</color>
     <!--浅蓝色-->
@@ -19,7 +22,7 @@
 
     <!--整体背景色-->
     <!--<color name="bg_app">#f8f9fa</color>-->
-    <color name="bg_app">#F0F0F0</color>
+    <color name="bg_app">#F7F7F7</color>
 
 
     <!-- 背景色 -->
@@ -95,6 +98,8 @@
     <color name="home_channel_cb00c52">#b00c52</color>
     <color name="home_channel_c9f8dfa">#9f8dfa</color>
     <color name="home_channel_c10b594">#10b594</color>
+
+    <color name="first_gv_unit">#ff8400</color>
 
 
     <!--网络信号差对话框  -->

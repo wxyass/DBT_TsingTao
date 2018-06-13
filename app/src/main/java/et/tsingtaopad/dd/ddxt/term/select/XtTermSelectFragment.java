@@ -35,6 +35,7 @@ import et.tsingtaopad.core.net.domain.ResponseStructBean;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.JsonUtil;
+import et.tsingtaopad.core.util.dbtutil.NetStatusUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
@@ -385,9 +386,18 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
                             //if (ViewUtil.isDoubleClick(v.getId(), 2500)) return;
                             DbtLog.logUtils(TAG, "前往拜访：删除");
                             xtUploadService.deleteXt(mitVisitM.getVisitkey(),mitVisitM.getTerminalkey());
+                            initTermListData(routeKey);
+                            setSelectTerm();// 设置已添加购物车的符号
+                            setItemAdapterListener();
                         }else if(1 == position){
                             DbtLog.logUtils(TAG, "前往拜访：上传");
-                            xtUploadService.upload_xt_visit(false,mitVisitM.getVisitkey(),1);
+                            // 如果网络可用
+                            if (NetStatusUtil.isNetValid(getActivity())) {
+                                xtUploadService.upload_xt_visit(false,mitVisitM.getVisitkey(),1);
+                            } else {
+                                // 提示修改网络
+                                Toast.makeText(getContext(), "网络异常,请先检查网络连接", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                 })
@@ -412,7 +422,6 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
         MstTerminalinfoM term = xtSelectService.findTermByTerminalkey(termSelectMStc.getTerminalkey());
         xtSelectService.toCopyMstTerminalinfoMCartData(term,"1");
     }
-
 
     // 条目点击 确定拜访一家终端
     private void confirmXtUplad(final XtTermSelectMStc termSelectMStc) {

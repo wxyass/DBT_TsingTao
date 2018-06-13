@@ -272,10 +272,9 @@
                 <EditText
                     android:id="@+id/xtbf_sayhi_termname"
                     style="@style/xtbf_sayhi_two_tv"
-                    android:layout_width="150dp"
+                    android:layout_width="270dp"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="5dp"
-                    android:layout_marginRight="100dp"
                     android:layout_marginTop="5dp"
                     android:maxLength="30"
                     android:background="@drawable/bg_visit_record"
@@ -344,7 +343,7 @@
                 <TextView
                     android:id="@+id/xtbf_sayhi_termlv"
                     style="@style/xtbf_sayhi_san_tv"
-                    android:layout_marginRight="130dp"
+                    android:layout_marginRight="40dp"
                     />
 
                 <TextView
@@ -431,10 +430,9 @@
                 <EditText
                     android:id="@+id/xtbf_sayhi_termaddress"
                     style="@style/xtbf_sayhi_two_tv"
-                    android:layout_width="150dp"
+                    android:layout_width="270dp"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="5dp"
-                    android:layout_marginRight="100dp"
                     android:layout_marginTop="5dp"
                     android:maxLength="50"
                     android:background="@drawable/bg_visit_record"
@@ -458,10 +456,9 @@
                 <EditText
                     android:id="@+id/xtbf_sayhi_termcontact"
                     style="@style/xtbf_sayhi_two_tv"
-                    android:layout_width="150dp"
+                    android:layout_width="270dp"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="5dp"
-                    android:layout_marginRight="100dp"
                     android:layout_marginTop="5dp"
                     android:maxLength="30"
                     android:background="@drawable/bg_visit_record"
@@ -485,10 +482,9 @@
                 <EditText
                     android:id="@+id/xtbf_sayhi_termphone"
                     style="@style/xtbf_sayhi_two_tv"
-                    android:layout_width="150dp"
+                    android:layout_width="270dp"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="5dp"
-                    android:layout_marginRight="100dp"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/bg_visit_record"
                     android:maxLength="20"
@@ -513,8 +509,6 @@
                 <EditText
                     android:id="@+id/xtbf_sayhi_termcycle"
                     style="@style/xtbf_sayhi_san_tv"
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:maxLength="3"
@@ -544,10 +538,9 @@
                 <EditText
                     android:id="@+id/xtbf_sayhi_termsequence"
                     style="@style/xtbf_sayhi_two_tv"
-                    android:layout_width="50dp"
+                    android:layout_width="80dp"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="5dp"
-                    android:layout_marginRight="100dp"
                     android:layout_marginTop="5dp"
                     android:maxLength="3"
                     android:background="@drawable/bg_visit_record"
@@ -572,8 +565,6 @@
                 <EditText
                     android:id="@+id/xtbf_sayhi_termhvolume"
                     style="@style/xtbf_sayhi_san_tv"
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:maxLength="10"
@@ -604,8 +595,6 @@
                 <EditText
                     android:id="@+id/xtbf_sayhi_termmvolume"
                     style="@style/xtbf_sayhi_san_tv"
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/bg_visit_record"
@@ -635,8 +624,6 @@
                 <EditText
                     android:id="@+id/xtbf_sayhi_termpvolume"
                     style="@style/xtbf_sayhi_san_tv"
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/bg_visit_record"
@@ -666,8 +653,6 @@
                 <EditText
                     android:id="@+id/xtbf_sayhi_termlvolume"
                     style="@style/xtbf_sayhi_san_tv"
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/bg_visit_record"
@@ -697,8 +682,6 @@
                 <EditText
                     android:id="@+id/xtbf_sayhi_termtvolume"
                     style="@style/xtbf_sayhi_san_tv"
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/bg_visit_record"

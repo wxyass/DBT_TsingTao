@@ -82,7 +82,7 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
     RelativeLayout xtTermBtn;
     LinearLayout zdzsBtn;
     RelativeLayout zsTermBtn;
-    RelativeLayout agencyresBtn;
+    LinearLayout agencyresBtn;
     RelativeLayout agencycheckBtn;
     RelativeLayout addtermBtn;
 
@@ -115,16 +115,16 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
         backTv = (AppCompatTextView) view.findViewById(R.id.top_navigation_bt_back);
         titleTv = (AppCompatTextView) view.findViewById(R.id.top_navigation_tv_title);
         backBtn.setVisibility(View.INVISIBLE);
-        confirmBtn.setVisibility(View.INVISIBLE);
+        confirmBtn.setVisibility(View.VISIBLE);
         confirmBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
 
-        button = (LinearLayout)view.findViewById(R.id.dd_btn_test);
+        button = (LinearLayout)view.findViewById(R.id.dd_btn_xtbf);
         xtTermBtn = (RelativeLayout)view.findViewById(R.id.dd_btn_xt_term);
         zdzsBtn = (LinearLayout)view.findViewById(R.id.dd_btn_zdzs);
         zsTermBtn = (RelativeLayout)view.findViewById(R.id.dd_btn_zs_term);
 
-        agencyresBtn = (RelativeLayout)view.findViewById(R.id.dd_btn_zs_agencyres);
+        agencyresBtn = (LinearLayout)view.findViewById(R.id.dd_btn_zs_agencyres);
         agencycheckBtn = (RelativeLayout)view.findViewById(R.id.dd_btn_zs_agencycheck);
         addtermBtn = (RelativeLayout)view.findViewById(R.id.dd_btn_zs_addterm);
 
@@ -156,8 +156,17 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.dd_btn_test:
+            case R.id.dd_btn_xtbf:
                 changeHomeFragment(new XtTermSelectFragment(), "xttermlistfragment");
+                break;
+            case R.id.top_navigation_rl_confirm:
+                if (hasPermission(GlobalValues.WRITE_READ_EXTERNAL_PERMISSION)) {
+                    // 拥有了此权限,那么直接执行业务逻辑
+                    startSyncInfo();
+                } else {
+                    // 还没有对一个权限(请求码,权限数组)这两个参数都事先定义好
+                    requestPermission(GlobalValues.WRITE_READ_EXTERNAL_CODE, GlobalValues.WRITE_READ_EXTERNAL_PERMISSION);
+                }
                 break;
             case R.id.dd_btn_xt_term:
                 Bundle bundle = new Bundle();
@@ -231,9 +240,9 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
 
         tablenames = new ArrayList<>();
 
-        tablenames.add("MST_MARKETAREA_GRID_ROUTE_M");
 
-        tablenames.add("CMM_AREA_M");
+
+
         tablenames.add("MST_PROMOTIONS_M");
         tablenames.add("MST_PROMOPRODUCT_INFO");
         tablenames.add("CMM_DATADIC_M");
@@ -249,7 +258,11 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
         tablenames.add("MST_INVOICING_INFO");
         tablenames.add("MST_AGENCYVISIT_M");
 
+        tablenames.add("MST_MARKETAREA_GRID_ROUTE_M");
+
         tablenames.add("MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO");
+
+        tablenames.add("CMM_AREA_M");
 
         //handler.sendEmptyMessage(FirstFragment.SYNC_SUCCSE);
         Bundle bundle = new Bundle();

@@ -59,7 +59,7 @@
                 <!--内容1-->
                 <TextView
                     android:id="@+id/zdzs_sayhi_tv_termstatus_con1"
-                    style="@style/zdzs_sayhi_content1"
+                    style="@style/zdzs_sayhi_checkterm"
                     android:text=""/>
 
                 <!--内容2-->
@@ -90,7 +90,7 @@
                 <!--内容1-->
                 <TextView
                     android:id="@+id/zdzs_sayhi_tv_visitstatus_con1"
-                    style="@style/zdzs_sayhi_content1"
+                    style="@style/zdzs_sayhi_checkterm"
                     android:text=""/>
 
                 <!--内容2-->
@@ -121,13 +121,14 @@
                 <!--内容1-->
                 <TextView
                     android:id="@+id/zdzs_sayhi_rl_wopindianzhao_con1"
-                    style="@style/zdzs_sayhi_content1"
+                    style="@style/zdzs_sayhi_checkterm"
                     android:text=""/>
 
                 <!--内容2-->
                 <TextView
                     android:id="@+id/zdzs_sayhi_rl_wopindianzhao_con2"
                     style="@style/zdzs_sayhi_content2"
+                    android:layout_marginLeft="260dp"
                     android:text=""/>
 
                 <!--未稽查-->
@@ -153,7 +154,7 @@
                 <!--内容1-->
                 <TextView
                     android:id="@+id/zdzs_sayhi_rl_selfstatus_con1"
-                    style="@style/zdzs_sayhi_content1"
+                    style="@style/zdzs_sayhi_checkterm"
                     android:text=""/>
 
                 <!--内容2-->
@@ -185,7 +186,7 @@
                 <!--内容1-->
                 <TextView
                     android:id="@+id/zdzs_sayhi_rl_cmpstatus_con1"
-                    style="@style/zdzs_sayhi_content1"
+                    style="@style/zdzs_sayhi_checkterm"
                     android:text=""/>
 
                 <!--内容2-->
@@ -217,7 +218,7 @@
                 <!--内容1-->
                 <TextView
                     android:id="@+id/zdzs_sayhi_rl_selfprotocol_con1"
-                    style="@style/zdzs_sayhi_content1"
+                    style="@style/zdzs_sayhi_checkterm"
                     android:text=""/>
 
                 <!--内容2-->
@@ -249,7 +250,7 @@
                 <!--内容1-->
                 <TextView
                     android:id="@+id/zdzs_sayhi_rl_cmpprotocol_con1"
-                    style="@style/zdzs_sayhi_content1"
+                    style="@style/zdzs_sayhi_checkterm"
                     android:text=""/>
 
                 <!--内容2-->

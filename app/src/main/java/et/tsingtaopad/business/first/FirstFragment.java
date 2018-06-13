@@ -199,7 +199,7 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                 .failure(new IFailure() {
                     @Override
                     public void onFailure() {
-                        Toast.makeText(getActivity(), "首页数据请求失败", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(getActivity(), "首页数据请求失败", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .builde()
@@ -213,12 +213,12 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
         List<GvTop> gvTops = JsonUtil.parseList(emp.getHomesevendayrank(), GvTop.class);
         List<LvTop> lvTops = JsonUtil.parseList(emp.getSevendayindexrank(), LvTop.class);
 
-        if(gvTops!=null&&gvTops.size()>0){
+        if (gvTops != null && gvTops.size() > 0) {
             gvTopList.clear();
             gvTopList.addAll(gvTops);
         }
 
-        if(lvTops!=null&&gvTops.size()>0){
+        if (lvTops != null && gvTops.size() > 0) {
             lvTopList.clear();
             lvTopList.addAll(lvTops);
         }
@@ -249,22 +249,52 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                 break;
 
             case R.id.first_rl_xtbf:// 协同拜访
-                changeHomeFragment(new XtTermSelectFragment(), "xttermlistfragment");
+                if (getCmmAreaMCount() > 0) {
+                    changeHomeFragment(new XtTermSelectFragment(), "xttermlistfragment");
+                } else {
+                    Toast.makeText(getActivity(), "基础信息不完整,请先同步数据", Toast.LENGTH_SHORT).show();
+                }
+
                 break;
             case R.id.first_rl_zdzs:// 终端追溯
-                changeHomeFragment(new ZsTermSelectFragment(), "zstermselectfragment");
+                if (getCmmAreaMCount() > 0) {
+                    changeHomeFragment(new ZsTermSelectFragment(), "zstermselectfragment");
+                } else {
+                    Toast.makeText(getActivity(), "基础信息不完整,请先同步数据", Toast.LENGTH_SHORT).show();
+                }
+
                 break;
             case R.id.first_rl_kcpd:// 库存盘点
-                changeHomeFragment(new DdAgencyCheckSelectFragment(), "ddagencycheckselectfragment");
+                if (getCmmAreaMCount() > 0) {
+                    changeHomeFragment(new DdAgencyCheckSelectFragment(), "ddagencycheckselectfragment");
+                } else {
+                    Toast.makeText(getActivity(), "基础信息不完整,请先同步数据", Toast.LENGTH_SHORT).show();
+                }
+
                 break;
             case R.id.first_rl_zgjh:// 整改计划
-                changeHomeFragment(new DdDealPlanFragment(), "dddealplanfragment");
+                if (getCmmAreaMCount() > 0) {
+                    changeHomeFragment(new DdDealPlanFragment(), "dddealplanfragment");
+                } else {
+                    Toast.makeText(getActivity(), "基础信息不完整,请先同步数据", Toast.LENGTH_SHORT).show();
+                }
+
                 break;
             case R.id.first_rl_jhzd:// 计划制定
-                changeHomeFragment(new DdWeekPlanFragment(), "ddweekplanfragment");
+                if (getCmmAreaMCount() > 0) {
+                    changeHomeFragment(new DdWeekPlanFragment(), "ddweekplanfragment");
+                } else {
+                    Toast.makeText(getActivity(), "基础信息不完整,请先同步数据", Toast.LENGTH_SHORT).show();
+                }
+
                 break;
             case R.id.first_rl_gzzj:// 工作总结
-                changeHomeFragment(new DdDaySummaryFragment(), "dddaysummaryfragment");
+                if (getCmmAreaMCount() > 0) {
+                    changeHomeFragment(new DdDaySummaryFragment(), "dddaysummaryfragment");
+                } else {
+                    Toast.makeText(getActivity(), "基础信息不完整,请先同步数据", Toast.LENGTH_SHORT).show();
+                }
+
                 break;
             default:
                 break;

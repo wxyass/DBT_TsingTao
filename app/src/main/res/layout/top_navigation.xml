@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
               android:id="@+id/top_ll_title"
-              android:layout_height="51dp"
-              android:background="@color/white"
+              android:layout_width="match_parent"
+              android:layout_height="49dp"
+              android:background="@color/first_title"
               android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="48dp"
         android:orientation="horizontal">
         <!-- 取消 -->
         <RelativeLayout
@@ -22,30 +22,33 @@
                 android:id="@+id/top_navigation_bt_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="30dp"
-                android:background="@drawable/icon_return"/>
+                android:layout_marginLeft="24dp"
+                android:background="@drawable/icon_return"
+                android:lines="1"
+                android:textColor="@color/bg_top_navigation_title"/>
         </RelativeLayout>
 
         <!-- 标题 -->
 
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="7">
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/top_navigation_tv_title"
                 style="@style/banner_child"
                 android:layout_width="wrap_content"
-                android:layout_height="65dp"
-                android:layout_centerInParent="true"
-                android:textColor="@color/bg_top_navigation_title"
-                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:lines="1"
                 android:maxLength="15"
+                android:textColor="@color/prompt_wt"
                 android:textSize="@dimen/font_size1"
-                android:paddingLeft="30dp"
-                android:paddingRight="30dp"/>
+                />
         </RelativeLayout>
 
         <!-- 确定 -->
@@ -63,11 +66,12 @@
                 android:id="@+id/top_navigation_bt_confirm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginRight="30dp"
-                android:textSize="@dimen/font_size2"
+                android:layout_centerVertical="true"
+                android:lines="1"
                 android:text="确定"
+                android:textColor="@color/prompt_wt"
+                android:textSize="@dimen/font_size2"
                 />
         </RelativeLayout>
     </LinearLayout>
@@ -75,6 +79,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/lightblack"/>
+        android:background="@color/lightgray2"/>
 
 </LinearLayout>

@@ -22,11 +22,11 @@
 
             <!--协同-->
             <LinearLayout
-                android:id="@+id/dd_btn_test"
+                android:id="@+id/dd_btn_xtbf"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:layout_marginTop="10dp"
-                android:background="@color/white"
+                android:background="@drawable/bg_select_white_gray"
                 android:orientation="horizontal">
 
                 <RelativeLayout
@@ -61,7 +61,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:background="@color/white">
+                        >
 
                     </RelativeLayout>
 
@@ -69,7 +69,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:background="@color/white">
+                        >
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -82,7 +82,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:background="@color/white">
+                        >
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -103,7 +103,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:background="@color/white">
+                        android:background="@drawable/bg_select_white_gray">
 
                         <ImageView
                             android:id="@+id/dd_visit_img06"
@@ -121,14 +121,13 @@
                             android:textSize="18dp"
                             android:layout_toRightOf="@id/dd_visit_img06"
                             android:text="协同终端夹"/>
-
                     </RelativeLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:background="@color/white">
+                        >
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -141,7 +140,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:background="@color/white">
+                        >
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -159,7 +158,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:layout_marginTop="10dp"
-                android:background="@color/white"
+                android:background="@drawable/bg_select_white_gray"
                 android:orientation="horizontal">
 
                 <RelativeLayout
@@ -194,7 +193,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:background="@color/white">
+                        >
 
                     </RelativeLayout>
 
@@ -202,7 +201,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:background="@color/white">
+                        >
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -215,7 +214,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:background="@color/white">
+                        >
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -236,7 +235,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:background="@color/white">
+                        android:background="@drawable/bg_select_white_gray">
 
                         <ImageView
                             android:id="@+id/dd_visit_img07"
@@ -261,7 +260,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:background="@color/white">
+                        >
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -274,7 +273,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:background="@color/white">
+                        >
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -294,29 +293,30 @@
                 android:orientation="horizontal">
 
                 <!--经销商资料库-->
-                <RelativeLayout
+                <LinearLayout
                     android:id="@+id/dd_btn_zs_agencyres"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="5dp"
                     android:layout_weight="2"
-                    android:background="@color/white">
+                    android:orientation="vertical"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:background="@drawable/bg_select_white_gray">
 
                     <ImageView
                         android:id="@+id/dd_visit_img03"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:background="@drawable/icon_visit_dealerdatabase"/>
 
                     <TextView
+                        android:layout_marginTop="@dimen/font_size7"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/dd_visit_img03"
-                        android:layout_centerHorizontal="true"
+                        android:textSize="@dimen/font_size3"
+                        android:textColor="@color/bg_top_navigation_title"
                         android:text="经销商资料库"/>
 
-                </RelativeLayout>
+                </LinearLayout>
 
                 <!--经销商库存盘点-->
                 <RelativeLayout
@@ -325,7 +325,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="2"
-                    android:background="@color/white">
+                    android:background="@drawable/bg_select_white_gray">
 
                     <ImageView
                         android:id="@+id/dd_visit_img04"
@@ -357,7 +357,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginRight="5dp"
                     android:layout_weight="2"
-                    android:background="@color/white">
+                    android:background="@drawable/bg_select_white_gray">
 
                     <ImageView
                         android:id="@+id/dd_visit_img05"
@@ -398,7 +398,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginRight="5dp"
                     android:layout_weight="2"
-                    android:background="@color/white"
+                    android:background="@drawable/bg_select_white_gray"
                     android:visibility="invisible">
 
                     <ImageView
@@ -424,7 +424,8 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="2"
-                    android:background="@color/white">
+                    android:visibility="gone"
+                    android:background="@drawable/bg_select_white_gray">
 
                     <ImageView
                         android:id="@+id/dd_visit_imgsync2"

@@ -1,5 +1,6 @@
 package et.tsingtaopad.home.login;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.lang.ref.SoftReference;
+import java.util.Date;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseActivity;
@@ -173,14 +175,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 .error(new IError() {
                     @Override
                     public void onError(int code, String msg) {
-                        Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        netDownLogin(msg);
                         LatteLoader.stopLoading();
                     }
                 })
                 .failure(new IFailure() {
                     @Override
                     public void onFailure() {
-                        Toast.makeText(LoginActivity.this, "请求失败", Toast.LENGTH_SHORT).show();
+                        netDownLogin("请求失败");
                         LatteLoader.stopLoading();
                     }
                 })
@@ -208,6 +210,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             } else {
                 saveLoginSession(emp, "", "");
             }
+        }
+    }
+
+    // 离线登录
+    private void netDownLogin(String msg){
+        String name = uidEt.getText().toString();
+        String pwd = pwdEt.getText().toString();
+        if (name.equals(PrefUtils.getString(LoginActivity.this, "usercode", ""))
+                && pwd.equals(PrefUtils.getString(LoginActivity.this, "userPwd", ""))) {
+            PrefUtils.putString(LoginActivity.this, "loginDate", DateUtil.formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"));// 2018-04-08 14:22:23
+            Toast.makeText(LoginActivity.this, "离线登录", Toast.LENGTH_SHORT).show();
+            startDbtAty();
+        }else{
+            Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
         }
     }
 

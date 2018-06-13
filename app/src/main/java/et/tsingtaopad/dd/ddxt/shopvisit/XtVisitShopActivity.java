@@ -198,6 +198,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
         isFirstVisit = bundle.getString("isFirstVisit");
         termStc = (XtTermSelectMStc) bundle.getSerializable("termStc");
 
+        titleTv.setTextSize(20);
         titleTv.setText(termStc.getTerminalname());
 
         xtShopVisitService = new XtShopVisitService(getApplicationContext(), null);

@@ -88,15 +88,13 @@
                     android:layout_centerVertical="true"
                     android:layout_toLeftOf="@id/item_first_tv01"
                     android:textColor="@color/holo_orange_dark"/>
-
-
             </RelativeLayout>
 
             <ProgressBar
                 android:id="@+id/item_first_probar_rankingbar"
                 style="@style/MyProgressBarH"
                 android:layout_width="match_parent"
-                android:layout_height="10dp"
+                android:layout_height="7dp"
                 android:progress="89"/>
         </LinearLayout>
 

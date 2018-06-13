@@ -1,5 +1,6 @@
 package et.tsingtaopad.dd.ddzs.zsterm.zscart;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,6 +37,7 @@ import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.JsonUtil;
+import et.tsingtaopad.core.util.dbtutil.NetStatusUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
@@ -261,9 +263,16 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
                             //if (ViewUtil.isDoubleClick(v.getId(), 2500)) return;
                             DbtLog.logUtils(TAG, "前往拜访：删除");
                             xtUploadService.deleteZs(mitValterM.getId(),mitValterM.getTerminalkey(),1);
+                            initData();
                         }else if(1 == position){
                             DbtLog.logUtils(TAG, "前往拜访：上传");
-                            xtUploadService.upload_zs_visit(false,mitValterM.getId(),1);
+                            // 如果网络可用
+                            if (NetStatusUtil.isNetValid(getActivity())) {
+                                xtUploadService.upload_zs_visit(false,mitValterM.getId(),1);
+                            } else {
+                                // 提示修改网络
+                                Toast.makeText(getContext(), "网络异常,请先检查网络连接", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                 })

@@ -18,7 +18,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="110dp"
                 android:background="@color/first_title"
                 android:orientation="horizontal">
 
@@ -42,9 +42,9 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:layout_marginLeft="20dp"
                         android:layout_toRightOf="@id/first_img_icon"
                         android:gravity="center_vertical"
-                        android:layout_marginLeft="10dp"
                         android:orientation="vertical"
                         >
 
@@ -52,19 +52,25 @@
                             android:id="@+id/first_tv_username"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="胡歌"/>
+                            android:text="胡歌"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/font_size2"/>
 
                         <TextView
                             android:id="@+id/first_tv_zhuisu"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="追溯家数: 0"/>
+                            android:text="追溯家数: 0"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/font_size6"/>
 
                         <TextView
                             android:id="@+id/first_tv_xietong"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="协同家数: 0"/>
+                            android:text="协同家数: 0"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/font_size6"/>
                     </LinearLayout>
                 </RelativeLayout>
                 <!--签到-->
@@ -81,7 +87,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="20dp"
-                        android:background="@drawable/attend"
+                        android:background="@drawable/bg_sign_button"
                         />
 
                 </RelativeLayout>
@@ -95,6 +101,7 @@
                 android:layout_height="40dp"
                 android:background="@color/white"
                 android:gravity="center_vertical"
+                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <RelativeLayout
@@ -102,215 +109,216 @@
                     android:layout_height="wrap_content"
                     android:background="@color/white">
 
+                    <ImageView
+                        android:id="@+id/icon_laba"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/icon_home_laba"/>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="30dp"
+                        android:layout_toRightOf="@id/icon_laba"
+                        android:layout_marginLeft="8dp"
                         android:text="通知:这是一条紧急通知"/>
 
                 </RelativeLayout>
 
             </LinearLayout>
 
-
-            <!--快捷入口-->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="4dp"
-                android:layout_marginLeft="4dp"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:background="@color/white">
 
-                <!--协同拜访-->
-                <RelativeLayout
-                    android:id="@+id/first_rl_xtbf"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="6dp"
-                    android:layout_marginLeft="6dp"
-                    android:layout_weight="2"
-                    android:background="@color/white">
+                <!--快捷入口-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="34dp"
-                        android:text="协同拜访"/>
+                    <!--协同拜访-->
+                    <RelativeLayout
+                        android:id="@+id/first_rl_xtbf"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="6dp"
+                        android:layout_weight="2"
+                        android:background="@drawable/bg_select_white_gray">
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="36dp"
-                        android:background="@drawable/icon_home_ent_xietong"/>
+                        <TextView
+                            style="@style/first_statue"
+                            android:text="协同拜访"/>
 
-                </RelativeLayout>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="36dp"
+                            android:background="@drawable/icon_home_ent_xietong"/>
 
-                <!--终端追溯-->
-                <RelativeLayout
-                    android:id="@+id/first_rl_zdzs"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="6dp"
-                    android:layout_marginLeft="6dp"
-                    android:layout_weight="2"
-                    android:background="@color/white">
+                    </RelativeLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="34dp"
-                        android:text="终端追溯"/>
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="12dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@color/lightgray"/>
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="36dp"
-                        android:background="@drawable/icon_home_ent_back"/>
+                    <!--终端追溯-->
+                    <RelativeLayout
+                        android:id="@+id/first_rl_zdzs"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="6dp"
+                        android:layout_weight="2"
+                        android:background="@drawable/bg_select_white_gray">
 
-                </RelativeLayout>
+                        <TextView
+                            style="@style/first_statue"
+                            android:text="终端追溯"/>
 
-            </LinearLayout>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="36dp"
+                            android:background="@drawable/icon_home_ent_back"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="4dp"
-                android:layout_marginLeft="4dp"
-                android:orientation="horizontal">
+                    </RelativeLayout>
 
-                <!--库存盘点-->
-                <RelativeLayout
-                    android:id="@+id/first_rl_kcpd"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="6dp"
-                    android:layout_marginLeft="6dp"
-                    android:layout_weight="2"
-                    android:background="@color/white">
+                </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="34dp"
-                        android:text="库存盘点"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:orientation="horizontal">
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="36dp"
-                        android:background="@drawable/icon_home_ent_sto"/>
+                    <!--库存盘点-->
+                    <RelativeLayout
+                        android:id="@+id/first_rl_kcpd"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="6dp"
+                        android:layout_weight="2"
+                        android:background="@drawable/bg_select_white_gray">
 
-                </RelativeLayout>
+                        <TextView
+                            style="@style/first_statue"
+                            android:text="库存盘点"/>
 
-                <!--整改计划-->
-                <RelativeLayout
-                    android:id="@+id/first_rl_zgjh"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="6dp"
-                    android:layout_marginLeft="6dp"
-                    android:layout_weight="2"
-                    android:background="@color/white">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="36dp"
+                            android:background="@drawable/icon_home_ent_sto"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="34dp"
-                        android:text="整改计划"/>
+                    </RelativeLayout>
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="36dp"
-                        android:background="@drawable/icon_home_ent_coo"/>
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="12dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@color/lightgray"/>
 
-                </RelativeLayout>
+                    <!--整改计划-->
+                    <RelativeLayout
+                        android:id="@+id/first_rl_zgjh"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="6dp"
+                        android:layout_weight="2"
+                        android:background="@drawable/bg_select_white_gray">
 
-            </LinearLayout>
+                        <TextView
+                            style="@style/first_statue"
+                            android:text="整改计划"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="4dp"
-                android:layout_marginLeft="4dp"
-                android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="36dp"
+                            android:background="@drawable/icon_home_ent_coo"/>
 
-                <!--计划制定-->
-                <RelativeLayout
-                    android:id="@+id/first_rl_jhzd"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="6dp"
-                    android:layout_marginLeft="6dp"
-                    android:layout_weight="2"
-                    android:background="@color/white">
+                    </RelativeLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="34dp"
-                        android:text="计划制定"/>
+                </LinearLayout>
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="36dp"
-                        android:background="@drawable/icon_home_ent_rec"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:orientation="horizontal">
 
-                </RelativeLayout>
+                    <!--计划制定-->
+                    <RelativeLayout
+                        android:id="@+id/first_rl_jhzd"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="6dp"
+                        android:layout_weight="2"
+                        android:background="@drawable/bg_select_white_gray">
 
-                <!--工作总结-->
-                <RelativeLayout
-                    android:id="@+id/first_rl_gzzj"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="6dp"
-                    android:layout_marginLeft="6dp"
-                    android:layout_weight="2"
-                    android:background="@color/white">
+                        <TextView
+                            style="@style/first_statue"
+                            android:text="计划制定"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_marginLeft="34dp"
-                        android:layout_centerVertical="true"
-                        android:text="工作总结"/>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="36dp"
+                            android:background="@drawable/icon_home_ent_rec"/>
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="36dp"
-                        android:background="@drawable/icon_home_ent_sum"/>
+                    </RelativeLayout>
 
-                </RelativeLayout>
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="12dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@color/lightgray"/>
+
+                    <!--工作总结-->
+                    <RelativeLayout
+                        android:id="@+id/first_rl_gzzj"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="6dp"
+                        android:layout_weight="2"
+                        android:background="@drawable/bg_select_white_gray">
+
+                        <TextView
+                            style="@style/first_statue"
+                            android:text="工作总结"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="36dp"
+                            android:background="@drawable/icon_home_ent_sum"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -337,19 +345,19 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+                android:background="@color/white"
                 android:gravity="center"
                 android:orientation="horizontal">
 
                 <et.tsingtaopad.view.MyGridView
                     android:id="@+id/first_gv_top"
-                    android:paddingTop="20dp"
-                    android:paddingBottom="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:numColumns="3"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
                     android:scrollbars="none"
                     android:verticalSpacing="2dp">
                 </et.tsingtaopad.view.MyGridView>
@@ -381,9 +389,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+                android:background="@color/white"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -393,15 +401,15 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:paddingBottom="10dp"
                     android:divider="@color/bg_page_color"
-                    android:dividerHeight="0dp"/>
+                    android:dividerHeight="0dp"
+                    android:paddingBottom="10dp"/>
             </LinearLayout>
 
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="10dp"/>
+                android:layout_height="2dp"/>
 
         </LinearLayout>
     </ScrollView>

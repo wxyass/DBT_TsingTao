@@ -3,6 +3,7 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:gravity="center"
+              android:background="@color/white"
               android:orientation="vertical">
 
     <LinearLayout
@@ -18,6 +19,8 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:textSize="@dimen/font_size6"
+            android:textColor="@color/first_gv_unit"
             android:text="588(个)"/>
 
         <TextView
@@ -26,6 +29,8 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:layout_marginTop="@dimen/font_size9"
+            android:textColor="@color/bg_top_navigation_title"
             android:textSize="@dimen/font_size1"
             android:text="李雷"/>
 
@@ -33,8 +38,11 @@
             android:id="@+id/item_first_tv_topname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/font_size9"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:textSize="@dimen/font_size6"
+            android:textColor="@color/gray"
             android:text="走访冠军"/>
 
     </LinearLayout>

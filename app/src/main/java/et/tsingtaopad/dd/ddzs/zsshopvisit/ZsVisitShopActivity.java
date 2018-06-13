@@ -148,6 +148,7 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
         termStc = (XtTermSelectMStc) bundle.getSerializable("termStc");
         mitValcheckterM = (MitValcheckterM) bundle.getSerializable("mitValcheckterM");
 
+        titleTv.setTextSize(20);
         titleTv.setText(termStc.getTerminalname());
 
         xtShopVisitService = new XtShopVisitService(getApplicationContext(), null);

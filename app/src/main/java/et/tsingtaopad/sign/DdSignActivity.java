@@ -90,7 +90,7 @@ import et.tsingtaopad.util.requestHeadUtil;
 
 public class DdSignActivity extends BaseActivity implements View.OnClickListener {
 
-    private final String TAG = "XtVisitShopActivity";
+    private final String TAG = "DdSignActivity";
 
     private LinearLayout ll_title;
     private RelativeLayout backBtn;
@@ -172,7 +172,7 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
     private void initData() {
 
         titleTv.setText("考勤管理");
-        confirmTv.setText("日历");
+        confirmTv.setText("");
         // ll_title.setBackgroundResource(R.color.tab_select);
         confirmTv.setBackgroundResource(R.drawable.icon_work_time);
         handler = new MyHandler(this);
@@ -322,6 +322,7 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
                                     // 保存信息
                                     String formjson = resObj.getResBody().getContent();
                                     parseAttenceJson(formjson);
+                                    Toast.makeText(DdSignActivity.this,"打卡成功",Toast.LENGTH_SHORT).show();
                                 }
 
 
@@ -329,28 +330,18 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
                                 Toast.makeText(DdSignActivity.this, resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
                             }
                         }
-
-
                     }
                 })
                 .error(new IError() {
                     @Override
                     public void onError(int code, String msg) {
                         Toast.makeText(DdSignActivity.this, msg, Toast.LENGTH_SHORT).show();
-                        /*Message msg1 = new Message();
-                        msg1.what = FirstFragment.SYNC_CLOSE;//
-                        handler.sendMessage(msg1);*/
-                        //initData();
                     }
                 })
                 .failure(new IFailure() {
                     @Override
                     public void onFailure() {
                         Toast.makeText(DdSignActivity.this, "请求失败", Toast.LENGTH_SHORT).show();
-                        /*Message msg2 = new Message();
-                        msg2.what = FirstFragment.SYNC_CLOSE;//
-                        handler.sendMessage(msg2);*/
-                        //initData();
                     }
                 })
                 .builde()

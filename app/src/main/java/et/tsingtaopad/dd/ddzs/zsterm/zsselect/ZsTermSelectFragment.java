@@ -35,6 +35,7 @@ import et.tsingtaopad.core.net.domain.ResponseStructBean;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.JsonUtil;
+import et.tsingtaopad.core.util.dbtutil.NetStatusUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
@@ -349,7 +350,7 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
             if(terminalList.size()>0){// 未上传,弹窗上传
                 deleteOrXtUplad(terminalList.get(0));
             }else{// 已上传,去追溯
-                confirmXtUplad(xtTermSelectMStc);// 拜访
+                confirmXtUplad(xtTermSelectMStc);// 去拜访
             }
         }else{
             Toast.makeText(getActivity(),"请先联系文员,配置督导模板",Toast.LENGTH_SHORT).show();
@@ -460,7 +461,13 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
                             setItemAdapterListener();
                         }else if(1 == position){
                             DbtLog.logUtils(TAG, "前往拜访：上传");
-                            xtUploadService.upload_zs_visit(false,mitValterM.getId(),1);
+                            // 如果网络可用
+                            if (NetStatusUtil.isNetValid(getActivity())) {
+                                xtUploadService.upload_zs_visit(false,mitValterM.getId(),1);
+                            } else {
+                                // 提示修改网络
+                                Toast.makeText(getContext(), "网络异常,请先检查网络连接", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                 })
