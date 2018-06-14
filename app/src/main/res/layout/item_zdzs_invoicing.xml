@@ -30,7 +30,8 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
                     android:text="崂山啤酒8度500*12罐啤"
-                    android:textSize="@dimen/font_size3"/>
+                    android:textColor="@color/bg_top_navigation_title"
+                    android:textSize="@dimen/font_size4"/>
 
             </RelativeLayout>
 

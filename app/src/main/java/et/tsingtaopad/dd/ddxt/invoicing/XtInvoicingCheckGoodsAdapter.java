@@ -122,9 +122,9 @@ public class XtInvoicingCheckGoodsAdapter extends
         
         //累计卡)
         if (ConstValues.FLAG_0.equals(item.getAddcard())) {
-            holder.addcardEt.setHint("0");
+            holder.addcardEt.setHint("请输入");
         } else if("0.0".equals(item.getAddcard())){
-            holder.addcardEt.setHint("0");
+            holder.addcardEt.setHint("请输入");
         }else {
             holder.addcardEt.setText(item.getAddcard());
         }

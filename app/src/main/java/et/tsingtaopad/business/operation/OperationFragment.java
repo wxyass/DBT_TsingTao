@@ -27,9 +27,9 @@ public class OperationFragment extends BaseFragmentSupport implements View.OnCli
     private AppCompatTextView backTv;
     private AppCompatTextView titleTv;
 
-    LinearLayout weekPlan;
-    RelativeLayout summaryBtn;
-    RelativeLayout dealBtn;
+    RelativeLayout weekPlan;
+    RelativeLayout summaryBtn;//
+    LinearLayout dealBtn;
 
     @Nullable
     @Override
@@ -51,9 +51,9 @@ public class OperationFragment extends BaseFragmentSupport implements View.OnCli
         confirmBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
 
-        weekPlan = (LinearLayout)view.findViewById(R.id.dd_operation_btn_plan);
+        weekPlan = (RelativeLayout)view.findViewById(R.id.dd_operation_btn_plan);
         summaryBtn = (RelativeLayout)view.findViewById(R.id.dd_operation_btn_summer);
-        dealBtn = (RelativeLayout)view.findViewById(R.id.dd_operation_btn_zhenggai);
+        dealBtn = (LinearLayout)view.findViewById(R.id.dd_operation_btn_zhenggai);
 
         weekPlan.setOnClickListener(this);
         summaryBtn.setOnClickListener(this);

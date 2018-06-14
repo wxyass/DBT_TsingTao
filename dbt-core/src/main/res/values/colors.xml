@@ -22,7 +22,7 @@
 
     <!--整体背景色-->
     <!--<color name="bg_app">#f8f9fa</color>-->
-    <color name="bg_app">#F7F7F7</color>
+    <color name="bg_app">#F2F2F2</color>
 
 
     <!-- 背景色 -->
@@ -86,7 +86,7 @@
     <color name="home_mt">#23ac38</color>
     <!-- et橘黄黄色 -->
     <color name="home_et">#f08300</color>
-    <!-- sp红色 #e95377 灰色 #666666-->
+    <!-- sp红色 #e95377 -->
     <color name="home_sp">#e95377</color>
     <!-- ot蓝色 -->
     <color name="home_ot">#00ada9</color>
@@ -137,6 +137,7 @@
 
     <!-- 顶部标题 -->
     <color name="bg_top_navigation_title">#333333</color>
+    <color name="bg_text_gray">#666666</color>
 
 
     <color name="tab_unselect">#c9c9c9</color>

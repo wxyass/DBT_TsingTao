@@ -26,35 +26,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/bg_select_white_gray"
+                android:background="@color/white"
                 android:orientation="horizontal">
 
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="2">
+                    android:layout_weight="2"
+                    >
 
                     <ImageView
                         android:id="@+id/dd_visit_img01"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
+                        style="@style/app_icon_style"
                         android:background="@drawable/icon_visit_synergeticvisit"/>
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/dd_visit_img01"
-                        android:layout_centerHorizontal="true"
-                        android:text="@string/dxtbf"/>
+                        style="@style/app_text_style"
+                        android:text="@string/dxtbf"
+                        />
 
                 </RelativeLayout>
 
-                <LinearLayout
+                <!--协同 第二列-->
+                <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
-                    android:orientation="vertical">
+                    >
 
 
                     <RelativeLayout
@@ -67,43 +65,86 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
                         >
 
                         <TextView
+                            android:id="@+id/visit_xt_currentvisit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:text="最近拜访: 终端1"/>
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:text="最近拜访: "
+                            android:textColor="@color/gray"
+                            android:textSize="@dimen/font_size6"/>
+
+                        <TextView
+                            android:id="@+id/visit_xt_termname"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="6dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_toRightOf="@id/visit_xt_currentvisit"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:text="利民超市"
+                            android:textColor="@color/bg_top_navigation_title"
+                            android:textSize="@dimen/font_size6"/>
                     </RelativeLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="16dp"
                         >
 
                         <TextView
+                            android:id="@+id/visit_xt_nextvisit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="下次拜访: 终端2"/>
-                    </RelativeLayout>
-                </LinearLayout>
+                            android:layout_centerVertical="true"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:text="下次拜访: "
+                            android:textColor="@color/gray"
+                            android:textSize="@dimen/font_size6"/>
 
-                <LinearLayout
+                        <TextView
+                            android:id="@+id/visit_xt_nexttermname"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="6dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_toRightOf="@id/visit_xt_nextvisit"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:text="宝丽华超市宝丽华超市宝丽华超市"
+                            android:textColor="@color/bg_top_navigation_title"
+                            android:textSize="@dimen/font_size6"/>
+                    </RelativeLayout>
+                </RelativeLayout>
+
+                <!--协同第三列-->
+                <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
-                    android:orientation="vertical">
-
+                    >
 
                     <RelativeLayout
                         android:id="@+id/dd_btn_xt_term"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/bg_select_white_gray">
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_select_white_gray"
+                        android:paddingBottom="15dp"
+                        android:paddingLeft="0dp"
+                        android:paddingRight="15dp"
+                        android:paddingTop="15dp">
 
                         <ImageView
                             android:id="@+id/dd_visit_img06"
@@ -111,6 +152,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"
+                            android:layout_marginLeft="4dp"
                             android:background="@drawable/icon_visit_folder"/>
 
                         <TextView
@@ -118,38 +160,67 @@
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
                             android:layout_centerVertical="true"
-                            android:textSize="18dp"
+                            android:layout_marginLeft="6dp"
                             android:layout_toRightOf="@id/dd_visit_img06"
-                            android:text="协同终端夹"/>
+                            android:text="协同终端夹"
+                            android:textSize="18dp"/>
                     </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:orientation="horizontal"
+                        >
+
+                        <TextView
+                            android:id="@+id/visit_xt_ydname"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="4dp"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:text="张三"
+                            android:textColor="@color/holo_orange_dark"
+                            android:textSize="@dimen/font_size6"/>
+
+                        <TextView
+                            android:id="@+id/visit_xt_upload"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="6dp"
+                            android:layout_toRightOf="@id/visit_xt_ydname"
+                            android:layout_weight="2"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:text="完成"
+                            android:textColor="@color/holo_blue_dark"
+                            android:textSize="@dimen/font_size6"/>
+                    </LinearLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="16dp"
                         >
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:text="张三 完成"/>
+                            android:layout_marginLeft="4dp"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:text="建国门内大街建国门内大街建国门内大街"
+                            android:textColor="@color/bg_top_navigation_title"
+                            android:textSize="@dimen/font_size6"/>
                     </RelativeLayout>
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        >
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="建国门内大街"/>
-                    </RelativeLayout>
-
-
-                </LinearLayout>
+                </RelativeLayout>
             </LinearLayout>
 
             <!--追溯-->
@@ -158,35 +229,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/bg_select_white_gray"
+                android:background="@color/white"
                 android:orientation="horizontal">
 
+                <!--追溯第一列-->
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="2">
+                    android:layout_weight="2"
+                    >
 
                     <ImageView
                         android:id="@+id/dd_visit_img02"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
+                        style="@style/app_icon_style"
                         android:background="@drawable/icon_visit_terminaltraceability"/>
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/dd_visit_img02"
-                        android:layout_centerHorizontal="true"
+                        style="@style/app_text_style"
                         android:text="@string/ddzdzs"/>
 
                 </RelativeLayout>
-
-                <LinearLayout
+                <!--追溯第二列-->
+                <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
-                    android:orientation="vertical">
+                    >
 
 
                     <RelativeLayout
@@ -199,43 +267,86 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
                         >
 
                         <TextView
+                            android:id="@+id/visit_zs_currentvisit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:text="最近拜访: 终端1"/>
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:text="最近拜访: "
+                            android:textColor="@color/gray"
+                            android:textSize="@dimen/font_size6"/>
+
+                        <TextView
+                            android:id="@+id/visit_zs_termname"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="6dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_toRightOf="@id/visit_zs_currentvisit"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:text="利民超市"
+                            android:textColor="@color/bg_top_navigation_title"
+                            android:textSize="@dimen/font_size6"/>
                     </RelativeLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="16dp"
                         >
 
                         <TextView
+                            android:id="@+id/visit_zs_nextvisit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="下次拜访: 终端2"/>
-                    </RelativeLayout>
-                </LinearLayout>
+                            android:layout_centerVertical="true"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:text="下次拜访: "
+                            android:textColor="@color/gray"
+                            android:textSize="@dimen/font_size6"/>
 
-                <LinearLayout
+                        <TextView
+                            android:id="@+id/visit_zs_nexttermname"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="6dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_toRightOf="@id/visit_zs_nextvisit"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:text="利民超市"
+                            android:textColor="@color/bg_top_navigation_title"
+                            android:textSize="@dimen/font_size6"/>
+                    </RelativeLayout>
+                </RelativeLayout>
+                <!--追溯第三列-->
+                <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
-                    android:orientation="vertical">
+                    >
 
 
                     <RelativeLayout
                         android:id="@+id/dd_btn_zs_term"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/bg_select_white_gray">
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_select_white_gray"
+                        android:paddingBottom="15dp"
+                        android:paddingLeft="0dp"
+                        android:paddingRight="15dp"
+                        android:paddingTop="15dp">
 
                         <ImageView
                             android:id="@+id/dd_visit_img07"
@@ -243,6 +354,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"
+                            android:layout_marginLeft="4dp"
                             android:background="@drawable/icon_visit_folder"/>
 
                         <TextView
@@ -250,41 +362,68 @@
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
                             android:layout_centerVertical="true"
-                            android:textSize="18dp"
+                            android:layout_marginLeft="6dp"
                             android:layout_toRightOf="@id/dd_visit_img07"
-                            android:text="追溯终端夹"/>
+                            android:text="追溯终端夹"
+                            android:textSize="18dp"/>
 
                     </RelativeLayout>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:orientation="horizontal"
+                        >
+
+                        <TextView
+                            android:id="@+id/visit_zs_ydname"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="4dp"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:text="张三,李四,王五"
+                            android:textColor="@color/holo_orange_dark"
+                            android:textSize="@dimen/font_size6"/>
+
+                        <TextView
+                            android:id="@+id/visit_zs_upload"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="6dp"
+                            android:layout_toRightOf="@id/visit_zs_ydname"
+                            android:layout_weight="2"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:text="完成"
+                            android:textColor="@color/holo_blue_dark"
+                            android:textSize="@dimen/font_size6"/>
+                    </LinearLayout>
+
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="16dp"
                         >
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:text="张三 完成"/>
+                            android:layout_marginLeft="4dp"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:text="建国门内大街"
+                            android:textColor="@color/bg_top_navigation_title"
+                            android:textSize="@dimen/font_size6"/>
                     </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        >
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="建国门内大街"/>
-                    </RelativeLayout>
-
-
-                </LinearLayout>
+                </RelativeLayout>
             </LinearLayout>
-
             <!--经销商-->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -293,31 +432,25 @@
                 android:orientation="horizontal">
 
                 <!--经销商资料库-->
-                <LinearLayout
+                <RelativeLayout
                     android:id="@+id/dd_btn_zs_agencyres"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="2"
-                    android:orientation="vertical"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:background="@drawable/bg_select_white_gray">
+                    android:background="@drawable/bg_select_white_gray"
+                    >
 
                     <ImageView
                         android:id="@+id/dd_visit_img03"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        style="@style/app_icon_style"
                         android:background="@drawable/icon_visit_dealerdatabase"/>
 
                     <TextView
-                        android:layout_marginTop="@dimen/font_size7"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/font_size3"
-                        android:textColor="@color/bg_top_navigation_title"
-                        android:text="经销商资料库"/>
-
-                </LinearLayout>
-
+                        style="@style/app_text_style"
+                        android:text="经销商资料库"
+                        />
+                </RelativeLayout>
                 <!--经销商库存盘点-->
                 <RelativeLayout
                     android:id="@+id/dd_btn_zs_agencycheck"
@@ -325,21 +458,18 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="2"
-                    android:background="@drawable/bg_select_white_gray">
+                    android:background="@drawable/bg_select_white_gray"
+                    >
 
                     <ImageView
                         android:id="@+id/dd_visit_img04"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
+                        style="@style/app_icon_style"
                         android:background="@drawable/icon_visit_stock"/>
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/dd_visit_img04"
-                        android:layout_centerHorizontal="true"
-                        android:text="经销商库存盘点"/>
+                        style="@style/app_text_style"
+                        android:text="经销商库存盘点"
+                        />
 
                 </RelativeLayout>
 
@@ -357,21 +487,18 @@
                     android:layout_height="match_parent"
                     android:layout_marginRight="5dp"
                     android:layout_weight="2"
-                    android:background="@drawable/bg_select_white_gray">
+                    android:background="@drawable/bg_select_white_gray"
+                    >
 
                     <ImageView
                         android:id="@+id/dd_visit_img05"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
+                        style="@style/app_icon_style"
                         android:background="@drawable/icon_visit_drainmakeupshop"/>
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/dd_visit_img05"
-                        android:layout_centerHorizontal="true"
-                        android:text="漏店补录"/>
+                        style="@style/app_text_style"
+                        android:text="漏店补录"
+                        />
 
                 </RelativeLayout>
 
@@ -380,72 +507,13 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="2"
+                    android:background="@drawable/bg_select_white_gray"
+                    android:visibility="invisible"
                     >
 
                 </RelativeLayout>
 
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-                <RelativeLayout
-                    android:id="@+id/dd_operation_btn_summer"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="5dp"
-                    android:layout_weight="2"
-                    android:background="@drawable/bg_select_white_gray"
-                    android:visibility="invisible">
-
-                    <ImageView
-                        android:id="@+id/dd_visit_imgsync"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/icon_visit_dealerdatabase"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/dd_visit_imgsync"
-                        android:layout_centerHorizontal="true"
-                        android:text="@string/operation_weeksummer"/>
-
-                </RelativeLayout>
-
-                <!--同步数据-->
-                <RelativeLayout
-                    android:id="@+id/dd_btn_visit_sync_start"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="2"
-                    android:visibility="gone"
-                    android:background="@drawable/bg_select_white_gray">
-
-                    <ImageView
-                        android:id="@+id/dd_visit_imgsync2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/icon_visit_stock"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/dd_visit_imgsync2"
-                        android:layout_centerHorizontal="true"
-                        android:text="同步数据"/>
-
-                </RelativeLayout>
-
-            </LinearLayout>
-
-
         </LinearLayout>
     </ScrollView>
 

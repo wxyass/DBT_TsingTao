@@ -357,6 +357,18 @@ public class DateUtil {
     }
 
     /**
+     * 20181223111223 -> 11:12:23
+     * @param str
+     * @return
+     */
+    public static String dividetime(String str){
+        if(str==null || "".equals(str)){
+            return "";
+        }
+        return str.substring(8, 10)+":"+str.substring(10, 12)+":"+str.substring(12,14);
+    }
+
+    /**
      * 当前系统日期加天数
      * 
      * @param days 增加的日期数

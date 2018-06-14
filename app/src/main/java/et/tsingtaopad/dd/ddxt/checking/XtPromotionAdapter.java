@@ -78,7 +78,6 @@ public class XtPromotionAdapter extends BaseAdapter {
             holder.reachnum = (EditText) convertView.findViewById(R.id.item_xt_checkindex_et_zushu);//达成组数
             holder.proLl = (LinearLayout) convertView.findViewById(R.id.item_xt_checkindex_ll_pro);//产品展示,整体
             holder.proNameTv = (TextView) convertView.findViewById(R.id.item_xt_checkindex_lv_proname);//产品展示.Tv
-
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();

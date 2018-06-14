@@ -20,9 +20,9 @@
             android:layout_marginRight="10dp"
             android:orientation="vertical">
 
-            <!--周工作计划-->
+            <!--整改计划-->
             <LinearLayout
-                android:id="@+id/dd_operation_btn_plan"
+                android:id="@+id/dd_operation_btn_zhenggai"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:layout_marginTop="10dp"
@@ -32,22 +32,20 @@
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="2">
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/bg_select_white_gray"
+                    >
 
                     <ImageView
                         android:id="@+id/dd_visit_img01"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/icon_visit_synergeticvisit"/>
+                        style="@style/app_icon_style"
+                        android:background="@drawable/icon_operation_zhenggaiplan"/>
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/dd_visit_img01"
-                        android:layout_centerHorizontal="true"
-                        android:text="@string/operation_weekjihua"/>
-
+                        style="@style/app_text_style"
+                        android:text="@string/operation_zhenggai"
+                        />
                 </RelativeLayout>
 
                 <LinearLayout
@@ -105,7 +103,6 @@
                         android:layout_weight="1"
                         >
 
-
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -152,47 +149,39 @@
                     android:layout_height="match_parent"
                     android:layout_marginRight="5dp"
                     android:layout_weight="2"
-                    android:background="@drawable/bg_select_white_gray">
+                    android:background="@drawable/bg_select_white_gray"
+                    >
 
                     <ImageView
                         android:id="@+id/dd_visit_img03"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/icon_visit_dealerdatabase"/>
+                        style="@style/app_icon_style"
+                        android:background="@drawable/icon_operation_record"/>
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/dd_visit_img03"
-                        android:layout_centerHorizontal="true"
-                        android:text="@string/operation_weeksummer"/>
-
+                        style="@style/app_text_style"
+                        android:text="@string/operation_weeksummer"
+                        />
                 </RelativeLayout>
 
-                <!--整改计划-->
+                <!--周工作计划-->
                 <RelativeLayout
-                    android:id="@+id/dd_operation_btn_zhenggai"
+                    android:id="@+id/dd_operation_btn_plan"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="2"
-                    android:background="@drawable/bg_select_white_gray">
+                    android:background="@drawable/bg_select_white_gray"
+                    >
 
                     <ImageView
                         android:id="@+id/dd_visit_img04"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/icon_visit_stock"/>
+                        style="@style/app_icon_style"
+                        android:background="@drawable/icon_operation_plan"/>
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/dd_visit_img04"
-                        android:layout_centerHorizontal="true"
-                        android:text="@string/operation_zhenggai"/>
-
+                        style="@style/app_text_style"
+                        android:text="@string/operation_weekjihua"
+                        />
                 </RelativeLayout>
             </LinearLayout>
         </LinearLayout>

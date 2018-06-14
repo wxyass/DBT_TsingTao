@@ -112,8 +112,8 @@
                     android:background="@drawable/transparent"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:textSize="@dimen/font_size3"
                     android:text="@string/default_text"
+                    android:textSize="@dimen/font_size3"
                     android:visibility="gone"/>
 
                 <Button
@@ -127,8 +127,8 @@
                     android:background="@drawable/bg_search_button"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:textSize="@dimen/font_size3"
                     android:text="@string/default_date"
+                    android:textSize="@dimen/font_size3"
                     android:visibility="gone"/>
 
                 <et.tsingtaopad.view.DdSlideSwitch
@@ -173,8 +173,8 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="70dp"
                     android:button="@drawable/bg_visit_select"
-                    android:textSize="@dimen/font_size4"
-                    android:text="@string/sayhi_prostatus_vie"/>
+                    android:text="@string/sayhi_prostatus_vie"
+                    android:textSize="@dimen/font_size4"/>
 
                 <CheckBox
                     android:id="@+id/xt_sayhi_cb_mine"
@@ -185,8 +185,8 @@
                     android:layout_marginRight="20dp"
                     android:layout_toLeftOf="@id/xt_sayhi_cb_vie"
                     android:button="@drawable/bg_visit_select"
-                    android:textSize="@dimen/font_size4"
-                    android:text="@string/sayhi_prostatus_mine"/>
+                    android:text="@string/sayhi_prostatus_mine"
+                    android:textSize="@dimen/font_size4"/>
             </RelativeLayout>
 
             <View
@@ -216,8 +216,8 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="70dp"
                     android:button="@drawable/bg_visit_select"
-                    android:textSize="@dimen/font_size4"
-                    android:text="@string/sayhi_prostatus_vie"/>
+                    android:text="@string/sayhi_prostatus_vie"
+                    android:textSize="@dimen/font_size4"/>
 
                 <CheckBox
                     android:id="@+id/xt_sayhi_cb_mineprotocol"
@@ -228,8 +228,8 @@
                     android:layout_marginRight="20dp"
                     android:layout_toLeftOf="@id/xt_sayhi_cb_vieprotocol"
                     android:button="@drawable/bg_visit_select"
-                    android:textSize="@dimen/font_size4"
-                    android:text="@string/sayhi_prostatus_mine"/>
+                    android:text="@string/sayhi_prostatus_mine"
+                    android:textSize="@dimen/font_size4"/>
             </RelativeLayout>
 
             <View
@@ -263,7 +263,7 @@
             <!-- layout_gravity属性是**指定当前控件在父元素的位置layout_gravity属性是**指定当前控件在父元素的位置- -->
             <!-- 终端名称： -->
             <RelativeLayout
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_line">
 
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
@@ -276,8 +276,10 @@
                     android:layout_height="match_parent"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
+                    android:background="@null"
+                    android:gravity="center_vertical|right"
+                    android:hint="@string/default_input"
                     android:maxLength="30"
-                    android:background="@drawable/bg_visit_record"
                     />
 
                 <ImageView
@@ -290,7 +292,7 @@
 
             <!-- 终端编码： -->
             <RelativeLayout
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_line">
 
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
@@ -299,6 +301,7 @@
                 <TextView
                     android:id="@+id/xtbf_sayhi_termcode"
                     style="@style/xtbf_sayhi_two_tv"
+                    android:textColor="@color/lightgray"
                     />
 
                 <ImageView
@@ -361,7 +364,7 @@
 
             <!-- 所在省： -->
             <RelativeLayout
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_line">
 
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
@@ -370,6 +373,7 @@
                 <TextView
                     android:id="@+id/xtbf_sayhi_termprovince"
                     style="@style/xtbf_sayhi_two_tv"
+                    android:textColor="@color/lightgray"
                     />
 
                 <ImageView
@@ -381,7 +385,7 @@
                 android:layout_height="1dp"/>
             <!-- 所在市： -->
             <RelativeLayout
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_line">
 
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
@@ -390,6 +394,7 @@
                 <TextView
                     android:id="@+id/xtbf_sayhi_termcity"
                     style="@style/xtbf_sayhi_two_tv"
+                    android:textColor="@color/lightgray"
                     />
 
                 <ImageView
@@ -401,7 +406,7 @@
                 android:layout_height="1dp"/>
             <!-- 所在县： -->
             <RelativeLayout
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_line">
 
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
@@ -410,6 +415,7 @@
                 <TextView
                     android:id="@+id/xtbf_sayhi_termcountry"
                     style="@style/xtbf_sayhi_two_tv"
+                    android:textColor="@color/lightgray"
                     />
 
                 <ImageView
@@ -421,7 +427,7 @@
                 android:layout_height="1dp"/>
             <!-- 地址： -->
             <RelativeLayout
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_line">
 
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
@@ -434,8 +440,10 @@
                     android:layout_height="match_parent"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
+                    android:background="@null"
+                    android:gravity="center_vertical|right"
+                    android:hint="@string/default_input"
                     android:maxLength="50"
-                    android:background="@drawable/bg_visit_record"
                     />
 
                 <ImageView
@@ -447,7 +455,7 @@
                 android:layout_height="1dp"/>
             <!-- 联系人： -->
             <RelativeLayout
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_line">
 
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
@@ -460,8 +468,10 @@
                     android:layout_height="match_parent"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
+                    android:background="@null"
+                    android:gravity="center_vertical|right"
+                    android:hint="@string/default_input"
                     android:maxLength="30"
-                    android:background="@drawable/bg_visit_record"
                     />
 
                 <ImageView
@@ -473,7 +483,7 @@
                 android:layout_height="1dp"/>
             <!-- 电话： -->
             <RelativeLayout
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_line">
 
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
@@ -486,7 +496,9 @@
                     android:layout_height="match_parent"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/bg_visit_record"
+                    android:background="@null"
+                    android:gravity="center_vertical|right"
+                    android:hint="@string/default_input"
                     android:maxLength="20"
                     android:singleLine="true"
                     />
@@ -500,7 +512,7 @@
                 android:layout_height="1dp"/>
             <!-- 拜访周期： -->
             <RelativeLayout
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_line">
 
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
@@ -511,14 +523,17 @@
                     style="@style/xtbf_sayhi_san_tv"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
-                    android:maxLength="3"
-                    android:background="@drawable/bg_visit_record"
+                    android:background="@null"
+                    android:gravity="center_vertical|right"
                     android:inputType="number"
+                    android:hint="@string/default_input"
+                    android:maxLength="3"
                     />
 
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_unit_cycle"/>
+                    android:text="@string/termadd_unit_cycle"
+                    android:textColor="@color/lightgray"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
@@ -529,7 +544,7 @@
                 android:layout_height="1dp"/>
             <!-- 拜访顺序： -->
             <RelativeLayout
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_line">
 
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
@@ -542,9 +557,11 @@
                     android:layout_height="match_parent"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
-                    android:maxLength="3"
-                    android:background="@drawable/bg_visit_record"
+                    android:background="@null"
+                    android:hint="@string/default_input"
+                    android:gravity="center_vertical|right"
                     android:inputType="number"
+                    android:maxLength="3"
                     />
 
                 <ImageView
@@ -556,7 +573,7 @@
                 android:layout_height="1dp"/>
             <!-- 高档容量： -->
             <RelativeLayout
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_line">
 
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
@@ -567,15 +584,17 @@
                     style="@style/xtbf_sayhi_san_tv"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
-                    android:maxLength="10"
-                    android:background="@drawable/bg_visit_record"
-                    android:hint="0"
+                    android:background="@null"
+                    android:gravity="center_vertical|right"
+                    android:hint="@string/default_input"
                     android:inputType="number"
+                    android:maxLength="10"
                     />
 
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_unit_volume"/>
+                    android:text="@string/termadd_unit_volume"
+                    android:textColor="@color/lightgray"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
@@ -586,7 +605,7 @@
                 android:layout_height="1dp"/>
             <!-- 中档容量： -->
             <RelativeLayout
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_line">
 
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
@@ -597,14 +616,16 @@
                     style="@style/xtbf_sayhi_san_tv"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/bg_visit_record"
-                    android:hint="0"
-                    android:maxLength="10"
-                    android:inputType="number"/>
+                    android:background="@null"
+                    android:gravity="center_vertical|right"
+                    android:hint="@string/default_input"
+                    android:inputType="number"
+                    android:maxLength="10"/>
 
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_unit_volume"/>
+                    android:text="@string/termadd_unit_volume"
+                    android:textColor="@color/lightgray"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
@@ -615,7 +636,7 @@
                 android:layout_height="1dp"/>
             <!-- 普通容量： -->
             <RelativeLayout
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_line">
 
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
@@ -626,14 +647,16 @@
                     style="@style/xtbf_sayhi_san_tv"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/bg_visit_record"
-                    android:hint="0"
-                    android:maxLength="10"
-                    android:inputType="number"/>
+                    android:background="@null"
+                    android:gravity="center_vertical|right"
+                    android:hint="@string/default_input"
+                    android:inputType="number"
+                    android:maxLength="10"/>
 
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_unit_volume"/>
+                    android:text="@string/termadd_unit_volume"
+                    android:textColor="@color/lightgray"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
@@ -644,7 +667,7 @@
                 android:layout_height="1dp"/>
             <!-- 低档容量： -->
             <RelativeLayout
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_line">
 
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
@@ -655,14 +678,16 @@
                     style="@style/xtbf_sayhi_san_tv"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/bg_visit_record"
-                    android:hint="0"
-                    android:maxLength="10"
-                    android:inputType="number"/>
+                    android:background="@null"
+                    android:gravity="center_vertical|right"
+                    android:hint="@string/default_input"
+                    android:inputType="number"
+                    android:maxLength="10"/>
 
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_unit_volume"/>
+                    android:text="@string/termadd_unit_volume"
+                    android:textColor="@color/lightgray"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
@@ -673,7 +698,7 @@
                 android:layout_height="1dp"/>
             <!-- 总容量： -->
             <RelativeLayout
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl_line">
 
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
@@ -684,14 +709,16 @@
                     style="@style/xtbf_sayhi_san_tv"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/bg_visit_record"
-                    android:hint="0"
-                    android:maxLength="20"
-                    android:inputType="number"/>
+                    android:background="@null"
+                    android:gravity="center_vertical|right"
+                    android:hint="@string/default_input"
+                    android:inputType="number"
+                    android:maxLength="20"/>
 
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_unit_volume"/>
+                    android:text="@string/termadd_unit_volume"
+                    android:textColor="@color/lightgray"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
@@ -805,11 +832,12 @@
                 <!--内容1-->
                 <EditText
                     android:id="@+id/xtbf_sayhi_termpersion_et"
-                    style="@style/zdzs_sayhi_content1"
-                    android:layout_marginRight="200dp"
-                    android:background="@drawable/bg_visit_record"
+                    style="@style/xtbf_sayhi_san_tv"
+                    android:background="@null"
+                    android:gravity="center_vertical|right"
+                    android:hint="请输入"
+                    android:maxLength="20"
                     android:text=""
-                    android:maxLength="10"
                     android:visibility="gone"/>
 
                 <ImageView

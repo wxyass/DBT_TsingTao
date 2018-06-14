@@ -33,7 +33,7 @@
 
                 <TextView
                     style="@style/zdzs_sayhi_title"
-                    android:background="@drawable/icon_work_locat"/>
+                    android:background="@drawable/icon_set_password"/>
 
                 <!--修改密码-->
                 <TextView
@@ -64,7 +64,7 @@
 
                 <TextView
                     style="@style/zdzs_sayhi_title"
-                    android:background="@drawable/icon_work_locat"/>
+                    android:background="@drawable/icon_set_que"/>
 
                 <!--问题反馈-->
                 <TextView
@@ -95,7 +95,7 @@
 
                 <TextView
                     style="@style/zdzs_sayhi_title"
-                    android:background="@drawable/icon_work_locat"/>
+                    android:background="@drawable/icon_set_update"/>
 
                 <!--检查更新-->
                 <TextView
@@ -127,7 +127,7 @@
 
                 <TextView
                     style="@style/zdzs_sayhi_title"
-                    android:background="@drawable/icon_work_locat"/>
+                    android:background="@drawable/icon_set_sys"/>
 
                 <!--关于系统-->
                 <TextView
@@ -158,7 +158,7 @@
 
                 <TextView
                     style="@style/zdzs_sayhi_title"
-                    android:background="@drawable/icon_work_locat"/>
+                    android:background="@drawable/icon_set_quit"/>
 
                 <!--退出系统-->
                 <TextView

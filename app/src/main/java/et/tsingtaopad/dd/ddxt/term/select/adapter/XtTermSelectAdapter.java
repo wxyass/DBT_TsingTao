@@ -23,6 +23,7 @@ import java.util.Map;
 import et.tsingtaopad.R;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.dd.ddxt.term.select.IXtTermSelectClick;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 import et.tsingtaopad.main.operation.workplan.domain.VpLvItemStc;
@@ -174,7 +175,7 @@ public class XtTermSelectAdapter extends BaseAdapter implements OnClickListener 
 
         if (!CheckUtil.isBlankOrNull(item.getVisitTime())) {
             holder.visitDateTv.setVisibility(View.VISIBLE);
-            holder.visitDateTv.setText(item.getVisitTime());
+            holder.visitDateTv.setText(DateUtil.dividetime(item.getVisitTime()));
         } else {
             //holder.visitDateTv.setVisibility(View.GONE);
             holder.visitDateTv.setVisibility(View.VISIBLE);
@@ -271,9 +272,9 @@ public class XtTermSelectAdapter extends BaseAdapter implements OnClickListener 
             } else {
                 // 未拜访过的
                 holder.terminalNameTv.setTextColor(Color.BLACK);
-                holder.terminalNameTv.setTextColor(context.getResources().getColor(R.color.listview_item_font_color));
-                holder.terminalTypeTv.setTextColor(context.getResources().getColor(R.color.listview_item_font_color));
-                holder.visitDateTv.setTextColor(context.getResources().getColor(R.color.listview_item_font_color));
+                holder.terminalNameTv.setTextColor(context.getResources().getColor(R.color.bg_top_navigation_title));
+                holder.terminalTypeTv.setTextColor(context.getResources().getColor(R.color.lightgray));
+                holder.visitDateTv.setTextColor(context.getResources().getColor(R.color.lightgray));
             }
             // 未选中的条目,将拜访时间隐藏
             //holder.visitDateTv.setVisibility(View.GONE);
