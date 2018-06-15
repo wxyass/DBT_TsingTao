@@ -50,10 +50,11 @@
                     style="@style/zdzs_sayhi_title"
                     android:text="经销商编码"/>
 
-                <!--未稽查-->
+                <!---->
                 <TextView
                     android:id="@+id/agency_check_tv_agencycode"
                     style="@style/zdzs_sayhi_statue"
+                    android:textColor="@color/gray"
                     android:text="S123424353243225"/>
             </RelativeLayout>
             <!-- 经销商负责人： -->
@@ -66,10 +67,11 @@
                     style="@style/zdzs_sayhi_title"
                     android:text="经销商负责人"/>
 
-                <!--未稽查-->
+                <!---->
                 <TextView
                     android:id="@+id/agency_check_tv_contact"
                     style="@style/zdzs_sayhi_statue"
+                    android:textColor="@color/gray"
                     android:text="张三,李四"/>
 
             </RelativeLayout>
@@ -83,10 +85,11 @@
                     style="@style/zdzs_sayhi_title"
                     android:text="联系电话"/>
 
-                <!--未稽查-->
+                <!---->
                 <TextView
                     android:id="@+id/agency_check_tv_phone"
                     style="@style/zdzs_sayhi_statue"
+                    android:textColor="@color/gray"
                     android:text="13100005678"/>
             </RelativeLayout>
 
@@ -128,7 +131,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:cacheColorHint="@color/bg_lv_item"
-                    android:divider="@color/listview_line"
+                    android:divider="@color/list_line"
                     android:dividerHeight="5dp">
                 </et.tsingtaopad.view.NoScrollListView>
             </LinearLayout>

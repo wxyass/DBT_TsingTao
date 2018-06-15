@@ -17,17 +17,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:orientation="vertical">
 
             <!-- layout_gravity属性是**指定当前控件在父元素的位置layout_gravity属性是**指定当前控件在父元素的位置- -->
             <!-- 终端名称： -->
             <RelativeLayout
-                android:layout_marginTop="15dp"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl"
+                android:layout_marginTop="15dp">
 
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"
@@ -35,15 +35,10 @@
 
                 <EditText
                     android:id="@+id/dd_addterm_termname"
-                    style="@style/xtbf_sayhi_two_tv"
-                    android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginRight="100dp"
-                    android:layout_marginTop="5dp"
+                    style="@style/dd_addterm_et"
+                    android:background="@null"
+                    android:hint="请输入终端名称"
                     android:maxLength="20"
-                    android:hint="不能超过20个汉字"
-                    android:background="@drawable/bg_visit_record"
                     />
 
                 <ImageView
@@ -65,13 +60,15 @@
 
                 <TextView
                     android:id="@+id/dd_addterm_termareaid"
-                    style="@style/xtbf_sayhi_two_tv"
+                    style="@style/dd_addterm_text"
+                    android:hint="请选择所属区域"
                     />
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"/>
@@ -86,13 +83,15 @@
 
                 <TextView
                     android:id="@+id/dd_addterm_termgridid"
-                    style="@style/xtbf_sayhi_two_tv"
+                    style="@style/dd_addterm_text"
+                    android:hint="请选择所属定格"
                     />
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"
                     android:visibility="visible"/>
             </RelativeLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"/>
@@ -107,7 +106,8 @@
 
                 <TextView
                     android:id="@+id/dd_addterm_termroude"
-                    style="@style/xtbf_sayhi_two_tv"
+                    style="@style/dd_addterm_text"
+                    android:hint="请选择所属路线"
                     />
 
                 <ImageView
@@ -129,13 +129,9 @@
 
                 <TextView
                     android:id="@+id/dd_addterm_termlv"
-                    style="@style/xtbf_sayhi_san_tv"
-                    android:layout_marginRight="130dp"
+                    style="@style/dd_addterm_text"
+                    android:hint="请选择所属等级"
                     />
-
-                <TextView
-                    style="@style/xtbf_sayhi_two_tv"
-                    android:text="级"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"
@@ -157,7 +153,9 @@
 
                 <TextView
                     android:id="@+id/dd_addterm_termprovince"
-                    style="@style/xtbf_sayhi_two_tv"
+                    style="@style/dd_addterm_text"
+                    android:hint="请选择所在省"
+
                     />
 
                 <ImageView
@@ -179,7 +177,8 @@
 
                 <TextView
                     android:id="@+id/dd_addterm_termcity"
-                    style="@style/xtbf_sayhi_two_tv"
+                    style="@style/dd_addterm_text"
+                    android:hint="请选择所在市"
                     />
 
                 <ImageView
@@ -201,7 +200,8 @@
 
                 <TextView
                     android:id="@+id/dd_addterm_termcountry"
-                    style="@style/xtbf_sayhi_two_tv"
+                    style="@style/dd_addterm_text"
+                    android:hint="请选择所在县"
                     />
 
                 <ImageView
@@ -222,13 +222,10 @@
 
                 <EditText
                     android:id="@+id/dd_addterm_termaddress"
-                    style="@style/xtbf_sayhi_two_tv"
-                    android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginRight="100dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/bg_visit_record"
+                    style="@style/dd_addterm_et"
+                    android:background="@null"
+                    android:hint="请输入地址"
+                    android:maxLength="50"
                     />
 
                 <ImageView
@@ -246,15 +243,13 @@
                     style="@style/xtbf_sayhi_one_tv"
                     android:text="@string/termadd_person"/>
 
+
                 <EditText
                     android:id="@+id/dd_addterm_termcontact"
-                    style="@style/xtbf_sayhi_two_tv"
-                    android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginRight="100dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/bg_visit_record"
+                    style="@style/dd_addterm_et"
+                    android:background="@null"
+                    android:hint="请输入联系人"
+                    android:maxLength="50"
                     />
 
                 <ImageView
@@ -274,16 +269,11 @@
 
                 <EditText
                     android:id="@+id/dd_addterm_termphone"
-                    style="@style/xtbf_sayhi_two_tv"
-                    android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginRight="100dp"
-                    android:layout_marginTop="5dp"
+                    style="@style/dd_addterm_et"
+                    android:background="@null"
+                    android:hint="请输入电话"
                     android:inputType="number"
-                    android:background="@drawable/bg_visit_record"
                     android:maxLength="20"
-                    android:singleLine="true"
                     />
 
                 <ImageView
@@ -303,18 +293,16 @@
 
                 <EditText
                     android:id="@+id/dd_addterm_termcycle"
-                    style="@style/xtbf_sayhi_san_tv"
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/bg_visit_record"
+                    style="@style/dd_addterm_et_unit"
+                    android:hint="@string/default_input"
                     android:inputType="number"
+                    android:maxLength="10"
                     />
 
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_unit_cycle"/>
+                    android:text="@string/termadd_unit_cycle"
+                    android:textColor="@color/gray_color_666666"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
@@ -333,14 +321,11 @@
 
                 <EditText
                     android:id="@+id/dd_addterm_termsequence"
-                    style="@style/xtbf_sayhi_two_tv"
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginRight="100dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/bg_visit_record"
+                    style="@style/dd_addterm_et"
+                    android:background="@null"
+                    android:hint="请输入拜访顺序"
                     android:inputType="number"
+                    android:maxLength="20"
                     />
 
                 <ImageView
@@ -360,19 +345,16 @@
 
                 <EditText
                     android:id="@+id/dd_addterm_termhvolume"
-                    style="@style/xtbf_sayhi_san_tv"
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/bg_visit_record"
-                    android:hint="0"
+                    style="@style/dd_addterm_et_unit"
+                    android:hint="@string/default_input"
                     android:inputType="number"
+                    android:maxLength="10"
                     />
 
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_unit_volume"/>
+                    android:text="@string/termadd_unit_volume"
+                    android:textColor="@color/gray_color_666666"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
@@ -391,18 +373,15 @@
 
                 <EditText
                     android:id="@+id/dd_addterm_termmvolume"
-                    style="@style/xtbf_sayhi_san_tv"
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/bg_visit_record"
-                    android:hint="0"
-                    android:inputType="number"/>
+                    style="@style/dd_addterm_et_unit"
+                    android:hint="@string/default_input"
+                    android:inputType="number"
+                    android:maxLength="10"/>
 
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_unit_volume"/>
+                    android:text="@string/termadd_unit_volume"
+                    android:textColor="@color/gray_color_666666"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
@@ -421,18 +400,15 @@
 
                 <EditText
                     android:id="@+id/dd_addterm_termpvolume"
-                    style="@style/xtbf_sayhi_san_tv"
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/bg_visit_record"
-                    android:hint="0"
-                    android:inputType="number"/>
+                    style="@style/dd_addterm_et_unit"
+                    android:hint="@string/default_input"
+                    android:inputType="number"
+                    android:maxLength="10"/>
 
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_unit_volume"/>
+                    android:text="@string/termadd_unit_volume"
+                    android:textColor="@color/gray_color_666666"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
@@ -451,18 +427,16 @@
 
                 <EditText
                     android:id="@+id/dd_addterm_termlvolume"
-                    style="@style/xtbf_sayhi_san_tv"
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/bg_visit_record"
-                    android:hint="0"
-                    android:inputType="number"/>
+                    style="@style/dd_addterm_et_unit"
+                    android:hint="@string/default_input"
+                    android:inputType="number"
+                    android:maxLength="10"
+                    />
 
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
-                    android:text="@string/termadd_unit_volume"/>
+                    android:text="@string/termadd_unit_volume"
+                    android:textColor="@color/gray_color_666666"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
@@ -483,7 +457,8 @@
 
                 <TextView
                     android:id="@+id/dd_addterm_termarea"
-                    style="@style/xtbf_sayhi_two_tv"
+                    style="@style/dd_addterm_text"
+                    android:hint="请选择区域类型"
                     />
 
                 <ImageView
@@ -505,7 +480,8 @@
 
                 <TextView
                     android:id="@+id/dd_addterm_termsellchannel"
-                    style="@style/xtbf_sayhi_two_tv"
+                    style="@style/dd_addterm_text"
+                    android:hint="请选择销售渠道"
                     />
 
                 <ImageView
@@ -527,7 +503,8 @@
 
                 <TextView
                     android:id="@+id/dd_addterm_termtmainchannel"
-                    style="@style/xtbf_sayhi_two_tv"
+                    style="@style/dd_addterm_text"
+                    android:hint="请选择主渠道"
                     />
 
                 <ImageView
@@ -549,7 +526,8 @@
 
                 <TextView
                     android:id="@+id/dd_addterm_termminorchannel"
-                    style="@style/xtbf_sayhi_two_tv"
+                    style="@style/dd_addterm_text"
+                    android:hint="请选择次渠道"
                     />
 
                 <ImageView

@@ -60,15 +60,17 @@
         <item name="android:background">@android:drawable/bottom_bar</item>
     </style>
 
-    <style name="ButtonBarButton" />
+    <style name="ButtonBarButton"/>
 
     <!-- App字体列表 -->
     <style name="font_size1">
         <item name="android:textSize">24dp</item>
     </style>
+
     <style name="font_size2">
         <item name="android:textSize">20dp</item>
     </style>
+
     <style name="font_size3">
         <item name="android:textSize">18dp</item>
     </style>
@@ -76,15 +78,19 @@
     <style name="font_size4">
         <item name="android:textSize">15dp</item>
     </style>
+
     <style name="font_size5">
         <item name="android:textSize">14dp</item>
     </style>
+
     <style name="font_size6">
         <item name="android:textSize">16dp</item>
     </style>
+
     <style name="font_size7">
         <item name="android:textSize">12dp</item>
     </style>
+
     <style name="font_size8">
         <item name="android:textSize">10dp</item>
     </style>
@@ -121,7 +127,6 @@
         <item name="android:layout_marginRight">10dp</item>
         <item name="android:layout_marginLeft">10dp</item>
     </style>
-
 
 
     <style name="home_content_margin">
@@ -214,6 +219,7 @@
     <style name="button_text" parent="@style/font_size4">
         <item name="android:textColor">#6e655c</item>
     </style>
+
     <style name="button_text2" parent="@style/font_size5">
         <item name="android:textColor">#6e655c</item>
     </style>
@@ -227,6 +233,7 @@
     <style name="page_label_big" parent="@style/font_size6">
         <item name="android:textColor">#333333</item>
     </style>
+
     <style name="page_label_big2" parent="@style/font_size5">
         <item name="android:textColor">#595757</item>
     </style>
@@ -343,6 +350,7 @@
         <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
         <item name="android:backgroundDimEnabled">true</item>
     </style>
+
     <style name="PromptDialogStyle">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowNoTitle">true</item>
@@ -405,7 +413,7 @@
         <item name="android:gravity">center_vertical</item>
     </style>
 
-    <!-- xtbf_sayhi_rl -->
+    <!-- 终端追溯_打招呼_每一行 -->
     <style name="xtbf_sayhi_rl_all" parent="@style/xtbf_sayhi_rl">
         <item name="android:visibility">gone</item>
         <item name="android:layout_marginTop">1dp</item>
@@ -442,6 +450,8 @@
     </style>
 
 
+    <!-- 漏店补录 输入框 -->
+
 
     <!-- 追溯 查指标 产品一列 -->
     <style name="ddzs_checkindex_pro_tv" parent="@style/font_size3">
@@ -449,7 +459,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:layout_marginLeft">15dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
     </style>
 
     <!-- 协同拜访_打招呼 中档容量 输入框 一列 0614 -->
@@ -476,6 +486,51 @@
         <item name="android:gravity">center_vertical|left</item>
     </style>
 
+    <!-- 漏店补录 输入框 不带单位的-->
+    <style name="dd_addterm_et" parent="@style/font_size6">
+        <item name="android:textColor">#666666</item>
+        <item name="android:textColorHint">#cccccc</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginLeft">150dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginRight">30dp</item>
+        <item name="android:paddingRight">30dp</item>
+        <item name="android:gravity">center_vertical|right</item>
+    </style>
+
+    <!-- 漏店补录 输入框 带单位的-->
+    <style name="dd_addterm_et_unit" parent="@style/font_size6">
+        <item name="android:layout_width">150dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:background">@null</item>
+        <item name="android:gravity">center_vertical|right</item>
+        <item name="android:textColor">@color/gray_color_666666</item>
+        <item name="android:textColorHint">@color/gray_color_cccccc</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginRight">90dp</item>
+        <item name="android:paddingRight">30dp</item>
+    </style>
+
+    <!-- 漏店补录 选择后的显示 -->
+    <style name="dd_addterm_text" parent="@style/font_size6">
+        <item name="android:textColor">#666666</item>
+        <item name="android:textColorHint">#cccccc</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginRight">30dp</item>
+        <item name="android:paddingRight">30dp</item>
+        <item name="android:gravity">center_vertical|right</item>
+    </style>
+
     <!-- 新增整改计划 中间终端名称 的设置 -->
     <style name="zgjh_dealmake_con" parent="@style/font_size6">
         <item name="android:textColor">#333333</item>
@@ -492,7 +547,7 @@
         <item name="android:layout_height">20dp</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_alignParentRight">true</item>
-        <item name="android:layout_marginRight">20dp</item>
+        <item name="android:layout_marginRight">10dp</item>
         <item name="android:visibility">invisible</item>
         <item name="android:background">@drawable/icon_visit_unchecked</item>
     </style>
@@ -518,36 +573,36 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
     </style>
 
-    <!-- 终端追溯 打招呼 内容一列 -->
+    <!-- 终端追溯 打招呼 核查终端拜访 内容一列 -->
     <style name="zdzs_sayhi_checkterm" parent="@style/font_size6">
-        <item name="android:textColor">#333333</item>
+        <item name="android:textColor">@color/gray</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_alignParentLeft">true</item>
-        <item name="android:layout_marginLeft">230dp</item>
+        <item name="android:layout_marginLeft">180dp</item>
         <item name="android:layout_marginRight">80dp</item>
         <item name="android:gravity">center_vertical|left</item>
     </style>
 
-    <!-- 终端追溯 打招呼 内容一列 -->
+    <!-- 终端追溯 打招呼 确认终端信息 内容一列 -->
     <style name="zdzs_sayhi_content1" parent="@style/font_size6">
-        <item name="android:textColor">#333333</item>
+        <item name="android:textColor">@color/gray</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_alignParentLeft">true</item>
-        <item name="android:layout_marginLeft">130dp</item>
+        <item name="android:layout_marginLeft">180dp</item>
         <item name="android:layout_marginRight">80dp</item>
         <item name="android:gravity">center_vertical|left</item>
     </style>
 
     <!-- 终端追溯 打招呼 单位 (件/年) -->
     <style name="zdzs_sayhi_content2" parent="@style/font_size6">
-        <item name="android:textColor">#333333</item>
+        <item name="android:textColor">@color/gray_color_cccccc</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>
@@ -569,11 +624,12 @@
 
     <!-- zdzs_sayhi_content2 打招呼 未稽查  -->
     <style name="zdzs_sayhi_statue" parent="@style/font_size6">
+        <item name="android:textColor">@color/gray_color_666666</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_alignParentRight">true</item>
-        <item name="android:layout_marginRight">35dp</item>
+        <item name="android:layout_marginRight">25dp</item>
     </style>
 
     <!-- 下载更新版本的进度条的样式-->
@@ -588,11 +644,11 @@
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:layout_marginLeft">34dp</item>
-        <item name="android:textColor">@color/bg_top_navigation_title</item>
+        <item name="android:textColor">@color/gray_color_333333</item>
     </style>
 
     <!-- 模块底部图标样式  -->
-    <style name="app_icon_style" >
+    <style name="app_icon_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerHorizontal">true</item>
@@ -605,7 +661,7 @@
         <item name="android:layout_alignParentBottom">true</item>
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:layout_marginBottom">14dp</item>
-        <item name="android:textColor">@color/bg_top_navigation_title</item>
+        <item name="android:textColor">@color/gray_color_333333</item>
     </style>
 
 

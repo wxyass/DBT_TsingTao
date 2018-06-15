@@ -156,7 +156,7 @@ public class ZsInvoicingAdapter extends
                 holder.statueTv.setTextColor(context.getResources().getColor(R.color.zdzs_dd_yes));
             }else{
                 holder.statueTv.setText("未稽查");
-                holder.statueTv.setTextColor(context.getResources().getColor(R.color.zdzs_dd_notcheck));
+                holder.statueTv.setTextColor(context.getResources().getColor(R.color.gray_color_666666));
             }
 
             // 背景

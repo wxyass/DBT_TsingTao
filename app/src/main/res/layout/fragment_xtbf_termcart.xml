@@ -183,6 +183,7 @@
                 android:layout_height="wrap_content"
                 android:cacheColorHint="@color/bg_lv_item"
                 android:divider="@color/listview_line"
+                android:descendantFocusability="beforeDescendants"
                 android:dividerHeight="1dp">
             </ListView>
         </LinearLayout>

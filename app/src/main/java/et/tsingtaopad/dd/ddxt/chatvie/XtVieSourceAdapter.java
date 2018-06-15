@@ -124,7 +124,7 @@ public class XtVieSourceAdapter extends BaseAdapter
         } else if(!CheckUtil.isBlankOrNull(item.getChannelPrice())){
             holder.channelPriceEt.setText(item.getChannelPrice());
         }else{
-            holder.channelPriceEt.setHint(R.string.hit_input);
+            holder.channelPriceEt.setHint(R.string.default_input);
             holder.channelPriceEt.setText(null);
         }
         holder.channelPriceEt.setTag(position);
@@ -136,7 +136,7 @@ public class XtVieSourceAdapter extends BaseAdapter
         } else if(!CheckUtil.isBlankOrNull(item.getSellPrice())) {
             holder.sellPriceEt.setText(item.getSellPrice());
         }else{
-            holder.sellPriceEt.setHint(R.string.hit_input);
+            holder.sellPriceEt.setHint(R.string.default_input);
             holder.sellPriceEt.setText(null);
         }
         holder.sellPriceEt.setTag(position);
@@ -149,7 +149,7 @@ public class XtVieSourceAdapter extends BaseAdapter
         } else if(!CheckUtil.isBlankOrNull(item.getAgencyName())) {
         	holder.agencyEt.setText(item.getAgencyName());
         }else{
-        	holder.agencyEt.setHint(R.string.hit_input);
+        	holder.agencyEt.setHint(R.string.default_input_vieagencyname);
         	holder.agencyEt.setText(null);
         }
         holder.agencyEt.setTag(position);

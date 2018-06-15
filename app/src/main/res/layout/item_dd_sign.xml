@@ -40,7 +40,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@id/tv01"
                 android:layout_centerVertical="true"
-                android:textColor="@color/bg_top_navigation_title"
+                android:textColor="@color/gray_color_333333"
                 android:gravity="center_vertical|left"
                 android:text=""
                 android:textSize="@dimen/font_size3"

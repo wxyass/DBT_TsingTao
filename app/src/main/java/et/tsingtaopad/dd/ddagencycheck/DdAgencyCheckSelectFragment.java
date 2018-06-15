@@ -140,8 +140,7 @@ public class DdAgencyCheckSelectFragment extends BaseFragmentSupport implements 
                     agencyAdapter.notifyDataSetChanged();
                 } else {
                     // 展示经销商
-
-                     secondAreaid = areaList.get(Postion).getKey();
+                    secondAreaid = areaList.get(Postion).getKey();
                     selectLst = service.queryZsDdagencySelectLst(areaList.get(Postion).getKey());
                     agencyAdapter = new DdAgencyCheckSelectAdapter(getActivity(), selectLst, confirmBtn, "");
                     agencyLv.setAdapter(agencyAdapter);

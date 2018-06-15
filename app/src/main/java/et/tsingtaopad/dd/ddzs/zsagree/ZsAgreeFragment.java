@@ -82,8 +82,8 @@ public class ZsAgreeFragment extends XtBaseVisitFragment implements View.OnClick
     // 初始化控件
     private void initView(View view) {
 
-         agree_ll_all = (LinearLayout) view.findViewById(R.id.zs_agree_ll_all);
-         agree_ll_tv = (LinearLayout) view.findViewById(R.id.zs_agree_ll_tv);
+        agree_ll_all = (LinearLayout) view.findViewById(R.id.zs_agree_ll_all);
+        agree_ll_tv = (LinearLayout) view.findViewById(R.id.zs_agree_ll_tv);
         tv_agreecode_con1 = (TextView) view.findViewById(R.id.zdzs_agree_tv_agreecode_con1);
 
         tv_agencyname_con1 = (TextView) view.findViewById(R.id.zdzs_agree_tv_agencyname_con1);
@@ -134,7 +134,7 @@ public class ZsAgreeFragment extends XtBaseVisitFragment implements View.OnClick
         valagreeMTemps = zsAgreeService.queryMitValagreeMTemp(mitValterMTempKey);
         valagreedetailMTemps = zsAgreeService.queryMitValagreedetailMTemp(mitValterMTempKey);
 
-        if(valagreeMTemps.size()>0){// 该终端有协议
+        if (valagreeMTemps.size() > 0) {// 该终端有协议
             agree_ll_tv.setVisibility(View.GONE);
             agree_ll_all.setVisibility(View.VISIBLE);
             mitValagreeMTemp = valagreeMTemps.get(0);// 协议,每个终端只有一条
@@ -145,7 +145,7 @@ public class ZsAgreeFragment extends XtBaseVisitFragment implements View.OnClick
             //
             initLvData();
 
-        }else{
+        } else {
             agree_ll_all.setVisibility(View.GONE);
             agree_ll_tv.setVisibility(View.VISIBLE);
         }
@@ -169,8 +169,8 @@ public class ZsAgreeFragment extends XtBaseVisitFragment implements View.OnClick
         tv_agreecode_con1.setText(mitValagreeMTemp.getAgreecode());
         tv_agencyname_con1.setText(mitValagreeMTemp.getAgencyname());
         rl_moneyagency_con1.setText(mitValagreeMTemp.getMoneyagency());
-        rl_startdate_con1.setText(mitValagreeMTemp.getStartdate().substring(0,10));
-        rl_enddate_con1.setText(mitValagreeMTemp.getEnddate().substring(0,10));
+        rl_startdate_con1.setText(mitValagreeMTemp.getStartdate().substring(0, 10));
+        rl_enddate_con1.setText(mitValagreeMTemp.getEnddate().substring(0, 10));
         rl_paytype_con1.setText(mitValagreeMTemp.getPaytype());
         rl_contact_con1.setText(mitValagreeMTemp.getContact());
         rl_mobile_con1.setText(mitValagreeMTemp.getMobile());
@@ -180,42 +180,41 @@ public class ZsAgreeFragment extends XtBaseVisitFragment implements View.OnClick
     // 显示数据状态
     private void initViewStatus() {
         // 开始时间 未稽查
-        if("N".equals(mitValagreeMTemp.getStartdateflag())){
+        if ("N".equals(mitValagreeMTemp.getStartdateflag())) {
             rl_startdate_statue.setText("错误");
             rl_startdate_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_error));
-        }else if("Y".equals(mitValagreeMTemp.getStartdateflag())){
+        } else if ("Y".equals(mitValagreeMTemp.getStartdateflag())) {
             rl_startdate_statue.setText("正确");
             rl_startdate_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_yes));
-        }else{
+        } else {
             rl_startdate_statue.setText("未稽查");
             rl_startdate_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_notcheck));
         }
 
         // 结束时间 未稽查
-        if("N".equals(mitValagreeMTemp.getEnddateflag())){
+        if ("N".equals(mitValagreeMTemp.getEnddateflag())) {
             rl_enddate_statue.setText("错误");
             rl_enddate_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_error));
-        }else if("Y".equals(mitValagreeMTemp.getEnddateflag())){
+        } else if ("Y".equals(mitValagreeMTemp.getEnddateflag())) {
             rl_enddate_statue.setText("正确");
             rl_enddate_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_yes));
-        }else{
+        } else {
             rl_enddate_statue.setText("未稽查");
             rl_enddate_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_notcheck));
         }
 
         // 主要协议 未稽查
-        if("N".equals(mitValagreeMTemp.getNotesflag())){
+        if ("N".equals(mitValagreeMTemp.getNotesflag())) {
             rl_notes_statue.setText("错误");
             rl_notes_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_error));
-        }else if("Y".equals(mitValagreeMTemp.getNotesflag())){
+        } else if ("Y".equals(mitValagreeMTemp.getNotesflag())) {
             rl_notes_statue.setText("正确");
             rl_notes_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_yes));
-        }else{
+        } else {
             rl_notes_statue.setText("未稽查");
             rl_notes_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_notcheck));
         }
     }
-
 
 
     // 核查产品兑换信息
@@ -334,6 +333,6 @@ public class ZsAgreeFragment extends XtBaseVisitFragment implements View.OnClick
         super.onPause();
         DbtLog.logUtils(TAG, "onPause()");
         // 保存追溯
-        zsAgreeService.saveZsAgree(mitValagreeMTemp,valagreedetailMTemps);
+        zsAgreeService.saveZsAgree(mitValagreeMTemp, valagreedetailMTemps);
     }
 }

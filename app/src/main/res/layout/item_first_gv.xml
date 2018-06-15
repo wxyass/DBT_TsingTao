@@ -30,7 +30,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:layout_marginTop="@dimen/font_size9"
-            android:textColor="@color/bg_top_navigation_title"
+            android:textColor="@color/gray_color_333333"
             android:textSize="@dimen/font_size1"
             android:text="李雷"/>
 

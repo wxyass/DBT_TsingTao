@@ -124,7 +124,7 @@ public class ZsAgreeAdapter extends BaseAdapter {
             holder.tv_statue.setTextColor(context.getResources().getColor(R.color.zdzs_dd_yes));
         }else{
             holder.tv_statue.setText("未稽查");
-            holder.tv_statue.setTextColor(context.getResources().getColor(R.color.zdzs_dd_notcheck));
+            holder.tv_statue.setTextColor(context.getResources().getColor(R.color.gray_color_666666));
         }
 
         holder.ll_all.setTag(position);

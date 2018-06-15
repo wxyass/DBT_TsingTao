@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:cuisw="http://schemas.android.com/apk/res-auto"
-              style="@style/content_margin"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@color/bg_page_color"
@@ -102,8 +101,8 @@
                 android:id="@+id/zdzs_checkindex_lv_promotion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:divider="@color/bg_page_color"
-                android:dividerHeight="3dp" />
+                android:divider="@color/bg_app"
+                android:dividerHeight="10dp" />
 
             <View
                 android:layout_width="match_parent"
@@ -156,6 +155,7 @@
                     <TextView
                         android:id="@+id/zdzs_sayhi_tv_prostatus_con1"
                         style="@style/zdzs_sayhi_content3"
+                        android:textColor="@color/gray"
                         android:text=""/>
 
                     <!--内容2-->
@@ -190,6 +190,7 @@
                     <TextView
                         android:id="@+id/zdzs_sayhi_tv_hezuo_con1"
                         style="@style/zdzs_sayhi_content3"
+                        android:textColor="@color/gray"
                         android:text=""/>
 
                     <!--内容2-->
@@ -224,6 +225,7 @@
                     <TextView
                         android:id="@+id/zdzs_sayhi_tv_peisong_con1"
                         style="@style/zdzs_sayhi_content3"
+                        android:textColor="@color/gray"
                         android:text=""/>
 
                     <!--内容2-->
@@ -258,6 +260,7 @@
                     <TextView
                         android:id="@+id/zdzs_sayhi_tv_zhanyoulv_con1"
                         style="@style/zdzs_sayhi_content3"
+                        android:textColor="@color/gray"
                         android:text=""/>
 
                     <!--内容2-->

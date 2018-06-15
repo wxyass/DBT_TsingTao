@@ -114,7 +114,7 @@ public class ZsPromotionAdapter extends BaseAdapter {
             holder.statueTv.setTextColor(context.getResources().getColor(R.color.zdzs_dd_yes));
         }else{
             holder.statueTv.setText("未稽查");
-            holder.statueTv.setTextColor(context.getResources().getColor(R.color.zdzs_dd_notcheck));
+            holder.statueTv.setTextColor(context.getResources().getColor(R.color.gray_color_666666));
         }
 
         // 是否达成监听

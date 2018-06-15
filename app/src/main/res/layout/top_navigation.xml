@@ -27,7 +27,7 @@
                 android:layout_marginLeft="24dp"
                 android:background="@drawable/icon_return"
                 android:lines="1"
-                android:textColor="@color/bg_top_navigation_title"/>
+                android:textColor="@color/gray_color_333333"/>
         </RelativeLayout>
 
         <!-- 标题 -->
@@ -79,6 +79,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/lightgray2"/>
+        android:background="@color/color_e5e5e5"/>
 
 </LinearLayout>

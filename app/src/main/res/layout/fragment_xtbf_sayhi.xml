@@ -301,7 +301,7 @@
                 <TextView
                     android:id="@+id/xtbf_sayhi_termcode"
                     style="@style/xtbf_sayhi_two_tv"
-                    android:textColor="@color/lightgray"
+                    android:textColor="@color/gray_color_cccccc"
                     />
 
                 <ImageView
@@ -373,7 +373,7 @@
                 <TextView
                     android:id="@+id/xtbf_sayhi_termprovince"
                     style="@style/xtbf_sayhi_two_tv"
-                    android:textColor="@color/lightgray"
+                    android:textColor="@color/gray_color_cccccc"
                     />
 
                 <ImageView
@@ -394,7 +394,7 @@
                 <TextView
                     android:id="@+id/xtbf_sayhi_termcity"
                     style="@style/xtbf_sayhi_two_tv"
-                    android:textColor="@color/lightgray"
+                    android:textColor="@color/gray_color_cccccc"
                     />
 
                 <ImageView
@@ -415,7 +415,7 @@
                 <TextView
                     android:id="@+id/xtbf_sayhi_termcountry"
                     style="@style/xtbf_sayhi_two_tv"
-                    android:textColor="@color/lightgray"
+                    android:textColor="@color/gray_color_cccccc"
                     />
 
                 <ImageView
@@ -533,7 +533,7 @@
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_unit_cycle"
-                    android:textColor="@color/lightgray"/>
+                    android:textColor="@color/gray_color_cccccc"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
@@ -594,7 +594,7 @@
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_unit_volume"
-                    android:textColor="@color/lightgray"/>
+                    android:textColor="@color/gray_color_cccccc"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
@@ -625,7 +625,7 @@
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_unit_volume"
-                    android:textColor="@color/lightgray"/>
+                    android:textColor="@color/gray_color_cccccc"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
@@ -656,7 +656,7 @@
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_unit_volume"
-                    android:textColor="@color/lightgray"/>
+                    android:textColor="@color/gray_color_cccccc"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
@@ -687,7 +687,7 @@
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_unit_volume"
-                    android:textColor="@color/lightgray"/>
+                    android:textColor="@color/gray_color_cccccc"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
@@ -718,7 +718,7 @@
                 <TextView
                     style="@style/xtbf_sayhi_two_tv"
                     android:text="@string/termadd_unit_volume"
-                    android:textColor="@color/lightgray"/>
+                    android:textColor="@color/gray_color_cccccc"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>

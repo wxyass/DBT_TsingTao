@@ -11,8 +11,8 @@
     <!--灰色-->
     <color name="gray">#999999</color>
     <!--浅灰色-->
-    <color name="lightgray">#cccccc</color>
-    <color name="lightgray2">#e5e5e5</color>
+    <color name="gray_color_cccccc">#cccccc</color>
+    <color name="color_e5e5e5">#e5e5e5</color>
     <!--橘黄色-->
     <color name="orange">#F9C829</color>
     <!--浅蓝色-->
@@ -23,6 +23,10 @@
     <!--整体背景色-->
     <!--<color name="bg_app">#f8f9fa</color>-->
     <color name="bg_app">#F2F2F2</color>
+
+
+    <!--list间隔线-->
+    <color name="list_line">#F2F2F2</color>
 
 
     <!-- 背景色 -->
@@ -136,8 +140,8 @@
     <color name="possible_result_points">#c0ffff00</color>
 
     <!-- 顶部标题 -->
-    <color name="bg_top_navigation_title">#333333</color>
-    <color name="bg_text_gray">#666666</color>
+    <color name="gray_color_333333">#333333</color>
+    <color name="gray_color_666666">#666666</color>
 
 
     <color name="tab_unselect">#c9c9c9</color>

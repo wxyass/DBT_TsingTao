@@ -69,7 +69,7 @@ public class XtVieStatusAdapter extends BaseAdapter implements OnFocusChangeList
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.item_xtbf_chatvie_viestatus, null);
-            holder.proName = (TextView)convertView.findViewById(R.id.item_askgoods_tv_proname);
+            holder.proName = (TextView)convertView.findViewById(R.id.item_viestatus_tv_proname);
             holder.mothSellNumEt = (EditText)convertView.findViewById(R.id.item_viestatus_et_monthsell);
             holder.currStoreEt = (EditText)convertView.findViewById(R.id.item_viestatus_et_currstore);
             holder.describeEt = (EditText)convertView.findViewById(R.id.item_viestatus_et_describe);

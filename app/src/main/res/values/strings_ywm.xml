@@ -69,6 +69,7 @@
     <string name="default_week_title_info">本周计划完成目标汇总：</string>
     <string name="default_week_title_info2">本周计划完成目标汇总</string>
     <string name="default_input">请输入</string>
+    <string name="default_input_vieagencyname">请输入竞品经销商名称</string>
     <string name="point">点</string>
 
     <!-- 新增终端 -->

@@ -26,6 +26,7 @@ import et.tsingtaopad.base.BaseFragmentSupport;
 import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.view.alertview.AlertView;
+import et.tsingtaopad.core.view.alertview.OnItemClickListener;
 import et.tsingtaopad.db.table.MitValagencykfM;
 import et.tsingtaopad.db.table.MitValterMTemp;
 import et.tsingtaopad.db.table.MstAgencyKFM;
@@ -353,7 +354,7 @@ public class DdAgencyContentFragment extends BaseFragmentSupport implements View
         }else if("Y".equals(flag)){
             color = getResources().getColor(R.color.zdzs_dd_yes);
         }else{
-            color = getResources().getColor(R.color.zdzs_dd_notcheck);
+            color = getResources().getColor(R.color.gray_color_666666);
         }
         return color;
     }
@@ -532,41 +533,29 @@ public class DdAgencyContentFragment extends BaseFragmentSupport implements View
      */
     private AlertView mAlertViewExt;//窗口拓展例子
     public void alertShow3(final String type) {
-        List<KvStc> sureOrFail = new ArrayList<>();
-        sureOrFail.add(new KvStc("zhengque","正确","-1"));
-        sureOrFail.add(new KvStc("cuowu","错误(去修正)","-1"));
-        mAlertViewExt = new AlertView("请选择结果", null, null, null,
-                null, getActivity(), AlertView.Style.ActionSheet, null);
-        ViewGroup extView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_list_form, null);
-        ListView listview = (ListView) extView.findViewById(R.id.alert_list);
-        AlertKeyValueAdapter keyValueAdapter = new AlertKeyValueAdapter(getActivity(), sureOrFail,
-                new String[]{"key", "value"}, "zhengque");
-        listview.setAdapter(keyValueAdapter);
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(0==position){
-                    setMstAgencyKFMFlag(valagencykfM,type);
-                    handler.sendEmptyMessage(DdAgencyContentFragment.DD_AGENCY_CONTENT_SUC);
-                }
-                else if(1==position){
+        new AlertView("请选择核查结果", null, "取消", null,
+                new String[]{"正确", "错误"},
+                getActivity(), AlertView.Style.ActionSheet,
+                new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Object o, int position) {
+                        // Toast.makeText(getActivity(), "点击了第" + position + "个", Toast.LENGTH_SHORT).show();
+                        if (0 == position) {// 正确
+                            setMstAgencyKFMFlag(valagencykfM,type);
+                            handler.sendEmptyMessage(DdAgencyContentFragment.DD_AGENCY_CONTENT_SUC);
+                        } else if (1 == position) {// 跳转数据录入
+                            Bundle bundle = new Bundle();
+                            bundle.putString("type", type);
+                            bundle.putSerializable("mstAgencyKFM", mstAgencyKFM);
+                            bundle.putSerializable("valagencykfM", valagencykfM);
+                            DdAgencyAmendFragment agencyAmendFragment = new DdAgencyAmendFragment(handler);
+                            agencyAmendFragment.setArguments(bundle);
+                            // 跳转 经销商库存盘点 填充数据
+                            changeHomeFragment(agencyAmendFragment, "DdAgencyAmendFragment");
+                        }
 
-                    Bundle bundle = new Bundle();
-                    bundle.putString("type", type);
-                    bundle.putSerializable("mstAgencyKFM", mstAgencyKFM);
-                    bundle.putSerializable("valagencykfM", valagencykfM);
-                    DdAgencyAmendFragment agencyAmendFragment = new DdAgencyAmendFragment(handler);
-                    agencyAmendFragment.setArguments(bundle);
-                    // 跳转 经销商库存盘点 填充数据
-                    changeHomeFragment(agencyAmendFragment, "DdAgencyAmendFragment");
-                }
-
-                mAlertViewExt.dismiss();
-            }
-        });
-        mAlertViewExt.addExtView(extView);
-        mAlertViewExt.setCancelable(true).setOnDismissListener(null);
-        mAlertViewExt.show();
+                    }
+                }).setCancelable(true).show();
     }
 
 }

@@ -122,7 +122,7 @@ public class XtTermCartAdapter extends BaseAdapter implements OnClickListener {
         //是否允许修改
         if (isUpdate) {
             holder.terminalSequenceEt.setEnabled(true);
-            holder.terminalSequenceEt.setBackgroundColor(Color.LTGRAY);
+            holder.terminalSequenceEt.setBackgroundColor(context.getResources().getColor(R.color.bg_app));
         } else {
             holder.terminalSequenceEt.setEnabled(false);
         }

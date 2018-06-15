@@ -101,7 +101,7 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
             ZsChatvieFragment.class ,ZsCameraFragment.class};
 
     private int imageViewArray[] = { R.drawable.bt_shopvisit_sayhi,
-            R.drawable.bt_shopvisit_invoicing,R.drawable.bt_shopvisit_invoicing,
+            R.drawable.bt_shopvisit_invoicing,R.drawable.bt_shopvisit_agreement,
             R.drawable.bt_shopvisit_checkindex, R.drawable.bt_shopvisit_chatvie,
             R.drawable.bt_shopvisit_camera };
 
@@ -140,6 +140,8 @@ public class ZsVisitShopActivity extends BaseActivity implements View.OnClickLis
 
     // 初始化数据
     private void initData() {
+
+        titleTv.setText("确定");
 
         // 获取参数“终端信息”
         Bundle bundle = getIntent().getExtras();

@@ -133,6 +133,8 @@ public class DdAgencySelectAdapter extends BaseAdapter implements OnClickListene
         } else {
             // 未选中的条目,变成白色
             holder.itermLayout.setBackgroundColor(Color.WHITE);
+            holder.agencyNameTv.setTextColor(context.getResources().getColor(R.color.gray_color_333333));
+            holder.phoneTv.setTextColor(context.getResources().getColor(R.color.gray));
             /*if (ConstValues.FLAG_1.equals(item.getUploadFlag())) {
                 // 已提交过的
                 holder.agencyNameTv.setTextColor(context.getResources().getColor(R.color.termlst_sync_font_color));

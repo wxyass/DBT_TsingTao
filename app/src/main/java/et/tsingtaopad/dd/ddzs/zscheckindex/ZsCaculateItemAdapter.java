@@ -130,10 +130,8 @@ public class ZsCaculateItemAdapter extends BaseAdapter implements OnClickListene
             holder.statueTv.setTextColor(context.getResources().getColor(R.color.zdzs_dd_yes));
         }else{
             holder.statueTv.setText("未稽查");
-            holder.statueTv.setTextColor(context.getResources().getColor(R.color.zdzs_dd_notcheck));
+            holder.statueTv.setTextColor(context.getResources().getColor(R.color.gray_color_666666));
         }
-
-
 
         // 判定显示方式及初始化显示数据 0:计算单选、 1:单选、 2:文本框、 3:数值、 4:下拉单选
         /*if (ConstValues.FLAG_1.equals(item.getIndexType())) {

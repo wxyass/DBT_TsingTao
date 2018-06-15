@@ -133,6 +133,8 @@
                     <EditText
                         android:id="@+id/agency_res_amend_rl_dd_con1_et"
                         style="@style/zdzs_sayhi_content1"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
                         android:background="@drawable/bg_visit_record"
                         android:text=""/>
                     <!--内容2-->

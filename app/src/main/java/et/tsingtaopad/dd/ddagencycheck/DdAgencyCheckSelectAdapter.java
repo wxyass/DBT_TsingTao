@@ -81,7 +81,7 @@ public class DdAgencyCheckSelectAdapter extends BaseAdapter implements OnClickLi
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.item_agency_check_select, null);
             holder.agencyNameTv = (TextView) convertView.findViewById(R.id.item_agency_check_select_tv_name);
-            holder.phoneTv = (TextView) convertView.findViewById(R.id.item_agency_check_select_tv_type);// 渠道类型
+            holder.phoneTv = (TextView) convertView.findViewById(R.id.item_agency_check_select_tv_type);// 电话
 
             holder.updateIv = (ImageView) convertView.findViewById(R.id.item_agency_check_select_iv_update);// 上传成功标识
             holder.updateFailIv = (ImageView) convertView.findViewById(R.id.item_agency_check_select_iv_update_fail);// 上传失败标识
@@ -134,8 +134,8 @@ public class DdAgencyCheckSelectAdapter extends BaseAdapter implements OnClickLi
         } else {
             // 未选中的条目,变成白色
             holder.itermLayout.setBackgroundColor(Color.WHITE);
-            holder.agencyNameTv.setTextColor(context.getResources().getColor(R.color.listview_item_font_color));
-            holder.phoneTv.setTextColor(context.getResources().getColor(R.color.listview_item_font_color));
+            holder.agencyNameTv.setTextColor(context.getResources().getColor(R.color.gray_color_333333));
+            holder.phoneTv.setTextColor(context.getResources().getColor(R.color.gray));
             /*if (ConstValues.FLAG_1.equals(item.getUploadFlag())) {
                 // 已提交过的
                 holder.agencyNameTv.setTextColor(context.getResources().getColor(R.color.termlst_sync_font_color));

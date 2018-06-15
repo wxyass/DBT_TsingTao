@@ -128,7 +128,7 @@ public class ZsChatvieAdapter extends
 
         if("Y".equals(item.getValaddagencysupply())){// 是否督导新增
             holder.statueTv.setText("督导新增");
-            holder.statueTv.setTextColor(context.getResources().getColor(R.color.zdzs_dd_notcheck));
+            holder.statueTv.setTextColor(context.getResources().getColor(R.color.gray_color_666666));
 
         }else{// 业代的供货数据
             // 未稽查
@@ -140,7 +140,7 @@ public class ZsChatvieAdapter extends
                 holder.statueTv.setTextColor(context.getResources().getColor(R.color.zdzs_dd_yes));
             }else{
                 holder.statueTv.setText("未稽查");
-                holder.statueTv.setTextColor(context.getResources().getColor(R.color.zdzs_dd_notcheck));
+                holder.statueTv.setTextColor(context.getResources().getColor(R.color.gray_color_666666));
             }
 
             // 背景
@@ -154,16 +154,16 @@ public class ZsChatvieAdapter extends
 
         //销量
         if (ConstValues.FLAG_0.equals(item.getValcmpsales())) {
-            holder.prevNumEt.setHint(item.getValcmpsales());
+            // holder.prevNumEt.setHint(item.getValcmpsales());
         } else {
             holder.prevNumEt.setText(item.getValcmpsales());
         }
         
         //当前库存
         if (ConstValues.FLAG_0.equals(item.getValcmpkc())) {
-            holder.addcardEt.setHint("0");
+            // holder.addcardEt.setHint("0");
         } else if("0.0".equals(item.getValcmpkc())){
-            holder.addcardEt.setHint("0");
+            // holder.addcardEt.setHint("0");
         }else {
             holder.addcardEt.setText(item.getValcmpkc());
         }
@@ -180,7 +180,7 @@ public class ZsChatvieAdapter extends
         } else if(!CheckUtil.isBlankOrNull(item.getValcmpjdj())){
             holder.channelPriceEt.setText(item.getValcmpjdj());
         }else{
-            holder.channelPriceEt.setHint(R.string.hit_input);
+            // holder.channelPriceEt.setHint(R.string.hit_input);
             holder.channelPriceEt.setText(null);
         }
         holder.channelPriceEt.setTag(position);
@@ -193,7 +193,7 @@ public class ZsChatvieAdapter extends
         } else if(!CheckUtil.isBlankOrNull(item.getValcmplsj())){
             holder.sellPriceEt.setText(item.getValcmplsj());
         }else{
-            holder.sellPriceEt.setHint(R.string.hit_input);
+            // holder.sellPriceEt.setHint(R.string.hit_input);
             holder.sellPriceEt.setText(null);
         }
         holder.sellPriceEt.setTag(position);

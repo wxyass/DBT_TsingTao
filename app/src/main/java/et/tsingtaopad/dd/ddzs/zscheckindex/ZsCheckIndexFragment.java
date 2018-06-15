@@ -232,7 +232,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                     zdzs_sayhi_tv_hezuo_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_yes));
                 } else {
                     zdzs_sayhi_tv_hezuo_statue.setText("未稽查");
-                    zdzs_sayhi_tv_hezuo_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_notcheck));
+                    zdzs_sayhi_tv_hezuo_statue.setTextColor(getResources().getColor(R.color.gray_color_666666));
                 }
             } else if ("df2e88c9-246f-40e2-b6e5-08cdebf8c281".equals(item.getIndexId())) {// 是否高质量配送
                 //tempLst = service.queryNoProIndexValueId2();
@@ -250,7 +250,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                     zdzs_sayhi_tv_peisong_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_yes));
                 } else {
                     zdzs_sayhi_tv_peisong_statue.setText("未稽查");
-                    zdzs_sayhi_tv_peisong_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_notcheck));
+                    zdzs_sayhi_tv_peisong_statue.setTextColor(getResources().getColor(R.color.gray_color_666666));
                 }
             } else if ("59802090-02ac-4146-9cc3-f09570c36a26".equals(item.getIndexId())) {// 我品占有率
                 zhanyoulvIndexValueId = item.getIndexValueId();
@@ -264,7 +264,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                     zdzs_sayhi_tv_zhanyoulv_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_yes));
                 } else {
                     zdzs_sayhi_tv_zhanyoulv_statue.setText("未稽查");
-                    zdzs_sayhi_tv_zhanyoulv_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_notcheck));
+                    zdzs_sayhi_tv_zhanyoulv_statue.setTextColor(getResources().getColor(R.color.gray_color_666666));
                 }
             }
         }
@@ -340,7 +340,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
             zdzs_sayhi_tv_prostatus_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_yes));
         } else {
             zdzs_sayhi_tv_prostatus_statue.setText("未稽查");
-            zdzs_sayhi_tv_prostatus_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_notcheck));
+            zdzs_sayhi_tv_prostatus_statue.setTextColor(getResources().getColor(R.color.gray_color_666666));
         }
     }
 
@@ -457,7 +457,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                     zdzs_sayhi_tv_hezuo_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_yes));
                 } else {
                     zdzs_sayhi_tv_hezuo_statue.setText("未稽查");
-                    zdzs_sayhi_tv_hezuo_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_notcheck));
+                    zdzs_sayhi_tv_hezuo_statue.setTextColor(getResources().getColor(R.color.gray_color_666666));
                 }
             } else if ("df2e88c9-246f-40e2-b6e5-08cdebf8c281".equals(item.getIndexId())) {// 是否高质量配送
                 // 未稽查
@@ -469,7 +469,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                     zdzs_sayhi_tv_peisong_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_yes));
                 } else {
                     zdzs_sayhi_tv_peisong_statue.setText("未稽查");
-                    zdzs_sayhi_tv_peisong_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_notcheck));
+                    zdzs_sayhi_tv_peisong_statue.setTextColor(getResources().getColor(R.color.gray_color_666666));
                 }
             } else if ("59802090-02ac-4146-9cc3-f09570c36a26".equals(item.getIndexId())) {// 我品占有率
                 // 未稽查
@@ -481,7 +481,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
                     zdzs_sayhi_tv_zhanyoulv_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_yes));
                 } else {
                     zdzs_sayhi_tv_zhanyoulv_statue.setText("未稽查");
-                    zdzs_sayhi_tv_zhanyoulv_statue.setTextColor(getResources().getColor(R.color.zdzs_dd_notcheck));
+                    zdzs_sayhi_tv_zhanyoulv_statue.setTextColor(getResources().getColor(R.color.gray_color_666666));
                 }
             }
         }

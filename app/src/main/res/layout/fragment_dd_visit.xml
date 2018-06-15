@@ -91,7 +91,7 @@
                             android:ellipsize="end"
                             android:singleLine="true"
                             android:text="利民超市"
-                            android:textColor="@color/bg_top_navigation_title"
+                            android:textColor="@color/gray_color_333333"
                             android:textSize="@dimen/font_size6"/>
                     </RelativeLayout>
 
@@ -124,7 +124,7 @@
                             android:ellipsize="end"
                             android:singleLine="true"
                             android:text="宝丽华超市宝丽华超市宝丽华超市"
-                            android:textColor="@color/bg_top_navigation_title"
+                            android:textColor="@color/gray_color_333333"
                             android:textSize="@dimen/font_size6"/>
                     </RelativeLayout>
                 </RelativeLayout>
@@ -216,7 +216,7 @@
                             android:ellipsize="end"
                             android:singleLine="true"
                             android:text="建国门内大街建国门内大街建国门内大街"
-                            android:textColor="@color/bg_top_navigation_title"
+                            android:textColor="@color/gray_color_333333"
                             android:textSize="@dimen/font_size6"/>
                     </RelativeLayout>
 
@@ -293,7 +293,7 @@
                             android:ellipsize="end"
                             android:singleLine="true"
                             android:text="利民超市"
-                            android:textColor="@color/bg_top_navigation_title"
+                            android:textColor="@color/gray_color_333333"
                             android:textSize="@dimen/font_size6"/>
                     </RelativeLayout>
 
@@ -326,7 +326,7 @@
                             android:ellipsize="end"
                             android:singleLine="true"
                             android:text="利民超市"
-                            android:textColor="@color/bg_top_navigation_title"
+                            android:textColor="@color/gray_color_333333"
                             android:textSize="@dimen/font_size6"/>
                     </RelativeLayout>
                 </RelativeLayout>
@@ -419,7 +419,7 @@
                             android:ellipsize="end"
                             android:singleLine="true"
                             android:text="建国门内大街"
-                            android:textColor="@color/bg_top_navigation_title"
+                            android:textColor="@color/gray_color_333333"
                             android:textSize="@dimen/font_size6"/>
                     </RelativeLayout>
                 </RelativeLayout>

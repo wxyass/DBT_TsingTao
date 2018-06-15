@@ -29,7 +29,7 @@
                     android:layout_centerVertical="true"
                     android:paddingLeft="10dp"
                     android:text="秋季大练兵"
-                    android:textColor="@color/bg_top_navigation_title"
+                    android:textColor="@color/gray_color_333333"
                     android:textSize="@dimen/font_size4"/>
 
             </RelativeLayout>
@@ -82,7 +82,7 @@
             android:layout_height="1dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:background="@color/lightgray"/>
+            android:background="@color/list_line"/>
 
         <!--是否达成  -->
         <LinearLayout
@@ -125,8 +125,8 @@
                     android:layout_marginRight="20dp"
                     android:background="@null"
                     android:hint="请输入达成组数"
-                    android:textColorHint="@color/lightgray"
-                    android:textColor="@color/bg_top_navigation_title"
+                    android:textColorHint="@color/gray_color_cccccc"
+                    android:textColor="@color/gray_color_333333"
                     android:inputType="number"
                     android:maxLength="10"
                     android:textSize="@dimen/font_size4"/>

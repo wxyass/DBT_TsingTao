@@ -24,7 +24,8 @@
                 style="@style/listview_tv_item_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="5"/>
+                android:layout_weight="5"
+                android:textColor="@color/gray_color_333333"/>
 
             <!-- 上传成功标识 -->
 
@@ -39,25 +40,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:visibility="gone"
-                    android:src="@drawable/ico_terminal_syncflag"/>
+                    android:src="@drawable/ico_terminal_syncflag"
+                    android:visibility="gone"/>
+
                 <ImageView
                     android:id="@+id/item_agency_check_select_iv_update_fail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:visibility="gone"
-                    android:src="@drawable/icon_select_syncflagoff"/>
+                    android:src="@drawable/icon_select_syncflagoff"
+                    android:visibility="gone"/>
             </RelativeLayout>
 
-            <!-- 渠道 -->
-
+            <!-- 电话 -->
             <TextView
                 android:id="@+id/item_agency_check_select_tv_type"
                 style="@style/listview_tv_item_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"/>
+                android:layout_weight="2"
+                android:textColor="@color/gray"/>
 
         </LinearLayout>
 

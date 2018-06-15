@@ -99,8 +99,8 @@
                 android:id="@+id/xtbf_checkindex_lv_promotion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:divider="@color/bg_page_color"
-                android:dividerHeight="3dp" />
+                android:divider="@color/bg_app"
+                android:dividerHeight="10dp" />
 
             <View
                 android:layout_width="match_parent"
