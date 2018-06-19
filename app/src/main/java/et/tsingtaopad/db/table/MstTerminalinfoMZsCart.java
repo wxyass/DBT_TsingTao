@@ -6,14 +6,14 @@ import com.j256.ormlite.table.DatabaseTable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import et.tsingtaopad.db.dao.impl.MstTerminalinfoMCartDaoImpl;
+import et.tsingtaopad.db.dao.impl.MstTerminalinfoMZsCartDaoImpl;
 
 /**
  * MstTerminalinfoMTemp entity. @author MyEclipse Persistence Tools
- * 协同终端购物车表 mst_terminalinfo_m_cart
+ * 追溯终端购物车表 mst_terminalinfo_m_cart
  */
-@DatabaseTable(tableName = "MST_TERMINALINFO_M_CART", daoClass = MstTerminalinfoMCartDaoImpl.class)
-public class MstTerminalinfoMCart implements java.io.Serializable {
+@DatabaseTable(tableName = "MST_TERMINALINFO_M_ZSCART", daoClass = MstTerminalinfoMZsCartDaoImpl.class)
+public class MstTerminalinfoMZsCart implements java.io.Serializable {
 
 	// Fields
 	@DatabaseField(canBeNull = false, id = true)
@@ -101,20 +101,20 @@ public class MstTerminalinfoMCart implements java.io.Serializable {
 	// Constructors
 
 	/** default constructor */
-	public MstTerminalinfoMCart() {
+	public MstTerminalinfoMZsCart() {
 	}
 
 	/** minimal constructor */
-	public MstTerminalinfoMCart(String terminalkey) {
+	public MstTerminalinfoMZsCart(String terminalkey) {
 		this.terminalkey = terminalkey;
 	}
 
 	/** full constructor */
-	public MstTerminalinfoMCart(String terminalkey, String routekey, String terminalcode, String terminalname, String province, String city,
-                                String county, String address, String contact, String mobile, String tlevel, String sequence, String cycle, String hvolume,
-                                String mvolume, String pvolume, String lvolume, String status, String sellchannel, String mainchannel, String minorchannel, String areatype,
-                                String sisconsistent, Date scondate, String padisconsistent, Date padcondate, String comid, String remarks, String orderbyno,
-                                String deleteflag, BigDecimal version, Date credate, String creuser, Date updatetime, String updateuser) {
+	public MstTerminalinfoMZsCart(String terminalkey, String routekey, String terminalcode, String terminalname, String province, String city,
+                                  String county, String address, String contact, String mobile, String tlevel, String sequence, String cycle, String hvolume,
+                                  String mvolume, String pvolume, String lvolume, String status, String sellchannel, String mainchannel, String minorchannel, String areatype,
+                                  String sisconsistent, Date scondate, String padisconsistent, Date padcondate, String comid, String remarks, String orderbyno,
+                                  String deleteflag, BigDecimal version, Date credate, String creuser, Date updatetime, String updateuser) {
 		this.terminalkey = terminalkey;
 		this.routekey = routekey;
 		this.terminalcode = terminalcode;

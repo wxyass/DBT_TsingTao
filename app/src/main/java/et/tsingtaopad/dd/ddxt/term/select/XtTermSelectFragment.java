@@ -438,7 +438,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
                             DbtLog.logUtils(TAG, "前往拜访：是");
 
                             // 复制到终端购物车
-                            copyMstTerminalinfoMCart(xtTermSelectMStc);
+                            // copyMstTerminalinfoMCart(xtTermSelectMStc);
 
                             List<String> termKeyLst = new ArrayList<String>();
                             termKeyLst.add(termSelectMStc.getTerminalkey());
@@ -551,7 +551,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
         intent.putExtra("seeFlag", "0"); // 0拜访 1查看标识
         startActivity(intent);
         // 购物车是否已经同步数据  false:没有  true:已同步
-        PrefUtils.putBoolean(getActivity(),GlobalValues.XT_CART_SYNC,false);// 设置需要同步
+        // PrefUtils.putBoolean(getActivity(),GlobalValues.XT_CART_SYNC,false);// 设置需要同步
     }
 
     MyHandler handler;

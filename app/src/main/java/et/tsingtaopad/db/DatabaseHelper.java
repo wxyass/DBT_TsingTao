@@ -84,6 +84,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<MstTerminalinfoMTemp, String> mstTerminalinfoMTempDao = null;
     private Dao<MitTerminalinfoM, String> mitTerminalinfoMDao = null;
     private Dao<MstTerminalinfoMCart, String> mstTerminalinfoMCartDao = null;
+    private Dao<MstTerminalinfoMZsCart, String> mstTerminalinfoMZsCartDao = null;
     private Dao<MstVisitauthorizeInfo, String> mstVisitauthorizeInfoDao = null;
     private Dao<MstVisitM, String> mstVisitMDao = null;
     private Dao<MitValterM, String> mitValterMDao = null;
@@ -281,7 +282,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             //TableUtils.createTable(connectionSource, MstGroupproductM.class);// 组合表 临时表
 
             TableUtils.createTable(connectionSource, MstVisitMTemp.class);// 拜访表 临时表
-            TableUtils.createTable(connectionSource, MstTerminalinfoMCart.class);// 终端购物车
+            TableUtils.createTable(connectionSource, MstTerminalinfoMCart.class);// 协同终端购物车
+            TableUtils.createTable(connectionSource, MstTerminalinfoMZsCart.class);// 追溯终端购物车
 
 
             TableUtils.createTable(connectionSource, MitVisitM.class);// 协同拜访表
@@ -925,9 +927,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 String termtemp = "create table MST_TERMINALINFO_M_TEMP (terminalkey varchar,routekey varchar,terminalcode varchar,terminalname varchar,province varchar,city varchar,county varchar,address varchar,contact varchar,mobile varchar,tlevel varchar,sequence varchar, cycle varchar,hvolume varchar,mvolume varchar,lvolume varchar,status varchar,sellchannel varchar,mainchannel varchar,minorchannel varchar,areatype varchar,sisconsistent varchar,scondate date ,padisconsistent varchar,padcondate date ,comid varchar,remarks varchar,orderbyno varchar,deleteflag varchar,version integer ,credate date ,creuser varchar,updatetime date ,updateuser varchar ,pvolume varchar ,selftreaty varchar ,cmpselftreaty varchar ,ifminedate varchar ,ifmine varchar )";
                 db.execSQL(termtemp);
 
-                // 终端表购物车
-                String termcart = "create table MST_TERMINALINFO_M_CART (terminalkey varchar,routekey varchar,terminalcode varchar,ddtype varchar,terminalname varchar,province varchar,city varchar,county varchar,address varchar,contact varchar,mobile varchar,tlevel varchar,sequence varchar, cycle varchar,hvolume varchar,mvolume varchar,lvolume varchar,status varchar,sellchannel varchar,mainchannel varchar,minorchannel varchar,areatype varchar,sisconsistent varchar,scondate date ,padisconsistent varchar,padcondate date ,comid varchar,remarks varchar,orderbyno varchar,deleteflag varchar,version integer ,credate date ,creuser varchar,updatetime date ,updateuser varchar ,pvolume varchar ,selftreaty varchar ,cmpselftreaty varchar ,ifminedate varchar ,ifmine varchar )";
-                db.execSQL(termcart);
+                // 协同终端表购物车
+                String xttermcart = "create table MST_TERMINALINFO_M_CART (terminalkey varchar,routekey varchar,terminalcode varchar,ddtype varchar,terminalname varchar,province varchar,city varchar,county varchar,address varchar,contact varchar,mobile varchar,tlevel varchar,sequence varchar, cycle varchar,hvolume varchar,mvolume varchar,lvolume varchar,status varchar,sellchannel varchar,mainchannel varchar,minorchannel varchar,areatype varchar,sisconsistent varchar,scondate date ,padisconsistent varchar,padcondate date ,comid varchar,remarks varchar,orderbyno varchar,deleteflag varchar,version integer ,credate date ,creuser varchar,updatetime date ,updateuser varchar ,pvolume varchar ,selftreaty varchar ,cmpselftreaty varchar ,ifminedate varchar ,ifmine varchar )";
+                db.execSQL(xttermcart);
+
+                // 追溯终端表购物车
+                String zstermcart = "create table MST_TERMINALINFO_M_ZSCART (terminalkey varchar,routekey varchar,terminalcode varchar,ddtype varchar,terminalname varchar,province varchar,city varchar,county varchar,address varchar,contact varchar,mobile varchar,tlevel varchar,sequence varchar, cycle varchar,hvolume varchar,mvolume varchar,lvolume varchar,status varchar,sellchannel varchar,mainchannel varchar,minorchannel varchar,areatype varchar,sisconsistent varchar,scondate date ,padisconsistent varchar,padcondate date ,comid varchar,remarks varchar,orderbyno varchar,deleteflag varchar,version integer ,credate date ,creuser varchar,updatetime date ,updateuser varchar ,pvolume varchar ,selftreaty varchar ,cmpselftreaty varchar ,ifminedate varchar ,ifmine varchar )";
+                db.execSQL(zstermcart);
 
                 // 我品供货关系表临时表
                 String agencysupplytemp = "create table MST_AGENCYSUPPLY_INFO_TEMP (asupplykey varchar,status varchar,inprice varchar,reprice varchar,productkey varchar,lowerkey varchar,lowertype varchar,upperkey varchar,uppertype varchar,siebelkey varchar,sisconsistent varchar, scondate date ,padisconsistent varchar,padcondate date ,comid varchar,remarks varchar,orderbyno varchar,deleteflag varchar,version integer ,credate date ,creuser varchar,updatetime date ,updateuser varchar )";
@@ -1806,6 +1812,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             mstTerminalinfoMCartDao = getDao(MstTerminalinfoMCart.class);
         }
         return mstTerminalinfoMCartDao;
+    }
+    public Dao<MstTerminalinfoMZsCart, String> getMstTerminalinfoMZsCartDao() throws SQLException {
+
+        if (mstTerminalinfoMZsCartDao == null) {
+            mstTerminalinfoMZsCartDao = getDao(MstTerminalinfoMZsCart.class);
+        }
+        return mstTerminalinfoMZsCartDao;
     }
 
     public Dao<MstVisitauthorizeInfo, String> getMstVisitauthorizeInfoDao() throws SQLException {

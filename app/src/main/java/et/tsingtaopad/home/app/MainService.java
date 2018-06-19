@@ -321,6 +321,18 @@ public class MainService extends XtShopVisitService {
      */
     public void createOrUpdateTable(String json, String tablename, Class<?> cls) {
         Log.e(TAG, "createOrUpdateTable");
+        createOrUpdateTable(json,tablename,cls,1); // 是否需要清除该表,再插入  0:不需要  1需要
+    }
+
+    /**
+     * 同步数据
+     * @param json          数据
+     * @param tablename     表名称
+     * @param cls           bean对象
+     * @param what          是否需要清除该表,再插入  0:不需要  1需要
+     */
+    public void createOrUpdateTable(String json, String tablename, Class<?> cls,int what) {
+        Log.e(TAG, "createOrUpdateTable");
         AndroidDatabaseConnection connection = null;
         try {
             SQLiteDatabase database = helper.getWritableDatabase();
@@ -345,9 +357,11 @@ public class MainService extends XtShopVisitService {
                     database.execSQL(buffer.toString());
                 }
             }else{
-                StringBuffer buffer = new StringBuffer();
-                buffer.append("DELETE FROM "+tablename);
-                database.execSQL(buffer.toString());
+                if(what == 1){// 是否需要清除该表,再插入  0:不需要  1需要
+                    StringBuffer buffer = new StringBuffer();
+                    buffer.append("DELETE FROM "+tablename);
+                    database.execSQL(buffer.toString());
+                }
             }
 
             // 更新 插入
@@ -705,20 +719,20 @@ public class MainService extends XtShopVisitService {
         String MST_AGREE_TMP = emp.getMST_AGREE_TMP();
         String MST_AGREE_DETAIL_TMP = emp.getMST_AGREE_DETAIL_TMP();
 
-        createOrUpdateTable(MST_AGENCYGRID_INFO, "MST_AGENCYGRID_INFO", MstAgencygridInfo.class);
-        // createOrUpdateTable(MST_AGENCYINFO_M, "MST_AGENCYINFO_M", MstAgencyinfoM.class);
-        createOrUpdateTable(MST_AGENCYSUPPLY_INFO, "MST_AGENCYSUPPLY_INFO", MstAgencysupplyInfo.class);
-        createOrUpdateTable(MST_CHECKEXERECORD_INFO, "MST_CHECKEXERECORD_INFO", MstCheckexerecordInfo.class);
-        createOrUpdateTable(MST_CMPSUPPLY_INFO, "MST_CMPSUPPLY_INFO", MstCmpsupplyInfo.class);
-        createOrUpdateTable(MST_COLLECTIONEXERECORD_INFO, "MST_COLLECTIONEXERECORD_INFO", MstCollectionexerecordInfo.class);
-        createOrUpdateTable(MST_GROUPPRODUCT_M, "MST_GROUPPRODUCT_M", MstGroupproductM.class);
-        createOrUpdateTable(MST_PROMOTERM_INFO, "MST_PROMOTERM_INFO", MstPromotermInfo.class);
-        createOrUpdateTable(MST_VISIT_M, "MST_VISIT_M", MstVisitM.class);
-        createOrUpdateTable(MST_VISTPRODUCT_INFO, "MST_VISTPRODUCT_INFO", MstVistproductInfo.class);
-        createOrUpdateTable(MST_AGENCYACCOUNT_M, "MST_TERMLEDGER_INFO", MstTermLedgerInfo.class);
+        createOrUpdateTable(MST_AGENCYGRID_INFO, "MST_AGENCYGRID_INFO", MstAgencygridInfo.class,0);
+        // createOrUpdateTable(MST_AGENCYINFO_M, "MST_AGENCYINFO_M", MstAgencyinfoM.class,0);
+        createOrUpdateTable(MST_AGENCYSUPPLY_INFO, "MST_AGENCYSUPPLY_INFO", MstAgencysupplyInfo.class,0);
+        createOrUpdateTable(MST_CHECKEXERECORD_INFO, "MST_CHECKEXERECORD_INFO", MstCheckexerecordInfo.class,0);
+        createOrUpdateTable(MST_CMPSUPPLY_INFO, "MST_CMPSUPPLY_INFO", MstCmpsupplyInfo.class,0);
+        createOrUpdateTable(MST_COLLECTIONEXERECORD_INFO, "MST_COLLECTIONEXERECORD_INFO", MstCollectionexerecordInfo.class,0);
+        createOrUpdateTable(MST_GROUPPRODUCT_M, "MST_GROUPPRODUCT_M", MstGroupproductM.class,0);
+        createOrUpdateTable(MST_PROMOTERM_INFO, "MST_PROMOTERM_INFO", MstPromotermInfo.class,0);
+        createOrUpdateTable(MST_VISIT_M, "MST_VISIT_M", MstVisitM.class,0);
+        createOrUpdateTable(MST_VISTPRODUCT_INFO, "MST_VISTPRODUCT_INFO", MstVistproductInfo.class,0);
+        createOrUpdateTable(MST_AGENCYACCOUNT_M, "MST_TERMLEDGER_INFO", MstTermLedgerInfo.class,0);
 
-        createOrUpdateTable(MST_AGREE_TMP, "MST_AGREE_TMP", MstAgreeTmp.class);
-        createOrUpdateTable(MST_AGREE_DETAIL_TMP, "MST_AGREE_DETAIL_TMP", MstAgreeDetailTmp.class);
+        createOrUpdateTable(MST_AGREE_TMP, "MST_AGREE_TMP", MstAgreeTmp.class,0);
+        createOrUpdateTable(MST_AGREE_DETAIL_TMP, "MST_AGREE_DETAIL_TMP", MstAgreeDetailTmp.class,0);
     }
 
 }

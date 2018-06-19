@@ -178,6 +178,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:singleLine="true"
+                    android:textColor="@color/gray_color_cccccc"
                     android:textSize="@dimen/font_size6"
                     android:text="2018-12-12 23:12:23"
                     />

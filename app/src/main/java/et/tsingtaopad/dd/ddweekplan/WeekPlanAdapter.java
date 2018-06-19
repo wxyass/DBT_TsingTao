@@ -87,15 +87,20 @@ public class WeekPlanAdapter extends BaseAdapter {
 
         // 未制定
         if("0".equals(item.getState())){
-            holder.statueTv.setText("未制定");
+            //holder.statueTv.setText("未制定");
+            holder.statueTv.setBackgroundResource(R.drawable.icon_operation_weizhiding);
         }else if("1".equals(item.getState())){
-            holder.statueTv.setText("未提交");
+            //holder.statueTv.setText("未提交");
+            holder.statueTv.setBackgroundResource(R.drawable.icon_operation_weitijiao);
         }else if("2".equals(item.getState())){
-            holder.statueTv.setText("待审核");
+            //holder.statueTv.setText("待审核");
+            holder.statueTv.setBackgroundResource(R.drawable.icon_operation_shenhe);
         }else if("3".equals(item.getState())){
-            holder.statueTv.setText("审核通过");
+            //holder.statueTv.setText("审核通过");
+            holder.statueTv.setBackgroundResource(R.drawable.icon_operation_tonguo);
         }else if("4".equals(item.getState())){
-            holder.statueTv.setText("未通过");
+            //holder.statueTv.setText("未通过");
+            holder.statueTv.setBackgroundResource(R.drawable.icon_operation_weitongguo);
         }
 
 

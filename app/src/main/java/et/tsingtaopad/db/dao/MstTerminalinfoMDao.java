@@ -147,11 +147,17 @@ public interface MstTerminalinfoMDao extends Dao<MstTerminalinfoM, String> {
      */
     public void updateTermSequence(SQLiteOpenHelper helper, List<TermSequence> list);
     /***
-     *  修改终端临时表顺序
+     *  修改协同购物车表顺序
      * @param helper
      * @param list
      */
-    public void updateTermTempSequence(SQLiteOpenHelper helper, List<TermSequence> list);
+    public void updateXtTempSequence(SQLiteOpenHelper helper, List<TermSequence> list);
+    /***
+     *  修改追溯购物车表顺序
+     * @param helper
+     * @param list
+     */
+    public void updateZsTempSequence(SQLiteOpenHelper helper, List<TermSequence> list);
 
     /**
      * 获取名称

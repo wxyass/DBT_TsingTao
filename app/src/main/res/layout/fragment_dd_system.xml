@@ -16,34 +16,29 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:orientation="vertical">
 
             <!-- 修改密码 -->
             <RelativeLayout
                 android:id="@+id/dd_system_rl_repwd"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/bg_select_white_gray"
                 android:clickable="true"
                 android:gravity="center_vertical"
                 android:visibility="visible">
 
                 <TextView
-                    style="@style/zdzs_sayhi_title"
+                    android:id="@+id/system_tv01"
+                    style="@style/system_title"
                     android:background="@drawable/icon_set_password"/>
 
                 <!--修改密码-->
                 <TextView
                     android:id="@+id/dd_system_tv_repwd"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="60dp"
-                    android:gravity="center_vertical|left"
+                    style="@style/system_title_text"
+                    android:layout_toRightOf="@id/system_tv01"
                     android:text="修改密码"/>
 
                 <ImageView
@@ -55,26 +50,23 @@
             <RelativeLayout
                 android:id="@+id/dd_system_rl_question"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/bg_select_white_gray"
                 android:clickable="true"
                 android:gravity="center_vertical"
                 android:visibility="visible">
 
                 <TextView
-                    style="@style/zdzs_sayhi_title"
+                    android:id="@+id/system_tv02"
+                    style="@style/system_title"
                     android:background="@drawable/icon_set_que"/>
 
                 <!--问题反馈-->
                 <TextView
                     android:id="@+id/dd_system_tv_question"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="60dp"
-                    android:gravity="center_vertical|left"
+                    style="@style/system_title_text"
+                    android:layout_toRightOf="@id/system_tv02"
                     android:text="问题反馈"/>
 
                 <ImageView
@@ -86,26 +78,23 @@
             <RelativeLayout
                 android:id="@+id/dd_system_rl_upload"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/bg_select_white_gray"
                 android:clickable="true"
                 android:gravity="center_vertical"
                 android:visibility="visible">
 
                 <TextView
-                    style="@style/zdzs_sayhi_title"
+                    android:id="@+id/system_tv03"
+                    style="@style/system_title"
                     android:background="@drawable/icon_set_update"/>
 
                 <!--检查更新-->
                 <TextView
                     android:id="@+id/dd_system_tv_upload"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="60dp"
-                    android:gravity="center_vertical|left"
+                    style="@style/system_title_text"
+                    android:layout_toRightOf="@id/system_tv03"
                     android:text="检查更新"/>
 
                 <ImageView
@@ -113,31 +102,27 @@
                     android:visibility="visible"/>
             </RelativeLayout>
 
-
             <!-- 关于系统 -->
             <RelativeLayout
                 android:id="@+id/dd_system_rl_about"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/bg_select_white_gray"
                 android:clickable="true"
                 android:gravity="center_vertical"
                 android:visibility="visible">
 
                 <TextView
-                    style="@style/zdzs_sayhi_title"
+                    android:id="@+id/system_tv04"
+                    style="@style/system_title"
                     android:background="@drawable/icon_set_sys"/>
 
                 <!--关于系统-->
                 <TextView
                     android:id="@+id/dd_system_tv_about"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="60dp"
-                    android:gravity="center_vertical|left"
+                    style="@style/system_title_text"
+                    android:layout_toRightOf="@id/system_tv04"
                     android:text="关于系统"/>
 
                 <ImageView
@@ -149,26 +134,23 @@
             <RelativeLayout
                 android:id="@+id/dd_system_rl_exit"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/bg_select_white_gray"
                 android:clickable="true"
                 android:gravity="center_vertical"
                 android:visibility="visible">
 
                 <TextView
-                    style="@style/zdzs_sayhi_title"
+                    android:id="@+id/system_tv05"
+                    style="@style/system_title"
                     android:background="@drawable/icon_set_quit"/>
 
                 <!--退出系统-->
                 <TextView
                     android:id="@+id/dd_system_tv_exit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="60dp"
-                    android:gravity="center_vertical|left"
+                    style="@style/system_title_text"
+                    android:layout_toRightOf="@id/system_tv05"
                     android:text="退出系统"/>
 
                 <ImageView

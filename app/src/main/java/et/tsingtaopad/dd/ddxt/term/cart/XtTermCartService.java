@@ -195,10 +195,10 @@ public class XtTermCartService {
     }
 
     /***
-     * 更新终端顺序 不上传
+     * 协同 购物车更新终端顺序 不上传
      * @param list
      */
-    public void updateTermSequence(List<TermSequence> list)
+    public void updateXtTermSequence(List<TermSequence> list)
     {
         AndroidDatabaseConnection connection = null;
         try
@@ -210,7 +210,40 @@ public class XtTermCartService {
             connection.setAutoCommit(false);
             MstTerminalinfoMDao dao = helper.getDao(MstTerminalinfoM.class);
             //dao.updateTermSequence(helper, list);
-            dao.updateTermTempSequence(helper, list);
+            dao.updateXtTempSequence(helper, list);
+            connection.commit(null);
+            //sendTermSequenceRequest(list);
+        }
+        catch (SQLException e)
+        {
+            Log.e(TAG, "更改巡店拜访顺序失败", e);
+            try
+            {
+                connection.rollback(null);
+            }
+            catch (SQLException e1)
+            {
+                e1.printStackTrace();
+            }
+        }
+    }
+    /***
+     * 追溯 购物车更新终端顺序 不上传
+     * @param list
+     */
+    public void updateZsTermSequence(List<TermSequence> list)
+    {
+        AndroidDatabaseConnection connection = null;
+        try
+        {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            SQLiteDatabase database = helper.getWritableDatabase();
+            connection = new AndroidDatabaseConnection(database, true);
+            Log.e(TAG, "更改巡店拜访顺序");
+            connection.setAutoCommit(false);
+            MstTerminalinfoMDao dao = helper.getDao(MstTerminalinfoM.class);
+            //dao.updateTermSequence(helper, list);
+            dao.updateXtTempSequence(helper, list);
             connection.commit(null);
             //sendTermSequenceRequest(list);
         }

@@ -371,10 +371,11 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
         // 跳转购物车Fragment
         if (TOFRAGMENT == type) {
             // 清空购物车表数据  // 购物车表ddtype 1:协同  2:追溯
-            xtSelectService.deleteCartData("MST_TERMINALINFO_M_CART","2");
+            //xtSelectService.deleteCartData("MST_TERMINALINFO_M_CART","2");
+            xtSelectService.deleteCartData("MST_TERMINALINFO_M_ZSCART","2");
             // 复制终端临时表
             for (XtTermSelectMStc xtselect : selectedList) {
-                copyMstTerminalinfoMCart(xtselect);
+                copyMstTerminalinfoMZsCart(xtselect);
             }
             // 销毁当前Fragment
             supportFragmentManager.popBackStack();
@@ -399,9 +400,9 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
     }
 
     // 查找终端,并复制到终端购物车
-    public void copyMstTerminalinfoMCart(XtTermSelectMStc termSelectMStc) {
+    public void copyMstTerminalinfoMZsCart(XtTermSelectMStc termSelectMStc) {
         MstTerminalinfoM term = xtSelectService.findTermByTerminalkey(termSelectMStc.getTerminalkey());
-        xtSelectService.toCopyMstTerminalinfoMCartData(term,"2");
+        xtSelectService.toCopyMstTerminalinfoMZsCartData(term,"2");
     }
 
 
@@ -419,7 +420,7 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
                             DbtLog.logUtils(TAG, "前往拜访：是");
 
                             // 复制到终端购物车
-                            copyMstTerminalinfoMCart(xtTermSelectMStc);
+                            // copyMstTerminalinfoMCart(xtTermSelectMStc);
 
                             List<String> termKeyLst = new ArrayList<String>();
                             termKeyLst.add(termSelectMStc.getTerminalkey());
@@ -570,7 +571,7 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
         intent.putExtra("mitValcheckterM", mitValcheckterMs.get(0));
         intent.putExtra("seeFlag", "0"); // 0拜访 1查看标识
         startActivity(intent);
-        PrefUtils.putBoolean(getActivity(),GlobalValues.ZS_CART_SYNC,false);// false 追溯购物车 需要同步
+        //PrefUtils.putBoolean(getActivity(),GlobalValues.ZS_CART_SYNC,false);// false 追溯购物车 需要同步
     }
 
     MyHandler handler;

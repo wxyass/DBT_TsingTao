@@ -541,6 +541,18 @@
         <item name="android:gravity">center_vertical|left</item>
     </style>
 
+    <!-- 整改计划主页  中间终端名称 的设置 -->
+    <style name="zgjh_first_con" parent="@style/font_size5">
+        <item name="android:textColor">#999999</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginLeft">40dp</item>
+        <item name="android:gravity">center_vertical|left</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
     <!-- xtbf_sayhi_打招呼 箭头一列 -->
     <style name="xtbf_sayhi_third_tv" parent="@style/font_size4">
         <item name="android:layout_width">10dp</item>
@@ -574,6 +586,24 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_marginLeft">10dp</item>
+    </style>
+    <!-- 系统管理  最左侧一栏图片 -->
+    <style name="system_title" parent="@style/page_label_big">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginLeft">25dp</item>
+    </style>
+    <!-- 系统管理  最左侧一栏图片 文字-->
+    <style name="system_title_text" parent="@style/page_label_big">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginLeft">25dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">@dimen/font_size3</item>
+        <item name="android:textColor">@color/gray_color_333333</item>
+
     </style>
 
     <!-- 终端追溯 打招呼 核查终端拜访 内容一列 -->

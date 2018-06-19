@@ -51,6 +51,7 @@ import et.tsingtaopad.db.table.MstRouteM;
 import et.tsingtaopad.db.table.MstTerminalinfoM;
 import et.tsingtaopad.db.table.MstTerminalinfoMCart;
 import et.tsingtaopad.db.table.MstTerminalinfoMTemp;
+import et.tsingtaopad.db.table.MstTerminalinfoMZsCart;
 import et.tsingtaopad.db.table.MstVisitM;
 import et.tsingtaopad.db.table.MstVisitMTemp;
 import et.tsingtaopad.db.table.MstVistproductInfo;
@@ -243,7 +244,7 @@ public class XtTermSelectService {
     //
 
     /**
-     * 复制终端表 到终端购物车
+     * 复制终端表 到协同终端购物车
      *
      * @param xtTermSelectMStc
      * @param ddType           督导业务类型 1:协同  2:追溯
@@ -306,6 +307,83 @@ public class XtTermSelectService {
                 terminalinfoMCart.setIfminedate(term.getIfminedate());
                 terminalinfoMCart.setIfmine(term.getIfmine());
                 terminalinfoMCartDao.createOrUpdate(terminalinfoMCart);
+
+            }
+            connection.commit(null);
+        } catch (Exception e) {
+            Log.e(TAG, "复制数据出错", e);
+            try {
+                connection.rollback(null);
+                //ViewUtil.sendMsg(context, R.string.agencyvisit_msg_failsave);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+    /**
+     * 复制终端表 到追溯终端购物车
+     *
+     * @param xtTermSelectMStc
+     * @param ddType           督导业务类型 1:协同  2:追溯
+     */
+    public void toCopyMstTerminalinfoMZsCartData(MstTerminalinfoM xtTermSelectMStc, String ddType) {
+
+        // 事务控制
+        AndroidDatabaseConnection connection = null;
+        // 开始复制
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MstTerminalinfoMZsCart, String> terminalinfoMZsCartDao = helper.getMstTerminalinfoMZsCartDao();
+
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+            // 复制终端临时表
+            MstTerminalinfoM term = xtTermSelectMStc;
+            MstTerminalinfoMZsCart info = null;
+            if (term != null) {
+                info = new MstTerminalinfoMZsCart();
+                info.setTerminalkey(term.getTerminalkey());
+                info.setRoutekey(term.getRoutekey());
+                info.setTerminalcode(term.getTerminalcode());
+                info.setTerminalname(term.getTerminalname());
+                info.setProvince(term.getProvince());
+                info.setDdtype(ddType);// 督导业务类型 1:协同  2:追溯
+                info.setCity(term.getCity());
+                info.setCounty(term.getCounty());
+                info.setAddress(term.getAddress());
+                info.setContact(term.getContact());
+                info.setMobile(term.getMobile());
+                info.setTlevel(term.getTlevel());
+                info.setSequence(term.getSequence());
+                info.setCycle(term.getCycle());
+                info.setHvolume(term.getHvolume());
+                info.setMvolume(term.getMvolume());
+                info.setPvolume(term.getPvolume());
+                info.setLvolume(term.getLvolume());
+                info.setStatus(term.getStatus());
+                info.setSellchannel(term.getSellchannel());
+                info.setMainchannel(term.getMainchannel());
+                info.setMinorchannel(term.getMinorchannel());
+                info.setAreatype(term.getAreatype());
+                info.setSisconsistent(term.getSisconsistent());
+                info.setScondate(term.getScondate());
+                info.setPadisconsistent(term.getPadisconsistent());
+                info.setPadcondate(term.getPadcondate());
+                info.setComid(term.getComid());
+                info.setRemarks(term.getRemarks());
+                info.setOrderbyno(term.getOrderbyno());
+                info.setVersion(term.getVersion());
+                info.setCredate(term.getCredate());
+                info.setCreuser(term.getCreuser());
+                info.setSelftreaty(term.getSelftreaty());
+                info.setCmpselftreaty(term.getCmpselftreaty());
+                info.setUpdatetime(term.getUpdatetime());
+                info.setUpdateuser(term.getUpdateuser());
+                info.setDeleteflag(term.getDeleteflag());
+                info.setIfminedate(term.getIfminedate());
+                info.setIfmine(term.getIfmine());
+                terminalinfoMZsCartDao.createOrUpdate(info);
 
             }
             connection.commit(null);

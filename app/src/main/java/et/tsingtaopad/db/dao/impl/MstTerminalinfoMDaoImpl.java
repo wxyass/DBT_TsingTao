@@ -98,20 +98,6 @@ public class MstTerminalinfoMDaoImpl extends BaseDaoImpl<MstTerminalinfoM, Strin
         lst.addAll(getCartTermList_sequence(helper, false));
         return lst;
     }
-    /**
-     * 获取购物车下的终端列表
-     * <p>
-     * 用于：巡店+追溯  -- 终端选择  (2018年5月2日16:50:54 新加 )
-     *
-     * @param helper
-     * @return
-     */
-    public List<XtTermSelectMStc> queryAllCartTermLst(SQLiteOpenHelper helper) {
-        List<XtTermSelectMStc> lst = new ArrayList<XtTermSelectMStc>();
-        lst.addAll(getAllCartTermList_sequence(helper,  true));
-        lst.addAll(getAllCartTermList_sequence(helper, false));
-        return lst;
-    }
 
     /**
      * 获取购物车下的终端列表
@@ -125,6 +111,21 @@ public class MstTerminalinfoMDaoImpl extends BaseDaoImpl<MstTerminalinfoM, Strin
         List<XtTermSelectMStc> lst = new ArrayList<XtTermSelectMStc>();
         lst.addAll(getZsCartTermList_sequence(helper,  true));
         lst.addAll(getZsCartTermList_sequence(helper, false));
+        return lst;
+    }
+
+    /**
+     * 获取购物车下的终端列表
+     * <p>
+     * 用于：巡店+追溯  -- 终端选择  (2018年5月2日16:50:54 新加 )
+     *
+     * @param helper
+     * @return
+     */
+    public List<XtTermSelectMStc> queryAllCartTermLst(SQLiteOpenHelper helper) {
+        List<XtTermSelectMStc> lst = new ArrayList<XtTermSelectMStc>();
+        lst.addAll(getAllCartTermList_sequence(helper,  true));
+        lst.addAll(getAllCartTermList_sequence(helper, false));
         return lst;
     }
 
@@ -435,7 +436,7 @@ public class MstTerminalinfoMDaoImpl extends BaseDaoImpl<MstTerminalinfoM, Strin
     private List<XtTermSelectMStc> getAllCartTermList_sequence(SQLiteOpenHelper helper, boolean isSequence) {
         List<XtTermSelectMStc> lst = new ArrayList<XtTermSelectMStc>();
         StringBuffer buffer = new StringBuffer();
-        buffer.append("select m.terminalkey, m.terminalcode,m.routekey, m.terminalname,m.status,m.sequence, ");
+        /*buffer.append("select m.terminalkey, m.terminalcode,m.routekey, m.terminalname,m.status,m.sequence, ");
         //buffer.append("vm.isself, vm.iscmp, vm.selftreaty, vm.cmptreaty, ");
         buffer.append("vm.isself, vm.iscmp, m.selftreaty, vm.cmptreaty, ");// 我品 竞品 我品协议店,竞品协议店
         buffer.append("vm.padisconsistent, vm.uploadFlag, m.minorchannel, ");// 销售渠道编码
@@ -486,6 +487,19 @@ public class MstTerminalinfoMDaoImpl extends BaseDaoImpl<MstTerminalinfoM, Strin
             if (!"2".equals(status)) {//有效终端
                 lst.add(item);
             }
+        }*/
+
+        buffer.append("select distinct terminalkey from (select * from MST_TERMINALINFO_M_ZSCART  ");
+        buffer.append("Union ");
+        buffer.append("select * from  MST_TERMINALINFO_M_CART) a ");
+
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor cursor = db.rawQuery(buffer.toString(), null);
+        XtTermSelectMStc item;
+        while (cursor.moveToNext()) {
+            item = new XtTermSelectMStc();
+            item.setTerminalkey(cursor.getString(cursor.getColumnIndex("terminalkey")));
+            lst.add(item);
         }
         return lst;
     }
@@ -503,7 +517,7 @@ public class MstTerminalinfoMDaoImpl extends BaseDaoImpl<MstTerminalinfoM, Strin
         //buffer.append("vm.isself, vm.iscmp, m.selftreaty, vm.cmptreaty, ");// 我品 竞品 我品协议店,竞品协议店
         buffer.append("vm.padisconsistent,  m.minorchannel, ");// 销售渠道编码
         buffer.append("dm.dicname terminalType, vm.visitdate ");// 终端渠道类型 拜访时间
-        buffer.append("from mst_terminalinfo_m_cart m ");
+        buffer.append("from mst_terminalinfo_m_zscart m ");
         buffer.append("left join cmm_datadic_m dm on m.minorchannel = dm.diccode ");
         buffer.append("     and coalesce(dm.deleteflag,'0') != '1' ");
         buffer.append("left join v_mit_valter_m_newest vm on m.terminalkey = vm.terminalkey ");
@@ -886,10 +900,20 @@ public class MstTerminalinfoMDaoImpl extends BaseDaoImpl<MstTerminalinfoM, Strin
         }
     }
     @Override
-    public void updateTermTempSequence(SQLiteOpenHelper helper, List<TermSequence> list) {
+    public void updateXtTempSequence(SQLiteOpenHelper helper, List<TermSequence> list) {
         for (TermSequence term : list) {
             StringBuffer buffer = new StringBuffer();
             buffer.append("update mst_terminalinfo_m_cart set sequence=?");
+            buffer.append("where terminalkey=?");
+            SQLiteDatabase db = helper.getReadableDatabase();
+            db.execSQL(buffer.toString(), new Object[]{term.getSequence(), term.getTerminalkey()});
+        }
+    }
+    @Override
+    public void updateZsTempSequence(SQLiteOpenHelper helper, List<TermSequence> list) {
+        for (TermSequence term : list) {
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("update mst_terminalinfo_m_zscart set sequence=?");
             buffer.append("where terminalkey=?");
             SQLiteDatabase db = helper.getReadableDatabase();
             db.execSQL(buffer.toString(), new Object[]{term.getSequence(), term.getTerminalkey()});

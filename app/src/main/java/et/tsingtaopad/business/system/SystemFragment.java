@@ -293,7 +293,7 @@ public class SystemFragment extends BaseFragmentSupport implements View.OnClickL
 
     // 解析数据
     private void parseTableJson(String formjson) {
-        if(TextUtils.isEmpty(formjson)){
+        /*if(TextUtils.isEmpty(formjson)){
             Toast.makeText(getContext(), "已是最新版本,无需更新", Toast.LENGTH_SHORT).show();
         }else{
             ApkStc info = JsonUtil.parseJson(formjson, ApkStc.class);
@@ -304,7 +304,11 @@ public class SystemFragment extends BaseFragmentSupport implements View.OnClickL
 
             // 下载apk
             downLoadApk();
-        }
+        }*/
+
+        // 下载apk
+        //downLoadApk();
+        changeHomeFragment(new DownApkFragment(), "downapkfragment");
     }
 
     // 下载apk

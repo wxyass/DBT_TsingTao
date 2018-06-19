@@ -361,8 +361,8 @@ public class XtTermCartFragment extends BaseFragmentSupport implements View.OnCl
             termSequence.setTerminalkey(term.getTerminalkey());
             termSequenceList.add(termSequence);
         }
-        // 将排序上传服务器
-        cartService.updateTermSequence(termSequenceList);
+        // 保存到数据库
+        cartService.updateXtTermSequence(termSequenceList);
     }
 
     // 组建json  请求终端上次拜访详情

@@ -17,7 +17,7 @@
             android:id="@+id/syssetting_dd_ll_psw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:gravity="center"
             android:orientation="vertical"
             android:visibility="visible">
@@ -25,9 +25,9 @@
             <!-- 原密码 -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/bg_select_white_gray"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
                 android:clickable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -38,7 +38,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="30dp"
+                    android:layout_marginLeft="25dp"
+                    android:textSize="@dimen/font_size3"
+                    android:textColor="@color/gray_color_333333"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
                     android:text="原密码"/>
@@ -50,19 +52,19 @@
                     android:layout_height="40dp"
                     android:layout_marginRight="30dp"
                     android:layout_weight="3"
-                    android:background="@drawable/bg_visit_record"
+                    android:background="@null"
                     android:digits="@string/sys_digits_pwd"
                     android:hint="@string/sys_hint_currentpsd"
-                    android:paddingLeft="6dp"
+                    android:paddingLeft="16dp"
                     android:inputType="textPassword"/>
             </LinearLayout>
 
             <!-- 新密码 -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/bg_select_white_gray"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
                 android:clickable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -72,7 +74,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="30dp"
+                    android:layout_marginLeft="25dp"
+                    android:textSize="@dimen/font_size3"
+                    android:textColor="@color/gray_color_333333"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
                     android:text="新密码"/>
@@ -84,19 +88,19 @@
                     android:layout_height="40dp"
                     android:layout_marginRight="30dp"
                     android:layout_weight="3"
-                    android:background="@drawable/bg_visit_record"
+                    android:background="@null"
                     android:digits="@string/sys_digits_pwd"
                     android:hint="@string/sys_hint_newpsd"
-                    android:paddingLeft="6dp"
+                    android:paddingLeft="16dp"
                     android:inputType="textPassword"/>
             </LinearLayout>
 
             <!-- 确认密码 -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/bg_select_white_gray"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
                 android:clickable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -106,7 +110,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="30dp"
+                    android:layout_marginLeft="25dp"
+                    android:textSize="@dimen/font_size3"
+                    android:textColor="@color/gray_color_333333"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
                     android:text="确认密码"/>
@@ -118,10 +124,10 @@
                     android:layout_height="40dp"
                     android:layout_marginRight="30dp"
                     android:layout_weight="3"
-                    android:background="@drawable/bg_visit_record"
+                    android:background="@null"
                     android:digits="@string/sys_digits_pwd"
                     android:hint="@string/sys_hint_repeatpsd"
-                    android:paddingLeft="6dp"
+                    android:paddingLeft="16dp"
                     android:inputType="textPassword"/>
             </LinearLayout>
 

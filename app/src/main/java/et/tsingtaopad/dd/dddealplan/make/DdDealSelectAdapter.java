@@ -1,4 +1,4 @@
-package et.tsingtaopad.dd.ddxt.term.select.adapter;
+package et.tsingtaopad.dd.dddealplan.make;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -26,7 +26,7 @@ import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 
 /**
  * 项目名称：营销移动智能工作平台 </br>
- * 文件名：TermListAdapter.java</br>
+ * 文件名：DdDealSelectAdapter.java</br>
  * 作者：ywm   </br>
  * 创建时间：2014-1-19</br>
  * 功能描述:终端列表adapter </br>
@@ -34,7 +34,7 @@ import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
  * 修改履历</br>
  * 日期      原因  BUG号    修改人 修改版本</br>
  */
-public class XtTermSelectAdapter extends BaseAdapter implements OnClickListener {
+public class DdDealSelectAdapter extends BaseAdapter implements OnClickListener {
 
     private Activity context;
     private List<XtTermSelectMStc> dataLst;
@@ -46,7 +46,7 @@ public class XtTermSelectAdapter extends BaseAdapter implements OnClickListener 
     private boolean isUpdate;//是否处于修改状态
 
 
-    public XtTermSelectAdapter(Activity context, List<XtTermSelectMStc> seqTermList, List<XtTermSelectMStc> termialLst,
+    public DdDealSelectAdapter(Activity context, List<XtTermSelectMStc> seqTermList, List<XtTermSelectMStc> termialLst,
                                TextView confirmBt, String termId, IXtTermSelectClick mListener) {
         this.context = context;
         this.seqTermList = seqTermList;
@@ -85,9 +85,9 @@ public class XtTermSelectAdapter extends BaseAdapter implements OnClickListener 
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        XtTermSelectAdapter.ViewHolder holder = null;
+        DdDealSelectAdapter.ViewHolder holder = null;
         if (convertView == null) {
-            holder = new XtTermSelectAdapter.ViewHolder();
+            holder = new DdDealSelectAdapter.ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.item_termselect, null);
             holder.terminalSequenceEt = (EditText) convertView.findViewById(R.id.item_termselect_et_sequence);
             holder.terminalNameTv = (TextView) convertView.findViewById(R.id.item_termselect_tv_name);
@@ -108,21 +108,18 @@ public class XtTermSelectAdapter extends BaseAdapter implements OnClickListener 
             holder.itermLayout = (LinearLayout) convertView.findViewById(R.id.item_termselect_ll);// 整体条目
             holder.itemCoverV = convertView.findViewById(R.id.item_termselect_v_cover);// 失效终端底色
 
-            holder.terminalSequenceEt.addTextChangedListener(new XtTermSelectAdapter.MyTextWatcher(holder) {
+            holder.terminalSequenceEt.addTextChangedListener(new DdDealSelectAdapter.MyTextWatcher(holder) {
                 @Override
-                public void afterTextChanged(Editable s, XtTermSelectAdapter.ViewHolder holder) {
+                public void afterTextChanged(Editable s, DdDealSelectAdapter.ViewHolder holder) {
                     int position = (Integer) holder.terminalSequenceEt.getTag();
                     saveEditValue(s.toString(), position);
                 }
             });
             convertView.setTag(holder);
         } else {
-            holder = (XtTermSelectAdapter.ViewHolder) convertView.getTag();
+            holder = (DdDealSelectAdapter.ViewHolder) convertView.getTag();
         }
         holder.terminalSequenceEt.setTag(position);
-
-
-
 
         XtTermSelectMStc item = dataLst.get(position);
         holder.terminalNameTv.setHint(item.getTerminalkey());
@@ -154,7 +151,7 @@ public class XtTermSelectAdapter extends BaseAdapter implements OnClickListener 
             holder.addTerm.setVisibility(View.VISIBLE);
         }
 
-        // 添加终端
+        //  整改计划  添加终端(原购物车+号)
         holder.addTerm.setTag(position);
         holder.addTerm.setOnClickListener(mListener);
         if("1".equals(item.getIsSelectToCart())){
@@ -163,48 +160,16 @@ public class XtTermSelectAdapter extends BaseAdapter implements OnClickListener 
             holder.addTerm.setImageResource(R.drawable.icon_visit_add);
         }
 
-        //
         holder.terminalSequenceEt.setText(item.getSequence());
-        //
         holder.terminalNameTv.setText(item.getTerminalname());
         holder.terminalTypeTv.setText(item.getTerminalType());
 
-        if (!CheckUtil.isBlankOrNull(item.getVisitTime())) {
-            holder.visitDateTv.setVisibility(View.VISIBLE);
-            holder.visitDateTv.setText(DateUtil.dividetime(item.getVisitTime()));
-        } else {
-            //holder.visitDateTv.setVisibility(View.GONE);
-            holder.visitDateTv.setVisibility(View.VISIBLE);
-            holder.visitDateTv.setText("今日未拜访");
-        }
+        // 今日拜访时间
+        holder.visitDateTv.setVisibility(View.GONE);
 
         // 上传标记  SyncFlag对应拜访表Padisconsistent
-        if(ConstValues.FLAG_1.equals(item.getUploadFlag())&&ConstValues.FLAG_1.equals(item.getSyncFlag())){
-            // 结束上传  上传成功
-            holder.terminalNameTv.setTextColor(Color.RED);
-            holder.updateIv.setVisibility(View.VISIBLE);
-            holder.updateFailIv.setVisibility(View.GONE);
-        }else if(ConstValues.FLAG_1.equals(item.getUploadFlag())&&ConstValues.FLAG_0.equals(item.getSyncFlag())){
-            // 结束上传  上传失败
-            holder.terminalNameTv.setTextColor(Color.YELLOW);
-            holder.updateIv.setVisibility(View.GONE);// 后面修改
-            holder.updateFailIv.setVisibility(View.VISIBLE);
-        }else {
-            holder.terminalNameTv.setTextColor(Color.BLACK);
-            holder.updateIv.setVisibility(View.GONE);
-            holder.updateFailIv.setVisibility(View.GONE);
-        }
-
-        /*if (ConstValues.FLAG_1.equals(item.getSyncFlag())) {
-            holder.terminalNameTv.setTextColor(Color.RED);
-            holder.updateIv.setVisibility(View.VISIBLE);
-        } else if (ConstValues.FLAG_0.equals(item.getSyncFlag())) {
-            holder.terminalNameTv.setTextColor(Color.YELLOW);
-            holder.updateIv.setVisibility(View.INVISIBLE);
-        } else {
-            holder.terminalNameTv.setTextColor(Color.BLACK);
-            holder.updateIv.setVisibility(View.INVISIBLE);
-        }*/
+        holder.updateIv.setVisibility(View.GONE);
+        holder.updateFailIv.setVisibility(View.GONE);
 
         // 我品
         if (ConstValues.FLAG_1.equals(item.getMineFlag())) {
@@ -232,48 +197,6 @@ public class XtTermSelectAdapter extends BaseAdapter implements OnClickListener 
             holder.vieProtocolIv.setVisibility(View.VISIBLE);
         } else {
             holder.vieProtocolIv.setVisibility(View.INVISIBLE);
-        }
-
-        // 当结束拜访,拜访界面消失,显示购物车的时候,用到这个判断
-        if (selectItem == -1 && item.getTerminalkey().equals(termId)) {
-            selectItem = position;
-        }
-
-        // 整体的字变色
-        if (position == selectItem) {
-            // 选中的条目
-            //holder.itermLayout.setBackgroundColor(context.getResources().getColor(R.color.bg_content_color_gray));
-            holder.terminalRb.setChecked(true);
-            holder.terminalNameTv.setTextColor(context.getResources().getColor(R.color.font_color_green));
-            holder.terminalTypeTv.setTextColor(context.getResources().getColor(R.color.font_color_green));
-            holder.visitDateTv.setTextColor(context.getResources().getColor(R.color.font_color_green));
-            // 选中的条目,根据是否今日拜访过,显示拜访时间
-            if (!CheckUtil.isBlankOrNull(item.getVisitTime())) {
-                holder.visitDateTv.setVisibility(View.VISIBLE);
-            }
-        } else {
-            // 未选中的条目
-            //holder.itermLayout.setBackgroundColor(Color.WHITE);
-            holder.terminalRb.setChecked(false);
-            if (ConstValues.FLAG_1.equals(item.getUploadFlag())) {
-                // 已提交过的
-                holder.terminalNameTv.setTextColor(context.getResources().getColor(R.color.termlst_sync_font_color));
-                holder.terminalTypeTv.setTextColor(context.getResources().getColor(R.color.termlst_sync_font_color));
-                holder.visitDateTv.setTextColor(context.getResources().getColor(R.color.termlst_sync_font_color));
-            } else if (ConstValues.FLAG_0.equals(item.getUploadFlag())) {
-                // 已拜访过未上传的
-                holder.terminalNameTv.setTextColor(context.getResources().getColor(R.color.termlst_insync_font_color));
-                holder.terminalTypeTv.setTextColor(context.getResources().getColor(R.color.termlst_insync_font_color));
-                holder.visitDateTv.setTextColor(context.getResources().getColor(R.color.termlst_insync_font_color));
-            } else {
-                // 未拜访过的
-                holder.terminalNameTv.setTextColor(Color.BLACK);
-                holder.terminalNameTv.setTextColor(context.getResources().getColor(R.color.gray_color_333333));
-                holder.terminalTypeTv.setTextColor(context.getResources().getColor(R.color.gray_color_cccccc));
-                holder.visitDateTv.setTextColor(context.getResources().getColor(R.color.gray_color_cccccc));
-            }
-            // 未选中的条目,将拜访时间隐藏
-            //holder.visitDateTv.setVisibility(View.GONE);
         }
 
         return convertView;

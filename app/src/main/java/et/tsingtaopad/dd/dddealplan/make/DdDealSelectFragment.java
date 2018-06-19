@@ -45,7 +45,6 @@ import et.tsingtaopad.db.table.MstRouteM;
 import et.tsingtaopad.db.table.MstTerminalinfoM;
 import et.tsingtaopad.dd.ddxt.term.select.IXtTermSelectClick;
 import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectService;
-import et.tsingtaopad.dd.ddxt.term.select.adapter.XtTermSelectAdapter;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 import et.tsingtaopad.home.app.MainService;
 import et.tsingtaopad.home.initadapter.GlobalValues;
@@ -295,12 +294,12 @@ public class DdDealSelectFragment extends BaseFragmentSupport implements View.On
         });
     }
 
-    XtTermSelectAdapter selectAdapter;
+    DdDealSelectAdapter selectAdapter;
 
     //  设置终端条目适配器,及条目点击事件
     private void setItemAdapterListener() {
         // 设置适配器 加号按钮点击事件
-        selectAdapter = new XtTermSelectAdapter(getActivity(), termList, termList, confirmTv, null, new IXtTermSelectClick() {
+        selectAdapter = new DdDealSelectAdapter(getActivity(), termList, termList, confirmTv, null, new IXtTermSelectClick() {
             @Override
             public void imageViewClick(int position, View v) {
                 ImageView imageView = (ImageView) v;

@@ -487,7 +487,8 @@ public class XtShopVisitService {
             }
 
             // 复制终端临时表
-            MstTerminalinfoMCart term = findTermById(termStc.getTerminalkey());
+            // MstTerminalinfoMCart term = findTermById(termStc.getTerminalkey());
+            MstTerminalinfoM term = findMstTerminalinfoMById(termStc.getTerminalkey());
             MstTerminalinfoMTemp terminalinfoMTemp = null;
             if (term != null) {
                 terminalinfoMTemp = new MstTerminalinfoMTemp();
@@ -839,7 +840,8 @@ public class XtShopVisitService {
             }*/
 
             // 复制终端临时表
-            MstTerminalinfoMCart term = findTermById(termStc.getTerminalkey());
+            // MstTerminalinfoMCart term = findTermById(termStc.getTerminalkey());
+            MstTerminalinfoM term = findMstTerminalinfoMById(termStc.getTerminalkey());
             MstTerminalinfoMTemp terminalinfoMTemp = null;
             if (term != null) {
                 terminalinfoMTemp = new MstTerminalinfoMTemp();
@@ -1097,7 +1099,8 @@ public class XtShopVisitService {
     // 终端追溯协议对付信息表 临时表
     private void createMitValagreedetailMTemp(Dao<MstAgreeDetailTmp, String> mstAgreeDetailTmpDao,
                                               Dao<MitValagreedetailMTemp, String> mitValagreedetailMTempDao,
-                                              MstTerminalinfoMCart term,
+                                              //MstTerminalinfoMCart term,
+                                              MstTerminalinfoM term,
                                               String valterid,
                                               String mitValagreeMId) {
 
@@ -1194,7 +1197,8 @@ public class XtShopVisitService {
     // 复制追溯台账主表 临时表   复制追溯台账附表 临时表
     private void createMitValaddaccountMTemp(Dao<MitValaddaccountMTemp, String> mitValaddaccountMTempDao,
                                              Dao<MitValaddaccountproMTemp, String> mitValaddaccountproMTempDao,
-                                             MstTerminalinfoMCart term,
+                                             //MstTerminalinfoMCart term,
+                                             MstTerminalinfoM term,
                                              String id) {
 
         List<MstTermLedgerInfo> list = new ArrayList<MstTermLedgerInfo>();
@@ -1273,7 +1277,8 @@ public class XtShopVisitService {
 
     // 复制追溯产品组合表
     private void createMitGroupproMTemp(Dao<MitValgroupproMTemp, String> mitValgroupproMTempDao,
-                                        MstTerminalinfoMCart term,
+                                        //MstTerminalinfoMCart term,
+                                        MstTerminalinfoM term,
                                         String valterid) {
 
         List<MstGroupproductM> listvo = queryZsMstGroupproductM(term.getTerminalcode());
@@ -2187,6 +2192,26 @@ public class XtShopVisitService {
         try {
             DatabaseHelper helper = DatabaseHelper.getHelper(context);
             MstTerminalinfoMTempDao dao = helper.getDao(MstTerminalinfoMTemp.class);
+            termInfo = dao.queryForId(termId);
+
+        } catch (SQLException e) {
+            Log.e(TAG, "获取终端表DAO对象失败", e);
+        }
+
+        return termInfo;
+    }
+    /**
+     * 获取终端主表数据 记录信息
+     *
+     * @param termId 终端ID
+     * @return
+     */
+    public MstTerminalinfoM findMstTerminalinfoMById(String termId) {
+
+        MstTerminalinfoM termInfo = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            MstTerminalinfoMDao dao = helper.getDao(MstTerminalinfoM.class);
             termInfo = dao.queryForId(termId);
 
         } catch (SQLException e) {
