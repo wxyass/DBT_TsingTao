@@ -547,10 +547,27 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginRight">35dp</item>
         <item name="android:layout_marginLeft">40dp</item>
-        <item name="android:gravity">center_vertical|left</item>
+        <item name="android:gravity">center_vertical|right</item>
         <item name="android:ellipsize">end</item>
         <item name="android:singleLine">true</item>
+    </style>
+
+    <!-- 周计划首页条目 左侧内容 的设置 -->
+    <style name="weekplan_first_left" parent="@style/font_size5">
+        <item name="android:layout_gravity">center_vertical|left</item>
+        <item name="android:layout_marginLeft">30dp</item>
+        <item name="android:textColor">@color/gray_color_666666</item>
+    </style>
+    <!-- 周计划首页条目 右侧内容 的设置 -->
+    <style name="weekplan_first_right" parent="@style/font_size5">
+        <item name="android:ellipsize">end</item>
+        <item name="android:gravity">center_vertical|right</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:layout_marginRight">30dp</item>
+        <item name="android:textColor">@color/gray</item>
     </style>
 
     <!-- xtbf_sayhi_打招呼 箭头一列 -->

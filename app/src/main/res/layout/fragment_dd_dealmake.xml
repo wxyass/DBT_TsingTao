@@ -26,20 +26,24 @@
             <!-- 整改终端： -->
             <RelativeLayout
                 android:id="@+id/zgjh_make_rl_termname"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl"
+                >
 
                 <TextView
                     android:id="@+id/tv01"
                     style="@style/xtbf_sayhi_one_tv"
+                    android:gravity="center_vertical"
                     android:text="整改终端"/>
 
                 <TextView
                     android:id="@+id/zgjh_make_termname"
                     style="@style/zgjh_dealmake_con"
-                    android:layout_toRightOf="@id/tv01"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="50dp"
+                    android:layout_toRightOf="@id/tv01"
                     android:gravity="right"
+                    android:paddingBottom="3dp"
+                    android:paddingTop="3dp"
                     android:text=""
                     />
 
@@ -66,9 +70,9 @@
                 <TextView
                     android:id="@+id/zgjh_make_grid"
                     style="@style/zgjh_dealmake_con"
-                    android:layout_toRightOf="@id/tv02"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="50dp"
+                    android:layout_toRightOf="@id/tv02"
                     android:gravity="right"
                     android:text=""
                     />
@@ -95,9 +99,9 @@
                 <TextView
                     android:id="@+id/zgjh_make_ydname"
                     style="@style/zgjh_dealmake_con"
-                    android:layout_toRightOf="@id/tv03"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="50dp"
+                    android:layout_toRightOf="@id/tv03"
                     android:gravity="right"
                     android:text=""
                     />
@@ -126,12 +130,12 @@
                     style="@style/zgjh_dealmake_con"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
                     android:layout_marginBottom="5dp"
+                    android:layout_marginRight="50dp"
                     android:layout_marginTop="5dp"
                     android:layout_toRightOf="@id/tv04"
                     android:background="@null"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="50dp"
                     android:gravity="right|center_vertical"
                     android:hint="请输入待整改的问题"
                     android:maxLength="30"
@@ -161,12 +165,12 @@
                     style="@style/zgjh_dealmake_con"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
                     android:layout_marginBottom="5dp"
                     android:layout_marginRight="50dp"
                     android:layout_marginTop="5dp"
                     android:layout_toRightOf="@id/tv05"
                     android:background="@null"
-                    android:layout_alignParentRight="true"
                     android:gravity="right|center_vertical"
                     android:hint="请输入改进计划"
                     android:maxLength="30"
@@ -196,13 +200,13 @@
                     style="@style/zgjh_dealmake_con"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
                     android:layout_marginBottom="5dp"
                     android:layout_marginRight="50dp"
-                    android:layout_alignParentRight="true"
-                    android:gravity="right|center_vertical"
                     android:layout_marginTop="5dp"
                     android:layout_toRightOf="@id/tv06"
                     android:background="@null"
+                    android:gravity="right|center_vertical"
                     android:hint="请输入考核措施"
                     android:maxLength="30"
                     />
@@ -229,9 +233,9 @@
                 <TextView
                     android:id="@+id/zgjh_make_checktime"
                     style="@style/zgjh_dealmake_con"
-                    android:layout_toRightOf="@id/tv08"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="50dp"
+                    android:layout_toRightOf="@id/tv08"
                     android:gravity="right|center_vertical"
                     android:hint="请选择完成时间"
                     />

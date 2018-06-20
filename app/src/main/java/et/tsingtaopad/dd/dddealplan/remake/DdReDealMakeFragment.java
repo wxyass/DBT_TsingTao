@@ -156,7 +156,7 @@ public class DdReDealMakeFragment extends BaseFragmentSupport implements View.On
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        titleTv.setText("新增整改计划");
+        titleTv.setText("修改整改计划");
         handler = new MyHandler(this);
 
         // 获取系统时间

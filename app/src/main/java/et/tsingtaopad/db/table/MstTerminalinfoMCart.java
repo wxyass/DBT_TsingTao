@@ -97,6 +97,8 @@ public class MstTerminalinfoMCart implements java.io.Serializable {
 	private String ifmine;//店招
 	@DatabaseField
 	private String ddtype;// 督导类型 1:协同  2:追溯
+	@DatabaseField
+	private String visitflag;// 是否已拜访
 
 	// Constructors
 
@@ -497,5 +499,13 @@ public class MstTerminalinfoMCart implements java.io.Serializable {
 
 	public void setDdtype(String ddtype) {
 		this.ddtype = ddtype;
+	}
+
+	public String getVisitflag() {
+		return visitflag;
+	}
+
+	public void setVisitflag(String visitflag) {
+		this.visitflag = visitflag;
 	}
 }

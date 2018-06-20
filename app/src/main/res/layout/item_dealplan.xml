@@ -102,11 +102,6 @@
             <TextView
                 android:id="@+id/item_dealplan_question"
                 style="@style/zgjh_first_con"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"
-                android:layout_marginRight="100dp"
-                android:layout_marginTop="5dp"
                 android:layout_toRightOf="@id/tv04"
                 android:maxLength="30"
                 />
@@ -133,11 +128,6 @@
             <TextView
                 android:id="@+id/item_dealplan_amendplan"
                 style="@style/zgjh_first_con"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"
-                android:layout_marginRight="100dp"
-                android:layout_marginTop="5dp"
                 android:layout_toRightOf="@id/tv05"
                 android:maxLength="30"
                 />
@@ -164,11 +154,6 @@
             <TextView
                 android:id="@+id/item_dealplan_measure"
                 style="@style/zgjh_first_con"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"
-                android:layout_marginRight="100dp"
-                android:layout_marginTop="5dp"
                 android:layout_toRightOf="@id/tv06"
                 android:maxLength="30"
                 />

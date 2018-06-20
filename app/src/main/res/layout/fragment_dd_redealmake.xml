@@ -26,7 +26,8 @@
             <!-- 整改终端： -->
             <RelativeLayout
                 android:id="@+id/zgjh_remake_rl_termname"
-                style="@style/xtbf_sayhi_rl">
+                style="@style/xtbf_sayhi_rl"
+                >
 
                 <TextView
                     android:id="@+id/tv01"
@@ -36,7 +37,12 @@
                 <TextView
                     android:id="@+id/zgjh_remake_termname"
                     style="@style/zgjh_dealmake_con"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="50dp"
                     android:layout_toRightOf="@id/tv01"
+                    android:gravity="right"
+                    android:paddingBottom="3dp"
+                    android:paddingTop="3dp"
                     android:text=""
                     />
 
@@ -48,7 +54,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/gray"/>
+                android:background="@color/list_line"/>
 
             <!-- 所属定格： -->
             <RelativeLayout
@@ -63,7 +69,10 @@
                 <TextView
                     android:id="@+id/zgjh_remake_grid"
                     style="@style/zgjh_dealmake_con"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="50dp"
                     android:layout_toRightOf="@id/tv02"
+                    android:gravity="right"
                     android:text=""
                     />
 
@@ -74,7 +83,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/gray"/>
+                android:background="@color/list_line"/>
 
             <!-- 业代名称： -->
             <RelativeLayout
@@ -89,7 +98,10 @@
                 <TextView
                     android:id="@+id/zgjh_remake_ydname"
                     style="@style/zgjh_dealmake_con"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="50dp"
                     android:layout_toRightOf="@id/tv03"
+                    android:gravity="right"
                     android:text=""
                     />
 
@@ -100,7 +112,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/gray"/>
+                android:background="@color/list_line"/>
 
             <!-- 问题描述： -->
             <RelativeLayout
@@ -117,11 +129,13 @@
                     style="@style/zgjh_dealmake_con"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
                     android:layout_marginBottom="5dp"
-                    android:layout_marginRight="100dp"
+                    android:layout_marginRight="50dp"
                     android:layout_marginTop="5dp"
                     android:layout_toRightOf="@id/tv04"
-                    android:background="@drawable/bg_visit_record"
+                    android:background="@null"
+                    android:gravity="right|center_vertical"
                     android:hint="请输入待整改的问题"
                     android:maxLength="30"
                     />
@@ -133,7 +147,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/gray"/>
+                android:background="@color/list_line"/>
 
             <!-- 改进计划： -->
             <RelativeLayout
@@ -150,11 +164,13 @@
                     style="@style/zgjh_dealmake_con"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
                     android:layout_marginBottom="5dp"
-                    android:layout_marginRight="100dp"
+                    android:layout_marginRight="50dp"
                     android:layout_marginTop="5dp"
                     android:layout_toRightOf="@id/tv05"
-                    android:background="@drawable/bg_visit_record"
+                    android:background="@null"
+                    android:gravity="right|center_vertical"
                     android:hint="请输入改进计划"
                     android:maxLength="30"
                     />
@@ -166,7 +182,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/gray"/>
+                android:background="@color/list_line"/>
 
             <!-- 考核措施： -->
             <RelativeLayout
@@ -183,11 +199,13 @@
                     style="@style/zgjh_dealmake_con"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
                     android:layout_marginBottom="5dp"
-                    android:layout_marginRight="100dp"
+                    android:layout_marginRight="50dp"
                     android:layout_marginTop="5dp"
                     android:layout_toRightOf="@id/tv06"
-                    android:background="@drawable/bg_visit_record"
+                    android:background="@null"
+                    android:gravity="right|center_vertical"
                     android:hint="请输入考核措施"
                     android:maxLength="30"
                     />
@@ -199,20 +217,20 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/gray"
-                android:visibility="gone"/>
+                android:background="@color/list_line"
+                />
 
             <et.tsingtaopad.view.NoScrollListView
                 android:id="@+id/zgjh_remake_lv_altime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:divider="@color/bg_page_color"
-                android:dividerHeight="1dp" />
+                android:divider="@color/list_line"
+                android:dividerHeight="1dp"/>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/gray"/>
+                android:background="@color/list_line"/>
 
             <!-- 复查时间： -->
             <RelativeLayout
@@ -227,8 +245,11 @@
                 <TextView
                     android:id="@+id/zgjh_remake_checktime"
                     style="@style/zgjh_dealmake_con"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="50dp"
                     android:layout_toRightOf="@id/tv08"
-                    android:hint="请选择复查时间"
+                    android:gravity="right|center_vertical"
+                    android:hint="请选择完成时间"
                     />
 
                 <ImageView

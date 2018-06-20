@@ -74,7 +74,6 @@ public class WeekPlanAdapter extends BaseAdapter {
             holder.tv_route = (TextView) convertView.findViewById(R.id.item_weekplan_tv_route);
             holder.tv_check = (TextView) convertView.findViewById(R.id.item_weekplan_tv_check);
 
-
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
