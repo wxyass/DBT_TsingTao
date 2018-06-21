@@ -181,24 +181,13 @@ public class XtTermCartFragment extends BaseFragmentSupport implements View.OnCl
                 supportFragmentManager.popBackStack();
                 break;
             case R.id.top_navigation_rl_confirm:
-                // 购物车是否已经同步数据  false:没有  true:已同步
-                boolean issync = PrefUtils.getBoolean(getActivity(),GlobalValues.XT_CART_SYNC,false);
-                if(issync){// 已同步
-                    termStc = (XtTermSelectMStc)confirmBtn.getTag();
-                    // 该终端协同数据是否全部上传
-                    List<MitVisitM> terminalList = cartService.getXtMitValterM(termStc.getTerminalkey());
-                    if(terminalList.size()>0){// 未上传
-                        deleteOrXtUplad(terminalList.get(0));
-                    }else{// 已上传
-                        LatteLoader.showLoading(getActivity());// 处理数据中  ,在XtVisitShopActivity的initVIew中关闭
-                        Intent intent = new Intent(getActivity(), XtVisitShopActivity.class);
-                        intent.putExtra("isFirstVisit", "1");// 非第一次拜访1
-                        intent.putExtra("termStc", termStc);
-                        intent.putExtra("seeFlag", "0"); // 0拜访 1查看标识
-                        startActivity(intent);
-                    }
-                }else{// 未同步
-                    Toast.makeText(getActivity(),"请先点击全部同步",Toast.LENGTH_SHORT).show();
+
+                if (hasPermission(GlobalValues.LOCAL_PERMISSION)) {
+                    // 拥有了此权限,那么直接执行业务逻辑
+                    confirmVisit();// 去拜访
+                } else {
+                    // 还没有对一个权限(请求码,权限数组)这两个参数都事先定义好
+                    requestPermission(GlobalValues.LOCAL_CODE, GlobalValues.LOCAL_PERMISSION);
                 }
 
                 break;
@@ -228,6 +217,34 @@ public class XtTermCartFragment extends BaseFragmentSupport implements View.OnCl
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    public void doLocation() {
+        confirmVisit();// 去拜访
+    }
+
+    // 删除或拜访
+    private void confirmVisit(){
+        // 购物车是否已经同步数据  false:没有  true:已同步
+        boolean issync = PrefUtils.getBoolean(getActivity(),GlobalValues.XT_CART_SYNC,false);
+        if(issync){// 已同步
+            termStc = (XtTermSelectMStc)confirmBtn.getTag();
+            // 该终端协同数据是否全部上传
+            List<MitVisitM> terminalList = cartService.getXtMitValterM(termStc.getTerminalkey());
+            if(terminalList.size()>0){// 未上传
+                deleteOrXtUplad(terminalList.get(0));
+            }else{// 已上传
+                LatteLoader.showLoading(getActivity());// 处理数据中  ,在XtVisitShopActivity的initVIew中关闭
+                Intent intent = new Intent(getActivity(), XtVisitShopActivity.class);
+                intent.putExtra("isFirstVisit", "1");// 非第一次拜访1
+                intent.putExtra("termStc", termStc);
+                intent.putExtra("seeFlag", "0"); // 0拜访 1查看标识
+                startActivity(intent);
+            }
+        }else{// 未同步
+            Toast.makeText(getActivity(),"请先点击全部同步",Toast.LENGTH_SHORT).show();
         }
     }
 

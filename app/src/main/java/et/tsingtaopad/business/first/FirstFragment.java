@@ -21,6 +21,7 @@ import et.tsingtaopad.business.first.bean.FirstDataStc;
 import et.tsingtaopad.business.first.bean.GvTop;
 import et.tsingtaopad.business.first.bean.LvTop;
 import et.tsingtaopad.business.first.bean.XtZsNumStc;
+import et.tsingtaopad.business.visit.SyncBasicFragment;
 import et.tsingtaopad.core.net.HttpUrl;
 import et.tsingtaopad.core.net.RestClient;
 import et.tsingtaopad.core.net.callback.IError;
@@ -130,10 +131,21 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
         lvTopAdapter = new FirstLvTopAdapter(getActivity(), lvTopList, null);
         sclv_top.setAdapter(lvTopAdapter);
 
+
+        // 基础信息不完整,请先同步数据
+        if (getCmmAreaMCount() > 0) {
+            // changeHomeFragment(new DdWeekPlanFragment(), "ddweekplanfragment");
+        } else {
+            // Toast.makeText(getActivity(), "基础信息不完整,请先同步数据", Toast.LENGTH_SHORT).show();
+            changeHomeFragment(new SyncBasicFragment(), "syncbasicfragment");
+        }
+
         String json = PrefUtils.getString(getActivity(), "firstjson", "");
         if (!TextUtils.isEmpty(json)) {// 读取预存数据展示
             parseFirstJson(json);
         }
+
+
     }
 
     // 创建json 发起请求
@@ -252,7 +264,9 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                 if (getCmmAreaMCount() > 0) {
                     changeHomeFragment(new XtTermSelectFragment(), "xttermlistfragment");
                 } else {
+
                     Toast.makeText(getActivity(), "基础信息不完整,请先同步数据", Toast.LENGTH_SHORT).show();
+                    changeHomeFragment(new SyncBasicFragment(), "syncbasicfragment");
                 }
 
                 break;
@@ -261,6 +275,7 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                     changeHomeFragment(new ZsTermSelectFragment(), "zstermselectfragment");
                 } else {
                     Toast.makeText(getActivity(), "基础信息不完整,请先同步数据", Toast.LENGTH_SHORT).show();
+                    changeHomeFragment(new SyncBasicFragment(), "syncbasicfragment");
                 }
 
                 break;
@@ -269,6 +284,7 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                     changeHomeFragment(new DdAgencyCheckSelectFragment(), "ddagencycheckselectfragment");
                 } else {
                     Toast.makeText(getActivity(), "基础信息不完整,请先同步数据", Toast.LENGTH_SHORT).show();
+                    changeHomeFragment(new SyncBasicFragment(), "syncbasicfragment");
                 }
 
                 break;
@@ -277,6 +293,7 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                     changeHomeFragment(new DdDealPlanFragment(), "dddealplanfragment");
                 } else {
                     Toast.makeText(getActivity(), "基础信息不完整,请先同步数据", Toast.LENGTH_SHORT).show();
+                    changeHomeFragment(new SyncBasicFragment(), "syncbasicfragment");
                 }
 
                 break;
@@ -285,6 +302,7 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                     changeHomeFragment(new DdWeekPlanFragment(), "ddweekplanfragment");
                 } else {
                     Toast.makeText(getActivity(), "基础信息不完整,请先同步数据", Toast.LENGTH_SHORT).show();
+                    changeHomeFragment(new SyncBasicFragment(), "syncbasicfragment");
                 }
 
                 break;
@@ -293,6 +311,7 @@ public class FirstFragment extends BaseFragmentSupport implements View.OnClickLi
                     changeHomeFragment(new DdDaySummaryFragment(), "dddaysummaryfragment");
                 } else {
                     Toast.makeText(getActivity(), "基础信息不完整,请先同步数据", Toast.LENGTH_SHORT).show();
+                    changeHomeFragment(new SyncBasicFragment(), "syncbasicfragment");
                 }
 
                 break;

@@ -145,6 +145,7 @@ public class XtShopCopyService {
         AndroidDatabaseConnection connection = null;
         try {
             DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            SQLiteDatabase db = helper.getWritableDatabase();
             MstVisitMDao dao = helper.getDao(MstVisitM.class);
             MstVisitMTempDao visitTempDao = helper.getDao(MstVisitMTemp.class);
             MitVisitMDao mitVisitMDao = helper.getDao(MitVisitM.class);
@@ -218,6 +219,10 @@ public class XtShopCopyService {
             //createMstTerminalinfoMByMstTerminalinfoMTemp(terminalinfoMDao,terminalinfoMTempDao, visitId, termId, visitEndDate);
             createMitTerminalinfoMByMstTerminalinfoMTemp(terminalinfoMDao,terminalinfoMTempDao,mitTerminalDao, visitId, termId, visitEndDate);
 
+            // 处理协同购物车表
+            updateMstTerminalinfoMCart(db,"MST_TERMINALINFO_M_CART",termId);
+
+
             // 复制我品供货关系表
             //createMstAgencysupplyInfoByMstAgencysupplyInfoTemp(agencyDao,agencyTempDao, visitId, termId, visitEndDate);
             createMitAgencysupplyInfoByMstAgencysupplyInfoTemp(agencyDao,agencyTempDao,mitAgencysupplyDao, visitId, termId, visitEndDate);
@@ -240,6 +245,13 @@ public class XtShopCopyService {
                 e1.printStackTrace();
             }
         }
+    }
+
+    // 根据Terminalkey 删除记录
+    private void updateMstTerminalinfoMCart(SQLiteDatabase db, String tableName, String terminalkey) {
+        // 删除表记录
+        String sql = "update " + tableName + " set visitflag = '1'   where terminalkey = '" + terminalkey + "' ";
+        db.execSQL(sql);
     }
 
     // 复制产品组合是否达标表 到业代产品组合是否达标表
@@ -1719,6 +1731,7 @@ public class XtShopCopyService {
         AndroidDatabaseConnection connection = null;
         try {
             DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            SQLiteDatabase db = helper.getWritableDatabase();
 
             // 复制督导追溯数据
             MitValterMTempDao valterMTempDao = helper.getDao(MitValterMTemp.class);
@@ -1786,6 +1799,9 @@ public class XtShopCopyService {
 
             // 复制追溯终端活动表
             createMitValpromotionsMByTemp(mitValpromotionsMDao,mitValpromotionsMTempDao,valterid);
+
+            // 处理追溯购物车表
+            updateMstTerminalinfoMCart(db,"MST_TERMINALINFO_M_ZSCART",valterMTemp.getTerminalkey());
 
             // 复制追溯产品组合表
             createMitValgroupproMByTemp(mitValgroupproMDao,mitValgroupproMTempDao,valterid);

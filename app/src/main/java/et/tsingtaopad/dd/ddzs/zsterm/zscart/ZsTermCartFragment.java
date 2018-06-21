@@ -46,6 +46,7 @@ import et.tsingtaopad.core.view.alertview.OnDismissListener;
 import et.tsingtaopad.core.view.alertview.OnItemClickListener;
 import et.tsingtaopad.db.table.MitValcheckterM;
 import et.tsingtaopad.db.table.MitValterM;
+import et.tsingtaopad.db.table.MitVisitM;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
 import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartService;
 import et.tsingtaopad.dd.ddxt.term.cart.adapter.XtTermCartAdapter;
@@ -194,31 +195,13 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
                 supportFragmentManager.popBackStack();
                 break;
             case R.id.top_navigation_rl_confirm:
-                // 购物车是否已经同步数据  false:没有  true:已同步
-                boolean issync = PrefUtils.getBoolean(getActivity(),GlobalValues.ZS_CART_SYNC,false);
-                if(issync){// 同步过
-                    termStc = (XtTermSelectMStc)confirmBtn.getTag();
-                    // 检测条数是否已上传  // 该终端追溯数据是否全部上传
-                    List<MitValterM> terminalList = cartService.getZsMitValterM(termStc.getTerminalkey());
-                    if(terminalList.size()>0){// 未上传
-                        deleteOrXtUpladCart(terminalList.get(0));
-                    }else{// 已上传
-                        if(mitValcheckterMs.size()>0){// 配置了督导模板
-                            LatteLoader.showLoading(getActivity());// 处理数据中 ,在ZsVisitShopActivity的initVIew中关闭
-                            Intent intent = new Intent(getActivity(), ZsVisitShopActivity.class);
-                            intent.putExtra("isFirstVisit", "1");// 非第一次拜访1
-                            intent.putExtra("termStc", termStc);
-                            intent.putExtra("mitValcheckterM", mitValcheckterMs.get(0));
-                            intent.putExtra("seeFlag", "0"); // 0拜访 1查看标识
-                            startActivity(intent);
-                        }else{// 未配置督导模板
-                            Toast.makeText(getActivity(),"请先联系文员,配置督导模板",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }else{// 未同步
-                    Toast.makeText(getActivity(),"请先点击全部同步",Toast.LENGTH_SHORT).show();
+                if (hasPermission(GlobalValues.LOCAL_PERMISSION)) {
+                    // 拥有了此权限,那么直接执行业务逻辑
+                    confirmVisit();// 去拜访
+                } else {
+                    // 还没有对一个权限(请求码,权限数组)这两个参数都事先定义好
+                    requestPermission(GlobalValues.LOCAL_CODE, GlobalValues.LOCAL_PERMISSION);
                 }
-
                 break;
             case R.id.xtbf_termcart_bt_search:
                 searchTerm();
@@ -246,6 +229,39 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    public void doLocation() {
+        confirmVisit();// 去拜访
+    }
+
+    // 删除或拜访
+    private void confirmVisit(){
+        // 购物车是否已经同步数据  false:没有  true:已同步
+        boolean issync = PrefUtils.getBoolean(getActivity(),GlobalValues.ZS_CART_SYNC,false);
+        if(issync){// 同步过
+            termStc = (XtTermSelectMStc)confirmBtn.getTag();
+            // 检测条数是否已上传  // 该终端追溯数据是否全部上传
+            List<MitValterM> terminalList = cartService.getZsMitValterM(termStc.getTerminalkey());
+            if(terminalList.size()>0){// 未上传
+                deleteOrXtUpladCart(terminalList.get(0));
+            }else{// 已上传
+                if(mitValcheckterMs.size()>0){// 配置了督导模板
+                    LatteLoader.showLoading(getActivity());// 处理数据中 ,在ZsVisitShopActivity的initVIew中关闭
+                    Intent intent = new Intent(getActivity(), ZsVisitShopActivity.class);
+                    intent.putExtra("isFirstVisit", "1");// 非第一次拜访1
+                    intent.putExtra("termStc", termStc);
+                    intent.putExtra("mitValcheckterM", mitValcheckterMs.get(0));
+                    intent.putExtra("seeFlag", "0"); // 0拜访 1查看标识
+                    startActivity(intent);
+                }else{// 未配置督导模板
+                    Toast.makeText(getActivity(),"请先联系文员,配置督导模板",Toast.LENGTH_SHORT).show();
+                }
+            }
+        }else{// 未同步
+            Toast.makeText(getActivity(),"请先点击全部同步",Toast.LENGTH_SHORT).show();
         }
     }
 

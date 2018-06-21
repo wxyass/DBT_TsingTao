@@ -1,6 +1,7 @@
 package et.tsingtaopad.home.app;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.util.Log;
@@ -10,12 +11,14 @@ import com.j256.ormlite.dao.Dao;
 
 import java.lang.reflect.Method;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import et.tsingtaopad.business.visit.bean.AreaGridRoute;
+import et.tsingtaopad.business.visit.bean.VisitContentStc;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
@@ -733,6 +736,146 @@ public class MainService extends XtShopVisitService {
 
         createOrUpdateTable(MST_AGREE_TMP, "MST_AGREE_TMP", MstAgreeTmp.class,0);
         createOrUpdateTable(MST_AGREE_DETAIL_TMP, "MST_AGREE_DETAIL_TMP", MstAgreeDetailTmp.class,0);
+    }
+
+
+    /**
+     * 最近拜访终端
+     *
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public List<VisitContentStc> queryLastVisitTerminal() {
+
+        List<VisitContentStc> visitContentStcs = new ArrayList<VisitContentStc>();
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            SQLiteDatabase db = helper.getReadableDatabase();
+
+            String querySql = "select ter.terminalname,g.username,vi.padisconsistent,vi.credate from mit_visit_m vi   " +
+                    "  left join mst_terminalinfo_m ter on ter.terminalkey=vi.terminalkey " +
+                    "  left join mst_route_M r on r.routekey = ter.routekey  " +
+                    "  left join mst_grid_m g on g.gridkey =r.gridkey " +
+                    "  order by vi.credate desc limit 1" ;
+            Cursor cursor = db.rawQuery(querySql, null);
+            VisitContentStc item;
+            while (cursor.moveToNext()) {
+                item = new VisitContentStc();
+                //item.setTerminalkey(cursor.getString(cursor.getColumnIndex("terminalkey")));
+                item.setTerminalname(cursor.getString(cursor.getColumnIndex("terminalname")));
+                //item.setUserkey(cursor.getString(cursor.getColumnIndex("userkey")));
+                item.setUsername(cursor.getString(cursor.getColumnIndex("username")));
+                //item.setAddress(cursor.getString(cursor.getColumnIndex("address")));
+                item.setPadisconsistent(cursor.getString(cursor.getColumnIndex("padisconsistent")));
+                visitContentStcs.add(item);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "获取线路信息失败", e);
+        }
+        return visitContentStcs;
+    }
+    /**
+     * 最近追溯终端
+     *
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public List<VisitContentStc> queryLastZsTerminal() {
+
+        List<VisitContentStc> visitContentStcs = new ArrayList<VisitContentStc>();
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            SQLiteDatabase db = helper.getReadableDatabase();
+
+            String querySql = "select ter.terminalname,g.username,vi.padisconsistent,vi.credate from mit_valter_m vi   " +
+                    "  left join mst_terminalinfo_m ter on ter.terminalkey=vi.terminalkey " +
+                    "  left join mst_route_M r on r.routekey = ter.routekey  " +
+                    "  left join mst_grid_m g on g.gridkey =r.gridkey " +
+                    "  order by vi.credate desc limit 1" ;
+            Cursor cursor = db.rawQuery(querySql, null);
+            VisitContentStc item;
+            while (cursor.moveToNext()) {
+                item = new VisitContentStc();
+                //item.setTerminalkey(cursor.getString(cursor.getColumnIndex("terminalkey")));
+                item.setTerminalname(cursor.getString(cursor.getColumnIndex("terminalname")));
+                //item.setUserkey(cursor.getString(cursor.getColumnIndex("userkey")));
+                item.setUsername(cursor.getString(cursor.getColumnIndex("username")));
+                //item.setAddress(cursor.getString(cursor.getColumnIndex("address")));
+                item.setPadisconsistent(cursor.getString(cursor.getColumnIndex("padisconsistent")));
+                visitContentStcs.add(item);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "获取线路信息失败", e);
+        }
+        return visitContentStcs;
+    }
+    /**
+     * 预计协同终端
+     *
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public List<VisitContentStc> queryNextVisitTerminal() {
+
+        List<VisitContentStc> visitContentStcs = new ArrayList<VisitContentStc>();
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            SQLiteDatabase db = helper.getReadableDatabase();
+
+            String querySql = "select cart.terminalname,cart.address   " +
+                    "from MST_TERMINALINFO_M_CART cart  " +
+                    "where (cart.visitflag  is null or cart.visitflag='0')   " +
+                    "order by cart.sequence*1 asc limit 1   "  ;
+            Cursor cursor = db.rawQuery(querySql, null);
+            VisitContentStc item;
+            while (cursor.moveToNext()) {
+                item = new VisitContentStc();
+                //item.setTerminalkey(cursor.getString(cursor.getColumnIndex("terminalkey")));
+                item.setTerminalname(cursor.getString(cursor.getColumnIndex("terminalname")));
+                //item.setUserkey(cursor.getString(cursor.getColumnIndex("userkey")));
+                //item.setUsername(cursor.getString(cursor.getColumnIndex("username")));
+                item.setAddress(cursor.getString(cursor.getColumnIndex("address")));
+                //item.setPadisconsistent(cursor.getString(cursor.getColumnIndex("padisconsistent")));
+                visitContentStcs.add(item);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "获取线路信息失败", e);
+        }
+        return visitContentStcs;
+    }
+    /**
+     * 预计追溯终端
+     *
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public List<VisitContentStc> queryNextZsTerminal() {
+
+        List<VisitContentStc> visitContentStcs = new ArrayList<VisitContentStc>();
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            SQLiteDatabase db = helper.getReadableDatabase();
+
+            String querySql = "select cart.terminalname,cart.address   " +
+                    "from MST_TERMINALINFO_M_ZSCART cart  " +
+                    "where (cart.visitflag  is null or cart.visitflag='0')   " +
+                    "order by cart.sequence*1 asc limit 1   "  ;
+            Cursor cursor = db.rawQuery(querySql, null);
+            VisitContentStc item;
+            while (cursor.moveToNext()) {
+                item = new VisitContentStc();
+                //item.setTerminalkey(cursor.getString(cursor.getColumnIndex("terminalkey")));
+                item.setTerminalname(cursor.getString(cursor.getColumnIndex("terminalname")));
+                //item.setUserkey(cursor.getString(cursor.getColumnIndex("userkey")));
+                //item.setUsername(cursor.getString(cursor.getColumnIndex("username")));
+                item.setAddress(cursor.getString(cursor.getColumnIndex("address")));
+                //item.setPadisconsistent(cursor.getString(cursor.getColumnIndex("padisconsistent")));
+                visitContentStcs.add(item);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "获取线路信息失败", e);
+        }
+        return visitContentStcs;
     }
 
 }

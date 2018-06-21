@@ -350,14 +350,24 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
             if(terminalList.size()>0){// 未上传,弹窗上传
                 deleteOrXtUplad(terminalList.get(0));
             }else{// 已上传,去追溯
-                confirmXtUplad(xtTermSelectMStc);// 去拜访
+
+                if (hasPermission(GlobalValues.LOCAL_PERMISSION)) {
+                    // 拥有了此权限,那么直接执行业务逻辑
+                    // 弹出提示 是否拜访这家终端
+                    confirmXtUplad(xtTermSelectMStc);// 去拜访
+                } else {
+                    // 还没有对一个权限(请求码,权限数组)这两个参数都事先定义好
+                    requestPermission(GlobalValues.LOCAL_CODE, GlobalValues.LOCAL_PERMISSION);
+                }
             }
         }else{
             Toast.makeText(getActivity(),"请先联系文员,配置督导模板",Toast.LENGTH_SHORT).show();
         }
+    }
 
-
-
+    @Override
+    public void doLocation() {
+        confirmXtUplad(xtTermSelectMStc);// 去拜访
     }
 
     /**

@@ -109,7 +109,7 @@
                             android:layout_centerVertical="true"
                             android:ellipsize="end"
                             android:singleLine="true"
-                            android:text="下次拜访: "
+                            android:text="预计拜访: "
                             android:textColor="@color/gray"
                             android:textSize="@dimen/font_size6"/>
 
@@ -209,6 +209,7 @@
                         >
 
                         <TextView
+                            android:id="@+id/visit_xt_address"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
@@ -278,7 +279,7 @@
                             android:layout_centerVertical="true"
                             android:ellipsize="end"
                             android:singleLine="true"
-                            android:text="最近拜访: "
+                            android:text="最近追溯: "
                             android:textColor="@color/gray"
                             android:textSize="@dimen/font_size6"/>
 
@@ -311,7 +312,7 @@
                             android:layout_centerVertical="true"
                             android:ellipsize="end"
                             android:singleLine="true"
-                            android:text="下次拜访: "
+                            android:text="预计追溯: "
                             android:textColor="@color/gray"
                             android:textSize="@dimen/font_size6"/>
 
@@ -412,6 +413,7 @@
                         >
 
                         <TextView
+                            android:id="@+id/visit_zs_address"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"

@@ -337,8 +337,20 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
             deleteOrXtUplad(terminalList.get(0));
         }else{// 已上传 去拜访
             // 弹出提示 是否拜访这家终端
-            confirmXtUplad(xtTermSelectMStc);// 拜访
+            if (hasPermission(GlobalValues.LOCAL_PERMISSION)) {
+                // 拥有了此权限,那么直接执行业务逻辑
+                confirmXtUplad(xtTermSelectMStc);// 拜访
+            } else {
+                // 还没有对一个权限(请求码,权限数组)这两个参数都事先定义好
+                requestPermission(GlobalValues.LOCAL_CODE, GlobalValues.LOCAL_PERMISSION);
+            }
+
         }
+    }
+
+    @Override
+    public void doLocation() {
+        confirmXtUplad(xtTermSelectMStc);// 拜访
     }
 
     /**
