@@ -50,6 +50,7 @@ import et.tsingtaopad.db.table.MstGridM;
 import et.tsingtaopad.db.table.MstMarketareaM;
 import et.tsingtaopad.db.table.MstRouteM;
 import et.tsingtaopad.db.table.MstTerminalinfoM;
+import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartFragment;
 import et.tsingtaopad.dd.ddxt.term.select.IXtTermSelectClick;
 import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectService;
 import et.tsingtaopad.dd.ddxt.term.select.adapter.XtTermSelectAdapter;
@@ -378,28 +379,33 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
      */
     public void breakNextLayout(int type, List<XtTermSelectMStc> selectedList) {
 
-        // 跳转购物车Fragment
         if (TOFRAGMENT == type) {
-            // 清空购物车表数据  // 购物车表ddtype 1:协同  2:追溯
-            //xtSelectService.deleteCartData("MST_TERMINALINFO_M_CART","2");
-            xtSelectService.deleteCartData("MST_TERMINALINFO_M_ZSCART","2");
-            // 复制终端临时表
-            for (XtTermSelectMStc xtselect : selectedList) {
-                copyMstTerminalinfoMZsCart(xtselect);
+            if(selectedList.size()>0){
+                // 清空购物车表数据  // 购物车表ddtype 1:协同  2:追溯
+                //xtSelectService.deleteCartData("MST_TERMINALINFO_M_CART","2");
+                xtSelectService.deleteCartData("MST_TERMINALINFO_M_ZSCART","2");
+                // 复制终端临时表
+                for (XtTermSelectMStc xtselect : selectedList) {
+                    copyMstTerminalinfoMZsCart(xtselect);
+                }
+                // 销毁当前Fragment
+                supportFragmentManager.popBackStack();
+
+                /*Bundle bundle = new Bundle();
+                bundle.putSerializable("fromFragment", "ZsTermSelectFragment");
+                //bundle.putSerializable("mitValcheckterM", mitValcheckterMs.get(0));
+                ZsTermCartFragment zsTermCartFragment = new ZsTermCartFragment();
+                zsTermCartFragment.setArguments(bundle);
+
+                // 跳转终端购物车
+                changeHomeFragment(zsTermCartFragment, "xttermcartfragment");*/
+                changeHomeFragment(new ZsTermCartFragment(), "xttermcartfragment");
+                PrefUtils.putBoolean(getActivity(),GlobalValues.ZS_CART_SYNC,false);// false 追溯购物车 需要同步
+
+                Toast.makeText(getActivity(),"终端夹添加成功",Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(getActivity(),"请先添加终端",Toast.LENGTH_SHORT).show();
             }
-            // 销毁当前Fragment
-            supportFragmentManager.popBackStack();
-
-            /*Bundle bundle = new Bundle();
-            bundle.putSerializable("fromFragment", "ZsTermSelectFragment");
-            //bundle.putSerializable("mitValcheckterM", mitValcheckterMs.get(0));
-            ZsTermCartFragment zsTermCartFragment = new ZsTermCartFragment();
-            zsTermCartFragment.setArguments(bundle);
-
-            // 跳转终端购物车
-            changeHomeFragment(zsTermCartFragment, "xttermcartfragment");*/
-            changeHomeFragment(new ZsTermCartFragment(), "xttermcartfragment");
-            PrefUtils.putBoolean(getActivity(),GlobalValues.ZS_CART_SYNC,false);// false 追溯购物车 需要同步
         }
     }
 
@@ -420,7 +426,7 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
     private void confirmXtUplad(final XtTermSelectMStc termSelectMStc) {
         String termName = termSelectMStc.getTerminalname();
         // 普通窗口
-        mAlertViewExt = new AlertView("拜访: "+termName, null, "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert,
+        mAlertViewExt = new AlertView("追溯:"+termName, null, "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert,
                 new OnItemClickListener() {
                     @Override
                     public void onItemClick(Object o, int position) {

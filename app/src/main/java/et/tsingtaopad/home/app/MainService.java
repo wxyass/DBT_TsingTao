@@ -8,6 +8,8 @@ import android.util.Log;
 
 import com.j256.ormlite.android.AndroidDatabaseConnection;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
 
 import java.lang.reflect.Method;
 import java.sql.SQLException;
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import et.tsingtaopad.R;
 import et.tsingtaopad.business.visit.bean.AreaGridRoute;
 import et.tsingtaopad.business.visit.bean.VisitContentStc;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
@@ -24,6 +27,7 @@ import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.JsonUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
+import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.db.DBManager;
 import et.tsingtaopad.db.DatabaseHelper;
@@ -83,6 +87,8 @@ import et.tsingtaopad.db.table.MstShowpicInfo;
 import et.tsingtaopad.db.table.MstSynckvM;
 import et.tsingtaopad.db.table.MstTermLedgerInfo;
 import et.tsingtaopad.db.table.MstTerminalinfoM;
+import et.tsingtaopad.db.table.MstTerminalinfoMCart;
+import et.tsingtaopad.db.table.MstTerminalinfoMZsCart;
 import et.tsingtaopad.db.table.MstVisitM;
 import et.tsingtaopad.db.table.MstVisitauthorizeInfo;
 import et.tsingtaopad.db.table.MstVisitmemoInfo;
@@ -876,6 +882,73 @@ public class MainService extends XtShopVisitService {
             Log.e(TAG, "获取线路信息失败", e);
         }
         return visitContentStcs;
+    }
+
+
+    /***
+     * 获取协同终端夹数据
+     * @param //tempDao
+     * @param //visitId
+     * @return
+     * @throws SQLException
+     */
+    public List<MstTerminalinfoMCart> getMstTerminalinfoMCartList() {
+        AndroidDatabaseConnection connection = null;
+        List<MstTerminalinfoMCart> valueLst = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MstTerminalinfoMCart, String> valueDao = helper.getMstTerminalinfoMCartDao();
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+            QueryBuilder<MstTerminalinfoMCart, String> valueQb = valueDao.queryBuilder();
+            Where<MstTerminalinfoMCart, String> valueWr = valueQb.where();
+            valueWr.eq("status", "1");
+            valueLst = valueQb.query();
+            connection.commit(null);
+        } catch (Exception e) {
+            Log.e(TAG, "获取协同终端夹数据", e);
+            try {
+                connection.rollback(null);
+                // ViewUtil.sendMsg(context, R.string.agencyvisit_msg_failsave);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+        return valueLst;
+    }
+    /***
+     * 获取追溯终端夹数据
+     * @param //tempDao
+     * @param //visitId
+     * @return
+     * @throws SQLException
+     */
+    public List<MstTerminalinfoMZsCart> getMstTerminalinfoMZsCartList() {
+        AndroidDatabaseConnection connection = null;
+        List<MstTerminalinfoMZsCart> valueLst = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MstTerminalinfoMZsCart, String> valueDao = helper.getMstTerminalinfoMZsCartDao();
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+            QueryBuilder<MstTerminalinfoMZsCart, String> valueQb = valueDao.queryBuilder();
+            Where<MstTerminalinfoMZsCart, String> valueWr = valueQb.where();
+            valueWr.eq("status", "1");
+            valueLst = valueQb.query();
+            connection.commit(null);
+        } catch (Exception e) {
+            Log.e(TAG, "获取追溯终端夹数据", e);
+            try {
+                connection.rollback(null);
+                // ViewUtil.sendMsg(context, R.string.agencyvisit_msg_failsave);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
+        return valueLst;
     }
 
 }

@@ -34,8 +34,13 @@ import et.tsingtaopad.core.net.domain.RequestStructBean;
 import et.tsingtaopad.core.net.domain.ResponseStructBean;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
 import et.tsingtaopad.core.util.dbtutil.JsonUtil;
+import et.tsingtaopad.core.util.dbtutil.NetStatusUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
+import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
+import et.tsingtaopad.core.view.alertview.AlertView;
+import et.tsingtaopad.core.view.alertview.OnDismissListener;
+import et.tsingtaopad.core.view.alertview.OnItemClickListener;
 import et.tsingtaopad.db.table.CmmAreaM;
 import et.tsingtaopad.db.table.CmmDatadicM;
 import et.tsingtaopad.db.table.MitValcheckterM;
@@ -53,6 +58,8 @@ import et.tsingtaopad.db.table.MstProductM;
 import et.tsingtaopad.db.table.MstPromoproductInfo;
 import et.tsingtaopad.db.table.MstPromotionsM;
 import et.tsingtaopad.db.table.MstRouteM;
+import et.tsingtaopad.db.table.MstTerminalinfoMCart;
+import et.tsingtaopad.db.table.MstTerminalinfoMZsCart;
 import et.tsingtaopad.db.table.MstVisitauthorizeInfo;
 import et.tsingtaopad.db.table.PadCheckstatusInfo;
 import et.tsingtaopad.dd.ddaddterm.DdAddTermFragment;
@@ -183,40 +190,91 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.dd_btn_xtbf:
+            case R.id.dd_btn_xtbf:// 协同拜访
                 changeHomeFragment(new XtTermSelectFragment(), "xttermlistfragment");
                 break;
             case R.id.top_navigation_rl_confirm:// 同步数据
                 changeHomeFragment(new SyncBasicFragment(), "syncbasicfragment");
                 break;
-            case R.id.dd_btn_xt_term:
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("fromFragment", "VisitFragment");
-                XtTermCartFragment xtTermCartFragment = new XtTermCartFragment();
-                xtTermCartFragment.setArguments(bundle);
-                changeHomeFragment(xtTermCartFragment, "xttermcartfragment");
+            case R.id.dd_btn_xt_term:// 协同终端夹
+                toXtTermCartFragment();
                 break;
-            case R.id.dd_btn_zdzs:
+            case R.id.dd_btn_zdzs:// 终端追溯
                 changeHomeFragment(new ZsTermSelectFragment(), "zstermselectfragment");
                 break;
 
-            case R.id.dd_btn_zs_term:
-                Bundle zsBundle = new Bundle();
-                zsBundle.putSerializable("fromFragment", "VisitFragment");
-                ZsTermCartFragment zsTermCartFragment = new ZsTermCartFragment();
-                zsTermCartFragment.setArguments(zsBundle);
-                changeHomeFragment(zsTermCartFragment, "zstermcartfragment");
+            case R.id.dd_btn_zs_term:// 追溯文件夹
+                toZsTermCartFragment();
                 break;
 
-            case R.id.dd_btn_zs_agencyres:
+            case R.id.dd_btn_zs_agencyres:// 经销商资料库
                 changeHomeFragment(new DdAgencySelectFragment(), "ddagencyselectfragment");
                 break;
-            case R.id.dd_btn_zs_agencycheck:
+            case R.id.dd_btn_zs_agencycheck:// 经销商库存盘点
                 changeHomeFragment(new DdAgencyCheckSelectFragment(), "ddagencycheckselectfragment");
                 break;
-            case R.id.dd_btn_zs_addterm:
+            case R.id.dd_btn_zs_addterm:// 漏店补录
                 changeHomeFragment(new DdAddTermFragment(), "ddaddtermfragment");
                 break;
+        }
+    }
+
+    // 跳转追溯终端文件夹
+    private void toZsTermCartFragment() {
+        List<MstTerminalinfoMZsCart> valueLst = service.getMstTerminalinfoMZsCartList();
+        if(valueLst.size()>0){
+            Bundle zsBundle = new Bundle();
+            zsBundle.putSerializable("fromFragment", "VisitFragment");
+            ZsTermCartFragment zsTermCartFragment = new ZsTermCartFragment();
+            zsTermCartFragment.setArguments(zsBundle);
+            changeHomeFragment(zsTermCartFragment, "zstermcartfragment");
+        }else{
+            // Toast.makeText(getActivity(),"协同终端夹暂无数据",Toast.LENGTH_SHORT).show();
+
+            new AlertView("终端夹暂无数据是否去添加", null, null, new String[]{"取消","确定"}, null, getActivity(), AlertView.Style.Alert,
+                    new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(Object o, int position) {
+                            //Toast.makeText(getApplicationContext(), "点击了第" + position + "个", Toast.LENGTH_SHORT).show();
+                            if (0 == position) {// 取消
+
+                            }else if(1 == position){// 确定
+
+                            }
+                        }
+                    })
+                    .setCancelable(true)
+                    .setOnDismissListener(null)
+                    .show();
+        }
+    }
+
+    // 跳转协同终端文件夹
+    private void toXtTermCartFragment() {
+        List<MstTerminalinfoMCart> valueLst = service.getMstTerminalinfoMCartList();
+        if(valueLst.size()>0){
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("fromFragment", "VisitFragment");
+            XtTermCartFragment xtTermCartFragment = new XtTermCartFragment();
+            xtTermCartFragment.setArguments(bundle);
+            changeHomeFragment(xtTermCartFragment, "xttermcartfragment");
+        }else{
+            // Toast.makeText(getActivity(),"追溯终端夹暂无数据",Toast.LENGTH_SHORT).show();
+            new AlertView("终端夹暂无数据是否去添加", null, null, new String[]{"取消","确定"}, null, getActivity(), AlertView.Style.Alert,
+                    new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(Object o, int position) {
+                            //Toast.makeText(getApplicationContext(), "点击了第" + position + "个", Toast.LENGTH_SHORT).show();
+                            if (0 == position) {// 取消
+
+                            }else if(1 == position){// 确定
+
+                            }
+                        }
+                    })
+                    .setCancelable(true)
+                    .setOnDismissListener(null)
+                    .show();
         }
     }
 

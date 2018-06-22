@@ -31,9 +31,11 @@ import et.tsingtaopad.core.net.domain.RequestHeadStc;
 import et.tsingtaopad.core.net.domain.RequestStructBean;
 import et.tsingtaopad.core.net.domain.ResponseStructBean;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.DateUtil;
 import et.tsingtaopad.core.util.dbtutil.JsonUtil;
 import et.tsingtaopad.core.util.dbtutil.PrefUtils;
 import et.tsingtaopad.core.util.dbtutil.PropertiesUtil;
+import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.db.table.CmmAreaM;
 import et.tsingtaopad.db.table.CmmDatadicM;
 import et.tsingtaopad.db.table.MitValcheckterM;
@@ -62,7 +64,7 @@ import et.tsingtaopad.util.requestHeadUtil;
  * Created by yangwenmin on 2018/3/12.
  */
 
-public class SyncBasicFragment extends BaseFragmentSupport  {
+public class SyncBasicFragment extends BaseFragmentSupport {
 
     private final String TAG = "SyncBasicFragment";
 
@@ -139,6 +141,7 @@ public class SyncBasicFragment extends BaseFragmentSupport  {
 
 
     private int count;
+
     private void startSyncInfo() {
         handler.sendEmptyMessage(VisitFragment.SYNC_START); // 弹出进度弹窗
         count = 1;
@@ -159,6 +162,7 @@ public class SyncBasicFragment extends BaseFragmentSupport  {
     }
 
     private List<String> tablenames;
+
     // 测试登录网络框架
     private void getInfo() {
 
@@ -180,9 +184,20 @@ public class SyncBasicFragment extends BaseFragmentSupport  {
         tablenames.add("MST_INVOICING_INFO");
         tablenames.add("MST_AGENCYVISIT_M");
 
-        tablenames.add("MST_MARKETAREA_GRID_ROUTE_M");
 
-        tablenames.add("MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO");
+
+
+
+
+        //tablenames.add("MST_MARKETAREA_GRID_ROUTE_M");
+
+        // tablenames.add("MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO");
+
+        tablenames.add("MST_MARKETAREA_M");
+        tablenames.add("MST_GRID_M");
+        tablenames.add("MST_ROUTE_M");
+        tablenames.add("MST_CHECKSTATUS_INFO");
+        tablenames.add("MST_COLLECTIONTEMPLATE_M");
 
         tablenames.add("CMM_AREA_M");
 
@@ -202,6 +217,7 @@ public class SyncBasicFragment extends BaseFragmentSupport  {
         if (count < tablenames.size() + 1) {
             String tablename = tablenames.get(count - 1);
             ceshiHttp("opt_get_dates2", tablename, getJson(tablename));
+            DbtLog.write("发起同步请求: " + tablename + " " + DateUtil.getDateTimeStr(8));
         }
 
         showFirstDialog(msgdata);// 刷新进度条
@@ -243,7 +259,7 @@ public class SyncBasicFragment extends BaseFragmentSupport  {
                         resObj = JsonUtil.parseJson(json, ResponseStructBean.class);
                         // 保存登录信息
                         if (ConstValues.SUCCESS.equals(resObj.getResHead().getStatus())) {
-
+                            DbtLog.write("返回同步请求: " + table + " " + DateUtil.getDateTimeStr(8));
                             // 写入数据库
                             parseTableAll(table, resObj);
 
@@ -286,6 +302,7 @@ public class SyncBasicFragment extends BaseFragmentSupport  {
     }
 
     private AlertDialog dialog;
+
     /**
      * 展示滚动条
      */
@@ -323,7 +340,7 @@ public class SyncBasicFragment extends BaseFragmentSupport  {
         if ("MST_MARKETAREA_GRID_ROUTE_M".equals(table)) {
 
             Bundle bundle = new Bundle();
-            bundle.putString("msg", "正在处理区域数据...");
+            bundle.putString("msg", "正在下载区域数据...");
             Message msg = new Message();
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
@@ -331,11 +348,12 @@ public class SyncBasicFragment extends BaseFragmentSupport  {
 
             String formjson = resObj.getResBody().getContent();
             parseTableJson(formjson);
+            DbtLog.write("解析同步请求: " + table + " " + DateUtil.getDateTimeStr(8));
 
         } else if ("MST_COLLECTIONTEMPLATE_CHECKSTATUS_INFO".equals(table)) {
 
             Bundle bundle = new Bundle();
-            bundle.putString("msg", "正在处理指标数据...");
+            bundle.putString("msg", "正在下载指标数据...");
             Message msg = new Message();
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
@@ -343,14 +361,96 @@ public class SyncBasicFragment extends BaseFragmentSupport  {
 
             String formjson = resObj.getResBody().getContent();
             parseIndexTableJson(formjson);
+            DbtLog.write("解析同步请求: " + table + " " + DateUtil.getDateTimeStr(8));
 
         }
 
         // --------------------------------------------------------------
+        else if ("MST_MARKETAREA_M".equals(table)) {
+
+            Bundle bundle = new Bundle();
+            bundle.putString("msg", "正在下载区域数据...");
+            Message msg = new Message();
+            msg.what = VisitFragment.SYNC_SUCCSE;//
+            msg.setData(bundle);
+            handler.sendMessage(msg);
+
+            String formjson = resObj.getResBody().getContent();
+            AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
+            String mst_marketarea_m = emp.getMST_MARKETAREA_M();
+            service.createOrUpdateTable(mst_marketarea_m, "MST_MARKETAREA_M", MstMarketareaM.class);
+
+            DbtLog.write("解析同步请求: " + table + " " + DateUtil.getDateTimeStr(8));
+
+        }
+        else if ("MST_GRID_M".equals(table)) {
+
+            Bundle bundle = new Bundle();
+            bundle.putString("msg", "正在下载定格数据...");
+            Message msg = new Message();
+            msg.what = VisitFragment.SYNC_SUCCSE;//
+            msg.setData(bundle);
+            handler.sendMessage(msg);
+
+            String formjson = resObj.getResBody().getContent();
+            AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
+            String mst_grid_m = emp.getMST_GRID_M();
+            service.createOrUpdateTable(mst_grid_m, "MST_GRID_M", MstGridM.class);
+            DbtLog.write("解析同步请求: " + table + " " + DateUtil.getDateTimeStr(8));
+
+        }
+        else if ("MST_ROUTE_M".equals(table)) {
+
+            Bundle bundle = new Bundle();
+            bundle.putString("msg", "正在下载路线数据...");
+            Message msg = new Message();
+            msg.what = VisitFragment.SYNC_SUCCSE;//
+            msg.setData(bundle);
+            handler.sendMessage(msg);
+
+            String formjson = resObj.getResBody().getContent();
+            AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
+            String mst_route_m = emp.getMST_ROUTE_M();
+            service.createOrUpdateTable(mst_route_m, "MST_ROUTE_M", MstRouteM.class);
+            DbtLog.write("解析同步请求: " + table + " " + DateUtil.getDateTimeStr(8));
+
+        }
+        else if ("MST_CHECKSTATUS_INFO".equals(table)) {
+
+            Bundle bundle = new Bundle();
+            bundle.putString("msg", "正在下载指标字典数据...");
+            Message msg = new Message();
+            msg.what = VisitFragment.SYNC_SUCCSE;//
+            msg.setData(bundle);
+            handler.sendMessage(msg);
+
+            String formjson = resObj.getResBody().getContent();
+            AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
+            String PAD_CHECKSTATUS_INFO = emp.getMST_CHECKSTATUS_INFO();
+            service.createOrUpdateTable(PAD_CHECKSTATUS_INFO, "PAD_CHECKSTATUS_INFO", PadCheckstatusInfo.class);
+            DbtLog.write("解析同步请求: " + table + " " + DateUtil.getDateTimeStr(8));
+
+        }
+        else if ("MST_COLLECTIONTEMPLATE_M".equals(table)) {
+
+            Bundle bundle = new Bundle();
+            bundle.putString("msg", "正在下载指标数据...");
+            Message msg = new Message();
+            msg.what = VisitFragment.SYNC_SUCCSE;//
+            msg.setData(bundle);
+            handler.sendMessage(msg);
+
+            String formjson = resObj.getResBody().getContent();
+            AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
+            String MST_COLLECTIONTEMPLATE_M = emp.getMST_COLLECTIONTEMPLATE_M();
+            service.parsePadCheckType(MST_COLLECTIONTEMPLATE_M);
+            DbtLog.write("解析同步请求: " + table + " " + DateUtil.getDateTimeStr(8));
+        }
+
         else if ("CMM_AREA_M".equals(table)) {
 
             Bundle bundle = new Bundle();
-            bundle.putString("msg", "正在处理区域数据...");
+            bundle.putString("msg", "正在下载区域数据...");
             Message msg = new Message();
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
@@ -361,11 +461,12 @@ public class SyncBasicFragment extends BaseFragmentSupport  {
             String CMM_AREA_M = emp.getCMM_AREA_M();
             service.createOrUpdateTable(CMM_AREA_M, "CMM_AREA_M", CmmAreaM.class);
 
+            DbtLog.write("解析同步请求: " + table + " " + DateUtil.getDateTimeStr(8));
 
         } else if ("CMM_DATADIC_M".equals(table)) {
 
             Bundle bundle = new Bundle();
-            bundle.putString("msg", "正在处理字典数据...");
+            bundle.putString("msg", "正在下载字典数据...");
             Message msg = new Message();
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
@@ -377,10 +478,12 @@ public class SyncBasicFragment extends BaseFragmentSupport  {
             String CMM_DATADIC_M = emp.getCMM_DATADIC_M();
             service.createOrUpdateTable(CMM_DATADIC_M, "CMM_DATADIC_M", CmmDatadicM.class);
 
+            DbtLog.write("解析同步请求: " + table + " " + DateUtil.getDateTimeStr(8));
+
         } else if ("MST_PROMOTIONS_M".equals(table)) {
 
             Bundle bundle = new Bundle();
-            bundle.putString("msg", "正在处理促销活动数据...");
+            bundle.putString("msg", "正在下载促销活动数据...");
             Message msg = new Message();
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
@@ -391,10 +494,12 @@ public class SyncBasicFragment extends BaseFragmentSupport  {
             String MST_PROMOTIONS_M = emp.getMST_PROMOTIONS_M();
             service.createOrUpdateTable(MST_PROMOTIONS_M, "MST_PROMOTIONS_M", MstPromotionsM.class);
 
+            DbtLog.write("解析同步请求: " + table + " " + DateUtil.getDateTimeStr(8));
+
         } else if ("MST_PROMOPRODUCT_INFO".equals(table)) {
 
             Bundle bundle = new Bundle();
-            bundle.putString("msg", "正在处理活动产品数据...");
+            bundle.putString("msg", "正在下载活动产品数据...");
             Message msg = new Message();
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
@@ -405,10 +510,12 @@ public class SyncBasicFragment extends BaseFragmentSupport  {
             String MST_PROMOPRODUCT_INFO = emp.getMST_PROMOPRODUCT_INFO();
             service.createOrUpdateTable(MST_PROMOPRODUCT_INFO, "MST_PROMOPRODUCT_INFO", MstPromoproductInfo.class);
 
+            DbtLog.write("解析同步请求: " + table + " " + DateUtil.getDateTimeStr(8));
+
         } else if ("MST_PICTYPE_M".equals(table)) {
 
             Bundle bundle = new Bundle();
-            bundle.putString("msg", "正在处理图片类型数据...");
+            bundle.putString("msg", "正在下载图片类型数据...");
             Message msg = new Message();
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
@@ -419,10 +526,12 @@ public class SyncBasicFragment extends BaseFragmentSupport  {
             String MST_PICTYPE_M = emp.getMST_PICTYPE_M();
             service.createOrUpdateTable(MST_PICTYPE_M, "MST_PICTYPE_M", MstPictypeM.class);
 
+            DbtLog.write("解析同步请求: " + table + " " + DateUtil.getDateTimeStr(8));
+
         } else if ("MST_PRODUCT_M".equals(table)) {
 
             Bundle bundle = new Bundle();
-            bundle.putString("msg", "正在处理产品数据...");
+            bundle.putString("msg", "正在下载产品数据...");
             Message msg = new Message();
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
@@ -432,11 +541,11 @@ public class SyncBasicFragment extends BaseFragmentSupport  {
             AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
             String MST_PRODUCT_M = emp.getMST_PRODUCT_M();
             service.createOrUpdateTable(MST_PRODUCT_M, "MST_PRODUCT_M", MstProductM.class);
-
+            DbtLog.write("解析同步请求: " + table + " " + DateUtil.getDateTimeStr(8));
         } else if ("MST_CMPCOMPANY_M".equals(table)) {
 
             Bundle bundle = new Bundle();
-            bundle.putString("msg", "正在处理竞品公司数据...");
+            bundle.putString("msg", "正在下载竞品公司数据...");
             Message msg = new Message();
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
@@ -446,11 +555,11 @@ public class SyncBasicFragment extends BaseFragmentSupport  {
             AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
             String MST_CMPCOMPANY_M = emp.getMST_CMPCOMPANY_M();
             service.createOrUpdateTable(MST_CMPCOMPANY_M, "MST_CMPCOMPANY_M", MstCmpcompanyM.class);
-
+            DbtLog.write("解析同步请求: " + table + " " + DateUtil.getDateTimeStr(8));
         } else if ("MST_CMPBRANDS_M".equals(table)) {
 
             Bundle bundle = new Bundle();
-            bundle.putString("msg", "正在处理竞品品牌数据...");
+            bundle.putString("msg", "正在下载竞品品牌数据...");
             Message msg = new Message();
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
@@ -461,10 +570,11 @@ public class SyncBasicFragment extends BaseFragmentSupport  {
             AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
             String MST_CMPBRANDS_M = emp.getMST_CMPBRANDS_M();
             service.createOrUpdateTable(MST_CMPBRANDS_M, "MST_CMPBRANDS_M", MstCmpbrandsM.class);
+            DbtLog.write("解析同步请求: " + table + " " + DateUtil.getDateTimeStr(8));
         } else if ("MST_CMPRODUCTINFO_M".equals(table)) {
 
             Bundle bundle = new Bundle();
-            bundle.putString("msg", "正在处理竞品产品数据...");
+            bundle.putString("msg", "正在下载竞品产品数据...");
             Message msg = new Message();
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
@@ -474,10 +584,10 @@ public class SyncBasicFragment extends BaseFragmentSupport  {
             AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
             String MST_CMPRODUCTINFO_M = emp.getMST_CMPRODUCTINFO_M();
             service.createOrUpdateTable(MST_CMPRODUCTINFO_M, "MST_CMPRODUCTINFO_M", MstCmproductinfoM.class);
-
+            DbtLog.write("解析同步请求: " + table + " " + DateUtil.getDateTimeStr(8));
         } else if ("MIT_VALCHECKTER_M".equals(table)) {
             Bundle bundle = new Bundle();
-            bundle.putString("msg", "正在处理督导指标数据...");
+            bundle.putString("msg", "正在下载督导指标数据...");
             Message msg = new Message();
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
@@ -487,11 +597,11 @@ public class SyncBasicFragment extends BaseFragmentSupport  {
             AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
             String MIT_VALCHECKTER_M = emp.getMIT_VALCHECKTER_M();
             service.createOrUpdateTable(MIT_VALCHECKTER_M, "MIT_VALCHECKTER_M", MitValcheckterM.class);
-
+            DbtLog.write("解析同步请求: " + table + " " + DateUtil.getDateTimeStr(8));
         } else if ("MST_AGENCYKF_M".equals(table)) {
 
             Bundle bundle = new Bundle();
-            bundle.putString("msg", "正在处理经销商开发数据...");
+            bundle.putString("msg", "正在下载经销商开发数据...");
             Message msg = new Message();
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
@@ -501,11 +611,11 @@ public class SyncBasicFragment extends BaseFragmentSupport  {
             AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
             String MST_AGENCYKF_M = emp.getMST_AGENCYKF_M();
             service.createOrUpdateTable(MST_AGENCYKF_M, "MST_AGENCYKF_M", MstAgencyKFM.class);
-
+            DbtLog.write("解析同步请求: " + table + " " + DateUtil.getDateTimeStr(8));
         } else if ("MST_AGENCYVISIT_M".equals(table)) {
 
             Bundle bundle = new Bundle();
-            bundle.putString("msg", "正在处理经销商拜访数据...");
+            bundle.putString("msg", "正在下载经销商拜访数据...");
             Message msg = new Message();
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
@@ -515,11 +625,11 @@ public class SyncBasicFragment extends BaseFragmentSupport  {
             AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
             String MST_AGENCYVISIT_M = emp.getMST_AGENCYVISIT_M();
             service.createOrUpdateTable(MST_AGENCYVISIT_M, "MST_AGENCYVISIT_M", MstAgencyvisitM.class);
-
+            DbtLog.write("解析同步请求: " + table + " " + DateUtil.getDateTimeStr(8));
         } else if ("MST_INVOICING_INFO".equals(table)) {
 
             Bundle bundle = new Bundle();
-            bundle.putString("msg", "正在处理经销商库存盘点数据...");
+            bundle.putString("msg", "正在下载经销商库存盘点数据...");
             Message msg = new Message();
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
@@ -529,11 +639,11 @@ public class SyncBasicFragment extends BaseFragmentSupport  {
             AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
             String MST_INVOICING_INFO = emp.getMST_INVOICING_INFO();
             service.createOrUpdateTable(MST_INVOICING_INFO, "MST_INVOICING_INFO", MstInvoicingInfo.class);
-
+            DbtLog.write("解析同步请求: " + table + " " + DateUtil.getDateTimeStr(8));
         } else if ("MST_VISITAUTHORIZE_INFO".equals(table)) {
 
             Bundle bundle = new Bundle();
-            bundle.putString("msg", "正在处理定格可拜访经销商数据...");
+            bundle.putString("msg", "正在下载定格可拜访经销商数据...");
             Message msg = new Message();
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
@@ -543,11 +653,11 @@ public class SyncBasicFragment extends BaseFragmentSupport  {
             AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
             String MST_VISITAUTHORIZE_INFO = emp.getMST_VISITAUTHORIZE_INFO();
             service.createOrUpdateTable(MST_VISITAUTHORIZE_INFO, "MST_VISITAUTHORIZE_INFO", MstVisitauthorizeInfo.class);
-
+            DbtLog.write("解析同步请求: " + table + " " + DateUtil.getDateTimeStr(8));
         } else if ("MST_AGENCYINFO_M".equals(table)) {
 
             Bundle bundle = new Bundle();
-            bundle.putString("msg", "正在处理经销商数据...");
+            bundle.putString("msg", "正在下载经销商数据...");
             Message msg = new Message();
             msg.what = VisitFragment.SYNC_SUCCSE;//
             msg.setData(bundle);
@@ -557,6 +667,7 @@ public class SyncBasicFragment extends BaseFragmentSupport  {
             AreaGridRoute emp = JsonUtil.parseJson(formjson, AreaGridRoute.class);
             String MST_AGENCYINFO_M = emp.getMST_AGENCYINFO_M();
             service.createOrUpdateTable(MST_AGENCYINFO_M, "MST_AGENCYINFO_M", MstAgencyinfoM.class);
+            DbtLog.write("解析同步请求: " + table + " " + DateUtil.getDateTimeStr(8));
         }
     }
 

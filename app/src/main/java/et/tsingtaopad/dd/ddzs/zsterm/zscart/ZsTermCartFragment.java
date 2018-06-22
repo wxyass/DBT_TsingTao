@@ -218,6 +218,7 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
                     updateBtn.setText("编辑排序");
                     termCartAdapter.setUpdate(false);
                     searchTerm();
+                    Toast.makeText(getActivity(),"排序保存成功",Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.xtbf_termcart_bt_add:// 更新数据

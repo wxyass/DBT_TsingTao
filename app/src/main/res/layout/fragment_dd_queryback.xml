@@ -23,9 +23,6 @@
             android:orientation="vertical"
             android:visibility="visible">
 
-
-
-
             <!--问题描述-->
             <LinearLayout
                 android:id="@+id/queryback_dd_visitreport_title"
@@ -67,6 +64,7 @@
                     android:background="@drawable/bg_visit_record"
                     android:hint="请描述对应问题"
                     android:inputType="textMultiLine"
+                    android:textColorHint="@color/gray_color_cccccc"
                     android:maxLength="1000"
                     android:padding="6dp"
                     android:textSize="@dimen/font_size3"/>
@@ -112,6 +110,7 @@
                     android:background="@drawable/bg_visit_record"
                     android:hint="如:电话13212341234,QQ1092476827"
                     android:inputType="textMultiLine"
+                    android:textColorHint="@color/gray_color_cccccc"
                     android:padding="6dp"
                     android:maxLength="150"
                     android:textSize="@dimen/font_size3"/>

@@ -385,6 +385,11 @@ public class DdWeekPlanFragment extends BaseFragmentSupport implements View.OnCl
             // 上传周计划
             XtUploadService xtUploadService = new XtUploadService(getActivity(), null);
             xtUploadService.uploadWeekPlan(false, mitPlanweekM.getId(), 1);
+
+            submitTv.setText("等待审核");
+            submitTv.setClickable(false);
+            submitTv.setBackgroundColor(getResources().getColor(R.color.bg_content_color_gray));
+
         } else {
             Toast.makeText(getActivity(), "请先至少制定一条日计划", Toast.LENGTH_SHORT).show();
         }

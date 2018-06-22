@@ -192,7 +192,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
     // 初始化数据
     private void initData() {
 
-        titleTv.setText("确定");
+        confirmTv.setText("确定");
 
         // 获取参数“终端信息”
         Bundle bundle = getIntent().getExtras();
