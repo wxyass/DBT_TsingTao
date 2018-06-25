@@ -222,13 +222,14 @@ public class CrashHandler implements UncaughtExceptionHandler {
 
             final String rquestParam = exceptionInfo.toString();
             // 上传到后台
-            String filePath = FileUtil.getSDPath();
+
+            //String filePath = FileUtil.getSDPath();
             // /storage/emulated/0
-            String SDCARD_DIR = Environment.getExternalStorageDirectory().getPath();
+            //String SDCARD_DIR = Environment.getExternalStorageDirectory().getPath();
 
-            String pin = PinYin4jUtil.converterToFirstSpell("与系统中所有的Activity进行交互的类");
+            //String pin = PinYin4jUtil.converterToFirstSpell("与系统中所有的Activity进行交互的类");
 
-            String yin = PinYin4jUtil.converterToSpell("与系统中所有的Activity进行交互的类");
+            //String yin = PinYin4jUtil.converterToSpell("与系统中所有的Activity进行交互的类");
 
             String adf ="123";
         } catch (Exception e) {

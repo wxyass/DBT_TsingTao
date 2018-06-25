@@ -239,7 +239,7 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
                             if (0 == position) {// 取消
 
                             }else if(1 == position){// 确定
-
+                                changeHomeFragment(new ZsTermSelectFragment(), "zstermselectfragment");
                             }
                         }
                     })
@@ -268,7 +268,7 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
                             if (0 == position) {// 取消
 
                             }else if(1 == position){// 确定
-
+                                changeHomeFragment(new XtTermSelectFragment(), "xttermlistfragment");
                             }
                         }
                     })
@@ -344,7 +344,7 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
 
             // 预计协同
             List<VisitContentStc> xtNextContents = service.queryNextVisitTerminal();
-            if(zsContents.size()>0){
+            if(xtNextContents.size()>0){
                 VisitContentStc contentStc = xtNextContents.get(0);
                 visit_xt_nexttermname.setText(contentStc.getTerminalname());
                 visit_xt_address.setText(contentStc.getAddress());
@@ -355,7 +355,7 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
 
             // 预计追溯
             List<VisitContentStc> zsNextContents = service.queryNextZsTerminal();
-            if(zsContents.size()>0){
+            if(zsNextContents.size()>0){
                 VisitContentStc contentStc = zsNextContents.get(0);
                 visit_zs_nexttermname.setText(contentStc.getTerminalname());
                 visit_zs_address.setText(contentStc.getAddress());
