@@ -141,6 +141,7 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
         super.onActivityCreated(savedInstanceState);
 
         titleTv.setText(R.string.zdzs_selectterm);
+        confirmTv.setText("确定");
         handler = new MyHandler(this);
         ConstValues.handler = handler;
 

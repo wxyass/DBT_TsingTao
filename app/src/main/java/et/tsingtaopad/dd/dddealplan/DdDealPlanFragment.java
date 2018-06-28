@@ -92,8 +92,6 @@ public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnCl
         confirmTv = (AppCompatTextView) view.findViewById(R.id.top_navigation_bt_confirm);
         backTv = (AppCompatTextView) view.findViewById(R.id.top_navigation_bt_back);
         titleTv = (AppCompatTextView) view.findViewById(R.id.top_navigation_tv_title);
-        confirmBtn.setVisibility(View.VISIBLE);
-        confirmBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
 
         tv_month = (TextView) view.findViewById(R.id.zgjh_tv_month);

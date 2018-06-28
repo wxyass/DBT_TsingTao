@@ -151,6 +151,7 @@ public class DdDealSelectFragment extends BaseFragmentSupport implements View.On
         super.onActivityCreated(savedInstanceState);
 
         titleTv.setText("选择整改终端");
+        confirmTv.setText("确定");
 
         // 获取传递过来的数据
         Bundle bundle = getArguments();

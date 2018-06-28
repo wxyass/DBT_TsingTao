@@ -334,6 +334,94 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"/>
+            <!-- 区域类型： -->
+            <RelativeLayout
+                android:id="@+id/xtbf_sayhi_rl_termarea"
+                style="@style/xtbf_sayhi_rl">
+
+                <TextView
+                    style="@style/xtbf_sayhi_one_tv"
+                    android:text="@string/termadd_areatype"/>
+
+                <TextView
+                    android:id="@+id/xtbf_sayhi_termarea"
+                    style="@style/xtbf_sayhi_two_tv"
+                    />
+
+                <ImageView
+                    style="@style/xtbf_sayhi_third_tv"
+                    android:visibility="visible"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+            <!-- 销售渠道： -->
+            <RelativeLayout
+                android:id="@+id/xtbf_sayhi_rl_termsellchannel"
+                style="@style/xtbf_sayhi_rl">
+
+                <TextView
+                    style="@style/xtbf_sayhi_one_tv"
+                    android:text="@string/termadd_sellchannel"/>
+
+                <TextView
+                    android:id="@+id/xtbf_sayhi_termsellchannel"
+                    style="@style/xtbf_sayhi_two_tv"
+                    />
+
+                <ImageView
+                    style="@style/xtbf_sayhi_third_tv"
+                    android:visibility="visible"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+            <!-- 主渠道： -->
+            <RelativeLayout
+                android:id="@+id/xtbf_sayhi_rl_termtmainchannel"
+                style="@style/xtbf_sayhi_rl">
+
+                <TextView
+                    style="@style/xtbf_sayhi_one_tv"
+                    android:text="@string/termadd_mainchannel"/>
+
+                <TextView
+                    android:id="@+id/xtbf_sayhi_termtmainchannel"
+                    style="@style/xtbf_sayhi_two_tv"
+                    />
+
+                <ImageView
+                    style="@style/xtbf_sayhi_third_tv"
+                    android:visibility="visible"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+            <!-- 次渠道： -->
+            <RelativeLayout
+                android:id="@+id/xtbf_sayhi_rl_termminorchannel"
+                style="@style/xtbf_sayhi_rl">
+
+                <TextView
+                    style="@style/xtbf_sayhi_one_tv"
+                    android:text="@string/termadd_minorchannel"/>
+
+                <TextView
+                    android:id="@+id/xtbf_sayhi_termminorchannel"
+                    style="@style/xtbf_sayhi_two_tv"
+                    />
+
+                <ImageView
+                    style="@style/xtbf_sayhi_third_tv"
+                    android:visibility="visible"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
             <!-- 终端等级： -->
             <RelativeLayout
                 android:id="@+id/xtbf_sayhi_rl_termlv"
@@ -477,6 +565,41 @@
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"/>
             </RelativeLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+            <!-- 拜访对象： -->
+            <RelativeLayout
+                android:id="@+id/xtbf_sayhi_rl_termpersion"
+                style="@style/xtbf_sayhi_rl">
+
+                <TextView
+                    style="@style/xtbf_sayhi_one_tv"
+                    android:text="@string/termadd_visitperson"/>
+
+                <!--内容1-->
+                <TextView
+                    android:id="@+id/xtbf_sayhi_termpersion"
+                    style="@style/xtbf_sayhi_two_tv"
+                    />
+                <!--内容1-->
+                <EditText
+                    android:id="@+id/xtbf_sayhi_termpersion_et"
+                    style="@style/xtbf_sayhi_san_tv"
+                    android:background="@null"
+                    android:gravity="center_vertical|right"
+                    android:hint="请输入"
+                    android:maxLength="20"
+                    android:text=""
+                    android:visibility="gone"/>
+
+                <ImageView
+                    style="@style/xtbf_sayhi_third_tv"
+                    android:visibility="visible"/>
+            </RelativeLayout>
+
 
             <View
                 android:layout_width="match_parent"
@@ -724,126 +847,9 @@
                     style="@style/xtbf_sayhi_third_tv"/>
             </RelativeLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
-            <!-- 区域类型： -->
-            <RelativeLayout
-                android:id="@+id/xtbf_sayhi_rl_termarea"
-                style="@style/xtbf_sayhi_rl">
 
-                <TextView
-                    style="@style/xtbf_sayhi_one_tv"
-                    android:text="@string/termadd_areatype"/>
 
-                <TextView
-                    android:id="@+id/xtbf_sayhi_termarea"
-                    style="@style/xtbf_sayhi_two_tv"
-                    />
 
-                <ImageView
-                    style="@style/xtbf_sayhi_third_tv"
-                    android:visibility="visible"/>
-            </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
-            <!-- 销售渠道： -->
-            <RelativeLayout
-                android:id="@+id/xtbf_sayhi_rl_termsellchannel"
-                style="@style/xtbf_sayhi_rl">
-
-                <TextView
-                    style="@style/xtbf_sayhi_one_tv"
-                    android:text="@string/termadd_sellchannel"/>
-
-                <TextView
-                    android:id="@+id/xtbf_sayhi_termsellchannel"
-                    style="@style/xtbf_sayhi_two_tv"
-                    />
-
-                <ImageView
-                    style="@style/xtbf_sayhi_third_tv"
-                    android:visibility="visible"/>
-            </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
-            <!-- 主渠道： -->
-            <RelativeLayout
-                android:id="@+id/xtbf_sayhi_rl_termtmainchannel"
-                style="@style/xtbf_sayhi_rl">
-
-                <TextView
-                    style="@style/xtbf_sayhi_one_tv"
-                    android:text="@string/termadd_mainchannel"/>
-
-                <TextView
-                    android:id="@+id/xtbf_sayhi_termtmainchannel"
-                    style="@style/xtbf_sayhi_two_tv"
-                    />
-
-                <ImageView
-                    style="@style/xtbf_sayhi_third_tv"
-                    android:visibility="visible"/>
-            </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
-            <!-- 次渠道： -->
-            <RelativeLayout
-                android:id="@+id/xtbf_sayhi_rl_termminorchannel"
-                style="@style/xtbf_sayhi_rl">
-
-                <TextView
-                    style="@style/xtbf_sayhi_one_tv"
-                    android:text="@string/termadd_minorchannel"/>
-
-                <TextView
-                    android:id="@+id/xtbf_sayhi_termminorchannel"
-                    style="@style/xtbf_sayhi_two_tv"
-                    />
-
-                <ImageView
-                    style="@style/xtbf_sayhi_third_tv"
-                    android:visibility="visible"/>
-            </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"/>
-            <!-- 拜访对象： -->
-            <RelativeLayout
-                android:id="@+id/xtbf_sayhi_rl_termpersion"
-                style="@style/xtbf_sayhi_rl">
-
-                <TextView
-                    style="@style/xtbf_sayhi_one_tv"
-                    android:text="@string/termadd_visitperson"/>
-
-                <!--内容1-->
-                <TextView
-                    android:id="@+id/xtbf_sayhi_termpersion"
-                    style="@style/xtbf_sayhi_two_tv"
-                    />
-                <!--内容1-->
-                <EditText
-                    android:id="@+id/xtbf_sayhi_termpersion_et"
-                    style="@style/xtbf_sayhi_san_tv"
-                    android:background="@null"
-                    android:gravity="center_vertical|right"
-                    android:hint="请输入"
-                    android:maxLength="20"
-                    android:text=""
-                    android:visibility="gone"/>
-
-                <ImageView
-                    style="@style/xtbf_sayhi_third_tv"
-                    android:visibility="visible"/>
-            </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"

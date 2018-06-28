@@ -242,7 +242,7 @@ public class DdAgencyContentFragment extends BaseFragmentSupport implements View
     }
 
     private void initData() {
-        titleTv.setText("青岛啤酒北京销售有限公司");
+
         confirmTv.setText("更正");
 
          service = new DdAgencySelectService(getActivity());
@@ -250,6 +250,8 @@ public class DdAgencyContentFragment extends BaseFragmentSupport implements View
         Bundle bundle = getArguments();
         // 获取传递过来的 经销商主键,名称,地址,联系电话
         mstAgencyKFM = (MstAgencyKFM) bundle.getSerializable("mstagencykfm");
+
+        titleTv.setText(mstAgencyKFM.getAgencyname());
 
         agencyname_con1.setText(mstAgencyKFM.getAgencyname());
         contact_con1.setText(mstAgencyKFM.getContact());

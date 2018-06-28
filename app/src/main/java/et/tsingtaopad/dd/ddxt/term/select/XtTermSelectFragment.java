@@ -135,6 +135,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
         super.onActivityCreated(savedInstanceState);
 
         titleTv.setText(R.string.xtbf_selectterm);
+        confirmTv.setText("确定");
         handler = new MyHandler(this);
         ConstValues.handler = handler;
 
@@ -557,6 +558,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
 
         MainService service = new MainService(getActivity(), null);
         service.createOrUpdateTable(MST_TERMINALINFO_M, "MST_TERMINALINFO_M", MstTerminalinfoM.class);
+
         initTermListData(routeKey);
         setSelectTerm();// 设置已添加购物车的符号
         setItemAdapterListener();
