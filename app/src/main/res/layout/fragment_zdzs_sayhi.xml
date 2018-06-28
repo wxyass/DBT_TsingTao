@@ -47,8 +47,8 @@
             <!-- 是否有效终端： -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_termstatus"
-                android:layout_marginTop="14dp"
-                style="@style/xtbf_sayhi_rl_all">
+                style="@style/xtbf_sayhi_rl_all"
+                android:layout_marginTop="14dp">
 
                 <!--标题-->
                 <TextView
@@ -417,7 +417,8 @@
             <!-- 所在省： -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_prov"
-                style="@style/xtbf_sayhi_rl_all">
+                style="@style/xtbf_sayhi_rl_all"
+                android:background="@color/white">
 
                 <!--标题-->
                 <TextView
@@ -439,8 +440,8 @@
                 <TextView
                     android:id="@+id/zdzs_sayhi_rl_prov_statue"
                     style="@style/zdzs_sayhi_statue"
-                    android:visibility="gone"
-                    android:text="未稽查"/>
+                    android:text="未稽查"
+                    android:visibility="gone"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"
@@ -449,7 +450,8 @@
             <!-- 所在市：-->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_city"
-                style="@style/xtbf_sayhi_rl_all">
+                style="@style/xtbf_sayhi_rl_all"
+                android:background="@color/white">
 
                 <!--标题-->
                 <TextView
@@ -471,8 +473,8 @@
                 <TextView
                     android:id="@+id/zdzs_sayhi_rl_city_statue"
                     style="@style/zdzs_sayhi_statue"
-                    android:visibility="gone"
-                    android:text="未稽查"/>
+                    android:text="未稽查"
+                    android:visibility="gone"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"
@@ -791,8 +793,8 @@
             <!-- 总容量： -->
             <RelativeLayout
                 android:id="@+id/zdzs_sayhi_rl_totalvolume"
-                android:visibility="gone"
-                style="@style/xtbf_sayhi_rl_all">
+                style="@style/xtbf_sayhi_rl_all"
+                android:visibility="gone">
 
                 <!--标题-->
                 <TextView
@@ -876,8 +878,8 @@
                 <TextView
                     android:id="@+id/zdzs_sayhi_rl_sellchannel_statue"
                     style="@style/zdzs_sayhi_statue"
-                    android:visibility="gone"
-                    android:text="未稽查"/>
+                    android:text="未稽查"
+                    android:visibility="gone"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"
@@ -908,8 +910,8 @@
                 <TextView
                     android:id="@+id/zdzs_sayhi_rl_mainchannel_statue"
                     style="@style/zdzs_sayhi_statue"
-                    android:visibility="gone"
-                    android:text="未稽查"/>
+                    android:text="未稽查"
+                    android:visibility="gone"/>
 
                 <ImageView
                     style="@style/xtbf_sayhi_third_tv"
