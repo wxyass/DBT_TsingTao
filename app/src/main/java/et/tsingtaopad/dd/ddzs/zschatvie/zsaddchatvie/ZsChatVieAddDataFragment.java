@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import com.j256.ormlite.field.DatabaseField;
+
 import java.util.List;
 
 import et.tsingtaopad.R;
@@ -175,15 +177,22 @@ public class ZsChatVieAddDataFragment extends BaseFragmentSupport implements Vie
         valsupplyMTemp.setValcmpsalesval(ddlqdinfo);
         valsupplyMTemp.setValcmpkcval(ljkqdinfo);
 
+        valsupplyMTemp.setValcmpjdj(qdinfo);//    竞品进店价
+        valsupplyMTemp.setValcmplsj(lsinfo);//    竞品零售价
+        valsupplyMTemp.setValcmpsales(ddlqdinfo);//  竞品销量
+        valsupplyMTemp.setValcmpkc(ljkqdinfo);//竞品库存
+
         // 经销商
         String vieagency = zdzs_chatvie_dd_et_vieagency.getText().toString();
         valsupplyMTemp.setValcmpagencyval(vieagency);
+
+        valsupplyMTemp.setValcmpagency(vieagency);
 
         // 备注
         String report = zdzs_chatvie_adddata_dd_et_report.getText().toString();
         valsupplyMTemp.setValcmpsupremark(report);
 
-        handler.sendEmptyMessage(ZsInvoicingFragment.INIT_AMEND);
+        handler.sendEmptyMessage(ZsChatvieFragment.INIT_AMEND);
 
     }
 }

@@ -41,6 +41,8 @@ public class GlobalValues {
     // 购物车是否已经同步数据  false:没有  true:已同步
     public static final String XT_CART_SYNC = "xtcartsync";
     public static final String ZS_CART_SYNC = "zscartsync";
+    public static final String XT_CART_TIME = "xtcarttime";
+    public static final String ZS_CART_TIME = "zscarttime";
 
     // TODO hongen 删除new LoginSession()  登录Session
     public static LoginSession loginSession = new LoginSession();

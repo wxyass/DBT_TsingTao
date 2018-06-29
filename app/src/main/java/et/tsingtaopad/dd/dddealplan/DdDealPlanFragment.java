@@ -313,8 +313,10 @@ public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnCl
         bundle.putSerializable("weekDateEnd", weekDateEnd);*/
         DdDealMakeFragment ddDealMakeFragment = new DdDealMakeFragment(handler);
         ddDealMakeFragment.setArguments(bundle);
+
         // 跳转 新增整改计划
         addHomeFragment(ddDealMakeFragment, "dddealmakefragment");
+
     }
 
 

@@ -1074,13 +1074,11 @@ public class XtUploadService {
                     @Override
                     public void onError(int code, String msg) {
                         ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_FAIL);
-                        //Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
                     }
                 })
                 .failure(new IFailure() {
                     @Override
                     public void onFailure() {
-                        //Toast.makeText(context, "请求失败", Toast.LENGTH_SHORT).show();
                         ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_FAIL);
                     }
                 })

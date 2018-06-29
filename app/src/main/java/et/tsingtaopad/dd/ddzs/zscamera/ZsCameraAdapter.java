@@ -73,8 +73,9 @@ public class ZsCameraAdapter extends BaseAdapter {
 			//final File tempFile = new File(FileUtil.getPhotoPath()+camerainfostc.getLocalpath());
 
 			Uri fileUri = null;
+
 			// // 兼容7.0及以上的写法
-			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+			/*if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
 				final ContentValues contentValues = new ContentValues(1);// ?
 				contentValues.put(MediaStore.Images.Media.DATA, tempFile.getPath());//?
 				final Uri uri = context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
@@ -84,7 +85,9 @@ public class ZsCameraAdapter extends BaseAdapter {
 				fileUri = Uri.fromFile(realFile);
 			}else{
 				fileUri = Uri.fromFile(tempFile);// 将File转为Uri
-			}
+			}*/
+
+			fileUri = Uri.fromFile(tempFile);// 将File转为Uri
 
 
 			Glide.with(context)

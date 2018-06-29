@@ -91,7 +91,7 @@ public class XtAddInvoicingFragment extends BaseFragmentSupport implements View.
         confirmTv = (AppCompatTextView) view.findViewById(R.id.top_navigation_bt_confirm);
         backTv = (AppCompatTextView) view.findViewById(R.id.top_navigation_bt_back);
         titleTv = (AppCompatTextView) view.findViewById(R.id.top_navigation_tv_title);
-        confirmTv.setText("确定");
+
         confirmBtn.setVisibility(View.VISIBLE);
         confirmBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
@@ -106,6 +106,7 @@ public class XtAddInvoicingFragment extends BaseFragmentSupport implements View.
         super.onActivityCreated(savedInstanceState);
 
         titleTv.setText("新增供货关系");
+        confirmTv.setText("确定");
 
         // 获取传递过来的数据
         Bundle bundle = getArguments();

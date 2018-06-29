@@ -150,9 +150,22 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
         // 设置终端列表数据 假数据
         initTermListData("1-63UNEX");
 
+        // 查询已选中的终端
+        selectedList = xtSelectService.queryXtTerminalCart("1");
 
+        // 终端夹隔天清零
+        String addTime = PrefUtils.getString(getActivity(), GlobalValues.XT_CART_TIME, DateUtil.getDateTimeStr(7));
+        if(!DateUtil.getDateTimeStr(7).equals(addTime)){
+            selectedList.clear();
+        }
+
+        setSelectTerm();// 设置已添加购物车的符号
         // 设置终端条目适配器,及条目点击事件
         setItemAdapterListener();
+
+        if(selectedList.size()>0){
+            confirmTv.setText("确定" + "(" + selectedList.size() + ")");
+        }
 
     }
 
@@ -386,6 +399,7 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
                 changeHomeFragment(new XtTermCartFragment(), "xttermcartfragment");
                 // 购物车是否已经同步数据  false:没有  true:已同步
                 PrefUtils.putBoolean(getActivity(),GlobalValues.XT_CART_SYNC,false);// 设置需要同步
+                PrefUtils.putString(getActivity(), GlobalValues.XT_CART_TIME, DateUtil.getDateTimeStr(7));// 添加协同文件夹时间
 
                 Toast.makeText(getActivity(),"终端夹添加成功",Toast.LENGTH_SHORT).show();
             }else{

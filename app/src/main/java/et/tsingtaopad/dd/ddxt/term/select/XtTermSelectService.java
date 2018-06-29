@@ -320,6 +320,7 @@ public class XtTermSelectService {
             }
         }
     }
+
     /**
      * 复制终端表 到追溯终端购物车
      *
@@ -577,6 +578,94 @@ public class XtTermSelectService {
     }
 
 
+    /**
+     * 获取已选中的协同终端
+     *
+     * @param ddtype
+     * @return
+     */
+    public List<XtTermSelectMStc> queryXtTerminalCart(String ddtype) {
+        AndroidDatabaseConnection connection = null;
+        List<MstTerminalinfoMCart> valueLst = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MstTerminalinfoMCart, String> valueDao = helper.getMstTerminalinfoMCartDao();
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+
+            QueryBuilder<MstTerminalinfoMCart, String> valueQb = valueDao.queryBuilder();
+            Where<MstTerminalinfoMCart, String> valueWr = valueQb.where();
+            valueWr.eq("ddtype", ddtype);
+            valueLst = valueQb.query();
+            connection.commit(null);
+        } catch (Exception e) {
+            Log.e(TAG, "获取协同终端夹出错", e);
+            try {
+                connection.rollback(null);
+                // ViewUtil.sendMsg(context, R.string.agencyvisit_msg_failsave);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+        List<XtTermSelectMStc> selectedList = new ArrayList<XtTermSelectMStc>();
+        if (valueLst.size() > 0) {
+            for (MstTerminalinfoMCart terminalinfoMCart : valueLst){
+                XtTermSelectMStc xtTermSelectMStc = new XtTermSelectMStc();
+                xtTermSelectMStc.setRoutekey(terminalinfoMCart.getRoutekey());// 路线key
+                xtTermSelectMStc.setTerminalkey(terminalinfoMCart.getTerminalkey());// 终端key
+                xtTermSelectMStc.setTerminalname(terminalinfoMCart.getTerminalname());// 终端name
+                selectedList.add(xtTermSelectMStc);
+            }
+        }
+        return selectedList;
+    }
+    /**
+     * 获取已选中的追溯终端
+     *
+     * @param ddtype
+     * @return
+     */
+    public List<XtTermSelectMStc> queryZsTerminalCart(String ddtype) {
+        AndroidDatabaseConnection connection = null;
+        List<MstTerminalinfoMZsCart> valueLst = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MstTerminalinfoMZsCart, String> valueDao = helper.getMstTerminalinfoMZsCartDao();
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+
+            QueryBuilder<MstTerminalinfoMZsCart, String> valueQb = valueDao.queryBuilder();
+            Where<MstTerminalinfoMZsCart, String> valueWr = valueQb.where();
+            valueWr.eq("ddtype", ddtype);
+            valueLst = valueQb.query();
+            connection.commit(null);
+        } catch (Exception e) {
+            Log.e(TAG, "获取协同终端夹出错", e);
+            try {
+                connection.rollback(null);
+                // ViewUtil.sendMsg(context, R.string.agencyvisit_msg_failsave);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+        List<XtTermSelectMStc> selectedList = new ArrayList<XtTermSelectMStc>();
+        if (valueLst.size() > 0) {
+            for (MstTerminalinfoMZsCart terminalinfoMCart : valueLst){
+                XtTermSelectMStc xtTermSelectMStc = new XtTermSelectMStc();
+                xtTermSelectMStc.setRoutekey(terminalinfoMCart.getRoutekey());// 路线key
+                xtTermSelectMStc.setTerminalkey(terminalinfoMCart.getTerminalkey());// 终端key
+                xtTermSelectMStc.setTerminalname(terminalinfoMCart.getTerminalname());// 终端name
+                selectedList.add(xtTermSelectMStc);
+            }
+        }
+        return selectedList;
+    }
+
+
     public List<MitRepairterM> queryDealSelectTerminal(String id) {
         AndroidDatabaseConnection connection = null;
         List<MitRepairterM> valueLst = null;
@@ -605,7 +694,7 @@ public class XtTermSelectService {
         return valueLst;
     }
 
-    public void saveMitRepairterM(MitRepairM repairM,String gridkey, List<XtTermSelectMStc> selectedList) {
+    public void saveMitRepairterM(MitRepairM repairM, String gridkey, List<XtTermSelectMStc> selectedList,String routekey) {
         String id = repairM.getId();// 整顿计划主表主键
         MitRepairterM mitRepairterM;
 
@@ -620,26 +709,38 @@ public class XtTermSelectService {
             StringBuffer buffer = new StringBuffer();
             buffer.append("delete from MIT_REPAIRTER_M ");
             buffer.append("where repairid = ? ");
-            proDao.executeRaw(buffer.toString(), new String[] {id});
+            proDao.executeRaw(buffer.toString(), new String[]{id});
 
-            // 再重新插入
-            for (XtTermSelectMStc term : selectedList) {
+            if(selectedList.size()>0){// 判断终端数目是否为0
+                // 再重新插入
+                for (XtTermSelectMStc term : selectedList) {
+                    mitRepairterM = new MitRepairterM();
+                    mitRepairterM.setId(FunUtil.getUUID());
+                    mitRepairterM.setRepairid(id);
+                    mitRepairterM.setGridkey(gridkey);//
+                    mitRepairterM.setRoutekey(term.getRoutekey());//
+                    mitRepairterM.setTerminalkey(term.getTerminalkey());//
+                    mitRepairterM.setTerminalname(term.getTerminalname());//
+                    mitRepairterM.setUploadflag("1");//
+                    mitRepairterM.setPadisconsistent("0");//
+                    proDao.createOrUpdate(mitRepairterM);
+                }
+            }else{
                 mitRepairterM = new MitRepairterM();
                 mitRepairterM.setId(FunUtil.getUUID());
                 mitRepairterM.setRepairid(id);
                 mitRepairterM.setGridkey(gridkey);//
-                mitRepairterM.setRoutekey(term.getRoutekey());//
-                mitRepairterM.setTerminalkey(term.getTerminalkey());//
-                mitRepairterM.setTerminalname(term.getTerminalname());//
+                mitRepairterM.setRoutekey(routekey);//
                 mitRepairterM.setUploadflag("1");//
                 mitRepairterM.setPadisconsistent("0");//
                 proDao.createOrUpdate(mitRepairterM);
             }
 
+
             connection.commit(null);
         } catch (Exception e) {
-            DbtLog.logUtils(TAG,"解除整顿计划选择终端失败");
-            DbtLog.logUtils(TAG,e.getMessage());
+            DbtLog.logUtils(TAG, "解除整顿计划选择终端失败");
+            DbtLog.logUtils(TAG, e.getMessage());
             e.printStackTrace();
             Log.e(TAG, "保存整顿计划选择终端数据发生异常", e);
             try {
@@ -658,7 +759,7 @@ public class XtTermSelectService {
             MitRepairterMDao valueDao = helper.getDao(MitRepairterM.class);
             connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
             connection.setAutoCommit(false);
-            valueLst = valueDao.querySelectTerminal(helper,repairMId);
+            valueLst = valueDao.querySelectTerminal(helper, repairMId);
             connection.commit(null);
         } catch (Exception e) {
             Log.e(TAG, "获取整顿计划选择终端出错2", e);
@@ -680,7 +781,7 @@ public class XtTermSelectService {
             MitRepairterMDao valueDao = helper.getDao(MitRepairterM.class);
             connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
             connection.setAutoCommit(false);
-            valueLst = valueDao.queryDealPlanStatus(helper,repairMId);
+            valueLst = valueDao.queryDealPlanStatus(helper, repairMId);
             connection.commit(null);
         } catch (Exception e) {
             Log.e(TAG, "获取整顿计划选择终端出错2", e);
@@ -709,7 +810,7 @@ public class XtTermSelectService {
 
             connection.commit(null);
         } catch (Exception e) {
-            DbtLog.logUtils(TAG,e.getMessage());
+            DbtLog.logUtils(TAG, e.getMessage());
             e.printStackTrace();
             Log.e(TAG, "保存整顿计划主表发生异常", e);
             try {

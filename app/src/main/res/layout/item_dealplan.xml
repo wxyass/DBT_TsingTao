@@ -62,6 +62,31 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/list_line"/>
+        <!-- 所属路线： -->
+        <RelativeLayout
+            android:id="@+id/item_dealplan_rl_route"
+            style="@style/xtbf_sayhi_rl">
+
+            <TextView
+                android:id="@+id/tv10"
+                style="@style/xtbf_sayhi_one_tv"
+                android:text="所属定格"/>
+
+            <TextView
+                android:id="@+id/item_dealplan_route"
+                style="@style/zgjh_first_con"
+                android:layout_toRightOf="@id/tv10"
+                android:text=""
+                />
+
+            <ImageView
+                style="@style/xtbf_sayhi_third_tv"/>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/list_line"/>
 
         <!-- 业代名称： -->
         <RelativeLayout

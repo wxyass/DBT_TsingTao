@@ -88,14 +88,16 @@ public class XtShowPicActivity extends BaseActivity  {
 
         Uri fileuri;
         // 兼容7.0及以上的写法
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             //intent = toCameraByFileProvider(intent,tempFile);
             //intent = toCameraByContentResolver(intent,tempFile,currentPhotoName);
             fileuri = toCameraByContentResolverUri(file,picname);
         } else {
             fileuri = Uri.fromFile(file);// 将File转为Uri
             //CameraImageBean.getInstance().setmPath(fileUri);
-        }
+        }*/
+
+        fileuri = Uri.fromFile(file);// 将File转为Uri
 
         try {
             // 读取uri所在的图片

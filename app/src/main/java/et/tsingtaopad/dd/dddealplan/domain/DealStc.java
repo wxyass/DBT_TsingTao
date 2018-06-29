@@ -28,6 +28,8 @@ public class DealStc implements Serializable{
 	private String terminalname;//
 	private String credate;// 整改计划的创建时间
 
+	private String routename;//
+
 
 	public DealStc() {
 	}
@@ -158,5 +160,13 @@ public class DealStc implements Serializable{
 
 	public void setCredate(String credate) {
 		this.credate = credate;
+	}
+
+	public String getRoutename() {
+		return routename;
+	}
+
+	public void setRoutename(String routename) {
+		this.routename = routename;
 	}
 }

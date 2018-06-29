@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatTextView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -445,13 +446,13 @@ public class DdDealSelectFragment extends BaseFragmentSupport implements View.On
 
     // 保存终端数据
     private void saveValue() {
-        if(selectedList.size()>0){
+        if("".equals(routeKey)|| TextUtils.isEmpty(routeKey)){//
+            Toast.makeText(getActivity(),"至少选择一条路线",Toast.LENGTH_SHORT).show();
+        }else{
             // 保存到数据库中
-            xtSelectService.saveMitRepairterM(repairM,gridkey,selectedList);
+            xtSelectService.saveMitRepairterM(repairM,gridkey,selectedList,routeKey);
             handler.sendEmptyMessage(DdDealMakeFragment.MAKEPLAN_UP_SUC);
             supportFragmentManager.popBackStack();
-        }else{
-            Toast.makeText(getActivity(),"至少选择一家终端",Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -68,6 +68,7 @@ public class DdDealPlanAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_dealplan, null);
             holder.termname = (TextView) convertView.findViewById(R.id.item_dealplan_termname);
             holder.grid = (TextView) convertView.findViewById(R.id.item_dealplan_grid);
+            holder.route = (TextView) convertView.findViewById(R.id.item_dealplan_route);
             holder.ydname = (TextView) convertView.findViewById(R.id.item_dealplan_ydname);
             holder.question = (TextView) convertView.findViewById(R.id.item_dealplan_question);
             holder.amendplan = (TextView) convertView.findViewById(R.id.item_dealplan_amendplan);
@@ -86,6 +87,7 @@ public class DdDealPlanAdapter extends BaseAdapter {
         final DealStc item = dataLst.get(position);
 
         holder.termname.setText(item.getTerminalname());
+        holder.route.setText(item.getRoutename());
         holder.grid.setText(item.getGridname());
         holder.ydname.setText(item.getUsername());
         holder.question.setText(item.getContent());
@@ -113,6 +115,7 @@ public class DdDealPlanAdapter extends BaseAdapter {
     private class ViewHolder {
         private TextView termname;
         private TextView grid;
+        private TextView route;
         private TextView ydname;
         private TextView question;
         private TextView amendplan;

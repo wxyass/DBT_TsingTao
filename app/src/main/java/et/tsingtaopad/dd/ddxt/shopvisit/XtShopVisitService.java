@@ -835,7 +835,6 @@ public class XtShopVisitService {
                     // createMstPromotermInfoTemp(helper, prevVisitId, visitDate, visitMTemp, promDao, promTempDao, false);
                     // 复制采集项表
                     createMstCollectionexerecordInfoTemp(collectionDao, collectionTempDao, padCheckaccomplishInfoDao, prevVisitId, termStc, visitMTemp);
-
                 }
             }*/
 

@@ -184,6 +184,5 @@ public class ZsInvocingAddDataFragment extends BaseFragmentSupport implements Vi
         valsupplyMTemp.setValagencysupplyremark(report);
 
         handler.sendEmptyMessage(ZsInvoicingFragment.INIT_AMEND);
-
     }
 }

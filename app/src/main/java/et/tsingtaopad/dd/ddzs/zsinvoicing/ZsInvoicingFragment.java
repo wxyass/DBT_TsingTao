@@ -284,7 +284,6 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
                 zsInvoicingAdapter.setDelPosition(-1);
                 zsInvoicingAdapter.notifyDataSetChanged();
                 ViewUtil.setListViewHeight(zsInvoicingLv);
-
             }
         }
     }
@@ -483,8 +482,6 @@ public class ZsInvoicingFragment extends XtBaseVisitFragment implements View.OnC
                         mAlertViewExt.dismiss();
                     }
                 }
-
-
             }
         });
 

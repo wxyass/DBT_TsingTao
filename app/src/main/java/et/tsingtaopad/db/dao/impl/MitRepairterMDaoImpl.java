@@ -34,9 +34,10 @@ public class MitRepairterMDaoImpl extends BaseDaoImpl<MitRepairterM, String> imp
     public List<DealPlanMakeStc> querySelectTerminal(DatabaseHelper helper, String repairid) {
         List<DealPlanMakeStc> detailStcs = new ArrayList<>();
         StringBuffer buffer = new StringBuffer();
-        buffer.append("select g.terminalkey, g.terminalname,h.gridkey,h.gridname,h.username,h.userid from MIT_REPAIRTER_M mv  ");
+        buffer.append("select g.terminalkey, g.terminalname,h.gridkey,h.gridname,r.routename,r.routekey,h.username,h.userid from MIT_REPAIRTER_M mv  ");
         buffer.append("    left join MST_TERMINALINFO_M g on g.terminalkey = mv.terminalkey   ");
         buffer.append("    left join MST_GRID_M h on h.gridkey = mv.gridkey   ");
+        buffer.append("    left join MST_ROUTE_M r on r.routekey = mv.routekey   ");
         buffer.append("    where repairid = ? ");
 
         SQLiteDatabase db = helper.getReadableDatabase();
@@ -48,6 +49,8 @@ public class MitRepairterMDaoImpl extends BaseDaoImpl<MitRepairterM, String> imp
             kvStc.setTerminalname(cursor.getString(cursor.getColumnIndex("terminalname")));
             kvStc.setGridkey(cursor.getString(cursor.getColumnIndex("gridkey")));
             kvStc.setGridname(cursor.getString(cursor.getColumnIndex("gridname")));
+            kvStc.setRoutekey(cursor.getString(cursor.getColumnIndex("routekey")));
+            kvStc.setRoutename(cursor.getString(cursor.getColumnIndex("routename")));
             kvStc.setUserkey(cursor.getString(cursor.getColumnIndex("userid")));
             kvStc.setUsername(cursor.getString(cursor.getColumnIndex("username")));
             detailStcs.add(kvStc);
@@ -101,9 +104,10 @@ public class MitRepairterMDaoImpl extends BaseDaoImpl<MitRepairterM, String> imp
         List<DealStc> detailStcs = new ArrayList<>();
         StringBuffer buffer = new StringBuffer();
 
-        buffer.append("select mv.id, h.terminalkey,h.terminalname   ");
+        buffer.append("select mv.id, h.terminalkey,h.terminalname,r.routename   ");
         buffer.append("        from MIT_REPAIR_M mv   ");
         buffer.append("   left join MIT_REPAIRTER_M h on h.repairid = mv.id    ");
+        buffer.append("    left join MST_ROUTE_M r on r.routekey = h.routekey   ");
         // buffer.append("   left join MST_TERMINALINFO_M i on i.terminalkey = h.terminalkey    ");
         buffer.append("    where h.repairid = ? ");
 
@@ -115,6 +119,7 @@ public class MitRepairterMDaoImpl extends BaseDaoImpl<MitRepairterM, String> imp
             kvStc.setRepairid(cursor.getString(cursor.getColumnIndex("id")));
             kvStc.setTerminalkey(cursor.getString(cursor.getColumnIndex("terminalkey")));
             kvStc.setTerminalname(cursor.getString(cursor.getColumnIndex("terminalname")));
+            kvStc.setRoutename(cursor.getString(cursor.getColumnIndex("routename")));
             detailStcs.add(kvStc);
         }
         return detailStcs;

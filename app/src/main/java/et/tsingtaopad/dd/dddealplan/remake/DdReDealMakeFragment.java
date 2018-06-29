@@ -68,6 +68,8 @@ public class DdReDealMakeFragment extends BaseFragmentSupport implements View.On
 
     private RelativeLayout rl_termname;
     private TextView termname;
+    private RelativeLayout rl_routename;
+    private TextView routename;
     private RelativeLayout rl_grid;
     private TextView grid;
     private RelativeLayout rl_ydname;
@@ -122,6 +124,9 @@ public class DdReDealMakeFragment extends BaseFragmentSupport implements View.On
 
         rl_termname = (RelativeLayout) view.findViewById(R.id.zgjh_remake_rl_termname);
         termname = (TextView) view.findViewById(R.id.zgjh_remake_termname);
+
+        rl_routename = (RelativeLayout) view.findViewById(R.id.zgjh_remake_rl_route);
+        routename = (TextView) view.findViewById(R.id.zgjh_remake_route);
 
         rl_grid = (RelativeLayout) view.findViewById(R.id.zgjh_remake_rl_grid);
         grid = (TextView) view.findViewById(R.id.zgjh_remake_grid);
@@ -178,14 +183,15 @@ public class DdReDealMakeFragment extends BaseFragmentSupport implements View.On
 
     private void initData() {
 
-        termname.setText(dealStc.getTerminalname());// = (TextView) view.findViewById(R.id.zgjh_remake_termname);
-        grid.setText(dealStc.getGridname());// = (TextView) view.findViewById(R.id.zgjh_remake_termname);
-        grid.setTag(dealStc.getGridkey());// = (TextView) view.findViewById(R.id.zgjh_remake_termname);
-        ydname.setText(dealStc.getUsername());// = (TextView) view.findViewById(R.id.zgjh_remake_termname);
-        ydname.setTag(dealStc.getUserid());// = (TextView) view.findViewById(R.id.zgjh_remake_termname);
-        question.setText(dealStc.getContent());// = (TextView) view.findViewById(R.id.zgjh_remake_termname);
-        amendplan.setText(dealStc.getRepairremark());// = (TextView) view.findViewById(R.id.zgjh_remake_termname);
-        measure.setText(dealStc.getCheckcontent());// = (TextView) view.findViewById(R.id.zgjh_remake_termname);
+        termname.setText(dealStc.getTerminalname());//
+        grid.setText(dealStc.getGridname());//
+        grid.setTag(dealStc.getGridkey());//
+        routename.setText(dealStc.getRoutename());//
+        ydname.setText(dealStc.getUsername());//
+        ydname.setTag(dealStc.getUserid());//
+        question.setText(dealStc.getContent());//
+        amendplan.setText(dealStc.getRepairremark());//
+        measure.setText(dealStc.getCheckcontent());//
 
         // 根据整顿计划主键 查询整改计划审核表  MIT_REPAIRCHECK_M
         List<ReCheckTimeStc> reCheckTimeStcs = xtSelectService.getDealPlanStatus(dealStc.getRepairid());
@@ -330,10 +336,10 @@ public class DdReDealMakeFragment extends BaseFragmentSupport implements View.On
     private boolean checkTermName() {
         long b = DateUtil.parse(DateUtil.getDateTimeStr(7), "yyyy-MM-dd").getTime();// 当前时间
         boolean ishaveName = true;
-        if (TextUtils.isEmpty(termname.getText().toString())) {
+        /*if (TextUtils.isEmpty(termname.getText().toString())) {
             ishaveName = false;
             Toast.makeText(getActivity(), "请选择整改终端", Toast.LENGTH_SHORT).show();
-        } else if (TextUtils.isEmpty(checktime.getText().toString())) {
+        } else*/ if (TextUtils.isEmpty(checktime.getText().toString())) {
             ishaveName = false;
             Toast.makeText(getActivity(), "请选择复查时间", Toast.LENGTH_SHORT).show();
         }else if(b > DateUtil.parse(checktime.getText().toString(), "yyyy-MM-dd").getTime()){
@@ -393,7 +399,9 @@ public class DdReDealMakeFragment extends BaseFragmentSupport implements View.On
         List<DealPlanMakeStc> valueLst = xtSelectService.getSelectTerminal(dealStc.getRepairid());
         if (valueLst.size() > 0) {
             String terminalName = listToString(valueLst);
+            String routeName = listToRouteString(valueLst);
             termname.setText(terminalName);
+            routename.setText(routeName);
             grid.setText(FunUtil.isBlankOrNullTo(valueLst.get(0).getGridname(), ""));
             grid.setTag(FunUtil.isBlankOrNullTo(valueLst.get(0).getGridkey(), ""));
             ydname.setText(FunUtil.isBlankOrNullTo(valueLst.get(0).getUsername(), ""));
@@ -408,16 +416,44 @@ public class DdReDealMakeFragment extends BaseFragmentSupport implements View.On
      * @return
      */
     public static String listToString(List<DealPlanMakeStc> list) {
-        String listToString = "";
+        //String listToString = "";
+        StringBuffer listToString = new StringBuffer();
         if (!list.isEmpty()) {
             /* 输出list值 */
             for (int i = 0; i < list.size(); i++) {
                 //listToString+="'"+list.get(i)+"'";
-                listToString += list.get(i).getTerminalname();
+                // listToString += list.get(i).getTerminalname();
+                listToString.append(list.get(i).getTerminalname());
                 if (i != list.size() - 1) {
+                    //listToString += ",";
+                    listToString.append(",");
+                }
+            }
+        }
+        return listToString.toString();
+    }
+
+    /**
+     * 取出路线
+     *
+     * @param list
+     * @return
+     */
+    public static String listToRouteString(List<DealPlanMakeStc> list) {
+        String listToString = "";
+        //StringBuffer listToString = new StringBuffer();
+        if (!list.isEmpty()) {
+            /* 输出list值 */
+            for (int i = 0; i < list.size(); i++) {
+                if(!listToString.contains(list.get(i).getRoutename())){
+                    listToString += list.get(i).getRoutename();
                     listToString += ",";
                 }
             }
+        }
+
+        if (listToString.endsWith(",")) {
+            listToString = listToString.substring(0,listToString.length() - 1);
         }
         return listToString;
     }

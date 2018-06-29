@@ -68,6 +68,8 @@ public class DdDealMakeFragment extends BaseFragmentSupport implements View.OnCl
     private TextView termname;
     private RelativeLayout rl_grid;
     private TextView grid;
+    private RelativeLayout rl_route;
+    private TextView routename;
     private RelativeLayout rl_ydname;
     private TextView ydname;
     private RelativeLayout rl_question;
@@ -119,6 +121,8 @@ public class DdDealMakeFragment extends BaseFragmentSupport implements View.OnCl
 
         rl_grid = (RelativeLayout) view.findViewById(R.id.zgjh_make_rl_grid);
         grid = (TextView) view.findViewById(R.id.zgjh_make_grid);
+        rl_route = (RelativeLayout) view.findViewById(R.id.zgjh_make_rl_route);
+        routename = (TextView) view.findViewById(R.id.zgjh_make_route);
 
         rl_ydname = (RelativeLayout) view.findViewById(R.id.zgjh_make_rl_ydname);
         ydname = (TextView) view.findViewById(R.id.zgjh_make_ydname);
@@ -281,15 +285,12 @@ public class DdDealMakeFragment extends BaseFragmentSupport implements View.OnCl
         mitRepaircheckM.setPadisconsistent("0");
         mitRepaircheckM.setCredate(DateUtil.getDateTimeStr(8));
 
-
         // 保存到库中
         xtSelectService.saveMitRepairM(repairM, mitRepaircheckM);
-
 
         // 上传整顿计划
         XtUploadService xtUploadService = new XtUploadService(getActivity(),null);
         xtUploadService.upload_repair(false,repairM,mitRepaircheckM,1);
-
 
         // Toast.makeText(getActivity(), "整顿计划保存成功", Toast.LENGTH_SHORT).show();
         supportFragmentManager.popBackStack();
@@ -300,10 +301,10 @@ public class DdDealMakeFragment extends BaseFragmentSupport implements View.OnCl
     private boolean checkTermName() {
         long b = DateUtil.parse(DateUtil.getDateTimeStr(7), "yyyy-MM-dd").getTime();// 当前时间
         boolean ishaveName = true;
-        if(TextUtils.isEmpty(termname.getText().toString())){
+        /*if(TextUtils.isEmpty(termname.getText().toString())){
             ishaveName = false;
             Toast.makeText(getActivity(),"请选择整改终端",Toast.LENGTH_SHORT).show();
-        }else if(TextUtils.isEmpty(checktime.getText().toString())){
+        }else*/ if(TextUtils.isEmpty(checktime.getText().toString())){
             ishaveName = false;
             Toast.makeText(getActivity(),"请选择复查时间",Toast.LENGTH_SHORT).show();
         }else if(b > DateUtil.parse(checktime.getText().toString(), "yyyy-MM-dd").getTime()){
@@ -354,7 +355,6 @@ public class DdDealMakeFragment extends BaseFragmentSupport implements View.OnCl
 
         // 刷新终端名称
         refreshTermname();
-
     }
 
     // 刷新终端名称
@@ -363,7 +363,9 @@ public class DdDealMakeFragment extends BaseFragmentSupport implements View.OnCl
         List<DealPlanMakeStc> valueLst = xtSelectService.getSelectTerminal(repairM.getId());
         if (valueLst.size() > 0) {
             String terminalName = listToString(valueLst);
+            String routeName = listToRouteString(valueLst);
             termname.setText(terminalName);
+            routename.setText(routeName);
             grid.setText(FunUtil.isBlankOrNullTo(valueLst.get(0).getGridname(),""));
             grid.setTag(FunUtil.isBlankOrNullTo(valueLst.get(0).getGridkey(),""));
             ydname.setText(FunUtil.isBlankOrNullTo(valueLst.get(0).getUsername(),""));
@@ -378,17 +380,47 @@ public class DdDealMakeFragment extends BaseFragmentSupport implements View.OnCl
      * @return
      */
     public static String listToString(List<DealPlanMakeStc> list) {
-        String listToString = "";
+        //String listToString = "";
+        StringBuffer listToString = new StringBuffer();
         if (!list.isEmpty()) {
             /* 输出list值 */
             for (int i = 0; i < list.size(); i++) {
                 //listToString+="'"+list.get(i)+"'";
-                listToString += list.get(i).getTerminalname();
+                // listToString += list.get(i).getTerminalname();
+                // listToString.append(list.get(i).getTerminalname());
+                listToString.append(FunUtil.isBlankOrNullTo(list.get(i).getTerminalname(),""));
                 if (i != list.size() - 1) {
+                    //listToString += ",";
+                    listToString.append(",");
+                }
+            }
+        }
+        return listToString.toString();
+    }
+
+    /**
+     * 取出路线
+     *
+     * @param list
+     * @return
+     */
+    public static String listToRouteString(List<DealPlanMakeStc> list) {
+        String listToString = "";
+        //StringBuffer listToString = new StringBuffer();
+        if (!list.isEmpty()) {
+            /* 输出list值 */
+            for (int i = 0; i < list.size(); i++) {
+                if(!listToString.contains(list.get(i).getRoutename())){
+                    listToString += list.get(i).getRoutename();
                     listToString += ",";
                 }
             }
         }
+
+        if (listToString.endsWith(",")) {
+            listToString = listToString.substring(0,listToString.length() - 1);
+        }
+
         return listToString;
     }
 }

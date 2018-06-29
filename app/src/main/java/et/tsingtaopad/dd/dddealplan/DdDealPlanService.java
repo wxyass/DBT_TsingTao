@@ -69,6 +69,7 @@ public class DdDealPlanService {
             for (DealStc dealStc : valueLst){
                 termNameLst = valueDao.queryDealPlanTermName(helper,dealStc.getRepairid());//
                 dealStc.setTerminalname(listToString(termNameLst));
+                dealStc.setRoutename(listToRouteString(termNameLst));
             }
 
             connection.commit(null);
@@ -80,10 +81,6 @@ public class DdDealPlanService {
                 e1.printStackTrace();
             }
         }
-
-
-
-
         return valueLst;
     }
 
@@ -94,19 +91,45 @@ public class DdDealPlanService {
      * @return
      */
     public static String listToString(List<DealStc> list) {
-        String listToString = "";
+        StringBuffer listToString = new StringBuffer();
         if (!list.isEmpty()) {
             /* 输出list值 */
             for (int i = 0; i < list.size(); i++) {
-                //listToString+="'"+list.get(i)+"'";
-                listToString += list.get(i).getTerminalname();
+                listToString.append(FunUtil.isBlankOrNullTo(list.get(i).getTerminalname(),""));
                 if (i != list.size() - 1) {
+                    listToString.append(",");
+                }
+            }
+        }
+        return listToString.toString();
+    }
+
+    /**
+     * 取出路线
+     *
+     * @param list
+     * @return
+     */
+    public static String listToRouteString(List<DealStc> list) {
+        String listToString = "";
+        //StringBuffer listToString = new StringBuffer();
+        if (!list.isEmpty()) {
+            /* 输出list值 */
+            for (int i = 0; i < list.size(); i++) {
+                if(!listToString.contains(list.get(i).getRoutename())){
+                    listToString += list.get(i).getRoutename();
                     listToString += ",";
                 }
             }
         }
+
+        if (listToString.endsWith(",")) {
+            listToString = listToString.substring(0,listToString.length() - 1);
+        }
         return listToString;
     }
+
+
 
     // 设置整改计划审核表
     public void setStatus(String repairid,String repaircheckid, String status) {

@@ -108,6 +108,7 @@ public class ZsAddChatVieFragment extends BaseFragmentSupport implements View.On
         super.onActivityCreated(savedInstanceState);
 
         titleTv.setText("新增竞品关系");
+        confirmTv.setText("确定");
 
         // 获取传递过来的数据
         Bundle bundle = getArguments();

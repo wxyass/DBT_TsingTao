@@ -391,7 +391,7 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
 
 
         zdzs_sayhi_rl_termname.setOnClickListener(this);
-        zdzs_sayhi_rl_termcode.setOnClickListener(this);
+        // zdzs_sayhi_rl_termcode.setOnClickListener(this);
         zdzs_sayhi_rl_address.setOnClickListener(this);
         zdzs_sayhi_rl_person.setOnClickListener(this);
         zdzs_sayhi_rl_tel.setOnClickListener(this);
@@ -405,10 +405,10 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
 
         zdzs_sayhi_rl_belongline.setOnClickListener(this);
         zdzs_sayhi_rl_level.setOnClickListener(this);
-        zdzs_sayhi_rl_country.setOnClickListener(this);
+        // zdzs_sayhi_rl_country.setOnClickListener(this);
         zdzs_sayhi_rl_areatype.setOnClickListener(this);
         zdzs_sayhi_rl_minorchannel.setOnClickListener(this);
-        zdzs_sayhi_rl_visitperson.setOnClickListener(this);
+        // zdzs_sayhi_rl_visitperson.setOnClickListener(this);
     }
 
     @Override
@@ -510,6 +510,7 @@ public class ZsSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         // 底档容量
         if ("Y".equals(mitValcheckterM.getLvolume())) {
             zdzs_sayhi_rl_lvolume.setVisibility(View.VISIBLE);
+            zdzs_sayhi_rl_totalvolume.setVisibility(View.VISIBLE);// 总容量
         }
         // 区域类型
         if ("Y".equals(mitValcheckterM.getAreatype())) {
