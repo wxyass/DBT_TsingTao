@@ -46,6 +46,13 @@ public class MitValagreedetailM implements java.io.Serializable {
     @DatabaseField
     private String padisconsistent ;//
 
+    @DatabaseField
+    private String truepro ;//
+    @DatabaseField
+    private String truemoney ;//
+    @DatabaseField
+    private String truenum ;//
+
 
     /**
      * default constructor
@@ -171,5 +178,29 @@ public class MitValagreedetailM implements java.io.Serializable {
 
     public void setPadisconsistent(String padisconsistent) {
         this.padisconsistent = padisconsistent;
+    }
+
+    public String getTruepro() {
+        return truepro;
+    }
+
+    public void setTruepro(String truepro) {
+        this.truepro = truepro;
+    }
+
+    public String getTruemoney() {
+        return truemoney;
+    }
+
+    public void setTruemoney(String truemoney) {
+        this.truemoney = truemoney;
+    }
+
+    public String getTruenum() {
+        return truenum;
+    }
+
+    public void setTruenum(String truenum) {
+        this.truenum = truenum;
     }
 }

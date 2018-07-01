@@ -11,7 +11,7 @@
         style="@style/dialog_tv_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
+        android:layout_marginLeft="20dp"
         android:layout_weight="1.0" />
 
     <CheckBox
@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:clickable="false"
         android:focusable="false"
+        android:layout_marginRight="20dp"
         android:focusableInTouchMode="false"
         android:checked="false"
         android:gravity="center_vertical" />

@@ -85,7 +85,7 @@ public class MstTerminalinfoMDaoImpl extends BaseDaoImpl<MstTerminalinfoM, Strin
     }
 
     /**
-     * 获取购物车下的终端列表
+     * 获取购物车下的终端列表  (协同)
      * <p>
      * 用于：巡店拜访  -- 终端选择  (2018年3月23日16:50:54 新加 )
      *
@@ -245,13 +245,14 @@ public class MstTerminalinfoMDaoImpl extends BaseDaoImpl<MstTerminalinfoM, Strin
         StringBuffer buffer = new StringBuffer();
         buffer.append("select m.terminalkey, m.terminalcode, m.terminalname,m.status,m.sequence, ");
         //buffer.append("vm.isself, vm.iscmp, vm.selftreaty, vm.cmptreaty, ");
-        buffer.append("vm.isself, vm.iscmp, m.selftreaty, vm.cmptreaty, ");// 我品 竞品 我品协议店,竞品协议店
+        buffer.append("vmn.isself, vmn.iscmp, m.selftreaty, vmn.cmptreaty, ");// 我品 竞品 我品协议店,竞品协议店
         buffer.append("vm.padisconsistent, vm.uploadFlag, m.minorchannel, ");// 销售渠道编码
-        buffer.append("dm.dicname terminalType, vm.visitdate ");// 终端渠道类型 拜访时间
+        buffer.append("dm.dicname terminalType, vm.visitdate, vm.enddate ");// 终端渠道类型 拜访时间
         buffer.append("from mst_terminalinfo_m m ");
         buffer.append("left join cmm_datadic_m dm on m.minorchannel = dm.diccode ");
         buffer.append("     and coalesce(dm.deleteflag,'0') != '1' ");
         buffer.append("left join v_mit_visit_m_newest vm on m.terminalkey = vm.terminalkey ");
+        buffer.append("left join v_visit_m_newest vmn on m.terminalkey = vmn.terminalkey ");
         buffer.append("where coalesce(m.status,'0') != '2' and m.routekey=? ");
         buffer.append(" and coalesce(m.deleteflag,'0') != '1' ");
         if (isSequence) {
@@ -279,6 +280,7 @@ public class MstTerminalinfoMDaoImpl extends BaseDaoImpl<MstTerminalinfoM, Strin
             item.setVieFlag(cursor.getString(cursor.getColumnIndex("iscmp")));
             item.setMineProtocolFlag(cursor.getString(cursor.getColumnIndex("selftreaty")));
             item.setVieProtocolFlag(cursor.getString(cursor.getColumnIndex("cmptreaty")));
+            item.setEndDate(cursor.getString(cursor.getColumnIndex("enddate")));
             visitDate = cursor.getString(cursor.getColumnIndex("visitdate"));
             if (visitDate != null && currDay.equals(visitDate.substring(0, 8))) {// 若果 记录是当天生成的
                 item.setVisitTime(visitDate);
@@ -310,13 +312,14 @@ public class MstTerminalinfoMDaoImpl extends BaseDaoImpl<MstTerminalinfoM, Strin
         StringBuffer buffer = new StringBuffer();
         buffer.append("select m.terminalkey, m.terminalcode, m.terminalname,m.status,m.sequence, ");
         //buffer.append("vm.isself, vm.iscmp, vm.selftreaty, vm.cmptreaty, ");
-        //buffer.append("vm.isself, vm.iscmp, m.selftreaty, vm.cmptreaty, ");// 我品 竞品 我品协议店,竞品协议店
+        buffer.append("vmn.isself, vmn.iscmp, m.selftreaty, vmn.cmptreaty, ");// 我品 竞品 我品协议店,竞品协议店
         buffer.append("vm.padisconsistent,  m.minorchannel, ");// 销售渠道编码
-        buffer.append("dm.dicname terminalType, vm.visitdate ");// 终端渠道类型 拜访时间
+        buffer.append("dm.dicname terminalType, vm.visitdate,vm.videnddate ");// 终端渠道类型 拜访时间
         buffer.append("from mst_terminalinfo_m m ");
         buffer.append("left join cmm_datadic_m dm on m.minorchannel = dm.diccode ");
         buffer.append("     and coalesce(dm.deleteflag,'0') != '1' ");
         buffer.append("left join v_mit_valter_m_newest vm on m.terminalkey = vm.terminalkey ");
+        buffer.append("left join v_visit_m_newest vmn on m.terminalkey = vmn.terminalkey ");
         buffer.append("where coalesce(m.status,'0') != '2' and m.routekey=? ");
         buffer.append(" and coalesce(m.deleteflag,'0') != '1' ");
         if (isSequence) {
@@ -340,10 +343,11 @@ public class MstTerminalinfoMDaoImpl extends BaseDaoImpl<MstTerminalinfoM, Strin
             item.setTerminalname(cursor.getString(cursor.getColumnIndex("terminalname")));
             item.setStatus(cursor.getString(cursor.getColumnIndex("status")));
             item.setSequence(cursor.getString(cursor.getColumnIndex("sequence")));
-            /*item.setMineFlag(cursor.getString(cursor.getColumnIndex("isself")));
+            item.setMineFlag(cursor.getString(cursor.getColumnIndex("isself")));
             item.setVieFlag(cursor.getString(cursor.getColumnIndex("iscmp")));
             item.setMineProtocolFlag(cursor.getString(cursor.getColumnIndex("selftreaty")));
-            item.setVieProtocolFlag(cursor.getString(cursor.getColumnIndex("cmptreaty")));*/
+            item.setVieProtocolFlag(cursor.getString(cursor.getColumnIndex("cmptreaty")));
+            item.setEndDate(cursor.getString(cursor.getColumnIndex("videnddate")));
             visitDate = cursor.getString(cursor.getColumnIndex("visitdate"));
             if (visitDate != null && currDay.equals(visitDate.substring(0, 8))) {// 若果 记录是当天生成的
                 item.setVisitTime(visitDate);
@@ -374,13 +378,14 @@ public class MstTerminalinfoMDaoImpl extends BaseDaoImpl<MstTerminalinfoM, Strin
         StringBuffer buffer = new StringBuffer();
         buffer.append("select m.terminalkey, m.terminalcode,m.routekey, m.terminalname,m.status,m.sequence, ");
         //buffer.append("vm.isself, vm.iscmp, vm.selftreaty, vm.cmptreaty, ");
-        buffer.append("vm.isself, vm.iscmp, m.selftreaty, vm.cmptreaty, ");// 我品 竞品 我品协议店,竞品协议店
+        buffer.append("vmn.isself, vmn.iscmp, m.selftreaty, vmn.cmptreaty, ");// 我品 竞品 我品协议店,竞品协议店
         buffer.append("vm.padisconsistent, vm.uploadFlag, m.minorchannel, ");// 销售渠道编码
         buffer.append("dm.dicname terminalType, vm.visitdate ");// 终端渠道类型 拜访时间
         buffer.append("from mst_terminalinfo_m_cart m ");
         buffer.append("left join cmm_datadic_m dm on m.minorchannel = dm.diccode ");
         buffer.append("     and coalesce(dm.deleteflag,'0') != '1' ");
         buffer.append("left join v_mit_visit_m_newest vm on m.terminalkey = vm.terminalkey ");
+        buffer.append("left join v_visit_m_newest vmn on m.terminalkey = vmn.terminalkey ");
         buffer.append("where coalesce(m.status,'0') != '2' ");
         buffer.append(" and coalesce(m.deleteflag,'0') != '1' ");
         buffer.append(" and m.ddtype = '1' ");// 1:协同  2:追溯
@@ -514,13 +519,14 @@ public class MstTerminalinfoMDaoImpl extends BaseDaoImpl<MstTerminalinfoM, Strin
         StringBuffer buffer = new StringBuffer();
         buffer.append("select m.terminalkey, m.terminalcode, m.terminalname,m.status,m.sequence, ");
         //buffer.append("vm.isself, vm.iscmp, vm.selftreaty, vm.cmptreaty, ");
-        //buffer.append("vm.isself, vm.iscmp, m.selftreaty, vm.cmptreaty, ");// 我品 竞品 我品协议店,竞品协议店
+        buffer.append("vmn.isself, vmn.iscmp, m.selftreaty, vmn.cmptreaty, ");// 我品 竞品 我品协议店,竞品协议店
         buffer.append("vm.padisconsistent,  m.minorchannel, ");// 销售渠道编码
         buffer.append("dm.dicname terminalType, vm.visitdate ");// 终端渠道类型 拜访时间
         buffer.append("from mst_terminalinfo_m_zscart m ");
         buffer.append("left join cmm_datadic_m dm on m.minorchannel = dm.diccode ");
         buffer.append("     and coalesce(dm.deleteflag,'0') != '1' ");
         buffer.append("left join v_mit_valter_m_newest vm on m.terminalkey = vm.terminalkey ");
+        buffer.append("left join v_visit_m_newest vmn on m.terminalkey = vmn.terminalkey ");
         buffer.append("where coalesce(m.status,'0') != '2' ");
         buffer.append(" and coalesce(m.deleteflag,'0') != '1' ");
         buffer.append(" and m.ddtype = '2' ");// 1:协同  2:追溯
@@ -545,10 +551,10 @@ public class MstTerminalinfoMDaoImpl extends BaseDaoImpl<MstTerminalinfoM, Strin
             item.setTerminalname(cursor.getString(cursor.getColumnIndex("terminalname")));
             item.setStatus(cursor.getString(cursor.getColumnIndex("status")));
             item.setSequence(cursor.getString(cursor.getColumnIndex("sequence")));
-            /*item.setMineFlag(cursor.getString(cursor.getColumnIndex("isself")));
+            item.setMineFlag(cursor.getString(cursor.getColumnIndex("isself")));
             item.setVieFlag(cursor.getString(cursor.getColumnIndex("iscmp")));
             item.setMineProtocolFlag(cursor.getString(cursor.getColumnIndex("selftreaty")));
-            item.setVieProtocolFlag(cursor.getString(cursor.getColumnIndex("cmptreaty")));*/
+            item.setVieProtocolFlag(cursor.getString(cursor.getColumnIndex("cmptreaty")));
             visitDate = cursor.getString(cursor.getColumnIndex("visitdate"));
             if (visitDate != null && currDay.equals(visitDate.substring(0, 8))) {// 若果 记录是当天生成的
                 item.setSyncFlag(cursor.getString(cursor.getColumnIndex("padisconsistent")));

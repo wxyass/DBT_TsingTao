@@ -160,6 +160,15 @@
                 android:id="@+id/dd_addterm_rl_termarea"
                 style="@style/xtbf_sayhi_rl">
 
+                <TextView
+                    style="@style/xtbf_sayhi_one_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/termadd_star"
+                    android:textColor="#fd022b"
+                    android:visibility="visible"
+                    android:layout_marginLeft="10dp"/>
+
 
                 <TextView
                     style="@style/xtbf_sayhi_one_tv"

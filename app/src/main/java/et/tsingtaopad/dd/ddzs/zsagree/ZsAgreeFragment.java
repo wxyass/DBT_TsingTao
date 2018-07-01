@@ -16,6 +16,7 @@ import java.lang.ref.SoftReference;
 import java.util.List;
 
 import et.tsingtaopad.R;
+import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.ViewUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.view.alertview.AlertView;
@@ -23,6 +24,8 @@ import et.tsingtaopad.core.view.alertview.OnItemClickListener;
 import et.tsingtaopad.db.table.MitValagreeMTemp;
 import et.tsingtaopad.db.table.MitValagreedetailMTemp;
 import et.tsingtaopad.dd.ddxt.base.XtBaseVisitFragment;
+import et.tsingtaopad.dd.ddzs.zssayhi.ZsSayhiAmendFragment;
+import et.tsingtaopad.dd.ddzs.zssayhi.ZsSayhiFragment;
 import et.tsingtaopad.dd.ddzs.zsshopvisit.ZsVisitShopActivity;
 import et.tsingtaopad.listviewintf.IClick;
 
@@ -219,7 +222,7 @@ public class ZsAgreeFragment extends XtBaseVisitFragment implements View.OnClick
 
     // 核查产品兑换信息
     public void alertShow6(final int posi) {
-        new AlertView("请选择核查结果", null, "取消", null,
+        /*new AlertView("请选择核查结果", null, "取消", null,
                 new String[]{"正确", "品种有误", "承担金额有误", "实际数量有误"},
                 getActivity(), AlertView.Style.ActionSheet,
                 new OnItemClickListener() {
@@ -238,6 +241,28 @@ public class ZsAgreeFragment extends XtBaseVisitFragment implements View.OnClick
                             xtVisitShopActivity.changeXtvisitFragment(xtaddinvoicingfragment, "zsagreedetailamendfragment");
                         }
 
+                    }
+                }).setCancelable(true).show();*/
+
+        new AlertView("请选择核查结果", null, "取消", null,
+                new String[]{"正确", "错误"},
+                getActivity(), AlertView.Style.ActionSheet,
+                new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Object o, int position) {
+                        // Toast.makeText(getActivity(), "点击了第" + position + "个", Toast.LENGTH_SHORT).show();
+                        if (0 == position) {// 正确
+                            valagreedetailMTemps.get(posi).setAgreedetailflag("Y");
+                            handler.sendEmptyMessage(ZsAgreeFragment.AGREE_AMEND_DETAIL);
+                        } else if (1 == position) {// 跳转数据录入
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("type", position);// 1 品种有误  2 承担金额有误  3 实际数量有误
+                            bundle.putSerializable("MitValagreedetailMTemp", valagreedetailMTemps.get(posi));
+                            ZsAgreeDetailAmendFragment xtaddinvoicingfragment = new ZsAgreeDetailAmendFragment(handler);
+                            xtaddinvoicingfragment.setArguments(bundle);
+                            ZsVisitShopActivity xtVisitShopActivity = (ZsVisitShopActivity) getActivity();
+                            xtVisitShopActivity.changeXtvisitFragment(xtaddinvoicingfragment, "zsagreedetailamendfragment");
+                        }
                     }
                 }).setCancelable(true).show();
     }

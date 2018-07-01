@@ -171,7 +171,7 @@ public class XtTermSelectAdapter extends BaseAdapter implements OnClickListener 
 
         if (!CheckUtil.isBlankOrNull(item.getVisitTime())) {
             holder.visitDateTv.setVisibility(View.VISIBLE);
-            holder.visitDateTv.setText(DateUtil.dividetime(item.getVisitTime()));
+            holder.visitDateTv.setText(DateUtil.dividetime(item.getVisitTime())+"-"+DateUtil.dividetime(item.getEndDate()));
         } else {
             //holder.visitDateTv.setVisibility(View.GONE);
             holder.visitDateTv.setVisibility(View.VISIBLE);

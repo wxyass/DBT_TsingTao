@@ -473,7 +473,22 @@ public class XtTermSelectFragment extends BaseFragmentSupport implements View.On
                             DbtLog.logUtils(TAG, "前往拜访：是");
 
                             // 复制到终端购物车
-                            // copyMstTerminalinfoMCart(xtTermSelectMStc);
+                            copyMstTerminalinfoMCart(xtTermSelectMStc);
+
+                            if (selectedList.contains(termSelectMStc)) {
+                                //selectedList.remove(termSelectMStc);
+                                //termSelectMStc.setIsSelectToCart("0");
+                                //imageView.setImageResource(R.drawable.icon_visit_add);
+                                confirmTv.setText("确定" + "(" + selectedList.size() + ")");
+
+                            } else {
+                                selectedList.add(termSelectMStc);
+                                termSelectMStc.setIsSelectToCart("1");
+                                //imageView.setImageResource(R.drawable.icon_select_minus);
+                                confirmTv.setText("确定" + "(" + selectedList.size() + ")");
+
+                            }
+                            selectAdapter.notifyDataSetChanged();
 
                             List<String> termKeyLst = new ArrayList<String>();
                             termKeyLst.add(termSelectMStc.getTerminalkey());

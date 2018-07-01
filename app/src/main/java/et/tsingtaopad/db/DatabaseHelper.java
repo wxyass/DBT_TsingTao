@@ -1225,10 +1225,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 
                 // 终端追溯协议对付信息表
-                String MIT_VALAGREEDETAIL_M = "create table MIT_VALAGREEDETAIL_M ( id varchar2(36) not null, valterid varchar2(36) null, valagreeid varchar2(36) null, prokey varchar2(36) null, proname  varchar2(200) null, cashtype varchar2(36) null, commoney number(22,7) null, trunnum  number(22,7) null, price number(22,7) null, cashdate date null, agreedetailflag char(1) null, erroritem  char(1) null, remarks  varchar2(500) null, uploadflag char(1) null, padisconsistent char(1) null )";
+                String MIT_VALAGREEDETAIL_M = "create table MIT_VALAGREEDETAIL_M ( id varchar2(36) not null, valterid varchar2(36) null, valagreeid varchar2(36) null, prokey varchar2(36) null, proname  varchar2(200) null,truepro  varchar2(200) null,truemoney  varchar2(22) null,truenum  varchar2(22) null, cashtype varchar2(36) null, commoney number(22,7) null, trunnum  number(22,7) null, price number(22,7) null, cashdate date null, agreedetailflag char(1) null, erroritem  char(1) null, remarks  varchar2(500) null, uploadflag char(1) null, padisconsistent char(1) null )";
                 db.execSQL(MIT_VALAGREEDETAIL_M);
                 // 终端追溯协议对付信息表 临时表
-                String MIT_VALAGREEDETAIL_M_TEMP = "create table MIT_VALAGREEDETAIL_M_TEMP ( id varchar2(36) not null, valterid varchar2(36) null, valagreeid varchar2(36) null, prokey varchar2(36) null, proname  varchar2(200) null, cashtype varchar2(36) null, commoney number(22,7) null, trunnum  number(22,7) null, price number(22,7) null, cashdate date null, agreedetailflag char(1) null, erroritem  char(1) null, remarks  varchar2(500) null, uploadflag char(1) null, padisconsistent char(1) null )";
+                String MIT_VALAGREEDETAIL_M_TEMP = "create table MIT_VALAGREEDETAIL_M_TEMP ( id varchar2(36) not null, valterid varchar2(36) null, valagreeid varchar2(36) null, prokey varchar2(36) null, proname  varchar2(200) null,truepro  varchar2(200) null,truemoney  varchar2(22) null,truenum  varchar2(22) null, cashtype varchar2(36) null, commoney number(22,7) null, trunnum  number(22,7) null, price number(22,7) null, cashdate date null, agreedetailflag char(1) null, erroritem  char(1) null, remarks  varchar2(500) null, uploadflag char(1) null, padisconsistent char(1) null )";
                 db.execSQL(MIT_VALAGREEDETAIL_M_TEMP);
 
 

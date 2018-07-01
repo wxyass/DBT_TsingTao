@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
+import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.util.pinyin.PinYin4jUtil;
 import et.tsingtaopad.db.DatabaseHelper;
 import et.tsingtaopad.db.dao.MitValterMDao;
@@ -26,8 +27,11 @@ import et.tsingtaopad.db.dao.MstTerminalinfoMDao;
 import et.tsingtaopad.db.table.MitValcheckterM;
 import et.tsingtaopad.db.table.MitValterM;
 import et.tsingtaopad.db.table.MitVisitM;
+import et.tsingtaopad.db.table.MstAgencysupplyInfo;
+import et.tsingtaopad.db.table.MstAgencysupplyInfoTemp;
 import et.tsingtaopad.db.table.MstTerminalinfoM;
 import et.tsingtaopad.db.table.MstTerminalinfoMTemp;
+import et.tsingtaopad.db.table.MstVistproductInfo;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 import et.tsingtaopad.main.visit.shopvisit.term.domain.MstTermListMStc;
 import et.tsingtaopad.main.visit.shopvisit.term.domain.TermSequence;
@@ -70,6 +74,7 @@ public class XtTermCartService {
         }
         return terminalList;
     }
+
     /**
      * 获取购物车终端列表 获取相应的数据列表数据(协同+追溯 所有的终端)
      *
@@ -88,6 +93,7 @@ public class XtTermCartService {
         }
         return terminalList;
     }
+
     /**
      * 获取购物车终端列表 获取相应的数据列表数据(追溯)
      *
@@ -198,11 +204,9 @@ public class XtTermCartService {
      * 协同 购物车更新终端顺序 不上传
      * @param list
      */
-    public void updateXtTermSequence(List<TermSequence> list)
-    {
+    public void updateXtTermSequence(List<TermSequence> list) {
         AndroidDatabaseConnection connection = null;
-        try
-        {
+        try {
             DatabaseHelper helper = DatabaseHelper.getHelper(context);
             SQLiteDatabase database = helper.getWritableDatabase();
             connection = new AndroidDatabaseConnection(database, true);
@@ -213,29 +217,23 @@ public class XtTermCartService {
             dao.updateXtTempSequence(helper, list);
             connection.commit(null);
             //sendTermSequenceRequest(list);
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             Log.e(TAG, "更改巡店拜访顺序失败", e);
-            try
-            {
+            try {
                 connection.rollback(null);
-            }
-            catch (SQLException e1)
-            {
+            } catch (SQLException e1) {
                 e1.printStackTrace();
             }
         }
     }
+
     /***
      * 追溯 购物车更新终端顺序 不上传
      * @param list
      */
-    public void updateZsTermSequence(List<TermSequence> list)
-    {
+    public void updateZsTermSequence(List<TermSequence> list) {
         AndroidDatabaseConnection connection = null;
-        try
-        {
+        try {
             DatabaseHelper helper = DatabaseHelper.getHelper(context);
             SQLiteDatabase database = helper.getWritableDatabase();
             connection = new AndroidDatabaseConnection(database, true);
@@ -246,16 +244,11 @@ public class XtTermCartService {
             dao.updateXtTempSequence(helper, list);
             connection.commit(null);
             //sendTermSequenceRequest(list);
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             Log.e(TAG, "更改巡店拜访顺序失败", e);
-            try
-            {
+            try {
                 connection.rollback(null);
-            }
-            catch (SQLException e1)
-            {
+            } catch (SQLException e1) {
                 e1.printStackTrace();
             }
         }
@@ -278,6 +271,50 @@ public class XtTermCartService {
             e.printStackTrace();
         }
         return list;
+    }
+
+
+    /**
+     * 删除协同购物车
+     *
+     * @param terminalkey 终端ID
+     */
+    public boolean deleteXtTermCart(String terminalkey, String type) {
+        boolean isFlag = false;
+        AndroidDatabaseConnection connection = null;
+        try {
+            DatabaseHelper helper = DatabaseHelper.getHelper(context);
+            Dao<MstAgencysupplyInfo, String> supplyDao = helper.getDao(MstAgencysupplyInfo.class);
+
+            connection = new AndroidDatabaseConnection(helper.getWritableDatabase(), true);
+            connection.setAutoCommit(false);
+
+            // 删除拜访产品-竞品我品记录表，相关数据
+            StringBuffer buffer = new StringBuffer();
+            if ("1".equals(type)) { // 删除协同终端夹
+                buffer.append("delete from mst_terminalinfo_m_cart ");
+            } else if ("2".equals(type)) {// 删除追溯终端夹
+                buffer.append("delete from mst_terminalinfo_m_zscart ");
+            }
+            buffer.append("where terminalkey = ? ");
+            supplyDao.executeRaw(buffer.toString(), new String[]{terminalkey});
+
+            connection.commit(null);
+            isFlag = true;
+
+        } catch (Exception e) {
+            isFlag = false;
+            DbtLog.logUtils(TAG, "解除终端失败");
+            DbtLog.logUtils(TAG, e.getMessage());
+            e.printStackTrace();
+            Log.e(TAG, "解除终端发生异常", e);
+            try {
+                connection.rollback(null);
+            } catch (SQLException e1) {
+                Log.e(TAG, "回滚进销存数据发生异常", e1);
+            }
+        }
+        return isFlag;
     }
 
 }

@@ -279,7 +279,7 @@ public class XtTermCartFragment extends BaseFragmentSupport implements View.OnCl
         }
 
         // 设置适配器
-        termCartAdapter = new XtTermCartAdapter(getActivity(), seqTermList, tempLst, confirmBtn, termId);
+        termCartAdapter = new XtTermCartAdapter(getActivity(), seqTermList, tempLst, confirmBtn, termId,"1");
         termCartLv.setAdapter(termCartAdapter);
 
         // 若巡店拜访页面销毁了,根据下面判断 拜访按钮是否出现

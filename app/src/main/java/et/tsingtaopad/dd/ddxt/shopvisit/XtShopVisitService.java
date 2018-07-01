@@ -1947,7 +1947,7 @@ public class XtShopVisitService {
                             mstCollectionexerecordInfoTemp.setTotalcount(item.getTotalcount());
                             mstCollectionexerecordInfoTemp.setComid(item.getComid());
                             mstCollectionexerecordInfoTemp.setRemarks(item.getRemarks());
-                            mstCollectionexerecordInfoTemp.setFreshness(item.getFreshness());// 新鲜度
+                            // mstCollectionexerecordInfoTemp.setFreshness(item.getFreshness());// 新鲜度
                             mstCollectionexerecordInfoTemp.setOrderbyno(item.getOrderbyno());
                             mstCollectionexerecordInfoTemp.setVersion(item.getVersion());
                             mstCollectionexerecordInfoTemp.setCreuser(item.getCreuser());
@@ -2513,7 +2513,7 @@ public class XtShopVisitService {
                 proItem.setFinalNum(stc.getFinalNum());
                 proItem.setXianyouliang(stc.getXianyouliang());
                 proItem.setBianhualiang(stc.getBianhualiang());
-                proItem.setFreshness(FunUtil.isNullSetDate(stc.getFreshness()));// 新鲜度
+                // proItem.setFreshness(FunUtil.isNullSetDate(stc.getFreshness()));// 新鲜度
                 proItem.setIndexIdLst(new ArrayList<String>());
                 proItemLst.add(proItem);
                 Id = proItemId;
@@ -2572,7 +2572,7 @@ public class XtShopVisitService {
                 proItem.setValitemremark(stc.getValitemremark());
                 proItem.setXianyouliang(stc.getXianyouliang());
                 proItem.setBianhualiang(stc.getBianhualiang());
-                proItem.setFreshness(FunUtil.isNullSetDate(stc.getFreshness()));// 新鲜度
+                //proItem.setFreshness(FunUtil.isNullSetDate(stc.getFreshness()));// 新鲜度
                 proItem.setIndexIdLst(new ArrayList<String>());
                 proItemLst.add(proItem);
                 Id = proItemId;
@@ -2814,7 +2814,7 @@ public class XtShopVisitService {
                     itemInfo.setBianhualiang(proItem.getBianhualiang());
                     itemInfo.setXianyouliang(proItem.getXianyouliang());
                     //itemInfo.setFreshness(proItem.getFreshness());// 新鲜度
-                    itemInfo.setFreshness(FunUtil.isDateString(proItem.getFreshness()));// 新鲜度
+                    // itemInfo.setFreshness(FunUtil.isDateString(proItem.getFreshness()));// 新鲜度
                     itemInfo.setPadisconsistent(ConstValues.FLAG_0);
                     itemInfo.setDeleteflag(ConstValues.FLAG_0);
                     //itemInfo.setCreuser(ConstValues.loginSession.getUserCode());
@@ -3534,7 +3534,7 @@ public class XtShopVisitService {
                     info.setTotalcount(item.getTotalcount());
                     info.setComid(item.getComid());
                     info.setRemarks(item.getRemarks());
-                    info.setFreshness(item.getFreshness());// 新鲜度
+                    // info.setFreshness(item.getFreshness());// 新鲜度
                     info.setOrderbyno(item.getOrderbyno());
                     info.setVersion(item.getVersion());
                     info.setCreuser(item.getCreuser());

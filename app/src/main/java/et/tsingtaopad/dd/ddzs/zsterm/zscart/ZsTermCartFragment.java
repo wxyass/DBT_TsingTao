@@ -331,7 +331,7 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
         }
 
         // 设置适配器
-        termCartAdapter = new XtTermCartAdapter(getActivity(), seqTermList, tempLst, confirmBtn, termId);
+        termCartAdapter = new XtTermCartAdapter(getActivity(), seqTermList, tempLst, confirmBtn, termId,"2");// 1协同  2追溯
         termCartLv.setAdapter(termCartAdapter);
 
         // 若巡店拜访页面销毁了,根据下面判断 拜访按钮是否出现
@@ -444,6 +444,8 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
                                 // 购物车是否已经同步数据  false:没有  true:已同步
                                 PrefUtils.putBoolean(getActivity(),GlobalValues.ZS_CART_SYNC,true);
                                 Toast.makeText(getActivity(), "该列表终端数据请求成功", Toast.LENGTH_SHORT).show();
+
+                                initData();// 初始化数据
                             }
                         }else{
                             Toast.makeText(getActivity(), resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();

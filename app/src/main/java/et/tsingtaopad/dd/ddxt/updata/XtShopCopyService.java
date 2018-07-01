@@ -1914,6 +1914,9 @@ public class XtShopCopyService {
                     info.setAgreedetailflag(item.getAgreedetailflag());//正确与否
                     info.setErroritem(item.getErroritem());//错误项
                     info.setRemarks(item.getRemarks());//备注
+                    info.setTruepro(item.getTruepro());//正确的产品名称
+                    info.setTruemoney(item.getTruemoney());//正确的承担金额
+                    info.setTruenum(item.getTruenum());//正确的实际数量
 
                     info.setUploadflag("1");
                     info.setPadisconsistent("0");// 是否已上传 0:未上传 1:已上传

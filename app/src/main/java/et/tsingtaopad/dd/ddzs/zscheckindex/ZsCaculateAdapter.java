@@ -22,13 +22,17 @@ import et.tsingtaopad.adapter.GridKeyValueAdapter;
 import et.tsingtaopad.core.ui.loader.LatteLoader;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.DateUtil;
+import et.tsingtaopad.core.util.dbtutil.FunUtil;
 import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
 import et.tsingtaopad.core.view.alertview.AlertView;
 import et.tsingtaopad.core.view.alertview.OnDismissListener;
+import et.tsingtaopad.core.view.alertview.OnItemClickListener;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProIndex;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProIndexValue;
 import et.tsingtaopad.dd.ddxt.checking.domain.XtProItem;
 import et.tsingtaopad.dd.ddzs.zscheckindex.zsnum.ZsCaculateAmendFragment;
+import et.tsingtaopad.dd.ddzs.zssayhi.ZsSayhiAmendFragment;
+import et.tsingtaopad.dd.ddzs.zssayhi.ZsSayhiFragment;
 import et.tsingtaopad.dd.ddzs.zsshopvisit.ZsVisitShopActivity;
 import et.tsingtaopad.initconstvalues.domain.KvStc;
 
@@ -169,7 +173,8 @@ public class ZsCaculateAdapter extends BaseAdapter {
             }
         }
 
-        //
+
+        /*
         List<KvStc> sureOrFail = new ArrayList<>();
         sureOrFail.add(new KvStc("zhengque","正确","-1"));
         sureOrFail.add(new KvStc("cuowu","错误(去修正)","-1"));
@@ -195,16 +200,28 @@ public class ZsCaculateAdapter extends BaseAdapter {
                 mAlertViewExt.dismiss();
 
                 if(0==position){
-                    LatteLoader.showLoading(context);// 处理数据中,在ZsCheckIndexFragment的showIndexAdapter中关闭
+                   //LatteLoader.showLoading(context);// 处理数据中,在ZsCheckIndexFragment的showIndexAdapter中关闭
                     // 修改对错
-                    xtProIndexValue.setValchecktypeflag("Y");
-                    handler.sendEmptyMessage(ZsCheckIndexFragment.INIT_INDEX_AMEND);
+                    //xtProIndexValue.setValchecktypeflag("Y");
+                    //handler.sendEmptyMessage(ZsCheckIndexFragment.INIT_INDEX_AMEND);
+
+
+
+                    ZsVisitShopActivity xtVisitShopActivity = (ZsVisitShopActivity)context;
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("tempLst", (Serializable) tempLst);
+                    bundle.putString("proName", proName);
+                    bundle.putString("valchecktypeflag", "Y");
+                    ZsCaculateAmendFragment xtCaculateFragment = new ZsCaculateAmendFragment(xtProIndexValue,handler);
+                    xtCaculateFragment.setArguments(bundle);
+                    xtVisitShopActivity.changeXtvisitFragment(xtCaculateFragment,"xtnuminputfragment");
                 }
                 else if(1==position){
                     ZsVisitShopActivity xtVisitShopActivity = (ZsVisitShopActivity)context;
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("tempLst", (Serializable) tempLst);
                     bundle.putString("proName", proName);
+                    bundle.putString("valchecktypeflag", "N");
                     ZsCaculateAmendFragment xtCaculateFragment = new ZsCaculateAmendFragment(xtProIndexValue,handler);
                     xtCaculateFragment.setArguments(bundle);
                     xtVisitShopActivity.changeXtvisitFragment(xtCaculateFragment,"xtnuminputfragment");
@@ -220,7 +237,38 @@ public class ZsCaculateAdapter extends BaseAdapter {
                 DbtLog.logUtils(TAG, "取消选择结果");
             }
         });
-        mAlertViewExt.show();
+        mAlertViewExt.show();*/
+
+
+        new AlertView("请选择核查结果", null, "取消", null,
+                new String[]{"正确", "错误"},
+                context, AlertView.Style.ActionSheet,
+                new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Object o, int position) {
+                        // Toast.makeText(getActivity(), "点击了第" + position + "个", Toast.LENGTH_SHORT).show();
+                        if (0 == position) {// 正确
+                            ZsVisitShopActivity xtVisitShopActivity = (ZsVisitShopActivity)context;
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("tempLst", (Serializable) tempLst);
+                            bundle.putString("proName", proName);
+                            bundle.putString("valchecktypeflag", "Y");
+                            ZsCaculateAmendFragment xtCaculateFragment = new ZsCaculateAmendFragment(xtProIndexValue,handler);
+                            xtCaculateFragment.setArguments(bundle);
+                            xtVisitShopActivity.changeXtvisitFragment(xtCaculateFragment,"xtnuminputfragment");
+                        } else if (1 == position) {// 跳转数据录入
+                            ZsVisitShopActivity xtVisitShopActivity = (ZsVisitShopActivity)context;
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("tempLst", (Serializable) tempLst);
+                            bundle.putString("proName", proName);
+                            bundle.putString("valchecktypeflag", "N");
+                            ZsCaculateAmendFragment xtCaculateFragment = new ZsCaculateAmendFragment(xtProIndexValue,handler);
+                            xtCaculateFragment.setArguments(bundle);
+                            xtVisitShopActivity.changeXtvisitFragment(xtCaculateFragment,"xtnuminputfragment");
+                        }
+
+                    }
+                }).setCancelable(true).show();
     }
 
 }

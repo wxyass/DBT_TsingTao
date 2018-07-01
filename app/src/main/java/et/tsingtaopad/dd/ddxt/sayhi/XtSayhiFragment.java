@@ -9,7 +9,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -524,9 +526,15 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
             xtprovince.setText(xtSayhiService.getAreaName(termInfoTemp.getProvince()));
             xttermcity.setText(xtSayhiService.getAreaName(termInfoTemp.getCity()));
             xttermcountry.setText(xtSayhiService.getAreaName(termInfoTemp.getCounty()));
-
-
         }
+
+        xttermphone.addTextChangedListener(watcher);
+        xttermhvolume.addTextChangedListener(watcher);
+        xttermmvolume.addTextChangedListener(watcher);
+        xttermpvolume.addTextChangedListener(watcher);
+        xttermlvolume.addTextChangedListener(watcher);
+
+
         PrefUtils.putBoolean(getActivity(),GlobalValues.SAYHIREADY,true);
     }
 
@@ -1111,4 +1119,48 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
         mAlertViewExt.setCancelable(true).setOnDismissListener(this);
         mAlertViewExt.show();
     }
+
+
+    /**
+     * 计算总容量
+     */
+    private TextWatcher watcher = new TextWatcher() {
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before,
+                                  int count) {
+
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count,
+                                      int after) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+            Double total = 0d;
+            if (xttermphone.getText().toString().length() > 30) {
+                //Toast.makeText(getActivity(), "电话长度不能超过30位", 0).show();
+                //telEt.setText(telEt.getText().toString().substring(0, 30));
+            }
+            if (!CheckUtil.isBlankOrNull(xttermhvolume.getText().toString())) {
+                total += Double.parseDouble(xttermhvolume.getText().toString());
+            }
+            if (!CheckUtil.isBlankOrNull(xttermmvolume.getText().toString())) {
+                total += Double.parseDouble(xttermmvolume.getText().toString());
+            }
+            if (!CheckUtil.isBlankOrNull(xttermpvolume.getText().toString())) {
+                total += Double.parseDouble(xttermpvolume.getText().toString());
+            }
+            if (!CheckUtil.isBlankOrNull(xttermlvolume.getText().toString())) {
+                total += Double.parseDouble(xttermlvolume.getText().toString());
+            }
+            if (total.intValue() != 0) {
+                xttermtvolume.setText(String.valueOf(total.intValue()));
+            }
+        }
+    };
 }

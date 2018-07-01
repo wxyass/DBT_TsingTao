@@ -496,7 +496,7 @@ public class ZsCheckIndexFragment extends XtBaseVisitFragment implements View.On
     private void showIndexAdapter() {
 
         xtCaculateAdapter.notifyDataSetChanged();
-        LatteLoader.stopLoading();
+        // LatteLoader.stopLoading();
     }
 
     /**

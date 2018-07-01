@@ -46,6 +46,7 @@ public class ZsCaculateAmendFragment extends BaseFragmentSupport implements View
     ZsCheckIndexFragment.MyHandler handler;
     XtProIndexValue xtProIndexValue;
     private Button sureBtn;
+    private String valchecktypeflag;
 
     public ZsCaculateAmendFragment() {
     }
@@ -88,6 +89,7 @@ public class ZsCaculateAmendFragment extends BaseFragmentSupport implements View
         tempLst = new ArrayList<XtProItem>();
         tempLst = (List<XtProItem>) bundle.getSerializable("tempLst");
         String proName = bundle.getString("proName");
+         valchecktypeflag = bundle.getString("valchecktypeflag");
         titleTv.setText(proName);
 
         ZsCalculateAmendAdapter zsCalculateAmendAdapter = new ZsCalculateAmendAdapter(getActivity(), tempLst);
@@ -145,7 +147,7 @@ public class ZsCaculateAmendFragment extends BaseFragmentSupport implements View
 
 
         // 修改对错
-        xtProIndexValue.setValchecktypeflag("N");
+        xtProIndexValue.setValchecktypeflag(valchecktypeflag);
 
 
         Message msg = new Message();

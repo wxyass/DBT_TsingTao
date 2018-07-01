@@ -159,7 +159,7 @@ public class DdDayPlanFragment extends BaseFragmentSupport implements View.OnCli
                 break;
             case R.id.top_navigation_rl_confirm:// 确定
 
-                Toast.makeText(getActivity(), "弹出日历", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getActivity(), "弹出日历", Toast.LENGTH_SHORT).show();
 
                 break;
             case R.id.dd_dayplan_bt_add:// 新增计划

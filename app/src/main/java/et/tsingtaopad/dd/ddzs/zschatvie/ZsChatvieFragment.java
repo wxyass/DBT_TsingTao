@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -324,15 +325,18 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
      */
     public void alertShow3(final int position) {
 
-        mAlertViewExt = new AlertView(null, null, null, null,
-                null, getActivity(), AlertView.Style.ActionSheet, null);
+        // mAlertViewExt = new AlertView(null, null, null, null, null, getActivity(), AlertView.Style.ActionSheet, null);
         ViewGroup extView = (ViewGroup) LayoutInflater.from(getActivity()).inflate(R.layout.alert_result_chatvie_form, null);
 
-        RelativeLayout rl_back1 = (RelativeLayout) extView.findViewById(R.id.top_navigation_rl_back1);
-        android.support.v7.widget.AppCompatTextView bt_back1 = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_bt_back1);
-        RelativeLayout rl_confirm1 = (RelativeLayout) extView.findViewById(R.id.top_navigation_rl_confirm1);
-        android.support.v7.widget.AppCompatTextView bt_confirm1 = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_bt_confirm1);
+        RelativeLayout rl_back1 = (RelativeLayout) extView.findViewById(R.id.top_navigation_rl_back);
+        android.support.v7.widget.AppCompatTextView bt_back1 = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_bt_back);
+        android.support.v7.widget.AppCompatTextView title = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_tv_title);
+        RelativeLayout rl_confirm1 = (RelativeLayout) extView.findViewById(R.id.top_navigation_rl_confirm);
+        android.support.v7.widget.AppCompatTextView bt_confirm1 = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_bt_confirm);
 
+        title.setText("选择结果");
+        rl_confirm1.setVisibility(View.VISIBLE);
+        bt_confirm1.setText("确定");
 
         final RadioButton right_rb = (RadioButton) extView.findViewById(R.id.right_rb);
         final RadioGroup right_rg = (RadioGroup) extView.findViewById(R.id.right_rg);
@@ -374,11 +378,18 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
             right_rg.clearCheck();
         }
 
+
+        // 显示对话框
+        final AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
+        dialog.setView(extView, 0, 0, 0, 0);
+        dialog.setCancelable(false);
+        dialog.show();
+
         // 取消按钮
         rl_back1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAlertViewExt.dismiss();
+                dialog.dismiss();
             }
         });
 
@@ -398,7 +409,7 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
                     valsupplyMTemp.setValproerror("N");// 品项有误
                     valsupplyMTemp.setValagencyerror("N");// 经销商有误
                     valsupplyMTemp.setValdataerror("N");// 数据有误
-                    mAlertViewExt.dismiss();
+                    dialog.dismiss();
                     handler.sendEmptyMessage(ZsChatvieFragment.INIT_AMEND);
                 } else {
                     if (cb1.isChecked()) {// 品项有误
@@ -406,7 +417,7 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
                         valsupplyMTemp.setValproerror("Y");// 品项有误
                         valsupplyMTemp.setValagencyerror("N");// 经销商有误
                         valsupplyMTemp.setValdataerror("N");// 数据有误
-                        mAlertViewExt.dismiss();
+                        dialog.dismiss();
                         handler.sendEmptyMessage(ZsChatvieFragment.INIT_AMEND);
                     } else {
                         valsupplyMTemp.setValagencysupplyflag("N");// 供货关系正确与否
@@ -423,7 +434,7 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
                         zsInvocingAmendFragment.setArguments(bundle);
                         ZsVisitShopActivity zsVisitShopActivity = (ZsVisitShopActivity) getActivity();
                         zsVisitShopActivity.changeXtvisitFragment(zsInvocingAmendFragment, "zschatvieamendfragment");
-                        mAlertViewExt.dismiss();
+                        dialog.dismiss();
                     }
                 }
 
@@ -474,14 +485,14 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
         });
 
 
-        mAlertViewExt.addExtView(extView);
+        /*mAlertViewExt.addExtView(extView);
         mAlertViewExt.setOnDismissListener(new OnDismissListener() {
             @Override
             public void onDismiss(Object o) {
                 DbtLog.logUtils(TAG, "取消选择结果");
             }
         });
-        mAlertViewExt.show();
+        mAlertViewExt.show();*/
     }
 
 
@@ -558,7 +569,7 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
      * 参数8: 条目点击监听 √
      */
     public void alertShow4(final int posi) {
-        List<KvStc> sureOrFail = new ArrayList<>();
+        /*List<KvStc> sureOrFail = new ArrayList<>();
         sureOrFail.add(new KvStc("zhengque","失效这条供货关系","-1"));
         sureOrFail.add(new KvStc("cuowu","录入该条记录数据","-1"));
         mAlertViewExt = new AlertView(null, null, null, null,
@@ -596,7 +607,34 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
                 DbtLog.logUtils(TAG, "取消选择结果");
             }
         });
-        mAlertViewExt.show();
+        mAlertViewExt.show();*/
+
+
+
+        new AlertView("处理新增供货关系", null, "取消", null,
+                new String[]{"失效这条供货关系", "录入该条记录数据"},
+                getActivity(), AlertView.Style.ActionSheet,
+                new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Object o, int position) {
+                        // Toast.makeText(getActivity(), "点击了第" + position + "个", Toast.LENGTH_SHORT).show();
+                        if (0 == position) {// 失效这条供货关系
+                            dataLst.remove(posi);
+                            handler.sendEmptyMessage(ZsChatvieFragment.INIT_AMEND);
+                        } else if (1 == position) {// 跳转数据录入
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("position", posi);//
+                            bundle.putString("termId", termId);//
+                            bundle.putString("mitValterMTempKey", mitValterMTempKey);
+                            bundle.putSerializable("dataLst", (Serializable) dataLst);
+                            ZsChatVieAddDataFragment zsInvocingAddDataFragment = new ZsChatVieAddDataFragment(handler);
+                            zsInvocingAddDataFragment.setArguments(bundle);
+                            ZsVisitShopActivity zsVisitShopActivity = (ZsVisitShopActivity) getActivity();
+                            zsVisitShopActivity.changeXtvisitFragment(zsInvocingAddDataFragment, "zsamendfragment");
+                        }
+
+                    }
+                }).setCancelable(true).show();
     }
 
     /**

@@ -64,6 +64,7 @@
                         android:id="@+id/zdzs_invoicing_adddata_rl_con2_qd"
                         style="@style/zdzs_sayhi_content1"
                         android:background="@drawable/bg_visit_record"
+                        android:inputType="number|numberDecimal"
                         android:text=""/>
 
 
@@ -83,6 +84,7 @@
                         android:id="@+id/zdzs_invoicing_adddata_rl_con2_ls"
                         style="@style/zdzs_sayhi_content1"
                         android:background="@drawable/bg_visit_record"
+                        android:inputType="number|numberDecimal"
                         android:text=""/>
 
 
@@ -102,6 +104,7 @@
                         android:id="@+id/zdzs_invoicing_adddata_rl_con2_ddl"
                         style="@style/zdzs_sayhi_content1"
                         android:background="@drawable/bg_visit_record"
+                        android:inputType="number|numberDecimal"
                         android:text=""/>
 
 
@@ -121,6 +124,7 @@
                         android:id="@+id/zdzs_invoicing_adddata_rl_con2_ljk"
                         style="@style/zdzs_sayhi_content1"
                         android:background="@drawable/bg_visit_record"
+                        android:inputType="number|numberDecimal"
                         android:text=""/>
 
 

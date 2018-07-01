@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
@@ -40,6 +41,14 @@ public class ZsAgreeDetailAmendFragment extends BaseFragmentSupport implements V
 
     private MitValagreedetailMTemp mitValagreedetailMTemp;
 
+
+    private TextView tv_product;
+    private TextView tv_price ;
+    private TextView tv_num ;
+    private EditText et_product;
+    private EditText et_price ;
+    private EditText et_num;
+
     public ZsAgreeDetailAmendFragment() {
 
     }
@@ -68,6 +77,12 @@ public class ZsAgreeDetailAmendFragment extends BaseFragmentSupport implements V
         confirmBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
 
+        tv_product = (TextView) view.findViewById(R.id.zdzs_agreedetail_amend_tv_product);
+        tv_price = (TextView) view.findViewById(R.id.zdzs_agreedetail_amend_tv_price);
+        tv_num = (TextView) view.findViewById(R.id.zdzs_agreedetail_amend_tv_num);
+        et_product = (EditText) view.findViewById(R.id.zdzs_agreedetail_amend_dd_et_product);
+        et_price = (EditText) view.findViewById(R.id.zdzs_agreedetail_amend_dd_et_price);
+        et_num = (EditText) view.findViewById(R.id.zdzs_agreedetail_amend_dd_et_num);
         zdzs_agreedetail_amend_dd_et_report = (EditText) view.findViewById(R.id.zdzs_agreedetail_amend_dd_et_report);
         sureBtn = (Button) view.findViewById(R.id.zdzs_agreedetail_amend_dd_bt_save);
         sureBtn.setOnClickListener(this);
@@ -88,6 +103,12 @@ public class ZsAgreeDetailAmendFragment extends BaseFragmentSupport implements V
     }
 
     private void initData() {
+        tv_product.setText(mitValagreedetailMTemp.getProname());
+        tv_price.setText("¥ "+mitValagreedetailMTemp.getCommoney());
+        tv_num.setText(mitValagreedetailMTemp.getTrunnum());
+        et_product.setText(mitValagreedetailMTemp.getTruepro());
+        et_price.setText(mitValagreedetailMTemp.getTruemoney());
+        et_num.setText(mitValagreedetailMTemp.getTruenum());
         zdzs_agreedetail_amend_dd_et_report.setText(mitValagreedetailMTemp.getRemarks());// 备注
     }
 
@@ -113,9 +134,12 @@ public class ZsAgreeDetailAmendFragment extends BaseFragmentSupport implements V
     private void saveValue() {
 
         // 备注
+        String product = et_product.getText().toString();
+        String price = et_price.getText().toString();
+        String num = et_num.getText().toString();
         String report = zdzs_agreedetail_amend_dd_et_report.getText().toString();
 
-        if (type == 1) {// 1 品种有误
+        /*if (type == 1) {// 1 品种有误
             mitValagreedetailMTemp.setErroritem("0");
             mitValagreedetailMTemp.setAgreedetailflag("N");
         } else if (type == 2) {//2 承担金额有误
@@ -124,7 +148,13 @@ public class ZsAgreeDetailAmendFragment extends BaseFragmentSupport implements V
         } else if (type == 3) {// 3 实际数量有误
             mitValagreedetailMTemp.setErroritem("2");
             mitValagreedetailMTemp.setAgreedetailflag("N");
-        }
+        }*/
+
+        mitValagreedetailMTemp.setAgreedetailflag("N");
+
+        mitValagreedetailMTemp.setTruepro(product);
+        mitValagreedetailMTemp.setTruemoney(price);
+        mitValagreedetailMTemp.setTruenum(num);
         mitValagreedetailMTemp.setRemarks(report);
 
         handler.sendEmptyMessage(ZsAgreeFragment.AGREE_AMEND_DETAIL);

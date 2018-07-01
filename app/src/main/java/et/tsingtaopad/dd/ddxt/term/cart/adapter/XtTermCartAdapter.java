@@ -15,12 +15,21 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.core.util.dbtutil.CheckUtil;
 import et.tsingtaopad.core.util.dbtutil.ConstValues;
+import et.tsingtaopad.core.util.dbtutil.ViewUtil;
+import et.tsingtaopad.core.util.dbtutil.logutil.DbtLog;
+import et.tsingtaopad.core.view.alertview.AlertView;
+import et.tsingtaopad.core.view.alertview.OnDismissListener;
+import et.tsingtaopad.core.view.alertview.OnItemClickListener;
+import et.tsingtaopad.dd.ddxt.invoicing.XtInvoicingService;
+import et.tsingtaopad.dd.ddxt.invoicing.domain.XtInvoicingStc;
+import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartService;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 
 /**
@@ -33,23 +42,27 @@ import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
  * 修改履历</br>
  * 日期      原因  BUG号    修改人 修改版本</br>
  */
-public class XtTermCartAdapter extends BaseAdapter implements OnClickListener {
+public class XtTermCartAdapter extends BaseAdapter implements OnClickListener,View.OnLongClickListener {
+
+    private final String TAG = "XtTermCartAdapter";
 
     private Activity context;
     private List<XtTermSelectMStc> dataLst;
     private List<XtTermSelectMStc> seqTermList;
     private RelativeLayout confirmBt;
     private String termId;
+    private String type;// 1协同  2追溯
     private int selectItem = -1;
     private boolean isUpdate;//是否处于修改状态
 
     public XtTermCartAdapter(Activity context, List<XtTermSelectMStc> seqTermList,
-                             List<XtTermSelectMStc> termialLst, RelativeLayout confirmBt, String termId) {
+                             List<XtTermSelectMStc> termialLst, RelativeLayout confirmBt, String termId,String type) {
         this.context = context;
         this.seqTermList = seqTermList;
         this.dataLst = termialLst;
         this.confirmBt = confirmBt;
         this.termId = termId;
+        this.type = type;
     }
 
     @Override
@@ -136,12 +149,14 @@ public class XtTermCartAdapter extends BaseAdapter implements OnClickListener {
             holder.terminalRb.setOnClickListener(null);
             holder.terminalRb.setTag(position);
             holder.itermLayout.setOnClickListener(null);
+            holder.itermLayout.setOnLongClickListener(null);
             holder.itermLayout.setTag(position);
         } else {
             holder.itemCoverV.setVisibility(View.GONE);
             holder.terminalRb.setOnClickListener(this);
             holder.terminalRb.setTag(position);
             holder.itermLayout.setOnClickListener(this);
+            holder.itermLayout.setOnLongClickListener(this);
             holder.itermLayout.setTag(position);
         }
         holder.terminalSequenceEt.setText(item.getSequence());
@@ -256,6 +271,8 @@ public class XtTermCartAdapter extends BaseAdapter implements OnClickListener {
         return convertView;
     }
 
+
+
     private class ViewHolder {
         private EditText terminalSequenceEt;
         private RadioButton terminalRb;
@@ -282,6 +299,58 @@ public class XtTermCartAdapter extends BaseAdapter implements OnClickListener {
         confirmBt.setVisibility(View.VISIBLE);
         confirmBt.setTag(dataLst.get(position));
     }
+
+    @Override
+    public boolean onLongClick(View v) {
+        int position = Integer.parseInt(v.getTag().toString());
+        // Toast.makeText(context,"点击了"+ position,Toast.LENGTH_SHORT).show();
+        deleteTerm(position);//
+        return true;
+    }
+
+    private AlertView mAlertViewExt;//窗口拓展例子
+    // 长按删除终端
+    private void deleteTerm(final int posi) {
+        final XtTermSelectMStc termSelectMStc = dataLst.get(posi);
+        // 普通窗口
+        mAlertViewExt = new AlertView("删除终端: "+termSelectMStc.getTerminalname(), null, "取消", new String[]{"确定"}, null, context, AlertView.Style.Alert,
+                new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Object o, int position) {
+                        //Toast.makeText(getApplicationContext(), "点击了第" + position + "个", Toast.LENGTH_SHORT).show();
+                        if (0 == position) {// 确定按钮:0   取消按钮:-1
+                            //if (ViewUtil.isDoubleClick(v.getId(), 2500)) return;
+                            DbtLog.logUtils(TAG, "删除终端：是");
+                            // 删除对应的数据
+                            if (!CheckUtil.isBlankOrNull(termSelectMStc.getTerminalkey())) {
+                                DbtLog.logUtils(TAG,"删除终端");
+                                XtTermCartService service = new XtTermCartService(context);
+                                boolean isFlag = service.deleteXtTermCart(termSelectMStc.getTerminalkey(),type);
+                                if(isFlag){
+                                    // 删除界面listView相应行
+                                    dataLst.remove(posi);
+                                    notifyDataSetChanged();
+                                    // ViewUtil.setListViewHeight(checkGoodsLv);
+                                }else{
+                                    Toast.makeText(context, "删除终端失败!", Toast.LENGTH_SHORT).show();
+                                }
+                            }else{
+
+                            }
+                        }
+
+                    }
+                })
+                .setCancelable(true)
+                .setOnDismissListener(new OnDismissListener() {
+                    @Override
+                    public void onDismiss(Object o) {
+                        DbtLog.logUtils(TAG, "删除供货关系：否");
+                    }
+                });
+        mAlertViewExt.show();
+    }
+
 
     public int getSelectItem() {
         return selectItem;

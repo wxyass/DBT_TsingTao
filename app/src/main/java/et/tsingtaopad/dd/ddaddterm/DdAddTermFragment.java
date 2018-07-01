@@ -978,7 +978,10 @@ public class DdAddTermFragment extends BaseFragmentSupport implements View.OnCli
         if (termname == null || "".equals(termname.trim())) {
             Toast.makeText(getActivity(), "请输入终端名称", Toast.LENGTH_SHORT).show();
             right = false;
-        } else if (termroude == null || "".equals(termroude.trim())) {
+        } else if (termarea == null || "".equals(termarea.trim())) {
+            Toast.makeText(getActivity(), "请选择区域类型", Toast.LENGTH_SHORT).show();
+            right = false;
+        }else if (termroude == null || "".equals(termroude.trim())) {
             Toast.makeText(getActivity(), "请选择所属路线", Toast.LENGTH_SHORT).show();
             right = false;
         } else if (termlv == null || "".equals(termlv.trim())) {

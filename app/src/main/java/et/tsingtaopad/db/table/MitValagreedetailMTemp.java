@@ -25,6 +25,7 @@ public class MitValagreedetailMTemp implements java.io.Serializable {
     private String prokey ;//
     @DatabaseField
     private String proname ;//
+
     @DatabaseField
     private String cashtype ;//
     @DatabaseField
@@ -45,6 +46,13 @@ public class MitValagreedetailMTemp implements java.io.Serializable {
     private String uploadflag ;//
     @DatabaseField
     private String padisconsistent ;//
+
+    @DatabaseField
+    private String truepro ;//
+    @DatabaseField
+    private String truemoney ;//
+    @DatabaseField
+    private String truenum ;//
 
 
     /**
@@ -171,5 +179,29 @@ public class MitValagreedetailMTemp implements java.io.Serializable {
 
     public void setPadisconsistent(String padisconsistent) {
         this.padisconsistent = padisconsistent;
+    }
+
+    public String getTruepro() {
+        return truepro;
+    }
+
+    public void setTruepro(String truepro) {
+        this.truepro = truepro;
+    }
+
+    public String getTruemoney() {
+        return truemoney;
+    }
+
+    public void setTruemoney(String truemoney) {
+        this.truemoney = truemoney;
+    }
+
+    public String getTruenum() {
+        return truenum;
+    }
+
+    public void setTruenum(String truenum) {
+        this.truenum = truenum;
     }
 }

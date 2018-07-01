@@ -181,7 +181,7 @@ public class ZsInvoicingAdapter extends
         } else if(!CheckUtil.isBlankOrNull(item.getValsqd())){
             holder.channelPriceEt.setText(item.getValsqd());
         }else{
-            holder.channelPriceEt.setHint(R.string.hit_input);
+            holder.channelPriceEt.setHint(item.getValsqd());
             holder.channelPriceEt.setText(null);
         }
         holder.channelPriceEt.setTag(position);
@@ -194,7 +194,7 @@ public class ZsInvoicingAdapter extends
         } else if(!CheckUtil.isBlankOrNull(item.getValsls())){
             holder.sellPriceEt.setText(item.getValsls());
         }else{
-            holder.sellPriceEt.setHint(R.string.hit_input);
+            holder.sellPriceEt.setHint(item.getValsls());
             holder.sellPriceEt.setText(null);
         }
         holder.sellPriceEt.setTag(position);

@@ -179,8 +179,8 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
             case R.id.item_daydetail_rl_check:// 追溯项
                 // alertShow3(posi);
                 if(!isChecking){
-                    alertShow7(posi);
-                    //alertZsShow3(posi);
+                    //alertShow7(posi);
+                    alertZsShow3(posi);
                 }else{
                     Toast.makeText(context,"审核状态下不可修改",Toast.LENGTH_SHORT).show();
                 }
@@ -203,7 +203,8 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
                 break;
             case R.id.item_daydetail_rl_routekey:// 追溯路线
                 if(!isChecking){
-                    alertShow6(posi);
+                    // alertShow6(posi); 从下方弹出
+                    alertShow7(posi);// 从中间弹出
                 }else{
                     Toast.makeText(context,"审核状态下不可修改",Toast.LENGTH_SHORT).show();
                 }
@@ -296,88 +297,100 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
     }
 
 
+    // 新追溯项
+    public void alertZsShow3(final int position) {
 
-    // 追溯项
-    public void alertShow3(final int position) {
+        final DayDetailStc item = dataLst.get(position);
 
-        mAlertViewExt = new AlertView(null, null, null, null,
-                //null, context, AlertView.Style.ActionSheet, null);
-                null, context, AlertView.Style.Alert, null);
-        ViewGroup extView = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.alert_daydetail_form, null);
+        final List<KvStc> typeLst  = initRetrospect();
 
-        RelativeLayout rl_back1 = (RelativeLayout) extView.findViewById(R.id.top_navigation_rl_back1);
-        android.support.v7.widget.AppCompatTextView bt_back1 = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_bt_back1);
-        RelativeLayout rl_confirm1 = (RelativeLayout) extView.findViewById(R.id.top_navigation_rl_confirm1);
-        android.support.v7.widget.AppCompatTextView bt_confirm1 = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_bt_confirm1);
 
-        final CheckBox cb1 = (CheckBox) extView.findViewById(R.id.result_daydetail_cb1);
-        final CheckBox cb2 = (CheckBox) extView.findViewById(R.id.result_daydetail_cb2);
-        final CheckBox cb3 = (CheckBox) extView.findViewById(R.id.result_daydetail_cb3);
-        final CheckBox cb4 = (CheckBox) extView.findViewById(R.id.result_daydetail_cb4);
+        // 加载视图
+        View extView = LayoutInflater.from(context).inflate(R.layout.alert_daydetail_form, null);
 
-        DayDetailStc dayDetailStc = dataLst.get(position);
-        final List<String> checkNames = dayDetailStc.getValchecknameLv();
-        if(checkNames!=null){
-            for (String s : checkNames) {
-                if (context.getString(R.string.workplan_basedata).equals(s)) {// 基础数据群
-                    cb1.setChecked(true);
-                } else if (context.getString(R.string.workplan_netdata).equals(s)) {// 网络数据群
-                    cb2.setChecked(true);
-                } else if (context.getString(R.string.workplan_viedata).equals(s)) {// 竞品数据群
-                    cb3.setChecked(true);
-                } else if (context.getString(R.string.workplan_privicedata).equals(s)) {// 价格数据群
-                    cb4.setChecked(true);
+        final ListView dataLv = (ListView) extView.findViewById(R.id.alert_daydetal_lv);
+        RelativeLayout rl_back1 = (RelativeLayout) extView.findViewById(R.id.top_navigation_rl_back);
+        android.support.v7.widget.AppCompatTextView bt_back1 = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_bt_back);
+        android.support.v7.widget.AppCompatTextView title = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_tv_title);
+        RelativeLayout rl_confirm1 = (RelativeLayout) extView.findViewById(R.id.top_navigation_rl_confirm);
+        android.support.v7.widget.AppCompatTextView bt_confirm1 = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_bt_confirm);
+
+        title.setText("选择结果");
+        rl_confirm1.setVisibility(View.VISIBLE);
+        bt_confirm1.setText("确定");
+
+
+        // 获取已选中的集合
+        List<String>  selectedId = new ArrayList<String>();
+        if(!TextUtils.isEmpty(item.getValcheckkey())){
+            selectedId = Arrays.asList(item.getValcheckkey().split(","));
+        }
+
+        // 标记选中状态
+        for (KvStc kvstc : typeLst) {
+            for (String itemselect : selectedId) {
+                if (kvstc.getKey().equals(itemselect)) {
+                    kvstc.setIsDefault("1");// 0:没选中 1已选中
                 }
             }
         }
 
-        // 取消按钮
-        rl_back1.setOnClickListener(new View.OnClickListener() {
+        final DayDetailSelectKeyValueAdapter sadapter = new DayDetailSelectKeyValueAdapter(context,typeLst,
+                new String[]{"key","value"}, item.getValroutekeys());
+        dataLv.setAdapter(sadapter);
+        dataLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                mAlertViewExt.dismiss();
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                CheckBox itemCB = (CheckBox) arg1.findViewById(R.id.common_multiple_cb_lvitem);
+                TextView itemTv = (TextView) arg1.findViewById(R.id.common_multiple_tv_lvitem);
+                itemCB.toggle();//点击整行可以显示效果
+
+                String checkkey = FunUtil.isBlankOrNullTo(itemTv.getHint(), " ") + ",";
+                String checkname = FunUtil.isBlankOrNullTo(itemTv.getText().toString(), " ") + ",";
+                if (itemCB.isChecked()) {
+                    item.setValcheckkey(FunUtil.isBlankOrNullTo(item.getValcheckkey(),"")  + checkkey);
+                    item.setValcheckname(FunUtil.isBlankOrNullTo(item.getValcheckname(),"") + checkname);
+                    ((KvStc)typeLst.get(arg2)).setIsDefault("1");
+                } else {
+                    item.setValcheckkey(FunUtil.isBlankOrNullTo(item.getValcheckkey(),"") .replace(checkkey, ""));
+                    item.setValcheckname(FunUtil.isBlankOrNullTo(item.getValcheckname(),"").replace(checkname, ""));
+                    ((KvStc)typeLst.get(arg2)).setIsDefault("0");
+                }
+                sadapter.notifyDataSetChanged();
             }
         });
 
-        // 确定按钮
+
+        // 显示对话框
+        final AlertDialog dialog = new AlertDialog.Builder(context).create();
+        dialog.setView(extView, 0, 0, 0, 0);
+        dialog.setCancelable(false);
+        dialog.show();
+
+
+        // 确定
         rl_confirm1.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View arg0) {
 
-                // 请至少勾选一项
-                if ((!cb1.isChecked()) && (!cb2.isChecked()) && (!cb3.isChecked()) && (!cb4.isChecked())) {
-                    Toast.makeText(context, "请至少勾选一项", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                /*item.setValroutekeys(item.getValroutekeys().substring(0,item.getValroutekeys().length()-1));
+                item.setValroutenames(item.getValroutenames().substring(0,item.getValroutenames().length()-1));*/
 
-                checkNames.clear();
-                if (cb1.isChecked()) {// 基础数据群
-                    checkNames.add(context.getString(R.string.workplan_basedata));
-                }
-                if (cb2.isChecked()) {// 网络数据群
-                    checkNames.add(context.getString(R.string.workplan_netdata));
-                }
-                if (cb3.isChecked()) {// 竞品数据群
-                    checkNames.add(context.getString(R.string.workplan_viedata));
-                }
-                if (cb4.isChecked()) {// 价格数据群
-                    checkNames.add(context.getString(R.string.workplan_privicedata));
-                }
-                mAlertViewExt.dismiss();
+                dialog.dismiss();
                 notifyDataSetChanged();
             }
         });
 
-
-        mAlertViewExt.addExtView(extView);
-        mAlertViewExt.setCancelable(true).setOnDismissListener(new OnDismissListener() {
+        // 取消
+        rl_back1.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDismiss(Object o) {
-                DbtLog.logUtils(TAG, "取消选择结果");
+            public void onClick(View arg0) {
+
+                dialog.dismiss();
             }
         });
-        mAlertViewExt.show();
     }
+
 
     // 追溯区域
     public void alertShow4(final int position) {
@@ -457,7 +470,7 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
         mAlertViewExt.show();
     }
 
-    // 追溯路线
+    // 追溯路线  从下方弹出
     public void alertShow6(final int position) {
 
         final DayDetailStc item = dataLst.get(position);
@@ -471,15 +484,19 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
             typeLst.add(kvStc);
         }
 
-        mAlertViewExt = new AlertView(null, null, null, null,
-                null, context, AlertView.Style.ActionSheet, null);
+        mAlertViewExt = new AlertView(null, null, null, null,null, context, AlertView.Style.ActionSheet, null);
         ViewGroup extView = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.alert_dayroute_form, null);
 
         final ListView dataLv = (ListView) extView.findViewById(R.id.alert_dayroute_lv);
-        RelativeLayout rl_back1 = (RelativeLayout) extView.findViewById(R.id.top_navigation_rl_back1);
-        android.support.v7.widget.AppCompatTextView bt_back1 = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_bt_back1);
-        RelativeLayout rl_confirm1 = (RelativeLayout) extView.findViewById(R.id.top_navigation_rl_confirm1);
-        android.support.v7.widget.AppCompatTextView bt_confirm1 = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_bt_confirm1);
+        RelativeLayout rl_back1 = (RelativeLayout) extView.findViewById(R.id.top_navigation_rl_back);
+        android.support.v7.widget.AppCompatTextView bt_back1 = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_bt_back);
+        android.support.v7.widget.AppCompatTextView title = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_tv_title);
+        RelativeLayout rl_confirm1 = (RelativeLayout) extView.findViewById(R.id.top_navigation_rl_confirm);
+        android.support.v7.widget.AppCompatTextView bt_confirm1 = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_bt_confirm);
+
+        title.setText("选择结果");
+        rl_confirm1.setVisibility(View.VISIBLE);
+        bt_confirm1.setText("确定");
 
         // 获取已选中的集合
         List<String>  selectedId = new ArrayList<String>();
@@ -556,27 +573,37 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
         mAlertViewExt.show();
     }
 
-    // 新追溯项
+    // 追溯路线  从中间弹出
     public void alertShow7(final int position) {
 
         final DayDetailStc item = dataLst.get(position);
+        List<MstRouteM> valueLst = xtSelectService.getMstRouteMList(FunUtil.isBlankOrNullTo(item.getValgridkey(),""));
+        final List<KvStc> typeLst = new ArrayList<KvStc>();
+        for (MstRouteM routeM : valueLst) {
+            KvStc kvStc =new KvStc();
+            kvStc.setKey(routeM.getRoutekey());
+            kvStc.setValue(routeM.getRoutename());
+            kvStc.setIsDefault("");
+            typeLst.add(kvStc);
+        }
 
-        final List<KvStc> typeLst  = initRetrospect();
-
-        mAlertViewExt = new AlertView(null, null, null, null,
-                null, context, AlertView.Style.ActionSheet, null);
         ViewGroup extView = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.alert_dayroute_form, null);
 
         final ListView dataLv = (ListView) extView.findViewById(R.id.alert_dayroute_lv);
-        RelativeLayout rl_back1 = (RelativeLayout) extView.findViewById(R.id.top_navigation_rl_back1);
-        android.support.v7.widget.AppCompatTextView bt_back1 = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_bt_back1);
-        RelativeLayout rl_confirm1 = (RelativeLayout) extView.findViewById(R.id.top_navigation_rl_confirm1);
-        android.support.v7.widget.AppCompatTextView bt_confirm1 = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_bt_confirm1);
+        RelativeLayout rl_back1 = (RelativeLayout) extView.findViewById(R.id.top_navigation_rl_back);
+        android.support.v7.widget.AppCompatTextView bt_back1 = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_bt_back);
+        android.support.v7.widget.AppCompatTextView title = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_tv_title);
+        RelativeLayout rl_confirm1 = (RelativeLayout) extView.findViewById(R.id.top_navigation_rl_confirm);
+        android.support.v7.widget.AppCompatTextView bt_confirm1 = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_bt_confirm);
+
+        title.setText("选择结果");
+        rl_confirm1.setVisibility(View.VISIBLE);
+        bt_confirm1.setText("确定");
 
         // 获取已选中的集合
         List<String>  selectedId = new ArrayList<String>();
-        if(!TextUtils.isEmpty(item.getValcheckkey())){
-            selectedId = Arrays.asList(item.getValcheckkey().split(","));
+        if(!TextUtils.isEmpty(item.getValroutekeys())){
+            selectedId = Arrays.asList(item.getValroutekeys().split(","));
         }
 
         // 标记选中状态
@@ -590,6 +617,7 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
 
         final DayDetailSelectKeyValueAdapter sadapter = new DayDetailSelectKeyValueAdapter(context,
                 typeLst, new String[]{"key","value"}, item.getValroutekeys());
+
         dataLv.setAdapter(sadapter);
         dataLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -598,114 +626,20 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
                 TextView itemTv = (TextView) arg1.findViewById(R.id.common_multiple_tv_lvitem);
                 itemCB.toggle();//点击整行可以显示效果
 
-                String checkkey = FunUtil.isBlankOrNullTo(itemTv.getHint(), " ") + ",";
-                String checkname = FunUtil.isBlankOrNullTo(itemTv.getText().toString(), " ") + ",";
+                String routekey = FunUtil.isBlankOrNullTo(itemTv.getHint(), " ") + ",";
+                String routename = FunUtil.isBlankOrNullTo(itemTv.getText().toString(), " ") + ",";
                 if (itemCB.isChecked()) {
-                    item.setValcheckkey(FunUtil.isBlankOrNullTo(item.getValcheckkey(),"")  + checkkey);
-                    item.setValcheckname(FunUtil.isBlankOrNullTo(item.getValcheckname(),"") + checkname);
+                    item.setValroutekeys(FunUtil.isBlankOrNullTo(item.getValroutekeys(),"")  + routekey);
+                    item.setValroutenames(FunUtil.isBlankOrNullTo(item.getValroutenames(),"") + routename);
                     ((KvStc)typeLst.get(arg2)).setIsDefault("1");
                 } else {
-                    item.setValcheckkey(FunUtil.isBlankOrNullTo(item.getValcheckkey(),"") .replace(checkkey, ""));
-                    item.setValcheckname(FunUtil.isBlankOrNullTo(item.getValcheckname(),"").replace(checkname, ""));
+                    item.setValroutekeys(FunUtil.isBlankOrNullTo(item.getValroutekeys(),"") .replace(routekey, ""));
+                    item.setValroutenames(FunUtil.isBlankOrNullTo(item.getValroutenames(),"").replace(routename, ""));
                     ((KvStc)typeLst.get(arg2)).setIsDefault("0");
                 }
                 sadapter.notifyDataSetChanged();
             }
         });
-
-
-        // 确定
-        rl_confirm1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-
-                /*item.setValroutekeys(item.getValroutekeys().substring(0,item.getValroutekeys().length()-1));
-                item.setValroutenames(item.getValroutenames().substring(0,item.getValroutenames().length()-1));*/
-
-                mAlertViewExt.dismiss();
-                notifyDataSetChanged();
-            }
-        });
-
-        // 取消
-        rl_back1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-
-                mAlertViewExt.dismiss();
-            }
-        });
-
-
-
-        mAlertViewExt.addExtView(extView);
-        mAlertViewExt.setCancelable(true).setOnDismissListener(new OnDismissListener() {
-            @Override
-            public void onDismiss(Object o) {
-                DbtLog.logUtils(TAG, "取消选择结果");
-            }
-        });
-        mAlertViewExt.show();
-    }
-
-
-    // 新追溯项
-    public void alertZsShow3(final int position) {
-
-        final DayDetailStc item = dataLst.get(position);
-
-        final List<KvStc> typeLst  = initRetrospect();
-
-
-        // 加载视图
-        View extView = LayoutInflater.from(context).inflate(R.layout.alert_daydetail_form, null);
-
-        final ListView dataLv = (ListView) extView.findViewById(R.id.alert_dayroute_lv);
-        RelativeLayout rl_back1 = (RelativeLayout) extView.findViewById(R.id.top_navigation_rl_back1);
-        android.support.v7.widget.AppCompatTextView bt_back1 = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_bt_back1);
-        RelativeLayout rl_confirm1 = (RelativeLayout) extView.findViewById(R.id.top_navigation_rl_confirm1);
-        android.support.v7.widget.AppCompatTextView bt_confirm1 = (android.support.v7.widget.AppCompatTextView) extView.findViewById(R.id.top_navigation_bt_confirm1);
-
-        // 获取已选中的集合
-        List<String>  selectedId = new ArrayList<String>();
-        if(!TextUtils.isEmpty(item.getValcheckkey())){
-            selectedId = Arrays.asList(item.getValcheckkey().split(","));
-        }
-
-        // 标记选中状态
-        for (KvStc kvstc : typeLst) {
-            for (String itemselect : selectedId) {
-                if (kvstc.getKey().equals(itemselect)) {
-                    kvstc.setIsDefault("1");// 0:没选中 1已选中
-                }
-            }
-        }
-
-        final DayDetailSelectKeyValueAdapter sadapter = new DayDetailSelectKeyValueAdapter(context,
-                typeLst, new String[]{"key","value"}, item.getValroutekeys());
-        dataLv.setAdapter(sadapter);
-        dataLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                CheckBox itemCB = (CheckBox) arg1.findViewById(R.id.common_multiple_cb_lvitem);
-                TextView itemTv = (TextView) arg1.findViewById(R.id.common_multiple_tv_lvitem);
-                itemCB.toggle();//点击整行可以显示效果
-
-                String checkkey = FunUtil.isBlankOrNullTo(itemTv.getHint(), " ") + ",";
-                String checkname = FunUtil.isBlankOrNullTo(itemTv.getText().toString(), " ") + ",";
-                if (itemCB.isChecked()) {
-                    item.setValcheckkey(FunUtil.isBlankOrNullTo(item.getValcheckkey(),"")  + checkkey);
-                    item.setValcheckname(FunUtil.isBlankOrNullTo(item.getValcheckname(),"") + checkname);
-                    ((KvStc)typeLst.get(arg2)).setIsDefault("1");
-                } else {
-                    item.setValcheckkey(FunUtil.isBlankOrNullTo(item.getValcheckkey(),"") .replace(checkkey, ""));
-                    item.setValcheckname(FunUtil.isBlankOrNullTo(item.getValcheckname(),"").replace(checkname, ""));
-                    ((KvStc)typeLst.get(arg2)).setIsDefault("0");
-                }
-                sadapter.notifyDataSetChanged();
-            }
-        });
-
 
         // 显示对话框
         final AlertDialog dialog = new AlertDialog.Builder(context).create();
@@ -713,7 +647,6 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
         dialog.setCancelable(false);
         dialog.show();
 
-
         // 确定
         rl_confirm1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -735,15 +668,12 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
                 dialog.dismiss();
             }
         });
-
-
-
-
-
     }
 
+
+
     /**
-     * 初始化拜访对象职位(老板老板娘)
+     * 初始化追溯项
      */
     private List<KvStc> initRetrospect() {
 

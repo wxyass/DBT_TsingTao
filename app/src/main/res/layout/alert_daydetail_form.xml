@@ -4,120 +4,24 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
-        <!-- 取消 -->
-        <RelativeLayout
-            android:id="@+id/top_navigation_rl_back1"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="2"
-            android:background="@drawable/bt_return">
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/top_navigation_bt_back1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="30dp"
-                android:background="@drawable/icon_return"/>
-        </RelativeLayout>
-
-        <!-- 标题 -->
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="7"
-            android:background="@color/white">
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/top_navigation_tv_title1"
-                style="@style/banner_child"
-                android:layout_width="wrap_content"
-                android:layout_height="65dp"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:maxLength="15"
-                android:paddingLeft="30dp"
-                android:paddingRight="30dp"
-                android:text="选择结果"
-                android:textColor="@color/gray_color_333333"/>
-        </RelativeLayout>
-
-        <!-- 确定 -->
-
-        <RelativeLayout
-            android:id="@+id/top_navigation_rl_confirm1"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="2"
-            android:background="@drawable/bt_return"
-            android:visibility="visible">
-
-            <!-- 删除Button按钮,因为这个按钮会有点击事件  使用TextView没有点击事件 -->
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/top_navigation_bt_confirm1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="30dp"
-                android:text="@string/sureabc"
-                />
-        </RelativeLayout>
-    </LinearLayout>
+    <include layout="@layout/top_navigation"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@color/black"
+        android:background="@color/bgColor_overlay"
+        android:visibility="gone"
         />
 
 
-    <CheckBox
-        android:id="@+id/result_daydetail_cb1"
+    <ListView
+        android:id="@+id/alert_daydetal_lv"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:text="@string/workplan_basedata"
-        android:visibility="visible"/>
+        android:layout_height="wrap_content"
+        android:cacheColorHint="@color/bg_lv_item"
+        android:divider="@color/listview_line"
+        android:dividerHeight="1dp" >
+    </ListView>
 
-    <CheckBox
-        android:id="@+id/result_daydetail_cb2"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:text="@string/workplan_netdata"
-        android:visibility="visible"/>
-
-    <CheckBox
-        android:id="@+id/result_daydetail_cb3"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:text="@string/workplan_viedata"
-        android:visibility="visible"/>
-
-    <CheckBox
-        android:id="@+id/result_daydetail_cb4"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:text="@string/workplan_privicedata"
-        android:visibility="visible"/>
-
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="20dp"/>
 
 </LinearLayout>

@@ -75,7 +75,7 @@
                 <!-- 渠道 -->
 
                 <TextView
-                    android:id="@+id/item_termselect_tv_type"
+                    android:id="@+id/item_termselect_tv_visitdate"
                     style="@style/listview_tv_item_text_xiao"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -173,7 +173,7 @@
 
                 <!--拜访时间-->
                 <TextView
-                    android:id="@+id/item_termselect_tv_visitdate"
+                    android:id="@+id/item_termselect_tv_type"
                     style="@style/listview_tv_item_text_xiao2"
                     android:layout_width="match_parent"
                     android:layout_height="20dp"

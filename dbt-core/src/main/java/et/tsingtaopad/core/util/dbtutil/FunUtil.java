@@ -161,7 +161,7 @@ public class FunUtil {
         return strResult;
     }
 
-    // 1451525045000L -> 2015-12-11
+    // 1451525045000L -> 2015-12-11  这出报错
     public static String todate(String strParam) {
         String abc = new SimpleDateFormat("yyyy-MM-dd").format(new Date(Long.parseLong(strParam)));
         ;
