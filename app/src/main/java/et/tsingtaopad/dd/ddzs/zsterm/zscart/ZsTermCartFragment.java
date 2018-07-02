@@ -285,7 +285,7 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
                             DbtLog.logUtils(TAG, "前往拜访：上传");
                             // 如果网络可用
                             if (NetStatusUtil.isNetValid(getActivity())) {
-                                xtUploadService.upload_zs_visit(false,mitValterM.getId(),1);
+                                xtUploadService.upload_zs_visit(false,mitValterM.getId(),1,0);
                             } else {
                                 // 提示修改网络
                                 Toast.makeText(getContext(), "网络异常,请先检查网络连接", Toast.LENGTH_SHORT).show();

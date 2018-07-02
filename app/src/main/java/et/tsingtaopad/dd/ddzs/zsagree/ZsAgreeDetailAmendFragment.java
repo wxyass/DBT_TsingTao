@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import et.tsingtaopad.R;
 import et.tsingtaopad.base.BaseFragmentSupport;
@@ -133,33 +134,51 @@ public class ZsAgreeDetailAmendFragment extends BaseFragmentSupport implements V
 
     private void saveValue() {
 
+
+
         // 备注
         String product = et_product.getText().toString();
         String price = et_price.getText().toString();
         String num = et_num.getText().toString();
         String report = zdzs_agreedetail_amend_dd_et_report.getText().toString();
 
-        /*if (type == 1) {// 1 品种有误
-            mitValagreedetailMTemp.setErroritem("0");
+        // 检测3项中 必须填写一项
+        if(checkAgree(product,price,num)){
+
+            /*if (type == 1) {// 1 品种有误
+                mitValagreedetailMTemp.setErroritem("0");
+                mitValagreedetailMTemp.setAgreedetailflag("N");
+            } else if (type == 2) {//2 承担金额有误
+                mitValagreedetailMTemp.setErroritem("1");
+                mitValagreedetailMTemp.setAgreedetailflag("N");
+            } else if (type == 3) {// 3 实际数量有误
+                mitValagreedetailMTemp.setErroritem("2");
+                mitValagreedetailMTemp.setAgreedetailflag("N");
+            }*/
+
             mitValagreedetailMTemp.setAgreedetailflag("N");
-        } else if (type == 2) {//2 承担金额有误
-            mitValagreedetailMTemp.setErroritem("1");
-            mitValagreedetailMTemp.setAgreedetailflag("N");
-        } else if (type == 3) {// 3 实际数量有误
-            mitValagreedetailMTemp.setErroritem("2");
-            mitValagreedetailMTemp.setAgreedetailflag("N");
-        }*/
 
-        mitValagreedetailMTemp.setAgreedetailflag("N");
+            mitValagreedetailMTemp.setTruepro(product);
+            mitValagreedetailMTemp.setTruemoney(price);
+            mitValagreedetailMTemp.setTruenum(num);
+            mitValagreedetailMTemp.setRemarks(report);
 
-        mitValagreedetailMTemp.setTruepro(product);
-        mitValagreedetailMTemp.setTruemoney(price);
-        mitValagreedetailMTemp.setTruenum(num);
-        mitValagreedetailMTemp.setRemarks(report);
+            handler.sendEmptyMessage(ZsAgreeFragment.AGREE_AMEND_DETAIL);
 
-        handler.sendEmptyMessage(ZsAgreeFragment.AGREE_AMEND_DETAIL);
+            supportFragmentManager.popBackStack();
+        }else{
+            Toast.makeText(getActivity(),"有误数据必须填写一项",Toast.LENGTH_SHORT).show();
+        }
 
-        supportFragmentManager.popBackStack();
+    }
+
+    // 检测3项是否填值了
+    private boolean checkAgree(String product,String price,String num) {
+        boolean isin = true;
+        if("".equals(product)&&"".equals(price)&&"".equals(num)){
+            isin = false;
+        }
+        return isin;
     }
 
 }

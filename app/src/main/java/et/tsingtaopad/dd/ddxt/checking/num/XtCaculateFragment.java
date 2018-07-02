@@ -132,12 +132,12 @@ public class XtCaculateFragment extends BaseFragmentSupport implements View.OnCl
             item.setCheckkey(xtProIndexValue.getIndexId());
             // 获取采集文本框内容
             itemEt = (EditText) colitemLv.getChildAt(i).findViewById(R.id.item_xt_calculatedialog_et_finalnum);
-            item.setChangeNum((FunUtil.isBlankOrNullToDouble(itemEt.getText().toString())));
+            item.setFinalNum((FunUtil.isBlankOrNullToDouble(itemEt.getText().toString())));
             //item.setFinalNum(Double.valueOf(FunUtil.isNullToZero(itemEt.getText().toString())));
             item.setXianyouliang(itemEt.getText().toString());// 现有量
 
             itemEt2 = (EditText) colitemLv.getChildAt(i).findViewById(R.id.item_xt_calculatedialog_et_changenum);
-            item.setFinalNum((FunUtil.isBlankOrNullToDouble(itemEt2.getText().toString())));
+            item.setChangeNum((FunUtil.isBlankOrNullToDouble(itemEt2.getText().toString())));
             //item.setChangeNum(Double.valueOf(FunUtil.isNullToZero(itemEt.getText().toString())));
             item.setBianhualiang(itemEt2.getText().toString());// 变化量
 

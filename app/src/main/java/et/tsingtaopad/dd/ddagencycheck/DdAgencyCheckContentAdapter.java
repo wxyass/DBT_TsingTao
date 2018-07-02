@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -107,10 +108,10 @@ public class DdAgencyCheckContentAdapter extends
 
         // 期末库存
         if (ConstValues.FLAG_0.equals(item.getStorenum())) {
-            holder.channelPriceEt.setHint(item.getStorenum()+"");
+            holder.channelPriceEt.setHint(getInt(item.getStorenum())+"");
             holder.channelPriceEt.setText(null);
-        } else if(!CheckUtil.isBlankOrNull(item.getStorenum()+"")){
-            holder.channelPriceEt.setText(item.getStorenum()+"");
+        } else if(!CheckUtil.isBlankOrNull(getInt(item.getStorenum())+"")){
+            holder.channelPriceEt.setText(getInt(item.getStorenum())+"");
         }else{
             holder.channelPriceEt.setHint(R.string.hit_input);
             holder.channelPriceEt.setText(null);
@@ -134,6 +135,11 @@ public class DdAgencyCheckContentAdapter extends
         holder.desEt.setText(item.getDes());
         
         return convertView;
+    }
+
+    public static int getInt(double number){
+        BigDecimal bd=new BigDecimal(number).setScale(0, BigDecimal.ROUND_HALF_UP);
+        return Integer.parseInt(bd.toString());
     }
 
     private class ViewHolder {

@@ -528,7 +528,7 @@ public class XtVisitShopActivity extends BaseActivity implements View.OnClickLis
 
                             // 上传协同拜访数据
                             XtUploadService xtUploadService = new XtUploadService(getApplicationContext(), null);
-                            xtUploadService.upload_xt_visit(false, visitId, 1);
+                            xtUploadService.upload_xt_visit(false, visitId, 1,0);
 
                             ConstValues.handler.sendEmptyMessage(ConstValues.WAIT0);
 

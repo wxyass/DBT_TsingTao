@@ -89,6 +89,7 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
 
     private LinearLayout termRouteLl;
     private ListView termRouteLv;
+    private Button searchBtn;
     private Button addAllTermBtn;
 
     private XtTermSelectMStc xtTermSelectMStc;
@@ -129,10 +130,12 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
         areaBtn = (DropdownButton) view.findViewById(R.id.xtbf_termselect_area);
         gridBtn = (DropdownButton) view.findViewById(R.id.xtbf_termselect_grid);
         routeBtn = (DropdownButton) view.findViewById(R.id.xtbf_termselect_route);
+        searchBtn = (Button) view.findViewById(R.id.xtbf_termselect_bt_search);
         addAllTermBtn = (Button) view.findViewById(R.id.xtbf_termselect_bt_add);
         termRouteLl = (LinearLayout) view.findViewById(R.id.xtbf_termselect_ll_lv);
         termRouteLv = (ListView) view.findViewById(R.id.xtbf_termselect_lv);
         addAllTermBtn.setOnClickListener(this);
+        searchBtn.setOnClickListener(this);
     }
 
     @Override
@@ -347,6 +350,9 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
                 selectAdapter.notifyDataSetChanged();
                 confirmTv.setText("确定" + "(" + selectedList.size() + ")");
                 break;
+            case R.id.xtbf_termselect_bt_search:// 查询
+                Toast.makeText(getActivity(),"未查到终端,请到相关路线下寻找",Toast.LENGTH_SHORT).show();
+                break;
             default:
                 break;
         }
@@ -514,7 +520,7 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
                             DbtLog.logUtils(TAG, "前往拜访：上传");
                             // 如果网络可用
                             if (NetStatusUtil.isNetValid(getActivity())) {
-                                xtUploadService.upload_zs_visit(false, mitValterM.getId(), 1);
+                                xtUploadService.upload_zs_visit(false, mitValterM.getId(), 1,0);
                             } else {
                                 // 提示修改网络
                                 Toast.makeText(getContext(), "网络异常,请先检查网络连接", Toast.LENGTH_SHORT).show();

@@ -569,6 +569,10 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
                             }
                         }, yearr, month, day);
                 if (!dateDialog.isShowing()) {
+                    Date date = new Date();//当前时间
+                    long time = date.getTime();
+                    //设置最大日期
+                    dateDialog.getDatePicker().setMaxDate(time);
                     dateDialog.show();
                 }
                 break;

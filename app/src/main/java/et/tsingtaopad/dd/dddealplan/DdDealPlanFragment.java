@@ -124,22 +124,39 @@ public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnCl
             @Override
             public void listViewItemClick(int position, View v) {
                 DealStc stc = dataLst.get(position);
-                String status = stc.getRepairstatus();
-                if ("1".equals(status)) {// 未通过
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("DealStc", stc);
-                    /*bundle.putSerializable("weekplan", mitPlanweekM);
-                    bundle.putSerializable("weekDateStart", weekDateStart);
-                    bundle.putSerializable("weekDateEnd", weekDateEnd);*/
-                    DdReDealMakeFragment ddReDealMakeFragment = new DdReDealMakeFragment(handler);
-                    ddReDealMakeFragment.setArguments(bundle);
-                    // 跳转 新增整改计划
-                    addHomeFragment(ddReDealMakeFragment, "ddredealmakefragment");
-                } else if ("2".equals(status)) {// 已通过
 
-                } else {
-                    alertShow6(position);// 弹窗: 未通过,已通过
+                int id = v.getId();
+                switch (id) {
+                    case R.id.item_dealplan_rl_termname:// 终端名称
+                        if("0".equals(stc.getIsshow())){
+                            stc.setIsshow("1");
+                        }else if("1".equals(stc.getIsshow())){
+                            stc.setIsshow("0");
+                        }
+                        dealPlanAdapter.notifyDataSetChanged();
+                        break;
+                    case R.id.item_dealplan_rl_checkstatus:// 复查结果
+                        String status = stc.getRepairstatus();
+                        if ("1".equals(status)) {// 未通过
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("DealStc", stc);
+                            /*bundle.putSerializable("weekplan", mitPlanweekM);
+                            bundle.putSerializable("weekDateStart", weekDateStart);
+                            bundle.putSerializable("weekDateEnd", weekDateEnd);*/
+                            DdReDealMakeFragment ddReDealMakeFragment = new DdReDealMakeFragment(handler);
+                            ddReDealMakeFragment.setArguments(bundle);
+                            // 跳转 新增整改计划
+                            addHomeFragment(ddReDealMakeFragment, "ddredealmakefragment");
+                        } else if ("2".equals(status)) {// 已通过
+
+                        } else {
+                            alertShow6(position);// 弹窗: 未通过,已通过
+                        }
+                        break;
+
                 }
+
+
 
             }
         });

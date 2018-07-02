@@ -27,7 +27,7 @@
         android:gravity="center" />
 
 
-    <!--相册-->
+    <!--查看-->
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/photodialog_btn_native"
         android:layout_width="match_parent"
@@ -35,7 +35,7 @@
         android:layout_gravity="center"
         android:background="@drawable/btn_border_nativephoto"
         android:gravity="center"
-        android:text="查看(还未做)"
+        android:text="查看"
         android:textColor="#323232" />
 
     <View

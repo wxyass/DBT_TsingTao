@@ -29,6 +29,9 @@ public class DealStc implements Serializable{
 	private String credate;// 整改计划的创建时间
 
 	private String routename;//
+	private String isshow;// 是否展开  0不展开  1展开
+
+
 
 
 	public DealStc() {
@@ -168,5 +171,13 @@ public class DealStc implements Serializable{
 
 	public void setRoutename(String routename) {
 		this.routename = routename;
+	}
+
+	public String getIsshow() {
+		return isshow;
+	}
+
+	public void setIsshow(String isshow) {
+		this.isshow = isshow;
 	}
 }

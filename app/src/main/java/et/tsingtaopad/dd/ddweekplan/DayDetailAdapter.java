@@ -135,10 +135,12 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
         holder.ll_all.setOnLongClickListener(listener);
 
         // 追溯项
-        //holder.tv_checkname.setText(item.getValchecknameLv().toString().substring(1,item.getValchecknameLv().toString().length()-1));
         if(item.getValcheckname()!=null){
-            //holder.tv_routename.setText(item.getValroutenames().substring(0,item.getValroutenames().length()-1));
-            holder.tv_checkname.setText(item.getValcheckname());
+            String check = item.getValcheckname();
+            if (check.endsWith(",")) {
+                check = check.substring(0,check.length() - 1);
+            }
+            holder.tv_checkname .setText(check);
         }else{
             holder.tv_checkname.setText("");
         }
@@ -148,12 +150,23 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
         // 追溯定格
         holder.tv_valgridname.setText(item.getValgridname());
         // 追溯路线
-        if(item.getValroutenames()!=null){
+        /*if(item.getValroutenames()!=null){
             //holder.tv_routename.setText(item.getValroutenames().substring(0,item.getValroutenames().length()-1));
             holder.tv_routename.setText(item.getValroutenames());
         }else{
             holder.tv_routename.setText("");
+        }*/
+
+        if(item.getValroutenames()!=null){
+            String route = item.getValroutenames();
+            if (route.endsWith(",")) {
+                route = route.substring(0,route.length() - 1);
+            }
+            holder.tv_routename .setText(route);
+        }else{
+            holder.tv_routename.setText("");
         }
+
 
         holder.rl_check.setTag(position);
         holder.rl_areaid.setTag(position);
@@ -303,6 +316,7 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
         final DayDetailStc item = dataLst.get(position);
 
         final List<KvStc> typeLst  = initRetrospect();
+        typeLst.add(0, new KvStc("-1", "全选", "-1"));
 
 
         // 加载视图
@@ -340,22 +354,50 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
         dataLv.setAdapter(sadapter);
         dataLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+            public void onItemClick(AdapterView<?> arg0, View arg1, int posi, long arg3) {
                 CheckBox itemCB = (CheckBox) arg1.findViewById(R.id.common_multiple_cb_lvitem);
                 TextView itemTv = (TextView) arg1.findViewById(R.id.common_multiple_tv_lvitem);
                 itemCB.toggle();//点击整行可以显示效果
 
                 String checkkey = FunUtil.isBlankOrNullTo(itemTv.getHint(), " ") + ",";
                 String checkname = FunUtil.isBlankOrNullTo(itemTv.getText().toString(), " ") + ",";
-                if (itemCB.isChecked()) {
-                    item.setValcheckkey(FunUtil.isBlankOrNullTo(item.getValcheckkey(),"")  + checkkey);
-                    item.setValcheckname(FunUtil.isBlankOrNullTo(item.getValcheckname(),"") + checkname);
-                    ((KvStc)typeLst.get(arg2)).setIsDefault("1");
-                } else {
-                    item.setValcheckkey(FunUtil.isBlankOrNullTo(item.getValcheckkey(),"") .replace(checkkey, ""));
-                    item.setValcheckname(FunUtil.isBlankOrNullTo(item.getValcheckname(),"").replace(checkname, ""));
-                    ((KvStc)typeLst.get(arg2)).setIsDefault("0");
+
+                if(0 == posi){// 全选
+                    if(itemCB.isChecked()){// 是选中状态
+                        StringBuffer key = new StringBuffer();
+                        StringBuffer name = new StringBuffer();
+                        for (KvStc stc : typeLst){
+                            if(!"-1".equals(stc.getParentKey())){
+                                key.append(stc.getKey());
+                                key.append(",");
+                                name.append(stc.getValue());
+                                name.append(",");
+                            }
+                            stc.setIsDefault("1");
+                        }
+                        item.setValcheckkey(key.toString());
+                        item.setValcheckname(name.toString());
+                    }else{// 是未选中状态
+                        for (KvStc stc : typeLst){
+                            stc.setIsDefault("0");
+                        }
+                        item.setValcheckkey("");
+                        item.setValcheckname("");
+                    }
+                }else{
+                    if (itemCB.isChecked()) {
+                        item.setValcheckkey(FunUtil.isBlankOrNullTo(item.getValcheckkey(),"")  + checkkey);
+                        item.setValcheckname(FunUtil.isBlankOrNullTo(item.getValcheckname(),"") + checkname);
+                        ((KvStc)typeLst.get(posi)).setIsDefault("1");
+                    } else {
+                        item.setValcheckkey(FunUtil.isBlankOrNullTo(item.getValcheckkey(),"") .replace(checkkey, ""));
+                        item.setValcheckname(FunUtil.isBlankOrNullTo(item.getValcheckname(),"").replace(checkname, ""));
+                        ((KvStc)typeLst.get(posi)).setIsDefault("0");
+                        ((KvStc)typeLst.get(0)).setIsDefault("0");
+                    }
                 }
+
+
                 sadapter.notifyDataSetChanged();
             }
         });
@@ -364,7 +406,7 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
         // 显示对话框
         final AlertDialog dialog = new AlertDialog.Builder(context).create();
         dialog.setView(extView, 0, 0, 0, 0);
-        dialog.setCancelable(false);
+        dialog.setCancelable(true);
         dialog.show();
 
 
@@ -586,6 +628,7 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
             kvStc.setIsDefault("");
             typeLst.add(kvStc);
         }
+        typeLst.add(0, new KvStc("-1", "全选", "-1"));
 
         ViewGroup extView = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.alert_dayroute_form, null);
 
@@ -628,14 +671,40 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
 
                 String routekey = FunUtil.isBlankOrNullTo(itemTv.getHint(), " ") + ",";
                 String routename = FunUtil.isBlankOrNullTo(itemTv.getText().toString(), " ") + ",";
-                if (itemCB.isChecked()) {
-                    item.setValroutekeys(FunUtil.isBlankOrNullTo(item.getValroutekeys(),"")  + routekey);
-                    item.setValroutenames(FunUtil.isBlankOrNullTo(item.getValroutenames(),"") + routename);
-                    ((KvStc)typeLst.get(arg2)).setIsDefault("1");
-                } else {
-                    item.setValroutekeys(FunUtil.isBlankOrNullTo(item.getValroutekeys(),"") .replace(routekey, ""));
-                    item.setValroutenames(FunUtil.isBlankOrNullTo(item.getValroutenames(),"").replace(routename, ""));
-                    ((KvStc)typeLst.get(arg2)).setIsDefault("0");
+
+                if(0 == arg2){// 全选
+                    if(itemCB.isChecked()){// 是选中状态
+                        StringBuffer key = new StringBuffer();
+                        StringBuffer name = new StringBuffer();
+                        for (KvStc stc : typeLst){
+                            if(!"-1".equals(stc.getParentKey())){
+                                key.append(stc.getKey());
+                                key.append(",");
+                                name.append(stc.getValue());
+                                name.append(",");
+                            }
+                            stc.setIsDefault("1");
+                        }
+                        item.setValroutekeys(key.toString());
+                        item.setValroutenames(name.toString());
+                    }else{// 是未选中状态
+                        for (KvStc stc : typeLst){
+                            stc.setIsDefault("0");
+                        }
+                        item.setValroutekeys("");
+                        item.setValroutenames("");
+                    }
+                }else{
+                    if (itemCB.isChecked()) {
+                        item.setValroutekeys(FunUtil.isBlankOrNullTo(item.getValroutekeys(),"")  + routekey);
+                        item.setValroutenames(FunUtil.isBlankOrNullTo(item.getValroutenames(),"") + routename);
+                        ((KvStc)typeLst.get(arg2)).setIsDefault("1");
+                    } else {
+                        item.setValroutekeys(FunUtil.isBlankOrNullTo(item.getValroutekeys(),"") .replace(routekey, ""));
+                        item.setValroutenames(FunUtil.isBlankOrNullTo(item.getValroutenames(),"").replace(routename, ""));
+                        ((KvStc)typeLst.get(arg2)).setIsDefault("0");
+                        ((KvStc)typeLst.get(0)).setIsDefault("0");
+                    }
                 }
                 sadapter.notifyDataSetChanged();
             }
@@ -644,7 +713,7 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
         // 显示对话框
         final AlertDialog dialog = new AlertDialog.Builder(context).create();
         dialog.setView(extView, 0, 0, 0, 0);
-        dialog.setCancelable(false);
+        dialog.setCancelable(true);
         dialog.show();
 
         // 确定

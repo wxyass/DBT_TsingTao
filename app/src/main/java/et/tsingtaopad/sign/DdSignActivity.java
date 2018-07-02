@@ -175,6 +175,8 @@ public class DdSignActivity extends BaseActivity implements View.OnClickListener
         confirmTv.setText("");
         // ll_title.setBackgroundResource(R.color.tab_select);
         confirmTv.setBackgroundResource(R.drawable.icon_work_time);
+        confirmTv.setWidth(10);
+        confirmTv.setHeight(10);
         handler = new MyHandler(this);
 
         // 获取系统时间

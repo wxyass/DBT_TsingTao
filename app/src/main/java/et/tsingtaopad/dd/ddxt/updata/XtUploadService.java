@@ -293,8 +293,8 @@ public class XtUploadService {
      * @param isNeedExit true 的时候 上传数据后退出程序 ，不需要退出程序 请用false
      */
     public void uploadTables(boolean isNeedExit) {
-        upload_xt_visit(isNeedExit, null, 1);// 上传协同
-        upload_zs_visit(isNeedExit, null, 1);// 上传追溯
+        upload_xt_visit(isNeedExit, null, 1,1);// 上传协同
+        upload_zs_visit(isNeedExit, null, 1,1);// 上传追溯
         uploadMitTerminalM(isNeedExit, null, 1);// 上传督导新增终端  //
         uploadMitValagencykfM(isNeedExit, null, 1);// 上传经销商资料库  //
         uploadMitAgencynumM(isNeedExit, null, null, 1);// 上传经销商库存盘点 //
@@ -376,7 +376,7 @@ public class XtUploadService {
     List<MitCameraInfoM> mitCameraInfoMs = new ArrayList<MitCameraInfoM>();// 上传图片列表
     List<MitGroupproductM> mMstGroupproductMs = new ArrayList<MitGroupproductM>(); // 上传产品组合是否达标
 
-    public void upload_xt_visit(final boolean isNeedExit, final String visitKey, final int whatId) {
+    public void upload_xt_visit(final boolean isNeedExit, final String visitKey, final int whatId,final int type) {
         try {
             MitVisitM visit = null;
             if (visitKey != null && !visitKey.trim().equals("")) {
@@ -686,7 +686,7 @@ public class XtUploadService {
                 // System.out.println("巡店拜访"+json);
                 Log.i(TAG, "巡店拜访send list size" + mainDatas.size() + json);
 
-                upVisitDataInService("opt_save_visit", "", json);
+                upVisitDataInService("opt_save_visit", "", json,type);
 
             } else {
                 if (isNeedExit) {
@@ -716,8 +716,15 @@ public class XtUploadService {
     List<MitValagreeM> mitValagreeMs = new ArrayList<MitValagreeM>();
     List<MitValagreedetailM> mitValagreedetailMs = new ArrayList<MitValagreedetailM>();
 
-    // 上传追溯数据
-    public void upload_zs_visit(final boolean isNeedExit, final String valterid, final int whatId) {
+
+    /**
+     * 上传追溯数据
+     * @param isNeedExit
+     * @param valterid
+     * @param whatId
+     * @param type  0正常上传  1离线上传
+     */
+    public void upload_zs_visit(final boolean isNeedExit, final String valterid, final int whatId,final int type) {
         try {
             MitValterM mitValterM = null;
             if (valterid != null && !valterid.trim().equals("")) {
@@ -929,7 +936,7 @@ public class XtUploadService {
                 // System.out.println("巡店拜访"+json);
                 Log.i(TAG, "终端追溯send list size" + mainDatas.size() + json);
 
-                upZsDataInService("opt_save_zdzs", "", json);
+                upZsDataInService("opt_save_zdzs", "", json,type);
 
             } else {
                 if (isNeedExit) {
@@ -970,11 +977,18 @@ public class XtUploadService {
     /**
      * 上传协同拜访数据
      *
-     * @param optcode   请求码
-     * @param tableName 请求的表
-     * @param content   请求json
+     * @param optcode
+     * @param tableName
+     * @param content
      */
-    void upVisitDataInService(final String optcode, final String tableName, String content) {
+    /**
+     * 上传协同拜访数据
+     * @param optcode 请求码
+     * @param tableName 请求的表
+     * @param content 请求json
+     * @param type  0正常上传   1离线上传
+     */
+    void upVisitDataInService(final String optcode, final String tableName, String content,final int type) {
 
         // 组建请求Json
         RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(context);
@@ -1000,25 +1014,34 @@ public class XtUploadService {
                             // 处理上传后的数据,该删删,该处理
                             String formjson = resObj.getResBody().getContent();
                             parseUpData(formjson);
-                            ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_SUC);
+                            if(0==type){
+                                ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_SUC);
+                            }
 
                         } else {
-                            Toast.makeText(context, resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
+                            // Toast.makeText(context, resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 })
                 .error(new IError() {
                     @Override
                     public void onError(int code, String msg) {
-                        ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_FAIL);
+                        if(0==type){
+                            ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_FAIL);
+                        }
+
                         //Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
                     }
                 })
                 .failure(new IFailure() {
                     @Override
                     public void onFailure() {
+
+                        if(0==type){
+                            ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_FAIL);
+                        }
                         //Toast.makeText(context, "请求失败", Toast.LENGTH_SHORT).show();
-                        ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_FAIL);
+
                     }
                 })
                 .builde()
@@ -1032,7 +1055,7 @@ public class XtUploadService {
      * @param tableName 请求的表
      * @param content   请求json
      */
-    void upZsDataInService(final String optcode, final String tableName, String content) {
+    void upZsDataInService(final String optcode, final String tableName, String content,final int type) {
 
         // 组建请求Json
         RequestHeadStc requestHeadStc = requestHeadUtil.parseRequestHead(context);
@@ -1060,10 +1083,12 @@ public class XtUploadService {
                                 // 处理上传后的数据,该删删,该处理
                                 String formjson = resObj.getResBody().getContent();
                                 parseZsUpData(formjson);
-                                ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_SUC);
+                                if(0==type){// 0正常上传   1离线上传
+                                    ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_SUC);
+                                }
 
                             } else {
-                                Toast.makeText(context, resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
+                                // Toast.makeText(context, resObj.getResHead().getContent(), Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -1073,13 +1098,19 @@ public class XtUploadService {
                 .error(new IError() {
                     @Override
                     public void onError(int code, String msg) {
-                        ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_FAIL);
+                        if(0==type){// 0正常上传   1离线上传
+                            ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_FAIL);
+                        }
+
                     }
                 })
                 .failure(new IFailure() {
                     @Override
                     public void onFailure() {
-                        ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_FAIL);
+                        if(0==type){// 0正常上传    1离线上传
+                            ConstValues.handler.sendEmptyMessage(GlobalValues.SINGLE_UP_FAIL);
+                        }
+
                     }
                 })
                 .builde()

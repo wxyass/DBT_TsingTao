@@ -138,12 +138,11 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/bg_select_white_gray"
+                        android:background="@color/white"
                         android:paddingBottom="15dp"
                         android:paddingLeft="0dp"
                         android:paddingRight="15dp"
                         android:paddingTop="15dp">
-
 
                     </RelativeLayout>
 

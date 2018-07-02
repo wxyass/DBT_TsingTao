@@ -118,6 +118,8 @@
                         android:background="@drawable/bg_visit_record"
                         android:inputType="number|numberDecimal"
                         android:maxLength="10"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="3dp"
                         android:text=""
                         android:textSize="@dimen/font_size3"/>
 
@@ -140,6 +142,8 @@
                         android:background="@drawable/bg_visit_record"
                         android:inputType="number|numberDecimal"
                         android:maxLength="10"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="3dp"
                         android:text=""
                         android:textSize="@dimen/font_size3"/>
 
@@ -162,6 +166,8 @@
                         android:background="@drawable/bg_visit_record"
                         android:inputType="number|numberDecimal"
                         android:maxLength="10"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="3dp"
                         android:text=""
                         android:textSize="@dimen/font_size3"/>
 
@@ -184,6 +190,8 @@
                         android:background="@drawable/bg_visit_record"
                         android:inputType="number|numberDecimal"
                         android:maxLength="10"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="3dp"
                         android:text=""
                         android:textSize="@dimen/font_size3"/>
 

@@ -67,6 +67,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private void initData() {
 
         handler = new MyHandler(this);
+
+        String usercode = PrefUtils.getString(LoginActivity.this,"usercode","");
+        uidEt.setText(usercode);
     }
 
     private void initView() {

@@ -66,7 +66,9 @@ public class DdDealPlanAdapter extends BaseAdapter {
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.item_dealplan, null);
+            holder.termnameRl = (RelativeLayout) convertView.findViewById(R.id.item_dealplan_rl_termname);
             holder.termname = (TextView) convertView.findViewById(R.id.item_dealplan_termname);
+            holder.ll_plan = (LinearLayout) convertView.findViewById(R.id.item_dealplan_ll_plan);// 其他行
             holder.grid = (TextView) convertView.findViewById(R.id.item_dealplan_grid);
             holder.route = (TextView) convertView.findViewById(R.id.item_dealplan_route);
             holder.ydname = (TextView) convertView.findViewById(R.id.item_dealplan_ydname);
@@ -106,6 +108,14 @@ public class DdDealPlanAdapter extends BaseAdapter {
             holder.operation.setText("复查");
         }
 
+        if("0".equals(item.getIsshow())){// 0不展示   1展示
+            holder.ll_plan.setVisibility(View.GONE);
+        }else{
+            holder.ll_plan.setVisibility(View.VISIBLE);
+        }
+
+        holder.termnameRl.setTag(position);
+        holder.termnameRl.setOnClickListener(listener);
         holder.checkstatusRl.setTag(position);
         holder.checkstatusRl.setOnClickListener(listener);
 
@@ -113,7 +123,9 @@ public class DdDealPlanAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
+        private RelativeLayout termnameRl;
         private TextView termname;
+        private LinearLayout ll_plan;
         private TextView grid;
         private TextView route;
         private TextView ydname;

@@ -70,6 +70,7 @@ public class DdDealPlanService {
                 termNameLst = valueDao.queryDealPlanTermName(helper,dealStc.getRepairid());//
                 dealStc.setTerminalname(listToString(termNameLst));
                 dealStc.setRoutename(listToRouteString(termNameLst));
+                dealStc.setIsshow("0");// 0不展开  1展开
             }
 
             connection.commit(null);

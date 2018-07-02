@@ -76,64 +76,6 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!--承担金额有误-->
-            <LinearLayout
-                style="@style/content_margin"
-                android:id="@+id/zdzs_agreedetail_amend_rl_ll_price"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:gravity="center_vertical">
-
-                    <ImageView
-                        style="@style/point"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:src="@drawable/ico_point"/>
-
-                    <TextView
-                        style="@style/page_label_big"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="承担金额有误: "/>
-                    <TextView
-                        android:id="@+id/zdzs_agreedetail_amend_tv_price"
-                        style="@style/page_label_big"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""/>
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"/>
-
-                <!--承担金额输入框-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="70dp"
-                    android:background="@color/white"
-                    android:gravity="center_vertical">
-
-                    <EditText
-                        android:id="@+id/zdzs_agreedetail_amend_dd_et_price"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:background="@drawable/bg_visit_record"
-                        android:hint="请输入正确金额信息"
-                        android:inputType="number"
-                        android:maxLength="150"/>
-                </LinearLayout>
-            </LinearLayout>
-
             <!--实际数量有误-->
             <LinearLayout
                 style="@style/content_margin"
@@ -187,6 +129,64 @@
                         android:layout_marginRight="10dp"
                         android:background="@drawable/bg_visit_record"
                         android:hint="请输入正确数量信息"
+                        android:inputType="number"
+                        android:maxLength="150"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!--承担金额有误-->
+            <LinearLayout
+                style="@style/content_margin"
+                android:id="@+id/zdzs_agreedetail_amend_rl_ll_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        style="@style/point"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:src="@drawable/ico_point"/>
+
+                    <TextView
+                        style="@style/page_label_big"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="承担金额有误: "/>
+                    <TextView
+                        android:id="@+id/zdzs_agreedetail_amend_tv_price"
+                        style="@style/page_label_big"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""/>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+                <!--承担金额输入框-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:background="@color/white"
+                    android:gravity="center_vertical">
+
+                    <EditText
+                        android:id="@+id/zdzs_agreedetail_amend_dd_et_price"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/bg_visit_record"
+                        android:hint="请输入正确金额信息"
                         android:inputType="number"
                         android:maxLength="150"/>
                 </LinearLayout>

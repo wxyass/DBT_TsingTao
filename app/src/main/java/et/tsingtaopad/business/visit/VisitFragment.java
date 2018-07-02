@@ -181,6 +181,8 @@ public class VisitFragment extends BaseFragmentSupport implements View.OnClickLi
 
         titleTv.setText("拜访管理");
         confirmTv.setBackgroundResource(R.drawable.icon_visit_upload);
+        confirmTv.setWidth(10);
+        confirmTv.setHeight(10);
         handler = new MyHandler(this);
         service = new MainService(getActivity(), null);
 

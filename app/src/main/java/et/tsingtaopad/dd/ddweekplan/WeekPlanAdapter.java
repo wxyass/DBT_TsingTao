@@ -110,11 +110,25 @@ public class WeekPlanAdapter extends BaseAdapter {
         holder.time.setText(item.getVisitTime());
 
         // 区域
-        holder.tv_area.setText(item.getPlanareaid());
+        String area = item.getPlanareaid();
+        if (area.endsWith(",")) {
+            area = area.substring(0,area.length() - 1);
+        }
+        holder.tv_area.setText(area);
+
         // 路线
-        holder.tv_route .setText(item.getPlanroute());
+        String route = item.getPlanroute();
+        if (route.endsWith(",")) {
+            route = route.substring(0,route.length() - 1);
+        }
+        holder.tv_route.setText(route);
+
         // 追溯项
-        holder.tv_check .setText(item.getPlancheck());
+        String check = item.getPlancheck();
+        if (check.endsWith(",")) {
+            check = check.substring(0,check.length() - 1);
+        }
+        holder.tv_check .setText(check);
 
         return convertView;
     }

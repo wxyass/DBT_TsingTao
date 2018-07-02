@@ -109,7 +109,7 @@ public class ZsCaculateAmendFragment extends BaseFragmentSupport implements View
                 break;
             case R.id.zdzs_caculate_bt_next:// 保存
                 saveValue(v);
-                supportFragmentManager.popBackStack();
+
                 break;
 
             default:
@@ -122,11 +122,12 @@ public class ZsCaculateAmendFragment extends BaseFragmentSupport implements View
         if (ViewUtil.isDoubleClick(v.getId(), 2500))
             return;
 
-        LatteLoader.showLoading(getActivity());// 处理数据中,在ZsCheckIndexFragment的autoZsCalculateSuc中关闭
+        LatteLoader.showLoading(getActivity());// 处理数据中,在ZsCheckIndexFragment的autoZsCalculateSuc中关闭 和下面ischeckin检测
 
 
         XtProItem item = null;
         EditText itemEt = null;
+        boolean ischeckin = true;// 如果是5d,并且填写值了才能保存
         for (int i = 0; i < tempLst.size(); i++) {
             item = tempLst.get(i);
             item.setCheckkey(xtProIndexValue.getIndexId());
@@ -134,9 +135,23 @@ public class ZsCaculateAmendFragment extends BaseFragmentSupport implements View
             itemEt = (EditText) colitemLv.getChildAt(i).findViewById(R.id.item_zs_calculatedialog_et_finalnum);
             //item.setValitemval((FunUtil.isBlankOrNullToDouble(itemEt.getText().toString())));
             item.setValitemval(itemEt.getText().toString());
+
+            // 如果是5d,并且填写值了才能保存
+            if("ad3030fb-e42e-47f8-a3ec-4229089aab5d".equals(item.getCheckkey())){
+                if("".equals(item.getValitemval())){
+                    // 跳出 提醒
+                    ischeckin = false;
+                    break;
+                }
+            }
         }
 
-
+        // // 如果是5d,并且填写值了才能保存
+        if(!ischeckin){
+            Toast.makeText(getActivity(),"铺货状态必须填值",Toast.LENGTH_SHORT).show();
+            LatteLoader.stopLoading();
+            return;
+        }
 
         // 自动计算
         Bundle bundle = new Bundle();
@@ -145,10 +160,8 @@ public class ZsCaculateAmendFragment extends BaseFragmentSupport implements View
             bundle.putString("indexId", xtProIndexValue.getIndexId());
         }
 
-
         // 修改对错
         xtProIndexValue.setValchecktypeflag(valchecktypeflag);
-
 
         Message msg = new Message();
         msg.what = ZsCheckIndexFragment.INIT_INDEX_AUTO_AMEND;// 自动计算
@@ -156,5 +169,6 @@ public class ZsCaculateAmendFragment extends BaseFragmentSupport implements View
         handler.sendMessage(msg);
 
         //handler.sendEmptyMessage(ZsCheckIndexFragment.INIT_INDEX_AMEND);
+        supportFragmentManager.popBackStack();
     }
 }

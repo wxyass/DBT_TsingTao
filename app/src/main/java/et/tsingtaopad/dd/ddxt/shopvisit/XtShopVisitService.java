@@ -2018,27 +2018,28 @@ public class XtShopVisitService {
                 for (MstCollectionexerecordInfo item : collectionList) {
                     String key = item.getColitemkey() + item.getProductkey();
 
-                    MitValcheckitemMTemp mstCollectionexerecordInfoTemp = null;
+                    MitValcheckitemMTemp mitValcheckitemMTemp = null;
                     if (colitemProductkeys.containsKey(key)) {//此产品存在于指标采集项模板
                         if (!list.contains(key)) {//防止重复去重
                             list.add(key);
-                            mstCollectionexerecordInfoTemp = new MitValcheckitemMTemp();
-                            mstCollectionexerecordInfoTemp.setId(FunUtil.getUUID());
-                            mstCollectionexerecordInfoTemp.setValterid(vidterid);// 追溯表主键
-                            mstCollectionexerecordInfoTemp.setValchecktypeid(recordkey);// 督导拉链表主键
-                            mstCollectionexerecordInfoTemp.setVisitkey(prevVisitId);
-                            mstCollectionexerecordInfoTemp.setValitemid(item.getColrecordkey());// 采集项表主键
-                            mstCollectionexerecordInfoTemp.setColitemkey(item.getColitemkey());// 采集项名称
-                            mstCollectionexerecordInfoTemp.setCheckkey(item.getCheckkey());// 指标 varchar2(36) null,
-                            //mstCollectionexerecordInfoTemp.setAddcount(item.getAddcount());//  变化量varchar2(36) null,
-                            //mstCollectionexerecordInfoTemp.setTotalcount(item.getTotalcount());// 现有量 varchar2(36) null,
-                            mstCollectionexerecordInfoTemp.setProductkey(item.getProductkey()); // 产品key varchar2(36) null,
-                            mstCollectionexerecordInfoTemp.setValitem(item.getAddcount() + item.getTotalcount() + "");// 采集项原值结果量
-                            mstCollectionexerecordInfoTemp.setCreuser(item.getCreuser());
-                            mstCollectionexerecordInfoTemp.setUpdateuser(item.getUpdateuser());
-                            mstCollectionexerecordInfoTemp.setCredate(null);
-                            mstCollectionexerecordInfoTemp.setUpdatedate(null);
-                            mitValcheckitemMTempDao.create(mstCollectionexerecordInfoTemp);
+                            mitValcheckitemMTemp = new MitValcheckitemMTemp();
+                            mitValcheckitemMTemp.setId(FunUtil.getUUID());
+                            mitValcheckitemMTemp.setValterid(vidterid);// 追溯表主键
+                            mitValcheckitemMTemp.setValchecktypeid(recordkey);// 督导拉链表主键
+                            mitValcheckitemMTemp.setVisitkey(prevVisitId);
+                            mitValcheckitemMTemp.setValitemid(item.getColrecordkey());// 采集项表主键
+                            mitValcheckitemMTemp.setColitemkey(item.getColitemkey());// 采集项名称
+                            mitValcheckitemMTemp.setCheckkey(item.getCheckkey());// 指标 varchar2(36) null,
+                            //mitValcheckitemMTemp.setAddcount(item.getAddcount());//  变化量varchar2(36) null,
+                            //mitValcheckitemMTemp.setTotalcount(item.getTotalcount());// 现有量 varchar2(36) null,
+                            mitValcheckitemMTemp.setProductkey(item.getProductkey()); // 产品key varchar2(36) null,
+                            mitValcheckitemMTemp.setValitem(item.getAddcount() + item.getTotalcount() + "");// 采集项原值结果量
+                            // mitValcheckitemMTemp.setValitemval(item.getAddcount() + item.getTotalcount() + "");// 采集项正确结果量
+                            mitValcheckitemMTemp.setCreuser(item.getCreuser());
+                            mitValcheckitemMTemp.setUpdateuser(item.getUpdateuser());
+                            mitValcheckitemMTemp.setCredate(null);
+                            mitValcheckitemMTemp.setUpdatedate(null);
+                            mitValcheckitemMTempDao.create(mitValcheckitemMTemp);
                         }
                     }
                 }

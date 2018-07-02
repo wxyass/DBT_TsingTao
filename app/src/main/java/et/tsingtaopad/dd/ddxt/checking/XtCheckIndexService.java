@@ -378,17 +378,38 @@ public class XtCheckIndexService extends XtShopVisitService {
                     if(!indexProIdLst.contains(data)){
                         /*proItem.setIndexValueId(null);
                         proItem.setIndexValueName(null);*/
-                        setIndexValue(proItem, item.getIndexId());
+                        setXtIndexValue(proItem, item.getIndexId());
                     }
                 }else{
                     //当前指标状态在数据里不存在，值设置为空
                     if(data.equals(currIndexId+productKey) && !isCurrIndexExsist){
                         /*proItem.setIndexValueId(null);
                         proItem.setIndexValueName(null); */
-                        setIndexValue(proItem, currIndexId);
+                        setXtIndexValue(proItem, currIndexId);
                     }
                 }
             }
+        }
+    }
+
+    //
+    public void setXtIndexValue(XtProIndexValue proItem, String currIndexId) {
+        if ("ad3030fb-e42e-47f8-a3ec-4229089aab5d".equals(currIndexId)) {// 铺货状态
+            //proItem.setDdacresult("301");// 自动计算督导的指标值
+            proItem.setIndexValueId("301");
+            proItem.setIndexValueName("空白");
+        } else if ("ad3030fb-e42e-47f8-a3ec-4229089aab6d".equals(currIndexId)) {// 道具生动化
+            //proItem.setDdacresult("307");// 自动计算督导的指标值
+            proItem.setIndexValueId("307");
+            proItem.setIndexValueName("不合格");
+        } else if ("ad3030fb-e42e-47f8-a3ec-4229089aab7d".equals(currIndexId)) {// 产品生动化
+            //proItem.setDdacresult("309");// 自动计算督导的指标值
+            proItem.setIndexValueId("309");
+            proItem.setIndexValueName("不合格");
+        } else if ("ad3030fb-e42e-47f8-a3ec-4229089aab8d".equals(currIndexId)) {// 冰冻化
+            //proItem.setDdacresult("311");// 自动计算督导的指标值
+            proItem.setIndexValueId("311");
+            proItem.setIndexValueName("不合格");
         }
     }
 
