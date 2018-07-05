@@ -45,7 +45,7 @@
 
 
             <!-- 计划 -->
-            <et.tsingtaopad.view.NoScrollListView
+            <dd.tsingtaopad.view.NoScrollListView
                 android:id="@+id/dd_dayplan_lv_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

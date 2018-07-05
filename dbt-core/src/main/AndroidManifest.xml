@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="et.tsingtaopad.core">
+          package="dd.tsingtaopad.core">
 
     <!--允许程序唤醒机器-->
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT"/>

@@ -73,7 +73,7 @@
             </RelativeLayout>
 
             <!-- 经销商库存 -->
-            <et.tsingtaopad.view.NoScrollListView
+            <dd.tsingtaopad.view.NoScrollListView
                 android:id="@+id/operation_agencystore_monthplan_lv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

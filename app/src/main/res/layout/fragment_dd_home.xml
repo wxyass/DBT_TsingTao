@@ -351,7 +351,7 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <et.tsingtaopad.view.MyGridView
+                <dd.tsingtaopad.view.MyGridView
                     android:id="@+id/first_gv_top"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -360,7 +360,7 @@
                     android:paddingTop="10dp"
                     android:scrollbars="none"
                     android:verticalSpacing="2dp">
-                </et.tsingtaopad.view.MyGridView>
+                </dd.tsingtaopad.view.MyGridView>
 
 
             </LinearLayout>
@@ -395,7 +395,7 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <et.tsingtaopad.view.NoScrollListView
+                <dd.tsingtaopad.view.NoScrollListView
                     android:id="@+id/first_sclv_top"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
