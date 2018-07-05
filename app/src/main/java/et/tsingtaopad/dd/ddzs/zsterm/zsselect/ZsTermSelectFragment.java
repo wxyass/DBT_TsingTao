@@ -50,6 +50,7 @@ import et.tsingtaopad.db.table.MstGridM;
 import et.tsingtaopad.db.table.MstMarketareaM;
 import et.tsingtaopad.db.table.MstRouteM;
 import et.tsingtaopad.db.table.MstTerminalinfoM;
+import et.tsingtaopad.db.table.MstVisitM;
 import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartFragment;
 import et.tsingtaopad.dd.ddxt.term.select.IXtTermSelectClick;
 import et.tsingtaopad.dd.ddxt.term.select.XtTermSelectService;
@@ -581,7 +582,7 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
                                 MainService mainService = new MainService(getActivity(), null);
                                 mainService.parseTermDetailInfoJson(formjson);
                                 startXtVisitShopActivity();
-                                Toast.makeText(getActivity(), "该终端数据请求成功", Toast.LENGTH_SHORT).show();
+
                             }
 
                         } else {
@@ -621,13 +622,23 @@ public class ZsTermSelectFragment extends BaseFragmentSupport implements View.On
 
     // 跳转巡店拜访
     private void startXtVisitShopActivity() {
-        Intent intent = new Intent(getActivity(), ZsVisitShopActivity.class);
-        intent.putExtra("isFirstVisit", "1");// 非第一次拜访1
-        intent.putExtra("termStc", xtTermSelectMStc);
-        intent.putExtra("mitValcheckterM", mitValcheckterMs.get(0));
-        intent.putExtra("seeFlag", "0"); // 0拜访 1查看标识
-        startActivity(intent);
-        //PrefUtils.putBoolean(getActivity(),GlobalValues.ZS_CART_SYNC,false);// false 追溯购物车 需要同步
+        List<MstVisitM> mstVisitMS = xtSelectService.getMstVisitMList(xtTermSelectMStc.getTerminalkey());
+        if(mstVisitMS.size()>0){
+            Intent intent = new Intent(getActivity(), ZsVisitShopActivity.class);
+            intent.putExtra("isFirstVisit", "1");// 非第一次拜访1
+            intent.putExtra("termStc", xtTermSelectMStc);
+            intent.putExtra("mitValcheckterM", mitValcheckterMs.get(0));
+            intent.putExtra("seeFlag", "0"); // 0拜访 1查看标识
+            startActivity(intent);
+
+            Toast.makeText(getActivity(), "该终端数据请求成功", Toast.LENGTH_SHORT).show();
+
+            //PrefUtils.putBoolean(getActivity(),GlobalValues.ZS_CART_SYNC,false);// false 追溯购物车 需要同步
+        }else{
+            //
+            Toast.makeText(getActivity(),"该终端从未拜访,不能追溯",Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     MyHandler handler;

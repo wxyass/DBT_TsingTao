@@ -316,8 +316,11 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
         final DayDetailStc item = dataLst.get(position);
 
         final List<KvStc> typeLst  = initRetrospect();
-        typeLst.add(0, new KvStc("-1", "全选", "-1"));
 
+        // 如果追溯项大于0,添加全选按钮
+        if(typeLst.size()>0){
+            typeLst.add(0, new KvStc("-1", "全选", "-1"));
+        }
 
         // 加载视图
         View extView = LayoutInflater.from(context).inflate(R.layout.alert_daydetail_form, null);
@@ -628,7 +631,10 @@ public class DayDetailAdapter extends BaseAdapter implements View.OnClickListene
             kvStc.setIsDefault("");
             typeLst.add(kvStc);
         }
-        typeLst.add(0, new KvStc("-1", "全选", "-1"));
+        // 如果路线大于0,添加全选按钮
+        if(typeLst.size()>0){
+            typeLst.add(0, new KvStc("-1", "全选", "-1"));
+        }
 
         ViewGroup extView = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.alert_dayroute_form, null);
 

@@ -32,6 +32,7 @@ import et.tsingtaopad.db.table.MstAgencysupplyInfoTemp;
 import et.tsingtaopad.db.table.MstTerminalinfoM;
 import et.tsingtaopad.db.table.MstTerminalinfoMTemp;
 import et.tsingtaopad.db.table.MstVistproductInfo;
+import et.tsingtaopad.dd.ddxt.term.XtTermService;
 import et.tsingtaopad.dd.ddxt.term.select.domain.XtTermSelectMStc;
 import et.tsingtaopad.main.visit.shopvisit.term.domain.MstTermListMStc;
 import et.tsingtaopad.main.visit.shopvisit.term.domain.TermSequence;
@@ -39,21 +40,21 @@ import et.tsingtaopad.main.visit.shopvisit.term.domain.TermSequence;
 
 /**
  * 项目名称：营销移动智能工作平台 </br>
- * 文件名：TermListService.java</br>
- * 功能描述: 巡店拜访_终端列表的业务逻辑</br>
+ * 文件名：XtTermCartService.java</br>
  * 版本 V 1.0</br>
  * 修改履历</br>
  * 日期      原因  BUG号    修改人 修改版本</br>
  */
 @SuppressLint("DefaultLocale")
-public class XtTermCartService {
+public class XtTermCartService extends XtTermService{
 
-    private final String TAG = "TermListService";
+    private final String TAG = "XtTermCartService";
 
     private Context context;
 
     public XtTermCartService(Context context) {
-        this.context = context;
+        super(context);
+        // this.context = context;
     }
 
     /**
@@ -113,25 +114,8 @@ public class XtTermCartService {
         return terminalList;
     }
 
-    /**
-     * 根据终端key 获取上传信息(协同)
-     *
-     * @param terminalkey 终端key
-     * @return
-     */
-    public List<MitVisitM> getXtMitValterM(String terminalkey) {
 
-        List<MitVisitM> terminalList = new ArrayList<MitVisitM>();
-        try {
-            DatabaseHelper helper = DatabaseHelper.getHelper(context);
-            MitVisitMDao dao = helper.getDao(MitVisitM.class);
-            List<MitVisitM> termlst = dao.queryXtMitVisitM(helper, terminalkey);
-            terminalList.addAll(termlst);
-        } catch (SQLException e) {
-            Log.e(TAG, "获取线路表DAO对象失败", e);
-        }
-        return terminalList;
-    }
+
 
     /**
      * 按条件查询终端列表
@@ -180,25 +164,9 @@ public class XtTermCartService {
         return termPinyinMap;
     }
 
-    /**
-     * 根据终端key 获取上传信息(追溯)
-     *
-     * @param terminalkey 终端key
-     * @return
-     */
-    public List<MitValterM> getZsMitValterM(String terminalkey) {
 
-        List<MitValterM> terminalList = new ArrayList<MitValterM>();
-        try {
-            DatabaseHelper helper = DatabaseHelper.getHelper(context);
-            MitValterMDao dao = helper.getDao(MitValterM.class);
-            List<MitValterM> termlst = dao.queryZsMitValterMData(helper, terminalkey);
-            terminalList.addAll(termlst);
-        } catch (SQLException e) {
-            Log.e(TAG, "获取线路表DAO对象失败", e);
-        }
-        return terminalList;
-    }
+
+
 
     /***
      * 协同 购物车更新终端顺序 不上传
@@ -254,24 +222,7 @@ public class XtTermCartService {
         }
     }
 
-    /***
-     * 通过大区ID 获取追溯模板表
-     * @param areapid
-     * @return
-     */
-    public List<MitValcheckterM> getValCheckterMList(String areapid) {
-        List<MitValcheckterM> list = new ArrayList<MitValcheckterM>();
-        try {
-            Dao<MitValcheckterM, String> mitValcheckterMDao = DatabaseHelper.getHelper(context).getMitValcheckterMDao();
-            QueryBuilder<MitValcheckterM, String> qb = mitValcheckterMDao.queryBuilder();
-            Where<MitValcheckterM, String> where = qb.where();
-            where.eq("areaid", areapid);
-            list = qb.query();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
+
 
 
     /**

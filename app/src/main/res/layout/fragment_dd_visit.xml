@@ -90,7 +90,7 @@
                             android:layout_toRightOf="@id/visit_xt_currentvisit"
                             android:ellipsize="end"
                             android:singleLine="true"
-                            android:text="利民超市"
+                            android:text="--"
                             android:textColor="@color/gray_color_333333"
                             android:textSize="@dimen/font_size6"/>
                     </RelativeLayout>
@@ -123,7 +123,7 @@
                             android:layout_toRightOf="@id/visit_xt_nextvisit"
                             android:ellipsize="end"
                             android:singleLine="true"
-                            android:text="宝丽华超市宝丽华超市宝丽华超市"
+                            android:text="--"
                             android:textColor="@color/gray_color_333333"
                             android:textSize="@dimen/font_size6"/>
                     </RelativeLayout>
@@ -182,7 +182,7 @@
                             android:layout_weight="1"
                             android:ellipsize="end"
                             android:singleLine="true"
-                            android:text="张三"
+                            android:text="--"
                             android:textColor="@color/holo_orange_dark"
                             android:textSize="@dimen/font_size6"/>
 
@@ -196,7 +196,7 @@
                             android:layout_weight="2"
                             android:ellipsize="end"
                             android:singleLine="true"
-                            android:text="完成"
+                            android:text="--"
                             android:textColor="@color/holo_blue_dark"
                             android:textSize="@dimen/font_size6"/>
                     </LinearLayout>
@@ -216,7 +216,7 @@
                             android:layout_marginLeft="4dp"
                             android:ellipsize="end"
                             android:singleLine="true"
-                            android:text="建国门内大街建国门内大街建国门内大街"
+                            android:text="--"
                             android:textColor="@color/gray_color_333333"
                             android:textSize="@dimen/font_size6"/>
                     </RelativeLayout>
@@ -293,7 +293,7 @@
                             android:layout_toRightOf="@id/visit_zs_currentvisit"
                             android:ellipsize="end"
                             android:singleLine="true"
-                            android:text="利民超市"
+                            android:text="--"
                             android:textColor="@color/gray_color_333333"
                             android:textSize="@dimen/font_size6"/>
                     </RelativeLayout>
@@ -326,7 +326,7 @@
                             android:layout_toRightOf="@id/visit_zs_nextvisit"
                             android:ellipsize="end"
                             android:singleLine="true"
-                            android:text="利民超市"
+                            android:text="--"
                             android:textColor="@color/gray_color_333333"
                             android:textSize="@dimen/font_size6"/>
                     </RelativeLayout>
@@ -386,7 +386,7 @@
                             android:layout_weight="1"
                             android:ellipsize="end"
                             android:singleLine="true"
-                            android:text="张三,李四,王五"
+                            android:text="--"
                             android:textColor="@color/holo_orange_dark"
                             android:textSize="@dimen/font_size6"/>
 
@@ -400,7 +400,7 @@
                             android:layout_weight="2"
                             android:ellipsize="end"
                             android:singleLine="true"
-                            android:text="完成"
+                            android:text="--"
                             android:textColor="@color/holo_blue_dark"
                             android:textSize="@dimen/font_size6"/>
                     </LinearLayout>
@@ -420,7 +420,7 @@
                             android:layout_marginLeft="4dp"
                             android:ellipsize="end"
                             android:singleLine="true"
-                            android:text="建国门内大街"
+                            android:text="--"
                             android:textColor="@color/gray_color_333333"
                             android:textSize="@dimen/font_size6"/>
                     </RelativeLayout>

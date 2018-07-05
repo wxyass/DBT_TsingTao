@@ -358,8 +358,8 @@ public class XtSayhiFragment extends XtBaseVisitFragment implements View.OnClick
 
         PrefUtils.putBoolean(getActivity(),GlobalValues.SAYHIREADY,true);
         // 初始化页面数据
-        //initData();initData2();
-        initViewData();// 子线程查找数据
+        initData();initData2();
+        // initViewData();// 子线程查找数据
 
         // 设置监听
 

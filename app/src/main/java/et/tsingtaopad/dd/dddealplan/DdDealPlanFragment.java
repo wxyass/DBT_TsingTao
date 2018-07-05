@@ -362,23 +362,24 @@ public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnCl
             // 处理UI 变化
             switch (msg.what) {
                 case DEALPLAN_UP_SUC://
-                    fragment.shuaxinFragment(1);
+                    fragment.shuaxinFragment();
                     break;
                 case DEALPLAN_NEED_UP://
-                    fragment.upRepair(1);
+                    fragment.upRepair();
                     break;
-                /*case DEALPLAN_UP_FAIL://
-                    fragment.shuaxinFragment(2);
-                    break;*/
 
             }
         }
     }
 
     // 上传未通过 或已通过
-    private void upRepair(int i) {
+    private void upRepair() {
 
-        initData();
+        //initData();
+
+        dealPlanAdapter.notifyDataSetChanged();
+
+
         // 上传整顿计划
         MitRepairM repairM = new MitRepairM();
         repairM.setId(stc.getRepairid());
@@ -401,9 +402,62 @@ public class DdDealPlanFragment extends BaseFragmentSupport implements View.OnCl
         xtUploadService.upload_repair(false, repairM, null, 1);
     }
 
-    // 结束上传  刷新页面
-    private void shuaxinFragment(int upType) {
-        initData();
+    // 修改成功   刷新页面
+    private void shuaxinFragment() {
+        List<DealStc> newdataLst = ddDealPlanService.getDealPlanTerminal();
+        for (DealStc newdealStc : newdataLst){
+            for (DealStc dealStc :dataLst){
+                if(newdealStc.getRepairid().equals(dealStc.getRepairid())){
+                    newdealStc.setIsshow(dealStc.getIsshow());
+                }
+            }
+        }
+        dataLst.clear();
+        dataLst.addAll(newdataLst);
+        // dealPlanAdapter.notifyDataSetChanged();
+        dealPlanAdapter = new DdDealPlanAdapter(getActivity(), dataLst, new IClick() {
+            @Override
+            public void listViewItemClick(int position, View v) {
+                DealStc stc = dataLst.get(position);
+
+                int id = v.getId();
+                switch (id) {
+                    case R.id.item_dealplan_rl_termname:// 终端名称
+                        if("0".equals(stc.getIsshow())){
+                            stc.setIsshow("1");
+                        }else if("1".equals(stc.getIsshow())){
+                            stc.setIsshow("0");
+                        }
+                        dealPlanAdapter.notifyDataSetChanged();
+                        break;
+                    case R.id.item_dealplan_rl_checkstatus:// 复查结果
+                        String status = stc.getRepairstatus();
+                        if ("1".equals(status)) {// 未通过
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("DealStc", stc);
+                            /*bundle.putSerializable("weekplan", mitPlanweekM);
+                            bundle.putSerializable("weekDateStart", weekDateStart);
+                            bundle.putSerializable("weekDateEnd", weekDateEnd);*/
+                            DdReDealMakeFragment ddReDealMakeFragment = new DdReDealMakeFragment(handler);
+                            ddReDealMakeFragment.setArguments(bundle);
+                            // 跳转 新增整改计划
+                            addHomeFragment(ddReDealMakeFragment, "ddredealmakefragment");
+                        } else if ("2".equals(status)) {// 已通过
+
+                        } else {
+                            alertShow6(position);// 弹窗: 未通过,已通过
+                        }
+                        break;
+
+                }
+
+
+
+            }
+        });
+        monthplan_lv.setAdapter(dealPlanAdapter);
+        ViewUtil.setListViewHeight(monthplan_lv);
+
     }
 
 }

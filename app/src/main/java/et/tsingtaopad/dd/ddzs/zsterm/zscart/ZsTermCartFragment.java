@@ -47,6 +47,7 @@ import et.tsingtaopad.core.view.alertview.OnItemClickListener;
 import et.tsingtaopad.db.table.MitValcheckterM;
 import et.tsingtaopad.db.table.MitValterM;
 import et.tsingtaopad.db.table.MitVisitM;
+import et.tsingtaopad.db.table.MstVisitM;
 import et.tsingtaopad.dd.ddxt.shopvisit.XtVisitShopActivity;
 import et.tsingtaopad.dd.ddxt.term.cart.XtTermCartService;
 import et.tsingtaopad.dd.ddxt.term.cart.adapter.XtTermCartAdapter;
@@ -250,13 +251,24 @@ public class ZsTermCartFragment extends BaseFragmentSupport implements View.OnCl
                 deleteOrXtUpladCart(terminalList.get(0));
             }else{// 已上传
                 if(mitValcheckterMs.size()>0){// 配置了督导模板
-                    LatteLoader.showLoading(getActivity());// 处理数据中 ,在ZsVisitShopActivity的initVIew中关闭
-                    Intent intent = new Intent(getActivity(), ZsVisitShopActivity.class);
-                    intent.putExtra("isFirstVisit", "1");// 非第一次拜访1
-                    intent.putExtra("termStc", termStc);
-                    intent.putExtra("mitValcheckterM", mitValcheckterMs.get(0));
-                    intent.putExtra("seeFlag", "0"); // 0拜访 1查看标识
-                    startActivity(intent);
+
+                    // 判断拜访表中 是否有该终端的拜访记录
+                    List<MstVisitM> mstVisitMS = cartService.getMstVisitMList(termStc.getTerminalkey());
+                    if(mstVisitMS.size()>0){
+                        LatteLoader.showLoading(getActivity());// 处理数据中 ,在ZsVisitShopActivity的initVIew中关闭
+                        Intent intent = new Intent(getActivity(), ZsVisitShopActivity.class);
+                        intent.putExtra("isFirstVisit", "1");// 非第一次拜访1
+                        intent.putExtra("termStc", termStc);
+                        intent.putExtra("mitValcheckterM", mitValcheckterMs.get(0));
+                        intent.putExtra("seeFlag", "0"); // 0拜访 1查看标识
+                        startActivity(intent);
+                    }else{
+                        //
+                        Toast.makeText(getActivity(),"该终端从未拜访,不能追溯",Toast.LENGTH_SHORT).show();
+                    }
+
+
+
                 }else{// 未配置督导模板
                     Toast.makeText(getActivity(),"请先联系文员,配置督导模板",Toast.LENGTH_SHORT).show();
                 }

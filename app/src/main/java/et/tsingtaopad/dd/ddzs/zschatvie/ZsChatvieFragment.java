@@ -51,6 +51,8 @@ import et.tsingtaopad.dd.ddzs.zsinvoicing.ZsInvocingAmendFragment;
 import et.tsingtaopad.dd.ddzs.zsinvoicing.ZsInvoicingAdapter;
 import et.tsingtaopad.dd.ddzs.zsinvoicing.ZsInvoicingFragment;
 import et.tsingtaopad.dd.ddzs.zsinvoicing.zsaddinvoicing.ZsInvocingAddDataFragment;
+import et.tsingtaopad.dd.ddzs.zssayhi.ZsSayhiAmendFragment;
+import et.tsingtaopad.dd.ddzs.zssayhi.ZsSayhiFragment;
 import et.tsingtaopad.listviewintf.IClick;
 import et.tsingtaopad.listviewintf.ILongClick;
 import et.tsingtaopad.dd.ddzs.zschatvie.zsaddchatvie.ZsAddChatVieFragment;
@@ -649,7 +651,7 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
      * 参数8: 条目点击监听 √
      */
     public void alertShow5(final MitValcmpotherMTemp mitValcmpotherMTemp) {
-        List<KvStc> sureOrFail = new ArrayList<>();
+        /*List<KvStc> sureOrFail = new ArrayList<>();
         sureOrFail.add(new KvStc("zhengque","正确","-1"));
         sureOrFail.add(new KvStc("cuowu","错误(去修正)","-1"));
         mAlertViewExt = new AlertView(null, null, null, null,
@@ -669,11 +671,6 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
 
                     Bundle bundle1 = new Bundle();
                     bundle1.putSerializable("mitValcmpotherMTemp", mitValcmpotherMTemp);
-                /*bundle1.putSerializable("termname", termStc.getTerminalname());
-                bundle1.putSerializable("channelId", termStc.getMinorchannel());// 次渠道
-                bundle1.putSerializable("termStc", termStc);
-                bundle1.putSerializable("visitKey", visitId);//visitId
-                bundle1.putSerializable("seeFlag", seeFlag);// 默认0   0:拜访 1:查看*/
 
                     ZsWjVieAmendFragment zsWjVieAmendFragment = new ZsWjVieAmendFragment(handler);
                     zsWjVieAmendFragment.setArguments(bundle1);
@@ -692,7 +689,37 @@ public class ZsChatvieFragment extends XtBaseVisitFragment implements View.OnCli
                 DbtLog.logUtils(TAG, "取消选择结果");
             }
         });
-        mAlertViewExt.show();
+        mAlertViewExt.show();*/
+
+
+        new AlertView("请选择核查结果", null, "取消", null,
+                new String[]{"正确", "错误"},
+                getActivity(), AlertView.Style.ActionSheet,
+                new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Object o, int position) {
+                        // Toast.makeText(getActivity(), "点击了第" + position + "个", Toast.LENGTH_SHORT).show();
+                        if (0 == position) {// 正确
+                            mitValcmpotherMTemp.setValistrueflag("Y");
+                            handler.sendEmptyMessage(ZsChatvieFragment.INIT_WJ_AMEND);
+                        } else if (1 == position) {// 跳转数据录入
+                            Bundle bundle1 = new Bundle();
+                            bundle1.putSerializable("mitValcmpotherMTemp", mitValcmpotherMTemp);
+                            /*bundle1.putSerializable("termname", termStc.getTerminalname());
+                            bundle1.putSerializable("channelId", termStc.getMinorchannel());// 次渠道
+                            bundle1.putSerializable("termStc", termStc);
+                            bundle1.putSerializable("visitKey", visitId);//visitId
+                            bundle1.putSerializable("seeFlag", seeFlag);// 默认0   0:拜访 1:查看*/
+
+                            ZsWjVieAmendFragment zsWjVieAmendFragment = new ZsWjVieAmendFragment(handler);
+                            zsWjVieAmendFragment.setArguments(bundle1);
+
+                            ZsVisitShopActivity visitShopActivity = (ZsVisitShopActivity) getActivity();
+                            visitShopActivity.changeXtvisitFragment(zsWjVieAmendFragment, "zswjvieamendfragment");
+                        }
+
+                    }
+                }).setCancelable(true).show();
     }
 
     // 监听返回键
